@@ -1,0 +1,165 @@
+/* @import "~aos/dist/aos.css"; */
+/* You can add global styles to this file, and also import other style files */
+
+body {
+      top: 0 !important;
+      width: auto !important;
+      height: auto !important;
+}
+
+.ct_text_red {
+      color: rgb(180, 0, 0);
+}
+
+.ant-select-selection-search-input {
+      height: 52px !important;
+      border: none !important;
+      background: transparent !important;
+}
+
+.ant-select-selector {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+}
+
+.ant-select-selection-placeholder {
+      font-size: 16px !important;
+      color: #666 !important;
+      margin-top: 12px !important;
+}
+
+.ant-select-selection-item {
+      margin-top: 12px !important;
+      font-size: 16px !important;
+}
+
+.multi_select .ant-select-selection-item,
+.multi_select .ant-select-selection-placeholder {
+      font-size: 16px !important;
+      margin-top: 0 !important;
+}
+
+.ant-select-selector {
+      height: 100% !important;
+}
+
+.form-control:focus:not([type="select"]) {
+      color: #fff !important;
+}
+
+/* ///////////////////////////////////// */
+/* 
+.goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed {
+      display: none !important;
+}
+
+.goog-te-gadget-simple {
+      background-image: url('../public/img/prime_language.svg') !important;
+}
+
+.goog-te-gadget-simple {
+      height: 23px;
+      width: 25px;
+      background-repeat: no-repeat;
+      border-radius: 50%;
+      background-position-y: -3px;
+      background-position-x: -9px;
+      border-left: none !important;
+      border-top: none !important;
+      border-bottom: none !important;
+      border-right: none !important;
+}
+
+.goog-te-gadget-icon {
+      display: none !important;
+}
+
+.goog-te-gadget {
+      font-size: 6px !important;
+}
+
+.VIpgJd-ZVi9od-ORHb-OEVmcd {
+      display: none !important;
+}
+
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc {
+      display: none !important;
+}
+
+.VIpgJd-ZVi9od-vH1Gmf {
+      background-color: #0d1132 !important;
+}
+
+*/
+.ngx-slider .ngx-slider-selection {
+      background: #2631f8 !important;
+}
+
+.ngx-slider .ngx-slider-pointer {
+      width: 20px !important;
+      height: 20px !important;
+      top: -8px !important;
+      background-color: #2631f8 !important;
+}
+
+.ngx-slider .ngx-slider-pointer:after {
+      width: 4px !important;
+      height: 4px !important;
+      top: 8px !important;
+      left: 8px !important;
+}
+
+.VIpgJd-yAWNEb-L7lbkb {
+      display: none !important;
+}
+
+
+
+body>.skiptranslate,
+.goog-logo-link,
+.gskiptranslate,
+.goog-te-gadget span,
+.goog-te-banner-frame,
+#goog-gt-tt,
+.goog-te-balloon-frame,
+div#goog-gt-tt {
+      display: none !important;
+}
+
+.goog-te-gadget {
+      color: transparent !important;
+      font-size: 0px;
+}
+
+.goog-text-highlight {
+      background: transparent !important;
+      box-shadow: transparent !important;
+}
+
+#google_translate_element select {
+      box-shadow: 0px 3px 4px 0px #00000040;
+      backdrop-filter: blur(4px);
+      background-color: #2a363a;
+      color: #fff;
+      border: oldlace;
+      padding: 10px 30px;
+      border-radius: 100px !important;
+      appearance: auto;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+}
+
+#google_translate_element select:focus {
+      outline: none;
+}
+
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf {
+      display: none !important;
+}
+
+.VIpgJd-yAWNEb-VIpgJd-fmcmS-sn54Q {
+      background-color: transparent !important;
+      box-shadow: none !important;
+}

@@ -1,0 +1,56 @@
+<header class="ct_header ct_px_100">
+      <div class="ct_logo">
+            <a routerLink="/">
+                  <h2>ZYNQ</h2>
+            </a>
+      </div>
+      <nav class="ct_navbar">
+           <div class="ct_close_btn" (click)="toggleNavbar()">
+             <i class="fa-solid fa-xmark"></i>
+           </div>
+            <ul>
+                  <li>
+                        <a routerLink="/about-us">About us</a>
+                  </li>
+                  <li>
+                        <a routerLink="/contact-us">Contact us</a>
+                  </li>
+                    <li>
+                        <a routerLink="/faq">FAQs</a>
+                  </li>
+            </ul>
+
+      </nav>
+      
+      <div class="d-flex  align-items-center gap-3">
+            <div class="ct_language_select dropdown notranslate">
+            <img [src]="selectedLang == 'sv' ? 'img/Flag_of_Sweden.svg.png' : 'img/Flag_of_the_United_States.svg.png'"
+                  alt="" class="dropdown_img">
+            <!-- <select class="form-control notranslate" (change)="onCustomLangChange($event)">
+                  <option value="sv">Swedish</option>
+                  <option value="en">English</option>
+            </select> -->
+            <button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{selectedLang == 'sv' ?
+                  'Swedish' : 'English'}}</button>
+            <ul class="dropdown-menu">
+                  <li>
+                        <a class="dropdown-item" (click)="onCustomLangChange('sv')">
+                              <img src="img/Flag_of_Sweden.svg.png" alt="">
+                              Swedish
+                        </a>
+                  </li>
+                  <li>
+                        <a class="dropdown-item" (click)="onCustomLangChange('en')">
+                              <img src="img/Flag_of_the_United_States.svg.png" alt="">
+                              English
+                        </a>
+                  </li>
+            </ul>
+      </div>
+      <div class="ct_toggle_bar" (click)="toggleNavbar()">
+            <i class="fa-solid fa-bars"></i>
+      </div>
+      </div>
+      <div id="google_translate_element">
+      </div>
+</header>

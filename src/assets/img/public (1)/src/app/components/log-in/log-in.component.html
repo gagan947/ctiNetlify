@@ -1,0 +1,94 @@
+<section class="ct_login_main">
+      <div class="ct_login_left position-relative">
+            <img src="img/login-left.png" alt="">
+            <div class="ct_login_btm_logo">
+                  <img src="img/logo.svg" alt="">
+
+            </div>
+
+      </div>
+      <div class="ct_login_right">
+            <h4 class="ct_fs_44  ct_fw_600 mb-5">Welcome to ZYNQ</h4>
+            <form [formGroup]="Form">
+                  <div class="form-group mb-4">
+                        <div class="position-relative">
+                              <div class="ct_input_icon_left">
+                                    <img src="img/icons/user.svg" alt="">
+                              </div>
+                              <input type="text" placeholder="Name" class="form-control ct_input  ct_input_pe_40"
+                                    formControlName="name">
+                        </div>
+                        <span
+                              class="ct_text_red mt-2">{{validationErrorService.getErrorMessage('Name', Form.get('name'))}}</span>
+                  </div>
+                  <div class="form-group mb-4">
+                        <div class="position-relative">
+                              <div class="ct_input_icon_left">
+                                    <img src="img/icons/age.svg" alt="">
+                              </div>
+                              <input type="number" placeholder="Age" class="form-control ct_input  ct_input_pe_40"
+                                    formControlName="age">
+                        </div>
+                        <span
+                              class="ct_text_red mt-2">{{validationErrorService.getErrorMessage('Age', Form.get('age'))}}</span>
+                  </div>
+                  <div class="form-group mb-4">
+                        <nz-select formControlName="gender" nzPlaceHolder="Select Gender" class="form-control ct_input">
+                              <nz-option nzValue="Male" nzLabel="Male"></nz-option>
+                              <nz-option nzValue="Female" nzLabel="Female"></nz-option>
+                              <nz-option nzValue="Other" nzLabel="Other"></nz-option>
+                        </nz-select>
+                        <span
+                              class="ct_text_red mt-2">{{validationErrorService.getErrorMessage('Gender', Form.get('gender'))}}</span>
+                  </div>
+                  <div class="form-group mb-4">
+                        <div class="position-relative">
+                              <input type="email" placeholder="Email address"
+                                    class="form-control ct_input  ct_input_pe_40" formControlName="email">
+                        </div>
+                        <span
+                              class="ct_text_red mt-2">{{validationErrorService.getErrorMessage('Email', Form.get('email'))}}</span>
+                  </div>
+                  <div class="form-group mb-4">
+                        <div class="position-relative">
+                              <input type="password" placeholder="Current Password"
+                                    class="form-control ct_input  ct_input_pe_40" formControlName="password">
+                              <i class="fa-solid fa-eye-slash ct_show_eye"></i>
+                        </div>
+                        <span
+                              class="ct_text_red mt-2">{{validationErrorService.getErrorMessage('Password', Form.get('password'))}}</span>
+                  </div>
+                  <div class="form-group mb-4">
+                        <div class="position-relative">
+                              <input type="password" placeholder="New Password"
+                                    class="form-control ct_input  ct_input_pe_40" formControlName="newPassword">
+                              <i class="fa-solid fa-eye-slash ct_show_eye"></i>
+                        </div>
+                        <span
+                              class="ct_text_red mt-2">{{validationErrorService.getErrorMessage('New Password', Form.get('newPassword'))}}</span>
+                        <span *ngIf="Form.errors?.['sameAsCurrent'] && !validationErrorService.getErrorMessage('New Password', Form.get('newPassword'))"
+                              class="ct_text_red mt-2">
+                              New password cannot be same as current password.</span>
+                  </div>
+                  <div class="form-group mb-4">
+                        <div class="position-relative">
+                              <input type="password" placeholder="Confirm Password"
+                                    class="form-control ct_input  ct_input_pe_40" formControlName="confirmPassword">
+                              <i class="fa-solid fa-eye-slash ct_show_eye"></i>
+                        </div>
+                        <span class="ct_text_red mt-2"
+                              class="ct_text_red mt-2">{{validationErrorService.getErrorMessage('Confirm Password', Form.get('confirmPassword'))}}</span>
+                        <span
+                              *ngIf="Form.errors?.['passwordMismatch'] && !validationErrorService.getErrorMessage('Confirm Password', Form.get('confirmPassword'))">
+                              Passwords do not match.</span>
+                  </div>
+                  <a href="forgot-password.html" class="ct_text_black">Forgot Password?</a>
+
+                  <div class="mt-5">
+                        <a href="profile.ZYNQ.html" class="ct_black_btn w-100">Log in</a>
+                  </div>
+            </form>
+
+      </div>
+
+</section>

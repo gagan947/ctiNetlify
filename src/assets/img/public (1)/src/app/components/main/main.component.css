@@ -1,0 +1,13 @@
+::ng-deep h1 font {
+      font-family: "Jomolhari", serif !important;
+}
+
+::ng-deep .ct_ff_jomolhari font {
+      font-family: "Jomolhari", serif !important;
+
+}
+
+::ng-deep .ct_ff_maitree font {
+      font-family: "Maitree", serif !important;
+
+}
