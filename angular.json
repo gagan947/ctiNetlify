@@ -25,7 +25,8 @@
               "src/assets",
               "src/sitemap.xml",
               "src/robots.txt",
-              "src/_redirects"
+              "src/_redirects",
+              "src/_headers"  
             ],
             "styles": [
               "src/styles.css",

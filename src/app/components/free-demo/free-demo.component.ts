@@ -62,23 +62,34 @@ export class FreeDemoComponent {
 
 
     const formData = { ...this.myForm.value };
-    const updloadData = new FormData();
-    if (this.selectedFiles.length > 0) {
-      this.selectedFiles.forEach(file => {
-        updloadData.append('multiple_files', file);
-      });
+  
+    const formData2 = {
+      fullName: formData.fullName.trim(),
+      businessEmail: formData.businessEmail.trim(),
+      companyName: formData.companyName.trim(),
+      project_name: formData.projectName.trim(),
+      project_description: formData.projectDescription.trim(),
+      companySize: formData.companySize.trim(),
+      jobTitle: formData.jobTitle.trim(),
+      phoneNumber: formData.phoneNumber.internationalNumber
     }
+    // const updloadData = new FormData();
+    // if (this.selectedFiles.length > 0) {
+    //   this.selectedFiles.forEach(file => {
+    //     updloadData.append('multiple_files', file);
+    //   });
+    // }
 
-    updloadData.append('fullName', formData.fullName.trim());
-    updloadData.append('businessEmail', formData.businessEmail.trim());
-    updloadData.append('companyName', formData.companyName.trim());
-    updloadData.append('project_name', formData.projectName.trim());
-    updloadData.append('project_description', formData.projectDescription.trim());
-    updloadData.append('companySize', formData.companySize.trim());
-    updloadData.append('jobTitle', formData.jobTitle.trim());
-    updloadData.append('phoneNumber', formData.phoneNumber.internationalNumber);
+    // updloadData.append('fullName', formData.fullName.trim());
+    // updloadData.append('businessEmail', formData.businessEmail.trim());
+    // updloadData.append('companyName', formData.companyName.trim());
+    // updloadData.append('project_name', formData.projectName.trim());
+    // updloadData.append('project_description', formData.projectDescription.trim());
+    // updloadData.append('companySize', formData.companySize.trim());
+    // updloadData.append('jobTitle', formData.jobTitle.trim());
+    // updloadData.append('phoneNumber', formData.phoneNumber.internationalNumber);
 
-    this.apiService.postAPI('api/user/getFreeDemo', updloadData).subscribe({
+    this.apiService.postAPI('api/user/getFreeDemo', formData2).subscribe({
       next: (response: any) => {
         if (response.success){
           this.message.success('Thank you for your submission! We will get in touch with you shortly.', {
