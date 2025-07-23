@@ -84,10 +84,10 @@ export class FreeDemoComponent {
     // updloadData.append('businessEmail', formData.businessEmail.trim());
     // updloadData.append('companyName', formData.companyName.trim());
     // updloadData.append('project_name', formData.projectName.trim());
-    // updloadData.append('project_description', formData.projectDescription.trim());
-    // updloadData.append('companySize', formData.companySize.trim());
-    // updloadData.append('jobTitle', formData.jobTitle.trim());
-    // updloadData.append('phoneNumber', formData.phoneNumber.internationalNumber);
+  
+ 
+  
+   
 
     this.apiService.postAPI('api/user/getFreeDemo', formData2).subscribe({
       next: (response: any) => {
