@@ -4,18 +4,19 @@ import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { SubmitButtonComponent } from "../shared/submit-button/submit-button.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, FormsModule, CommonModule],
+  imports: [RouterLink, ReactiveFormsModule, FormsModule, CommonModule, SubmitButtonComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
   loginForm: FormGroup;
   showPassword: boolean = false; // Controls password visibility
-
+  isLoading = false
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService,) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -34,6 +35,7 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.isLoading = true;
       const payload = {
         email: this.loginForm.value.email,
         password: this.loginForm.value.password
@@ -49,15 +51,22 @@ export class LoginComponent {
               this.router.navigate(['/main'])
               // this.projectInfo = res.projectInfo
               // this, this.getProjectMedia()
-              // this.loading = false
+              this.isLoading = false
             } else {
+              this.isLoading = false
               // this.loading = false
               this.message.error(res.message)
             }
           },
           error: err => {
-            // this.loading = false
-            this.message.error('Something went wrong')
+            if (err.status === 0) {
+              this.message.error('Network error, please check your connection.');
+            } else if (err.error?.message) {
+              this.message.error(err.error.message);
+            } else {
+              this.message.error('Unexpected error occurred.');
+            }
+            this.isLoading = false
           }
         });
     } else {

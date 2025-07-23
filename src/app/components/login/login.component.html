@@ -8,7 +8,7 @@
                   </div>
                   <div class="ct_sign-in_othher ct_mt_18">
                         <a  class="ct_login_icon_site">
-                              <img src="assets/img/google.png" alt="AI app builder for mobile and web">
+                              <img loading="lazy" src="assets/img/google.png" alt="AI app builder for mobile and web">
                         </a>
                      
 
@@ -22,7 +22,7 @@
                         <div class="form-group mb-3">
                               <label class="ct_fw_400 mb-2">Company Email <span class="ct_red_text">*</span></label>
                               <div class="position-relative">
-                                    <img src="assets/img/message_icon.svg" alt="AI app builder for mobile and web" class="ct_left_input_icon">
+                                    <img loading="lazy" src="assets/img/message_icon.svg" alt="AI app builder for mobile and web" class="ct_left_input_icon">
                                     <input type="email" formControlName="email" class="form-control ct_input px-5"
                                           placeholder="Enter email" />
                               </div>
@@ -36,7 +36,7 @@
                         <div class="form-group mb-3">
                               <label class="ct_fw_400 mb-2">Password <span class="ct_red_text">*</span></label>
                               <div class="position-relative">
-                                    <img src="assets/img/lock_icon.svg" alt="AI app builder for mobile and web" class="ct_left_input_icon">
+                                    <img loading="lazy" src="assets/img/lock_icon.svg" alt="AI app builder for mobile and web" class="ct_left_input_icon">
                                     <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
                                           class="form-control ct_input px-5" placeholder="Enter password" />
                                     <button type="button"
@@ -56,9 +56,10 @@
 
                         <!-- Submit Button -->
                         <div class="mt-5">
-                              <button type="submit" class="ct_blue_btn_fill py-3 w-100">
+                              <!-- <button type="submit" class="ct_blue_btn_fill py-3 w-100">
                                     Sign in
-                              </button>
+                              </button> -->
+                              <app-submit-button [text]="'Sign in'" [isLoading]="isLoading" [class]="'ct_blue_btn_fill py-3 w-100'"></app-submit-button>
                         </div>
 
                         <!-- Sign Up Link -->
@@ -75,10 +76,10 @@
                   <!-- <h4 class="ct_fs_28 text-white">Very good works are waiting for you ☝️</h4>
                   <h4 class="ct_fs_28 text-white">Login Now</h4> -->
                   <div class="">
-                        <img src="assets/img/logocti.png" alt="Creative Ai">
+                        <img loading="lazy" src="assets/img/logocti.png" alt="Creative Ai">
                   </div>
                   <div class="">
-                        <img src="assets/img/login_img_2.png" alt="Creative Ai">
+                        <img loading="lazy" src="assets/img/login_img_2.png" alt="Creative Ai">
                   </div>
                   <p class="ct_fw_600 mb-0"><span class=" ct_fw_900">100K</span> Satisfied Clients</p>
 
@@ -86,15 +87,15 @@
             <div>
                   <ul>
                         <li class="d-flex align-items-center gap-2">
-                              <img src="assets/img/check_svg.svg" alt="Creative Ai">
+                              <img loading="lazy" src="assets/img/check_svg.svg" alt="Creative Ai">
                               <span>Trusted by Businesses Worldwide</span>
                         </li>
                         <li class="d-flex align-items-center gap-2">
-                              <img src="assets/img/check_svg.svg" alt="Creative Ai">
+                              <img loading="lazy" src="assets/img/check_svg.svg" alt="Creative Ai">
                               <span>Zero Tech Knowledge Needed – Simple & Fast Setup</span>
                         </li>
                         <li class="d-flex align-items-center gap-2">
-                              <img src="assets/img/check_svg.svg" alt="Creative Ai">
+                              <img loading="lazy" src="assets/img/check_svg.svg" alt="Creative Ai">
                               <span>CreativeThoughts.ai – Your Trusted App Development Partner</span>
                         </li>
                   </ul>
@@ -116,7 +117,7 @@
                                                 <h4 class="ct_orange_text ct_fw_600 ct_fs_26 mb-5">Tell us about you
                                                 </h4>
                                                 <div class="ct_login_modal_img">
-                                                      <img src="assets/img/pc_vector.png" alt="AI app builder for mobile and web">
+                                                      <img loading="lazy" src="assets/img/pc_vector.png" alt="AI app builder for mobile and web">
                                                 </div>
                                           </div>
 
@@ -445,7 +446,7 @@
                               <p class="text-center mb-0">Talk to our team of experts - Free consultation</p>
 
                               <div class="ct_team_leader_1_img">
-                                    <img src="assets/img/team_leader.png" alt="AI app builder for mobile and web">
+                                    <img loading="lazy" src="assets/img/team_leader.png" alt="AI app builder for mobile and web">
                               </div>
 
                               <button class="ct_schedule_call_btn ct_blue_btn_fill w-100 justify-content-center "
@@ -494,7 +495,7 @@
                         <!-- You Need To Import Schedule Form here -->
                         <div class="ct_schedule_call_main12">
 
-                              <img src="assets/img/schedule_call_img_456.png" alt="AI app builder for mobile and web" class="w-100">
+                              <img loading="lazy" src="assets/img/schedule_call_img_456.png" alt="AI app builder for mobile and web" class="w-100">
                               <div class="mt-4">
                                     <button class="ct_schedule_call_btn ct_blue_btn_fill  w-100 justify-content-center"
                                           data-bs-toggle="modal" data-bs-target="#ct_schedule_call_confirm">Confirm

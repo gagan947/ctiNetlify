@@ -2773,7 +2773,7 @@ table.table.ct_compare_table {
 
 .ct_where_next_overlay {
   position: absolute;
-  top: 40px;
+  top: 38%;
   left: 50%;
   width: 50%;
   transform: translateX(-50%);
