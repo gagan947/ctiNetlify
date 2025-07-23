@@ -1,0 +1,509 @@
+<section class="ct_dash_board_main">
+      <app-sidebar></app-sidebar>
+
+      <div class="ct_dash_right_content ct_white_bg_page ">
+            <div class="ct_dash_toggle_bar">
+                  <i class="fa-solid fa-bars"></i>
+            </div>
+            <div class="container-fluid">
+                  <div class="row">
+                        <div class="col-md-12">
+                              <div class="d-grid">
+                                    <div class="ct_step-container d-flex justify-content-between">
+                                          <div class="ct_step-circle cursor-pointer" [routerLink]="['/main']">
+                                                <!-- <p class=" mb-0">1</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Choose Base</p>
+                                          </div>
+                                          <div class="ct_step-circle cursor-pointer"
+                                                [routerLink]="['/make-it-mine/'+id]">
+                                                <!-- <p class=" mb-0">2</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Make it Mine</p>
+                                          </div>
+                                          <div class=" ct_step-circle cursor-pointer"
+                                                [routerLink]="['/refine-idea/'+id]">
+                                                <!-- <p class=" mb-0">3</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Refine Idea</p>
+                                          </div>
+                                          <div class=" ct_step-circle">
+                                                <p class=" mb-0">4</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Plan Delivery</p>
+                                          </div>
+                                          <div class=" ct_step-circle opacity-50">
+                                                <p class=" mb-0">5</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Review Buildcard</p>
+                                          </div>
+                                          <div class=" ct_step-circle opacity-50">
+                                                <p class=" mb-0">6</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Billing Details</p>
+                                          </div>
+                                          <div class=" ct_step-circle opacity-50">
+                                                <p class=" mb-0">7</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Payment Plan</p>
+                                          </div>
+                                          <div class=" ct_step-circle opacity-50">
+                                                <p class=" mb-0">6</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Payment Options</p>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="row mt-5">
+                        <div class="col-lg-8 mb-4 mb-lg-0">
+                              <div class="ct_outline_border_box">
+                                    <div class="d-flex align-items-center justify-content-between gap-3 ">
+                                          <h5 class="mb-0 ct_fs_18 ct_fw_700">Confirm app details</h5>
+                                          <div class="form-check form-switch ct_custom_switch">
+                                                <!-- <label class="form-check-label"
+                                                      for="flexSwitchCheckChecked">Advanced</label>
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                      id="flexSwitchCheckChecked" checked> -->
+                                          </div>
+                                    </div>
+
+                                    <div class="mt-4">
+                                          <h5 class="mb-0 ct_fs_18 ct_fw_600 mb-2">Smartphone</h5>
+                                          <div class="row">
+                                                @for (item of devices.slice(0,2);track devices; let i = $index; ) {
+                                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                                      <label for="flexCheckDefault{{i}}" class="ct_app_detail_card"
+                                                            [ngClass]="{'active': selectedDevices.includes(item)}"
+                                                            (click)="onDeviceSelect(item)">
+                                                            <svg width="22" height="12" viewBox="0 0 22 12" fill="none"
+                                                                  xmlns="http://www.w3.org/2000/svg">
+                                                                  <path d="M15.5148 8.81392C14.9908 8.76628 14.7051 8.4805 14.6574 7.95658C14.7051 7.43264 14.9908 7.14686 15.5148 7.09923C16.0149 7.14686 16.3007 7.43264 16.3721 7.95658C16.3007 8.4805 16.0149 8.76628 15.5148 8.81392ZM6.01259 8.81392C5.51247 8.76628 5.22669 8.4805 5.15525 7.95658C5.22669 7.43264 5.51247 7.14686 6.01259 7.09923C6.53652 7.14686 6.8223 7.43264 6.86993 7.95658C6.8223 8.4805 6.53652 8.76628 6.01259 8.81392ZM15.8006 3.63414L17.5152 0.669141C17.5867 0.550074 17.5986 0.431005 17.551 0.311938C17.4796 0.19287 17.3724 0.133337 17.2295 0.133337C17.0866 0.133337 16.9794 0.19287 16.908 0.311938L15.1576 3.34836C13.7525 2.70534 12.2879 2.38383 10.7637 2.38383C9.23953 2.38383 7.7749 2.70534 6.36981 3.34836L4.61941 0.311938C4.54796 0.19287 4.44079 0.133337 4.2979 0.133337C4.15501 0.133337 4.04784 0.19287 3.97639 0.311938C3.92877 0.431005 3.94068 0.550074 4.01212 0.669141L5.72681 3.63414C4.22646 4.46766 3.0238 5.58697 2.11883 6.99206C1.19004 8.37333 0.642292 9.95703 0.475586 11.7432H21.0518C20.8851 9.95703 20.3374 8.37333 19.4085 6.99206C18.5036 5.58697 17.3009 4.46766 15.8006 3.63414Z"
+                                                                        fill="black" />
+                                                            </svg>
+                                                            <h4 class="mb-0 ct_fs_14 ct_fw_700">{{ item }}</h4>
+                                                            <div class="form-check ct_transparent_checkbox">
+                                                                  <input class="form-check-input" type="checkbox"
+                                                                        [checked]="selectedDevices.includes(item)"
+                                                                        (change)="onDeviceSelect(item)">
+                                                            </div>
+                                                      </label>
+                                                </div>
+                                                }
+                                          </div>
+                                    </div>
+                                    <div class="mt-4">
+                                          <h5 class="mb-0 ct_fs_18 ct_fw_600 mb-2">Desktop</h5>
+                                          <div class="row">
+                                                @for (item of devices.slice(2,4);track devices; let i = $index; ) {
+                                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                                      <label for="flexCheckDefault{{i}}" class="ct_app_detail_card"
+                                                            [ngClass]="{'active': selectedDevices.includes(item)}"
+                                                            (click)="onDeviceSelect(item)">
+                                                            <svg width="22" height="12" viewBox="0 0 22 12" fill="none"
+                                                                  xmlns="http://www.w3.org/2000/svg">
+                                                                  <path d="M15.5148 8.81392C14.9908 8.76628 14.7051 8.4805 14.6574 7.95658C14.7051 7.43264 14.9908 7.14686 15.5148 7.09923C16.0149 7.14686 16.3007 7.43264 16.3721 7.95658C16.3007 8.4805 16.0149 8.76628 15.5148 8.81392ZM6.01259 8.81392C5.51247 8.76628 5.22669 8.4805 5.15525 7.95658C5.22669 7.43264 5.51247 7.14686 6.01259 7.09923C6.53652 7.14686 6.8223 7.43264 6.86993 7.95658C6.8223 8.4805 6.53652 8.76628 6.01259 8.81392ZM15.8006 3.63414L17.5152 0.669141C17.5867 0.550074 17.5986 0.431005 17.551 0.311938C17.4796 0.19287 17.3724 0.133337 17.2295 0.133337C17.0866 0.133337 16.9794 0.19287 16.908 0.311938L15.1576 3.34836C13.7525 2.70534 12.2879 2.38383 10.7637 2.38383C9.23953 2.38383 7.7749 2.70534 6.36981 3.34836L4.61941 0.311938C4.54796 0.19287 4.44079 0.133337 4.2979 0.133337C4.15501 0.133337 4.04784 0.19287 3.97639 0.311938C3.92877 0.431005 3.94068 0.550074 4.01212 0.669141L5.72681 3.63414C4.22646 4.46766 3.0238 5.58697 2.11883 6.99206C1.19004 8.37333 0.642292 9.95703 0.475586 11.7432H21.0518C20.8851 9.95703 20.3374 8.37333 19.4085 6.99206C18.5036 5.58697 17.3009 4.46766 15.8006 3.63414Z"
+                                                                        fill="black" />
+                                                            </svg>
+                                                            <h4 class="mb-0 ct_fs_14 ct_fw_700">{{ item }}</h4>
+                                                            <div class="form-check ct_transparent_checkbox">
+                                                                  <input class="form-check-input" type="checkbox"
+                                                                        [checked]="selectedDevices.includes(item)"
+                                                                        (change)="onDeviceSelect(item)">
+                                                            </div>
+                                                      </label>
+                                                </div>
+                                                }
+                                          </div>
+                                    </div>
+                              </div>
+
+                              <div class="ct_add_the_power_of_bg my-5">
+                                    <div class="container">
+                                          <div class="row">
+                                                <div class="col-md-12">
+                                                      <div class="ct_add_the_power_content">
+                                                            <div class="ct_max_w_65">
+                                                                  <h5 class="ct_white_badge ct_fw_600 ct_w_fit_content">
+                                                                        Add the power of
+                                                                        AI to
+                                                                        your
+                                                                        app</h5>
+                                                                  <p class="mb-0 text-white mt-3">Vaanya, our AI, can
+                                                                        supercharge your
+                                                                        customerexperience</p>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+
+                              <div class="mb-4">
+                                    <h5 class="mb-0 ct_fs_18 ct_fw_700 mb-3">Development speed</h5>
+                                    <div class="ct_outline_border_box">
+                                          <div>
+                                                <input type="range" class="form-range" min="0" max="4" step="2"
+                                                      id="customRange3" [value]="rangeValue"
+                                                      (input)="onRangeChange($event)">
+                                                <div class="ct_range_grid_5 mt-4">
+                                                      <div class="" [ngClass]="{'rangeActive': rangeValue =='0'}">
+                                                            <h6 class="mb-0 ct_fs_16 ct_fw_600">Standard</h6>
+                                                            <p class="mb-0 ct_fs_14 ">
+                                                                  {{this.projectsData.speed === 'Fast' ?  projectsData.estimated_time + 2 : this.projectsData.speed === 'Speedy' ?  projectsData.estimated_time + 4 : projectsData.estimated_time}}
+                                                                  weeks
+                                                            </p>
+                                                            <p class="mb-0 ct_fs_14 ">{{projectCost | currency
+                                                                                          :'INR'}}</p>
+                                                      </div>
+                                                      <div class="text-center"
+                                                            [ngClass]="{'rangeActive': rangeValue =='2'}">
+                                                            <h6 class="mb-0 ct_fs_16 ct_fw_600">Fast</h6>
+                                                            <p class="mb-0 ct_fs_14 ">
+                                                                  {{this.projectsData.speed === 'Fast' ?  projectsData.estimated_time  : this.projectsData.speed === 'Speedy' ?  projectsData.estimated_time + 2 : projectsData.estimated_time - 2}}
+                                                                  weeks
+                                                            </p>
+                                                            <p class="mb-0 ct_fs_14 ">{{projectSecondCost | currency
+                                                                                          :'INR'}}</p>
+                                                      </div>
+                                                      <div class="text-end"
+                                                            [ngClass]="{'rangeActive': rangeValue =='4'}">
+                                                            <h6 class="mb-0 ct_fs_16 ct_fw_600">Speedy</h6>
+                                                            <p class="mb-0 ct_fs_14 ">
+                                                                  {{this.projectsData.speed === 'Fast' ?  projectsData.estimated_time - 2 : this.projectsData.speed === 'Speedy' ?  projectsData.estimated_time : projectsData.estimated_time - 4}}
+                                                                  weeks
+                                                            </p>
+                                                            <p class="mb-0 ct_fs_14 ">{{projectThirdCost | currency
+                                                                                          :'INR'}}</p>
+                                                      </div>
+
+                                                </div>
+
+                                                <div class="pt-3 ct_border_top_1 mt-3">
+                                                      <h6 class="ct_fs_14 mb-0 ct_fw_600">Relaxed</h6>
+                                                      <p class="mb-0 ct_text_op_7">Our most budget-friendly option for
+                                                            those who
+                                                            aren't in a hurry.
+                                                      </p>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                              <div class="mb-4">
+                                    <h5 class="mb-0 ct_fs_18 ct_fw_700 ">Phases & deliverables</h5>
+                                    <div class="ct_outline_border_box ct_p_20 mt-3">
+                                          <div class="form-check ct_checkbox_with_border mb-0 ">
+                                                <input class="form-check-input mt-1 me-2" type="checkbox"
+                                                      [checked]="PhasesDeliverables ? PhasesDeliverables.includes('Product Roadmap') : false"
+                                                      (change)="selectDeliveryPhase($event, 'Product Roadmap')"
+                                                      id="flexCheckChecked">
+                                                <label class="form-check-label ct_fw_700 ct_fs_18"
+                                                      for="flexCheckChecked">
+                                                      Product Roadmap
+                                                </label>
+                                          </div>
+                                          <p class="mb-0 ct_fs_14">Based on your goals with milestones and release
+                                                dates.</p>
+                                    </div>
+
+                                    <div class="ct_outline_border_box ct_p_20 mt-3">
+                                          <div class="d-flex align-items-center  justify-content-between gap-3">
+                                                <div>
+                                                      <div class="form-check ct_checkbox_with_border mb-0 ">
+                                                            <input class="form-check-input mt-1 ct_grey_checkbox1"
+                                                                  type="checkbox" value="" id="flexCheckChecked" checked
+                                                                  disabled>
+                                                            <label class="form-check-label ct_fw_700 ct_fs_18"
+                                                                  for="flexCheckChecked">
+                                                                  Design
+                                                            </label>
+                                                      </div>
+                                                      <p class="mb-0 ct_fs_14">We'll create a custom design and
+                                                            experience.</p>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-3 ">
+                                                      <div class="text-center">
+                                                            <h5 class="ct_fs_16 ct_fw_500">Estimated Duration</h5>
+                                                            <p class="mb-0">6 weeks</p>
+                                                      </div>
+                                                      <div class="text-center">
+                                                            <h5 class="ct_fs_16 ct_fw_500">Estimated Duration</h5>
+                                                            <p class="mb-0">6 weeks</p>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                          <div class="row pt-4 ct_border_top_1 mt-4">
+                                                <div class="col-md-4 mb-4">
+                                                      <div>
+                                                            <div class="form-check ct_custom_radio_check">
+                                                                  <input class="form-check-input" type="radio" checked
+                                                                        (change)="selectDesignPhase($event, 'We do your designs')"
+                                                                        name="flexRadioDefault" id="flexRadioDefault1"
+                                                                        checked>
+                                                                  <label class="form-check-label"
+                                                                        for="flexRadioDefault1">
+                                                                        <h5 class="ct_fs_14 ct_fw_700 mb-0">We do your
+                                                                              designs</h5>
+                                                                        <p class="ct_text_op_7 mb-0">Add your brand
+                                                                              assets and we'll do
+                                                                              everything from storyboarding
+                                                                              to fully designed screens.</p>
+                                                                  </label>
+                                                            </div>
+                                                      </div>
+                                                </div>
+
+                                                <div class="col-md-4 mb-4">
+                                                      <div>
+                                                            <div class="form-check ct_custom_radio_check">
+                                                                  <input class="form-check-input" type="radio"
+                                                                        name="flexRadioDefault" id="flexRadioDefault2"
+                                                                        (change)="selectDesignPhase($event, 'You have designs')">
+                                                                  <label class="form-check-label"
+                                                                        for="flexRadioDefault2">
+                                                                        <h5 class="ct_fs_14 ct_fw_700 mb-0">You have
+                                                                              designs</h5>
+                                                                        <p class="ct_text_op_7 mb-0">Share your design
+                                                                              files. Our designers
+                                                                              will upload and check them – so you can
+                                                                              kick-off with no
+                                                                              hassles.</p>
+                                                                  </label>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                                <div class="col-md-4 mb-4">
+                                                      <div>
+                                                            <div class="form-check ct_custom_radio_check">
+                                                                  <input class="form-check-input" type="radio"
+                                                                        name="flexRadioDefault" id="flexRadioDefault3"
+                                                                        (change)="selectDesignPhase($event, 'You have a designer')">
+                                                                  <label class="form-check-label"
+                                                                        for="flexRadioDefault3">
+                                                                        <h5 class="ct_fs_14 ct_fw_700 mb-0">You have a
+                                                                              designer</h5>
+                                                                        <p class="ct_text_op_7 mb-0">Your designer will
+                                                                              work closely with
+                                                                              our team to ensure compatibility.</p>
+                                                                  </label>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <div class="ct_outline_border_box ct_p_20 mt-3">
+                                          <div class="form-check ct_checkbox_with_border mb-0 ">
+                                                <input class="form-check-input mt-1 me-2" type="checkbox"
+                                                      id="flexCheckChecked33"
+                                                      [checked]="PhasesDeliverables.includes('Clickable prototype')"
+                                                      (change)="selectDeliveryPhase($event, 'Clickable prototype')">
+                                                <label class="form-check-label ct_fw_700 ct_fs_18"
+                                                      for="flexCheckChecked33">
+                                                      Clickable prototype
+                                                </label>
+                                          </div>
+                                          <p class="mb-0 ct_fs_14">Get a visual representation of your app to test with
+                                                users.</p>
+                                    </div>
+                                    <div class="ct_outline_border_box ct_p_20 mt-3">
+                                          <div class="form-check ct_checkbox_with_border mb-0 ">
+                                                <input class="form-check-input mt-1 me-2" type="checkbox"
+                                                      id="flexCheckChecked22"
+                                                      [checked]="PhasesDeliverables.includes('Basic build')"
+                                                      (change)="selectDeliveryPhase($event, 'Basic build')">
+                                                <label class="form-check-label ct_fw_700 ct_fs_18"
+                                                      for="flexCheckChecked22">
+                                                      Basic build
+                                                </label>
+                                          </div>
+                                          <p class="mb-0 ct_fs_14">This first build (or MVP) will include a minimum set
+                                                of
+                                                features. Gain early adopters and gather valuable feedback.</p>
+                                    </div>
+                                    <div class="ct_outline_border_box ct_p_20 mt-3">
+                                          <div class="d-flex align-items-center  justify-content-between gap-3">
+                                                <div>
+                                                      <div class="form-check ct_checkbox_with_border mb-0 ">
+                                                            <input class="form-check-input mt-1 me-2" type="checkbox"
+                                                                  id="flexCheckChecked11"
+                                                                  [checked]="PhasesDeliverables.includes('Full build')"
+                                                                  (change)="selectDeliveryPhase($event, 'Full build')">
+                                                            <label class="form-check-label ct_fw_700 ct_fs_18"
+                                                                  for="flexCheckChecked11">
+                                                                  Full Build
+                                                            </label>
+                                                      </div>
+                                                      <p class="mb-0 ct_fs_14">We deliver market-ready software with a
+                                                            product team
+                                                            kick-off, review sessions, and a year of Studio One support.
+                                                      </p>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-3 ">
+                                                      <div class="text-center">
+                                                            <h5 class="ct_fs_16 ct_fw_500">Estimated Duration</h5>
+                                                            <p class="mb-0">6 weeks</p>
+                                                      </div>
+                                                      <div class="text-center">
+                                                            <h5 class="ct_fs_16 ct_fw_500">Estimated Duration</h5>
+                                                            <p class="mb-0">6 weeks</p>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="col-lg-4 mb-4 mb-lg-0">
+                              <div class="ct_right_sidebar_12 ct_outline_border_box">
+                                    <div>
+                                          <div class="position-relative ct_w_fit_content mx-auto">
+                                                <img src="assets/img/iPhone_14 Plus_.png" alt="AI app builder for mobile and web">
+                                                <div class="ct_mob_overlay_top_cnt_12">
+                                                      <div class="ct_add_logo_by_ai" [style]="projectsData.logoStyle">
+                                                            @if(!projectsData.projectLogo){
+                                                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                                  xmlns="http://www.w3.org/2000/svg">
+                                                                  <circle cx="5.6658" cy="5.82644" r="5.13414"
+                                                                        stroke="white" stroke-width="0.789868" />
+                                                                  <path d="M5.83104 3.45752V8.52584M3.29688 5.99168H8.3652"
+                                                                        stroke="white" stroke-width="0.724046"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                            </svg>
+                                                            } @else {
+                                                            <img [src]="projectsData.projectLogo" alt="AI app builder for mobile and web"
+                                                                  class="ct_img_logo_123">
+                                                            }
+                                                      </div>
+                                                      <h6 class="text-white ct_fs_14">{{projectsData.projectName}}</h6>
+                                                </div>
+                                          </div>
+                                          <div class="mt-3">
+                                                <h5 class="ct_fs_16 ct_fw_700 text-center">{{projectsData.projectName}}
+                                                </h5>
+                                                <p class="ct_text_op_7 mb-0 text-center">FEATURES:
+                                                      {{ projectsData.no_of_features}}
+                                                </p>
+                                          </div>
+                                          <div class="mt-5">
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_text_op_7 ct_fs_14">Estimated Duration</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">
+                                                            {{estimatedWeeks}} weeks
+                                                      </p>
+                                                </div>
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_text_op_7 ct_fs_14">Expected Completion</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">{{estimatedDate | date}}</p>
+                                                </div>
+                                          </div>
+                                          <div class="mt-4 pt-4 ct_border_top_1">
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Features</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">{{totalFeatureCost | currency
+                                                                                          :'INR'}}</p>
+                                                </div>
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Customisation</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">{{totalCustomizeCost | currency
+                                                                                          :'INR'}}</p>
+                                                </div>
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_fw_700 ct_fs_18">Total Cost</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_18">{{totalPrice| currency
+                                                                                          :'INR'}}</p>
+                                                </div>
+                                          </div>
+                                          <div class="mt-5">
+                                                <a (click)="Navigate()"
+                                                      class="ct_schedule_call_btn w-100 d-flex justify-content-center align-items-center">View
+                                                      Creative
+                                                      Card</a>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</section>
+
+<!-- Mobile page section S -->
+<section class="ct_mobile_section_main">
+      <div class="ct_mobile_header_main_bg">
+            <img src="assets/img/cti_black_logo.svg" alt="AI app builder for mobile and web">
+      </div>
+      <div class="container">
+            <div class="row">
+                  <div class="col-md-12">
+                        <div class="mt-4">
+                              <h3 class="ct_fs_24 text-center ct_fw_700">Why it's worth heading to a desktop now</h3>
+                              <p class="text-center">Our mobile site isn't the best place to order your app…yet.</p>
+                              <div class="ct_grey_bg p-4 mt-3">
+                                    <h6 class="ct_fs_16 ct_fw_700 mb-4">Go to your desktop now and Vaanya, our AI can:
+                                    </h6>
+                                    <ul class="ct_list_style_dics">
+                                          <li>Guide you to find all the app features you need</li>
+                                          <li>Help you Start designing - get a feel of what your app could look like
+                                          </li>
+                                          <li>Give you a guaranteed price and accurate timeline</li>
+                                    </ul>
+                              </div>
+                              <p class="mb-0 mt-3 text-center">Want to give it a try? Grab a bigger screen and let's
+                                    bring
+                                    your app to
+                                    life!</p>
+                              <div class="mt-5">
+                                    <a href="index.html" class="ct_blue_btn_fill w-100">Return to Creative Thoughts
+                                          Ai</a>
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</section>
+<!-- Mobile page section E -->
+
+<!-- Refrsh page modal S -->
+
+<div class="modal fade modal-lg" id="ct_refresh_page" tabindex="-1" aria-labelledby="ct_refresh_pageLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content  p-4">
+                  <div class="modal-body  p-0">
+                        <!-- You Need To Import Schedule Form here -->
+                        <div class="ct_schedule_call_main12">
+                              <h4 class="ct_fs_24 ct_fw_700 text-center mb-2">Are you sure you want to continue with
+                                    this
+                                    refresh?</h4>
+                              <p class="mb-0 text-center">Doing so may result in the loss of your recent interactions
+                                    and
+                                    changes.
+                              </p>
+                              <div
+                                    class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center">
+                                    <button class="ct_blue_outline_btn  justify-content-center"
+                                          data-bs-dismiss="modal">Cancel</button>
+                                    <button class="ct_blue_btn_fill  justify-content-center" data-bs-dismiss="modal"
+                                          routerLink="/main">Proceed</button>
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</div>

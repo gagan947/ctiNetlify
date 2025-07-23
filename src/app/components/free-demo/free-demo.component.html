@@ -1,0 +1,905 @@
+<div class="">
+      <div class="ct_header_main">
+            <app-header />
+      </div>
+
+      <!-- Inner Hero Content S -->
+      <section class="ct_py_70">
+            <div class="container">
+                  <div class="row     ">
+                        <div class="col-lg-7 mb-4 mb-lg-0" data-aos="fade-right" data-aos-duration="1000">
+                              <div class="ct_hero_banner_left_cnt ">
+                                    <div class="et_creative_banner_img_w">
+                                          <img src="assets/img/creativeai_banner.png" alt="AI app builder for mobile and web">
+                                    </div>
+                                    <p class="ct_fs_16  ct_fw_600 mb-4 ct_line_h_25">"The Fall of Builder.ai: What Went Wrong — and What’s Next for You"</p>
+                                    <ul>
+                                          <li class="align-items-start mb-4">
+                                                <i class="bi bi-check2-circle" style="margin-top: -4px;"></i>
+                                                <div>
+                                                      <p class="ct_fw_700 ct_fs_16 mb-1"> Builder.ai’s sudden collapse has left many in the tech world stunned</p>
+                                                      <p class="ct_fs_16">Not just because of its failure, but because of why it failed. Behind the polished pitch decks and billion-dollar valuations was a troubling lack of strategic direction, financial discipline, and transparent leadership.</p>
+                                                </div>
+                                          </li>
+                                          <li class="align-items-start mb-4"><i class="bi bi-check2-circle"
+                                                      style="margin-top: -4px;"></i>
+                                                <div>
+                                                      <p class="ct_fw_700 ct_fs_16 mb-1">This wasn’t just a missed opportunity</p>
+                                                      <p class="ct_fs_16">It was a breakdown that’s now impacting real businesses, founders, and clients who put their trust (and budgets) into the platform.</p>
+                                                </div>
+                                          </li>
+                                          <li class="align-items-start"><i class="bi bi-check2-circle"
+                                                      style="margin-top: -4px;"></i>
+                                                <div>
+                                                      <p class="ct_fw_700 ct_fs_16 mb-1">At Creative.ai</p>
+                                                      <p class="ct_fs_16">We’re stepping up to help those left behind. Whether your project is half-built, your investment feels wasted, or you're simply unsure of your next move, we're here to provide clarity, recovery plans, and honest guidance — no sales pitch, just solutions.</p>
+                                                </div>
+                                          </li>
+                                          <li class="align-items-start"><i class="bi bi-check2-circle"
+                                                      style="margin-top: -4px;"></i>
+                                                <div>
+                                                      <p class="ct_fw_700 ct_fs_16 mb-1">Reach out via DM</p>
+                                                      <p class="ct_fs_16">Let’s talk, review where things stand, and figure out how to move forward — with confidence and smarter tech choices.</p>
+                                                </div>
+                                          </li>
+                                    </ul>
+                                    <h5>This isn’t the end — it’s a chance to rebuild better.</h5>
+                                    <p>#AIFailure #StartupLessons #CreativeAI #LeadershipMatters #PostBuilderAI</p>
+
+
+                              </div>
+                        </div>
+                        <div class="col-lg-5 mb-4 mb-lg-0" data-aos="fade-left" data-aos-duration="1000">
+                              <div class="ct_free_demo_ui_form">
+                                    <h5 class="ct_fs_16 ct_fw_700 text-dark mb-2">Schedule a call from our expert</h5>
+                                    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+                                          <div class="row">
+                                                <h5 class="ct_fs_16 ct_fw_700 ct_dark_blue_text mb-3">About you</h5>
+
+                                                <!-- Full Name -->
+                                                <div class="col-md-12">
+                                                      <div class="form-group mb-3">
+                                                            <label for="fullName" class="ct_fw_600 mb-1">Full
+                                                                  name</label>
+                                                            <input type="text" class="form-control ct_input_grey"
+                                                                  formControlName="fullName"
+                                                                  placeholder="e.g. John Doe">
+                                                            <small *ngIf="f['fullName'].touched && f['fullName'].invalid"
+                                                                  class="text-danger">
+                                                                  Full name is required (Min 3 characters).
+                                                            </small>
+                                                      </div>
+                                                </div>
+
+                                                <!-- Phone Number -->
+                                                <div class="col-md-12">
+                                                      <div class="form-group mb-3">
+                                                            <label for="phone" class="ct_fw_600 mb-1">Phone No</label>
+                                                            <ngx-intl-tel-input formControlName="phoneNumber"
+                                                                  [cssClass]="'form-control ct_input ct_input_phone_number'"
+                                                                  [enableAutoCountrySelect]="false"
+                                                                  [enablePlaceholder]="true" [searchCountryFlag]="true"
+                                                                  [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                                                  [selectFirstCountry]="false"
+                                                                  [selectedCountryISO]="CountryISO.India"
+                                                                  [maxLength]="15" [phoneValidation]="true">
+                                                            </ngx-intl-tel-input>
+                                                            <small *ngIf="f['phoneNumber'].touched && f['phoneNumber'].invalid"
+                                                                  class="text-danger">
+                                                                  Valid phone number is required
+                                                            </small>
+                                                      </div>
+                                                </div>
+                                          </div>
+
+                                          <div class="row">
+                                                <h5 class="ct_fs_16 ct_fw_700 ct_dark_blue_text mb-3">About company</h5>
+
+                                                <!-- Business Email -->
+                                                <div class="col-md-12">
+                                                      <div class="form-group mb-3">
+                                                            <label for="businessEmail" class="ct_fw_600 mb-1">Business
+                                                                  Email</label>
+                                                            <input type="email" class="form-control ct_input_grey"
+                                                                  formControlName="businessEmail"
+                                                                  placeholder="e.g. name@company.com">
+                                                            <small *ngIf="f['businessEmail'].touched && f['businessEmail'].invalid"
+                                                                  class="text-danger">
+                                                                  Enter a valid email address.
+                                                            </small>
+                                                      </div>
+                                                </div>
+
+                                                <!-- Company Name -->
+                                                <div class="col-md-6">
+                                                      <div class="form-group mb-3">
+                                                            <label for="companyName" class="ct_fw_600 mb-1">Company
+                                                                  name</label>
+                                                            <input type="text" class="form-control ct_input_grey"
+                                                                  formControlName="companyName"
+                                                                  placeholder="Company name">
+                                                            <small *ngIf="f['companyName'].touched && f['companyName'].invalid"
+                                                                  class="text-danger">
+                                                                  Company name is required.
+                                                            </small>
+                                                      </div>
+                                                </div>
+
+                                                <!-- Company Size -->
+                                                <div class="col-md-6">
+                                                      <div class="form-group mb-3">
+                                                            <label for="companySize" class="ct_fw_600 mb-1">Company
+                                                                  size</label>
+                                                            <select class="form-control ct_input_grey"
+                                                                  formControlName="companySize">
+                                                                  <option value="">Select</option>
+                                                                  <option value="25+">25+</option>
+                                                                  <option value="50+">50+</option>
+                                                                  <option value="150+">150+</option>
+                                                                  <option value="200+">200+</option>
+                                                                  <option value="250+">250+</option>
+                                                            </select>
+                                                            <small *ngIf="f['companySize'].touched && f['companySize'].invalid"
+                                                                  class="text-danger">
+                                                                  Select company size.
+                                                            </small>
+                                                      </div>
+                                                </div>
+                                          </div>
+
+                                          <!-- Job Title -->
+                                          <div class="row">
+                                                <h5 class="ct_fs_16 ct_fw_700 ct_dark_blue_text mb-3">Job Title</h5>
+                                                <div class="col-md-12">
+                                                      <div class="ct_grid_3">
+                                                            <div *ngFor="let job of ['Entrepreneur', 'Manager', 'Director', 'C-Level', 'Student', 'Other']; let i = index"
+                                                                  class="form-check">
+                                                                  <input class="form-check-input" type="radio"
+                                                                        formControlName="jobTitle" [value]="job"
+                                                                        [id]="'jobTitle' + i">
+                                                                  <label class="form-check-label"
+                                                                        [for]="'jobTitle' + i">{{ job }}</label>
+                                                            </div>
+                                                            <small *ngIf="f['jobTitle'].touched && f['jobTitle'].invalid"
+                                                                  class="text-danger">
+                                                                  Select your job title.
+                                                            </small>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                          <div class="row mt-2">
+                                                <h5 class="ct_fs_16 ct_fw_700 ct_dark_blue_text mb-3">Project Details</h5>
+                                                <div class="col-md-12">
+                                                      <div class="form-group mb-3">
+                                                            <label for="companySize" class="ct_fw_600 mb-1">Project name</label>
+                                                            <input type="text" class="form-control ct_input_grey"
+                                                                  formControlName="projectName"
+                                                                  placeholder="Enter Project name">
+                                                            <small *ngIf="f['projectName'].touched && f['projectName'].invalid"
+                                                                  class="text-danger">
+                                                                  Project name is required.
+                                                            </small>
+                                                      </div>
+                                                </div>
+                                               
+                                                <div class="col-md-12">
+                                                      <div class="form-group mb-3">
+                                                            <label for="companySize" class="ct_fw_600 mb-1">Project description</label>
+                                                          
+                                                                  <textarea name="" id="" cols="30" rows="7" id="" maxlength="1000" class="form-control ct_input_grey h-auto" formControlName="projectDescription" placeholder="Enter Project description"></textarea>
+                                                          
+                                                      </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                      <div class="form-group mb-3">
+                                                            <label for="companySize" class="ct_fw_600 mb-1">File upload (Max 5 files)</label>
+                                                          
+                                                                  <input type="file" name="" id="" accept=".jpg,.jpeg,.png,.pdf,.csv,.doc,.xls" multiple class="form-control ct_input_grey"  #fileInput (change)="onFileChange($event)" >
+                                                          
+                                                      </div>
+                                                </div>
+                                          </div>
+
+                                          <!-- Submit Button -->
+                                          <div>
+                                                <button class="ct_blue_btn_fill w-100 mt-4" type="submit" [disabled]="isSubmitting">
+                                                  <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                                  <span *ngIf="!isSubmitting">Submit</span>
+                                                  <span *ngIf="isSubmitting">Submitting...</span>
+                                                </button>
+                                              </div>
+                                    </form>
+
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </section>
+      <!-- Inner Hero Content E -->
+</div>
+<!-- How it works section S -->
+<section class="ct_py_70 pt-0">
+      <div class="container">
+            <div class="ct_how_works_blue_bg ct_py_70">
+                  <div class="row">
+                        <div class="col-md-12" data-aos="fade-down" data-aos-duration="1000">
+                              <h1 class="ct_fs_44 ct_fw_700 text-center">Here's how it <span
+                                          class="ct_orange_gredient_text">works</span></h1>
+                        </div>
+                  </div>
+                  <div class="row ct_mt_85 align-items-center">
+                        <div class="col-md-6 mb-4 mb-md-0" data-aos="fade-right" data-aos-duration="1000">
+                              <div class="ct_how_works_ai">
+                                    <ul>
+
+                                          <li>
+                                                <div class="ct_works_ai_icon">
+                                                      <svg width="11" height="25" viewBox="0 0 11 12" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <mask id="mask0_303_14898" style="mask-type:luminance"
+                                                                  maskUnits="userSpaceOnUse" x="0" y="0" width="11"
+                                                                  height="12">
+                                                                  <path d="M0 0.802734H10.016V11.7744H0V0.802734Z"
+                                                                        fill="white" />
+                                                            </mask>
+                                                            <g mask="url(#mask0_303_14898)">
+                                                                  <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M0.622445 7.17234L5.36256 9.90098L8.34548 11.6096C8.72978 11.8324 9.21408 11.771 9.52837 11.4482C9.84123 11.1239 9.90266 10.6496 9.6698 10.2553L7.6269 6.82805C7.43546 6.50518 7.43546 6.14089 7.6269 5.81659L9.6698 2.3908C9.90266 1.9965 9.84123 1.52078 9.52837 1.19791C9.21408 0.873619 8.72978 0.813618 8.34548 1.03505L5.36256 2.74366L0.622445 5.47373C0.318152 5.65516 0.136719 5.95945 0.136719 6.32232C0.136719 6.68661 0.318152 6.98948 0.622445 7.17234Z"
+                                                                        fill="#1B83C1" />
+                                                            </g>
+                                                      </svg>
+
+                                                      <p class="mb-0 ct_fw_700 bg-white">01</p>
+                                                </div>
+                                                <div>
+                                                      <h4 class="ct_fs_18 ct_fw_700 mb-0">Chat to our AI, Creative
+                                                            Thoughts Ai</h4>
+                                                      <p class="ct_fs_16 ct_line_h_30">She asks about your idea and
+                                                            offers
+                                                            recommendations
+                                                            (based on every app we’ve ever
+                                                            built)</p>
+                                                </div>
+                                          </li>
+                                          <li>
+                                                <div class="ct_works_ai_icon">
+                                                      <svg width="11" height="25" viewBox="0 0 11 12" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <mask id="mask0_303_14898" style="mask-type:luminance"
+                                                                  maskUnits="userSpaceOnUse" x="0" y="0" width="11"
+                                                                  height="12">
+                                                                  <path d="M0 0.802734H10.016V11.7744H0V0.802734Z"
+                                                                        fill="white" />
+                                                            </mask>
+                                                            <g mask="url(#mask0_303_14898)">
+                                                                  <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M0.622445 7.17234L5.36256 9.90098L8.34548 11.6096C8.72978 11.8324 9.21408 11.771 9.52837 11.4482C9.84123 11.1239 9.90266 10.6496 9.6698 10.2553L7.6269 6.82805C7.43546 6.50518 7.43546 6.14089 7.6269 5.81659L9.6698 2.3908C9.90266 1.9965 9.84123 1.52078 9.52837 1.19791C9.21408 0.873619 8.72978 0.813618 8.34548 1.03505L5.36256 2.74366L0.622445 5.47373C0.318152 5.65516 0.136719 5.95945 0.136719 6.32232C0.136719 6.68661 0.318152 6.98948 0.622445 7.17234Z"
+                                                                        fill="#1B83C1" />
+                                                            </g>
+                                                      </svg>
+
+                                                      <p class="mb-0 ct_fw_700 bg-white">02</p>
+                                                </div>
+                                                <div>
+                                                      <h4 class="ct_fs_18 ct_fw_700 mb-0">Schedule a call with Our
+                                                            Expert</h4>
+                                                      <p class="ct_fs_16 ct_line_h_30">They project manage everything
+                                                            for you, right
+                                                            through
+                                                            to a successful launch.</p>
+                                                </div>
+                                          </li>
+                                          <li>
+                                                <div class="ct_works_ai_icon">
+                                                      <svg width="11" height="25" viewBox="0 0 11 12" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <mask id="mask0_303_14898" style="mask-type:luminance"
+                                                                  maskUnits="userSpaceOnUse" x="0" y="0" width="11"
+                                                                  height="12">
+                                                                  <path d="M0 0.802734H10.016V11.7744H0V0.802734Z"
+                                                                        fill="white" />
+                                                            </mask>
+                                                            <g mask="url(#mask0_303_14898)">
+                                                                  <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M0.622445 7.17234L5.36256 9.90098L8.34548 11.6096C8.72978 11.8324 9.21408 11.771 9.52837 11.4482C9.84123 11.1239 9.90266 10.6496 9.6698 10.2553L7.6269 6.82805C7.43546 6.50518 7.43546 6.14089 7.6269 5.81659L9.6698 2.3908C9.90266 1.9965 9.84123 1.52078 9.52837 1.19791C9.21408 0.873619 8.72978 0.813618 8.34548 1.03505L5.36256 2.74366L0.622445 5.47373C0.318152 5.65516 0.136719 5.95945 0.136719 6.32232C0.136719 6.68661 0.318152 6.98948 0.622445 7.17234Z"
+                                                                        fill="#1B83C1" />
+                                                            </g>
+                                                      </svg>
+
+                                                      <p class="mb-0 ct_fw_700 bg-white">03</p>
+                                                </div>
+                                                <div>
+                                                      <h4 class="ct_fs_18 ct_fw_700 mb-0">AI assembles your app features
+                                                            like a LEGO
+                                                            set.
+                                                      </h4>
+                                                      <p class="ct_fs_16 ct_line_h_30">Choose from our library of 600+
+                                                            features and we
+                                                            can
+                                                            create any custom ones you ones you need.</p>
+                                                </div>
+                                          </li>
+                                          <li>
+                                                <div class="ct_works_ai_icon">
+                                                      <svg width="11" height="25" viewBox="0 0 11 12" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <mask id="mask0_303_14898" style="mask-type:luminance"
+                                                                  maskUnits="userSpaceOnUse" x="0" y="0" width="11"
+                                                                  height="12">
+                                                                  <path d="M0 0.802734H10.016V11.7744H0V0.802734Z"
+                                                                        fill="white" />
+                                                            </mask>
+                                                            <g mask="url(#mask0_303_14898)">
+                                                                  <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M0.622445 7.17234L5.36256 9.90098L8.34548 11.6096C8.72978 11.8324 9.21408 11.771 9.52837 11.4482C9.84123 11.1239 9.90266 10.6496 9.6698 10.2553L7.6269 6.82805C7.43546 6.50518 7.43546 6.14089 7.6269 5.81659L9.6698 2.3908C9.90266 1.9965 9.84123 1.52078 9.52837 1.19791C9.21408 0.873619 8.72978 0.813618 8.34548 1.03505L5.36256 2.74366L0.622445 5.47373C0.318152 5.65516 0.136719 5.95945 0.136719 6.32232C0.136719 6.68661 0.318152 6.98948 0.622445 7.17234Z"
+                                                                        fill="#1B83C1" />
+                                                            </g>
+                                                      </svg>
+
+                                                      <p class="mb-0 ct_fw_700 bg-white">04</p>
+                                                </div>
+                                                <div>
+                                                      <h4 class="ct_fs_18 ct_fw_700 mb-0">Features are customised by
+                                                            human
+                                                            specialists.
+                                                      </h4>
+                                                      <p class="ct_fs_16 ct_line_h_30">Creative Thoughts Ai finds the
+                                                            best designers
+                                                            and
+                                                            developers (she’s tested them all) for each task.</p>
+                                                </div>
+                                          </li>
+                                          <li>
+                                                <div class="ct_works_ai_icon">
+                                                      <svg width="11" height="25" viewBox="0 0 11 12" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <mask id="mask0_303_14898" style="mask-type:luminance"
+                                                                  maskUnits="userSpaceOnUse" x="0" y="0" width="11"
+                                                                  height="12">
+                                                                  <path d="M0 0.802734H10.016V11.7744H0V0.802734Z"
+                                                                        fill="white" />
+                                                            </mask>
+                                                            <g mask="url(#mask0_303_14898)">
+                                                                  <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M0.622445 7.17234L5.36256 9.90098L8.34548 11.6096C8.72978 11.8324 9.21408 11.771 9.52837 11.4482C9.84123 11.1239 9.90266 10.6496 9.6698 10.2553L7.6269 6.82805C7.43546 6.50518 7.43546 6.14089 7.6269 5.81659L9.6698 2.3908C9.90266 1.9965 9.84123 1.52078 9.52837 1.19791C9.21408 0.873619 8.72978 0.813618 8.34548 1.03505L5.36256 2.74366L0.622445 5.47373C0.318152 5.65516 0.136719 5.95945 0.136719 6.32232C0.136719 6.68661 0.318152 6.98948 0.622445 7.17234Z"
+                                                                        fill="#1B83C1" />
+                                                            </g>
+                                                      </svg>
+
+                                                      <p class="mb-0 ct_fw_700 bg-white">05</p>
+                                                </div>
+                                                <div>
+                                                      <h4 class="ct_fs_18 ct_fw_700 mb-0">Your app is ready.</h4>
+                                                      <p class="ct_fs_16 ct_line_h_30">It’s checked by AI and humans –
+                                                            and includes 1
+                                                            year
+                                                            of
+                                                            Studio One, which keeps your app updated and protected</p>
+                                                </div>
+                                          </li>
+                                    </ul>
+                              </div>
+                        </div>
+                        <div class="col-md-5 mb-4 mb-md-0 offset-md-1" data-aos="fade-left" data-aos-duration="1000">
+                              <div class="ct_how_works_img">
+                                    <img src="assets/img/how-works_right.png" alt="AI app builder for mobile and web">
+                                    <img src="assets/img/circle_git_123.gif" alt="AI app builder for mobile and web">
+
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</section>
+<!-- How it works section E -->
+
+<!-- App Case Section S -->
+<section class="ct_py_70 pt-0">
+      <div class="container">
+            <div class="row align-items-center pb-0">
+                  <div class="col-md-6 mb-4 mb-md-0 aos-init aos-animate" data-aos="fade-right"
+                        data-aos-duration="1000">
+                        <div class="ct_flexible_serivce_cnt">
+                              <div class="ct_frenly_round_logo_1">
+                                    <img src="assets/img/frenly_logo.svg" alt="AI app builder for mobile and web">
+                              </div>
+                              <p class="mb-0 mt-4 ct_fs_16 ct_fw_600 ct_line_h_25">
+                                    <span class="ct_fw_700">Frenly</span> is building a community of over 5,000
+                                    investors.
+                              </p>
+                              <div class="mt-2">
+                                    <a  class="ct_link_green">See App Case Study</a>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="col-md-6 mb-4 mb-md-0  aos-init aos-animate" data-aos="fade-left"
+                        data-aos-duration="1000">
+                        <div class="ct_creative_single_img">
+                              <img src="assets/img/frenly_3_case.png" alt="AI app builder for mobile and web">
+                        </div>
+                  </div>
+            </div>
+
+      </div>
+</section>
+<!-- App Case Section E -->
+<app-footer />
+
+
+
+
+<!-- signup_modal Modal S -->
+<div class="modal fade modal-xl" id="tellUs" tabindex="-1" aria-labelledby="ct_signup_modalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-lg-5">
+                  <div class="modal-body ct_login_modal_main_overlay_h">
+                        <div class="ct_signup_modal_main">
+                              <div class="row ">
+                                    <div class="col-lg-6 mb-4 mb-lg-0">
+                                          <div>
+                                                <h4 class="ct_orange_text ct_fw_600 ct_fs_26 mb-5">Tell us about you
+                                                </h4>
+                                                <div class="ct_login_modal_img">
+                                                      <img src="assets/img/pc_vector.png" alt="AI app builder for mobile and web">
+                                                </div>
+                                          </div>
+
+                                    </div>
+                                    <div class="col-lg-6 mb-4 mb-lg-0">
+                                          <form #tellUsForm="ngForm" (ngSubmit)="onTellUsSubmit(tellUsForm)">
+                                                <p>By answering a few simple questions now we can get you to a solution
+                                                      faster.</p>
+                                                <div class="ct_login_modal_scroll_h">
+                                                      <div class="mb-3">
+                                                            <p class="mb-2">What best describes you and your role?</p>
+                                                            <ul>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio" name="yourRole" ngModel
+                                                                                    id="Student" checked
+                                                                                    value="Student">
+                                                                              <label class="form-check-label"
+                                                                                    for="Student">
+                                                                                    Student
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio" name="yourRole" ngModel
+                                                                                    id="entrepreneur"
+                                                                                    value="Solo entrepreneur">
+                                                                              <label class="form-check-label"
+                                                                                    for="entrepreneur">
+                                                                                    Solo entrepreneur
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio" name="yourRole" ngModel
+                                                                                    id="Manager" value="Manager">
+                                                                              <label class="form-check-label"
+                                                                                    for="Manager">
+                                                                                    Manager
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio" name="yourRole" ngModel
+                                                                                    id="Director" value="Director">
+                                                                              <label class="form-check-label"
+                                                                                    for="Director">
+                                                                                    Director
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio" name="yourRole" ngModel
+                                                                                    id="Chief" value="CFO">
+                                                                              <label class="form-check-label"
+                                                                                    for="Chief">
+                                                                                    Chief (CEO, CTO...)
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio" name="yourRole" ngModel
+                                                                                    id="CFO" value="CFO">
+                                                                              <label class="form-check-label" for="CFO">
+                                                                                    CFO
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                            </ul>
+                                                      </div>
+
+                                                      <div class="mb-3">
+                                                            <p class="mb-2">How quickly do you need your software
+                                                                  delivered?</p>
+                                                            <ul>
+
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio"
+                                                                                    name="softwareDelivered" ngModel
+                                                                                    id="2_months"
+                                                                                    value="Less than 2 months">
+                                                                              <label class="form-check-label"
+                                                                                    for="2_months">
+                                                                                    Less than 2 months
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio"
+                                                                                    name="softwareDelivered" ngModel
+                                                                                    id="6_months" value="2 to 6 months">
+                                                                              <label class="form-check-label"
+                                                                                    for="6_months">
+                                                                                    2 to 6 months
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio"
+                                                                                    name="softwareDelivered" ngModel
+                                                                                    id="12_months"
+                                                                                    value="6 to 12 months">
+                                                                              <label class="form-check-label"
+                                                                                    for="12_months">
+                                                                                    6 to 12 months
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio"
+                                                                                    name="softwareDelivered" ngModel
+                                                                                    id="Within_1_year"
+                                                                                    value="Within 1 year">
+                                                                              <label class="form-check-label"
+                                                                                    for="Within_1_year">
+                                                                                    Within 1 year
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio"
+                                                                                    name="softwareDelivered" ngModel
+                                                                                    id="Within_1_5_year"
+                                                                                    value="Within 1.5 year">
+                                                                              <label class="form-check-label"
+                                                                                    for="Within_1_5_year">
+                                                                                    Within 1.5 year
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                            </ul>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                            <p class="mb-2">How much do you expect to spend?</p>
+                                                            <ul>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio" name="spend" ngModel
+                                                                                    id="Less_than_700" checked
+                                                                                    value="Less than ₹700,000">
+                                                                              <label class="form-check-label"
+                                                                                    for="Less_than_700">
+                                                                                    Less than ₹700,000
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio" name="spend" ngModel
+                                                                                    id="Less_than_600"
+                                                                                    value="Less than ₹600,000">
+                                                                              <label class="form-check-label"
+                                                                                    for="Less_than_600">
+                                                                                    Less than ₹600,000
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio" name="spend" ngModel
+                                                                                    id="Less_than_430"
+                                                                                    value="Less than ₹440,000">
+                                                                              <label class="form-check-label"
+                                                                                    for="Less_than_430">
+                                                                                    Less than ₹430,000
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio" name="spend" ngModel
+                                                                                    id="Less_than_410"
+                                                                                    value="Less than ₹430,000">
+                                                                              <label class="form-check-label"
+                                                                                    for="Less_than_410">
+                                                                                    Less than ₹430,000
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio" name="spend" ngModel
+                                                                                    id="Less_than_440"
+                                                                                    value="Less than ₹400,000">
+                                                                              <label class="form-check-label"
+                                                                                    for="Less_than_440">
+                                                                                    Less than ₹400,000
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio" name="spend" ngModel
+                                                                                    id="Less_than_900"
+                                                                                    value="Less than ₹900,000">
+                                                                              <label class="form-check-label"
+                                                                                    for="Less_than_900">
+                                                                                    Less than ₹900,000
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                            </ul>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                            <p class="mb-2">Does your software fit into any of these
+                                                                  categories?</p>
+                                                            <ul>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio"
+                                                                                    name="softwareCategories" ngModel
+                                                                                    id="Restaurant"
+                                                                                    value="Food Delivery & Restaurant"
+                                                                                    checked>
+                                                                              <label class="form-check-label"
+                                                                                    for="Restaurant">
+                                                                                    Food Delivery & Restaurant
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio"
+                                                                                    name="softwareCategories" ngModel
+                                                                                    id="Retail"
+                                                                                    value="E-commerce & Retail">
+                                                                              <label class="form-check-label"
+                                                                                    for="Retail">
+                                                                                    E-commerce & Retail
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio"
+                                                                                    name="softwareCategories" ngModel
+                                                                                    id="Healthcare"
+                                                                                    value="Healthcare & Telemedicine">
+                                                                              <label class="form-check-label"
+                                                                                    for="Healthcare">
+                                                                                    Healthcare & Telemedicine
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio"
+                                                                                    name="softwareCategories" ngModel
+                                                                                    id="Tourism"
+                                                                                    value="Travel $ Tourism">
+                                                                              <label class="form-check-label"
+                                                                                    for="Tourism">
+                                                                                    Travel & Tourism
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio"
+                                                                                    name="softwareCategories" ngModel
+                                                                                    id="Estate" value="Real Estate">
+                                                                              <label class="form-check-label"
+                                                                                    for="Estate">
+                                                                                    Real Estate
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input ct_green_radio_checked"
+                                                                                    type="radio"
+                                                                                    name="softwareCategories" ngModel
+                                                                                    id="Less_than_900"
+                                                                                    value="Less_than_900">
+                                                                              <label class="form-check-label"
+                                                                                    for="Less_than_900">
+                                                                                    Fitness & Wellness
+                                                                              </label>
+                                                                        </div>
+                                                                  </li>
+                                                            </ul>
+                                                      </div>
+                                                </div>
+                                                <div class="mt-4">
+                                                      <button class="ct_blue_btn_fill py-3 w-100" data-bs-toggle="modal"
+                                                            data-bs-target="#ct_schedule_call_modal">Submit all
+                                                            answers</button>
+                                                </div>
+                                          </form>
+
+                                    </div>
+
+                              </div>
+
+                        </div>
+                  </div>
+
+            </div>
+      </div>
+</div>
+
+
+<!-- Schedule Call Modal S -->
+<!-- signup_modal Modal S -->
+<div class="modal fade modal-md" id="ct_schedule_call_modal" tabindex="-1" aria-labelledby="ct_schedule_call_modalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-lg-5 p-3">
+                  <div class="modal-body  p-0">
+                        <div class="ct_schedule_call_main12">
+                              <h2 class="ct_fs_26 ct_fw_700 text-center ct_orange_text">Need Help?</h2>
+                              <p class="text-center mb-0">Talk to our team of experts - Free consultation</p>
+
+                              <div class="ct_team_leader_1_img">
+                                    <img src="assets/img/team_leader.png" alt="AI app builder for mobile and web">
+                              </div>
+
+                              <button class="ct_schedule_call_btn ct_blue_btn_fill w-100 justify-content-center "
+                                    data-bs-toggle="modal" data-bs-target="#calendlyModal"><i
+                                          class="bi bi-telephone"></i>Schedule a call
+                              </button>
+
+                              <ul class="d-flex align-items-center justify-content-center gap-3 flex-wrap mt-4">
+                                    <li class="d-flex align-items-center gap-2">
+                                          <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M8.52664 3.51945V7.70144L11.3146 9.09544M15.4966 7.70144C15.4966 11.5509 12.3761 14.6714 8.52664 14.6714C4.67722 14.6714 1.55664 11.5509 1.55664 7.70144C1.55664 3.85202 4.67722 0.731445 8.52664 0.731445C12.3761 0.731445 15.4966 3.85202 15.4966 7.70144Z"
+                                                      stroke="#6B7280" stroke-width="1.394" stroke-linecap="round"
+                                                      stroke-linejoin="round" />
+                                          </svg>
+
+                                          <p class="mb-0">Available 24/7</p>
+                                    </li>
+                                    <li class="d-flex align-items-center gap-2">
+                                          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7.46857 0.742645C7.60412 0.742645 7.72999 0.770012 7.84617 0.824745L13.3358 3.01225C13.665 3.13984 13.9264 3.34034 14.12 3.61374C14.333 3.88721 14.4395 4.20624 14.4395 4.57084C14.4589 5.5005 14.2943 6.59424 13.9458 7.85205C13.5972 9.10986 12.9679 10.3312 12.0578 11.5161C11.1671 12.7192 9.88905 13.7127 8.22376 14.4966C7.7203 14.7153 7.21685 14.7153 6.71339 14.4966C5.04811 13.7127 3.7701 12.7192 2.87936 11.5161C1.96927 10.3312 1.33995 9.10986 0.991399 7.85205C0.642851 6.59424 0.478259 5.5005 0.497622 4.57084C0.497622 4.20624 0.604123 3.88721 0.817125 3.61374C1.01076 3.34034 1.27217 3.13984 1.60135 3.01225L7.09098 0.824745C7.20716 0.770012 7.33303 0.742645 7.46857 0.742645ZM7.46857 2.57475V12.9106C8.78531 12.2726 9.82129 11.4614 10.5765 10.4771C11.3123 9.49267 11.8351 8.48095 12.1449 7.44189C12.4354 6.3846 12.5806 5.43668 12.5806 4.59814L7.46857 2.57475Z"
+                                                      fill="#6B7280" />
+                                          </svg>
+
+
+
+                                          <p class="mb-0">Expert Support</p>
+                                    </li>
+                              </ul>
+
+                        </div>
+                  </div>
+
+            </div>
+      </div>
+</div>
+
+
+<!-- Schedule call Modal S -->
+<div class="modal fade modal-md" id="ct_schedule_call_info" tabindex="-1" aria-labelledby="ct_schedule_call_infoLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-lg-5 p-3">
+                  <div class="modal-body  p-0">
+                        <!-- You Need To Import Schedule Form here -->
+                        <div class="ct_schedule_call_main12">
+
+                              <img src="assets/img/schedule_call_img_456.png" alt="AI app builder for mobile and web" class="w-100">
+                              <div class="mt-4">
+                                    <button class="ct_schedule_call_btn ct_blue_btn_fill  w-100 justify-content-center"
+                                          data-bs-toggle="modal" data-bs-target="#ct_schedule_call_confirm">Confirm
+                                    </button>
+                              </div>
+
+
+
+                        </div>
+                  </div>
+
+            </div>
+      </div>
+</div>
+
+<!-- Schedule call confirm  Modal S -->
+<div class="modal fade modal-md" id="ct_schedule_call_confirm" tabindex="-1"
+      aria-labelledby="ct_schedule_call_confirmLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-lg-4 p-3">
+                  <div class="modal-header border-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body  p-0">
+                        <!-- You Need To Import Schedule Form here -->
+                        <div class="ct_schedule_call_main12">
+                              <div class="ct_scheduled_call_icon">
+                                    <svg width="20" height="22" viewBox="0 0 20 22" fill="none"
+                                          xmlns="http://www.w3.org/2000/svg">
+                                          <path d="M19 9H1M14 1V5M6 1V5M7 15L9 17L13.5 12.5M5.8 21H14.2C15.8802 21 16.7202 21 17.362 20.673C17.9265 20.3854 18.3854 19.9265 18.673 19.362C19 18.7202 19 17.8802 19 16.2V7.8C19 6.11984 19 5.27976 18.673 4.63803C18.3854 4.07354 17.9265 3.6146 17.362 3.32698C16.7202 3 15.8802 3 14.2 3H5.8C4.11984 3 3.27976 3 2.63803 3.32698C2.07354 3.6146 1.6146 4.07354 1.32698 4.63803C1 5.27976 1 6.11984 1 7.8V16.2C1 17.8802 1 18.7202 1.32698 19.362C1.6146 19.9265 2.07354 20.3854 2.63803 20.673C3.27976 21 4.11984 21 5.8 21Z"
+                                                stroke="#1690C8" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+
+                              </div>
+                              <h4 class="ct_fs_24 ct_fw_700 text-center mb-3">Your Call Has Been Scheduled!</h4>
+                              <p class="mb-0">Thank you for scheduling a call with us. One of our experts will connect
+                                    with
+                                    you on the
+                                    chosen date and time to discuss your project.</p>
+
+                              <div class="mt-4 text-center">
+                                    <a data-bs-dismiss="modal" aria-label="Close"
+                                          class="ct_blue_btn_fill  justify-content-center">View
+                                          My
+                                          Schedule </a>
+                              </div>
+                        </div>
+                  </div>
+
+            </div>
+      </div>
+</div>
+
+<div class="modal fade" id="calendlyModal" tabindex="-1" aria-labelledby="calendlyModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                  <div class="modal-header">
+                        <h5 class="modal-title" id="calendlyModalLabel">Schedule a Call</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                        <div id="calendly-inline-widget" style="min-width:320px;height:630px;"></div>
+                  </div>
+            </div>
+      </div>
+</div>

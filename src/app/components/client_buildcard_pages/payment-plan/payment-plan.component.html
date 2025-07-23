@@ -1,0 +1,504 @@
+<section class="ct_dash_board_main">
+      <app-sidebar></app-sidebar>
+      <div class="ct_dash_right_content ct_white_bg_page ">
+            <div class="ct_dash_toggle_bar">
+                  <i class="fa-solid fa-bars"></i>
+            </div>
+            <div class="container-fluid">
+                  <div class="row">
+                        <div class="col-md-12">
+                              <div class="d-grid">
+                                    <div class="ct_step-container d-flex justify-content-between">
+                                          <div class=" ct_step-circle cursor-pointer" routerLink="/main">
+                                                <!-- <p class=" mb-0">1</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Choose Base</p>
+                                          </div>
+                                          <div class=" ct_step-circle cursor-pointer"
+                                                [routerLink]="['/make-it-mine/'+ projectsData.projectId]">
+                                                <!-- <p class=" mb-0">2</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Make it Mine</p>
+                                          </div>
+                                          <div class=" ct_step-circle cursor-pointer"
+                                                [routerLink]="['/refine-idea/'+ projectsData.projectId]">
+                                                <!-- <p class=" mb-0">3</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Refine Idea</p>
+                                          </div>
+                                          <div class=" ct_step-circle cursor-pointer"
+                                                [routerLink]="['/plan-delivery/'+ projectsData.projectId]">
+                                                <!-- <p class=" mb-0">4</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Plan Delivery</p>
+                                          </div>
+                                          <div class="ct_step-circle cursor-pointer"
+                                                [routerLink]="['/review-buildcard']">
+                                                <!-- <p class=" mb-0">5</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Review Buildcard</p>
+                                          </div>
+                                          <div class=" ct_step-circle cursor-pointer"
+                                                [routerLink]="['/billing-details']">
+                                                <!-- <p class=" mb-0">6</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Billing Details</p>
+                                          </div>
+                                          <div class=" ct_step-circle">
+                                                <p class=" mb-0">7</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Payment Plan</p>
+                                          </div>
+                                          <div class=" ct_step-circle opacity-50">
+                                                <p class=" mb-0">6</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Payment Options</p>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="row mt-5">
+                        <div class="col-lg-8 mb-4 mb-lg-0">
+                              <div class="ct_outline_border_box">
+
+                                    <h5 class="mb-0 ct_fs_18 ct_fw_700">Payment plan</h5>
+                                    <p class="mb-0">Choose your preferred payment plan?</p>
+
+                                    <div class="ct_add_the_power_of_bg my-4 ">
+                                          <div class="container">
+                                                <div class="row">
+                                                      <div class="col-md-12">
+                                                            <div class="ct_add_the_power_content ">
+                                                                  <div class="ct_max_w_65">
+                                                                        <h5
+                                                                              class="ct_white_badge ct_fw_600 ct_w_fit_content">
+                                                                              Upfront offer
+                                                                        </h5>
+                                                                        <p class="mb-0 text-white mt-3">Pay upfront and
+                                                                              get 10% discount on
+                                                                              yourtotal creativecard</p>
+                                                                  </div>
+
+                                                            </div>
+
+                                                      </div>
+
+                                                </div>
+
+                                          </div>
+
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between gap-3">
+                                          <div class="form-check ct_custom_radio_check">
+                                                <input id="Upfront" class="form-check-input" type="radio"
+                                                      [(ngModel)]="paymentPlan" value="1"
+                                                      (change)="onPaymentChange('1')">
+                                                <label for="Upfront" class="form-check-label">
+                                                      <h5 class="ct_fs_14 ct_fw_700 mb-0">Upfront payment</h5>
+                                                </label>
+                                          </div>
+                                          <div>
+                                                <p class="mb-0"><del
+                                                            class="ct_text_op_7">{{ totalCost + (totalCost * 18)/100 | currency:'INR' }}
+                                                      </del></p>
+                                                <h4 class="mb-0 ct_fw_700">
+                                                      {{(totalCost + (totalCost * 18)/100) -
+                                                      (((totalCost + (totalCost * 18)/100) * 10) / 100) | currency:'INR' }}
+                                                </h4>
+                                          </div>
+
+                                    </div>
+                              </div>
+
+
+                              <div class="mt-4">
+                                    <div class="ct_app_detail_card d-block">
+
+                                          <div class="form-check ct_custom_radio_check ">
+                                                <input id="flexRadioDefault232"
+                                                      class="form-check-input position-relative" style="top: 4px;"
+                                                      type="radio" value='2' [(ngModel)]="paymentPlan"
+                                                      (change)="onPaymentChange('2')">
+                                                <label class="form-check-label" for="flexRadioDefault232">
+                                                      <h5 class="mb-0 ct_fw_700 ct_fs_18"> You don't need to pay it all
+                                                            now</h5>
+                                                </label>
+                                          </div>
+                                          <p class="mb-0 ct_fs_14 ct_text_op_7">Choose from our convenient monthly or
+                                                weekly
+                                                payment plan</p>
+                                    </div>
+                              </div>
+                              @if(paymentPlan =="2"){
+                              <div class="mt-5">
+                                    <h5 class="mb-2 ct_fs_18 ct_fw_700">How often do you want to be billed?</h5>
+
+                                    <div class="row mt-4">
+                                          <div class="col-md-6">
+                                                <div class="ct_app_detail_card"
+                                                      [ngClass]="{'active': installmentType == 'weekly'}">
+
+                                                      <div class="form-check ct_custom_radio_check ">
+                                                            <input class="form-check-input" type="radio"
+                                                                  name="flexRadioDefault" [(ngModel)]="installmentType"
+                                                                  value="weekly"
+                                                                  (change)="onInstallmentChange('weekly')">
+                                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                                  Weekly
+                                                            </label>
+                                                      </div>
+                                                </div>
+
+                                          </div>
+                                          <div class="col-md-6">
+                                                <div class="ct_app_detail_card "
+                                                      [ngClass]="{'active': installmentType == 'monthly'}">
+
+
+                                                      <div class="form-check ct_custom_radio_check">
+                                                            <input class="form-check-input" type="radio"
+                                                                  name="flexRadioDefault" [(ngModel)]="installmentType"
+                                                                  value="monthly"
+                                                                  (change)="onInstallmentChange('monthly')">
+                                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                                  Monthly
+                                                            </label>
+                                                      </div>
+                                                </div>
+
+                                          </div>
+
+                                    </div>
+                              </div>
+
+                              <div class="mt-5 ">
+                                    <h5 class="mb-2 ct_fs_18 ct_fw_700">Installment Details</h5>
+                                    <p class="mb-0">Payment amount adjusts with project stage.</p>
+
+                                    <div
+                                          class="ct_outline_border_box py-3 mt-4 d-flex align-items-center justify-content-between gap-3">
+                                          <div class="form-check ct_custom_radio_check ">
+                                                <!-- <input class="form-check-input position-relative" style="top: 4px;"
+                              type="radio" name="flexRadioDefault" id="flexRadioDefault1"> -->
+                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                      <h5 class="mb-0 ct_fw_700 ct_fs_18">Development</h5>
+                                                      <!-- <p class="mb-0 ct_text_op_7">  {{new Date() | date}} -   {{projectsData.estimatedDate | date}}</p> -->
+                                                      <p class="mb-0 ct_text_op_7"> {{ today | date }} - {{
+                                                            projectsData.estimatedDate | date }}</p>
+
+                                                </label>
+                                          </div>
+                                          <div>
+                                                <p class="ct_fw_400 ct_fs_12 mb-0">{{noOfInstallments}} INSTALLMENTS</p>
+                                                <span class="ct_fw_400 ct_fs_16 mb-0 pointer" data-bs-toggle="modal"
+                                                      data-bs-target="#installmentModal">See plan</span>
+                                          </div>
+                                    </div>
+                              </div>
+                              }
+
+
+
+
+                        </div>
+                        <div class="col-lg-4 mb-4 mb-lg-0">
+                              <div class="ct_right_sidebar_12 ct_outline_border_box">
+                                    <div>
+                                          <div class="position-relative ct_w_fit_content mx-auto">
+                                                <img src="assets/img/iPhone_14 Plus_.png" alt="AI app builder for mobile and web">
+                                                <div class="ct_mob_overlay_top_cnt_12">
+                                                      <div class="ct_add_logo_by_ai" [style]="projectsData.logoStyle">
+                                                            @if(!projectsData.projectLogo){
+                                                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                                  xmlns="http://www.w3.org/2000/svg">
+                                                                  <circle cx="5.6658" cy="5.82644" r="5.13414"
+                                                                        stroke="white" stroke-width="0.789868" />
+                                                                  <path d="M5.83104 3.45752V8.52584M3.29688 5.99168H8.3652"
+                                                                        stroke="white" stroke-width="0.724046"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                            </svg>
+                                                            } @else {
+                                                            <img [src]="projectsData.projectLogo" alt="AI app builder for mobile and web"
+                                                                  class="ct_img_logo_123">
+                                                            }
+                                                      </div>
+                                                      <h6 class="text-white ct_fs_14">{{projectsData.projectName}}</h6>
+                                                </div>
+                                          </div>
+                                          <div class="mt-3">
+                                                <h5 class="ct_fs_16 ct_fw_700 text-center">{{projectsData.projectName}}
+                                                </h5>
+                                                <p class="ct_text_op_7 mb-0 text-center">FEATURES: {{ projectsData.no_of_features }}
+                                                </p>
+                                          </div>
+
+                                          <div class="mt-5">
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_text_op_7 ct_fs_14">Estimated Duration</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">{{projectsData.estimated_time}}
+                                                            weeks</p>
+                                                </div>
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_text_op_7 ct_fs_14">Expected Completion</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">
+                                                            {{projectsData.estimatedDate | date}}
+                                                      </p>
+                                                </div>
+                                          </div>
+
+                                          <div class="mt-4 pt-4 ct_border_top_1">
+                                                <h5 class="ct_fw_700">Payment Summary</h5>
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Features</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">
+                                                            {{ projectsData.featuresCost | currency:'INR'}}
+                                                      </p>
+                                                </div>
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Customisation</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">
+                                                            {{projectsData.customisationCost | currency:'INR'}}
+                                                      </p>
+                                                </div>
+                                                <!-- <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Studio One (for 12 months)</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">{{0 | currency:'INR'}}</p>
+                                                </div> -->
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Taxes (18% GST)</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">
+                                                            {{( totalCost * 18)/100 | currency:'INR' }}
+                                                      </p>
+                                                </div>
+
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_fw_700 ct_fs_18">Total Cost</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_18">
+                                                            {{ actualCost  ?  (actualCost | currency:'INR') : (totalCost + (totalCost * 18)/100) -
+                                                      (((totalCost + (totalCost * 18)/100) * 10) / 100) | currency:'INR' }}
+                                                      </p>
+                                                </div>
+                                          </div>
+
+                                          <div class="mt-4 pt-4 ct_border_top_1">
+                                                <h5 class="ct_fw_700">Due Now <span class="ct_text_op_7" *ngIf="paymentPlan == '2'">(20% of total amount)</span>
+                                                </h5>
+                                                @if(paymentPlan =="2"){
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Security Deposit
+                                                      </p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">
+                                                            {{ securityDeposit | currency:'INR'}}
+                                                      </p>
+                                                </div>
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Taxe (18% GST)</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">
+                                                            {{( securityDeposit * 18)/100 | currency:'INR' }}
+                                                      </p>
+                                                </div>
+                                                }
+                                                <div
+                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                      <p class="mb-0 ct_fw_700 ct_fs_18">Total</p>
+                                                      @if(paymentPlan =="2"){
+                                                      <p class="mb-0 ct_fw_700 ct_fs_18">
+                                                            {{ securityDeposit + (securityDeposit * 18)/100 | currency : 'INR' }}
+                                                      </p>
+                                                      }@else {
+                                                      <p class="mb-0 ct_fw_700 ct_fs_18">
+                                                            {{ actualCost  ?  (actualCost | currency:'INR') : (totalCost + (totalCost * 18)/100) -
+                                                            (((totalCost + (totalCost * 18)/100) * 10) / 100) | currency:'INR' }}
+                                                      </p>
+                                                      }
+                                                </div>
+                                          </div>
+
+                                          <div class="mt-5">
+                                                <a (click)="Navigate()"
+                                                      class="ct_schedule_call_btn w-100 d-flex justify-content-center align-items-center mb-2 ct_border_radius_5">Continue
+                                                      to pay</a>
+                                                <a 
+                                                      class="ct_blue_outline_btn w-100 d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#calendlyModal">Schedule a call</a>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</section>
+
+<!-- Mobile page section S -->
+<section class="ct_mobile_section_main">
+      <div class="ct_mobile_header_main_bg">
+            <img src="assets/img/cti_black_logo.svg" alt="AI app builder for mobile and web">
+      </div>
+      <div class="container">
+            <div class="row">
+                  <div class="col-md-12">
+                        <div class="mt-4">
+                              <h3 class="ct_fs_24 text-center ct_fw_700">Why it's worth heading to a desktop now</h3>
+                              <p class="text-center">Our mobile site isn't the best place to order your app…yet.</p>
+
+                              <div class="ct_grey_bg p-4 mt-3">
+                                    <h6 class="ct_fs_16 ct_fw_700 mb-4">Go to your desktop now and Vaanya, our AI can:
+                                    </h6>
+                                    <ul class="ct_list_style_dics">
+                                          <li>Guide you to find all the app features you need</li>
+                                          <li>Help you Start designing - get a feel of what your app could look like
+                                          </li>
+                                          <li>Give you a guaranteed price and accurate timeline</li>
+                                    </ul>
+                              </div>
+                              <p class="mb-0 mt-3 text-center">Want to give it a try? Grab a bigger screen and let's
+                                    bring
+                                    your app to
+                                    life!</p>
+
+                              <div class="mt-5">
+                                    <a href="index.html" class="ct_blue_btn_fill w-100">Return to Creative Thoughts
+                                          Ai</a>
+                              </div>
+                        </div>
+
+                  </div>
+
+            </div>
+
+      </div>
+</section>
+<!-- Mobile page section E -->
+
+
+
+<!-- Refrsh page modal S -->
+
+<div class="modal fade modal-lg" id="ct_refresh_page" tabindex="-1" aria-labelledby="ct_refresh_pageLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content  p-4">
+
+                  <div class="modal-body  p-0">
+                        <!-- You Need To Import Schedule Form here -->
+                        <div class="ct_schedule_call_main12">
+
+                              <h4 class="ct_fs_24 ct_fw_700 text-center mb-2">Are you sure you want to continue with
+                                    this
+                                    refresh?</h4>
+                              <p class="mb-0 text-center">Doing so may result in the loss of your recent interactions
+                                    and
+                                    changes.
+                              </p>
+
+                              <div
+                                    class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center">
+                                    <button class="ct_blue_outline_btn  justify-content-center"
+                                          data-bs-dismiss="modal">Cancel</button>
+                                    <button class="ct_blue_btn_fill  justify-content-center" data-bs-dismiss="modal"
+                                          routerLink="/main">Proceed</button>
+                              </div>
+
+
+
+                        </div>
+                  </div>
+
+            </div>
+      </div>
+</div>
+<div class="modal fade modal-lg" id="installmentModal" tabindex="-1" aria-labelledby="ct_refresh_pageLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content  p-4">
+
+                  <div class="modal-body  p-0">
+                        <!-- You Need To Import Schedule Form here -->
+                        <div class="ct_schedule_call_main12">
+
+                              <h4 class="ct_fs_24 ct_fw_700  mb-2">Monthly installment plan</h4>
+                              <table class="table">
+                                    <thead>
+                                          <tr>
+                                                <th scope="col">Installment</th>
+                                                <th scope="col">Due Date</th>
+                                                <th scope="col">Project Stage</th>
+                                                <th scope="col">Amount</th>
+                                          </tr>
+                                    </thead>
+                                    <tbody>
+                                          @for (item of installmentDates; track $index) {
+                                          <tr>
+                                                <th scope="row">{{ $index + 1 }}</th>
+                                                <td>{{item | date}}</td>
+                                                <td>Development</td>
+                                                <td>{{ actualCost ? ((actualCost - (securityDeposit + (securityDeposit * 18)/100))/noOfInstallments | currency:'INR') : '' }}
+                                                </td>
+                                          </tr>
+                                          }
+                                    </tbody>
+                              </table>
+
+
+
+                        </div>
+                  </div>
+
+            </div>
+      </div>
+</div>
+<!-- Refrsh page modal E -->
+
+
+<div class="modal fade" id="calendlyModal" tabindex="-1" aria-labelledby="calendlyModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                  <div class="modal-header">
+                        <h5 class="modal-title" id="calendlyModalLabel">Schedule a Call</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                        <div id="calendly-inline-widget" style="min-width:320px;height:630px;"></div>
+                  </div>
+            </div>
+      </div>
+</div>

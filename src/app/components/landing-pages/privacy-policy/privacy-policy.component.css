@@ -1,0 +1,9 @@
+.ct_dot_8_span {
+    width: 8px;
+    height: 8px;
+    border-radius: 100px;
+    display: inline-flex
+;
+    background-color: #aaa;
+    margin-right: 6px;
+}

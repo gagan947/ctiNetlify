@@ -1,0 +1,40 @@
+<!-- <div #myModal class="modal fade modal-lg" id="ct_universal2" tabindex="-1" >
+    <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+                <div class="modal-header modal-header py-0 border-0">
+                      <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                      <div class="ct_buider_img_23">
+                            <img src="assets/img/Creative_ai_banner2.png" alt="AI app builder for mobile and web">
+                      </div>
+                </div>
+                <div class="modal-footer border-0 justify-content-center ">
+                      <button type="button" class="ct_blue_btn_fill" (click)="closeModal2()">Connect Now</button>
+                </div>
+          </div>
+    </div>
+</div> -->
+<div #myModal class="modal fade modal-lg" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                  <div class="modal-header modal-header py-0 border-0">
+                        <button type="button" class="btn-close ct_close_modal" data-bs-dismiss="modal"
+                              aria-label="Close" #closeModal></button>
+                  </div>
+                  <div class="modal-body p-0">
+                        <div class="ct_buider_img_23">
+                              <img src="assets/img/Creative_ai_banner2.png" alt="AI app builder for mobile and web">
+                        </div>
+
+                  </div>
+                  <div class="modal-footer border-0 justify-content-center">
+                        <button type="button" class="ct_blue_btn_fill" (click)="closeModal2()">Connect Now</button>
+                  </div>
+            </div>
+      </div>
+</div>
+
+<router-outlet />

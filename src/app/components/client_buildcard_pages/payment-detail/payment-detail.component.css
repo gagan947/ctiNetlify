@@ -1,0 +1,8 @@
+.payment_option_label {
+      color: #676a6f;
+}
+
+input[type="radio"] {
+      width: 20px;
+      height: 20px;
+}

@@ -1,0 +1,28 @@
+.preview-image {
+      height: 103px;
+      border-radius: 10px;
+}
+
+.ct_mobile_w_screen {
+      width: 144px !important;
+      height: 304px;
+      object-fit: cover;
+      border-radius: 10px;
+}
+
+.ct_fw_600 {
+      font-size: large;
+}
+
+.SubfeatursCount {
+      height: 1rem;
+      width: 1rem;
+      background: gray;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      border-radius: 50%;
+      padding: 10px;
+      font-size: 11px;
+}

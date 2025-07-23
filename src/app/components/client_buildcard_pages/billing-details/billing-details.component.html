@@ -1,0 +1,461 @@
+<section class="ct_dash_board_main">
+   <app-sidebar></app-sidebar>
+      <div class="ct_dash_right_content ct_white_bg_page ">
+            <div class="ct_dash_toggle_bar">
+                  <i class="fa-solid fa-bars"></i>
+            </div>
+            <div class="container-fluid">
+
+                  <div class="row">
+                        <div class="col-md-12">
+                              <div class="d-grid">
+                                    <div class="ct_step-container d-flex justify-content-between">
+                                          <div class=" ct_step-circle cursor-pointer" routerLink="/main">
+                                                <!-- <p class=" mb-0">1</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Choose Base</p>
+                                          </div>
+                                          <div class=" ct_step-circle cursor-pointer"
+                                                [routerLink]="['/make-it-mine/' + projectsData.projectId]">
+                                                <!-- <p class=" mb-0">2</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Make it Mine</p>
+                                          </div>
+                                          <div class=" ct_step-circle  cursor-pointer"
+                                                [routerLink]="['/refine-idea/' + projectsData.projectId]">
+                                                <!-- <p class=" mb-0">3</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Refine Idea</p>
+                                          </div>
+                                          <div class=" ct_step-circle cursor-pointer"
+                                                [routerLink]="['/plan-delivery/' + projectsData.projectId]">
+                                                <!-- <p class=" mb-0">4</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Plan Delivery</p>
+                                          </div>
+                                          <div class=" ct_step-circle cursor-pointer"
+                                                [routerLink]="['/review-buildcard']">
+                                                <!-- <p class=" mb-0">5</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Review Buildcard</p>
+                                          </div>
+                                          <div class=" ct_step-circle">
+                                                <p class=" mb-0">6</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Billing Details</p>
+                                          </div>
+                                          <div class=" ct_step-circle opacity-50">
+                                                <p class=" mb-0">7</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Payment Plan</p>
+                                          </div>
+                                          <div class=" ct_step-circle opacity-50">
+                                                <p class=" mb-0">6</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Payment Options</p>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <form [formGroup]="billingForm" (ngSubmit)="onSubmit()">
+                        <div class="row mt-5 pb-5">
+
+                              <div class="col-lg-8 mb-4 mb-lg-0">
+                                    <div class="ct_outline_border_box">
+                                          <h5 class="mb-2 ct_fs_18 ct_fw_700">Billing Details</h5>
+                                          <p>Do you want to be billed as an individual or as a company (including LLC,
+                                                partnership
+                                                firm or legal entity)?*</p>
+                                          <div class="row mt-4">
+                                                <div class="col-md-6">
+                                                      <div class="ct_app_detail_card"
+                                                            [ngClass]="{'active': billingForm.get('customer_type')!.value === 'individual'}">
+                                                            <div class="form-check ct_custom_radio_check ">
+                                                                  <input class="form-check-input" type="radio"
+                                                                        id="flexRadioDefault1" [value]="'individual'"
+                                                                        formControlName="customer_type"
+                                                                        (change)="billingForm.get('customer_type')!.setValue('individual')">
+                                                                  <label class="form-check-label"
+                                                                        for="flexRadioDefault1">
+                                                                        Individual
+                                                                  </label>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                      <div class="ct_app_detail_card"
+                                                            [ngClass]="{'active': billingForm.get('customer_type')!.value === 'company'}">
+                                                            <div class="form-check ct_custom_radio_check">
+                                                                  <input class="form-check-input" type="radio"
+                                                                        id="flexRadioDefault2"
+                                                                        formControlName="customer_type"
+                                                                        [value]="'company'"
+                                                                        (change)="billingForm.get('customer_type')!.setValue('company')">
+                                                                  <label class="form-check-label"
+                                                                        for="flexRadioDefault2">
+                                                                        Company
+                                                                  </label>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <div class="ct_outline_border_box mt-5">
+                                          <h5 class="mb-4 ct_fs_18 ct_fw_700">Contact Details</h5>
+                                          <div class="form-group mb-3">
+                                                <label for="" class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Full
+                                                      Name</label>
+                                                <input type="text" placeholder="Enter Name"
+                                                      class="form-control ct_input" formControlName="full_name">
+                                                <small class="text-danger"
+                                                      *ngIf="billingForm.get('full_name')?.invalid && billingForm.get('full_name')?.touched">
+                                                      Full name is required.
+                                                </small>
+                                          </div>
+                                          <div class="form-group mb-3">
+                                                <label for="" class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Email
+                                                      Address</label>
+                                                <input type="email" placeholder="Enter Email Address"
+                                                      class="form-control ct_input" formControlName="email">
+                                                <small class="text-danger"
+                                                      *ngIf="billingForm.get('email')?.invalid && billingForm.get('email')?.touched">
+                                                      Enter a valid email address.
+                                                </small>
+                                          </div>
+                                          <div class="form-group mb-3">
+                                                <label for="" class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Phone
+                                                      Number</label>
+                                                <ngx-intl-tel-input
+                                                      [cssClass]="'form-control ct_input ct_input_phone_number'"
+                                                      [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+                                                      [searchCountryFlag]="true"
+                                                      [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                                      [selectFirstCountry]="false"
+                                                      [selectedCountryISO]="CountryISO.India" [maxLength]="15"
+                                                      [phoneValidation]="true" formControlName="phone">
+                                                </ngx-intl-tel-input>
+                                                <small class="text-danger"
+                                                      *ngIf="billingForm.get('phone')?.invalid && billingForm.get('phone')?.touched">Valid
+                                                      phone number is
+                                                      required</small>
+                                          </div>
+                                          @if(billingForm.get('customer_type')!.value === 'company'){
+                                          <div class="form-group mb-3">
+                                                <label for="" class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Company
+                                                      Name</label>
+                                                <input type="text" placeholder="Enter Company Name"
+                                                      class="form-control ct_input" formControlName="company_name">
+                                                <small class="text-danger"
+                                                      *ngIf="billingForm.get('company_name')?.invalid && billingForm.get('company_name')?.touched">
+                                                      Company name is required.
+                                                </small>
+                                          </div>
+                                          }
+
+                                    </div>
+                                    <div class="ct_outline_border_box mt-5">
+                                          <h5 class="mb-4 ct_fs_18 ct_fw_700">Address</h5>
+
+                                          <!-- <div class="form-group mb-3">
+                                                      <label for=""
+                                                            class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Apartment
+                                                            Number</label>
+                                                      <input type="text" placeholder="Enter Apartment Number"
+                                                            class="form-control ct_input ">
+                                                </div> -->
+                                          <div class="form-group mb-3">
+                                                <label for="" class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Address
+                                                      line 1
+                                                      </label>
+                                                <input type="text" placeholder="Enter Address line 1"
+                                                      formControlName="address_line_1" class="form-control ct_input ">
+                                                <small class="text-danger"
+                                                      *ngIf="billingForm.get('address_line_1')?.invalid && billingForm.get('address_line_1')?.touched">Address
+                                                      line 1 is required.</small>
+                                          </div>
+                                          <div class="form-group mb-3">
+                                                <label for="" class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Address
+                                                      line
+                                                      2</label>
+                                                <input type="email" placeholder="Enter Address line 2"
+                                                      formControlName="address_line_2" class="form-control ct_input">
+                                          </div>
+                                          <div class="row">
+                                                <div class="col-md-6">
+                                                      <div class="form-group mb-3">
+                                                            <label for=""
+                                                                  class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Country</label>
+                                                            <select class="form-control ct_input"
+                                                                  formControlName="company_location"
+                                                                  (change)="getStateByCountry($event)">
+                                                                  <option value="">Select Country</option>
+                                                                  @for (item of countries; track $index) {
+                                                                  <option [value]="item.isoCode">{{item.name}}
+                                                                  </option>
+                                                                  }
+                                                            </select>
+                                                            <small class="text-danger"
+                                                                  *ngIf="billingForm.get('company_location')?.invalid && billingForm.get('company_location')?.touched">Country is required.</small>
+                                                      </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                      <div class="form-group mb-3">
+                                                            <label for=""
+                                                                  class="mb-2 d-block ct_fw_500 ct_text_clr_374151">State</label>
+                                                            <select class="form-control ct_input"
+                                                                  formControlName="state"
+                                                                  (change)="getCityByState($event)">
+                                                                  <option value="">Select State</option>
+                                                                  @for (item of states; track $index) {
+                                                                  <option [value]="item.isoCode">{{item.name}}
+                                                                  </option>
+                                                                  }
+                                                            </select>
+                                                            <small class="text-danger"
+                                                                  *ngIf="billingForm.get('state')?.invalid && billingForm.get('state')?.touched">State
+                                                                  is required.</small>
+                                                      </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                      <div class="form-group mb-3">
+                                                            <label for=""
+                                                                  class="mb-2 d-block ct_fw_500 ct_text_clr_374151">City</label>
+                                                            <select class="form-control ct_input"
+                                                                  formControlName="city">
+                                                                  <option value="">Select City</option>
+                                                                  @for (item of cities; track $index) {
+                                                                  <option [value]="item.name">{{item.name}}
+                                                                  </option>
+                                                                  }
+                                                            </select>
+                                                            <small class="text-danger"
+                                                                  *ngIf="billingForm.get('city')?.invalid && billingForm.get('city')?.touched">City
+                                                                  is required.</small>
+                                                      </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                      <div class="form-group mb-3">
+                                                            <label for=""
+                                                                  class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Postcode
+                                                                  /
+                                                                  ZIP / Pin</label>
+                                                            <input type="text" formControlName="postal_code"
+                                                                  placeholder="Enter Postcode / ZIP / Pin"
+                                                                  class="form-control ct_input ">
+
+                                                            <small class="text-danger"
+                                                                  *ngIf="billingForm.get('postal_code')?.invalid && billingForm.get('postal_code')?.touched">Postal
+                                                                  code is required.</small>
+                                                      </div>
+                                                </div>
+
+                                          </div>
+
+                                    </div>
+
+
+                              </div>
+
+                              <div class="col-lg-4 mb-4 mb-lg-0">
+                                    <div class="ct_right_sidebar_12 ct_outline_border_box">
+                                          <div>
+                                                <div class="position-relative ct_w_fit_content mx-auto">
+                                                      <img src="assets/img/iPhone_14 Plus_.png" alt="AI app builder for mobile and web">
+                                                      <div class="ct_mob_overlay_top_cnt_12">
+                                                            <div class="ct_add_logo_by_ai"
+                                                                  [style]="projectsData.logoStyle">
+                                                                  @if(!projectsData.projectLogo){
+                                                                  <svg width="12" height="12" viewBox="0 0 12 12"
+                                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <circle cx="5.6658" cy="5.82644" r="5.13414"
+                                                                              stroke="white" stroke-width="0.789868" />
+                                                                        <path d="M5.83104 3.45752V8.52584M3.29688 5.99168H8.3652"
+                                                                              stroke="white" stroke-width="0.724046"
+                                                                              stroke-linecap="round"
+                                                                              stroke-linejoin="round" />
+                                                                  </svg>
+                                                                  } @else {
+                                                                  <img [src]="projectsData.projectLogo" alt="AI app builder for mobile and web"
+                                                                        class="ct_img_logo_123">
+                                                                  }
+                                                            </div>
+                                                            <h6 class="text-white ct_fs_14">{{projectsData.projectName}}
+                                                            </h6>
+                                                      </div>
+                                                </div>
+                                                <div class="mt-3">
+                                                      <h5 class="ct_fs_16 ct_fw_700 text-center">
+                                                            {{projectsData.projectName}}
+                                                      </h5>
+                                                      <p class="ct_text_op_7 mb-0 text-center">FEATURES:
+                                                            {{totalSubFeatures}}
+                                                      </p>
+                                                </div>
+
+                                                <div class="mt-5">
+                                                      <div
+                                                            class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                            <p class="mb-0 ct_text_op_7 ct_fs_14">Estimated Duration</p>
+                                                            <p class="mb-0 ct_fw_700 ct_fs_14">
+                                                                  {{projectsData.estimated_time}}
+                                                                  weeks
+                                                            </p>
+                                                      </div>
+                                                      <div
+                                                            class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                            <p class="mb-0 ct_text_op_7 ct_fs_14">Expected Completion
+                                                            </p>
+                                                            <p class="mb-0 ct_fw_700 ct_fs_14">
+                                                                  {{projectsData.estimatedDate | date}}
+                                                            </p>
+                                                      </div>
+                                                </div>
+
+                                                <div class="mt-4 pt-4 ct_border_top_1">
+                                                      <div
+                                                            class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                            <p class="mb-0 ct_fw_700 ct_fs_14">Features</p>
+                                                            <p class="mb-0 ct_fw_700 ct_fs_14">
+                                                                  {{projectsData.featuresCost | currency:'INR'}}
+                                                            </p>
+                                                      </div>
+                                                      <div
+                                                            class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                            <p class="mb-0 ct_fw_700 ct_fs_14">Customisation</p>
+                                                            <p class="mb-0 ct_fw_700 ct_fs_14">
+                                                                  {{projectsData.customisationCost | currency:'INR'}}
+                                                            </p>
+                                                      </div>
+                                                      <!-- <div
+                                                            class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                            <p class="mb-0 ct_fw_700 ct_fs_14">Studio One (for 12
+                                                                  months)</p>
+                                                            <p class="mb-0 ct_fw_700 ct_fs_14">{{0 | currency:'INR'}}
+                                                            </p>
+                                                      </div> -->
+
+                                                      <div
+                                                            class="d-flex align-items-center justify-content-between gap-3  mb-3">
+                                                            <p class="mb-0 ct_fw_700 ct_fs_18">Total Cost</p>
+                                                            <p class="mb-0 ct_fw_700 ct_fs_18">
+                                                                  {{projectsData.finalCost | currency:'INR'}}
+                                                            </p>
+                                                      </div>
+                                                </div>
+                                                <div class="mt-5">
+                                                      <button type="submit"
+                                                            class="ct_schedule_call_btn w-100 d-flex justify-content-center align-items-center">Continue
+                                                            to Payment Plan</button>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </form>
+            </div>
+      </div>
+</section>
+
+<!-- Mobile page section S -->
+<section class="ct_mobile_section_main">
+      <div class="ct_mobile_header_main_bg">
+            <img src="assets/img/cti_black_logo.svg" alt="AI app builder for mobile and web">
+      </div>
+      <div class="container">
+            <div class="row">
+                  <div class="col-md-12">
+
+                        <div class="mt-4">
+                              <h3 class="ct_fs_24 text-center ct_fw_700">Why it's worth heading to a desktop now</h3>
+                              <p class="text-center">Our mobile site isn't the best place to order your app…yet.</p>
+
+                              <div class="ct_grey_bg p-4 mt-3">
+                                    <h6 class="ct_fs_16 ct_fw_700 mb-4">Go to your desktop now and Vaanya, our AI can:
+                                    </h6>
+                                    <ul class="ct_list_style_dics">
+                                          <li>Guide you to find all the app features you need</li>
+                                          <li>Help you Start designing - get a feel of what your app could look like
+                                          </li>
+                                          <li>Give you a guaranteed price and accurate timeline</li>
+                                    </ul>
+                              </div>
+                              <p class="mb-0 mt-3 text-center">Want to give it a try? Grab a bigger screen and let's
+                                    bring
+                                    your app to
+                                    life!</p>
+
+                              <div class="mt-5">
+                                    <a href="index.html" class="ct_blue_btn_fill w-100">Return to Creative Thoughts
+                                          Ai</a>
+                              </div>
+                        </div>
+
+                  </div>
+
+            </div>
+
+      </div>
+</section>
+<!-- Mobile page section E -->
+
+
+
+<!-- Refrsh page modal S -->
+
+<div class="modal fade modal-lg" id="ct_refresh_page" tabindex="-1" aria-labelledby="ct_refresh_pageLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content  p-4">
+
+                  <div class="modal-body  p-0">
+                        <!-- You Need To Import Schedule Form here -->
+                        <div class="ct_schedule_call_main12">
+
+                              <h4 class="ct_fs_24 ct_fw_700 text-center mb-2">Are you sure you want to continue with
+                                    this
+                                    refresh?</h4>
+                              <p class="mb-0 text-center">Doing so may result in the loss of your recent interactions
+                                    and
+                                    changes.
+                              </p>
+
+                              <div
+                                    class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center">
+                                    <button class="ct_blue_outline_btn  justify-content-center"
+                                          data-bs-dismiss="modal">Cancel</button>
+                                    <button class="ct_blue_btn_fill  justify-content-center" data-bs-dismiss="modal"
+                                          routerLink="/main">Proceed</button>
+                              </div>
+
+
+
+                        </div>
+                  </div>
+
+            </div>
+      </div>
+</div>
+<!-- Refrsh page modal E -->

@@ -1,0 +1,8 @@
+.et_creative_banner_img_w img {
+    width: 100%;
+    /* max-width: 300px; */
+    margin-bottom: 30px;
+    display: block;
+    margin-inline: auto;
+    border-radius: 15px;
+}

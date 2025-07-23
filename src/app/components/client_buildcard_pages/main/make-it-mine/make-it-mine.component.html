@@ -1,0 +1,458 @@
+<section class="ct_dash_board_main">
+      <app-sidebar></app-sidebar>
+      <div class="ct_dash_right_content p-0 ct_white_bg_page">
+            <div class="ct_dash_toggle_bar">
+                  <i class="fa-solid fa-bars"></i>
+            </div>
+            <div class="d-flex ">
+                  <div class="ct_middile_sidebar">
+                        <div class="ct_cti_chat_animate_round">
+                              <img src="assets/img/circle_git_123.gif" alt="AI app builder for mobile and web">
+                              <span class="ct_fs_14">IN TRAINING</span>
+                        </div>
+                        <div class="ct_cti_chat_box">
+                              <!-- choose Base Chat show S -->
+                              <div>
+                                    <div class="ct_chat_item_left">
+                                          <p class="ct_mb_20 ct_fs_14 ct_line_h_25">What should we call your app? Don't
+                                                worry we
+                                                can
+                                                change this later.</p>
+                                          <div class="form-group">
+                                                <input type="text"
+                                                      class="form-control ct_input ct_border_radius_10 ct_fs_14 ct_input_h_32"
+                                                      placeholder="Enter Project Name" #project_name
+                                                      [value]="projectName" required (input)="updateName(project_name.value)">
+                                                <small *ngIf="nameInvalid"
+                                                      class="text-danger">
+                                                      Project name is required.
+                                                </small>
+                                                <button
+                                                      class="ct_schedule_call_btn w-100 mt-3 justify-content-center ct_fs_14 ct_fw_500 py-2"
+                                                      (click)="updateName(project_name.value)">Update
+                                                      app
+                                                      name</button>
+                                          </div>
+                                    </div>
+                                    <div class="ct_chat_item_right">
+                                          <p class="mb-0 ct_fs_14 ct_line_h_25">{{projectName}}</p>
+                                    </div>
+
+                                    <div class="ct_chat_item_left mt-2">
+                                          <p class="ct_mb_20 ct_fs_14 ct_line_h_25">Now let's really make it yours.
+                                                Select a
+                                                colour
+                                                and upload a logo (if you have one) to customise your app.</p>
+                                          <div class="pt-2">
+                                                <ul class="nav nav-pills mb-3 ct_dash_board_tab justify-content-center"
+                                                      id="pills-tab" role="tablist">
+                                                      <li class="nav-item" role="presentation">
+                                                            <button class="nav-link active ct_fs_14"
+                                                                  id="pills-Upcoming-Calls-tab" data-bs-toggle="pill"
+                                                                  data-bs-target="#pills-Upcoming-Calls" type="button"
+                                                                  role="tab" aria-controls="pills-Upcoming-Calls"
+                                                                  aria-selected="true">Upload
+                                                                  logo</button>
+                                                      </li>
+                                                      <li class="nav-item" role="presentation">
+                                                            <button class="nav-link ct_fs_14" id="pills-Past_Calls-tab"
+                                                                  data-bs-toggle="pill"
+                                                                  data-bs-target="#pills-Past_Calls" type="button"
+                                                                  role="tab" aria-controls="pills-Past_Calls"
+                                                                  aria-selected="false">Select
+                                                                  colour</button>
+                                                      </li>
+
+                                                </ul>
+                                                <div class="tab-content mt-4 pt-2" id="pills-tabContent">
+                                                      <div class="tab-pane fade show active" id="pills-Upcoming-Calls"
+                                                            role="tabpanel" aria-labelledby="pills-Upcoming-Calls-tab">
+                                                            <label for="ct_upload_logo" class="d-block">
+                                                                  <input type="file" class="d-none" id="ct_upload_logo"
+                                                                        accept="image/*"
+                                                                        (change)="onFileSelected($event)">
+                                                                  <div class="ct_upload_logo_div">
+                                                                        @if(imagePreview){
+                                                                        <img [src]="imagePreview" alt="Preview"
+                                                                              class="preview-image w-100">
+
+                                                                        }@else {
+                                                                        <svg width="22" height="21" viewBox="0 0 22 21"
+                                                                              fill="none"
+                                                                              xmlns="http://www.w3.org/2000/svg">
+                                                                              <path d="M3 14.7422C1.79401 13.935 1 12.5602 1 11C1 8.65643 2.79151 6.73129 5.07974 6.51937C5.54781 3.67213 8.02024 1.5 11 1.5C13.9798 1.5 16.4522 3.67213 16.9203 6.51937C19.2085 6.73129 21 8.65643 21 11C21 12.5602 20.206 13.935 19 14.7422M7 14.5L11 10.5M11 10.5L15 14.5M11 10.5V19.5"
+                                                                                    stroke="#1B83C1" stroke-width="2"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round" />
+                                                                        </svg>
+
+                                                                        }
+                                                                  </div>
+                                                                  <div class="ct_or_text_main">
+                                                                        <p class="mb-0">OR</p>
+                                                                  </div>
+                                                                  <div class="form-group mt-2">
+                                                                        <label for="" class="ct_fs_14 mb-2">Already have
+                                                                              your website
+                                                                              ?</label>
+                                                                        <input type="text"
+                                                                              class="form-control ct_input ct_border_radius_10 ct_fs_14 ct_input_h_32"
+                                                                              placeholder="Type url">
+                                                                  </div>
+                                                                  <div class="form-group mt-3">
+                                                                        <label for="" class="ct_fs_14 mb-2">Need to be
+                                                                              deliver (in weeks) -</label>
+                                                                        <input type="number"
+                                                                              class="form-control ct_input ct_border_radius_10 ct_fs_14 ct_input_h_32"
+                                                                              placeholder="Weeks"
+                                                                              [(ngModel)]="estimatedWeeks">
+                                                                        <span *ngIf="!estimatedWeeks && submitted"
+                                                                              class="ct_fs_12 text-danger">
+                                                                              Please enter estimated weeks.
+                                                                        </span>
+                                                                  </div>
+                                                            </label>
+                                                      </div>
+                                                      <div class="tab-pane fade d-flex justify-content-center"
+                                                            id="pills-Past_Calls" role="tabpanel"
+                                                            aria-labelledby="pills-Past_Calls-tab">
+                                                            <input [(colorPicker)]="color" [style.background]="color"
+                                                                  (colorPickerChange)="onColorChange($event)"
+                                                                  class="colorPickdr" />
+                                                      </div>
+
+                                                </div>
+                                                <div class="ct_chat_box_send_input">
+                                                      <input type="text" placeholder="What should I do now?"
+                                                            class="form-control">
+                                                      <div class="ct_chat_send_icons_overlay">
+                                                            <ul>
+                                                                  <li>
+                                                                        <svg width="16" height="22" viewBox="0 0 16 22"
+                                                                              fill="none"
+                                                                              xmlns="http://www.w3.org/2000/svg">
+                                                                              <path d="M15 9V11C15 14.866 11.866 18 8 18M1 9V11C1 14.866 4.13401 18 8 18M8 18V21M4 21H12M8 14C6.34315 14 5 12.6569 5 11V4C5 2.34315 6.34315 1 8 1C9.65685 1 11 2.34315 11 4V11C11 12.6569 9.65685 14 8 14Z"
+                                                                                    stroke="black"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round" />
+                                                                        </svg>
+                                                                  </li>
+                                                                  <li>
+                                                                        <button class="ct_send_btn_12">
+                                                                              <svg width="17" height="18"
+                                                                                    viewBox="0 0 17 18" fill="none"
+                                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path d="M10.2993 9.00026H3.69267C3.69267 8.77109 3.64517 8.54193 3.55101 8.32693L1.57017 3.84526C0.93684 2.41193 2.45184 0.976928 3.84851 1.68609L15.3327 7.51443C16.5493 8.13109 16.5493 9.86943 15.3327 10.4861L3.84934 16.3144C2.45184 17.0236 0.93684 15.5878 1.57017 14.1553L3.54934 9.67359C3.64288 9.46145 3.69113 9.23212 3.69101 9.00026"
+                                                                                          stroke="white"
+                                                                                          stroke-width="1.25"
+                                                                                          stroke-linecap="round"
+                                                                                          stroke-linejoin="round" />
+                                                                              </svg>
+                                                                        </button>
+                                                                  </li>
+                                                            </ul>
+                                                      </div>
+
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                              <!-- choose Base Chat show S -->
+
+                        </div>
+                  </div>
+                  <div class="ct_middle_right_content flex-1">
+                        <div class="container mt-5">
+                              <!-- <div class="progress px-1" style="height: 3px;background-color: #D9D9D9;">
+                          <div class="progress-bar" role="progressbar" style="width: 0%; " aria-valuenow="0"
+                              aria-valuemin="0" aria-valuemax="100"></div>
+                      </div> -->
+                              <div class="d-grid">
+                                    <div class="ct_step-container d-flex justify-content-between">
+                                          <div class=" ct_step-circle cursor-pointer" [routerLink]="['/main']">
+                                                <!-- <p class=" mb-0">1</p> -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                                      viewBox="0 0 24 24">
+                                                      <path fill="#17b400" fill-rule="evenodd"
+                                                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                                                            clip-rule="evenodd" />
+                                                </svg>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Choose Base</p>
+                                          </div>
+                                          <div class=" ct_step-circle">
+                                                <p class=" mb-0">2</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Make it Mine</p>
+                                          </div>
+                                          <div class=" ct_step-circle opacity-50">
+                                                <p class=" mb-0">3</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Refine Idea</p>
+                                          </div>
+                                          <div class=" ct_step-circle opacity-50">
+                                                <p class=" mb-0">4</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Plan Delivery</p>
+                                          </div>
+                                          <div class=" ct_step-circle opacity-50">
+                                                <p class=" mb-0">5</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Review Buildcard</p>
+                                          </div>
+                                          <div class=" ct_step-circle opacity-50">
+                                                <p class=" mb-0">6</p>
+                                                <p class="mb-0 ct_fs_14 ct_fw_600">Billing Details</p>
+                                          </div>
+                                    </div>
+                              </div>
+
+                              <form class="pt-5 pb-0">
+                                    <div class="ct_step">
+                                          <ul class="nav nav-pills mb-3 ct_dash_board_tab ct_mob_switch_tabs"
+                                                id="pills-tab_mob" role="tablist">
+
+                                                <li class="nav-item" role="presentation">
+                                                      <button class="nav-link active" id="pillsdesk-tab"
+                                                            data-bs-toggle="pill" data-bs-target="#pills-mob"
+                                                            type="button" role="tab" aria-controls="pills-mob"
+                                                            aria-selected="false" tabindex="-1">
+                                                            <svg width="14" height="21" viewBox="0 0 14 21" fill="none"
+                                                                  xmlns="http://www.w3.org/2000/svg">
+                                                                  <path d="M12.375 0H1.5C0.672656 0 0 0.672656 0 1.5V19.5C0 20.3273 0.672656 21 1.5 21H12.375C13.2023 21 13.875 20.3273 13.875 19.5V1.5C13.875 0.672656 13.2023 0 12.375 0ZM12.1875 19.3125H1.6875V1.6875H12.1875V19.3125ZM6 16.9219C6 17.1705 6.09877 17.409 6.27459 17.5848C6.4504 17.7606 6.68886 17.8594 6.9375 17.8594C7.18614 17.8594 7.4246 17.7606 7.60041 17.5848C7.77623 17.409 7.875 17.1705 7.875 16.9219C7.875 16.6732 7.77623 16.4348 7.60041 16.259C7.4246 16.0831 7.18614 15.9844 6.9375 15.9844C6.68886 15.9844 6.4504 16.0831 6.27459 16.259C6.09877 16.4348 6 16.6732 6 16.9219Z"
+                                                                        fill="black" />
+                                                            </svg>
+
+                                                      </button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                      <button class="nav-link" id="pills-mob-tab" data-bs-toggle="pill"
+                                                            data-bs-target="#pillsdesk" type="button" role="tab"
+                                                            aria-controls="pillsdesk" aria-selected="true">
+
+                                                            <svg width="20" height="19" viewBox="0 0 20 19" fill="none"
+                                                                  xmlns="http://www.w3.org/2000/svg">
+                                                                  <path d="M2.00003 13H18V2H2.00003V13ZM11 15V17H15V19H5.00003V17H9.00003V15H0.992032C0.860709 14.999 0.730878 14.972 0.609953 14.9208C0.489027 14.8696 0.379376 14.7951 0.287259 14.7015C0.195143 14.6079 0.122365 14.497 0.0730828 14.3753C0.0238002 14.2536 -0.00102253 14.1233 3.22575e-05 13.992V1.008C3.22575e-05 0.451 0.455032 0 0.992032 0H19.008C19.556 0 20 0.449 20 1.007V13.992C20 14.549 19.545 15 19.008 15H11Z"
+                                                                        fill="black" />
+                                                            </svg>
+
+                                                      </button>
+                                                </li>
+
+                                          </ul>
+                                          <div class="ct_base_section_main" class="tab-content" id="myTabContent">
+
+                                                <div class="position-relative ct_w_fit_content mx-auto tab-pane fade show active"
+                                                      id="pills-mob" role="tabpanel">
+                                                      <img src="assets/img/iPhone_14 Plus_.png" alt="AI app builder for mobile and web">
+                                                      <div class="ct_mob_overlay_top_cnt_12">
+                                                            <div #logoBox class="ct_add_logo_by_ai"
+                                                                  [style]="projectsData?.logoStyle">
+
+                                                                  @if(!imagePreview){
+                                                                  <svg width="12" height="12" viewBox="0 0 12 12"
+                                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <circle cx="5.6658" cy="5.82644" r="5.13414"
+                                                                              stroke="white" stroke-width="0.789868" />
+                                                                        <path d="M5.83104 3.45752V8.52584M3.29688 5.99168H8.3652"
+                                                                              stroke="white" stroke-width="0.724046"
+                                                                              stroke-linecap="round"
+                                                                              stroke-linejoin="round" />
+                                                                  </svg>
+                                                                  } @else {
+                                                                  <img [src]="imagePreview" alt="AI app builder for mobile and web"
+                                                                        class="ct_img_logo_123">
+                                                                  }
+
+
+                                                            </div>
+                                                            <h6 class="text-white ct_fs_14">{{projectName}}</h6>
+                                                      </div>
+                                                </div>
+
+                                                <div class="position-relative ct_w_fit_content mx-auto tab-pane fade show"
+                                                      style="max-width: 328px;width: 100%;" id="pillsdesk"
+                                                      role="tabpanel">
+                                                      <img [src]="'assets/img/Frame1437253511.png'" alt="AI app builder for mobile and web"
+                                                            style="max-width: 328px;width: 100%; height: 203px; object-fit: cover; border-radius: 10px;">
+                                                      <div class="ct_mob_overlay_top_cnt_12">
+                                                            <div class="ct_add_logo_by_ai"
+                                                                  [style]="projectsData?.logoStyle">
+                                                                  @if(!imagePreview){
+                                                                  <svg width="12" height="12" viewBox="0 0 12 12"
+                                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <circle cx="5.6658" cy="5.82644" r="5.13414"
+                                                                              stroke="white" stroke-width="0.789868" />
+                                                                        <path d="M5.83104 3.45752V8.52584M3.29688 5.99168H8.3652"
+                                                                              stroke="white" stroke-width="0.724046"
+                                                                              stroke-linecap="round"
+                                                                              stroke-linejoin="round" />
+                                                                  </svg>
+
+                                                                  }@else {
+                                                                  <img [src]="imagePreview" alt="AI app builder for mobile and web"
+                                                                        class="ct_img_logo_123">
+                                                                  }
+                                                            </div>
+                                                            <h6 class="text-white ct_fs_14">
+                                                                  {{projectName}}
+                                                            </h6>
+                                                      </div>
+                                                </div>
+
+                                                <div class="ct_white_bottom_bg mt-5 pb-5 ">
+                                                      <span class="ct_text_clr_7F8188 ct_fs_14">MY APP</span>
+                                                      <p class="mb-0 mt-1 ct_fw_700">{{projectName}}</p>
+                                                      <div
+                                                            class="d-flex align-items-center justify-content-between gap-3 mt-3">
+                                                            <button type="button" (click)="location.back()"
+                                                                  class="ct_blue_outline_btn w-100">Cancel</button>
+                                                            <a (click)="Navigate(id)" type="button"
+                                                                  class="ct_blue_btn_fill  w-100">Next</a>
+                                                      </div>
+                                                </div>
+
+
+                                          </div>
+
+
+                                    </div>
+                              </form>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</section>
+
+
+
+<!-- Mobile page section S -->
+<section class="ct_mobile_section_main">
+      <div class="ct_mobile_header_main_bg">
+            <img src="assets/img/cti_black_logo.svg" alt="AI app builder for mobile and web">
+      </div>
+      <div class="container">
+            <div class="row">
+                  <div class="col-md-12">
+
+                        <div class="mt-4">
+                              <h3 class="ct_fs_24 text-center ct_fw_700">Why it's worth heading to a desktop now</h3>
+                              <p class="text-center">Our mobile site isn't the best place to order your app…yet.</p>
+
+                              <div class="ct_grey_bg p-4 mt-3">
+                                    <h6 class="ct_fs_16 ct_fw_700 mb-4">Go to your desktop now and Vaanya, our AI can:
+                                    </h6>
+                                    <ul class="ct_list_style_dics">
+                                          <li>Guide you to find all the app features you need</li>
+                                          <li>Help you Start designing - get a feel of what your app could look like
+                                          </li>
+                                          <li>Give you a guaranteed price and accurate timeline</li>
+                                    </ul>
+                              </div>
+                              <p class="mb-0 mt-3 text-center">Want to give it a try? Grab a bigger screen and let's
+                                    bring
+                                    your app to
+                                    life!</p>
+
+                              <div class="mt-5">
+                                    <a href="index.html" class="ct_blue_btn_fill w-100">Return to Creative Thoughts
+                                          Ai</a>
+                              </div>
+                        </div>
+
+                  </div>
+
+            </div>
+
+      </div>
+</section>
+<!-- Mobile page section E -->
+
+
+<!-- Refrsh page modal S -->
+<div class="modal fade modal-lg" id="ct_refresh_page" tabindex="-1" aria-labelledby="ct_refresh_pageLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content  p-4">
+
+                  <div class="modal-body  p-0">
+                        <!-- You Need To Import Schedule Form here -->
+                        <div class="ct_schedule_call_main12">
+
+                              <h4 class="ct_fs_24 ct_fw_700 text-center mb-2">Are you sure you want to continue with
+                                    this
+                                    refresh?</h4>
+                              <p class="mb-0 text-center">Doing so may result in the loss of your recent interactions
+                                    and
+                                    changes.
+                              </p>
+
+                              <div
+                                    class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center">
+                                    <button class="ct_blue_outline_btn  justify-content-center"
+                                          data-bs-dismiss="modal">Cancel</button>
+                                    <button class="ct_blue_btn_fill  justify-content-center" data-bs-dismiss="modal"
+                                          routerLink="/main">Proceed</button>
+                              </div>
+
+
+
+                        </div>
+                  </div>
+
+            </div>
+      </div>
+</div>
+
+
+
+
+<!-- loader page section S -->
+<section class="ct_loader_page_section d-none">
+      <div>
+            <ul class="floatingBoxes">
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+            </ul>
+      </div>
+      <div class="container">
+            <div class="row">
+                  <div class="col-md-8 mx-auto">
+                        <h2 class="ct_fs_80 ct_fw_700 text-center">Here comes the fun bit!</h2>
+                        <p class="text-center mt-3">I’ve found <span class="ct_feature_icon_234">-</span> features
+                              that’ll
+                              bring
+                              your idea to life
+                        </p>
+                        <div class="row mt-5">
+                              <div class="col-md-4">
+                                    <div
+                                          class="ct_cti_chat_animate_round text-end ct_width_fit_content m-sm-auto mx-auto">
+                                          <img src="assets/img/circle_git_123.gif" alt="AI app builder for mobile and web" style="max-width: 200px;">
+                                          <span class="ct_fs_14" style="left: 0px;right: auto;">IN TRAINING</span>
+                                    </div>
+                              </div>
+                              <div class="col-md-8">
+                                    <div class="ct_fun_progress_list">
+                                          <ul>
+                                                <li>Planning your app</li>
+                                                <li>Creating your user journeys</li>
+                                                <li>Adding your colours and logo</li>
+                                          </ul>
+
+                                    </div>
+
+                              </div>
+
+                        </div>
+
+                  </div>
+            </div>
+
+      </div>
+
+</section>
+<!-- loader page section E -->

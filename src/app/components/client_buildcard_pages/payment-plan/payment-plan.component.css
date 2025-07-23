@@ -1,0 +1,9 @@
+.pointer {
+      cursor: pointer;
+      text-decoration: underline;
+      color: blue;
+}
+
+.ct_border_radius_5{
+      border-radius: 5px;
+}

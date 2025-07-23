@@ -1,0 +1,13 @@
+# Local Netlify folder
+.netlify
+.angular
+ 
+node_modules
+ 
+**/node_modules
+ 
+**/dist
+ 
+/dist
+ 
+.env

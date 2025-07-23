@@ -1,0 +1,124 @@
+@media screen and (max-width: 1199px) {
+  .et_dash_sidebar {
+    left: -100%;
+  }
+  .et_dash_right_content {
+    width: 100%;
+    margin: 0px;
+  }
+  .et_dashbaord_main.et_dash_show .et_dash_sidebar {
+    left: 0px;
+  }
+  .et_dashbaord_main.et_dash_show .et_dash_right_content {
+    width: calc(100% - 180px);
+    margin-left: 180px;
+  }
+}
+@media screen and (max-width: 991px) {
+  .et_dash_sidebar {
+    left: -100%;
+  }
+
+  .et_dash_right_content {
+    width: 100%;
+    margin-left: 0px;
+  }
+
+  .et_grid_4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .et_thread_chat_main {
+    border-left: 0px;
+  }
+
+  .et_todos_grid_4 {
+    flex-direction: column;
+  }
+
+  .et_todos_card_main {
+    width: 100%;
+  }
+  .et_dashbaord_main.et_dash_show .et_dash_right_content {
+    width: calc(100% - 0px);
+    margin-left: 0px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .et_dash_header ul a,
+  .et_dash_header ul li {
+    font-size: 15px;
+  }
+
+  .et_flex_direction_col_767 {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+
+  .et_right_head_content {
+    width: 100%;
+  }
+
+  .et_inner_dash_content {
+    padding-inline: 15px;
+  }
+
+  .et_right_request_img:after {
+    display: none;
+  }
+
+  .et_buildcard_tab ul#pills-tab {
+    width: 100%;
+    gap: 15px !important;
+  }
+
+  ul.et_todo_tab_list {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .et_res_767_w_100 {
+    width: 100%;
+    max-width: 100% !important;
+  }
+
+  .et_px_0_767 {
+    padding-inline: 0px;
+  }
+
+  .et_monthly_date_change {
+    margin-top: 20px;
+    justify-content: center;
+    padding: 0px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .timeline-period {
+    font-size: 8px;
+    color: #7a7a7a;
+    text-align: center;
+    margin-top: 5px;
+    white-space: nowrap;
+    padding-inline: 1px;
+  }
+
+  .et_flex_columm_575 {
+    flex-direction: column;
+    align-items: start !important;
+  }
+
+  .et_dash_header ul {
+    display: none;
+  }
+  .et_dash_header {
+    justify-content: end !important;
+  }
+  .et_search_input {
+    position: relative;
+    width: 100%;
+    min-width: 213px;
+  }
+}

@@ -1,0 +1,29 @@
+.ct_login_right_bg_1 {
+      background: #DDF1FD59;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+}
+
+.ct_right_inner_bg_1 {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      align-items: center;
+}
+
+.ct_right_inner_bg_1 p {
+      color: #009FFFCC;
+      font-size: 30px;
+      font-family: "Mulish", sans-serif;
+}
+
+.ct_login_right_bg_1 ul li {
+      color: #282828;
+      font-size: 15px;
+      font-family: "Mulish", sans-serif;
+      margin: 10px;
+}

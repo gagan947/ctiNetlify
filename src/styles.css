@@ -1,0 +1,111 @@
+.iti.iti--allow-dropdown {
+      width: 100%;
+}
+
+.iti {
+      display: block !important;
+}
+
+
+.iti__flag-container.open+input {
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+}
+
+.iti .search-container input:focus {
+      outline: none;
+}
+
+
+.iti--allow-dropdown .iti__flag-container,
+.iti--separate-dial-code .iti__flag-container {
+      right: auto;
+      left: 0;
+}
+
+.iti__flag-container {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      padding: 1px;
+}
+
+.iti__selected-flag {
+      z-index: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      padding: 0 6px 0 8px;
+      border-right: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+.ct_input_phone_number {
+      padding: 0 55px;
+}
+
+.dropdown-menu.country-dropdown.show {
+      font-size: 12px;
+      width: 250px;
+}
+
+ul.iti__country-list {
+      overflow: scroll;
+      height: 147px;
+      overflow-x: hidden;
+}
+
+.color-picker {
+      top: 360.746px !important;
+      left: 123.128px !important;
+}
+
+.color-picker .arrow.arrow-top-right,
+.color-picker .arrow.arrow-right-top {
+      bottom: -5px !important;
+      left: 59px !important;
+      transform: rotate(150deg) !important;
+}
+
+.ct_dragable_card_main_bg {
+      background-color: #fff;
+      box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.0.15);
+      padding: 20px 10px;
+      border-radius: 10px;
+
+}
+
+.ct_img_logo_123 {
+      width: 100%;
+      height: 100%;
+      border-radius: 5px;
+      object-fit: cover;
+}
+
+.iti input#country-search-box {
+      height: 30px;
+}
+
+::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+}
+
+::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 2px grey;
+      border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+      background: #0b82be;
+      border-radius: 10px;
+}
+
+.cursor-pointer {
+      cursor: pointer;
+}
+
+.ant-message.ant-message-success {
+      font-size: 18px; /* Adjust the font size as needed */
+    }

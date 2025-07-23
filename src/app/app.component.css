@@ -1,0 +1,15 @@
+.ct_buider_img_23 img {
+    width: 100%;
+  }
+  
+  .ct_close_modal {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 15px;
+    height: 15px;
+    background-color: #fff;
+    opacity: 1;
+    z-index: 888;
+  }
+  
