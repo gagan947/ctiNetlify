@@ -88,7 +88,8 @@
                     </small>
                 </div>
                 <div class="mt-5">
-                    <button type="submit" class="ct_blue_btn_fill py-3 w-100">Signup</button>
+                    <!-- <button type="submit" class="ct_blue_btn_fill py-3 w-100">Signup</button> -->
+                    <app-submit-button [text]="'Signup'" [isLoading]="isLoading" [class]="'ct_blue_btn_fill py-3 w-100'"></app-submit-button>
                 </div>
                 <p class="mb-0 mt-3 text-center">Already have an account? <a routerLink="/login">SignIn</a></p>
             </form>

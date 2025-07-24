@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router, RouterLink } from '@angular/router';
+import { SubmitButtonComponent } from "../shared/submit-button/submit-button.component";
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [NgxIntlTelInputModule, ReactiveFormsModule, FormsModule, CommonModule, RouterLink],
+  imports: [NgxIntlTelInputModule, ReactiveFormsModule, FormsModule, CommonModule, RouterLink, SubmitButtonComponent],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
@@ -19,7 +20,7 @@ export class SignupComponent {
   CountryISO = CountryISO
   countries: any;
   showPassword: boolean = false; // Initially, password is hidden
-  loading: boolean = false
+  isLoading: boolean = false
   ngOnInit(): void {
     this.countries = Country.getAllCountries()
   };
@@ -54,9 +55,11 @@ export class SignupComponent {
     if (this.signupForm.invalid) {
       return;
     }
-
+    this.isLoading = true
     const phoneData = this.signupForm.value.phone;
-    const formattedPhoneNumber = phoneData.dialCode + phoneData.number;
+    console.log(phoneData);
+    const formattedPhoneNumber = phoneData.number;
+    console.log(formattedPhoneNumber);
     const payload = {
       email: this.signupForm.value.email,
       name: this.signupForm.value.name,
@@ -71,12 +74,13 @@ export class SignupComponent {
           if (res.success == true) {
             this.message.success(res.message);
             this.router.navigate(['/login']);
+            this.isLoading = false
           } else {
-            // this.loading = false
+            this.isLoading = false
           }
         },
         error: err => {
-          this.loading = false
+          this.isLoading = false
           this.message.error(err.error.message);
         }
       });
