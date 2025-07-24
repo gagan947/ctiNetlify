@@ -1,0 +1,38 @@
+ .ct_page_not_found_bg {
+       background-color: #000;
+       height: 100vh;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       text-align: center;
+ }
+
+ /* .ct_page_not_found_section{
+  padding: 4rem 2rem;
+} */
+
+ .ct_page_not_found_section .ct_page_not_found_error {
+       font-size: 150px;
+       color: #00EEFF;
+       font-family: "Roboto", sans-serif;
+       margin-bottom: 40px;
+       font-weight: 700;
+
+ }
+
+ .ct_page_not_found_page {
+       margin: 2rem 0;
+       font-size: 20px;
+       font-weight: 600;
+       color: #ccc;
+       font-family: "Roboto", sans-serif;
+
+ }
+
+ ::ng-deep .ct_header {
+       display: none;
+ }
+
+ ::ng-deep footer {
+       display: none;
+ }

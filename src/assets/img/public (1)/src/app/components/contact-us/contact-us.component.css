@@ -1,0 +1,36 @@
+.ct_outline_blue_bg li{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.ct_outline_blue_bg{
+    border: 1px solid #00EEFF4D;
+    padding: 40px 60px;
+    border-radius: 10px;
+}
+.ct_outline_blue_bg li + li{
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #00EEFF0D;
+
+}
+
+@media screen and (max-width: 757px){
+    .ct_outline_blue_bg{
+        padding: 20px;
+    }
+  
+}
+
+@media screen and (max-width: 575px){
+    
+    .ct_outline_blue_bg li{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .ct_outline_blue_bg li span{
+        margin-top: 10px;
+    }
+}

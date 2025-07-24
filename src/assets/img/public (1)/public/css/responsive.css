@@ -1,0 +1,143 @@
+@media screen and (min-width:1640px){
+     .ct_fs_64{
+        font-size: 64px;
+        line-height: 77px;
+    }
+}
+
+@media screen and (max-width:1199px){
+   /* .ct_banner_title {
+    padding: 128px 0px 130px 100px;
+} */
+ .ct_partners_clinic_group_img {
+    width: 380px;
+}
+}
+@media screen and (max-width:991px){
+    .ct_px_100{
+        padding-inline: 50px !important;
+    }
+    /* .ct_banner_title {
+        padding: 106px 0px 130px 100px;
+    } */
+
+    .ct_trust_community_list{
+        padding-left: 0px;
+    }
+    .ct_clinic_img_1 ,.ct_clinic_video_1{
+        width: 300px;
+    }
+    .ct_partners_clinic_group_img {
+        width: 350px;
+        margin-bottom: 70px;
+    }
+
+    
+  .ct_navbar{
+    position: fixed;
+    width: 300px;
+    top: 0px;
+    right: -100%;
+    background-color: #000;
+    height: 100vh;
+    z-index: 99;
+    overflow-y: auto;
+    padding: 80px 20px;
+  
+  }
+  .ct_navbar.show{
+    right: 0px;
+  }
+  .ct_navbar ul{
+      flex-direction: column;
+      gap: 30px !important;
+      align-items: start !important;
+  }
+
+  .ct_toggle_bar ,.ct_close_btn{
+    display: block !important;
+  }
+
+  .ct_toggle_bar{
+    color: #fff;
+  }
+}
+
+
+@media screen and (max-width:767px){
+    .ct_hero_banner .row{
+       flex-direction: column-reverse;
+    }
+    .ct_hero_banner video {
+        display: none;
+    }
+ 
+    .ct_banner_right_img img{
+        opacity: 0.5;
+    }
+.ct_banner_title {
+    position: relative;
+    z-index: 1;
+}
+.ct_header {
+    z-index: 11;
+}
+
+.ct_discover_left_img img {
+    height: 400px;
+}
+.ct_fs_40{
+    font-size: 30px;
+}
+.ct_fs_20{
+    font-size: 18px;
+}
+.ct_enroll_bg:after{
+    display: none;
+}
+.ct_sub_footer{
+    flex-direction: column;
+    text-align: center;
+}
+}
+
+@media screen and (max-width:575px){
+    .ct_fs_64 {
+    font-size: 30px;
+    line-height: 45px;
+}
+.ct_px_100{
+    padding-inline: 15px !important;
+}
+.ct_fs_20 {
+    font-size: 16px;
+}
+.ct_grid_2{
+    grid-template-columns: repeat(1,1fr);
+}
+.ct_grid_img_2{
+    grid-template-columns: repeat(1,1fr);
+}
+.ct_fs_40{
+    font-size: 25px;
+}
+.ct_unlock_right_img img{
+    height: auto;
+}
+.ct_partners_clinic_group_img {
+        width: 320px;
+    }
+
+    .ct_language_select .form-control {
+  
+    padding: 10px 19px 10px 40px;
+    border-radius: 100px !important;
+   
+}
+.ct_header{
+    gap: 10px;
+}
+#ct_free_analysis .modal-content {
+    padding: 0px;
+}
+}

@@ -32,7 +32,7 @@ export const LandingRoutes: Routes = [
             path: 'entertainment', loadComponent: () => import('./enrertainment/enrertainment.component').then(c => c.EnrertainmentComponent)
       },
       {
-            path: 'education', loadComponent: () => import('./financial-services/financial-services.component').then(c => c.FinancialServicesComponent)
+            path: 'education', loadComponent: () => import('./education/education.component').then(c => c.EducationComponent)
       },
       {
             path: 'telecom', loadComponent: () => import('./telecom/telecom.component').then(c => c.TelecomComponent)
