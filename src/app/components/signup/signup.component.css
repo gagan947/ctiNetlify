@@ -32,3 +32,7 @@
 .ct_login_right_bg_1 li img {
       width: 20px;
 }
+
+.ct_logo {
+      cursor: pointer;
+}
