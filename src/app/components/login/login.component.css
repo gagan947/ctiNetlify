@@ -17,13 +17,18 @@
 
 .ct_right_inner_bg_1 p {
       color: #009FFFCC;
-      font-size: 30px;
+      font-size: 26px;
       font-family: "Mulish", sans-serif;
+      margin-bottom: 20px;
 }
 
 .ct_login_right_bg_1 ul li {
       color: #282828;
-      font-size: 15px;
+      font-size: 14px;
       font-family: "Mulish", sans-serif;
       margin: 10px;
+}
+
+.ct_login_right_bg_1 li img {
+      width: 20px;
 }
