@@ -4027,15 +4027,13 @@ section.ct_my_creative_project_overlay_main {
   transform-origin: top;
   /* top: 0px; */
 }
-
 section.ct_my_creative_project_overlay_main.ct_project_show_section {
-  transform: translateY(-14%) scaleY(1);
-  /* top: 0; */
-  height: 77%;
-  transition: 0.6s linear all;
-
-  /* bottom: 0px; */
-  /* top: auto; */
+    transform: translateY(0%) scaleY(1);
+    /* top: 0; */
+    height: calc(100vh - 138px);
+    transition: 0.6s linear all;
+    /* bottom: 0px; */
+    /* top: auto; */
 }
 
 .ct_table_without_bg tr td {
@@ -4085,9 +4083,10 @@ section.ct_my_creative_project_overlay_main.ct_project_show_section {
 }
 
 .ct_make_it_mine_section_main {
-  /* overflow-y: auto; */
-  display: grid;
-  height: 84vh;
+    /* overflow-y: auto; */
+    display: grid
+;
+    height: calc(100vh - 163px);
 }
 
 .ct_send_btn_12 {
@@ -4464,9 +4463,13 @@ ul.floatingBoxes li:nth-child(10) {
 }
 
 .ct_feature_card_scroll.show {
-  height: auto;
-  max-height: 561px;
-  overflow-y: auto;
+    height: auto;
+    /* max-height: calc(100vh - 132px);
+    overflow-y: auto; */
+}
+.ct_code_features_list.mt-4 {
+    height: calc(100vh - 209px);
+    overflow-y: auto;
 }
 
 .ct_feature_card_scroll.show ::-webkit-scrollbar {
