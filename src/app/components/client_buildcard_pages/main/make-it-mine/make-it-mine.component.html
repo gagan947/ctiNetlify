@@ -7,7 +7,8 @@
             <div class="d-flex ">
                   <div class="ct_middile_sidebar">
                         <div class="ct_cti_chat_animate_round">
-                              <img loading="lazy" src="assets/img/circle_git_123.gif" alt="AI app builder for mobile and web">
+                              <img loading="lazy" src="assets/img/circle_git_123.gif"
+                                    alt="AI app builder for mobile and web">
                               <span class="ct_fs_14">IN TRAINING</span>
                         </div>
                         <div class="ct_cti_chat_box">
@@ -22,9 +23,9 @@
                                                 <input type="text"
                                                       class="form-control ct_input ct_border_radius_10 ct_fs_14 ct_input_h_32"
                                                       placeholder="Enter Project Name" #project_name
-                                                      [value]="projectName" required (input)="updateName(project_name.value)">
-                                                <small *ngIf="nameInvalid"
-                                                      class="text-danger">
+                                                      [value]="projectName" required
+                                                      (input)="updateName(project_name.value)">
+                                                <small *ngIf="nameInvalid" class="text-danger">
                                                       Project name is required.
                                                 </small>
                                                 <button
@@ -98,18 +99,6 @@
                                                                         <input type="text"
                                                                               class="form-control ct_input ct_border_radius_10 ct_fs_14 ct_input_h_32"
                                                                               placeholder="Type url">
-                                                                  </div>
-                                                                  <div class="form-group mt-3">
-                                                                        <label for="" class="ct_fs_14 mb-2">Need to be
-                                                                              deliver (in weeks) -</label>
-                                                                        <input type="number"
-                                                                              class="form-control ct_input ct_border_radius_10 ct_fs_14 ct_input_h_32"
-                                                                              placeholder="Weeks"
-                                                                              [(ngModel)]="estimatedWeeks">
-                                                                        <span *ngIf="!estimatedWeeks && submitted"
-                                                                              class="ct_fs_12 text-danger">
-                                                                              Please enter estimated weeks.
-                                                                        </span>
                                                                   </div>
                                                             </label>
                                                       </div>
@@ -239,7 +228,8 @@
 
                                                 <div class="position-relative ct_w_fit_content mx-auto tab-pane fade show active"
                                                       id="pills-mob" role="tabpanel">
-                                                      <img loading="lazy" src="assets/img/iPhone_14 Plus_.png" alt="AI app builder for mobile and web">
+                                                      <img loading="lazy" src="assets/img/iPhone_14 Plus_.png"
+                                                            alt="AI app builder for mobile and web">
                                                       <div class="ct_mob_overlay_top_cnt_12">
                                                             <div #logoBox class="ct_add_logo_by_ai"
                                                                   [style]="projectsData?.logoStyle">
@@ -255,7 +245,8 @@
                                                                               stroke-linejoin="round" />
                                                                   </svg>
                                                                   } @else {
-                                                                  <img [src]="imagePreview" alt="AI app builder for mobile and web"
+                                                                  <img [src]="imagePreview"
+                                                                        alt="AI app builder for mobile and web"
                                                                         class="ct_img_logo_123">
                                                                   }
 
@@ -268,7 +259,8 @@
                                                 <div class="position-relative ct_w_fit_content mx-auto tab-pane fade show"
                                                       style="max-width: 328px;width: 100%;" id="pillsdesk"
                                                       role="tabpanel">
-                                                      <img [src]="'assets/img/Frame1437253511.png'" alt="AI app builder for mobile and web"
+                                                      <img [src]="'assets/img/Frame1437253511.png'"
+                                                            alt="AI app builder for mobile and web"
                                                             style="max-width: 328px;width: 100%; height: 203px; object-fit: cover; border-radius: 10px;">
                                                       <div class="ct_mob_overlay_top_cnt_12">
                                                             <div class="ct_add_logo_by_ai"
@@ -285,7 +277,8 @@
                                                                   </svg>
 
                                                                   }@else {
-                                                                  <img [src]="imagePreview" alt="AI app builder for mobile and web"
+                                                                  <img [src]="imagePreview"
+                                                                        alt="AI app builder for mobile and web"
                                                                         class="ct_img_logo_123">
                                                                   }
                                                             </div>
@@ -431,7 +424,8 @@
                               <div class="col-md-4">
                                     <div
                                           class="ct_cti_chat_animate_round text-end ct_width_fit_content m-sm-auto mx-auto">
-                                          <img loading="lazy" src="assets/img/circle_git_123.gif" alt="AI app builder for mobile and web" style="max-width: 200px;">
+                                          <img loading="lazy" src="assets/img/circle_git_123.gif"
+                                                alt="AI app builder for mobile and web" style="max-width: 200px;">
                                           <span class="ct_fs_14" style="left: 0px;right: auto;">IN TRAINING</span>
                                     </div>
                               </div>
