@@ -98,7 +98,7 @@ ul.iti__country-list {
 }
 
 ::-webkit-scrollbar-thumb {
-      background: #0b82be;
+      background: var(--blue);
       border-radius: 10px;
 }
 

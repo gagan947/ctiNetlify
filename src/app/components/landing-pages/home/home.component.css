@@ -12,3 +12,170 @@
   opacity: 1;
   z-index: 888;
 }
+
+
+/* Flip Text */
+
+.ct_gradient_clr {
+  background: linear-gradient(90.18deg, #3D40F6 18.49%, #D000FF 33.41%, #FF2929 56.34%, #FABB00 75.95%);
+
+ 
+  display: inline-block;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+ 
+}
+
+.ct_link_chev_icon{
+  width: 30px;
+  height: 30px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+.ct_img_box_img img{
+  height: 442px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+.ct_img_box_overlay_cnt {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    display: flex
+;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px;
+    width: 100%;
+}
+.ct_img_box_card{
+  position: relative;
+}
+
+.ct_img_211{
+  height: 209px !important;
+}
+
+
+.ct_tab_gradient_bg{
+      /* background-color: #f5f5f5; */
+    box-shadow: 0px 8.22727px 52.6545px rgba(40, 95, 245, 0.08);
+    background: linear-gradient(184.37deg, rgb(9 76 255 / 9%) 7.69%, rgb(9 76 255 / 10%) 51.48%, hsl(202.36deg 69.1% 54.31% / 22%) 95.27%);
+    border-radius: 0px 0px 28px 28px;
+    padding: 30px;
+}
+
+.ct_how_creative_work_list li {
+  padding: 15px;
+}
+.ct_how_creative_work_list li + li{
+  border-top: 1px dashed rgba(180, 195, 211, 0.52) !important
+}
+
+.ct_how_work_icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    /* background-color: red; */
+    flex-shrink: 0;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(184.37deg, rgb(9 76 255 / 86%) 7.69%, rgb(9 76 255 / 79%) 51.48%, hsl(202.36deg 69.1% 54.31%) 95.27%)
+}
+
+.ct_how_work_icon h4{
+  color: #fff;
+  font-size: 20px;
+}
+
+.ct_how_creative_work_list li{
+  display: flex;
+  align-items: start;
+  gap: 15px;
+
+}
+
+.ct_how_work_icon img{
+  width: 40px;
+}
+
+.ct_testimonial_main > img{
+width: 50px;
+    margin-bottom: 15px;
+}
+
+
+.ct_testimonial_user_img img {
+    width: 100px !important;
+    height: 100px;
+    border-radius: 100px;
+    border: 3px solid #e6e6e6;
+    margin-inline: auto;
+}
+
+
+.typewriter-wrapper {
+  position: relative;
+  width: 10ch; /* adjust as per longest line */
+  height: 30px;
+  overflow: hidden;
+  font-family: monospace;
+  font-size: 20px;
+}
+
+.line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  border-right: 2px solid black;
+  overflow: hidden;
+  width: 0;
+  opacity: 0;
+}
+
+/* Line 1 Animation */
+.line1 {
+  animation:
+    typewriter 2s steps(7) 0s infinite,
+    fadeInOut 6s infinite;
+}
+
+/* Line 2 Animation */
+.line2 {
+  animation:
+    typewriter 2s steps(7) 2s infinite,
+    fadeInOut 6s infinite;
+}
+
+/* Line 3 Animation */
+.line3 {
+  animation:
+    typewriter 2s steps(7) 4s infinite,
+    fadeInOut 6s infinite;
+}
+
+/* Typing Effect */
+@keyframes typewriter {
+  0% { width: 0 }
+  30% { width: 7ch }
+  100% { width: 7ch }
+}
+
+/* Fade In-Out Logic */
+@keyframes fadeInOut {
+  0%, 29% { opacity: 0; }
+  30%, 60% { opacity: 1; }
+  61%, 100% { opacity: 0; }
+}
+
+
