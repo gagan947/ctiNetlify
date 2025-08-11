@@ -56,9 +56,10 @@ $(document).ready(function () {
 
   // ct_recent_work_slider Brand Slider S
   $(".ct_testimonial_slider").owlCarousel({
-    loop: false,
+    loop: true,
     margin: 15,
     nav: true,
+    autoHeight: true,
     responsive: {
       0: {
         items: 1,
@@ -124,6 +125,29 @@ $(document).ready(function () {
       },
       1000: {
         items: 3,
+      },
+    },
+  });
+  $(".ct_team_slider_1").owlCarousel({
+    loop: true,
+    center: true,
+    nav: true,
+    margin: 20,
+    autoplay: true,
+    slideTransition: "linear",
+    autoplaySpeed: 6000,
+    smartSpeed: 6000,
+    // autoplayTimeout: 6000,
+    autoplayHoverPause: false,
+    responsive: {
+      0: {
+        items: 1,
+      },
+      600: {
+        items: 2,
+      },
+      1000: {
+        items: 4,
       },
     },
   });

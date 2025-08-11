@@ -316,6 +316,10 @@
   .ct_mobile_section_main {
     display: block;
   }
+  .ct_inner_banner_main_cnt:before,  .ct_inner_banner_main_cnt:after ,.ct_inner_hero_bg:before,  .ct_inner_hero_bg:after {
+    height: 120px !important;
+    max-width: 250px !important;
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -609,5 +613,9 @@
 
   .ct_fs_80 {
     font-size: 40px;
+  }
+   .ct_inner_banner_main_cnt:before,  .ct_inner_banner_main_cnt:after ,.ct_inner_hero_bg:before,  .ct_inner_hero_bg:after {
+    height: 80px !important;
+    max-width: 180px !important;
   }
 }
