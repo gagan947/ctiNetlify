@@ -88,12 +88,13 @@ ul.iti__country-list {
 }
 
 ::-webkit-scrollbar {
-      width: 7px;
-      height: 7px;
+      width: 5px;
+      height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-      box-shadow: inset 0 0 2px grey;
+      /* box-shadow: inset 0 0 2px grey; */
+      background-color: #e6e6e6;
       border-radius: 10px;
 }
 
@@ -190,4 +191,10 @@ ul.iti__country-list {
     right: 0;
     max-width: 350px;
      opacity: 0.5;
+}
+
+
+.ct_featured_logo img {
+    height: 50px;
+    object-fit: contain;
 }

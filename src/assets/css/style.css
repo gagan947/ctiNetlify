@@ -1115,6 +1115,7 @@ header {
     padding: 30px;
     border-radius: 15px;
     height: 100%;
+    display: grid;
 }
 
 .ct_testimonial_right_img .ct_line_overlay_shape123 {
@@ -1142,6 +1143,9 @@ header {
 
 .ct_testimonial_slider p{
   font-size: 16px;
+  max-height: 180px;
+  height: auto;
+  overflow-y: auto;
 }
 
 .ct_testimonial_slider .owl-nav button span {
@@ -4789,7 +4793,7 @@ ul.floatingBoxes li:nth-child(10) {
   padding-bottom: 50px;
 }
 
-.ct_testimonial_main > img {
+.ct_testimonial_main >div > img {
     width: 150px !important;
     margin-bottom: 15px;
     background-color: #4447f6;
