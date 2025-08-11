@@ -37,6 +37,11 @@
       transform:  translate(-50%, -50%) scale(1);
 }
 
+.ct_signature_png img {
+    width: 100%;
+    max-width: 200px;
+}
+
 .ct_value_card{
     background-color: #fff;
     padding: 20px;
