@@ -37,7 +37,7 @@
   color: #fff;
 }
 
-.ct_img_box_img img{
+.ct_img_box_img > img{
   height: 442px;
   width: 100%;
   object-fit: cover;
@@ -63,7 +63,11 @@
   height: 209px !important;
 }
 
-
+.ct_client_branding_logo img {
+   height: 60px;
+    object-fit: contain;
+    width: 220px !important;
+}
 
 
 

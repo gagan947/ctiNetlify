@@ -1,82 +1,6 @@
-.ct_say_hello_blue_bg span:nth-child(1) {
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 100%;
-	height: 3px;
-	background: linear-gradient(to right, #3D40F6 , #FF2929 );
-	animation: animate1 2s linear infinite;
-}
 .ct_say_hello_blue_bg{
-    overflow: hidden;
     position: relative;
-    /* border-radius: 100px; */
-}
-@keyframes animate1 {
-	0% {
-		transform: translateX(-100%);
-	}
-	100% {
-		transform: translateX(100%);
-	}
-}
-
-.ct_say_hello_blue_bg span:nth-child(2) {
-	position: absolute;
-	top: 0;
-	right: 0;
-	height: 100%;
-	width: 3px;
-	background: linear-gradient(to bottom, #3D40F6 , #FF2929);
-	animation: animate2 2s linear infinite;
-	animation-delay: 1s;
-}
-@keyframes animate2 {
-	0% {
-		transform: translateY(-100%);
-	}
-	100% {
-		transform: translateY(100%);
-	}
-}
-
-.ct_say_hello_blue_bg span:nth-child(3) {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	width: 100%;
-	height: 3px;
-	background: linear-gradient(to left, #3D40F6 , #FF2929);
-	animation: animate3 2s linear infinite;
-}
-
-@keyframes animate3 {
-	0% {
-		transform: translateX(100%);
-	}
-	100% {
-		transform: translateX(-100%);
-	}
-}
-
-.ct_say_hello_blue_bg span:nth-child(4) {
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 100%;
-	width: 3px;
-	background: linear-gradient(to top, #3D40F6 , #FF2929);
-	animation: animate4 2s linear infinite;
-	animation-delay: 1s;
-}
-
-@keyframes animate4 {
-	0% {
-		transform: translateY(100%);
-	}
-	100% {
-		transform: translateY(-100%);
-	}
+    overflow: hidden;
 }
 .ct_say_hello_blue_bg a {
     position: absolute;
@@ -85,15 +9,14 @@
     width: 100%;
     height: 100%;
     background-color: #00000094;
-    display: flex
+    display: flex;
 ;
     align-items: center;
     justify-content: center;
     /* color: #fff; */
-    border-radius: 5px;
+    border-radius: 100%;
     transition: 0.4s linear all;
-    transform-origin: bottom;
-    transform: scaleY(0) translate(-50%, -50%);
+    transform: translate(-50%, -50%)  scale(0);
 
 }
 .ct_say_hello_blue_bg a i {
@@ -111,7 +34,7 @@
 
 }
 .ct_say_hello_blue_bg:hover a{
-      transform: scaleY(1) translate(-50%, -50%);
+      transform:  translate(-50%, -50%) scale(1);
 }
 
 .ct_value_card{

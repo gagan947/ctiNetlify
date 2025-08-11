@@ -423,8 +423,9 @@ header {
 }
 
 .ct_logo img {
-  width: 100%;
-  max-width: 141px;
+    width: 100%;
+    max-width: 141px;
+    object-fit: contain;
 }
 
 .ct_middle_navbar {
@@ -930,7 +931,7 @@ header {
 
 /* Featured Section S */
 .ct_featured_logo_bg {
-  background-color: var(--grey);
+  /* background-color: var(--grey); */
   padding-block: 20px;
 }
 
@@ -2875,7 +2876,7 @@ table.table.ct_compare_table {
     height: 100%;
     object-fit: cover;
     background: #e6e6e6;
-    border-radius: 5px
+    border-radius: 100%
 }
 .ct_say_hello_cnt p{
   text-align: center;

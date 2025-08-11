@@ -131,7 +131,7 @@ $(document).ready(function () {
   $(".ct_team_slider_1").owlCarousel({
     loop: true,
     center: true,
-    nav: true,
+    nav: false,
     margin: 20,
     autoplay: true,
     slideTransition: "linear",
@@ -148,6 +148,32 @@ $(document).ready(function () {
       },
       1000: {
         items: 4,
+      },
+    },
+  });
+  $(".ct_client_branding_slider_1").owlCarousel({
+    loop: true,
+    center: true,
+    nav: false,
+    dots: false,
+    autoWidth: true,
+
+    margin: 20,
+    autoplay: true,
+    slideTransition: "linear",
+    autoplaySpeed: 6000,
+    smartSpeed: 6000,
+    // autoplayTimeout: 6000,
+    autoplayHoverPause: false,
+    responsive: {
+      0: {
+        items: 1,
+      },
+      600: {
+        items: 2,
+      },
+      1000: {
+        items: 7,
       },
     },
   });

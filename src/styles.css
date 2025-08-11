@@ -173,7 +173,7 @@ ul.iti__country-list {
     top: 18%;
     transform: rotate(-45deg);
     background: linear-gradient(90.18deg, hsl(239.03deg 91.13% 60.2% / 11%) 18.49%, hsl(289deg 100% 50% / 11%) 33.41%, hsl(0deg 100% 58% / 11%) 56.34%, hsl(44.88deg 100% 49.02% / 10%) 75.95%);
-    left: 0;
+    left: 15px;
     max-width: 350px;
     opacity: 0.5;
 }
@@ -188,9 +188,10 @@ ul.iti__country-list {
     top: 18%;
     transform: rotate(-45deg);
     background: linear-gradient(90.18deg, hsl(239.03deg 91.13% 60.2% / 11%) 18.49%, hsl(289deg 100% 50% / 11%) 33.41%, hsl(0deg 100% 58% / 11%) 56.34%, hsl(44.88deg 100% 49.02% / 10%) 75.95%);
-    right: 0;
+    right: 15px;
     max-width: 350px;
      opacity: 0.5;
+ 
 }
 
 
