@@ -626,6 +626,7 @@ header {
   align-items: center;
   gap: 10px;
   font-weight: 500;
+  font-size: 15px;
   justify-content: center;
 }
 
@@ -1637,16 +1638,17 @@ a.ct_login_icon_site img {
   font-size: 14px;
   color: #fff;
 }
-
 .ct_out_line_2_line_bg {
-  padding: 10px 20px;
-  border: 2px solid var(--dark_blue);
-  width: fit-content;
+    padding: 10px 20px;
+    border: 2px solid;
+    width: fit-content;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to left, #3d40f6, #b60cfe);
 }
 
 /* Helping_Section Css S */
 .ct_helping_bg_grey {
-  background-color: #f8f8f8;
+  background-color: #e6e6e6;
   padding: 56px 89px;
   border-radius: 22px;
 }
@@ -1881,7 +1883,10 @@ a.ct_login_icon_site img {
 }
 
 .ct_latest_project_bg {
-  background: linear-gradient(180deg, #5290cc 0%, #1b83c1 100%);
+
+    box-shadow: 0px 8.22727px 52.6545px rgba(40, 95, 245, 0.08);
+    background: linear-gradient(184.37deg, rgb(9 76 255 / 4%) 7.69%, rgb(9 76 255 / 31%) 51.48%, rgb(157 76 243 / 35%) 95.27%);
+
   padding-block: 70px;
   transition: 0.4s ease all;
 }
@@ -2087,12 +2092,12 @@ a.ct_login_icon_site img {
 }
 
 .ct_light_yellow_bg {
-  background-color: #ffe38e;
-  padding: 12px;
-  width: 100%;
-  max-width: 306px;
-  border: 2px dashed #000;
-  border-radius: 5px;
+    background-color: #0064ff26;
+    padding: 12px;
+    width: 100%;
+    /* max-width: 306px; */
+    border: 2px dashed #000;
+    border-radius: 5px;
 }
 
 .ct_light_yellow_bg p {
@@ -2277,6 +2282,11 @@ table.table.ct_compare_table {
 .ct_promisses_slider .owl-stage {
   margin-top: 30px;
 }
+.ct_promisses_slider .owl-stage, .ct_promisses_slider .owl-item {
+    display: flex
+;
+}
+
 
 .ct_promisses_slider .owl-item.active.center {
   transform: translateY(-30px);
@@ -3183,23 +3193,25 @@ table.table.ct_compare_table {
 /* Retail Ecommerce page S */
 
 .ct_retail_app_card_12 figure {
-  margin-bottom: 0px;
-  background-color: #fffefb;
-  padding: 50px 15px;
-  border-radius: 10px;
-  position: relative;
+    margin-bottom: 0px;
+    background-color: #fdfdfde0;
+    padding: 50px 15px;
+    border-radius: 10px;
+    position: relative;
+    height: 100%;
 }
-
 .ct_retail_app_icon {
-  background-color: var(--dark_blue);
-  width: 70px;
-  height: 70px;
-  border-radius: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-inline: auto;
-  margin-bottom: 30px;
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    display: flex
+;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+    margin-inline: auto;
+    margin-bottom: 20px;
+    background: linear-gradient(184.37deg, rgb(9 76 255 / 86%) 7.69%, rgb(9 76 255 / 79%) 51.48%, hsl(202.36deg 69.1% 54.31%) 95.27%);
 }
 
 .ct_owl_nav_on_hover .owl-nav button {
@@ -3338,16 +3350,15 @@ table.table.ct_compare_table {
   width: 10px;
   height: 10px;
   border-radius: 100px;
-  background-color: #ececec;
+  background-color: #3d71fe;
   transition: 0.6s ease all;
-  border: 1px solid var(--orange);
+  border: 1px solid #3d71ff;
 }
 
 .ct_dot_nav_hover .owl-dots .owl-dot.active {
-  width: 20px;
-  background-color: var(--orange);
+    width: 20px;
+    background-color: #3d71ff;
 }
-
 /* Retail Ecommerce page E */
 
 /* Chat with ui ai Page css S */
@@ -4811,4 +4822,14 @@ ul.floatingBoxes li:nth-child(10) {
     border-radius: 100px;
     border: 3px solid #e6e6e6;
     margin-inline: auto;
+}
+
+.ct_related_article_card {
+    background-color: #3d71ff0f;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.09);
+    padding-bottom: 15px;
+}
+
+#ct_retaial_app_slider .owl-stage ,#ct_retaial_app_slider .owl-item ,#ct_retaial_app_slider .item{
+  display: flex;
 }

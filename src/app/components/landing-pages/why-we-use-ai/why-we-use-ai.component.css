@@ -1,0 +1,21 @@
+.ct_flexible_serivce_cnt {
+    display: flex
+;
+    align-items: self-start;
+    gap: 20px;
+}
+.ct_blue_badge_round{
+    flex-shrink: 0;
+}
+
+.ct_time_line_verticle_line {
+    position: absolute;
+    left: 54px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #e0e0e0;
+    background: #0064ff;
+    transform: translateX(-50%);
+    z-index: -1;
+}
