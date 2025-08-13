@@ -213,9 +213,9 @@
     height: 100%;
   }
 
-  .ct_testimonial_main {
+  /* .ct_testimonial_main {
     gap: 20%;
-  }
+  } */
 
   .ct_got_question_bg:after {
     right: 20%;
@@ -365,12 +365,13 @@
     flex-direction: column-reverse;
   }
 
-  .ct_testimonial_main {
-    flex-direction: column-reverse;
-    display: flex;
-    gap: 30px;
-    align-items: self-start;
-  }
+    .ct_testimonial_main {
+        flex-direction: column;
+        display: flex
+;
+        gap: 30px;
+        align-items: center;
+    }
 
   .ct_testimonial_tabs .nav-tabs {
     gap: 15px;
