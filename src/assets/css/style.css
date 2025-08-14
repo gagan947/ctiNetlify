@@ -1364,17 +1364,17 @@ footer {
 }
 
 .ct_footer_brand_icon {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 24px;
+    display: flex
+;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 30px;
 }
 
 .ct_footer_brand_img img {
   width: 100%;
-  max-width: 80px;
+  max-width: 60px;
   object-fit: contain;
   transition: 0.4s ease all;
 }
@@ -1843,7 +1843,7 @@ a.ct_login_icon_site img {
 }
 
 .ct_pricing_works .owl-nav button:hover {
-  background-color: var(--green) !important;
+  background-color: var(--blue) !important;
 }
 
 .ct_pricing_works .owl-nav button.owl-prev:before {
@@ -2001,10 +2001,10 @@ a.ct_login_icon_site img {
 }
 
 .ct_article_img img {
-  border-radius: 10px 10px 0px 0px;
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
+    border-radius: 10px 10px 0px 0px;
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
 }
 
 .ct_related_article .owl-nav {

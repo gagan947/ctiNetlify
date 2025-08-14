@@ -39,7 +39,7 @@ $(document).ready(function () {
     autoplayTimeout: 2000,
     autoplaySpeed: 1000,
     smartSpeed: 1000,
-    nav: true,
+    nav: false,
     responsive: {
       0: {
         items: 2,

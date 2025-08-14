@@ -68,6 +68,9 @@ export const LandingRoutes: Routes = [
             path: 'blog', loadComponent: () => import('./blog/blog.component').then(c => c.BlogComponent)
       },
       {
+            path: 'our-projects', loadComponent: () => import('./our-projects/our-projects.component').then(c => c.OurProjectsComponent)
+      },
+      {
             path: 'FAQs', loadComponent: () => import('./faqs/faqs.component').then(c => c.FAQsComponent)
       },
       {
@@ -77,7 +80,22 @@ export const LandingRoutes: Routes = [
             path: 'terms-conditions', loadComponent: () => import('./terms-conditions/terms-conditions.component').then(c => c.TermsConditionsComponent)
       },
       {
+            path: 'all-industries', loadComponent: () => import('./all-industries/all-industries.component').then(c => c.AllIndustriesComponent)
+      },
+      {
             path: 'privacy-policy', loadComponent: () => import('./privacy-policy/privacy-policy.component').then(c => c.PrivacyPolicyComponent)
-      }
+      },
+      {
+            path: 'android-app-builder', loadComponent: () => import('./android-app-builder/android-app-builder.component').then(c => c.AndroidAppBuilderComponent)
+      },
+      {
+            path: 'iphone-app-builder', loadComponent: () => import('./iphone-app-builder/iphone-app-builder.component').then(c => c.IphoneAppBuilderComponent)
+      },
+      {
+            path: 'health-app-builder', loadComponent: () => import('./health-app-builder/health-app-builder.component').then(c => c.HealthAppBuilderComponent)
+      },
+      {
+            path: 'ecommerce-store-builder', loadComponent: () => import('./ecommerce-store-builder/ecommerce-store-builder.component').then(c => c.EcommerceStoreBuilderComponent)
+      },
 
 ]
