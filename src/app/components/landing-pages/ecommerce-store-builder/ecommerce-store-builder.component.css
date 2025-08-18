@@ -28,3 +28,24 @@
     font-size: 24px;
     font-weight: 700;
 }
+
+
+figure.ct_our_feature_card {
+    background-color: #e7edfe;
+    /* box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.09); */
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    transition: 0.4s ease all;
+    height: 100%;
+}
+
+.ct_our_feature_card img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+.ct_our_feature_card figcaption{
+    margin-top: 20px;
+}
