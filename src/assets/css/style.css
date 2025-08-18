@@ -1595,11 +1595,11 @@ a.ct_login_icon_site img {
 }
 
 .ct_input {
-  height: 46px;
-  border: 1px solid #0000004d;
-  border-radius: 2px;
+  border: 1px solid #e6e6e6;
+  border-radius: 5px;
   background-color: #fff;
   padding-inline: 13px;
+  height: 48px;
 }
 
 .ct_eys_password {
@@ -3143,11 +3143,11 @@ table.table.ct_compare_table {
 }
 
 .ct_free_demo_ui_form {
-  padding: 52px 44px;
-  border: 1px solid var(--dark_blue);
-  border-radius: 20px;
-  background-color: #fff;
-  box-shadow: 0px 4px 4px 0px #00000040;
+    padding: 52px 44px;
+    /* border: 1px solid var(--dark_blue); */
+    border-radius: 20px;
+    background-color: hsl(202.5deg 75.41% 47.84% / 6%);
+    /* box-shadow: 0px 4px 4px 0px #00000040; */
 }
 
 .ct_grid_3 {
@@ -4809,8 +4809,8 @@ ul.floatingBoxes li:nth-child(10) {
 .ct_testimonial_main >div > img {
     width: 150px !important;
     margin-bottom: 15px;
-    background-color: #4447f6;
-    padding: 10px;
+    background-color: #afceff;
+    padding: 5px;
     height: 39px;
     object-fit: contain;
     border-radius: 5px;

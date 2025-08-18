@@ -1,0 +1,15 @@
+.ct_our_project_card img{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 15px;
+}
+.ct_our_project_card figcaption{
+    padding: 20px;
+}
+
+.ct_our_project_card {
+    border-radius: 15px;
+    background-color: #f5f5f5;
+}
+

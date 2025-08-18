@@ -1,0 +1,26 @@
+.ct_client_branding_logo img {
+   height: 60px;
+    object-fit: contain;
+    width: 220px !important;
+}
+.ct_app_billder_box {
+    text-align: center;
+    background-color: #f5f5f5;
+    /* box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.09); */
+    padding: 20px 15px;
+    border-radius: 10px;
+    border: 1px solid #f2f2f2;
+    height: 100%;
+}
+
+.ct_step_icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 100px;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    margin-inline: auto;
+}

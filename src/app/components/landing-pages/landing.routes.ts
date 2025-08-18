@@ -97,5 +97,11 @@ export const LandingRoutes: Routes = [
       {
             path: 'ecommerce-store-builder', loadComponent: () => import('./ecommerce-store-builder/ecommerce-store-builder.component').then(c => c.EcommerceStoreBuilderComponent)
       },
+      {
+            path: 'ai-app-generator', loadComponent: () => import('./ai-app-generator/ai-app-generator.component').then(c => c.AiAppGeneratorComponent)
+      },
+      {
+            path: 'convert-web-to-app', loadComponent: () => import('./convert-web-to-app/convert-web-to-app.component').then(c => c.ConvertWebToAppComponent)
+      },
 
 ]
