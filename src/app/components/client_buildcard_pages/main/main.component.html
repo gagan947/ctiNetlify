@@ -1,6 +1,6 @@
 <section class="ct_dash_board_main">
       <app-sidebar></app-sidebar>
-      <div class="ct_dash_right_content">
+      <div class="ct_dash_right_content" style="    background: linear-gradient(90deg, rgb(250 218 188 / 44%), rgb(234 170 213 / 36%), rgb(220 229 244 / 69%)); height: auto; min-height: 100vh;">
             <div class="ct_dash_toggle_bar">
                   <i class="fa-solid fa-bars"></i>
             </div>
@@ -66,6 +66,55 @@
 
 
                   </div>
+
+                  <!-- chatbot -->
+                  <div class="chat-wrapper">
+                        <header class="chat-header">
+                          <div class="chat-title">
+                            <span class="dot"></span>
+                            Creative.ai Assistant
+                          </div>
+                        </header>
+                      
+                        <main class="chat-box" #scrollContainer>
+                              <div *ngFor="let msg of messages" 
+                                   class="msg-row" 
+                                   [ngClass]="msg.sender === 'You' ? 'out' : 'in'">
+                                   
+                                <div class="avatar">{{ msg.sender === 'You' ? 'Y' : 'B' }}</div>
+                                <div class="bubble">
+                                  <div class="meta">
+                                    <span class="sender">{{ msg.sender }}</span>
+                                    <span class="time">{{ msg.time || '' }}</span>
+                                  </div>
+                                  <div class="text">{{ msg.text }}</div>
+                                </div>
+                              </div>
+                            
+                              <!-- Spinner while waiting for bot -->
+                              <div *ngIf="isLoading" class="msg-row in">
+                               
+                            
+                                  <div class="spinner-grow" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                  </div>
+                               
+                              </div>
+                            </main>
+                      
+                        <footer class="chat-input">
+                          <input
+                            [(ngModel)]="userMessage"
+                            (keyup.enter)="sendMessage()"
+                            placeholder="Type your message…"
+                            autocomplete="off"
+                          />
+                          <button (click)="sendMessage()" aria-label="Send message">
+                            ➤
+                          </button>
+                        </footer>
+                      </div>
+                      
 
                   <div class="row ct_mt_100 ct_py_70 pt-0">
                         <div class=" col-xl-4 col-lg-6 mb-4">
