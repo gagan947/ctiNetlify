@@ -155,15 +155,16 @@ export class FreeDemoComponent {
   };
 
   openCalendly() {
-    Calendly.initPopupWidget({ url: 'https://calendly.com/amitholkar/30min' });
+    Calendly.initPopupWidget({ url: 'https://calendly.com/creativethoughts/30min' });
   };
 
   ngAfterViewInit() {
     const calendlyContainer = document.getElementById('calendly-inline-widget');
     if (calendlyContainer) {
       Calendly.initInlineWidget({
-        url: 'https://calendly.com/amitholkar/30min',
-        parentElement: calendlyContainer
+        url: 'https://calendly.com/creativethoughts/30min',
+        parentElement: calendlyContainer,
+        
       });
     }
   }

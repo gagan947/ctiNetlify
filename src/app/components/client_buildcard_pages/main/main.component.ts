@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { Project, ProjectResponse } from '../../../models/projects';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { io } from 'socket.io-client';
+import { ChatbotComponent } from "../chatbot/chatbot.component";
 declare var Calendly: any;
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule],
+  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule, ChatbotComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
@@ -30,6 +31,7 @@ export class MainComponent {
 
 
 ngOnInit(): void {
+  this.getProjects();
   sessionStorage.removeItem('projectData');
   this.socket = io(this.apiservice.apiUrl);
 
@@ -75,7 +77,14 @@ this.socket.on('botReply', (msg: string) => {
       .subscribe({
         next: (res) => {
           if (res.success == true) {
-            this.projectsData = res.data;
+            const data = res.data;
+            this.projectsData = data.map((item: any) => {
+              return {
+                ...item,
+                contain: item.contain.split(',')
+              };
+            });
+           
           } else {
             // this.loading = false
           }
@@ -102,7 +111,7 @@ this.socket.on('botReply', (msg: string) => {
   };
 
   updateProjectId(id: any, featureCount: number) {
-    console.log(id);
+   
     this.projectId = id;
     this.featureCount = featureCount
 

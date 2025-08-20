@@ -14,7 +14,7 @@ export interface Project {
   status: number;
   createdAt: string;
   updatedAt: string;
-  subFeaturesCounts: number;
+  subFeaturesCount: number;
 }
 
 
