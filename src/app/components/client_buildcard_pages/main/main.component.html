@@ -1,97 +1,104 @@
-<section class="ct_dash_board_main">
+<section class="ct_dash_board_main"style="display: block !important">
       <app-sidebar></app-sidebar>
-      <div class="ct_dash_right_content">
+      <div class="ct_dash_right_content" style="    background: linear-gradient(90deg, rgb(250 218 188 / 44%), rgb(234 170 213 / 36%), rgb(220 229 244 / 69%)); height: auto; min-height: 100vh;">
             <div class="ct_dash_toggle_bar">
                   <i class="fa-solid fa-bars"></i>
             </div>
             <div class="container-fluid">
-                  <div class="row">
-                        <div class="col-lg-5 mx-auto">
+                  <!-- <div class="row">
+                        <div class="col-lg-8 mx-auto">
                               <div class="ct_creative_msg_top_bar px-3">
-                                    <div class="ct_creative_msg_card">
+                                    <div class="d-flex align-items-center gap-2 mb-3">
+                                          <div class="avatar">B</div>
+                                    <div class="ct_creative_msg_card cti_msg_left mb-0">
+                                         
                                           <p class="mb-0">Hello! Great to see you back!</p>
                                     </div>
-                                    <div class="ct_creative_msg_card">
+                                    
+                                    </div>
+                                   <div class="d-flex align-items-center gap-2 mb-3">
+                                   
+                                  <div class="avatar">B</div>
+                                    <div class="ct_creative_msg_card cti_msg_left mb-0">
                                           <p class="mb-0">What are you building this time?</p>
                                     </div>
-                                    <div class="ct_creative_msg_card">
+                                   </div>
+                                   <div class="d-flex align-items-center gap-2 mb-3">
+                                    <div class="avatar">B</div>
+                                    <div class="ct_creative_msg_card cti_msg_left mb-0">
+                                       
                                           <p class="mb-0">Talk or chat to me about your idea - or upload a doc that
                                                 describes it.
                                           </p>
                                     </div>
+                                   </div>
                               </div>
-                              <div class="ct_creative_action_bar mt-3">
-                                    <div class="ct_creative_action_card">
-                                          <div class="ct_creative_action_icon">
-                                                <img loading="lazy" src="assets/img/mic_icon.svg" alt="AI app builder for mobile and web">
-                                                <p class="mb-0">Talk</p>
-                                          </div>
-                                          <!-- <div class="ct_creative_click_open_card">
-                                  <p class="mb-0"> I want to build an e-learning web app for students and teachers
-                                      <br> with online lectures, interactive lessons and direct messaging.
-                                  </p>
-                              </div> -->
+                          
 
-                                    </div>
-                                    <div class="ct_creative_action_card">
-                                          <div class="ct_creative_action_icon">
-                                                <img loading="lazy" src="assets/img/chat_icon.svg" alt="AI app builder for mobile and web">
-                                                <p class="mb-0">Chat</p>
-                                          </div>
-                                          <!-- <div class="ct_creative_click_open_card">
-                                  <p class="mb-0"> I want to build an e-learning web app for students and teachers
-                                      <br> with online lectures, interactive lessons and direct messaging.
-                                  </p>
-                              </div> -->
-
-                                    </div>
-                                    <div class="ct_creative_action_card">
-                                          <div class="ct_creative_action_icon">
-                                                <img loading="lazy" src="assets/img/upload_icon.svg" alt="AI app builder for mobile and web">
-                                                <p class="mb-0">Upload</p>
-                                                <!-- </div>
-                              <div class="ct_creative_click_open_card">
-                                  <p class="mb-0"> I want to build an e-learning web app for students and teachers
-                                      <br> with online lectures, interactive lessons and direct messaging.
-                                  </p>
-                              </div> -->
-
-                                          </div>
-
-                                    </div>
-
-                              </div>
-
+                              <footer class="chat-input">
+                                    <input  (keyup.enter)="sendMessage()" placeholder="Type your message…"
+                                        autocomplete="off" />
+                                    <button (click)="sendMessage()" aria-label="Send message">
+                                        ➤
+                                    </button>
+                                </footer>
                         </div>
 
 
-                  </div>
+                  </div> -->
+<app-chatbot></app-chatbot>
+                  <!-- chatbot -->
+                   
+                  <!-- <div class="chat-wrapper">
+                        <header class="chat-header">
+                          <div class="chat-title">
+                            <span class="dot"></span>
+                            Creative.ai Assistant
+                          </div>
+                        </header>
+                      
+                        <main class="chat-box" #scrollContainer>
+                              <div *ngFor="let msg of messages" 
+                                   class="msg-row" 
+                                   [ngClass]="msg.sender === 'You' ? 'out' : 'in'">
+                                   
+                                <div class="avatar">{{ msg.sender === 'You' ? 'Y' : 'B' }}</div>
+                                <div class="bubble">
+                                  <div class="meta">
+                                    <span class="sender">{{ msg.sender }}</span>
+                                    <span class="time">{{ msg.time || '' }}</span>
+                                  </div>
+                                  <div class="text">{{ msg.text }}</div>
+                                </div>
+                              </div>
+                            
+                            
+                              <div *ngIf="isLoading" class="msg-row in">
+                               
+                            
+                                  <div class="spinner-grow" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                  </div>
+                               
+                              </div>
+                            </main>
+                      
+                        <footer class="chat-input">
+                          <input
+                            [(ngModel)]="userMessage"
+                            (keyup.enter)="sendMessage()"
+                            placeholder="Type your message…"
+                            autocomplete="off"
+                          />
+                          <button (click)="sendMessage()" aria-label="Send message">
+                            ➤
+                          </button>
+                        </footer>
+                      </div> -->
+                      
 
                   <div class="row ct_mt_100 ct_py_70 pt-0">
-                        <div class=" col-xl-4 col-lg-6 mb-4">
-                              <div class="ct_ecommerse_web_card_first_card">
-                                    <img loading="lazy" src="assets/img/circle_git_123.gif" alt="AI app builder for mobile and web">
-                                    <ul>
-                                          <li></li>
-                                          <li>
-                                                <div class="form-check">
-                                                      <input class="form-check-input" type="radio"
-                                                            name="flexRadioDefault" id="flexRadioDefault1">
-                                                      <label class="form-check-label" for="flexRadioDefault1">
-                                                            Tell me about your idea...
-                                                      </label>
-                                                </div>
-                                          </li>
-                                          <li></li>
-                                    </ul>
-                                    <p class="text-center mb-0">I’ll use our conversation to find the relevant app
-                                          features for
-                                          you.
-                                    </p>
-
-
-                              </div>
-                        </div>
+                     
                         @for (item of projectsData; track $index) {
                         <div class=" col-xl-4 col-lg-6 mb-4">
                               <div class="ct_white_bg ct_ecommerse_web_card">
@@ -100,7 +107,7 @@
                                                 <img [src]="item.projectImage" alt="AI app builder for mobile and web">
                                           </div>
                                           <div class="ct_bash_icon12"
-                                                (click)="updateProjectId(item.id , item.subFeaturesCounts)"
+                                                (click)="updateProjectId(item.id , item.subFeaturesCount)"
                                                 data-bs-toggle="modal" data-bs-target="#ct_base_modal_1">
                                                 <i class="fa-solid fa-plus"></i>
                                           </div>
@@ -109,7 +116,7 @@
                                           <p class="mb-0 ct_fw_500">BUILD AN APP LIKE</p>
                                           <p class="mb-0 ct_fs_14 ct_fw_500"><span
                                                       class="ct_fw_700 ct_dark_blue_text">Features:</span>
-                                                {{item.subFeaturesCounts}}
+                                                {{item.subFeaturesCount}}
                                           </p>
                                     </div>
                                     <p class="mb-0 ct_fw_700 mb-3">{{item.projectName}}</p>
@@ -144,7 +151,7 @@
 </section>
 
 <!-- Mobile page section S -->
-<section class="ct_mobile_section_main">
+<section class="ct_mobile_section_main" style="display: none !important">
       <div class="ct_mobile_header_main_bg">
             <img loading="lazy" src="assets/img/cti_black_logo.svg" alt="AI app builder for mobile and web">
       </div>

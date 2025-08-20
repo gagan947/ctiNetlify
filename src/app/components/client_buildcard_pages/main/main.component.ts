@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { Project, ProjectResponse } from '../../../models/projects';
 import { SidebarComponent } from "../sidebar/sidebar.component";
+import { io } from 'socket.io-client';
+import { ChatbotComponent } from "../chatbot/chatbot.component";
 declare var Calendly: any;
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent],
+  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule, ChatbotComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
@@ -17,16 +19,56 @@ export class MainComponent {
   projectsData: Project[] = []
   projectId: any;
   featureCount: any;
-
-  ngOnInit(): void {
-    sessionStorage.removeItem('projectData');
-    this.getProjects()
-  };
-
+  socket: any;
+  userMessage = '';
+  messages: any[] = [];
+  isLoading: boolean = false;
 
   constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
 
   };
+
+
+
+ngOnInit(): void {
+  this.getProjects();
+  sessionStorage.removeItem('projectData');
+  this.socket = io(this.apiservice.apiUrl);
+
+  let currentBotMsg = "";
+
+  // listen for streaming tokens
+this.socket.on('botReply', (msg: string) => {
+
+  if (msg === "[END]") {
+    console.log("✅ Stream finished");
+    return;
+  }
+
+  // Append stream to last bot message
+  if (
+    this.messages.length > 0 &&
+    this.messages[this.messages.length - 1].sender === "Bot"
+  ) {
+    this.messages[this.messages.length - 1].text += msg;
+  } else {
+    this.messages.push({ sender: "Bot", text: msg });
+  }
+  this.isLoading = false; // hide spinner after response
+});
+
+  // when streaming ends
+  this.socket.on('botDone', () => {
+    console.log("✅ Bot finished response");
+    currentBotMsg = "";
+  });
+}
+
+
+
+ 
+
+ 
 
 
   getProjects() {
@@ -35,7 +77,14 @@ export class MainComponent {
       .subscribe({
         next: (res) => {
           if (res.success == true) {
-            this.projectsData = res.data;
+            const data = res.data;
+            this.projectsData = data.map((item: any) => {
+              return {
+                ...item,
+                contain: item.contain.split(',')
+              };
+            });
+           
           } else {
             // this.loading = false
           }
@@ -62,7 +111,7 @@ export class MainComponent {
   };
 
   updateProjectId(id: any, featureCount: number) {
-    console.log(id);
+   
     this.projectId = id;
     this.featureCount = featureCount
 
@@ -71,5 +120,14 @@ export class MainComponent {
   LogOut() {
     localStorage.clear()
     this.router.navigate(['/'])
+  }
+
+  sendMessage() {
+    if (!this.userMessage.trim()) return;
+
+    this.messages.push({ sender: 'You', text: this.userMessage });
+    this.socket.emit('chatMessage', this.userMessage);
+    this.isLoading = true;
+    this.userMessage = '';
   }
 }

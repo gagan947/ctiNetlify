@@ -20,6 +20,9 @@ export const routes: Routes = [
             path: 'make-it-mine/:id', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent)
       },
       {
+            path: 'chatbot', loadComponent: () => import('./components/client_buildcard_pages/chatbot/chatbot.component').then(c => c.ChatbotComponent)
+      },
+      {
             path: 'schedule-a-call', loadComponent: () => import('./components/schedule-a-call/schedule-a-call.component').then(c => c.ScheduleACallComponent)
       },
       {
@@ -45,6 +48,9 @@ export const routes: Routes = [
       },
       {
             path: 'profile', loadComponent: () => import('./components/profile/profile.component').then(c => c.ProfileComponent)
+      },
+      {
+            path: 'contact', loadComponent: () => import('./components/contactus/contactus.component').then(c => c.ContactusComponent)
       },
       {
             path: '', loadChildren: () => import('./components/landing-pages/landing.routes').then(r => r.LandingRoutes)

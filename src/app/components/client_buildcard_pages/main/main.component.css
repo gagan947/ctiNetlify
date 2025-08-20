@@ -1,0 +1,154 @@
+:root{
+    --bg:#0f172a;          /* slate-900 */
+    --panel:#111827;       /* gray-900 */
+    --panel-2:#0b1220;     /* deeper */
+    --text:#e5e7eb;        /* gray-200 */
+    --muted:#94a3b8;       /* slate-400 */
+    --accent:#6366f1;      /* indigo-500 */
+    --accent-2:#22d3ee;    /* cyan-400 */
+    --in:#1f2937;          /* gray-800 bubble (bot) */
+    --out:#3b82f6;         /* blue-500 bubble (you) */
+  }
+  
+  * { box-sizing: border-box; }
+  
+  body { background: var(--bg); }
+  
+  .chat-wrapper{
+    width: min(900px, 100%);
+    height: 88vh;
+    margin: 0 auto;
+    padding: 0 0px;
+    display: grid;
+    grid-template-rows: 64px 1fr 72px;
+    gap: 8px;
+    color: var(--text);
+    background-color: #f5f5f5;
+    margin-top: 30px;
+  }
+  
+  .chat-header{
+    display:flex; align-items:center; gap:12px;
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    border: 1px solid #e6e6e6;
+    border-radius: 16px;
+    padding: 10px 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.3);
+  }
+  
+  .chat-title{
+    font-weight: 600;
+    letter-spacing:.2px;
+    display:flex; align-items:center; gap:10px;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  .dot{
+    width:10px; height:10px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, var(--accent-2), var(--accent));
+    box-shadow: 0 0 12px var(--accent-2);
+  }
+  
+  .chat-box{
+    overflow-y: auto;
+    padding: 16px;
+    background: linear-gradient(0deg, #edf7fe, #fa85780f 60%, #fa857821 100%);
+    border: 1px solid #e6e6e6;
+    border-radius: 16px;
+    scroll-behavior: smooth;
+    padding-top: 40px;
+  }
+  
+  .msg-row{
+    display:flex; gap:10px; margin: 8px 0;
+    align-items: flex-end;
+  }
+  
+  .msg-row.in { flex-direction: row; }
+  .msg-row.out { flex-direction: row-reverse; }
+  
+  .avatar{
+    flex: 0 0 32px; height:32px; width:32px;
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    background: #fff; color: var(--muted);
+    border: 1px solid #e6e6e6;
+    font-size: 12px; font-weight:700;
+  }
+  
+  .bubble{
+    max-width: min(75%, 680px);
+    padding: 10px 12px;
+    border-radius: 14px;
+    position: relative;
+    border: 1px solid #e6e6e6;
+    background-color: #fff !important;
+    /* box-shadow: 0 6px 16px rgba(0,0,0,.25); */
+  }
+  
+  .msg-row.in .bubble{ background: var(--in); border-top-left-radius: 6px; }
+  .msg-row.out .bubble{
+    background: var(--out);
+    color: white;
+    border-top-right-radius: 6px;
+  }
+  
+  .meta{
+    display:flex; gap:8px; align-items:center;
+    margin-bottom: 4px;
+    font-size: 11px; color: var(--muted);
+    opacity:.9;
+  }
+  .msg-row.out .meta{ color: rgba(255,255,255,.8); }
+  
+  .text{
+    white-space: pre-wrap;
+    line-height: 1.5;
+    font-size: 14px;
+    color: #000;
+  }
+  
+  .chat-input{
+    display:flex; gap:10px; align-items:center;
+    padding: 10px;
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    /* border: 1px solid #1f2937; */
+    border-radius: 16px;
+  }
+  
+  .chat-input input{
+    flex:1;
+  
+    color: var(--text);
+    border: 1px solid #e6e6e6;
+    outline: none;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+  }
+  
+  .chat-input input::placeholder{ color: #64748b; }
+  
+  .chat-input button{
+    height: 44px; min-width: 56px;
+    border-radius: 12px;
+    border: 1px solid #1f2937;
+    background: linear-gradient(180deg, #1f2440, #141a32);
+    color: white; font-weight: 700; font-size: 16px;
+    cursor: pointer;
+    transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, .25);
+  }
+  .chat-input button:hover{ transform: translateY(-1px); }
+  .chat-input button:active{ transform: translateY(0); box-shadow: none; }
+  
+  /* Small screens */
+  @media (max-width: 640px){
+    .bubble{ max-width: 85%; }
+  }
+  span.sender {
+    color: #000;
+    font-size: 18px;
+    font-weight: 600;
+}
+
