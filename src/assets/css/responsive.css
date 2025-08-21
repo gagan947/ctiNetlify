@@ -524,6 +524,9 @@
   .ct_px_80 {
     padding-inline: 15px;
   }
+  .ct_footer_brand_img img{
+    width: 50px;
+  }
 
   .ct_blue_outline_btn,
   .ct_blue_btn_fill {
