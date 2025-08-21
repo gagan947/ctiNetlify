@@ -1,7 +1,7 @@
 export const chatbotFlow: any = {
   welcome: {
     step: "welcome",
-    message: `Hi, welcome to Creativethoughts.ai!\nI’m your AI assistant 🤖. How are you doing today?\nI can help you build your next app or website.\n\n👉 Choose an option below to get started:`,
+    message: `Welcome to Creative AI \nI’m your AI Assistant Vanya 🤖, here to help you bring your next app or website idea to life.\nI can help you build your next app or website.\n\n👉 Please select an option below to get started.:`,
     options: [
       { label: "💡 Build an App", next: "projectNameApp" },
       { label: "💻 Build a Website", next: "projectNameWebsite" },
@@ -15,14 +15,14 @@ export const chatbotFlow: any = {
   // Ask project name before proceeding
   projectNameApp: {
     step: "projectNameApp",
-    message: "Great! 🎉 Let's get started.\nWhat’s the name of your app project?",
+    message: "Excellent! 🎉 Let’s get Started.\nWhat’s the name of your app project?",
     input: true,
     next: "askAppType"
   },
 
   projectNameWebsite: {
     step: "projectNameWebsite",
-    message: "Great! 🎉 Let's get started.\nWhat’s the name of your website project?",
+    message: "Excellent! 🎉 Let’s get Started.\nWhat’s the name of your website project?",
     input: true,
     next: "askWebsiteType"
   },
@@ -30,7 +30,7 @@ export const chatbotFlow: any = {
   // App-specific flow
   askAppType: {
     step: "askAppType",
-    message: "Perfect! Project **{projectName}** sounds exciting.\nWhat type of app do you want to build?",
+    message: "Fantastic! Your Project **{projectName}** sounds exciting.\nCould you tell me what type of app you’d like to build?",
     options: [
       { label: "📱 Mobile App", next: "platform" },
       { label: "🛒 E-commerce App", next: "details" },
@@ -59,7 +59,7 @@ export const chatbotFlow: any = {
 
   platform: {
     step: "platform",
-    message: "Awesome! 📱\nDo you want it for:",
+    message: "Awesome! 📱\nWould you like your app to be built for:",
     options: [
       { label: "🍏 iOS", next: "details" },
       { label: "🤖 Android", next: "details" },
@@ -70,7 +70,7 @@ export const chatbotFlow: any = {
 
   details: {
     step: "details",
-    message: "Great! 👌\nCould you share some details about your project **{projectName}**? \nFor example: what it should do, who will use it, or the main purpose.",
+    message: "Great! 👌\nCould you share the main objective of your project **{projectName}**? \nFor example: what it should solves, who will use it, or the core purpose behind building it.",
     input: true,
     next: "features"
   },
@@ -86,8 +86,8 @@ export const chatbotFlow: any = {
     step: "design",
     message: "Great! 🎨 Do you already have a design/idea or should we create one from scratch?",
     options: [
-      { label: "🎨 I have a design", next: "budget" },
-      { label: "📝 Start from scratch", next: "budget" },
+      { label: "🎨 I have a design", next: "timeline" },
+      { label: "📝 Start from scratch", next: "timeline" },
       { label: "❓ Ask a Question", next: "chatbot" }
     ]
   },
