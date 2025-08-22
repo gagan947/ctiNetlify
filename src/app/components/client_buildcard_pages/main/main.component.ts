@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -16,6 +16,10 @@ declare var Calendly: any;
   styleUrl: './main.component.css'
 })
 export class MainComponent {
+
+  @ViewChild('anchor', { static: false }) anchor!: ElementRef;
+
+  private observer!: IntersectionObserver;
   projectsData: Project[] = []
   projectId: any;
   featureCount: any;
@@ -23,10 +27,11 @@ export class MainComponent {
   userMessage = '';
   messages: any[] = [];
   isLoading: boolean = false;
-
+  page = 1;
+  imageURL:any
   constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
-
-  };
+this.imageURL = this.apiservice.imageUrl
+  }
 
 
 
@@ -64,6 +69,16 @@ this.socket.on('botReply', (msg: string) => {
   });
 }
 
+ngAfterViewInit() {
+  this.observer = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      this.page+=1;
+      this.getProjects();
+    }
+  });
+  this.observer.observe(this.anchor.nativeElement);
+}
+
 
 
  
@@ -73,17 +88,15 @@ this.socket.on('botReply', (msg: string) => {
 
   getProjects() {
 
-    this.apiservice.getApi<ProjectResponse>(`api/user/fetchAllProjects`)
+    this.apiservice.getApi<ProjectResponse>(`api/user/fetchAllProjects?page=${this.page}`)
       .subscribe({
         next: (res) => {
           if (res.success == true) {
-            const data = res.data;
-            this.projectsData = data.map((item: any) => {
-              return {
-                ...item,
-                contain: item.contain.split(',')
-              };
-            });
+            const mappedData = res.data.map((item: any) => ({
+              ...item,
+              contain: item.contain ? item.contain.split(',') : []
+            }));
+            this.projectsData = [...this.projectsData, ...mappedData];
            
           } else {
             // this.loading = false
@@ -93,22 +106,22 @@ this.socket.on('botReply', (msg: string) => {
           // this.loading = false
         }
       });
-  };
+  }
 
 
   openCalendly() {
     Calendly.initPopupWidget({ url: 'https://calendly.com/mohdfaraz-ctinfotech/30min' });
   };
 
-  ngAfterViewInit() {
-    const calendlyContainer = document.getElementById('calendly-inline-widget');
-    if (calendlyContainer) {
-      Calendly.initInlineWidget({
-        url: 'https://calendly.com/mohdfaraz-ctinfotech/30min',
-        parentElement: calendlyContainer
-      });
-    }
-  };
+  // ngAfterViewInit() {
+  //   const calendlyContainer = document.getElementById('calendly-inline-widget');
+  //   if (calendlyContainer) {
+  //     Calendly.initInlineWidget({
+  //       url: 'https://calendly.com/mohdfaraz-ctinfotech/30min',
+  //       parentElement: calendlyContainer
+  //     });
+  //   }
+  // };
 
   updateProjectId(id: any, featureCount: number) {
    
