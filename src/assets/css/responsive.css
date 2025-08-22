@@ -320,6 +320,15 @@
     height: 120px !important;
     max-width: 250px !important;
   }
+  .ct_login_form{
+  max-width: 100%;
+  }
+      .ct_login_left_bg {
+        display: block;
+        max-width: 75%;
+        margin-inline: auto;
+        width: 100%;
+    }
 }
 
 @media screen and (max-width: 767px) {
@@ -516,6 +525,17 @@
 .ct_testimonial_slider .owl-nav button.owl-next{
   right: 0px;
 }
+.ct_login_bg{
+  max-width: calc(100% - 30px);
+}
+.ct_login_form {
+  padding-inline: 20px;
+
+}
+.ct_login_left_bg{
+  max-width: 90%;
+}
+
 }
 
 @media screen and (max-width: 575px) {
@@ -526,6 +546,9 @@
   }
   .ct_footer_brand_img img{
     width: 50px;
+  }
+  .ct_profile_main_bg_123{
+    padding-inline: 30px !important;
   }
 
   .ct_blue_outline_btn,
@@ -540,6 +563,9 @@
   .ct_right_menu ul {
     gap: 10px;
   }
+  .ct_login_left_bg{
+  max-width: 100%;
+}
 
   .ct_middle_navbar ul li a,
   .ct_right_menu ul li a {

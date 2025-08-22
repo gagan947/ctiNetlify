@@ -153,7 +153,7 @@ export const chatbotFlow: any = {
 
   support: {
     step: "support",
-    message: "You can reach us at:\n📧 support@creativethoughts.ai\n📞 Direct call available on request\n\n👉 How do you prefer to connect?",
+    message: "You can reach us at:\n📧 support@Creative AI\n📞 Direct call available on request\n\n👉 How do you prefer to connect?",
     options: [
       { label: "💬 Chat here", next: "chatbot" },
       { label: "📧 Email us", next: "end" },
