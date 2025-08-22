@@ -11,9 +11,9 @@ export class ApiService {
   // apiUrl = 'http://192.168.1.4:3000/prod/'
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
   apiUrl = 'https://api.creativethoughts.ai/';
+  imageUrl = 'https://api.creativethoughts.ai';
   // apiUrl = 'http://localhost:4500/';
-  // imageUrl = 'https://98.80.36.64:5000/images/';
-  imageUrl = 'http://192.168.29.241:4000/images/';
+
 
   private clearInputSubject = new Subject<void>();
 
@@ -21,11 +21,11 @@ export class ApiService {
 
   getApi<T>(url: string): Observable<T> {
     return this.http.get<T>(this.apiUrl + url);
-  };
+  }
 
   deleteApi<T>(url: string): Observable<T> {
     return this.http.delete<T>(this.apiUrl + url);
-  };
+  }
 
   getApiNoCache<T>(url: string): Observable<T> {
     const headers = new HttpHeaders({ 'X-Bypass-Cache': 'true' });

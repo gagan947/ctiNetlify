@@ -104,7 +104,7 @@
                               <div class="ct_white_bg ct_ecommerse_web_card">
                                     <div class="d-flex align-items-center justify-content-between gap-2 mb-4">
                                           <div class="ct_ecommerse_web_icon mb-0">
-                                                <img [src]="item.projectImage" alt="AI app builder for mobile and web">
+                                                <img [src]="imageURL+ item.projectImage" alt="AI app builder for mobile and web">
                                           </div>
                                           <div class="ct_bash_icon12"
                                                 (click)="updateProjectId(item.id , item.subFeaturesCount)"
@@ -126,12 +126,6 @@
                                           }
                                     </ul>
 
-                                    <!-- <button class="ct_schedule_call_btn w-100 justify-content-center"
-
-                                                data-bs-toggle="modal" data-bs-target="#ct_schedule_call_modal"
-                                                 (click)="openCalendly()">Schedule a
-
-                                                call <i class="bi bi-telephone"></i></button> -->
                                     <button class="ct_schedule_call_btn w-100 justify-content-center"
                                           data-bs-toggle="modal" data-bs-target="#calendlyModal">Schedule a
 
@@ -143,7 +137,7 @@
                         }
 
 
-
+                        <div #anchor></div>
                   </div>
 
             </div>
