@@ -1464,10 +1464,14 @@ footer {
 
 /*✨✨ Login page Css S✨✨ */
 .ct_login_bg {
-  display: grid;
-  grid-template-columns: 55% 45%;
-  align-items: center;
-  min-height: 100vh;
+    display: grid
+;
+    grid-template-columns: 55% 45%;
+    align-items: center;
+    min-height: calc(100vh - 0px);
+    max-width: calc(100vw - 0px);
+    margin-inline: auto;
+    /* padding-block: 50px; */
 }
 
 .ct_login_right_bg {
@@ -1486,7 +1490,9 @@ footer {
   height: 100%;
   position: relative;
 }
-
+.ct_login_right_bg_1{
+  padding: 20px;
+}
 .ct_right_inner_bg::after {
   content: "";
   position: absolute;
@@ -1528,18 +1534,27 @@ footer {
 }
 
 .ct_login_left_bg {
-  padding: 30px 46px;
-  background-color: #fff;
-  height: 100%;
-  display: grid;
-  align-items: center;
+    /* padding: 30px 46px; */
+    background-color: #fff;
+    height: 100%;
+    display: grid
+;
+    align-items: center;
+    /* box-shadow: 7px 3px 25px rgba(0, 0, 0, 0.09); */
+    /* border-radius: 30px; */
+    /* overflow: hidden; */
+    border-radius: 30px 0px 0px 30px;
+    /* border: 1px solid #f2f2f2; */
 }
 
 .ct_login_form {
-  padding: 42px 42px;
+  padding: 42px 40px;
   /* border: 2px solid #2785ba; */
   border-radius: 12px;
-  box-shadow: 0 0px 4px 5px #0060FF17;
+  /* box-shadow: 0 0px 4px 5px #0060FF17; */
+  max-width: 60%;
+  width: 100%;
+  margin-inline: auto;
 }
 
 .ct_sign_in_text {
@@ -1549,7 +1564,7 @@ footer {
 
 .ct_sign_in_text p {
   text-align: center;
-  background-color: #f3f3f3;
+  background-color: #fff;
   width: fit-content;
   margin-inline: auto;
   padding-inline: 10px;
@@ -1575,16 +1590,27 @@ footer {
 }
 
 a.ct_login_icon_site {
-  object-fit: contain;
-  background-color: #ffffff;
-  border: 0.4px solid #00000066;
-  padding: 11px;
+    object-fit: contain;
+    background-color: #ffffff;
+    border: 0.4px solid #e6e6e6;
+    padding: 11px 30px;
+    border-radius: 5px;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }
 
 a.ct_login_icon_site img {
-  width: 74px;
+  width: 36px;
   height: 23px;
   object-fit: contain;
+}
+.ct_login_icon_site span {
+    font-size: 16px;
+    color: #000;
+    font-weight: 600;
 }
 
 .ct_left_input_icon {
@@ -1610,7 +1636,7 @@ a.ct_login_icon_site img {
 }
 
 .ct_forgot_link {
-  color: #2785ba;
+  color: #0064ff;
   font-weight: 600;
   display: block;
   text-align: end;
@@ -3138,6 +3164,7 @@ table.table.ct_compare_table {
   margin-bottom: 20px;
 }
 
+
 .ct_cti_logo_small img {
   max-width: 150px;
 }
@@ -4259,17 +4286,18 @@ table.table.ct_compare_table {
 
 /* Profile Page css S */
 .ct_edit_profile_icon {
-  width: 35px;
-  height: 35px;
-  border-radius: 100px;
-  background-color: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  position: absolute;
-  bottom: 20px;
-  right: 5px;
+    width: 35px;
+    height: 35px;
+    border-radius: 100px;
+    background-color: #0064ff;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    position: absolute;
+    bottom: 20px;
+    right: 5px;
 }
 
 .ct_profile_main_bg_123 {

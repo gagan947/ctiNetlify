@@ -8,6 +8,9 @@ export const routes: Routes = [
             path: 'signup', loadComponent: () => import('./components/signup/signup.component').then(c => c.SignupComponent)
       },
       {
+            path: 'forgot-password', loadComponent: () => import('./components/forgot-password/forgot-password.component').then(c => c.ForgotPasswordComponent)
+      },
+      {
             path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(c => c.DashboardComponent)
       },
       {

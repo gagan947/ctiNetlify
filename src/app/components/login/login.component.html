@@ -1,33 +1,27 @@
 <section class="ct_login_bg">
       <div class="ct_login_left_bg">
             <div class="ct_login_form">
-                  <h4 class="ct_mb_44 ct_fw_700">Sign In</h4>
+                   
+                 <div class="ct_mb_44 text-center">
+                   <h4 class=" ct_fs_35 ct_fw_600  mb-2">Sign In</h4>
+                 </div>
 
-                  <!-- <div class="ct_sign_in_text">
-                        <p class="mb-0">Sign in using</p>
-                  </div>
-                  <div class="ct_sign-in_othher ct_mt_18">
-                        <a  class="ct_login_icon_site">
-                              <img loading="lazy" src="assets/img/google.png" alt="AI app builder for mobile and web">
-                        </a>
-                     
-
-                  </div> -->
-                  <div class="ct_sign_in_text ct_mt_18">
+                  
+                  <!-- <div class="ct_sign_in_text ct_mt_18">
                         <p class="mb-0">Sign in with email</p>
-                  </div>
-
+                  </div> -->
+                      
                   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="ct_mt_18">
                         <!-- Email Field -->
                         <div class="form-group mb-3">
-                              <label class="ct_fw_400 mb-2">Company Email <span class="ct_red_text">*</span></label>
+                              <label class="ct_fw_400 mb-2 ct_fs_16">Company Email <span class="ct_red_text">*</span></label>
                               <div class="position-relative">
                                     <img loading="lazy" src="assets/img/message_icon.svg"
                                           alt="AI app builder for mobile and web" class="ct_left_input_icon">
                                     <input type="email" formControlName="email" class="form-control ct_input px-5"
                                           placeholder="Enter email" />
                               </div>
-                              <small class="text-danger"
+                              <small class="text-danger ct_fs_16 mt-1 d-block"
                                     *ngIf="formControls['email'].invalid && formControls['email'].touched">
                                     Enter a valid email address.
                               </small>
@@ -35,7 +29,7 @@
 
                         <!-- Password Field -->
                         <div class="form-group mb-3">
-                              <label class="ct_fw_400 mb-2">Password <span class="ct_red_text">*</span></label>
+                              <label class="ct_fw_400 mb-2 ct_fs_16">Password <span class="ct_red_text">*</span></label>
                               <div class="position-relative">
                                     <img loading="lazy" src="assets/img/lock_icon.svg"
                                           alt="AI app builder for mobile and web" class="ct_left_input_icon">
@@ -47,14 +41,14 @@
                                           <i class="fa" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
                                     </button>
                               </div>
-                              <small class="text-danger"
+                              <small class="text-danger ct_fs_16 mt-1 d-block"
                                     *ngIf="formControls['password'].invalid && formControls['password'].touched">
                                     Password is required
                               </small>
                         </div>
 
                         <!-- Forgot Password -->
-                        <a routerLink="/forgot-password" class="ct_forgot_link">Forgot your password?</a>
+                        <a routerLink="/forgot-password" class="ct_forgot_link ct_fs_16">Forgot your password?</a>
 
                         <!-- Submit Button -->
                         <div class="mt-5">
@@ -67,39 +61,49 @@
 
                         <!-- Sign Up Link -->
                         <p class="mb-0 mt-3 text-center">Don’t have an account?
-                              <a routerLink="/signup">Sign up</a>
+                              <a routerLink="/signup" class="ct_forgot_link d-inline-block">Sign up</a>
                         </p>
                   </form>
 
+                        <div class="ct_sign_in_text mt-4">
+                        <p class="mb-0">Or Sign In With</p>
+                  </div>
+                  <div class="ct_sign-in_othher ct_mt_18">
+                        <a  class="ct_login_icon_site">
+                              <img loading="lazy" src="assets/img/google_icon_12.png" alt="AI app builder for mobile and web">
+                              <span>Google</span>
+                        </a>
+                     
+
+                  </div>
 
             </div>
       </div>
       <div class="ct_login_right_bg_1">
             <div class="ct_right_inner_bg_1">
-                  <!-- <h4 class="ct_fs_28 text-white">Very good works are waiting for you ☝️</h4>
-                  <h4 class="ct_fs_28 text-white">Login Now</h4> -->
+                 
+                
                   <div class="ct_logo" routerLink="/">
-                        <img loading="lazy" src="assets/img/cti_black_logo.svg" alt="Creative Ai">
+                        <img loading="lazy" src="assets/img/cti_black_logo1.png" alt="Creative Ai" style="max-width: 225px !important;">
                   </div>
-                  <div class="">
-                        <img loading="lazy" src="assets/img/login_img_2.png" alt="Creative Ai">
-                  </div>
-                  <p class="ct_fw_600 mb-0"><span class=" ct_fw_900">100K</span> Satisfied Clients</p>
+                  
+                  
+                  <p class="ct_fw_600"><span class=" ct_fw_900">100K</span> Satisfied Clients</p>
 
             </div>
-            <div>
+            <div class="ct_login_right_list">
                   <ul>
                         <li class="d-flex align-items-center gap-2">
-                              <img loading="lazy" src="assets/img/check_svg.svg" alt="Creative Ai">
-                              <span>Trusted by Businesses Worldwide</span>
+                              <i class="fa-regular fa-circle-check"></i>
+                              <span class="text-white">Trusted by Businesses Worldwide</span>
                         </li>
                         <li class="d-flex align-items-center gap-2">
-                              <img loading="lazy" src="assets/img/check_svg.svg" alt="Creative Ai">
-                              <span>Zero Tech Knowledge Needed – Simple & Fast Setup</span>
+                              <i class="fa-regular fa-circle-check"></i>
+                              <span class="text-white">Zero Tech Knowledge Needed – Simple & Fast Setup</span>
                         </li>
                         <li class="d-flex align-items-center gap-2">
-                              <img loading="lazy" src="assets/img/check_svg.svg" alt="Creative Ai">
-                              <span>CreativeThoughts.ai – Your Trusted App Development Partner</span>
+                              <i class="fa-regular fa-circle-check"></i>
+                              <span class="text-white">Creative AI – Your Trusted App Development Partner</span>
                         </li>
                   </ul>
             </div>
