@@ -224,6 +224,6 @@ export class PlanDeliveryComponent {
   }
 
   totalCost(featureData: any) {
-    this.projectCost = featureData.reduce((pre: any, next: { totalSubFeaturedPrice: any; totalCustomisationPrice: any; }) => pre + next.totalSubFeaturedPrice + next.totalCustomisationPrice, 0);
+    // this.projectCost = featureData.reduce((pre: any, next: { totalSubFeaturedPrice: any; totalCustomisationPrice: any; }) => pre + next.totalSubFeaturedPrice + next.totalCustomisationPrice, 0);
   }
 }

@@ -4088,28 +4088,28 @@ table.table.ct_compare_table {
   color: #7f8188;
 }
 
-section.ct_my_creative_project_overlay_main {
+.ct_my_creative_project_overlay_main {
   position: absolute;
   top: 0;
   z-index: 1;
   background-color: #fff;
   padding: 20px;
-  border-radius: 20px 20px 0px 0px;
+  border-radius: 20px 20px 20px 20px;
   left: 0px;
   width: 100%;
-  height: 100%;
-  overflow-y: auto;
+  height: calc(100vh - 142px);
+  /* overflow-y: auto; */
   /* top: -100%; */
   transition: 0.6s linear all;
   transform: translateY(100%);
   transform: scaleY(0);
-  transform-origin: top;
+  /* transform-origin: top; */
   /* top: 0px; */
 }
-section.ct_my_creative_project_overlay_main.ct_project_show_section {
+.ct_my_creative_project_overlay_main.ct_project_show_section {
     transform: translateY(0%) scaleY(1);
     /* top: 0; */
-    height: calc(100vh - 138px);
+    /* height: calc(100vh - 138px); */
     transition: 0.6s linear all;
     /* bottom: 0px; */
     /* top: auto; */

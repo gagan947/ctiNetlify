@@ -173,7 +173,7 @@
                                           <div class="ct_dragable_card_main_bg mt-4" [id]="'todoList'">
                                                 <h2
                                                       class="ct_fs_18 ct_fw_700 mb-0 d-flex align-items-center justify-content-between">
-                                                      {{ item.featuresName }}
+                                                      {{ item.featureName }}
                                                       @if (item.selected) {
                                                       <span
                                                             class="btn btn-primary btn-sm float-right ms-auto  opacity-50">
@@ -191,7 +191,7 @@
                                                 <div class="ct_feature_card_12 mt-2 position-relative"
                                                       [ngClass]="{'opacity-50' : items.selected}">
                                                       <div class="d-flex justify-content-between gap-3 w-100">
-                                                            <h4 class="ct_fs_14 ct_fw_600 mb-0">
+                                                            <h4 class="ct_fs_14 mb-0">
                                                                   {{ items.subFeaturesName }}
 
                                                             </h4>
@@ -356,14 +356,14 @@
                                                                                     @for (item of
                                                                                     projectsFeaturs.slice(0,3); track
                                                                                     $index) {
-                                                                                    <li>{{item.featuresName}}</li>
+                                                                                    <li>{{item.featureName}}</li>
                                                                                     }
                                                                               </ul>
                                                                               <ul>
                                                                                     @for (item of
                                                                                     projectsFeaturs.slice(3,6); track
                                                                                     $index) {
-                                                                                    <li>{{item.featuresName}}</li>
+                                                                                    <li>{{item.featureName}}</li>
                                                                                     }
                                                                               </ul>
                                                                               }
@@ -371,9 +371,7 @@
                                                                   </div>
 
                                                                   <div class="ct_white_bottom_bg mt-5 pb-5 d-none ">
-                                                                        <div class="ct_overlay_detail_icon_top">
-                                                                              <!-- <i class="fa-solid fa-chevron-up"></i> -->
-                                                                        </div>
+                                                                      
                                                                         <div
                                                                               class="d-flex align-items-center justify-content-between">
                                                                               <div
@@ -422,31 +420,21 @@
                                                                         </div>
                                                                   </div>
                                                                   <!-- overlay section S -->
+                                                                   <div class="ct_project_show_section ct_my_creative_project_overlay_main">
+
+                                                                  
                                                                   <section
-                                                                        class="ct_my_creative_project_overlay_main ct_project_show_section">
-                                                                        <!-- <div class="ct_overlay_detail_icon_down">
-                                                                              <i class="fa-solid fa-chevron-down"></i>
-                                                                        </div> -->
+                                                                        class="ct_create_verticle_h_scroll_new">
+                                                                     
                                                                         <div class="container">
                                                                               <div class="row">
                                                                                     <div class="col-md-12">
 
 
-                                                                                          <!-- <div
-                                                                  class="d-flex align-items-center justify-content-between gap-3 mt-5">
-                                                                  <div class="ct_search_input">
-                                                                      <input type="text" class="form-control"
-                                                                          placeholder="Search feature">
-                                                                      <i class="fa-solid fa-magnifying-glass"></i>
+                                                                                        
 
-                                                                  </div>
-                                                                  <div>
-
-                                                                  </div>
-                                                              </div> -->
-
-                                                                                          <div class="mt-5">
-                                                                                                <div>
+                                                                                          <div class="mt-0">
+                                                                                                <div class="bg-white">
                                                                                                       <!-- <h6 class="ct_fs_16 ct_fw_700">Help users sign
                                                                           up & login
                                                                       </h6> -->
@@ -455,7 +443,7 @@
                                                                                                             <thead>
                                                                                                                   <tr>
                                                                                                                         <th
-                                                                                                                              class="pb-4">
+                                                                                                                              class="pb-2 bg-white">
                                                                                                                               <div
                                                                                                                                     class="ct_search_input ct_width_fit">
                                                                                                                                     <input type="text"
@@ -470,25 +458,21 @@
 
                                                                                                                         </th>
                                                                                                                         <th
-                                                                                                                              class="ct_fw_400 pb-4">
-                                                                                                                              FEATURES
+                                                                                                                              class="ct_fw_400 pb-2 bg-white">
+                                                                                                                              Cost
                                                                                                                         </th>
+                                                                                                                      
                                                                                                                         <th
-                                                                                                                              class="ct_fw_400 pb-4">
-                                                                                                                              CUSTOMISATION
-                                                                                                                        </th>
-                                                                                                                        <th
-                                                                                                                              class="ct_fw_400 pb-4">
-                                                                                                                              TOTAL
-                                                                                                                              COST
+                                                                                                                              class="ct_fw_400 pb-2 bg-white">
+                                                                                                                             Estimated Time
                                                                                                                         </th>
                                                                                                                         <!-- <th
                                                                                                                               class="ct_fw_400 pb-4">
                                                                                                                               QTY
                                                                                                                         </th> -->
-                                                                                                                        <th>
+                                                                                                                        <th class="bg-white">
                                                                                                                         </th>
-                                                                                                                        <th>
+                                                                                                                        <th class="bg-white">
                                                                                                                         </th>
 
                                                                                                                   </tr>
@@ -512,37 +496,27 @@
                                                                                                                                     class="d-flex align-items-center gap-2">
                                                                                                                                     <span
                                                                                                                                           class="SubfeatursCount">
-                                                                                                                                          {{ item.subFeaturesListWithPrice.length}}
+                                                                                                                                        {{$index+1}}
                                                                                                                                     </span>
                                                                                                                                     <span
-                                                                                                                                          class="ct_fs_18 ct_fw_700 mb-0">{{item.featuresName}}</span>
+                                                                                                                                          class="ct_fs_18 ct_fw_700 mb-0">{{item.featureName}}</span>
                                                                                                                               </div>
                                                                                                                         </td>
                                                                                                                         <td><span
-                                                                                                                                    class="ct_fw_600">{{item.totalSubFeaturedPrice
-                                                                                                                                    |
-                                                                                                                                    currency
-                                                                                                                                    :
-                                                                                                                                    'INR'}}</span>
+                                                                                                                                    class="ct_fw_600">{{item.featureTime * 1750 | currency : 'INR'}}</span>
                                                                                                                         </td>
+                                                                                                                       
                                                                                                                         <td><span
-                                                                                                                                    class="ct_fw_600">{{item.totalCustomisationPrice | currency : 'INR'}}</span>
-                                                                                                                        </td>
-                                                                                                                        <td><span
-                                                                                                                                    class="ct_fw_600">{{(item.totalSubFeaturedPrice + item.totalCustomisationPrice)
-                                                                                                                                    |
-                                                                                                                                    currency
-                                                                                                                                    :
-                                                                                                                                    'INR'}}</span>
+                                                                                                                                    class="ct_fw_600">{{item.featureTime}}</span>
                                                                                                                         </td>
                                                                                                                         <!-- <td><span
                                                                                                                                     class="ct_fw_600">₹1,26,844.69</span>
                                                                                                                         </td> -->
-                                                                                                                        <td><span
+                                                                                                                        <!-- <td><span
                                                                                                                                     class="ct_fw_600">
                                                                                                                                     {{getEstimatedTime(item) | number : '1.0-2'}}
                                                                                                                                     HRS</span>
-                                                                                                                        </td>
+                                                                                                                        </td> -->
                                                                                                                         <td id="dropdownMenuButton1"
                                                                                                                               data-bs-toggle="dropdown"
                                                                                                                               aria-expanded="false">
@@ -564,36 +538,28 @@
                                                                                                                   @for
                                                                                                                   (item2
                                                                                                                   of
-                                                                                                                  item.subFeaturesListWithPrice;
+                                                                                                                  item.subFeatures;
                                                                                                                   track
                                                                                                                   $index)
                                                                                                                   {
                                                                                                                   <tr>
                                                                                                                         <td>
                                                                                                                               <span
-                                                                                                                                    class="ct_fs_14 ct_fw_600">{{item2.subFeaturesName}}</span>
+                                                                                                                                    class="ct_fs_14">{{item2.subFeatureName}}</span>
                                                                                                                         </td>
                                                                                                                         <td><span
-                                                                                                                                    class="">{{item2.subFeaturedPrice
+                                                                                                                                    class="">{{item2.estimated_time * 1750
                                                                                                                                     |
                                                                                                                                     currency
                                                                                                                                     :
                                                                                                                                     'INR'}}</span>
                                                                                                                         </td>
-                                                                                                                        <td><span
-                                                                                                                                    class="">{{item2.customisationPrice | currency : 'INR'}}</span>
-                                                                                                                        </td>
-                                                                                                                        <td><span
-                                                                                                                                    class="">{{(item2.subFeaturedPrice + item2.customisationPrice)
-                                                                                                                                    |
-                                                                                                                                    currency
-                                                                                                                                    :
-                                                                                                                                    'INR'}}</span>
-                                                                                                                        </td>
+                                                                                                                      
+                                                                                                                       
 
                                                                                                                         <td><span
                                                                                                                                     class="">
-                                                                                                                                    {{getSubEstimatedTime(item2) | number : '1.0-2'}}
+                                                                                                                                    {{item2.estimated_time | number : '1.0-2'}}
                                                                                                                                     HRS</span>
                                                                                                                         </td>
                                                                                                                         <td id="dropdownMenuButton1"
@@ -638,7 +604,72 @@
                                                                               </div>
 
                                                                         </div>
+
+                                                                        
                                                                   </section>
+                                                                  <div style="    border-top: 1px solid #e6e6e6;
+                                                                  padding-top: 15px;
+                                                                  margin-top: 15px;">
+                                                                        <div
+                                                                       class="ct_grid_60_auto_auto">
+                                                                       <div
+                                                                             class="d-flex align-items-center gap-5">
+                                                                             <div>
+                                                                                   <span
+                                                                                         class="ct_text_clr_7F8188  ct_fs_14">MY
+                                                                                         APP</span>
+                                                                                   <p
+                                                                                         class="mb-0 mt-1 ct_fw_700">
+                                                                                         {{projectsData.projectName}}
+                                                                                   </p>
+
+                                                                             </div>
+                                                                             <div>
+                                                                                   <span
+                                                                                         class="ct_text_clr_7F8188 ct_fs_14">Total Features</span>
+                                                                                   <p
+                                                                                         class="mb-0 mt-1 ct_fw_700">
+                                                                                         450
+                                                                                         
+                                                                                   </p>
+
+                                                                             </div>
+                                                                             
+                                                                       </div>
+                                                                       <div>
+                                                                        <span
+                                                                              class="ct_text_clr_7F8188  ct_fs_14">Total Cost
+                                                                              </span>
+                                                                        <p
+                                                                              class="mb-0 mt-1 ct_fw_700">
+                                                                              {{ totalPrice * 1750 | currency:'INR' }}
+                                                                        </p>
+
+                                                                  </div>
+                                                                  <div class="">
+                                                                        <span
+                                                                              class="ct_text_clr_7F8188  ct_fs_14">Total Weeks
+                                                                              </span>
+                                                                        <p
+                                                                              class="mb-0 mt-1 ct_fw_700">
+                                                                              {{ estimatedWeeks }}
+                                                                        </p>
+
+                                                                  </div>
+                                                                     
+                                                                 </div>
+                                                                 <div
+                                                                       class="d-flex align-items-center justify-content-between gap-3 mt-3">
+                                                                       <button type="button"
+                                                                             (click)="location.back()"
+                                                                             class="ct_blue_outline_btn w-100 prev-step">Cancel</button>
+                                                                       <a (click)="Navigate()" type="button"
+                                                                             class="ct_blue_btn_fill next-step w-100">Save
+                                                                             & Continue</a>
+                                                                 </div>
+                                                                 </div>
+                                                            </div>
+                                                                  
                                                                   <!-- overlay section E-->
                                                             </div>
 
@@ -696,14 +727,14 @@
                                                                                     @for (item of
                                                                                     projectsFeaturs.slice(0,3); track
                                                                                     $index) {
-                                                                                    <li>{{item.featuresName}}</li>
+                                                                                    <li>{{item.featureName}}</li>
                                                                                     }
                                                                               </ul>
                                                                               <ul>
                                                                                     @for (item of
                                                                                     projectsFeaturs.slice(3,6); track
                                                                                     $index) {
-                                                                                    <li>{{item.featuresName}}</li>
+                                                                                    <li>{{item.featureName}}</li>
                                                                                     }
                                                                               </ul>
                                                                               }
@@ -839,7 +870,7 @@
                                                                                                                   <tr>
                                                                                                                         <td>
                                                                                                                               <span
-                                                                                                                                    class="ct_fw_600">{{item.featuresName}}</span>
+                                                                                                                                    class="ct_fw_600">{{item.featureName}}</span>
                                                                                                                         </td>
                                                                                                                         <td><span
                                                                                                                                     class="ct_fw_600">₹1,26,844.69</span>

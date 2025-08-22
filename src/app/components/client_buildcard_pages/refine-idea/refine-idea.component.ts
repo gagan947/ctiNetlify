@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { Location } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
+import { ALLFeatures } from '../../../models/allfeatures';
 
 @Component({
   selector: 'app-refine-idea',
@@ -39,7 +40,7 @@ export class RefineIdeaComponent {
       this.getProjects();
     }
     this.getFeatures()
-  };
+  }
 
   getProjects() {
     this.apiService.getApi<FeatureResponse>(`api/user/fetchProjectDetailedById?projectId=${this.id}`)
@@ -47,8 +48,19 @@ export class RefineIdeaComponent {
         next: (res) => {
           if (res.success == true) {
             this.allFeatures = this.projectsFeaturs = res.data;
+            this.projectsFeaturs.map((feature: any) => {
+              feature.featureTime = feature.subFeatures.reduce(
+                (pre: number, next: { estimated_time: number }) => pre + Number(next.estimated_time),
+                0
+              );
+            });
+            
+            
+            this.totalPrice = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time:any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0);
+            this.estimatedWeeks = Math.ceil((this.totalPrice / 8 )/ 5);
+           
             // this.estimatedWeeks = res.data[0].estimated_time
-            this.totalCost(this.projectsFeaturs)
+            // this.totalCost(this.projectsFeaturs)
           } else {
             // this.loading = false
           }
@@ -88,7 +100,7 @@ export class RefineIdeaComponent {
       })
 
       this.commongFeaturs[commonFeatureIndex].selected = false
-      const featureIndex = this.projectsFeaturs.findIndex(f => f.featuresName === feature.featuresName);
+      const featureIndex = this.projectsFeaturs.findIndex(f => f.featureName === feature.featuresName);
       this.projectsFeaturs.splice(featureIndex, 1)
     }
     // this.totalPrice = this.totalPrice + feature.subFeaturesList.reduce((pre: any, next: { subFeaturedPrice: any; customisationPrice: any; }) => pre + next.subFeaturedPrice + next.customisationPrice, 0)
@@ -97,18 +109,18 @@ export class RefineIdeaComponent {
 
   removeSubFeture(features: any, item2: any) {
     this.totalPrice = this.totalPrice - item2.subFeaturedPrice - item2.customisationPrice
-    const featureIndex = this.projectsFeaturs.findIndex(f => f.featuresName === features.featuresName);
+    const featureIndex = this.projectsFeaturs.findIndex(f => f.featureName === features.featuresName);
     if (featureIndex > -1) {
-      this.projectsFeaturs[featureIndex].totalSubFeaturedPrice = this.projectsFeaturs[featureIndex].totalSubFeaturedPrice - item2.subFeaturedPrice
-      this.projectsFeaturs[featureIndex].totalCustomisationPrice = this.projectsFeaturs[featureIndex].totalCustomisationPrice - item2.customisationPrice
-      this.projectsFeaturs[featureIndex].subFeaturesListWithPrice = this.projectsFeaturs[featureIndex].subFeaturesListWithPrice.filter(el => el !== item2);
-      if (this.projectsFeaturs[featureIndex].subFeaturesListWithPrice.length === 0) {
-        this.projectsFeaturs.splice(featureIndex, 1);
-        const commonFeatureIndex = this.commongFeaturs.findIndex(f => f.featuresName === features.featuresName);
-        if (commonFeatureIndex > -1) {
-          this.commongFeaturs[commonFeatureIndex].selected = false
-        }
-      }
+      // this.projectsFeaturs[featureIndex].totalSubFeaturedPrice = this.projectsFeaturs[featureIndex].totalSubFeaturedPrice - item2.subFeaturedPrice
+      // this.projectsFeaturs[featureIndex].totalCustomisationPrice = this.projectsFeaturs[featureIndex].totalCustomisationPrice - item2.customisationPrice
+      // this.projectsFeaturs[featureIndex].subFeaturesListWithPrice = this.projectsFeaturs[featureIndex].subFeaturesListWithPrice.filter(el => el !== item2);
+      // if (this.projectsFeaturs[featureIndex].subFeaturesListWithPrice.length === 0) {
+      //   this.projectsFeaturs.splice(featureIndex, 1);
+      //   const commonFeatureIndex = this.commongFeaturs.findIndex(f => f.featuresName === features.featuresName);
+      //   if (commonFeatureIndex > -1) {
+      //     this.commongFeaturs[commonFeatureIndex].selected = false
+      //   }
+      // }
       this.projectsFeaturs = [...this.projectsFeaturs];
 
       const commonFeatureIndex = this.commongFeaturs.findIndex(f => f.featuresName === features.featuresName);
@@ -152,11 +164,11 @@ export class RefineIdeaComponent {
               selectdFeature: this.projectsFeaturs
             }
 
-            let featuresCost = this.projectsFeaturs.reduce((pre: any, next: { totalSubFeaturedPrice: any; }) => pre + next.totalSubFeaturedPrice, 0)
+            // let featuresCost = this.projectsFeaturs.reduce((pre: any, next: { totalSubFeaturedPrice: any; }) => pre + next.totalSubFeaturedPrice, 0)
 
-            let customisationCost = this.projectsFeaturs.reduce((pre: any, next: { totalCustomisationPrice: any; }) => pre + next.totalCustomisationPrice, 0)
+            // let customisationCost = this.projectsFeaturs.reduce((pre: any, next: { totalCustomisationPrice: any; }) => pre + next.totalCustomisationPrice, 0)
 
-            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalCost, ...selectdFeature, ...{ 'featuresCost': featuresCost }, ...{ 'no_of_features': no_of_features }, ...{ 'customisationCost': customisationCost }, ...{ 'estimated_time': this.estimatedWeeks } }))
+            // sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalCost, ...selectdFeature, ...{ 'featuresCost': featuresCost }, ...{ 'no_of_features': no_of_features }, ...{ 'customisationCost': customisationCost }, ...{ 'estimated_time': this.estimatedWeeks } }))
             this.router.navigate([`/plan-delivery/${this.id}`])
           } else {
             this.message.error(res.message);
@@ -165,37 +177,41 @@ export class RefineIdeaComponent {
       });
   }
 
-  findDifferences(originalArray: any[], newArray: any[]) {
-    const newFeaturesSet = new Set(newArray?.map(feature => feature.featuresName));
-    const newSubFeaturesSet = new Set(newArray?.flatMap(feature => feature.subFeaturesListWithPrice.map((subFeature: any) => subFeature.subFeaturesName)));
+  findDifferences(originalArray: ALLFeatures[], newArray: Feature[]) {
+    const newFeaturesSet = new Set(newArray?.map(feature => feature.featureName));
+
+    const newSubFeaturesSet = new Set(newArray?.flatMap(feature => feature.subFeatures.map((subFeature) =>
+      subFeature.subFeatureName)));
+
 
     this.commongFeaturs = originalArray.map(f => ({
       ...f,
-      selected: newFeaturesSet.has(f.featuresName),
-      subFeaturesList: f.subFeaturesList.map((sf: any) => ({
+      selected: newFeaturesSet.has(f.featureName),
+      subFeaturesList: f.subFeatures.map((sf) => ({
         ...sf,
         selected: newSubFeaturesSet.has(sf.subFeaturesName)
       }))
     }));
+
   }
 
   selectSubFeature(features: any, items: any) {
-    const featureIndex = this.projectsFeaturs.findIndex(f => f.featuresName === features.featuresName);
+    const featureIndex = this.projectsFeaturs.findIndex(f => f.featureName === features.featuresName);
     if (featureIndex > -1) {
-      this.projectsFeaturs[featureIndex].subFeaturesListWithPrice.push(items);
-      this.projectsFeaturs[featureIndex].totalSubFeaturedPrice = this.projectsFeaturs[featureIndex].totalSubFeaturedPrice + items.subFeaturedPrice
-      this.projectsFeaturs[featureIndex].totalCustomisationPrice = this.projectsFeaturs[featureIndex].totalCustomisationPrice + items.customisationPrice
+      // this.projectsFeaturs[featureIndex].subFeaturesListWithPrice.push(items);
+      // this.projectsFeaturs[featureIndex].totalSubFeaturedPrice = this.projectsFeaturs[featureIndex].totalSubFeaturedPrice + items.subFeaturedPrice
+      // this.projectsFeaturs[featureIndex].totalCustomisationPrice = this.projectsFeaturs[featureIndex].totalCustomisationPrice + items.customisationPrice
       this.projectsFeaturs = [...this.projectsFeaturs];
 
     } else {
-      this.projectsFeaturs.unshift({
-        featuresName: features.featuresName,
-        estimated_time: features.estimated_time,
-        totalCustomisationPrice: items.customisationPrice,
-        totalSubFeaturedPrice: items.subFeaturedPrice,
-        subFeaturesListWithPrice: [items],
-        countSubFeaturesName: items.length
-      })
+      // this.projectsFeaturs.unshift({
+      //   featureName: features.featureName,
+      //   estimated_time: features.estimated_time,
+      //   totalCustomisationPrice: items.customisationPrice,
+      //   totalSubFeaturedPrice: items.subFeaturedPrice,
+      //   subFeaturesListWithPrice: [items],
+      //   countSubFeaturesName: items.length
+      // })
     }
     const commonFeatureIndex = this.commongFeaturs.findIndex(f => f.featuresName === features.featuresName);
     if (commonFeatureIndex > -1) {
@@ -216,14 +232,14 @@ export class RefineIdeaComponent {
       })
 
       this.commongFeaturs[commonFeatureIndex].selected = true
-      this.projectsFeaturs.unshift({
-        featuresName: feature.featuresName,
-        estimated_time: feature.estimated_time,
-        totalCustomisationPrice: feature.subFeaturesList.reduce((pre: any, next: { customisationPrice: any; }) => pre + next.customisationPrice, 0),
-        totalSubFeaturedPrice: feature.subFeaturesList.reduce((pre: any, next: { subFeaturedPrice: any; }) => pre + next.subFeaturedPrice, 0),
-        subFeaturesListWithPrice: feature.subFeaturesList,
-        countSubFeaturesName: feature.subFeaturesList.lenght
-      })
+      // this.projectsFeaturs.unshift({
+      //   featureName: feature.featuresName,
+      //   estimated_time: feature.estimated_time,
+      //   totalCustomisationPrice: feature.subFeaturesList.reduce((pre: any, next: { customisationPrice: any; }) => pre + next.customisationPrice, 0),
+      //   totalSubFeaturedPrice: feature.subFeaturesList.reduce((pre: any, next: { subFeaturedPrice: any; }) => pre + next.subFeaturedPrice, 0),
+      //   subFeaturesListWithPrice: feature.subFeaturesList,
+      //   countSubFeaturesName: feature.subFeaturesList.lenght
+      // })
     }
     this.totalPrice = this.totalPrice + feature.subFeaturesList.reduce((pre: any, next: { subFeaturedPrice: any; customisationPrice: any; }) => pre + next.subFeaturedPrice + next.customisationPrice, 0)
     this.allFeatures = this.projectsFeaturs

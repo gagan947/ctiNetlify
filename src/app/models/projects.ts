@@ -19,18 +19,16 @@ export interface Project {
 
 
 export interface SubFeature {
-  customisationPrice: number;
-  subFeaturesName: string;
-  subFeaturedPrice: number;
+  id: number;
+  estimated_time: any,
+  subFeatureName: string
 }
 
 export interface Feature {
-  featuresName: string;
-  totalSubFeaturedPrice: number;
-  estimated_time: number;
-  countSubFeaturesName: number;
-  totalCustomisationPrice: number
-  subFeaturesListWithPrice: SubFeature[];
+  id: number;
+  featureName: string;
+  subFeatures:SubFeature[];
+  featureTime: any
 }
 
 export interface FeatureResponse {

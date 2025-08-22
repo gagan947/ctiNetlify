@@ -187,15 +187,15 @@
                                                                   <tr>
                                                                         <td>
                                                                               <span
-                                                                                    class="ct_fs_18 ct_fw_700 mb-0">{{item.featuresName}}</span>
+                                                                                    class="ct_fs_18 ct_fw_700 mb-0">{{item.featureName}}</span>
                                                                         </td>
-                                                                        <td><span class="ct_fw_600">{{item.totalSubFeaturedPrice
+                                                                        <!-- <td><span class="ct_fw_600">{{item.totalSubFeaturedPrice
                                                                                     |
                                                                                     currency
                                                                                     :
                                                                                     'INR'}}</span>
-                                                                        </td>
-                                                                        <td><span
+                                                                        </td> -->
+                                                                        <!-- <td><span
                                                                                     class="ct_fw_600">{{item.totalCustomisationPrice | currency : 'INR'}}</span>
                                                                         </td>
                                                                         <td><span class="ct_fw_600">{{(item.totalSubFeaturedPrice + item.totalCustomisationPrice)
@@ -203,7 +203,7 @@
                                                                                     currency
                                                                                     :
                                                                                     'INR'}}</span>
-                                                                        </td>
+                                                                        </td> -->
                                                                         <!-- <td><span
                                                                                     class="ct_fw_600">₹1,26,844.69</span>
                                                                         </td> -->
@@ -215,22 +215,22 @@
                                                                   @for
                                                                   (item2
                                                                   of
-                                                                  item.subFeaturesListWithPrice;
+                                                                  item.subFeatures;
                                                                   track
                                                                   $index)
                                                                   {
                                                                   <tr>
                                                                         <td>
                                                                               <span
-                                                                                    class="ct_fs_14 ct_fw_600">{{item2.subFeaturesName}}</span>
+                                                                                    class="ct_fs_14 ct_fw_600">{{item2.subFeatureName}}</span>
                                                                         </td>
-                                                                        <td><span class="">{{item2.subFeaturedPrice
+                                                                        <!-- <td><span class="">{{item2.subFeaturedPrice
                                                                                     |
                                                                                     currency
                                                                                     :
                                                                                     'INR'}}</span>
-                                                                        </td>
-                                                                        <td><span
+                                                                        </td> -->
+                                                                        <!-- <td><span
                                                                                     class="">{{item2.customisationPrice | currency : 'INR'}}</span>
                                                                         </td>
                                                                         <td><span class="">{{(item2.subFeaturedPrice + item2.customisationPrice)
@@ -238,7 +238,7 @@
                                                                               currency
                                                                               :
                                                                               'INR'}}</span>
-                                                                        </td>
+                                                                        </td> -->
 
                                                                         <!-- <td><span class="">{{getSubEstimatedTime(item2) | number : '1.0-2'}}
                                                                                     HRS</span>

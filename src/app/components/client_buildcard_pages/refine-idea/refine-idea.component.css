@@ -26,3 +26,20 @@
       padding: 10px;
       font-size: 11px;
 }
+
+section.ct_create_verticle_h_scroll_new {
+      height: calc(100vh - 326px);
+      overflow-y: auto;
+  }
+
+  .ct_help_user_table th {
+      vertical-align: middle;
+      position: sticky;
+      top: 0px;
+  }
+
+  .ct_grid_60_auto_auto{
+      display: grid
+      ;
+          grid-template-columns: 58% auto auto auto;
+  }
