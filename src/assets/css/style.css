@@ -1580,6 +1580,7 @@ footer {
   height: 0.6px;
   width: 100%;
   z-index: -1;
+  left: 0px;
 }
 
 .ct_sign-in_othher {
@@ -1591,25 +1592,29 @@ footer {
 
 a.ct_login_icon_site {
     object-fit: contain;
-    background-color: #ffffff;
-    border: 0.4px solid #e6e6e6;
-    padding: 11px 30px;
+    background-color: #0064ff;
+    border: 0.4px solid #0064ff;
+    padding: 12px 30px 12px 10px;
     border-radius: 5px;
     display: flex
 ;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 15px;
+    width: 100%;
 }
 
 a.ct_login_icon_site img {
-  width: 36px;
-  height: 23px;
-  object-fit: contain;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    background-color: #fff;
+    padding: 7px;
+    border-radius: 4px;
 }
 .ct_login_icon_site span {
     font-size: 16px;
-    color: #000;
+    color: #fff;
     font-weight: 600;
 }
 
@@ -1637,7 +1642,7 @@ a.ct_login_icon_site img {
 
 .ct_forgot_link {
   color: #0064ff;
-  font-weight: 600;
+  font-weight: 500;
   display: block;
   text-align: end;
 }
