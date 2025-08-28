@@ -192,7 +192,7 @@
                                                       [ngClass]="{'opacity-50' : items.selected}">
                                                       <div class="d-flex justify-content-between gap-3 w-100">
                                                             <h4 class="ct_fs_14 mb-0">
-                                                                  {{ items.subFeaturesName }}
+                                                                  {{ items.subFeatureName }}
 
                                                             </h4>
                                                             <span class="mb-0 ct_fs_14">{{ items.subFeaturedPrice | currency :
@@ -371,7 +371,7 @@
                                                                   </div>
 
                                                                   <div class="ct_white_bottom_bg mt-5 pb-5 d-none ">
-                                                                      
+
                                                                         <div
                                                                               class="d-flex align-items-center justify-content-between">
                                                                               <div
@@ -420,256 +420,264 @@
                                                                         </div>
                                                                   </div>
                                                                   <!-- overlay section S -->
-                                                                   <div class="ct_project_show_section ct_my_creative_project_overlay_main">
-
-                                                                  
-                                                                  <section
-                                                                        class="ct_create_verticle_h_scroll_new">
-                                                                     
-                                                                        <div class="container">
-                                                                              <div class="row">
-                                                                                    <div class="col-md-12">
+                                                                  <div
+                                                                        class="ct_project_show_section ct_my_creative_project_overlay_main">
 
 
-                                                                                        
+                                                                        <section
+                                                                              class="ct_create_verticle_h_scroll_new">
 
-                                                                                          <div class="mt-0">
-                                                                                                <div class="bg-white">
-                                                                                                      <!-- <h6 class="ct_fs_16 ct_fw_700">Help users sign
+                                                                              <div class="container">
+                                                                                    <div class="row">
+                                                                                          <div class="col-md-12">
+
+
+
+
+                                                                                                <div class="mt-0">
+                                                                                                      <div
+                                                                                                            class="bg-white">
+                                                                                                            <!-- <h6 class="ct_fs_16 ct_fw_700">Help users sign
                                                                           up & login
                                                                       </h6> -->
-                                                                                                      <table
-                                                                                                            class="table ct_help_user_table ">
-                                                                                                            <thead>
-                                                                                                                  <tr>
-                                                                                                                        <th
-                                                                                                                              class="pb-2 bg-white">
-                                                                                                                              <div
-                                                                                                                                    class="ct_search_input ct_width_fit">
-                                                                                                                                    <input type="text"
-                                                                                                                                          class="form-control"
-                                                                                                                                          name="search"
-                                                                                                                                          (input)="search($event)"
-                                                                                                                                          placeholder="Search feature">
-                                                                                                                                    <i
-                                                                                                                                          class="fa-solid fa-magnifying-glass"></i>
+                                                                                                            <table
+                                                                                                                  class="table ct_help_user_table ">
+                                                                                                                  <thead>
+                                                                                                                        <tr>
+                                                                                                                              <th
+                                                                                                                                    class="pb-2 bg-white">
+                                                                                                                                    <div
+                                                                                                                                          class="ct_search_input ct_width_fit">
+                                                                                                                                          <input type="text"
+                                                                                                                                                class="form-control"
+                                                                                                                                                name="search"
+                                                                                                                                                (input)="search($event)"
+                                                                                                                                                placeholder="Search feature">
+                                                                                                                                          <i
+                                                                                                                                                class="fa-solid fa-magnifying-glass"></i>
 
-                                                                                                                              </div>
+                                                                                                                                    </div>
 
-                                                                                                                        </th>
-                                                                                                                        <th
-                                                                                                                              class="ct_fw_400 pb-2 bg-white">
-                                                                                                                              Cost
-                                                                                                                        </th>
-                                                                                                                      
-                                                                                                                        <th
-                                                                                                                              class="ct_fw_400 pb-2 bg-white">
-                                                                                                                             Estimated Time
-                                                                                                                        </th>
-                                                                                                                        <!-- <th
+                                                                                                                              </th>
+                                                                                                                              <th
+                                                                                                                                    class="ct_fw_400 pb-2 bg-white">
+                                                                                                                                    Cost
+                                                                                                                              </th>
+
+                                                                                                                              <th
+                                                                                                                                    class="ct_fw_400 pb-2 bg-white">
+                                                                                                                                    Estimated
+                                                                                                                                    Time
+                                                                                                                              </th>
+                                                                                                                              <!-- <th
                                                                                                                               class="ct_fw_400 pb-4">
                                                                                                                               QTY
                                                                                                                         </th> -->
-                                                                                                                        <th class="bg-white">
-                                                                                                                        </th>
-                                                                                                                        <th class="bg-white">
-                                                                                                                        </th>
+                                                                                                                              <th
+                                                                                                                                    class="bg-white">
+                                                                                                                              </th>
+                                                                                                                              <th
+                                                                                                                                    class="bg-white">
+                                                                                                                              </th>
 
-                                                                                                                  </tr>
-                                                                                                            </thead>
-                                                                                                            <tbody>
-                                                                                                                  @if(
-                                                                                                                  projectsFeaturs
-                                                                                                                  &&
-                                                                                                                  projectsFeaturs.length
-                                                                                                                  > 0){
-                                                                                                                  @for
-                                                                                                                  (item
-                                                                                                                  of
-                                                                                                                  projectsFeaturs;
-                                                                                                                  track
-                                                                                                                  $index)
-                                                                                                                  {
-                                                                                                                  <tr>
-                                                                                                                        <td>
-                                                                                                                              <div
-                                                                                                                                    class="d-flex align-items-center gap-2">
-                                                                                                                                    <span
-                                                                                                                                          class="SubfeatursCount">
-                                                                                                                                        {{$index+1}}
-                                                                                                                                    </span>
-                                                                                                                                    <span
-                                                                                                                                          class="ct_fs_18 ct_fw_700 mb-0">{{item.featureName}}</span>
-                                                                                                                              </div>
-                                                                                                                        </td>
-                                                                                                                        <td><span
-                                                                                                                                    class="ct_fw_600">{{item.featureTime * 1750 | currency : 'INR'}}</span>
-                                                                                                                        </td>
-                                                                                                                       
-                                                                                                                        <td><span
-                                                                                                                                    class="ct_fw_600">{{item.featureTime}}</span>
-                                                                                                                        </td>
-                                                                                                                        <!-- <td><span
+                                                                                                                        </tr>
+                                                                                                                  </thead>
+                                                                                                                  <tbody>
+                                                                                                                        @if(
+                                                                                                                        projectsFeaturs
+                                                                                                                        &&
+                                                                                                                        projectsFeaturs.length
+                                                                                                                        >
+                                                                                                                        0){
+                                                                                                                        @for
+                                                                                                                        (item
+                                                                                                                        of
+                                                                                                                        projectsFeaturs;
+                                                                                                                        track
+                                                                                                                        $index)
+                                                                                                                        {
+                                                                                                                        <tr>
+                                                                                                                              <td>
+                                                                                                                                    <div
+                                                                                                                                          class="d-flex align-items-center gap-2">
+                                                                                                                                          <span
+                                                                                                                                                class="SubfeatursCount">
+                                                                                                                                                {{$index+1}}
+                                                                                                                                          </span>
+                                                                                                                                          <span
+                                                                                                                                                class="ct_fs_18 ct_fw_700 mb-0">{{item.featureName}}</span>
+                                                                                                                                    </div>
+                                                                                                                              </td>
+                                                                                                                              <td><span
+                                                                                                                                          class="ct_fw_600">{{item.featureTime * 1750 | currency : 'INR'}}</span>
+                                                                                                                              </td>
+
+                                                                                                                              <td><span
+                                                                                                                                          class="ct_fw_600">{{item.featureTime}}</span>
+                                                                                                                              </td>
+                                                                                                                              <!-- <td><span
                                                                                                                                     class="ct_fw_600">₹1,26,844.69</span>
                                                                                                                         </td> -->
-                                                                                                                        <!-- <td><span
+                                                                                                                              <!-- <td><span
                                                                                                                                     class="ct_fw_600">
                                                                                                                                     {{getEstimatedTime(item) | number : '1.0-2'}}
                                                                                                                                     HRS</span>
                                                                                                                         </td> -->
-                                                                                                                        <td id="dropdownMenuButton1"
-                                                                                                                              data-bs-toggle="dropdown"
-                                                                                                                              aria-expanded="false">
-                                                                                                                              <div
-                                                                                                                                    class="dropdown ct_table_action_drop">
-                                                                                                                                    <i
-                                                                                                                                          class="fa-solid fa-ellipsis-vertical"></i>
+                                                                                                                              <td id="dropdownMenuButton1"
+                                                                                                                                    data-bs-toggle="dropdown"
+                                                                                                                                    aria-expanded="false">
+                                                                                                                                    <div
+                                                                                                                                          class="dropdown ct_table_action_drop">
+                                                                                                                                          <i
+                                                                                                                                                class="fa-solid fa-ellipsis-vertical"></i>
 
-                                                                                                                                    <ul class="dropdown-menu"
-                                                                                                                                          aria-labelledby="dropdownMenuButton1">
-                                                                                                                                          <li><a class="dropdown-item"
-                                                                                                                                                      (click)="removeFeture(item)">Delete</a>
-                                                                                                                                          </li>
+                                                                                                                                          <ul class="dropdown-menu"
+                                                                                                                                                aria-labelledby="dropdownMenuButton1">
+                                                                                                                                                <li><a class="dropdown-item"
+                                                                                                                                                            (click)="removeFeture(item)">Delete</a>
+                                                                                                                                                </li>
 
-                                                                                                                                    </ul>
-                                                                                                                              </div>
-                                                                                                                        </td>
-                                                                                                                  </tr>
-                                                                                                                  @for
-                                                                                                                  (item2
-                                                                                                                  of
-                                                                                                                  item.subFeatures;
-                                                                                                                  track
-                                                                                                                  $index)
-                                                                                                                  {
-                                                                                                                  <tr>
-                                                                                                                        <td>
-                                                                                                                              <span
-                                                                                                                                    class="ct_fs_14">{{item2.subFeatureName}}</span>
-                                                                                                                        </td>
-                                                                                                                        <td><span
-                                                                                                                                    class="">{{item2.estimated_time * 1750
+                                                                                                                                          </ul>
+                                                                                                                                    </div>
+                                                                                                                              </td>
+                                                                                                                        </tr>
+                                                                                                                        @for
+                                                                                                                        (item2
+                                                                                                                        of
+                                                                                                                        item.subFeatures;
+                                                                                                                        track
+                                                                                                                        $index)
+                                                                                                                        {
+                                                                                                                        <tr>
+                                                                                                                              <td>
+                                                                                                                                    <span
+                                                                                                                                          class="ct_fs_14">{{item2.subFeatureName}}</span>
+                                                                                                                              </td>
+                                                                                                                              <td><span
+                                                                                                                                          class="">{{item2.estimated_time * 1750
                                                                                                                                     |
                                                                                                                                     currency
                                                                                                                                     :
                                                                                                                                     'INR'}}</span>
-                                                                                                                        </td>
-                                                                                                                      
-                                                                                                                       
+                                                                                                                              </td>
 
-                                                                                                                        <td><span
-                                                                                                                                    class="">
-                                                                                                                                    {{item2.estimated_time | number : '1.0-2'}}
-                                                                                                                                    HRS</span>
-                                                                                                                        </td>
-                                                                                                                        <td id="dropdownMenuButton1"
-                                                                                                                              data-bs-toggle="dropdown"
-                                                                                                                              aria-expanded="false">
-                                                                                                                              <div
-                                                                                                                                    class="dropdown ct_table_action_drop">
-                                                                                                                                    <i
-                                                                                                                                          class="fa-solid fa-ellipsis-vertical"></i>
 
-                                                                                                                                    <ul class="dropdown-menu"
-                                                                                                                                          aria-labelledby="dropdownMenuButton1">
-                                                                                                                                          <li><a class="dropdown-item"
-                                                                                                                                                      (click)="removeSubFeture(item,item2)">Delete</a>
-                                                                                                                                          </li>
 
-                                                                                                                                    </ul>
-                                                                                                                              </div>
-                                                                                                                        </td>
-                                                                                                                  </tr>
-                                                                                                                  }
-                                                                                                                  }
-                                                                                                                  }
-                                                                                                                  @else
-                                                                                                                  {
-                                                                                                                  <tr>
-                                                                                                                        <td colspan="6"
-                                                                                                                              class="text-center">
-                                                                                                                              No
-                                                                                                                              data
-                                                                                                                              found
-                                                                                                                        </td>
-                                                                                                                  </tr>
-                                                                                                                  }
-                                                                                                            </tbody>
-                                                                                                      </table>
+                                                                                                                              <td><span
+                                                                                                                                          class="">
+                                                                                                                                          {{item2.estimated_time | number : '1.0-2'}}
+                                                                                                                                          HRS</span>
+                                                                                                                              </td>
+                                                                                                                              <td id="dropdownMenuButton1"
+                                                                                                                                    data-bs-toggle="dropdown"
+                                                                                                                                    aria-expanded="false">
+                                                                                                                                    <div
+                                                                                                                                          class="dropdown ct_table_action_drop">
+                                                                                                                                          <i
+                                                                                                                                                class="fa-solid fa-ellipsis-vertical"></i>
+
+                                                                                                                                          <ul class="dropdown-menu"
+                                                                                                                                                aria-labelledby="dropdownMenuButton1">
+                                                                                                                                                <li><a class="dropdown-item"
+                                                                                                                                                            (click)="removeSubFeture(item,item2)">Delete</a>
+                                                                                                                                                </li>
+
+                                                                                                                                          </ul>
+                                                                                                                                    </div>
+                                                                                                                              </td>
+                                                                                                                        </tr>
+                                                                                                                        }
+                                                                                                                        }
+                                                                                                                        }
+                                                                                                                        @else
+                                                                                                                        {
+                                                                                                                        <tr>
+                                                                                                                              <td colspan="6"
+                                                                                                                                    class="text-center">
+                                                                                                                                    No
+                                                                                                                                    data
+                                                                                                                                    found
+                                                                                                                              </td>
+                                                                                                                        </tr>
+                                                                                                                        }
+                                                                                                                  </tbody>
+                                                                                                            </table>
+                                                                                                      </div>
+
                                                                                                 </div>
-
                                                                                           </div>
+
                                                                                     </div>
 
                                                                               </div>
 
-                                                                        </div>
 
-                                                                        
-                                                                  </section>
-                                                                  <div style="    border-top: 1px solid #e6e6e6;
+                                                                        </section>
+                                                                        <div style="    border-top: 1px solid #e6e6e6;
                                                                   padding-top: 15px;
                                                                   margin-top: 15px;">
-                                                                        <div
-                                                                       class="ct_grid_60_auto_auto">
-                                                                       <div
-                                                                             class="d-flex align-items-center gap-5">
-                                                                             <div>
-                                                                                   <span
-                                                                                         class="ct_text_clr_7F8188  ct_fs_14">MY
-                                                                                         APP</span>
-                                                                                   <p
-                                                                                         class="mb-0 mt-1 ct_fw_700">
-                                                                                         {{projectsData.projectName}}
-                                                                                   </p>
+                                                                              <div class="ct_grid_60_auto_auto">
+                                                                                    <div
+                                                                                          class="d-flex align-items-center gap-5">
+                                                                                          <div>
+                                                                                                <span
+                                                                                                      class="ct_text_clr_7F8188  ct_fs_14">MY
+                                                                                                      APP</span>
+                                                                                                <p
+                                                                                                      class="mb-0 mt-1 ct_fw_700">
+                                                                                                      {{projectsData.projectName}}
+                                                                                                </p>
 
-                                                                             </div>
-                                                                             <div>
-                                                                                   <span
-                                                                                         class="ct_text_clr_7F8188 ct_fs_14">Total Features</span>
-                                                                                   <p
-                                                                                         class="mb-0 mt-1 ct_fw_700">
-                                                                                         450
-                                                                                         
-                                                                                   </p>
+                                                                                          </div>
+                                                                                          <div>
+                                                                                                <span
+                                                                                                      class="ct_text_clr_7F8188 ct_fs_14">Total
+                                                                                                      Features</span>
+                                                                                                <p
+                                                                                                      class="mb-0 mt-1 ct_fw_700">
+                                                                                                      {{noOfFeaturs}}
+                                                                                                </p>
 
-                                                                             </div>
-                                                                             
-                                                                       </div>
-                                                                       <div>
-                                                                        <span
-                                                                              class="ct_text_clr_7F8188  ct_fs_14">Total Cost
-                                                                              </span>
-                                                                        <p
-                                                                              class="mb-0 mt-1 ct_fw_700">
-                                                                              {{ totalPrice * 1750 | currency:'INR' }}
-                                                                        </p>
+                                                                                          </div>
 
+                                                                                    </div>
+                                                                                    <div>
+                                                                                          <span
+                                                                                                class="ct_text_clr_7F8188  ct_fs_14">Total
+                                                                                                Cost
+                                                                                          </span>
+                                                                                          <p
+                                                                                                class="mb-0 mt-1 ct_fw_700">
+                                                                                                {{ totalPrice * 1750 | currency:'INR' }}
+                                                                                          </p>
+
+                                                                                    </div>
+                                                                                    <div class="">
+                                                                                          <span
+                                                                                                class="ct_text_clr_7F8188  ct_fs_14">Total
+                                                                                                Weeks
+                                                                                          </span>
+                                                                                          <p
+                                                                                                class="mb-0 mt-1 ct_fw_700">
+                                                                                                {{ estimatedWeeks }}
+                                                                                          </p>
+
+                                                                                    </div>
+
+                                                                              </div>
+                                                                              <div
+                                                                                    class="d-flex align-items-center justify-content-between gap-3 mt-3">
+                                                                                    <button type="button"
+                                                                                          (click)="location.back()"
+                                                                                          class="ct_blue_outline_btn w-100 prev-step">Cancel</button>
+                                                                                    <a (click)="Navigate()"
+                                                                                          type="button"
+                                                                                          class="ct_blue_btn_fill next-step w-100">Save
+                                                                                          & Continue</a>
+                                                                              </div>
+                                                                        </div>
                                                                   </div>
-                                                                  <div class="">
-                                                                        <span
-                                                                              class="ct_text_clr_7F8188  ct_fs_14">Total Weeks
-                                                                              </span>
-                                                                        <p
-                                                                              class="mb-0 mt-1 ct_fw_700">
-                                                                              {{ estimatedWeeks }}
-                                                                        </p>
 
-                                                                  </div>
-                                                                     
-                                                                 </div>
-                                                                 <div
-                                                                       class="d-flex align-items-center justify-content-between gap-3 mt-3">
-                                                                       <button type="button"
-                                                                             (click)="location.back()"
-                                                                             class="ct_blue_outline_btn w-100 prev-step">Cancel</button>
-                                                                       <a (click)="Navigate()" type="button"
-                                                                             class="ct_blue_btn_fill next-step w-100">Save
-                                                                             & Continue</a>
-                                                                 </div>
-                                                                 </div>
-                                                            </div>
-                                                                  
                                                                   <!-- overlay section E-->
                                                             </div>
 
