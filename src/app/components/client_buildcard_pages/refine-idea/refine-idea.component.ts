@@ -30,10 +30,8 @@ export class RefineIdeaComponent {
     this.projectsData = JSON.parse(projectData!);
     this.projectsFeaturs = this.projectsData.selectdFeature
     this.estimatedWeeks = this.projectsData.estimated_time
-    if (this.projectsFeaturs && this.projectsFeaturs.length > 0) {
-      // this.estimatedWeeks = this.projectsFeaturs[0].estimated_time ? this.projectsFeaturs[0].estimated_time : this.projectsFeaturs[1].estimated_time ? this.projectsFeaturs[1].estimated_time : this.projectsFeaturs[2].estimated_time
-      this.totalCost(this.projectsFeaturs)
-    }
+    this.totalPrice = this.projectsData.totalCost
+    this.noOfFeaturs = this.projectsData.no_of_features
   }
 
   ngOnInit(): void {
@@ -56,9 +54,9 @@ export class RefineIdeaComponent {
               );
             });
 
-            this.totalPrice = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0);
-            this.estimatedWeeks = Math.ceil((this.totalPrice / 8) / 5);
-
+            let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
+            this.totalPrice = (totalTime * 1750)
+            this.estimatedWeeks = Math.ceil((totalTime / 8) / 5);
             this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
 
             // this.estimatedWeeks = res.data[0].estimated_time
@@ -104,8 +102,9 @@ export class RefineIdeaComponent {
       const featureIndex = this.projectsFeaturs.findIndex(f => f.featureName === feature.featureName);
       this.projectsFeaturs.splice(featureIndex, 1)
     }
-    this.totalPrice = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0);
-    this.estimatedWeeks = Math.ceil((this.totalPrice / 8) / 5);
+    let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
+    this.totalPrice = (totalTime * 1750)
+    this.estimatedWeeks = Math.ceil((totalTime / 8) / 5);
     this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
     // this.allFeatures = this.projectsFeaturs
   }
@@ -130,14 +129,11 @@ export class RefineIdeaComponent {
         })
       }
     }
-    this.totalPrice = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0);
-    this.estimatedWeeks = Math.ceil((this.totalPrice / 8) / 5);
+    let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
+    this.totalPrice = (totalTime * 1750)
+    this.estimatedWeeks = Math.ceil((totalTime / 8) / 5);
     this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
     this.allFeatures = this.projectsFeaturs
-  }
-
-  totalCost(featureData: any) {
-    this.totalPrice = featureData.reduce((pre: any, next: { totalSubFeaturedPrice: any; totalCustomisationPrice: any; }) => pre + next.totalSubFeaturedPrice + next.totalCustomisationPrice, 0);
   }
 
   Navigate() {
@@ -213,8 +209,9 @@ export class RefineIdeaComponent {
       })
       this.commongFeaturs[commonFeatureIndex].selected = true
     }
-    this.totalPrice = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0);
-    this.estimatedWeeks = Math.ceil((this.totalPrice / 8) / 5);
+    let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
+    this.totalPrice = (totalTime * 1750)
+    this.estimatedWeeks = Math.ceil((totalTime / 8) / 5);
     this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
     this.allFeatures = this.projectsFeaturs
   }
@@ -236,8 +233,9 @@ export class RefineIdeaComponent {
         )
       })
     }
-    this.totalPrice = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0);
-    this.estimatedWeeks = Math.ceil((this.totalPrice / 8) / 5);
+    let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
+    this.totalPrice = (totalTime * 1750)
+    this.estimatedWeeks = Math.ceil((totalTime / 8) / 5);
     this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
     this.allFeatures = this.projectsFeaturs
   }
@@ -245,8 +243,8 @@ export class RefineIdeaComponent {
   search(event: any) {
     const searchTerm = event.target.value.toLowerCase();
     if (searchTerm) {
-      const filteredData = this.allFeatures.filter((item: any) => item.featuresName.toLowerCase().includes(searchTerm) ||
-        item.subFeaturesListWithPrice.some((subFeature: any) => subFeature.subFeatureName.toLowerCase().includes(searchTerm)));
+      const filteredData = this.allFeatures.filter((item: any) => item.featureName.toLowerCase().includes(searchTerm) ||
+        item.subFeatures.some((subFeature: any) => subFeature.subFeatureName.toLowerCase().includes(searchTerm)));
       this.projectsFeaturs = filteredData.length ? filteredData : [];
     } else {
       this.projectsFeaturs = [...this.allFeatures];

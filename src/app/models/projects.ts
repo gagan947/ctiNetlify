@@ -27,7 +27,7 @@ export interface SubFeature {
 export interface Feature {
   id: number;
   featureName: string;
-  subFeatures:SubFeature[];
+  subFeatures: SubFeature[];
   featureTime: any
 }
 

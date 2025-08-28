@@ -35,15 +35,12 @@ export class BillingDetailsComponent {
     this.projectsData = JSON.parse(projectData!);
     this.projectsFeatures = this.projectsData.selectdFeature;
     this.billingDetails = this.projectsData.bellingDetails ? this.projectsData.bellingDetails[0] : {};
-    this.totalSubFeatures = this.projectsData.selectdFeature.reduce(
-      (total: any, feature: { subFeaturesListWithPrice: string | any[]; }) => total + (feature.subFeaturesListWithPrice?.length || 0),
-      0
-    );
+    this.totalSubFeatures = this.projectsData.no_of_features
   };
 
   ngOnInit(): void {
     this.countries = Country.getAllCountries();
-    
+
     if (this.billingDetails.company_location) {
       this.getStateByCountry({ target: { value: this.billingDetails.company_location } });
       this.getCityByState({ target: { value: this.billingDetails.state } });

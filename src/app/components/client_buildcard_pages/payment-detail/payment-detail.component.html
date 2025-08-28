@@ -249,7 +249,8 @@
                               <div class="ct_right_sidebar_12 ct_outline_border_box">
                                     <div>
                                           <div class="position-relative ct_w_fit_content mx-auto">
-                                                <img loading="lazy" src="assets/img/iPhone_14 Plus_.png" alt="AI app builder for mobile and web">
+                                                <img loading="lazy" src="assets/img/iPhone_14 Plus_.png"
+                                                      alt="AI app builder for mobile and web">
                                                 <div class="ct_mob_overlay_top_cnt_12">
                                                       <div class="ct_add_logo_by_ai" [style]="projectsData.logoStyle">
                                                             @if(!projectsData.projectLogo){
@@ -263,7 +264,8 @@
                                                                         stroke-linejoin="round" />
                                                             </svg>
                                                             } @else {
-                                                            <img [src]="projectsData.projectLogo" alt="AI app builder for mobile and web"
+                                                            <img [src]="projectsData.projectLogo"
+                                                                  alt="AI app builder for mobile and web"
                                                                   class="ct_img_logo_123">
                                                             }
                                                       </div>
@@ -300,16 +302,16 @@
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">Features</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">
-                                                            {{ projectsData.featuresCost | currency:'INR'}}
+                                                            {{ projectsData.finalCost | currency:'INR'}}
                                                       </p>
                                                 </div>
-                                                <div
+                                                <!-- <div
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">Customisation</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">
                                                             {{projectsData.customisationCost | currency:'INR'}}
                                                       </p>
-                                                </div>
+                                                </div> -->
                                                 <!-- <div
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">Studio One (for 12 months)</p>
