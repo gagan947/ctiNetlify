@@ -1580,6 +1580,7 @@ footer {
   height: 0.6px;
   width: 100%;
   z-index: -1;
+  left: 0px;
 }
 
 .ct_sign-in_othher {
@@ -1591,25 +1592,29 @@ footer {
 
 a.ct_login_icon_site {
     object-fit: contain;
-    background-color: #ffffff;
-    border: 0.4px solid #e6e6e6;
-    padding: 11px 30px;
+    background-color: #0064ff;
+    border: 0.4px solid #0064ff;
+    padding: 12px 30px 12px 10px;
     border-radius: 5px;
     display: flex
 ;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 15px;
+    width: 100%;
 }
 
 a.ct_login_icon_site img {
-  width: 36px;
-  height: 23px;
-  object-fit: contain;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    background-color: #fff;
+    padding: 7px;
+    border-radius: 4px;
 }
 .ct_login_icon_site span {
     font-size: 16px;
-    color: #000;
+    color: #fff;
     font-weight: 600;
 }
 
@@ -1637,7 +1642,7 @@ a.ct_login_icon_site img {
 
 .ct_forgot_link {
   color: #0064ff;
-  font-weight: 600;
+  font-weight: 500;
   display: block;
   text-align: end;
 }
@@ -4196,26 +4201,28 @@ table.table.ct_compare_table {
 }
 
 .ct_send_btn_12 {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
-  background-color: #1b83c166;
-  border: 1px solid #1b83c166;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: #0064ff;
+    border: 1px solid #0064ff;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
 }
 
 .ct_chat_box_send_input input.form-control {
-  padding: 20px;
+  padding: 10px;
   padding-right: 104px;
   border: 1px solid #fff;
 }
 
 .ct_chat_box_send_input {
-  position: relative;
-  margin-top: 20px;
-  box-shadow: 0px 4px 4px 0px #00000014;
+    position: relative;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .ct_chat_send_icons_overlay ul {
@@ -4225,7 +4232,7 @@ table.table.ct_compare_table {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: 20px;
+  right: 4px;
 }
 
 .ct_profile_drop_34 li a {

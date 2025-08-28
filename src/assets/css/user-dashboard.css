@@ -1438,3 +1438,13 @@ span.et_document_badge_1 {
   background-color: var(--dark_blue);
   color: #fff;
 }
+
+
+.ct_chat_item_left {
+    background-color: #fff;
+    padding: 16px 12px;
+    border-radius: 0px 12px 12px;
+    display: grid
+;
+    height: calc(100vh - 80px);
+}

@@ -43,3 +43,29 @@
     object-fit: contain;
  
 }
+
+.ct_why_choose_card{
+    background-color: #fff;
+    box-shadow: 0px 0px 25px rgba(0,0,0,0.09);
+    padding: 20px;
+    border-radius: 15px;
+    height: 100%;
+    transition: 0.4s ease all;
+}
+.ct_why_choose_card figcaption{
+    text-align: center;
+
+}
+
+.ct_why_choose_card img {
+    text-align: center;
+    margin: auto;
+    display: block;
+    width: 40px;
+    margin-bottom: 20px;
+    object-fit: contain;
+        transition: 0.4s ease all;
+}
+.ct_why_choose_card:hover img{
+    transform: rotate(360deg);
+}

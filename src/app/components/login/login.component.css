@@ -57,4 +57,7 @@
 }
 
 
-
+.ct_google_login_position{
+      position: absolute;
+      left: 3px;
+}
