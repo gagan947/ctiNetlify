@@ -138,6 +138,7 @@ export class RefineIdeaComponent {
   }
 
   Navigate() {
+    const totalCost = this.totalPrice * 1750
     let no_of_features = 0;
     this.projectsFeaturs.forEach((element: any) => {
       no_of_features = no_of_features + element.countSubFeaturesName
@@ -147,7 +148,7 @@ export class RefineIdeaComponent {
       formNumber: 2,
       projectFeatures: this.projectsFeaturs,
       durations: this.estimatedWeeks,
-      totalCost: this.totalPrice,
+      totalCost: totalCost,
       currentRoutes: this.router.url,
       no_of_features: no_of_features
     }
@@ -156,8 +157,8 @@ export class RefineIdeaComponent {
       .subscribe({
         next: (res: any) => {
           if (res.success) {
-            let totalCost = {
-              totalCost: this.totalPrice
+            let totalProjectCost = {
+              totalCost: totalCost
             }
 
             let selectdFeature = {
@@ -168,7 +169,7 @@ export class RefineIdeaComponent {
 
             // let customisationCost = this.projectsFeaturs.reduce((pre: any, next: { totalCustomisationPrice: any; }) => pre + next.totalCustomisationPrice, 0)
 
-            // sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalCost, ...selectdFeature, ...{ 'featuresCost': featuresCost }, ...{ 'no_of_features': no_of_features }, ...{ 'customisationCost': customisationCost }, ...{ 'estimated_time': this.estimatedWeeks } }))
+            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalProjectCost, ...selectdFeature,  ...{ 'no_of_features': no_of_features },  ...{ 'estimated_time': this.estimatedWeeks } }))
             this.router.navigate([`/plan-delivery/${this.id}`])
           } else {
             this.message.error(res.message);
