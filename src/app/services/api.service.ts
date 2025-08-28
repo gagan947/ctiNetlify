@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
+import { Auth, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class ApiService {
 
   private clearInputSubject = new Subject<void>();
 
-  constructor(private http: HttpClient, private route: Router) { }
+  constructor(private http: HttpClient, private route: Router, private auth: Auth) { }
 
   getApi<T>(url: string): Observable<T> {
     return this.http.get<T>(this.apiUrl + url);
@@ -95,5 +96,10 @@ export class ApiService {
 
   updateUserDetail(userDetails: any) {
     this.userDataSubject.next(userDetails)
+  }
+
+  async googleLogin() {
+    const provider = new GoogleAuthProvider();
+    return await signInWithPopup(this.auth, provider);
   }
 }

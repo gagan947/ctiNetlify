@@ -1,30 +1,32 @@
 <section class="ct_login_bg">
       <div class="ct_login_left_bg">
             <div class="ct_login_form">
-                   
-                 <div class="mb-4 text-center">
-                   <h4 class=" ct_fs_35 ct_fw_600  mb-2">Log in to your account</h4>
-                    <!-- Sign Up Link -->
+
+                  <div class="mb-4 text-center">
+                        <h4 class=" ct_fs_35 ct_fw_600  mb-2">Log in to your account</h4>
+                        <!-- Sign Up Link -->
                         <p class="mb-0 mt-3 text-center">Don’t have an account?
                               <a routerLink="/signup" class="ct_forgot_link d-inline-block">Sign up</a>
                         </p>
-                         <div class="ct_sign-in_othher ct_mt_18">
-                        <a  class="ct_login_icon_site position-relative">
-                              <img loading="lazy" src="assets/img/google_icon_12.png" alt="AI app builder for mobile and web" class="ct_google_login_position">
-                              <span> Sign in with Google </span>
-                        </a>
+                        <div class="ct_sign-in_othher ct_mt_18">
+                              <a (click)="loginWithGoogle()" class="ct_login_icon_site position-relative">
+                                    <img loading="lazy" src="assets/img/google_icon_12.png"
+                                          alt="AI app builder for mobile and web" class="ct_google_login_position">
+                                    <span> Sign in with Google </span>
+                              </a>
+                        </div>
+                        <div class="ct_sign_in_text mt-4">
+                              <p class="mb-0">Or Sign In With</p>
+                        </div>
                   </div>
-                   <div class="ct_sign_in_text mt-4">
-                        <p class="mb-0">Or Sign In With</p>
-                  </div>
-                 </div>
 
-                 
-                      
+
+
                   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="ct_mt_18">
                         <!-- Email Field -->
                         <div class="form-group mb-3">
-                              <label class="ct_fw_400 mb-2 ct_fs_16">Email Address/ Mobile Number <span class="ct_red_text">*</span></label>
+                              <label class="ct_fw_400 mb-2 ct_fs_16">Email Address/ Mobile Number <span
+                                          class="ct_red_text">*</span></label>
                               <div class="position-relative">
                                     <img loading="lazy" src="assets/img/message_icon.svg"
                                           alt="AI app builder for mobile and web" class="ct_left_input_icon">
@@ -57,7 +59,7 @@
                               </small>
                         </div>
 
-                      
+
 
                         <!-- Submit Button -->
                         <div class="mt-4">
@@ -67,30 +69,31 @@
                               <app-submit-button [text]="'Log in'" [isLoading]="isLoading"
                                     [class]="'ct_blue_btn_fill py-3 w-100'"></app-submit-button>
                         </div>
-                          <!-- Forgot Password -->
-                       <div class="d-flex  align-items-center justify-content-center gap-2 mt-3">
-                         <a  class="ct_forgot_link ct_fs_16">Login with OTP</a>
-                         <span>|</span>
-                         <a routerLink="/forgot-password" class="ct_forgot_link ct_fs_16">Forgot password?</a>
-                       </div>
+                        <!-- Forgot Password -->
+                        <div class="d-flex  align-items-center justify-content-center gap-2 mt-3">
+                              <a class="ct_forgot_link ct_fs_16">Login with OTP</a>
+                              <span>|</span>
+                              <a routerLink="/forgot-password" class="ct_forgot_link ct_fs_16">Forgot password?</a>
+                        </div>
 
-                       
+
                   </form>
 
-                       
-                 
+
+
 
             </div>
       </div>
       <div class="ct_login_right_bg_1">
             <div class="ct_right_inner_bg_1">
-                 
-                
+
+
                   <div class="ct_logo" routerLink="/">
-                        <img loading="lazy" src="assets/img/cti_black_logo1.png" alt="Creative Ai" style="max-width: 225px !important;">
+                        <img loading="lazy" src="assets/img/cti_black_logo1.png" alt="Creative Ai"
+                              style="max-width: 225px !important;">
                   </div>
-                  
-                  
+
+
                   <p class="ct_fw_600"><span class=" ct_fw_900">100K</span> Satisfied Clients</p>
 
             </div>
@@ -124,7 +127,8 @@
                               <div class="row ">
                                     <div class="col-lg-6 mb-4 mb-lg-0">
                                           <div>
-                                                <h4 class="ct_orange_gredient_text ct_fw_600 ct_fs_26 mb-5">Tell us about you
+                                                <h4 class="ct_orange_gredient_text ct_fw_600 ct_fs_26 mb-5">Tell us
+                                                      about you
                                                 </h4>
                                                 <div class="ct_login_modal_img">
                                                       <img loading="lazy" src="assets/img/pc_vector.png"
