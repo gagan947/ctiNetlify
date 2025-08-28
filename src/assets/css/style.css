@@ -4201,26 +4201,28 @@ section.ct_my_creative_project_overlay_main.ct_project_show_section {
 }
 
 .ct_send_btn_12 {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
-  background-color: #1b83c166;
-  border: 1px solid #1b83c166;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: #0064ff;
+    border: 1px solid #0064ff;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
 }
 
 .ct_chat_box_send_input input.form-control {
-  padding: 20px;
+  padding: 10px;
   padding-right: 104px;
   border: 1px solid #fff;
 }
 
 .ct_chat_box_send_input {
-  position: relative;
-  margin-top: 20px;
-  box-shadow: 0px 4px 4px 0px #00000014;
+    position: relative;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .ct_chat_send_icons_overlay ul {
@@ -4230,7 +4232,7 @@ section.ct_my_creative_project_overlay_main.ct_project_show_section {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: 20px;
+  right: 4px;
 }
 
 .ct_profile_drop_34 li a {
