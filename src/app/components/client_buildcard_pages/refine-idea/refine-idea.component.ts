@@ -155,7 +155,7 @@ export class RefineIdeaComponent {
       .subscribe({
         next: (res: any) => {
           if (res.success) {
-            let totalCost = {
+            let totalProjectCost = {
               totalCost: this.totalPrice
             }
 
@@ -163,7 +163,7 @@ export class RefineIdeaComponent {
               selectdFeature: this.projectsFeaturs
             }
 
-            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalCost, ...selectdFeature, ...{ 'no_of_features': this.noOfFeaturs }, ...{ 'estimated_time': this.estimatedWeeks } }))
+            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalProjectCost, ...selectdFeature, ...{ 'no_of_features': this.noOfFeaturs }, ...{ 'estimated_time': this.estimatedWeeks } }))
             this.router.navigate([`/plan-delivery/${this.id}`])
           } else {
             this.message.error(res.message);
