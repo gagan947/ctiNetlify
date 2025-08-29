@@ -1,0 +1,30 @@
+
+.ct_light_grey_bg{
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e6e6e6;
+}
+  .ct_help_user_table th {
+    vertical-align: middle;
+    background-color: #d3e1f5;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 8px !important;
+}
+
+   .ct_help_user_table thead th:first-child ,.ct_help_user_table tr td:first-child{
+   border-radius: 10px 0px 0px 10px;
+    }
+
+    .ct_help_user_table thead th:last-child ,.ct_help_user_table tr td:last-child{
+        border-radius: 0px 10px 10px 0px;
+    }
+
+    table.table.ct_help_user_table {
+      border-spacing: 0px 4px;
+      border-collapse: separate;
+}
+.ct_help_user_table tr td {
+    vertical-align: middle;
+}

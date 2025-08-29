@@ -3402,7 +3402,8 @@ table.table.ct_compare_table {
 }
 
 .ct_dash_logo img {
-  max-width: 80px;
+    max-width: 80px;
+    padding-inline: 20px;
 }
 
 .ct_sidebar {
@@ -4174,9 +4175,9 @@ table.table.ct_compare_table {
 }
 
 .ct_search_input input {
-  border-radius: 100px;
-  max-width: 260px;
-  padding-right: 40px;
+    border-radius: 5px;
+    max-width: 350px;
+    padding-right: 40px;
 }
 
 .ct_search_input i {
@@ -4637,12 +4638,14 @@ ul.floatingBoxes li:nth-child(10) {
 }
 
 .ct_app_detail_card {
-  padding: 18px 10px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  display: flex;
-  align-items: center;
-  gap: 15px;
+    padding: 18px 10px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    display: flex
+;
+    align-items: center;
+    gap: 15px;
+    background-color: hsl(0deg 0% 100% / 72%);
 }
 
 .ct_transparent_checkbox .form-check-input {
@@ -4703,11 +4706,12 @@ ul.floatingBoxes li:nth-child(10) {
 }
 
 .ct_add_the_power_of_bg {
-  background-image: url(../img/power_ai_bg.png);
+  /* background-image: url(../img/power_ai_bg.png); */
+  background: linear-gradient(346deg, rgb(0 100 255 / 82%) 0%, rgb(182 12 254 / 66%) 50%, rgb(250 187 0 / 98%) 100%);
   padding: 40px 60px 60px;
   background-position: center;
   background-size: cover;
-  border-radius: 4px;
+  border-radius: 10px;
 }
 
 .ct_add_the_power_content {
@@ -4810,18 +4814,22 @@ ul.floatingBoxes li:nth-child(10) {
 
 .ct_review_build_card_grey_tab {
   background-color: #f8f9fa;
+  gap: 10px;
+  display: flex;
 }
 
 .ct_review_build_card_grey_tab.nav-pills .nav-link {
-  border-radius: 0px;
+  border-radius: 5px;
   color: #00000099;
+  font-size: 16px;
   padding: 10px 30px;
+  font-weight: 600;
+  background-color: #e6e6e6;
 }
 
-.ct_review_build_card_grey_tab.nav-pills .nav-link.active,
-.ct_review_build_card_grey_tab.nav-pills .show>.nav-link {
-  color: #1b83c1;
-  background-color: #e3f5ff;
+.ct_review_build_card_grey_tab.nav-pills .nav-link.active, .ct_review_build_card_grey_tab.nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #0064ff;
 }
 
 /* Plan Delivery page css E */

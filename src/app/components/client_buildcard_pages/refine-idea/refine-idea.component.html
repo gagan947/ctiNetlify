@@ -291,7 +291,7 @@
                            </li>
                            
                            </ul> -->
-                        <div class="tab-content mt-4 pt-2" id="pills-tabContent">
+                        <div class="tab-content " id="pills-tabContent">
                            <div class="tab-pane fade show active" id="pills-mob"
                               role="tabpanel" aria-labelledby="pills-mob-tab">
                               <!-- Step 2 form fields here -->
@@ -424,7 +424,7 @@
                                                                <th
                                                                   class="pb-2 ">
                                                                   <div
-                                                                     class="ct_search_input ct_width_fit">
+                                                                     class="ct_search_input" style="max-width: 350px;">
                                                                      <input type="text"
                                                                         class="form-control"
                                                                         name="search"
@@ -491,9 +491,7 @@
                                                                   {{getEstimatedTime(item) | number : '1.0-2'}}
                                                                   HRS</span>
                                                                   </td> -->
-                                                               <td id="dropdownMenuButton1"
-                                                                  data-bs-toggle="dropdown"
-                                                                  aria-expanded="false">
+                                                               <td >
                                                                  <a class="ct_delete_icon"
                                                                            (click)="removeFeture(item)"><i class="fa-solid fa-trash-can"></i></a>
                                                                </td>

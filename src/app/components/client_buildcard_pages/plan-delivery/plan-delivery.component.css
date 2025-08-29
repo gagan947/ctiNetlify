@@ -5,6 +5,67 @@
 .ct_light_grey_bg{
     background-color: #f8f8f8;
     padding: 20px;
-    border-radius: 15px;
+    border-radius: 10px;
     border: 1px solid #e6e6e6;
 }
+
+ .ct_upload_product_main {
+        border: 2px dashed #d1d5db;
+        border-radius: 5px;
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ct_browse_btn {
+        background-color: #f3f4f6;
+        padding: 9px 20px;
+        font-weight: 500;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .ct_uploaded_img123 {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        width: 100px;
+    }
+
+    .ct_uploaded_img_w img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    .ct_uploaded_img_w i {
+        position: absolute;
+        right: 5px;
+        width: 20px;
+        height: 20px;
+        background-color: #ff0000;
+        border-radius: 100px;
+        color: #fff;
+        font-size: 14px;
+        top: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .ct_multiple_img_div {
+        display: flex;
+        align-items: center;
+        column-gap: 15px;
+        flex-wrap: wrap;
+        height: auto;
+        max-height: 225px;
+        overflow-y: auto;
+    }
