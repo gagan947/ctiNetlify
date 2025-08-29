@@ -16,13 +16,13 @@
                               <!-- <div> -->
                                     <div class="ct_chat_item_left">
                                           <div>
-                                          <p class="ct_mb_20 ct_fs_14 ct_line_h_25">What should we call your app? Don't
+                                          <p class="mb-2 ct_fw_600 ct_fs_16 ct_line_h_25">What should we call your app? Don't
                                                 worry we
                                                 can
                                                 change this later.</p>
                                           <div class="form-group">
                                                 <input type="text"
-                                                      class="form-control ct_input ct_border_radius_10 ct_fs_14 ct_input_h_32"
+                                                      class="form-control ct_input ct_border_radius_10 ct_fs_14 "
                                                       placeholder="Enter Project Name" #project_name
                                                       [value]="projectName" required
                                                       (input)="updateName(project_name.value)">
@@ -69,15 +69,18 @@
                                                                               class="preview-image w-100">
 
                                                                         }@else {
-                                                                        <svg width="22" height="21" viewBox="0 0 22 21"
+                                                                       <div>
+                                                                         <svg width="22" height="21" viewBox="0 0 22 21" class="mx-auto d-block mb-2"
                                                                               fill="none"
                                                                               xmlns="http://www.w3.org/2000/svg">
                                                                               <path d="M3 14.7422C1.79401 13.935 1 12.5602 1 11C1 8.65643 2.79151 6.73129 5.07974 6.51937C5.54781 3.67213 8.02024 1.5 11 1.5C13.9798 1.5 16.4522 3.67213 16.9203 6.51937C19.2085 6.73129 21 8.65643 21 11C21 12.5602 20.206 13.935 19 14.7422M7 14.5L11 10.5M11 10.5L15 14.5M11 10.5V19.5"
-                                                                                    stroke="#1B83C1" stroke-width="2"
+                                                                                    stroke="#0064ff" stroke-width="2"
                                                                                     stroke-linecap="round"
                                                                                     stroke-linejoin="round" />
                                                                         </svg>
+                                                                        <p class="mb-0 text-center ct_text_clr_7F8188">Upload your logo here..</p>
 
+                                                                       </div>
                                                                         }
                                                                   </div>
                                                                  
@@ -181,9 +184,9 @@
                                     </div>
                               </div>
 
-                              <form class="pt-5 pb-0">
+                              <form class="pt-0 pb-0">
                                     <div class="ct_step">
-                                          <ul class="nav nav-pills mb-3 ct_dash_board_tab ct_mob_switch_tabs"
+                                          <ul class="nav nav-pills mb-3 gap-4 ct_dash_board_tab ct_mob_switch_tabs"
                                                 id="pills-tab_mob" role="tablist">
 
                                                 <li class="nav-item" role="presentation">
@@ -191,11 +194,12 @@
                                                             data-bs-toggle="pill" data-bs-target="#pills-mob"
                                                             type="button" role="tab" aria-controls="pills-mob"
                                                             aria-selected="false" tabindex="-1">
-                                                            <svg width="14" height="21" viewBox="0 0 14 21" fill="none"
+                                                            <svg width="14" height="21" viewBox="0 0 14 21" fill="none" class="ct_flex_shrink_0"
                                                                   xmlns="http://www.w3.org/2000/svg">
                                                                   <path d="M12.375 0H1.5C0.672656 0 0 0.672656 0 1.5V19.5C0 20.3273 0.672656 21 1.5 21H12.375C13.2023 21 13.875 20.3273 13.875 19.5V1.5C13.875 0.672656 13.2023 0 12.375 0ZM12.1875 19.3125H1.6875V1.6875H12.1875V19.3125ZM6 16.9219C6 17.1705 6.09877 17.409 6.27459 17.5848C6.4504 17.7606 6.68886 17.8594 6.9375 17.8594C7.18614 17.8594 7.4246 17.7606 7.60041 17.5848C7.77623 17.409 7.875 17.1705 7.875 16.9219C7.875 16.6732 7.77623 16.4348 7.60041 16.259C7.4246 16.0831 7.18614 15.9844 6.9375 15.9844C6.68886 15.9844 6.4504 16.0831 6.27459 16.259C6.09877 16.4348 6 16.6732 6 16.9219Z"
                                                                         fill="black" />
                                                             </svg>
+                                                            <p class="mb-0">Mobile</p>
 
                                                       </button>
                                                 </li>
@@ -209,16 +213,18 @@
                                                                   <path d="M2.00003 13H18V2H2.00003V13ZM11 15V17H15V19H5.00003V17H9.00003V15H0.992032C0.860709 14.999 0.730878 14.972 0.609953 14.9208C0.489027 14.8696 0.379376 14.7951 0.287259 14.7015C0.195143 14.6079 0.122365 14.497 0.0730828 14.3753C0.0238002 14.2536 -0.00102253 14.1233 3.22575e-05 13.992V1.008C3.22575e-05 0.451 0.455032 0 0.992032 0H19.008C19.556 0 20 0.449 20 1.007V13.992C20 14.549 19.545 15 19.008 15H11Z"
                                                                         fill="black" />
                                                             </svg>
+                                                             <p class="mb-0">Desktop</p>
 
                                                       </button>
                                                 </li>
 
                                           </ul>
-                                          <div class="ct_base_section_main" class="tab-content" id="myTabContent">
+                                          <div class="d-grid" style="height: calc(100vh - 180px)">
+                                                <div class="ct_base_section_main" class="tab-content d-flex align-items-center" id="myTabContent">
 
                                                 <div class="position-relative ct_w_fit_content mx-auto tab-pane fade show active"
                                                       id="pills-mob" role="tabpanel">
-                                                      <img loading="lazy" src="assets/img/iPhone_14 Plus_.png"
+                                                      <img loading="lazy" src="assets/img/iPhone_14 Plus_ (new).png" class="ct_mobile_app_builder"
                                                             alt="AI app builder for mobile and web">
                                                       <div class="ct_mob_overlay_top_cnt_12">
                                                             <div #logoBox class="ct_add_logo_by_ai"
@@ -247,11 +253,11 @@
                                                 </div>
 
                                                 <div class="position-relative ct_w_fit_content mx-auto tab-pane fade show"
-                                                      style="max-width: 328px;width: 100%;" id="pillsdesk"
+                                                      style="width: 100%;" id="pillsdesk"
                                                       role="tabpanel">
-                                                      <img [src]="'assets/img/Frame1437253511.png'"
+                                                      <img [src]="'assets/img/Frame1437253511_new.png'"
                                                             alt="AI app builder for mobile and web"
-                                                            style="max-width: 328px;width: 100%; height: 203px; object-fit: cover; border-radius: 10px;">
+                                                            style="width: 100%; height: 480px; object-fit: contain; border-radius: 10px;">
                                                       <div class="ct_mob_overlay_top_cnt_12">
                                                             <div class="ct_add_logo_by_ai"
                                                                   [style]="projectsData?.logoStyle">
@@ -278,7 +284,12 @@
                                                       </div>
                                                 </div>
 
-                                                <div class="ct_white_bottom_bg mt-5 pb-5 ">
+                                               
+
+
+                                          </div>
+                                          <div class="mt-auto  pt-3">
+                                                 <div class="ct_white_bottom_bg pb-4 ">
                                                       <span class="ct_text_clr_7F8188 ct_fs_14">MY APP</span>
                                                       <p class="mb-0 mt-1 ct_fw_700">{{projectName}}</p>
                                                       <div
@@ -289,8 +300,7 @@
                                                                   class="ct_blue_btn_fill  w-100">Next</a>
                                                       </div>
                                                 </div>
-
-
+                                          </div>
                                           </div>
 
 

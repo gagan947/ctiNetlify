@@ -1446,5 +1446,5 @@ span.et_document_badge_1 {
     border-radius: 0px 12px 12px;
     display: grid
 ;
-    height: calc(100vh - 0px);
+    height: calc(100vh - 30px);
 }

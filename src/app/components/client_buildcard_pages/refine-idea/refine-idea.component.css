@@ -43,3 +43,31 @@ section.ct_create_verticle_h_scroll_new {
       ;
           grid-template-columns: 58% auto auto auto;
   }
+
+  .ct_help_user_table th {
+    vertical-align: middle;
+    background-color: #d3e1f5;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+a.ct_delete_icon {
+    width: 30px;
+    height: 30px;
+    background-color: #ff0000;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    color: #fff !important;
+}
+
+
+   .ct_help_user_table thead th:first-child {
+        border-radius: 15px 0px 0px 0px;
+    }
+
+    .ct_help_user_table thead th:last-child {
+        border-radius: 0px 15px 0px 0px;
+    }
