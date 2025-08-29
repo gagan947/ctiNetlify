@@ -2,16 +2,18 @@
     <div class="ct_login_left_bg">
         <div class="ct_login_form">
             <h4 class=" ct_fw_600 mb-0 ct_fs_35 text-center">Create your Account</h4>
-           <p class="mb-0 mt-3 text-center">Already have an account? <a routerLink="/login" class="ct_forgot_link d-inline-block">Log In</a></p>
-             <div class="ct_sign-in_othher ct_mt_18">
-                        <a  class="ct_login_icon_site position-relative">
-                              <img loading="lazy" src="assets/img/google_icon_12.png" alt="AI app builder for mobile and web" class="ct_google_login_position">
-                              <span> Sign in with Google </span>
-                        </a>
-                  </div>
-                    <div class="ct_sign_in_text mt-4">
-                        <p class="mb-0">Or Sign Up With</p>
-                  </div>
+            <p class="mb-0 mt-3 text-center">Already have an account? <a routerLink="/login"
+                    class="ct_forgot_link d-inline-block">Log In</a></p>
+            <div class="ct_sign-in_othher ct_mt_18">
+                <a class="ct_login_icon_site position-relative">
+                    <img loading="lazy" src="assets/img/google_icon_12.png" alt="AI app builder for mobile and web"
+                        class="ct_google_login_position">
+                    <span> Sign in with Google </span>
+                </a>
+            </div>
+            <div class="ct_sign_in_text mt-4">
+                <p class="mb-0">Or Sign Up With</p>
+            </div>
             <div class="ct_sign-in_othher ct_mt_18">
                 <!-- <a  class="ct_login_icon_site">
                     <img loading="lazy" src="assets/img/google.png" alt="AI app builder for mobile and web">
@@ -24,23 +26,25 @@
                 </a> -->
 
             </div>
-          
+
 
             <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="ct_mt_18">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="form-group mb-4">
-                            <label class="ct_fw_500 mb-2 ct_fs_16">Email Address/ Mobile Number <span class="ct_red_text">*</span></label>
+                        <div class="form-group mb-3">
+                            <label class="ct_fw_500 mb-2 ct_fs_16">Email Address/ Mobile Number <span
+                                    class="ct_red_text">*</span></label>
                             <div class="position-relative">
                                 <img loading="lazy" src="assets/img/message_icon.svg"
                                     alt="AI app builder for mobile and web" class="ct_left_input_icon">
                                 <input type="email" class="form-control ct_input px-5" formControlName="email"
                                     placeholder="Enter email address/ mobile number">
                             </div>
-                            <small class="text-danger ct_fs_16 mt-2 d-inline-block" *ngIf="f['email'].touched && f['email'].invalid">Valid email is
+                            <small class="text-danger ct_fs_16 mt-2 d-inline-block"
+                                *ngIf="f['email'].touched && f['email'].invalid">Valid email is
                                 required</small>
                         </div>
-                         <div class="form-group mb-4">
+                        <div class="form-group mb-3">
                             <label class="ct_fw_500 mb-2 ct_fs_16">Password <span class="ct_red_text">*</span></label>
                             <div class="position-relative">
                                 <img loading="lazy" src="assets/img/lock_icon.svg"
@@ -51,7 +55,8 @@
                                     [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"
                                     (click)="togglePasswordVisibility()"></i>
                             </div>
-                            <small class="text-danger ct_fs_16 mt-2 d-inline-block" *ngIf="f['password'].invalid && f['password'].touched">
+                            <small class="text-danger ct_fs_16 mt-2 d-inline-block"
+                                *ngIf="f['password'].invalid && f['password'].touched">
                                 Password must be 8+ characters, include uppercase, lowercase, number & special
                                 character.
                             </small>
@@ -123,7 +128,7 @@
                             </small>
                         </div>
                     </div> -->
-                      <!-- <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label class="ct_fw_500 mb-2 ct_fs_16">Confirm Password <span class="ct_red_text">*</span></label>
                             <div class="position-relative">
@@ -141,18 +146,18 @@
                             </small>
                         </div>
                     </div> -->
-                   
+
                 </div>
-                <div class="mt-4">
+                <div class="mt-0">
                     <!-- <button type="submit" class="ct_blue_btn_fill py-3 w-100">Signup</button> -->
                     <app-submit-button [text]="'Sign Up'" [isLoading]="isLoading"
                         [class]="'ct_blue_btn_fill py-3 w-100'"></app-submit-button>
                 </div>
-               
+
             </form>
-            
-                      
-                
+
+
+
         </div>
     </div>
     <!-- <div class="ct_login_right_bg">
@@ -169,9 +174,10 @@
             <!-- <h4 class="ct_fs_28 text-white">Very good works are waiting for you ☝️</h4>
                   <h4 class="ct_fs_28 text-white">Login Now</h4> -->
             <div class="ct_logo" routerLink="/">
-                        <img loading="lazy" src="assets/img/cti_black_logo1.png" alt="Creative Ai" style="max-width: 225px !important;">
-                  </div>
-           
+                <img loading="lazy" src="assets/img/cti_black_logo1.png" alt="Creative Ai"
+                    style="max-width: 225px !important;">
+            </div>
+
             <p class="ct_fw_600">Want to Launch Your App Like a <span class=" ct_fw_900">Rocket?</span>
             </p>
 
@@ -180,7 +186,8 @@
             <ul>
                 <li class="d-flex align-items-center gap-2">
                     <i class="fa-regular fa-circle-check"></i>
-                    <span class="text-white ct_fs_16">Choose from 650+ features in our vast library to kickstart your journey. </span>
+                    <span class="text-white ct_fs_16">Choose from 650+ features in our vast library to kickstart your
+                        journey. </span>
                 </li>
                 <li class="d-flex align-items-center gap-2">
                     <i class="fa-regular fa-circle-check"></i>
@@ -188,11 +195,13 @@
                 </li>
                 <li class="d-flex align-items-center gap-2">
                     <i class="fa-regular fa-circle-check"></i>
-                    <span class="text-white ct_fs_16">Refine your software journeys to ensure every step is perfect.</span>
+                    <span class="text-white ct_fs_16">Refine your software journeys to ensure every step is
+                        perfect.</span>
                 </li>
                 <li class="d-flex align-items-center gap-2">
                     <i class="fa-regular fa-circle-check"></i>
-                    <span class="text-white ct_fs_16">Plan your delivery speed with real-time tracking and deadlines.</span>
+                    <span class="text-white ct_fs_16">Plan your delivery speed with real-time tracking and
+                        deadlines.</span>
                 </li>
             </ul>
         </div>

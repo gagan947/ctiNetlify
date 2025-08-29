@@ -23,7 +23,7 @@
                         <!-- Email Field -->
                         @if(!isPhone){
                         <div class="form-group mb-3">
-                              <label class="ct_fw_400 mb-2 ct_fs_16">
+                              <label class="ct_fw_400 mb-2 ct_fs_16 ct_fw_600">
                                     Email Address <span class="ct_red_text">*</span>
                               </label>
 
@@ -47,7 +47,8 @@
 
                         <!-- Password Field -->
                         <div class="form-group mb-3">
-                              <label class="ct_fw_400 mb-2 ct_fs_16">Password <span class="ct_red_text">*</span></label>
+                              <label class="ct_fw_400 mb-2 ct_fs_16 ct_fw_600">Password <span
+                                          class="ct_red_text">*</span></label>
                               <div class="position-relative">
                                     <img loading="lazy" src="assets/img/lock_icon.svg"
                                           alt="AI app builder for mobile and web" class="ct_left_input_icon">
@@ -59,7 +60,7 @@
                                           <i class="fa" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
                                     </button>
                               </div>
-                              <small class="text-danger ct_fs_14 mt-1 d-block"
+                              <small class="text-danger ct_fs_14 mt-1 d-block "
                                     *ngIf="formControls['password'].invalid && formControls['password'].touched">
                                     Password is required
                               </small>
