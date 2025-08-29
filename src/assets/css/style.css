@@ -3066,9 +3066,11 @@ table.table.ct_compare_table {
 }
 
 .ct_white_bg {
-  background-color: #fffdf9;
+  background-color: #fff;
   border-radius: 20px;
   padding: 35px;
+  
+  /* box-shadow: 0px 0px 25px rgba(0,0,0,0.09); */
 }
 
 .ct_how_works_12_w img {
@@ -3400,13 +3402,13 @@ table.table.ct_compare_table {
 }
 
 .ct_dash_logo img {
-  max-width: 112px;
+  max-width: 80px;
 }
 
 .ct_sidebar {
   /* background-color: #d3ebfc66; */
   background: linear-gradient(0.18deg, hsl(239.03deg 91.13% 60.2% / 11%) 18.49%, hsl(289deg 100% 50% / 11%) 33.41%, hsl(0deg 100% 58% / 8%) 56.34%, hsl(44.88deg 100% 49.02% / 11%) 75.95%);
-  max-width: 150px;
+  max-width: 100px;
   text-align: center;
   position: fixed;
   height: 100vh;
@@ -3450,7 +3452,7 @@ table.table.ct_compare_table {
 
 .ct_tool_tip_cnt {
   position: absolute;
-  left: 113px;
+  left: 100px;
   background-color: #333;
   padding: 10px;
   width: 200px;
@@ -3569,7 +3571,7 @@ table.table.ct_compare_table {
   position: relative;
   height: 100vh;
   width: calc(100% - 142px);
-  margin-left: 142px;
+  margin-left: 100px;
   padding: 100px 80px;
 }
 
