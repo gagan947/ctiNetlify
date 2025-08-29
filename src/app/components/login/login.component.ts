@@ -133,15 +133,14 @@ export class LoginComponent {
   }
 
   loginWithGoogle() {
-    this.apiService.googleLogin().then(res => {
+    this.apiService.googleLogin().then((res: any) => {
 
+      console.log(res);
       const formData = {
-        email: res.user.email,
-        fullName: res.user.displayName,
-        fcm_token: localStorage.getItem('fcm_token') || ''
+        token: res.user.accessToken,
       }
 
-      this.apiService.postAPI(`api/user/signIn`, formData)
+      this.apiService.postAPI(`api/user/googleLogin`, formData)
         .subscribe({
           next: (res: any) => {
             if (res.success == true) {
