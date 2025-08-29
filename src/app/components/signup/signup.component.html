@@ -40,6 +40,22 @@
                             <small class="text-danger ct_fs_16 mt-2 d-inline-block" *ngIf="f['email'].touched && f['email'].invalid">Valid email is
                                 required</small>
                         </div>
+                         <div class="form-group mb-4">
+                            <label class="ct_fw_500 mb-2 ct_fs_16">Password <span class="ct_red_text">*</span></label>
+                            <div class="position-relative">
+                                <img loading="lazy" src="assets/img/lock_icon.svg"
+                                    alt="AI app builder for mobile and web" class="ct_left_input_icon">
+                                <input [type]="showPassword ? 'text' : 'password'" class="form-control ct_input px-5"
+                                    formControlName="password" placeholder="Enter password">
+                                <i class="fa-regular  ct_eys_password"
+                                    [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"
+                                    (click)="togglePasswordVisibility()"></i>
+                            </div>
+                            <small class="text-danger ct_fs_16 mt-2 d-inline-block" *ngIf="f['password'].invalid && f['password'].touched">
+                                Password must be 8+ characters, include uppercase, lowercase, number & special
+                                character.
+                            </small>
+                        </div>
 
                     </div>
                     <!-- <div class="col-md-6">
