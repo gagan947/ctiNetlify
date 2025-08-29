@@ -3404,7 +3404,8 @@ table.table.ct_compare_table {
 }
 
 .ct_sidebar {
-  background-color: #d3ebfc66;
+  /* background-color: #d3ebfc66; */
+  background: linear-gradient(0.18deg, hsl(239.03deg 91.13% 60.2% / 11%) 18.49%, hsl(289deg 100% 50% / 11%) 33.41%, hsl(0deg 100% 58% / 8%) 56.34%, hsl(44.88deg 100% 49.02% / 11%) 75.95%);
   max-width: 150px;
   text-align: center;
   position: fixed;
@@ -3415,7 +3416,7 @@ table.table.ct_compare_table {
 }
 
 .ct_sidebar .ct_dash_nav {
-  padding-block: 90px;
+  padding-block: 50px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -3860,7 +3861,7 @@ table.table.ct_compare_table {
   background-color: #eed1ea1f;
   width: 100%;
   height: 100vh;
-  padding: 38px 15px;
+  padding: 15px 15px;
   z-index: 1;
   position: relative;
   overflow-x: hidden;
@@ -3923,11 +3924,14 @@ table.table.ct_compare_table {
 }
 
 .ct_chat_item_left {
-  background-color: #fff;
-  padding: 16px 12px;
-  border-radius: 0px 12px 12px;
+    background-color: #fff;
+    padding: 16px 12px;
+    border-radius: 0px 12px 12px;
+    display: grid
+;
+    height: calc(100vh - 50px);
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.09);
 }
-
 .ct_chat_item_right {
   margin-top: 12px;
 }
@@ -3983,10 +3987,15 @@ table.table.ct_compare_table {
 }
 
 .ct_middle_right_content {
-  flex: 1;
-  background-image: url(../img/grid_bg.png);
-  background-position: center;
-  background-size: contain;
+    flex: 1;
+    /* background-image: url(../img/grid_bg.png); */
+    background-color: #fff;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.09);
+    /* background: linear-gradient(90.18deg, hsl(239.03deg 91.13% 60.2% / 11%) 18.49%, hsl(289deg 100% 50% / 11%) 33.41%, hsl(0deg 100% 58% / 8%) 56.34%, hsl(44.88deg 100% 49.02% / 11%) 75.95%); */
+    background-position: center;
+    background-size: contain;
+    height: calc(100vh - 8px);
+    overflow-y: auto;
 }
 
 .ct_add_logo_by_ai {
@@ -4003,7 +4012,7 @@ table.table.ct_compare_table {
 
 .ct_mob_overlay_top_cnt_12 {
   position: absolute;
-  top: 0px;
+  top: 60px;
   left: 0px;
   transform: translateY(0%);
   text-align: center;
@@ -4014,10 +4023,13 @@ table.table.ct_compare_table {
 
 /* step Form Css S */
 .ct_step-container {
-  position: relative;
-  text-align: center;
-  transform: translateY(-54%);
-  overflow-x: auto;
+    position: relative;
+    text-align: center;
+    transform: translateY(-54%);
+    overflow-x: auto;
+    background: #f2f2f2;
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .ct_step-circle {
@@ -4079,12 +4091,12 @@ table.table.ct_compare_table {
 }
 
 .ct_white_bottom_bg {
-  background-color: #fff;
-  box-shadow: 0px -3.84px 3.84px 0px #0000001a;
-  padding: 10px 22px;
-  border-radius: 12px 12px 0px 0px;
-  position: relative;
-  z-index: 9;
+    background-color: #0064ff17;
+    /* box-shadow: 0px -3.84px 3.84px 0px #0000001a; */
+    padding: 10px 22px;
+    border-radius: 12px 12px;
+    position: relative;
+    z-index: 9;
 }
 
 .ct_project_detail_point_list_2 ul li+li {
@@ -4272,13 +4284,15 @@ section.ct_my_creative_project_overlay_main.ct_project_show_section {
 }
 
 .ct_mob_switch_tabs.nav-pills .nav-link {
-  width: 40px;
-  height: 40px;
+  /* width: 40px; */
+  /* height: 40px; */
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   padding: 0px;
   border-radius: 6px;
+  border: 0px;
 }
 
 .ct_mob_switch_tabs.nav-pills .nav-link.active,
