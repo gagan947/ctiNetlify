@@ -7,3 +7,9 @@
 .ct_border_radius_5{
       border-radius: 5px;
 }
+.ct_white_badge {
+    padding: 10px 23px;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    background-color: #fff;
+}
