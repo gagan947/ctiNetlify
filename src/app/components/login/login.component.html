@@ -19,24 +19,30 @@
                               <p class="mb-0">Or Sign In With</p>
                         </div>
                   </div>
-
-
-
                   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="ct_mt_18">
                         <!-- Email Field -->
+                        @if(!isPhone){
                         <div class="form-group mb-3">
-                              <label class="ct_fw_400 mb-2 ct_fs_16">Email Address/ Mobile Number <span
-                                          class="ct_red_text">*</span></label>
-                              <div class="position-relative">
+                              <label class="ct_fw_400 mb-2 ct_fs_16">
+                                    Email Address <span class="ct_red_text">*</span>
+                              </label>
+
+                              <div class="position-relative" *ngIf="!isPhone" #emailInput>
                                     <img loading="lazy" src="assets/img/message_icon.svg"
                                           alt="AI app builder for mobile and web" class="ct_left_input_icon">
-                                    <input type="email" formControlName="email" class="form-control ct_input px-5"
-                                          placeholder="Enter email address/ mobile number" />
+                                    <input type="text" formControlName="email" class="form-control ct_input px-5"
+                                          placeholder="Enter email address" />
                               </div>
-                              <small class="text-danger ct_fs_16 mt-1 d-block"
-                                    *ngIf="formControls['email'].invalid && formControls['email'].touched">
-                                    Enter a valid email address.
-                              </small>
+                              <!-- Validation messages -->
+                              <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
+                                    class="text-danger ct_fs_14 mt-1 d-block">
+                                    <div *ngIf="loginForm.get('email')?.errors?.['required']">
+                                          Email address is required.
+                                    </div>
+                                    <div *ngIf="loginForm.get('email')?.errors?.['email']">
+                                          Enter a valid email address.
+                                    </div>
+                              </div>
                         </div>
 
                         <!-- Password Field -->
@@ -53,49 +59,78 @@
                                           <i class="fa" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
                                     </button>
                               </div>
-                              <small class="text-danger ct_fs_16 mt-1 d-block"
+                              <small class="text-danger ct_fs_14 mt-1 d-block"
                                     *ngIf="formControls['password'].invalid && formControls['password'].touched">
                                     Password is required
                               </small>
                         </div>
+                        }@else{
+                        <div class="form-group mb-3">
+                              <label class="ct_fw_400 mb-2 ct_fs_16">Mobile Number <span
+                                          class="ct_red_text">*</span></label>
+                              <ngx-intl-tel-input #phoneInput [cssClass]="'form-control ct_input w-full ps-5'"
+                                    [enableAutoCountrySelect]="true" [enablePlaceholder]="true"
+                                    [searchCountryFlag]="true"
+                                    [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                    [selectFirstCountry]="false" [selectedCountryISO]="selectedCountry" [maxLength]="15"
+                                    [phoneValidation]="true" formControlName="contact">
+                              </ngx-intl-tel-input>
+                              <div *ngIf="loginForm.get('contact')?.touched && loginForm.get('contact')?.invalid"
+                                    class="text-danger ct_fs_14 mt-1 d-block">
+                                    <div *ngIf="loginForm.get('contact')?.errors?.['required']">
+                                          Mobile number is required.
+                                    </div>
+                                    <div *ngIf="loginForm.get('contact')?.errors?.['validatePhoneNumber']">
+                                          Please enter a valid mobile number.
+                                    </div>
+                              </div>
+                        </div>
 
-
-
-                        <!-- Submit Button -->
+                        <div class="form-group mb-3">
+                              <label class="ct_fw_400 mb-2 ct_fs_16">OTP <span class="ct_red_text">*</span></label>
+                              <nz-flex nzVertical>
+                                    <nz-input-otp [nzLength]="6" formControlName="otp"
+                                          (keypress)="restrictToNumbers($event)"></nz-input-otp>
+                              </nz-flex>
+                              <div *ngIf="loginForm.get('otp')?.touched && loginForm.get('otp')?.invalid"
+                                    class="text-danger ct_fs_14 mt-1 d-block">
+                                    <div *ngIf="loginForm.get('otp')?.errors?.['required']">
+                                          Invalid OTP. Please enter a 4-digit number.
+                                    </div>
+                              </div>
+                        </div>
+                        <div>
+                              <p class="mb-0 ct_fs_14 ct_fw_500">
+                                    Didn’t receive the code?
+                                    <a class="ct_purple_link ct_fs_14" (click)="isResendDisabled ? null : resendOtp()"
+                                          [class.disabled]="isResendDisabled">
+                                          Resend OTP
+                                    </a>
+                                    <span *ngIf="isResendDisabled">({{ countdown
+                                          }}s)</span>
+                              </p>
+                        </div>
+                        }
                         <div class="mt-4">
-                              <!-- <button type="submit" class="ct_blue_btn_fill py-3 w-100">
-                                    Sign in
-                              </button> -->
                               <app-submit-button [text]="'Log in'" [isLoading]="isLoading"
                                     [class]="'ct_blue_btn_fill py-3 w-100'"></app-submit-button>
                         </div>
-                        <!-- Forgot Password -->
                         <div class="d-flex  align-items-center justify-content-center gap-2 mt-3">
-                              <a class="ct_forgot_link ct_fs_16">Login with OTP</a>
+                              <a (click)="toggleOTPLogin()" class="ct_forgot_link ct_fs_16">Login
+                                    {{isPhone ? 'with email' : 'with OTP'}}</a>
                               <span>|</span>
                               <a routerLink="/forgot-password" class="ct_forgot_link ct_fs_16">Forgot password?</a>
                         </div>
-
-
                   </form>
-
-
-
-
             </div>
       </div>
       <div class="ct_login_right_bg_1">
             <div class="ct_right_inner_bg_1">
-
-
                   <div class="ct_logo" routerLink="/">
                         <img loading="lazy" src="assets/img/cti_black_logo1.png" alt="Creative Ai"
                               style="max-width: 225px !important;">
                   </div>
-
-
                   <p class="ct_fw_600"><span class=" ct_fw_900">100K</span> Satisfied Clients</p>
-
             </div>
             <div class="ct_login_right_list">
                   <ul>
