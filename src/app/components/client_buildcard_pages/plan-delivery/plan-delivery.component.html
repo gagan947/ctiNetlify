@@ -187,7 +187,6 @@
                                                             <p class="mb-0 ct_fs_14 ">{{projectThirdCost | currency
                                                                                           :'INR'}}</p>
                                                       </div>
-
                                                 </div>
 
                                                 <div class="pt-3 ct_border_top_1 mt-3">
@@ -367,7 +366,8 @@
                               <div class="ct_right_sidebar_12 ct_outline_border_box">
                                     <div>
                                           <div class="position-relative ct_w_fit_content mx-auto">
-                                                <img loading="lazy" src="assets/img/iPhone_14 Plus_.png" alt="AI app builder for mobile and web">
+                                                <img loading="lazy" src="assets/img/iPhone_14 Plus_.png"
+                                                      alt="AI app builder for mobile and web">
                                                 <div class="ct_mob_overlay_top_cnt_12">
                                                       <div class="ct_add_logo_by_ai" [style]="projectsData.logoStyle">
                                                             @if(!projectsData.projectLogo){
@@ -381,7 +381,8 @@
                                                                         stroke-linejoin="round" />
                                                             </svg>
                                                             } @else {
-                                                            <img [src]="projectsData.projectLogo" alt="AI app builder for mobile and web"
+                                                            <img [src]="projectsData.projectLogo"
+                                                                  alt="AI app builder for mobile and web"
                                                                   class="ct_img_logo_123">
                                                             }
                                                       </div>
@@ -410,7 +411,7 @@
                                                 </div>
                                           </div>
                                           <div class="mt-4 pt-4 ct_border_top_1">
-                                                <div
+                                                <!-- <div
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">Features</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">{{totalFeatureCost | currency
@@ -421,12 +422,12 @@
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">Customisation</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">{{totalCustomizeCost | currency
                                                                                           :'INR'}}</p>
-                                                </div>
+                                                </div> -->
                                                 <div
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">Total Cost</p>
-                                                      <p class="mb-0 ct_fw_700 ct_fs_18">{{totalPrice| currency
-                                                                                          :'INR'}}</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_18">{{totalPrice| currency:'INR'}}
+                                                      </p>
                                                 </div>
                                           </div>
                                           <div class="mt-5">

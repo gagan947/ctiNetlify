@@ -77,4 +77,44 @@ export class LoginComponent {
   get formControls() {
     return this.loginForm.controls;
   }
+
+  loginWithGoogle() {
+    this.apiService.googleLogin().then(res => {
+
+      const formData = {
+        email: res.user.email,
+        fullName: res.user.displayName,
+        fcm_token: localStorage.getItem('fcm_token') || ''
+      }
+
+      this.apiService.postAPI(`api/user/signIn`, formData)
+        .subscribe({
+          next: (res: any) => {
+            if (res.success == true) {
+              this.apiService.setToken(res.data.token);
+              localStorage.setItem('userDetailCTI', JSON.stringify(res.data.users));
+              this.message.success(res.message)
+              this.router.navigate(['/main'])
+              // this.projectInfo = res.projectInfo
+              // this, this.getProjectMedia()
+              this.isLoading = false
+            } else {
+              this.isLoading = false
+              // this.loading = false
+              this.message.error(res.message)
+            }
+          },
+          error: err => {
+            if (err.status === 0) {
+              this.message.error('Network error, please check your connection.');
+            } else if (err.error?.message) {
+              this.message.error(err.error.message);
+            } else {
+              this.message.error('Unexpected error occurred.');
+            }
+            this.isLoading = false
+          }
+        });
+    });
+  }
 }

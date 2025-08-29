@@ -158,18 +158,19 @@
                                                                               </div>
 
                                                                         </th>
-                                                                        <th class="ct_fw_400 pb-4 ct_white_nowrape_1">
+                                                                        <!-- <th class="ct_fw_400 pb-4 ct_white_nowrape_1">
                                                                               FEATURES
                                                                         </th>
                                                                         <th class="ct_fw_400 pb-4 ct_white_nowrape_1">
                                                                               CUSTOMISATION
-                                                                        </th>
+                                                                        </th> -->
+                                                                        <th class="ct_fw_400 pb-4 ct_white_nowrape_1">
+                                                                              ESTIMATED TIME</th>
                                                                         <th class="ct_fw_400 pb-4 ct_white_nowrape_1">
                                                                               TOTAL
                                                                               COST
                                                                         </th>
-                                                                        <!-- <th class="ct_fw_400 pb-4 ct_white_nowrape_1">
-                                                                              ESTIMATED TIME</th> -->
+
                                                                         <!-- <th class="ct_fw_400 pb-4 ct_white_nowrape_1">
                                                                               QTY
                                                                         </th> -->
@@ -187,18 +188,21 @@
                                                                   <tr>
                                                                         <td>
                                                                               <span
-                                                                                    class="ct_fs_18 ct_fw_700 mb-0">{{item.featuresName}}</span>
+                                                                                    class="ct_fs_18 ct_fw_700 mb-0">{{item.featureName}}</span>
                                                                         </td>
-                                                                        <td><span class="ct_fw_600">{{item.totalSubFeaturedPrice
+                                                                        <!-- <td><span class="ct_fw_600">{{item.totalSubFeaturedPrice
                                                                                     |
                                                                                     currency
                                                                                     :
                                                                                     'INR'}}</span>
-                                                                        </td>
-                                                                        <td><span
+                                                                        </td> -->
+                                                                        <!-- <td><span
                                                                                     class="ct_fw_600">{{item.totalCustomisationPrice | currency : 'INR'}}</span>
+                                                                        </td> -->
+                                                                        <td><span class="ct_fw_600">{{item.featureTime}}
+                                                                                    HRS</span>
                                                                         </td>
-                                                                        <td><span class="ct_fw_600">{{(item.totalSubFeaturedPrice + item.totalCustomisationPrice)
+                                                                        <td><span class="ct_fw_600">{{(item.featureTime * 1750)
                                                                                     |
                                                                                     currency
                                                                                     :
@@ -207,47 +211,40 @@
                                                                         <!-- <td><span
                                                                                     class="ct_fw_600">₹1,26,844.69</span>
                                                                         </td> -->
-                                                                        <!-- <td><span class="ct_fw_600">{{getEstimatedTime(item) | number : '1.0-2'}}
-                                                                                    HRS</span>
-                                                                        </td> -->
-
                                                                   </tr>
                                                                   @for
                                                                   (item2
                                                                   of
-                                                                  item.subFeaturesListWithPrice;
+                                                                  item.subFeatures;
                                                                   track
                                                                   $index)
                                                                   {
                                                                   <tr>
                                                                         <td>
                                                                               <span
-                                                                                    class="ct_fs_14 ct_fw_600">{{item2.subFeaturesName}}</span>
+                                                                                    class="ct_fs_14 ct_fw_600">{{item2.subFeatureName}}</span>
                                                                         </td>
-                                                                        <td><span class="">{{item2.subFeaturedPrice
+                                                                        <!-- <td><span class="">{{item2.subFeaturedPrice
                                                                                     |
                                                                                     currency
                                                                                     :
                                                                                     'INR'}}</span>
-                                                                        </td>
-                                                                        <td><span
+                                                                        </td> -->
+                                                                        <!-- <td><span
                                                                                     class="">{{item2.customisationPrice | currency : 'INR'}}</span>
+                                                                        </td>-->
+                                                                        <td><span class="">{{item2.estimated_time}}
+                                                                                    HRS</span>
                                                                         </td>
-                                                                        <td><span class="">{{(item2.subFeaturedPrice + item2.customisationPrice)
+                                                                        <td><span class="">{{(item2.estimated_time * 1750)
                                                                               |
                                                                               currency
                                                                               :
                                                                               'INR'}}</span>
                                                                         </td>
-
-                                                                        <!-- <td><span class="">{{getSubEstimatedTime(item2) | number : '1.0-2'}}
-                                                                                    HRS</span>
-                                                                        </td> -->
-
                                                                   </tr>
                                                                   }
                                                                   }
-
                                                             </tbody>
                                                       </table>
                                                 </div>
@@ -325,7 +322,8 @@
                               <div class="ct_right_sidebar_12 ct_outline_border_box">
                                     <div>
                                           <div class="position-relative ct_w_fit_content mx-auto">
-                                                <img loading="lazy" src="assets/img/iPhone_14 Plus_.png" alt="AI app builder for mobile and web">
+                                                <img loading="lazy" src="assets/img/iPhone_14 Plus_.png"
+                                                      alt="AI app builder for mobile and web">
                                                 <div class="ct_mob_overlay_top_cnt_12">
                                                       <div class="ct_add_logo_by_ai" [style]="projectsData.logoStyle">
                                                             @if(!projectsData.projectLogo){
@@ -339,7 +337,8 @@
                                                                         stroke-linejoin="round" />
                                                             </svg>
                                                             } @else {
-                                                            <img [src]="projectsData.projectLogo" alt="AI app builder for mobile and web"
+                                                            <img [src]="projectsData.projectLogo"
+                                                                  alt="AI app builder for mobile and web"
                                                                   class="ct_img_logo_123">
                                                             }
                                                       </div>

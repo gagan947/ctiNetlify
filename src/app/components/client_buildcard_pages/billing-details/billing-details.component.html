@@ -1,5 +1,5 @@
 <section class="ct_dash_board_main">
-   <app-sidebar></app-sidebar>
+      <app-sidebar></app-sidebar>
       <div class="ct_dash_right_content ct_white_bg_page ">
             <div class="ct_dash_toggle_bar">
                   <i class="fa-solid fa-bars"></i>
@@ -189,7 +189,7 @@
                                           <div class="form-group mb-3">
                                                 <label for="" class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Address
                                                       line 1
-                                                      </label>
+                                                </label>
                                                 <input type="text" placeholder="Enter Address line 1"
                                                       formControlName="address_line_1" class="form-control ct_input ">
                                                 <small class="text-danger"
@@ -218,7 +218,8 @@
                                                                   }
                                                             </select>
                                                             <small class="text-danger"
-                                                                  *ngIf="billingForm.get('company_location')?.invalid && billingForm.get('company_location')?.touched">Country is required.</small>
+                                                                  *ngIf="billingForm.get('company_location')?.invalid && billingForm.get('company_location')?.touched">Country
+                                                                  is required.</small>
                                                       </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -283,7 +284,8 @@
                                     <div class="ct_right_sidebar_12 ct_outline_border_box">
                                           <div>
                                                 <div class="position-relative ct_w_fit_content mx-auto">
-                                                      <img loading="lazy" src="assets/img/iPhone_14 Plus_.png" alt="AI app builder for mobile and web">
+                                                      <img loading="lazy" src="assets/img/iPhone_14 Plus_.png"
+                                                            alt="AI app builder for mobile and web">
                                                       <div class="ct_mob_overlay_top_cnt_12">
                                                             <div class="ct_add_logo_by_ai"
                                                                   [style]="projectsData.logoStyle">
@@ -298,7 +300,8 @@
                                                                               stroke-linejoin="round" />
                                                                   </svg>
                                                                   } @else {
-                                                                  <img [src]="projectsData.projectLogo" alt="AI app builder for mobile and web"
+                                                                  <img [src]="projectsData.projectLogo"
+                                                                        alt="AI app builder for mobile and web"
                                                                         class="ct_img_logo_123">
                                                                   }
                                                             </div>
@@ -335,7 +338,7 @@
                                                 </div>
 
                                                 <div class="mt-4 pt-4 ct_border_top_1">
-                                                      <div
+                                                      <!-- <div
                                                             class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                             <p class="mb-0 ct_fw_700 ct_fs_14">Features</p>
                                                             <p class="mb-0 ct_fw_700 ct_fs_14">
@@ -348,7 +351,7 @@
                                                             <p class="mb-0 ct_fw_700 ct_fs_14">
                                                                   {{projectsData.customisationCost | currency:'INR'}}
                                                             </p>
-                                                      </div>
+                                                      </div> -->
                                                       <!-- <div
                                                             class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                             <p class="mb-0 ct_fw_700 ct_fs_14">Studio One (for 12
@@ -365,7 +368,7 @@
                                                             </p>
                                                       </div>
                                                 </div>
-                                                <div class="mt-5">
+                                                <div class="mt-3">
                                                       <button type="submit"
                                                             class="ct_schedule_call_btn w-100 d-flex justify-content-center align-items-center">Continue
                                                             to Payment Plan</button>

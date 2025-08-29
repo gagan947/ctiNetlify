@@ -14,7 +14,6 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
   styleUrl: './review-buildcard.component.css'
 })
 export class ReviewBuildcardComponent {
-
   projectsFeatures: Feature[] = [];
   projectsData: any;
   totalSubFeatures: any;
@@ -22,10 +21,13 @@ export class ReviewBuildcardComponent {
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
     this.projectsFeatures = this.projectsData.selectdFeature;
-    this.totalSubFeatures = this.projectsData.selectdFeature.reduce(
-      (total: any, feature: { subFeaturesListWithPrice: string | any[]; }) => total + (feature.subFeaturesListWithPrice?.length || 0),
-      0
-    );
+    this.totalSubFeatures = this.projectsData.no_of_features
+    this.projectsFeatures.map((feature: any) => {
+      feature.featureTime = feature.subFeatures.reduce(
+        (pre: number, next: { estimated_time: number }) => pre + Number(next.estimated_time),
+        0
+      );
+    });
   };
 
 }

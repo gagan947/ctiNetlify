@@ -47,21 +47,13 @@ export class PlanDeliveryComponent {
   selectedDevices: string[] = ['Android'];
   PhasesDeliverables: any[] = [{ design: "We do your designs" }, "Product Roadmap", "Clickable prototype", "Basic build", "Full build"];
   originalProjectCost: any;
-  originalFeatureCost: number;
-  originalCustomizationCost: number;
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService) {
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
-    console.log(this.projectsData);
-    const projectsFeatures: any[] = this.projectsData.selectdFeature;
-
-    this.totalCost(projectsFeatures);
-    this.featureCost = projectsFeatures.reduce((pre: any, next: { totalSubFeaturedPrice: any; }) => pre + next.totalSubFeaturedPrice, 0);
-    this.customizationCost = projectsFeatures.reduce((pre: any, next: { totalCustomisationPrice: any; }) => pre + next.totalCustomisationPrice, 0) || 0;
+    this.totalPrice = this.projectsData.totalCost;
+    this.projectCost = this.totalPrice;
 
     this.originalProjectCost = this.projectCost;
-    this.originalFeatureCost = this.featureCost;
-    this.originalCustomizationCost = this.customizationCost;
 
     this.updateCosts();
 
@@ -84,15 +76,15 @@ export class PlanDeliveryComponent {
     this.projectSecondCost = this.projectCost + (this.projectCost * 12) / 100;
     this.projectThirdCost = this.projectCost + (this.projectCost * 24) / 100;
 
-    this.featureSecondCost = this.featureCost + (this.featureCost * 12) / 100;
-    this.featureThirdCost = this.featureCost + (this.featureCost * 24) / 100;
+    // this.featureSecondCost = this.featureCost + (this.featureCost * 12) / 100;
+    // this.featureThirdCost = this.featureCost + (this.featureCost * 24) / 100;
 
-    this.customizationSecondCost = this.customizationCost + (this.customizationCost * 12) / 100;
-    this.customizationThirdCost = this.customizationCost + (this.customizationCost * 24) / 100;
+    // this.customizationSecondCost = this.customizationCost + (this.customizationCost * 12) / 100;
+    // this.customizationThirdCost = this.customizationCost + (this.customizationCost * 24) / 100;
 
-    this.totalPrice = this.projectCost;
-    this.totalFeatureCost = this.featureCost;
-    this.totalCustomizeCost = this.customizationCost;
+    // this.totalPrice = this.projectCost;
+    // this.totalFeatureCost = this.featureCost;
+    // this.totalCustomizeCost = this.customizationCost;
   }
 
   onDeviceSelect(device: string): void {
@@ -128,8 +120,7 @@ export class PlanDeliveryComponent {
     }
 
     this.projectCost = this.originalProjectCost * (1 + incrementValue * (this.selectedDevices.length - 1));
-    this.featureCost = this.originalFeatureCost * (1 + incrementValue * (this.selectedDevices.length - 1));
-    this.customizationCost = this.originalCustomizationCost * (1 + incrementValue * (this.selectedDevices.length - 1));
+
 
     this.updateCosts();
     this.applyRangeValue();
@@ -170,8 +161,6 @@ export class PlanDeliveryComponent {
   }
 
   Navigate() {
-
-
     let formData = {
       formNumber: 3,
       platforms: this.selectedDevices,
@@ -224,6 +213,6 @@ export class PlanDeliveryComponent {
   }
 
   totalCost(featureData: any) {
-    this.projectCost = featureData.reduce((pre: any, next: { totalSubFeaturedPrice: any; totalCustomisationPrice: any; }) => pre + next.totalSubFeaturedPrice + next.totalCustomisationPrice, 0);
+    // this.projectCost = featureData.reduce((pre: any, next: { totalSubFeaturedPrice: any; totalCustomisationPrice: any; }) => pre + next.totalSubFeaturedPrice + next.totalCustomisationPrice, 0);
   }
 }
