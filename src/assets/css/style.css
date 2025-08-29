@@ -3570,7 +3570,7 @@ table.table.ct_compare_table {
 .ct_dash_right_content {
   position: relative;
   height: 100vh;
-  width: calc(100% - 142px);
+  width: calc(100% - 100px);
   margin-left: 100px;
   padding: 100px 80px;
 }
@@ -3645,8 +3645,9 @@ table.table.ct_compare_table {
 }
 
 .ct_ecommerse_web_card {
-  box-shadow: 0px 4px 4px 0px #00000040;
-  border: 0.32px solid #00000033;
+    /* box-shadow: 0px 4px 4px 0px #00000040; */
+    border: 0.32px solid #e6e6e6;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.09);
 }
 
 .ct_ecommerse_web_card_first_card {
@@ -4880,6 +4881,7 @@ ul.floatingBoxes li:nth-child(10) {
     background-color: #3d71ff0f;
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.09);
     padding-bottom: 15px;
+    height: 100%;
 }
 
 #ct_retaial_app_slider .owl-stage ,#ct_retaial_app_slider .owl-item ,#ct_retaial_app_slider .item{
