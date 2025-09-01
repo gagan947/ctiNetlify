@@ -26,6 +26,7 @@ export class LoginComponent {
   isResendDisabled: boolean = false;
   countdown: number = 60;
   interval: any;
+  phoneNumber: string = ''
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService,) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],

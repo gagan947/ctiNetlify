@@ -32,7 +32,16 @@
       align-items: center;
       
 }
-
+.ct_country_select {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 0px !important;
+      left: 1px;
+  }
+ .ct_text_op_5{
+      opacity: 0.5;
+ }
 .ct_right_inner_bg_1 p {
       color: #fff;
       font-size: 26px;

@@ -87,9 +87,13 @@
                               </div>
                         </div>
 
+                        <div class="text-center mb-4">
+                              <h4 class="ct_fs_20 ct_fw_600 mb-1">OTP Verification</h4>
+                              <p class="mb-0 ct_text_op_5">Enter OTP code sent to {{phoneNumber}}</p>
+                          </div>
                         <div class="form-group mb-3">
-                              <label class="ct_fw_400 mb-2 ct_fs_16">OTP <span class="ct_red_text">*</span></label>
-                              <nz-flex nzVertical>
+                           
+                              <nz-flex nzVertical class="justify-content-center">
                                     <nz-input-otp [nzLength]="6" formControlName="otp"
                                           (keypress)="restrictToNumbers($event)"></nz-input-otp>
                               </nz-flex>
@@ -101,7 +105,7 @@
                               </div>
                         </div>
                         <div>
-                              <p class="mb-0 ct_fs_14 ct_fw_500">
+                              <p class="mb-0 ct_fs_14 ct_fw_500 text-center">
                                     Didn’t receive the code?
                                     <a class="ct_purple_link ct_fs_14" (click)="isResendDisabled ? null : resendOtp()"
                                           [class.disabled]="isResendDisabled">
@@ -113,7 +117,7 @@
                         </div>
                         }
                         <div class="mt-4">
-                              <app-submit-button [text]="'Log in'" [isLoading]="isLoading"
+                              <app-submit-button [text]="'Login'" [isLoading]="isLoading"
                                     [class]="'ct_blue_btn_fill py-3 w-100'"></app-submit-button>
                         </div>
                         <div class="d-flex  align-items-center justify-content-center gap-2 mt-3">
