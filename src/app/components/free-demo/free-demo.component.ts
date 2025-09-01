@@ -62,7 +62,7 @@ export class FreeDemoComponent {
 
 
     const formData = { ...this.myForm.value };
-  
+
     const formData2 = {
       fullName: formData.fullName.trim(),
       businessEmail: formData.businessEmail.trim(),
@@ -83,29 +83,29 @@ export class FreeDemoComponent {
     // updloadData.append('fullName', formData.fullName.trim());
     // updloadData.append('businessEmail', formData.businessEmail.trim());
     // updloadData.append('companyName', formData.companyName.trim());
-    
-  
- 
-  
+
+
+
+
 
     this.apiService.postAPI('api/user/getFreeDemo', formData2).subscribe({
       next: (response: any) => {
-        if (response.success){
+        if (response.success) {
           this.message.success('Thank you for your submission! We will get in touch with you shortly.', {
             nzDuration: 8000 // 5 seconds
           });
           this.demoId = response.data.insertId
-        this.myForm.reset();
-        this.selectedFiles = [];
-        this.fileInput.nativeElement.value = '';
-     
-        setTimeout(() => {
-          this.isSubmitting = false; // Hide loader after 5 seconds
+          this.myForm.reset();
+          this.selectedFiles = [];
+          this.fileInput.nativeElement.value = '';
 
-          // Show modal
-          const modal = new bootstrap.Modal(document.getElementById('ct_schedule_call_modal') as HTMLElement);
-          modal.show();
-        }, 1000); // 5000ms = 5 seconds
+          setTimeout(() => {
+            this.isSubmitting = false; // Hide loader after 5 seconds
+
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('ct_schedule_call_modal') as HTMLElement);
+            modal.show();
+          }, 1000); // 5000ms = 5 seconds
         }
 
 
@@ -121,18 +121,18 @@ export class FreeDemoComponent {
 
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
-  
+
     if (input.files) {
       const files = Array.from(input.files);
-  
+
       if (files.length > 5) {
-       this.message.warning('You can upload a maximum of 5 files.');
+        this.message.warning('You can upload a maximum of 5 files.');
         // Clear the file input to prevent keeping the selection
         input.value = '';
         this.selectedFiles = [];
         return;
       }
-  
+
       this.selectedFiles = files;
       console.log('Selected files:', this.selectedFiles);
     }
@@ -154,18 +154,17 @@ export class FreeDemoComponent {
     })
   };
 
-  openCalendly() {
-    Calendly.initPopupWidget({ url: 'https://calendly.com/creativethoughts/30min' });
-  };
+  // openCalendly() {
+  //   Calendly.initPopupWidget({ url: 'https://calendly.com/creativethoughts/30min' });
+  // };
 
-  ngAfterViewInit() {
-    const calendlyContainer = document.getElementById('calendly-inline-widget');
-    if (calendlyContainer) {
-      Calendly.initInlineWidget({
-        url: 'https://calendly.com/creativethoughts/30min',
-        parentElement: calendlyContainer,
-        
-      });
-    }
-  }
+  // ngAfterViewInit() {
+  //   const calendlyContainer = document.getElementById('calendly-inline-widget');
+  //   if (calendlyContainer) {
+  //     Calendly.initInlineWidget({
+  //       url: 'https://calendly.com/creativethoughts/30min',
+  //       parentElement: calendlyContainer,
+  //     });
+  //   }
+  // }
 }

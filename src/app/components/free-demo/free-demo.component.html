@@ -49,9 +49,10 @@
 
                               </div>
                         </div> -->
-                        <div class="col-lg-8 mx-auto mb-4 mb-lg-0" >
+                        <div class="col-lg-8 mx-auto mb-4 mb-lg-0">
                               <div class="ct_free_demo_ui_form">
-                                    <h5 class="ct_fs_24 ct_fw_700 text-dark mb-4 text-center">Schedule a call from our expert</h5>
+                                    <h5 class="ct_fs_24 ct_fw_700 text-dark mb-4 text-center">Schedule a call from our
+                                          expert</h5>
                                     <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
                                           <div class="row">
                                                 <h5 class="ct_fs_16 ct_fw_700 ct_dark_blue_text mb-3">About you</h5>
@@ -142,7 +143,7 @@
                                                 </div>
                                           </div>
 
-                                          
+
                                           <div class="row">
                                                 <h5 class="ct_fs_16 ct_fw_700 ct_dark_blue_text mb-3">Job Title</h5>
                                                 <div class="col-md-12">
@@ -163,10 +164,12 @@
                                                 </div>
                                           </div>
                                           <div class="row mt-2">
-                                                <h5 class="ct_fs_16 ct_fw_700 ct_dark_blue_text mb-3">Project Details</h5>
+                                                <h5 class="ct_fs_16 ct_fw_700 ct_dark_blue_text mb-3">Project Details
+                                                </h5>
                                                 <div class="col-md-12">
                                                       <div class="form-group mb-3">
-                                                            <label for="companySize" class="ct_fw_600 mb-1">Project name</label>
+                                                            <label for="companySize" class="ct_fw_600 mb-1">Project
+                                                                  name</label>
                                                             <input type="text" class="form-control ct_input"
                                                                   formControlName="projectName"
                                                                   placeholder="Enter Project name">
@@ -176,33 +179,44 @@
                                                             </small>
                                                       </div>
                                                 </div>
-                                               
+
                                                 <div class="col-md-12">
                                                       <div class="form-group mb-3">
-                                                            <label for="companySize" class="ct_fw_600 mb-1">Project description</label>
-                                                          
-                                                                  <textarea name="" id="" cols="30" rows="7" id="" maxlength="1000" class="form-control ct_input h-auto" formControlName="projectDescription" placeholder="Enter Project description"></textarea>
-                                                          
+                                                            <label for="companySize" class="ct_fw_600 mb-1">Project
+                                                                  description</label>
+
+                                                            <textarea name="" id="" cols="30" rows="7" id=""
+                                                                  maxlength="1000" class="form-control ct_input h-auto"
+                                                                  formControlName="projectDescription"
+                                                                  placeholder="Enter Project description"></textarea>
+
                                                       </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                       <div class="form-group mb-3">
-                                                            <label for="companySize" class="ct_fw_600 mb-1">File upload (Max 5 files)</label>
-                                                          
-                                                                  <input type="file" name="" id="" accept=".jpg,.jpeg,.png,.pdf,.csv,.doc,.xls" multiple class="form-control ct_input_grey"  #fileInput (change)="onFileChange($event)" >
-                                                          
+                                                            <label for="companySize" class="ct_fw_600 mb-1">File upload
+                                                                  (Max 5 files)</label>
+
+                                                            <input type="file" name="" id=""
+                                                                  accept=".jpg,.jpeg,.png,.pdf,.csv,.doc,.xls" multiple
+                                                                  class="form-control ct_input_grey" #fileInput
+                                                                  (change)="onFileChange($event)">
+
                                                       </div>
                                                 </div>
                                           </div>
 
-                                   
+
                                           <div>
-                                                <button class="ct_blue_btn_fill w-100 mt-4" type="submit" [disabled]="isSubmitting">
-                                                  <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                                  <span *ngIf="!isSubmitting">Submit</span>
-                                                  <span *ngIf="isSubmitting">Submitting...</span>
+                                                <button class="ct_blue_btn_fill w-100 mt-4" type="submit"
+                                                      [disabled]="isSubmitting">
+                                                      <span *ngIf="isSubmitting"
+                                                            class="spinner-border spinner-border-sm me-2" role="status"
+                                                            aria-hidden="true"></span>
+                                                      <span *ngIf="!isSubmitting">Submit</span>
+                                                      <span *ngIf="isSubmitting">Submitting...</span>
                                                 </button>
-                                              </div>
+                                          </div>
                                     </form>
 
                               </div>
@@ -217,13 +231,13 @@
       <div class="container">
             <div class="">
                   <div class="row">
-                        <div class="col-md-12" >
+                        <div class="col-md-12">
                               <h1 class="ct_fs_44 ct_fw_700 text-center">Here's how it <span
                                           class="ct_orange_gredient_text">works</span></h1>
                         </div>
                   </div>
                   <div class="row ct_mt_85 align-items-center">
-                        <div class="col-md-6 mb-4 mb-md-0" >
+                        <div class="col-md-6 mb-4 mb-md-0">
                               <div class="ct_how_works_ai">
                                     <ul>
 
@@ -247,7 +261,8 @@
                                                       <p class="mb-0 ct_fw_700 bg-white">01</p>
                                                 </div>
                                                 <div>
-                                                      <h4 class="ct_fs_18 ct_fw_700 mb-0">Chat to our AI, Creative AI</h4>
+                                                      <h4 class="ct_fs_18 ct_fw_700 mb-0">Chat to our AI, Creative AI
+                                                      </h4>
                                                       <p class="ct_fs_16 ct_line_h_30">She asks about your idea and
                                                             offers
                                                             recommendations
@@ -374,10 +389,12 @@
                                     </ul>
                               </div>
                         </div>
-                        <div class="col-md-5 mb-4 mb-md-0 offset-md-1" >
+                        <div class="col-md-5 mb-4 mb-md-0 offset-md-1">
                               <div class="ct_how_works_img">
-                                    <img loading="lazy" src="assets/img/how-works_right.png" alt="AI app builder for mobile and web">
-                                    <img loading="lazy" src="assets/img/circle_git_123.gif" alt="AI app builder for mobile and web">
+                                    <img loading="lazy" src="assets/img/how-works_right.png"
+                                          alt="AI app builder for mobile and web">
+                                    <img loading="lazy" src="assets/img/circle_git_123.gif"
+                                          alt="AI app builder for mobile and web">
 
                               </div>
                         </div>
@@ -402,10 +419,12 @@
                               <div class="row ">
                                     <div class="col-lg-6 mb-4 mb-lg-0">
                                           <div>
-                                                <h4 class="ct_orange_gredient_text ct_fw_600 ct_fs_26 mb-5">Tell us about you
+                                                <h4 class="ct_orange_gredient_text ct_fw_600 ct_fs_26 mb-5">Tell us
+                                                      about you
                                                 </h4>
                                                 <div class="ct_login_modal_img">
-                                                      <img loading="lazy" src="assets/img/pc_vector.png" alt="AI app builder for mobile and web">
+                                                      <img loading="lazy" src="assets/img/pc_vector.png"
+                                                            alt="AI app builder for mobile and web">
                                                 </div>
                                           </div>
 
@@ -752,7 +771,8 @@
                               <p class="text-center mb-0">Talk to our team of experts - Free consultation</p>
 
                               <div class="ct_team_leader_1_img">
-                                    <img loading="lazy" src="assets/img/team_leader.png" alt="AI app builder for mobile and web">
+                                    <img loading="lazy" src="assets/img/team_leader.png"
+                                          alt="AI app builder for mobile and web">
                               </div>
 
                               <button class="ct_schedule_call_btn ct_blue_btn_fill w-100 justify-content-center "
@@ -801,7 +821,8 @@
                         <!-- You Need To Import Schedule Form here -->
                         <div class="ct_schedule_call_main12">
 
-                              <img loading="lazy" src="assets/img/schedule_call_img_456.png" alt="AI app builder for mobile and web" class="w-100">
+                              <img loading="lazy" src="assets/img/schedule_call_img_456.png"
+                                    alt="AI app builder for mobile and web" class="w-100">
                               <div class="mt-4">
                                     <button class="ct_schedule_call_btn ct_blue_btn_fill  w-100 justify-content-center"
                                           data-bs-toggle="modal" data-bs-target="#ct_schedule_call_confirm">Confirm
@@ -863,7 +884,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                        <div id="calendly-inline-widget" style="min-width:320px;height:630px;"></div>
+                        <!-- <div id="calendly-inline-widget" style="min-width:320px;height:630px;"></div> -->
                   </div>
             </div>
       </div>

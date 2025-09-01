@@ -28,62 +28,62 @@ export class MainComponent {
   messages: any[] = [];
   isLoading: boolean = false;
   page = 1;
-  imageURL:any
+  imageURL: any
   constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
-this.imageURL = this.apiservice.imageUrl
+    this.imageURL = this.apiservice.imageUrl
   }
 
 
 
-ngOnInit(): void {
-  this.getProjects();
-  sessionStorage.removeItem('projectData');
-  this.socket = io(this.apiservice.apiUrl);
+  ngOnInit(): void {
+    this.getProjects();
+    sessionStorage.removeItem('projectData');
+    // this.socket = io(this.apiservice.apiUrl);
 
-  let currentBotMsg = "";
+    let currentBotMsg = "";
 
-  // listen for streaming tokens
-this.socket.on('botReply', (msg: string) => {
+    // listen for streaming tokens
+    this.socket.on('botReply', (msg: string) => {
 
-  if (msg === "[END]") {
-    console.log("✅ Stream finished");
-    return;
+      if (msg === "[END]") {
+        console.log("✅ Stream finished");
+        return;
+      }
+
+      // Append stream to last bot message
+      if (
+        this.messages.length > 0 &&
+        this.messages[this.messages.length - 1].sender === "Bot"
+      ) {
+        this.messages[this.messages.length - 1].text += msg;
+      } else {
+        this.messages.push({ sender: "Bot", text: msg });
+      }
+      this.isLoading = false; // hide spinner after response
+    });
+
+    // when streaming ends
+    this.socket.on('botDone', () => {
+      console.log("✅ Bot finished response");
+      currentBotMsg = "";
+    });
   }
 
-  // Append stream to last bot message
-  if (
-    this.messages.length > 0 &&
-    this.messages[this.messages.length - 1].sender === "Bot"
-  ) {
-    this.messages[this.messages.length - 1].text += msg;
-  } else {
-    this.messages.push({ sender: "Bot", text: msg });
+  ngAfterViewInit() {
+    this.observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        this.page += 1;
+        this.getProjects();
+      }
+    });
+    this.observer.observe(this.anchor.nativeElement);
   }
-  this.isLoading = false; // hide spinner after response
-});
-
-  // when streaming ends
-  this.socket.on('botDone', () => {
-    console.log("✅ Bot finished response");
-    currentBotMsg = "";
-  });
-}
-
-ngAfterViewInit() {
-  this.observer = new IntersectionObserver(([entry]) => {
-    if (entry.isIntersecting) {
-      this.page+=1;
-      this.getProjects();
-    }
-  });
-  this.observer.observe(this.anchor.nativeElement);
-}
 
 
 
- 
 
- 
+
+
 
 
   getProjects() {
@@ -97,7 +97,7 @@ ngAfterViewInit() {
               contain: item.contain ? item.contain.split(',') : []
             }));
             this.projectsData = [...this.projectsData, ...mappedData];
-           
+
           } else {
             // this.loading = false
           }
@@ -124,7 +124,7 @@ ngAfterViewInit() {
   // };
 
   updateProjectId(id: any, featureCount: number) {
-   
+
     this.projectId = id;
     this.featureCount = featureCount
 

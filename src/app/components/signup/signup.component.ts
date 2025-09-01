@@ -84,8 +84,6 @@ export class SignupComponent {
           this.message.error(err.error.message);
         }
       });
-
-
   }
 
   togglePasswordVisibility() {
