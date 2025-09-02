@@ -24,23 +24,20 @@
                         @if(!isPhone){
                         <div class="form-group mb-3">
                               <label class="ct_fw_400 mb-2 ct_fs_16 ct_fw_600">
-                                    Email Address <span class="ct_red_text">*</span>
+                                    Email Address or Phone <span class="ct_red_text">*</span>
                               </label>
 
                               <div class="position-relative" *ngIf="!isPhone" #emailInput>
                                     <img loading="lazy" src="assets/img/message_icon.svg"
                                           alt="AI app builder for mobile and web" class="ct_left_input_icon">
                                     <input type="text" formControlName="email" class="form-control ct_input px-5"
-                                          placeholder="Enter email address" />
+                                          placeholder="Enter email address or phone" />
                               </div>
                               <!-- Validation messages -->
                               <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
                                     class="text-danger ct_fs_14 mt-1 d-block">
                                     <div *ngIf="loginForm.get('email')?.errors?.['required']">
-                                          Email address is required.
-                                    </div>
-                                    <div *ngIf="loginForm.get('email')?.errors?.['email']">
-                                          Enter a valid email address.
+                                          Email address or phone is required.
                                     </div>
                               </div>
                         </div>
@@ -66,6 +63,7 @@
                               </small>
                         </div>
                         }@else{
+                        @if(!otpVisible){
                         <div class="form-group mb-3">
                               <label class="ct_fw_400 mb-2 ct_fs_16">Mobile Number <span
                                           class="ct_red_text">*</span></label>
@@ -86,15 +84,14 @@
                                     </div>
                               </div>
                         </div>
-
+                        }@else {
                         <div class="text-center mb-4">
                               <h4 class="ct_fs_20 ct_fw_600 mb-1">OTP Verification</h4>
                               <p class="mb-0 ct_text_op_5">Enter OTP code sent to {{phoneNumber}}</p>
-                          </div>
+                        </div>
                         <div class="form-group mb-3">
-                           
                               <nz-flex nzVertical class="justify-content-center">
-                                    <nz-input-otp [nzLength]="6" formControlName="otp"
+                                    <nz-input-otp [nzLength]="6" [(ngModel)]="otp" [ngModelOptions]="{standalone: true}"
                                           (keypress)="restrictToNumbers($event)"></nz-input-otp>
                               </nz-flex>
                               <div *ngIf="loginForm.get('otp')?.touched && loginForm.get('otp')?.invalid"
@@ -116,9 +113,18 @@
                               </p>
                         </div>
                         }
+                        }
                         <div class="mt-4">
+                              @if(!otpVisible && !isPhone){
                               <app-submit-button [text]="'Login'" [isLoading]="isLoading"
                                     [class]="'ct_blue_btn_fill py-3 w-100'"></app-submit-button>
+                              }@else if(isPhone && !otpVisible){
+                              <app-submit-button [text]="'Send OTP'" [isLoading]="isLoading"
+                                    [class]="'ct_blue_btn_fill py-3 w-100'"></app-submit-button>
+                              }@else{
+                              <app-submit-button [text]="'Login'" [isLoading]="isLoading"
+                                    [class]="'ct_blue_btn_fill py-3 w-100'"></app-submit-button>
+                              }
                         </div>
                         <div class="d-flex  align-items-center justify-content-center gap-2 mt-3">
                               <a (click)="toggleOTPLogin()" class="ct_forgot_link ct_fs_16">Login

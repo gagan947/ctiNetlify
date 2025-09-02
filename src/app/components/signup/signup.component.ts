@@ -14,7 +14,7 @@ import { NzInputOtpComponent } from 'ng-zorro-antd/input';
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [NgxIntlTelInputModule, ReactiveFormsModule, FormsModule, CommonModule, RouterLink, SubmitButtonComponent, NzIconModule, NzSelectModule, NgxIntlTelInputModule,NzFlexDirective,NzInputOtpComponent],
+  imports: [NgxIntlTelInputModule, ReactiveFormsModule, FormsModule, CommonModule, RouterLink, SubmitButtonComponent, NzIconModule, NzSelectModule, NgxIntlTelInputModule, NzFlexDirective, NzInputOtpComponent],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
@@ -22,26 +22,26 @@ export class SignupComponent {
   SearchCountryField = SearchCountryField
   CountryISO = CountryISO
   countries: any;
-  showPassword: boolean = false; // Initially, password is hidden
+  showPassword: boolean = false;
   isLoading: boolean = false;
   selectedCountry = CountryISO.India
   isPhone: boolean = false;
   isResendDisabled: boolean = false;
   countdown: number = 60;
   interval: any;
-  otpVisible: boolean = true;
+  otpVisible: boolean = false;
   phoneNumber: string = '';
+  otp: any
   ngOnInit(): void {
     this.countries = Country.getAllCountries()
   };
 
   signupForm: FormGroup;
 
-
   constructor(private fb: FormBuilder, private apiservice: ApiService, private message: NzMessageService, private router: Router) {
     this.signupForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      phone: [null, [Validators.required]],
+      phone: [null],
       password: [
         '',
         [
@@ -58,78 +58,104 @@ export class SignupComponent {
   }
 
   onSubmit() {
-    this.signupForm.markAllAsTouched()
+    this.signupForm.markAllAsTouched();
     if (this.signupForm.invalid) {
       return;
     }
-    this.isLoading = true
-    const phoneData = this.signupForm.value.phone;
-    console.log(phoneData);
-    const formattedPhoneNumber = phoneData.number;
-    console.log(formattedPhoneNumber);
-this.phoneNumber = phoneData.dialCode + formattedPhoneNumber
-    // const payload = {
-    //   email: this.signupForm.value.email,
-    //   name: this.signupForm.value.name,
-    //   phoneNumber: +(formattedPhoneNumber),
-    //   password: this.signupForm.value.password
-    // };
+
+    this.isLoading = true;
+
+    const phoneData = this.signupForm.value.phone || {};
+    const formattedPhoneNumber = phoneData.number || '';
+    this.phoneNumber = phoneData.dialCode + formattedPhoneNumber || '';
 
     let url = '';
-    let payload = {};
-    if (this.isPhone) {
-      payload = {
-        email: this.signupForm.value.email,
-        phoneNumber: +(formattedPhoneNumber),
-        country_code : phoneData.dialCode,
-        password: this.signupForm.value.password
-      }
-      url = 'api/user/userSignUpPhoneNumber';
-    } else if(!this.isPhone && !this.otpVisible) {
-      payload = {
-        email: this.signupForm.value.email,
-        password: this.signupForm.value.password
-      }
-      url = 'api/user/signUp';
-    }else if(!this.isPhone && this.otpVisible){
-      payload = {
-        phoneNumber: +(formattedPhoneNumber),
-        otp : phoneData.dialCode,
-      }
-      url = 'api/user/verifyOtp';
+    let payload: any = {};
+
+    const caseKey = `${this.isPhone}_${this.otpVisible}`;
+
+    switch (caseKey) {
+      case 'true_false':
+        payload = {
+          email: this.signupForm.value.email,
+          phoneNumber: +(formattedPhoneNumber),
+          country_code: phoneData.dialCode,
+          password: this.signupForm.value.password
+        };
+        url = 'api/user/userSignUpPhoneNumber';
+        break;
+
+      case 'false_false':
+        payload = {
+          email: this.signupForm.value.email,
+          password: this.signupForm.value.password
+        };
+        url = 'api/user/signUp';
+        break;
+
+      case 'true_true':
+        payload = {
+          phoneNumber: +(formattedPhoneNumber),
+          otp: this.otp,
+        };
+        url = 'api/user/verifyOtp';
+        break;
+
+      case 'false_true':
+        payload = {
+          email: this.signupForm.value.email,
+          otp: this.otp
+        };
+        url = 'api/user/verifyEmailOtp';
+        break;
     }
-    this.apiservice.postAPI(url, payload)
-      .subscribe({
-        next: (res: any) => {
-          if (res.success == true) {
-            this.message.success(res.message);
-            if(this.isPhone){
-              this.otpVisible = true
-            }else if{
+
+    this.apiservice.postAPI(url, payload).subscribe({
+      next: (res: any) => {
+        if (res.success === true) {
+          this.message.success(res.message);
+
+          switch (caseKey) {
+            case 'true_false':
+              this.otpVisible = true;
+              this.startCountdown()
+              break;
+
+            case 'true_true':
               this.router.navigate(['/login']);
-            }
-            this.isLoading = false
-          } else {
-            this.isLoading = false
+              break;
+
+            case 'false_false':
+              this.phoneNumber = this.signupForm.value.email
+              this.otpVisible = true;
+              this.startCountdown()
+              break;
+
+            case 'false_true':
+              this.router.navigate(['/login']);
+              break;
           }
-        },
-        error: err => {
-          this.isLoading = false
-          this.message.error(err.error.message);
         }
-      });
+        this.isLoading = false;
+      },
+      error: err => {
+        this.isLoading = false;
+        this.message.error(err.error.message);
+      }
+    });
   }
 
+
   togglePasswordVisibility() {
-    this.showPassword = !this.showPassword; // Toggle password visibility
+    this.showPassword = !this.showPassword;
   }
 
   toggleOTPLogin() {
     this.isPhone = !this.isPhone;
     if (this.isPhone) {
-      this.signupForm.get('contact')?.setValidators([Validators.required]);
+      this.signupForm.get('phone')?.setValidators([Validators.required]);
       this.signupForm.get('otp')?.setValidators([Validators.required, Validators.minLength(6), Validators.maxLength(6)]);
-      this.signupForm.get('contact')?.updateValueAndValidity();
+      this.signupForm.get('phone')?.updateValueAndValidity();
       this.signupForm.get('otp')?.updateValueAndValidity();
       this.signupForm.get('email')?.clearValidators();
       this.signupForm.get('email')?.updateValueAndValidity();
@@ -138,8 +164,8 @@ this.phoneNumber = phoneData.dialCode + formattedPhoneNumber
       this.signupForm.get('password')?.setValidators([Validators.required]);
       this.signupForm.get('email')?.updateValueAndValidity();
       this.signupForm.get('password')?.updateValueAndValidity();
-      this.signupForm.get('contact')?.clearValidators();
-      this.signupForm.get('contact')?.updateValueAndValidity();
+      this.signupForm.get('phone')?.clearValidators();
+      this.signupForm.get('phone')?.updateValueAndValidity();
     }
   }
 
@@ -173,20 +199,20 @@ this.phoneNumber = phoneData.dialCode + formattedPhoneNumber
     }
     let url = 'api/user/userSignUpPhoneNumber';
     this.apiservice.postAPI(url, payload)
-    .subscribe({
-      next: (res: any) => {
-        if (res.success == true) {
-          this.message.success(res.message);
-          this.otpVisible = true
+      .subscribe({
+        next: (res: any) => {
+          if (res.success == true) {
+            this.message.success(res.message);
+            this.otpVisible = true
+            this.isLoading = false
+          } else {
+            this.isLoading = false
+          }
+        },
+        error: err => {
           this.isLoading = false
-        } else {
-          this.isLoading = false
+          this.message.error(err.error.message);
         }
-      },
-      error: err => {
-        this.isLoading = false
-        this.message.error(err.error.message);
-      }
-    });
+      });
   }
 }
