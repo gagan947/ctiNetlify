@@ -3,11 +3,12 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { RouterLink } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
+import { BlogCardsComponent } from '../blog-cards/blog-cards.component';
 
 @Component({
   selector: 'app-enrertainment',
   standalone: true,
-  imports: [HeaderComponent, FooterComponent, RouterLink],
+  imports: [HeaderComponent, FooterComponent, RouterLink,BlogCardsComponent],
   templateUrl: './enrertainment.component.html',
   styleUrl: './enrertainment.component.css'
 })

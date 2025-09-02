@@ -101,7 +101,7 @@
                      
                         @for (item of projectsData; track $index) {
                         <div class=" col-xl-4 col-lg-6 mb-4">
-                              <div class="ct_white_bg ct_ecommerse_web_card">
+                              <div class="ct_white_bg ct_ecommerse_web_card h-100">
                                     <div class="d-flex align-items-center justify-content-between gap-2 mb-4">
                                           <div class="ct_ecommerse_web_icon mb-0">
                                                 <img [src]="imageURL+ item.projectImage" alt="AI app builder for mobile and web">
@@ -109,7 +109,7 @@
                                           <div class="ct_bash_icon12"
                                                 (click)="updateProjectId(item.id , item.subFeaturesCount)"
                                                 data-bs-toggle="modal" data-bs-target="#ct_base_modal_1">
-                                                <i class="fa-solid fa-plus"></i>
+                                                <i class="bi bi-telephone"></i>
                                           </div>
                                     </div>
                                     <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap mb-1">

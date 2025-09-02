@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-careers',
   standalone: true,
-  imports: [HeaderComponent, FooterComponent],
+  imports: [HeaderComponent, FooterComponent, RouterLink],
   templateUrl: './careers.component.html',
   styleUrl: './careers.component.css'
 })

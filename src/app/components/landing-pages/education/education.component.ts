@@ -3,11 +3,12 @@ import { RouterLink } from '@angular/router';
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { Meta, Title } from '@angular/platform-browser';
+import { BlogCardsComponent } from '../blog-cards/blog-cards.component';
 
 @Component({
   selector: 'app-education',
   standalone: true,
-  imports: [HeaderComponent, FooterComponent, RouterLink],
+  imports: [HeaderComponent, FooterComponent, RouterLink,BlogCardsComponent],
   templateUrl: './education.component.html',
   styleUrl: './education.component.css'
 })

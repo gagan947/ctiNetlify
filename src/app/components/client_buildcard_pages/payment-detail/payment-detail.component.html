@@ -1,6 +1,6 @@
 <section class="ct_dash_board_main">
       <app-sidebar></app-sidebar>
-      <div class="ct_dash_right_content ct_white_bg_page ">
+      <div class="ct_dash_right_content ct_white_bg_page pt-5">
             <div class="ct_dash_toggle_bar">
                   <i class="fa-solid fa-bars"></i>
             </div>
@@ -92,7 +92,7 @@
                               </div>
                         </div>
                   </div>
-                  <div class="row mt-5 pb-5">
+                  <div class="row mt-0 pb-5">
                         <div class="col-lg-8 mb-4 mb-lg-0">
                               <h4 class="ct_fs_24 ct_fw_700">Payment Details</h4>
 
@@ -161,8 +161,8 @@
                                     </form>
                               </div> -->
 
-                              <div class="pb-4  pt-4">
-                                    <div class="mt-3">
+                              <div class="pb-4  ">
+                                    <div class="mt-0">
                                           <!-- <h5 class="ct_fs_18 ct_fw_700">Smartphone</h5> -->
                                           <div class="row">
                                                 <div class="col-md-12 mb-4 mb-md-0">
@@ -177,7 +177,7 @@
 
                                                       </div> -->
 
-                                                      <div class="et_grey_bg et_pt_36_px_10 h-auto">
+                                                      <div class="et_grey_bg et_pt_36_px_10 h-auto pt-3">
 
                                                             <div class="d-grid gap-3">
 
@@ -187,7 +187,7 @@
                                                                               id="online_payment"
                                                                               [checked]="paymentMethods.card"
                                                                               (change)="paymentMethods.card = true; paymentMethods.upi = false; paymentMethods.netbanking = false; paymentMethods.wallet = false;">
-                                                                        <label class="ct_fs_18 ct_fw_700 payment_option_label"
+                                                                        <label class="ct_fs_16 ct_fw_600 payment_option_label"
                                                                               for="online_payment">Credit/Debit
                                                                               card
                                                                         </label>
@@ -198,7 +198,7 @@
                                                                               id="online_payment_4"
                                                                               [checked]="paymentMethods.upi"
                                                                               (change)="paymentMethods.card = false; paymentMethods.upi = true; paymentMethods.netbanking = false; paymentMethods.wallet = false;">
-                                                                        <label class="ct_fs_18 ct_fw_700 payment_option_label"
+                                                                        <label class="ct_fs_16 ct_fw_600  payment_option_label"
                                                                               for="online_payment_4">UPI
                                                                         </label>
                                                                   </div>
@@ -209,7 +209,7 @@
                                                                               [checked]="paymentMethods.netbanking"
                                                                               (change)="paymentMethods.card = false; paymentMethods.upi = false; paymentMethods.netbanking = true; paymentMethods.wallet = false;">
                                                                         <label for="online_payment_2"
-                                                                              class="ct_fs_18 ct_fw_700 payment_option_label">
+                                                                              class="ct_fs_16 ct_fw_600  payment_option_label">
                                                                               Netbanking
                                                                         </label>
                                                                   </div>
@@ -220,14 +220,14 @@
                                                                               [checked]="paymentMethods.wallet"
                                                                               (change)="paymentMethods.card = false; paymentMethods.upi = false; paymentMethods.netbanking = false; paymentMethods.wallet = true;">
                                                                         <label for="online_payment_3"
-                                                                              class="ct_fs_18 ct_fw_700 payment_option_label">
+                                                                              class="ct_fs_16 ct_fw_600 payment_option_label">
                                                                               Wallet
                                                                         </label>
                                                                   </div>
 
                                                             </div>
                                                             <div
-                                                                  class="text-center mt-5 d-flex gap-3 justify-content-center align-items-center">
+                                                                  class="text-center mt-5 d-flex gap-3 justify-content-end align-items-center">
                                                                   <button (click)="payNow()"
                                                                         class="ct_blue_btn_fill">Pay
                                                                         & Schedule kick-off
@@ -249,7 +249,7 @@
                               <div class="ct_right_sidebar_12 ct_outline_border_box">
                                     <div>
                                           <div class="position-relative ct_w_fit_content mx-auto">
-                                                <img loading="lazy" src="assets/img/iPhone_14 Plus_.png"
+                                                <img loading="lazy" src="assets/img/iPhone_14 Plus_ (new).png" style="height: 350px;"
                                                       alt="AI app builder for mobile and web">
                                                 <div class="ct_mob_overlay_top_cnt_12">
                                                       <div class="ct_add_logo_by_ai" [style]="projectsData.logoStyle">
@@ -297,7 +297,7 @@
                                           </div>
 
                                           <div class="mt-4 pt-4 ct_border_top_1">
-                                                <h5 class="ct_fw_700">Payment Summary</h5>
+                                                <h5 class="ct_fw_700 mb-4">Payment Summary</h5>
                                                 <div
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">Features</p>

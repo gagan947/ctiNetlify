@@ -1,0 +1,17 @@
+.ct_related_article_card p{
+       box-sizing: border-box;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-width: 400px;
+    width: auto;
+
+}
+
+.ct_related_article_card figcaption {
+    display: grid;
+    height: 211px;
+;
+}
