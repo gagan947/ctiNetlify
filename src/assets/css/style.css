@@ -205,7 +205,7 @@ input[type="number"] {
 
 .ct_fs_18 {
   font-size: 18px;
-  line-height: 31.26px;
+  line-height: 26px;
 }
 
 .ct_fs_17 {
@@ -237,6 +237,8 @@ input[type="number"] {
 .ct_fw_100 {
   font-weight: 100;
 }
+
+
 
 .ct_fw_200 {
   font-weight: 200;
@@ -4520,6 +4522,7 @@ ul.floatingBoxes li:nth-child(10) {
   color: var(--dark_blue);
   border: 1px solid #fff;
   outline: none;
+  font-weight:600
 }
 
 .ct_creative_task_list_122 ul {
@@ -4560,7 +4563,11 @@ ul.floatingBoxes li:nth-child(10) {
 }
 
 .ct_creative_card_head {
-  background-color: #e9f3f9;
+  background: linear-gradient(
+      346deg,
+      rgba(0, 100, 255, 0.10) 0%,
+      rgba(182, 12, 254, 0.10) 50%,
+      rgba(250, 187, 0, 0.10) 100%);
   padding: 28px;
 }
 

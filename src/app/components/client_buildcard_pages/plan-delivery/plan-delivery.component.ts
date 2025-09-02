@@ -31,7 +31,7 @@ export class PlanDeliveryComponent {
   rangeValue: string = '0';
   projectSecondCost!: number;
   projectThirdCost!: number;
-  devices: any[] = ['Android', 'iOS', 'Web'];
+  devices: any[] = ['Android', 'iOS', 'Web','Ai Chatbot Integration'];
   estimatedDate: Date | undefined;
   estimatedWeeks: any;
   customWeeks: any;

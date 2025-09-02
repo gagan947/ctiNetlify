@@ -3,11 +3,12 @@ import { Meta, Title } from '@angular/platform-browser';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { RouterLink } from '@angular/router';
+import { BlogCardsComponent } from '../blog-cards/blog-cards.component';
 
 @Component({
   selector: 'app-manufacturing',
   standalone: true,
-  imports: [HeaderComponent, FooterComponent, RouterLink],
+  imports: [HeaderComponent, FooterComponent, RouterLink,BlogCardsComponent],
   templateUrl: './manufacturing.component.html',
   styleUrl: './manufacturing.component.css'
 })

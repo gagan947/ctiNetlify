@@ -222,7 +222,7 @@ span.sender {
   padding: 8px 12px;
   border: none;
   border-radius: 8px;
-  background: #1e91d6a1;
+  background: #0064ff;
   color: white;
   cursor: pointer;
 }
@@ -244,7 +244,11 @@ span.sender {
 }
 
 .ct_creative_msg_top_bar {
-  height: auto;
-  overflow-y: auto;
-  max-height: calc(100vh - 200px);
+    height: auto;
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
+    background-color: #fff9f99e;
+    padding: 30px;
+    border-radius: 10px;
 }
+

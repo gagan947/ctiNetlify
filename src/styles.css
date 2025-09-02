@@ -199,3 +199,16 @@ ul.iti__country-list {
     height: 50px;
     object-fit: contain;
 }
+
+
+
+
+.ct_related_article   .owl-stage {
+    display: flex
+;
+}
+.ct_related_article   .owl-item .item{
+    height: 100%;
+}
+
+
