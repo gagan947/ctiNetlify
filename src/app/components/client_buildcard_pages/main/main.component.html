@@ -1,6 +1,7 @@
-<section class="ct_dash_board_main"style="display: block !important">
+<section class="ct_dash_board_main" style="display: block !important">
       <app-sidebar></app-sidebar>
-      <div class="ct_dash_right_content" style="    background: linear-gradient(90deg, rgb(250 218 188 / 44%), rgb(234 170 213 / 36%), rgb(220 229 244 / 69%)); height: auto; min-height: 100vh;">
+      <div class="ct_dash_right_content"
+            style="    background: linear-gradient(90deg, rgb(250 218 188 / 44%), rgb(234 170 213 / 36%), rgb(220 229 244 / 69%)); height: auto; min-height: 100vh;">
             <div class="ct_dash_toggle_bar">
                   <i class="fa-solid fa-bars"></i>
             </div>
@@ -43,12 +44,10 @@
                                     </button>
                                 </footer>
                         </div>
-
-
                   </div> -->
-<app-chatbot></app-chatbot>
+                  <app-chatbot></app-chatbot>
                   <!-- chatbot -->
-                   
+
                   <!-- <div class="chat-wrapper">
                         <header class="chat-header">
                           <div class="chat-title">
@@ -72,10 +71,7 @@
                                 </div>
                               </div>
                             
-                            
                               <div *ngIf="isLoading" class="msg-row in">
-                               
-                            
                                   <div class="spinner-grow" role="status">
                                     <span class="sr-only">Loading...</span>
                                   </div>
@@ -95,16 +91,17 @@
                           </button>
                         </footer>
                       </div> -->
-                      
+
 
                   <div class="row ct_mt_100 ct_py_70 pt-0">
-                     
+
                         @for (item of projectsData; track $index) {
                         <div class=" col-xl-4 col-lg-6 mb-4">
                               <div class="ct_white_bg ct_ecommerse_web_card h-100">
                                     <div class="d-flex align-items-center justify-content-between gap-2 mb-4">
                                           <div class="ct_ecommerse_web_icon mb-0">
-                                                <img [src]="imageURL+ item.projectImage" alt="AI app builder for mobile and web">
+                                                <img [src]="imageURL+ item.projectImage"
+                                                      alt="AI app builder for mobile and web">
                                           </div>
                                           <div class="ct_bash_icon12"
                                                 (click)="updateProjectId(item.id , item.subFeaturesCount)"
@@ -200,7 +197,8 @@
                                     <div class="col-lg-7 mb-4 mb-lg-0">
                                           <div class="ct_schedule_card_cnt">
                                                 <div class="d-flex align-items-center gap-3 mb-4">
-                                                      <img loading="lazy" src="assets/img/flipcart.png" alt="AI app builder for mobile and web" width="80px">
+                                                      <img loading="lazy" src="assets/img/flipcart.png"
+                                                            alt="AI app builder for mobile and web" width="80px">
                                                       <div>
                                                             <p class="mb-0 ct_fw_500 ct_fs_16">BUILD AN APP LIKE</p>
                                                             <h4 class="ct_fs_24 ct_fw_700 mb-0">Flipkart</h4>
@@ -265,7 +263,8 @@
                                     </div>
                                     <div class="col-lg-5 mb-4 mb-lg-0">
                                           <div class="ct_shopping_card_234">
-                                                <img loading="lazy" src="assets/img/shopping_card_img_12.png" alt="AI app builder for mobile and web">
+                                                <img loading="lazy" src="assets/img/shopping_card_img_12.png"
+                                                      alt="AI app builder for mobile and web">
                                           </div>
                                           <button
                                                 class="ct_schedule_call_btn w-100 justify-content-center mt-5">Schedule

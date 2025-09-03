@@ -1,16 +1,14 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { Project } from '../../../models/projects';
+import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { SidebarComponent } from '../sidebar/sidebar.component';
 import { chatbotFlow } from '../../../helper/chatbot';
 
 @Component({
   selector: 'app-chatbot',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './chatbot.component.html',
   styleUrl: './chatbot.component.css'
 })
@@ -27,7 +25,6 @@ export class ChatbotComponent {
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
   constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
     this.addBotMessage(this.flow[this.currentStep].message);
-
   }
 
   ngAfterViewChecked() {
@@ -37,7 +34,7 @@ export class ChatbotComponent {
   scrollToBottom(): void {
     try {
       this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
-    } catch (err) {}
+    } catch (err) { }
   }
 
   addBotMessage(text: string) {
@@ -90,9 +87,9 @@ export class ChatbotComponent {
 
       }
     } else if (this.userInput.trim()) {
-        this.addUserMessage(this.userInput);
-        this.askAIQuestion();
-      }
+      this.addUserMessage(this.userInput);
+      this.askAIQuestion();
+    }
   }
   replacePlaceholders(message: string): string {
     console.log("here", message, this.userData);
