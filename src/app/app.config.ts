@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { InMemoryScrollingOptions, provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
+import { InMemoryScrollingOptions, PreloadAllModules, provideRouter, withComponentInputBinding, withInMemoryScrolling, withPreloading } from '@angular/router';
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
@@ -33,5 +33,5 @@ export const appConfig: ApplicationConfig = {
     ),
 
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    provideRouter(routes, withComponentInputBinding(), withInMemoryScrolling(scrollConfig))]
+    provideRouter(routes, withPreloading(PreloadAllModules) , withComponentInputBinding(), withInMemoryScrolling(scrollConfig))]
 };
