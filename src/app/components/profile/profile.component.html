@@ -21,7 +21,7 @@
                                                       </div>
                                                 </label>
                                           </div>
-                                          <h4 class="ct_fs_22 ct_fw_700 text-center"> Name</h4>
+                                          <h4 class="ct_fs_22 ct_fw_700 text-center">{{user?.name}}</h4>
                                     </div>
 
                                     <div class="row" *ngIf="user">
@@ -58,54 +58,56 @@
                                                                         }
                                                                   </div>
                                                                   <div>
-
-
                                                                   </div>
-
                                                             </div>
                                                       </div>
-                                                      <form #profilePhoneForm="ngForm" (ngSubmit)="verifySendOtp(profilePhoneForm)">
-                                                      <div class="form-group mb-4">
-                                                            <label for="" class="ct_fw_500 mb-2">Phone Number</label>
-                                                            <div class="position-relative">
-                                                                  <ngx-intl-tel-input #phoneInput="ngModel" name="phone"
-                                                                        [(ngModel)]="phone"
-                                                                        required
-                                                                        [cssClass]="'form-control ct_input w-full ps-5 ct_pe_90'"
-                                                                        [enableAutoCountrySelect]="true"
-                                                                        [enablePlaceholder]="true"
-                                                                        [searchCountryFlag]="true"
-                                                                        [customPlaceholder]="'Enter Number'"
-                                                                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
-                                                                        [selectFirstCountry]="false"
-                                                                        [selectedCountryISO]="selectedCountry"
-                                                                        [maxLength]="15" [phoneValidation]="true">
-                                                                  </ngx-intl-tel-input>
-                                                                  @if(user.is_phone_verified){
-                                                                  <svg width="24" height="24" class="ct_eye_show"
-                                                                        viewBox="0 0 24 24" fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-                                                                        <path d="M8.6 22.5L6.7 19.3L3.1 18.5L3.45 14.8L1 12L3.45 9.2L3.1 5.5L6.7 4.7L8.6 1.5L12 2.95L15.4 1.5L17.3 4.7L20.9 5.5L20.55 9.2L23 12L20.55 14.8L20.9 18.5L17.3 19.3L15.4 22.5L12 21.05L8.6 22.5ZM10.95 15.55L16.6 9.9L15.2 8.45L10.95 12.7L8.8 10.6L7.4 12L10.95 15.55Z"
-                                                                              fill="#2C96FF" />
-                                                                  </svg>
+                                                      <form #profilePhoneForm="ngForm"
+                                                            (ngSubmit)="verifySendOtp(profilePhoneForm)">
+                                                            <div class="form-group mb-4">
+                                                                  <label for="" class="ct_fw_500 mb-2">Phone
+                                                                        Number</label>
+                                                                  <div class="position-relative">
+                                                                        <ngx-intl-tel-input #phoneInput="ngModel"
+                                                                              name="phone" [(ngModel)]="phone" required
+                                                                              [cssClass]="'form-control ct_input w-full ps-5 ct_pe_90'"
+                                                                              [enableAutoCountrySelect]="true"
+                                                                              [enablePlaceholder]="true"
+                                                                              [searchCountryFlag]="true"
+                                                                              [customPlaceholder]="'Enter Number'"
+                                                                              [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                                                              [selectFirstCountry]="false"
+                                                                              [selectedCountryISO]="selectedCountry"
+                                                                              [maxLength]="15" [phoneValidation]="true"
+                                                                              [disabled]="user.is_phone_verified ===1">
+                                                                        </ngx-intl-tel-input>
+                                                                        @if(user.is_phone_verified){
+                                                                        <svg width="24" height="24" class="ct_eye_show"
+                                                                              viewBox="0 0 24 24" fill="none"
+                                                                              xmlns="http://www.w3.org/2000/svg">
+                                                                              <path d="M8.6 22.5L6.7 19.3L3.1 18.5L3.45 14.8L1 12L3.45 9.2L3.1 5.5L6.7 4.7L8.6 1.5L12 2.95L15.4 1.5L17.3 4.7L20.9 5.5L20.55 9.2L23 12L20.55 14.8L20.9 18.5L17.3 19.3L15.4 22.5L12 21.05L8.6 22.5ZM10.95 15.55L16.6 9.9L15.2 8.45L10.95 12.7L8.8 10.6L7.4 12L10.95 15.55Z"
+                                                                                    fill="#2C96FF" />
+                                                                        </svg>
 
-                                                                  }@else {
-                                                                  <button class="ct_green_btn ct_eye_show" type="submit"
-                                                                        >Verify</button>
+                                                                        }@else {
+                                                                        <button class="ct_green_btn ct_eye_show"
+                                                                              type="submit">Verify</button>
 
-                                                                  }
+                                                                        }
+                                                                  </div>
+                                                                  <div *ngIf="profilePhoneForm.submitted && phoneInput.invalid"
+                                                                        class="text-danger">
+                                                                        <span *ngIf="phoneInput.errors?.['required']">Phone
+                                                                              number is required.</span>
+                                                                        <span
+                                                                              *ngIf="phoneInput.errors?.['validatePhoneNumber']">Invalid
+                                                                              phone number.</span>
+                                                                  </div>
 
-                                                            </div>
-                                                            <div *ngIf="profilePhoneForm.submitted && phoneInput.invalid" class="text-danger">
-                                                                  <span *ngIf="phoneInput.errors?.['required']">Phone number is required.</span>
-                                                                  <span *ngIf="phoneInput.errors?.['validatePhoneNumber']">Invalid phone number.</span>
-                                                                </div>
-
-                                                            <!-- <input type="text" class="form-control ct_input"
+                                                                  <!-- <input type="text" class="form-control ct_input"
                                                             placeholder="Enter Number"
                                                             [(ngModel)]="user.phoneNumber"
                                                             name="phoneNumber"> -->
-                                                      </div>
+                                                            </div>
                                                       </form>
 
                                                 </div>
@@ -117,7 +119,8 @@
                                                       <div class="form-group mb-4">
                                                             <label for="" class="ct_fw_500 mb-2">Company Name</label>
                                                             <input type="text" class="form-control ct_input"
-                                                                  placeholder="Enter Company Name" [(ngModel)]="user.companyName">
+                                                                  placeholder="Enter Company Name"
+                                                                  [(ngModel)]="user.companyName">
                                                       </div>
                                                       <div class="form-group mb-4 d-flex gap-2">
                                                             <div class="form-check">
@@ -181,13 +184,8 @@
                                                                   }
                                                             </nz-select>
                                                       </div>
-
-
-
                                                 </div>
                                           </div>
-
-
                                     </div>
 
                                     <div class=" pt-5">
@@ -235,7 +233,7 @@
                                     class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center">
                                     <button class="ct_blue_outline_btn  justify-content-center"
                                           data-bs-dismiss="modal">Cancel</button>
-                                   
+
                               </div>
                         </div>
                   </div>
@@ -254,7 +252,8 @@
                         <!-- You Need To Import Schedule Form here -->
                         <div class="text-center mb-4">
                               <h4 class="ct_fs_20 ct_fw_600 mb-1">OTP Verification</h4>
-                              <p class="mb-0 ct_text_op_5">Enter OTP code sent to {{phone.dialCode}} {{phone.number}}</p>
+                              <p class="mb-0 ct_text_op_5">Enter OTP code sent to {{phone?.dialCode}} {{phone?.number}}
+                              </p>
                         </div>
                         <div class="form-group mb-3">
                               <nz-flex nzVertical class="justify-content-center">
@@ -267,6 +266,7 @@
 
                               </div>
                         </div>
+                        <p class="text-danger ct_fs_14 d-block text-center">{{errMsg}}</p>
                         <div>
                               <p class="mb-0 ct_fs_14 ct_fw_500 text-center">
                                     Didn’t receive the code?
@@ -279,11 +279,14 @@
                               </p>
                         </div>
                         <div class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center">
-                              <button class="ct_blue_outline_btn  justify-content-center"
-                                    data-bs-dismiss="modal">Cancel</button>
-                              <button class="ct_blue_btn_fill  justify-content-center">Proceed</button>
-                              <app-submit-button [text]="'Verify & Proceed'" [isLoading]="isLoading"
-                        [class]="'ct_blue_btn_fill py-3 w-100'"></app-submit-button>
+                              <button class="ct_blue_outline_btn  justify-content-center" data-bs-dismiss="modal"
+                                    #closeBtn>Cancel</button>
+                              <button class="ct_blue_btn_fill  justify-content-center" [disabled]="isLoading"
+                                    (click)="verifyOtpNumber()">
+                                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"
+                                          aria-hidden="true"></span>
+                                    {{ isLoading ? '' : 'Verify & Proceed' }}
+                              </button>
                         </div>
                   </div>
 

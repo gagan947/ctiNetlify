@@ -1,9 +1,7 @@
-import { Component, inject, ViewChild } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, ElementRef, inject, viewChild, ViewChild } from '@angular/core';
 import { SidebarComponent } from "../client_buildcard_pages/sidebar/sidebar.component";
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { ApiService } from '../../services/api.service';
 import { ApiResponse, UserProfile } from '../../models/userProfile';
@@ -12,17 +10,17 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input-gg';
 import { CountryISO, SearchCountryField } from 'ngx-intl-tel-input-gg';
 import { NzFlexDirective } from 'ng-zorro-antd/flex';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { SubmitButtonComponent } from "../shared/submit-button/submit-button.component";
 declare var bootstrap: any;
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [RouterLink, SidebarComponent, CommonModule, FormsModule, NzSelectModule, NgxIntlTelInputModule, NzInputOtpComponent, NzFlexDirective, SubmitButtonComponent],
+  imports: [SidebarComponent, CommonModule, FormsModule, NzSelectModule, NgxIntlTelInputModule, NzInputOtpComponent, NzFlexDirective],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
   @ViewChild('profilePhoneForm') profilePhoneForm!: NgForm;
+  @ViewChild('closeBtn') closeBtn!: ElementRef;
   selectedType: string = 'VAT';
   user: UserProfile | null = null;
   SearchCountryField = SearchCountryField
@@ -48,7 +46,6 @@ export class ProfileComponent {
 
   ngOnInit() {
     this.getProfile();
-
   }
 
   getProfile() {
@@ -83,13 +80,13 @@ export class ProfileComponent {
       console.log("Invalid form", form);
       return;
     }
-  
+
     console.log("Valid form, phone:", this.phone);
     const userData = {
       phoneNumber: this.phone!.number,
       country_code: this.phone!.dialCode,
     }
- 
+
     this.apiService.postAPI('api/user/sendOtpNumberProfile', userData).subscribe((res: any) => {
       if (res.success) {
         this.startCountdown()
@@ -102,20 +99,24 @@ export class ProfileComponent {
     })
   };
 
+  errMsg: string = '';
   verifyOtpNumber() {
+    this.isLoading = true
     const userData = {
       otp: this.otp
     }
     this.apiService.postAPI('api/user/verifyOtpNumberProfile', userData).subscribe((res: any) => {
       if (res.success) {
         this.message.success('OTP verified successfully');
-        const otpModalEl = document.getElementById('otpVerifyModal');
-        if (otpModalEl) {
-          const modal = new bootstrap.Modal(otpModalEl);
-          modal.hide();
-        }
+        this.closeBtn.nativeElement.click();
+        this.isLoading = false
         this.getProfile();
+      } else {
+        this.isLoading = false
       }
+    }, (err: any) => {
+      this.errMsg = err.error.message
+      this.isLoading = false
     })
   }
 
@@ -129,7 +130,7 @@ export class ProfileComponent {
       if (res.success) {
         this.message.success('Profile updated successfully');
         this.getProfile();
-      }else{
+      } else {
         this.message.error(res.message);
       }
     });
@@ -159,26 +160,16 @@ export class ProfileComponent {
   }
 
   resendOtp() {
-    // const phoneData = ''
-    // const formattedPhoneNumber = phoneData.number;
-    // const payload = {
-    //   phoneNumber: +(formattedPhoneNumber),
-    // }
-    // let url = 'api/user/sendOtpNumber';
-    // this.apiService.postAPI(url, payload)
-    //   .subscribe({
-    //     next: (res: any) => {
-    //       if (res.success == true) {
-    //         this.message.success(res.message);
-    //         this.startCountdown()
-    //       }
-    //     },
-    //     error: err => {
-    //       this.message.error(err.error.message);
-    //     }
-    //   });
+    const userData = {
+      phoneNumber: this.phone!.number,
+      country_code: this.phone!.dialCode,
+    }
+
+    this.apiService.postAPI('api/user/sendOtpNumberProfile', userData).subscribe((res: any) => {
+      if (res.success) {
+        this.startCountdown()
+      }
+    })
   }
-
-
 }
 
