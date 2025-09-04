@@ -220,5 +220,43 @@ export class SignupComponent {
           this.message.error(err.error.message)
       })
   };
+
+  loginWithGoogle() {
+    this.apiservice.googleLogin().then((res: any) => {
+
+      const formData = {
+        token: res.user.accessToken,
+      }
+
+      this.apiservice.postAPI(`api/user/googleLogin`, formData)
+        .subscribe({
+          next: (res: any) => {
+            if (res.success == true) {
+              this.apiservice.setToken(res.data.token);
+              localStorage.setItem('userDetailCTI', JSON.stringify(res.data.users));
+              this.message.success(res.message)
+              this.router.navigate(['/main'])
+              // this.projectInfo = res.projectInfo
+              // this, this.getProjectMedia()
+              this.isLoading = false
+            } else {
+              this.isLoading = false
+              // this.loading = false
+              this.message.error(res.message)
+            }
+          },
+          error: err => {
+            if (err.status === 0) {
+              this.message.error('Network error, please check your connection.');
+            } else if (err.error?.message) {
+              this.message.error(err.error.message);
+            } else {
+              this.message.error('Unexpected error occurred.');
+            }
+            this.isLoading = false
+          }
+        });
+    });
+  }
 }
 
