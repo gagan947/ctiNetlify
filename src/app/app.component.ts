@@ -10,7 +10,7 @@ declare var bootstrap: any;
 })
 export class AppComponent {
   title = 'creative_ai';
-@ViewChild('closeModal') closeModal!: ElementRef;
+  @ViewChild('closeModal') closeModal!: ElementRef;
   constructor(private router: Router) { }
 
   ngOnInit() {
@@ -30,7 +30,6 @@ export class AppComponent {
 
   @ViewChild('myModal') modalRef!: ElementRef;
 
- 
 
   closeModal2() {
     this.closeModal.nativeElement.click();

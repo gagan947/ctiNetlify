@@ -1,24 +1,26 @@
 .ct_login_right_bg_1 {
-    /* background: #0064fff2; */
-    background: url("../../../assets/img/Shiny_Overlay.svg");
-    height: 100%;
-    width: 100%;
-    display: flex
-;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-size: cover;
+      /* background: #0064fff2; */
+      background: url("../../../assets/img/Shiny_Overlay.svg");
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background-size: cover;
 }
+
 .ct_login_right_list li {
-    background-color: #ffffff5e;
-    padding: 15px;
-    border-radius: 10px;
+      background-color: #ffffff5e;
+      padding: 15px;
+      border-radius: 10px;
 }
-.ct_login_right_list i{
-    color: #fff;
-    font-size: 20px;
+
+.ct_login_right_list i {
+      color: #fff;
+      font-size: 20px;
 }
+
 /* .ct_login_bg{
            display: flex;
            align-items: center;
@@ -30,18 +32,21 @@
       flex-direction: column;
       gap: 40px;
       align-items: center;
-      
+
 }
+
 .ct_country_select {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
       border: 0px !important;
       left: 1px;
-  }
- .ct_text_op_5{
+}
+
+.ct_text_op_5 {
       opacity: 0.5;
- }
+}
+
 .ct_right_inner_bg_1 p {
       color: #fff;
       font-size: 26px;
@@ -57,7 +62,8 @@
 .ct_login_right_bg_1 li img {
       width: 20px;
 }
-.ct_fs_35{
+
+.ct_fs_35 {
       font-size: 35px;
 }
 
@@ -65,9 +71,7 @@
       cursor: pointer;
 }
 
-
-
-.ct_google_login_position{
+.ct_google_login_position {
       position: absolute;
       left: 3px;
 }

@@ -191,28 +191,34 @@ export class SignupComponent {
   }
 
   resendOtp() {
-    this.isLoading = true
-    const phoneData = this.signupForm.value.phone;
-    const formattedPhoneNumber = phoneData.number;
-    const payload = {
-      phoneNumber: +(formattedPhoneNumber),
+    let url = '';
+    let payload: any = {};
+    if (this.signupForm.value.phone) {
+      const phoneData = this.signupForm.value.phone;
+      const formattedPhoneNumber = phoneData.number;
+      payload = {
+        phoneNumber: +(formattedPhoneNumber),
+        password: this.signupForm.value.password
+      }
+      url = 'api/user/userSignUpPhoneNumber';
+    } else {
+      payload = {
+        email: this.signupForm.value.email,
+        password: this.signupForm.value.password
+      }
+      url = 'api/user/signUp';
     }
-    let url = 'api/user/userSignUpPhoneNumber';
     this.apiservice.postAPI(url, payload)
       .subscribe({
         next: (res: any) => {
           if (res.success == true) {
             this.message.success(res.message);
             this.otpVisible = true
-            this.isLoading = false
-          } else {
-            this.isLoading = false
           }
         },
-        error: err => {
-          this.isLoading = false
-          this.message.error(err.error.message);
-        }
-      });
-  }
+        error: err =>
+          this.message.error(err.error.message)
+      })
+  };
 }
+
