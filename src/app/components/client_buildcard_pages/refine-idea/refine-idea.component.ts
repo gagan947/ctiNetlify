@@ -8,13 +8,17 @@ import { Location } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ALLFeatures } from '../../../models/allfeatures';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 
 @Component({
   selector: 'app-refine-idea',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent],
+  imports: [RouterLink, CommonModule, SidebarComponent , ExchangeRatePipe],
   templateUrl: './refine-idea.component.html',
-  styleUrl: './refine-idea.component.css'
+  styleUrl: './refine-idea.component.css',
+
 })
 export class RefineIdeaComponent {
   @Input() id!: string;
@@ -25,7 +29,9 @@ export class RefineIdeaComponent {
   totalPrice: any;
   estimatedWeeks: number | undefined;
   noOfFeaturs: number = 0
-  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService) {
+  rates: any;
+
+  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService, private http: HttpClient) {
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
     this.projectsFeaturs = this.projectsData.selectdFeature
@@ -39,6 +45,7 @@ export class RefineIdeaComponent {
       this.getProjects();
     }
     this.getFeatures()
+    this.getRates('USD')
   }
 
   getProjects() {
@@ -267,5 +274,12 @@ export class RefineIdeaComponent {
     const weeks = Number(this.estimatedWeeks) || 0;
 
     return Math.ceil(((subFeatured + customisation) / cost) * (weeks * 5 * 8));
+  }
+
+  
+  getRates(base: string){
+  this.apiService.getRates('USD', ['INR', 'EUR']).subscribe((res: any) => {
+    this.rates = res.rates
+  })
   }
 }
