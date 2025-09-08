@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, effect, Input, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -15,7 +15,7 @@ import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 @Component({
   selector: 'app-refine-idea',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent , ExchangeRatePipe],
+  imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe],
   templateUrl: './refine-idea.component.html',
   styleUrl: './refine-idea.component.css',
 
@@ -29,7 +29,7 @@ export class RefineIdeaComponent {
   totalPrice: any;
   estimatedWeeks: number | undefined;
   noOfFeaturs: number = 0
-  rates: any;
+  rate: any;
 
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService, private http: HttpClient) {
     let projectData = sessionStorage.getItem('projectData');
@@ -38,6 +38,9 @@ export class RefineIdeaComponent {
     this.estimatedWeeks = this.projectsData.estimated_time
     this.totalPrice = this.projectsData.totalCost
     this.noOfFeaturs = this.projectsData.no_of_features
+    effect(() => {
+      this.rate = this.apiService._rate()
+    })
   }
 
   ngOnInit(): void {
@@ -45,7 +48,6 @@ export class RefineIdeaComponent {
       this.getProjects();
     }
     this.getFeatures()
-    this.getRates('USD')
   }
 
   getProjects() {
@@ -274,12 +276,5 @@ export class RefineIdeaComponent {
     const weeks = Number(this.estimatedWeeks) || 0;
 
     return Math.ceil(((subFeatured + customisation) / cost) * (weeks * 5 * 8));
-  }
-
-  
-  getRates(base: string){
-  this.apiService.getRates('USD', ['INR', 'EUR']).subscribe((res: any) => {
-    this.rates = res.rates
-  })
   }
 }

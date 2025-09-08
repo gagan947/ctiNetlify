@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { Auth, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
@@ -8,18 +8,25 @@ import { Auth, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
   providedIn: 'root'
 })
 export class ApiService {
-  // apiUrl = 'http://192.168.29.241:4500/'
+  apiUrl = 'http://192.168.29.241:4500/'
+  // imageUrl = 'http://192.168.29.241:4500/'
   // apiUrl = 'http://192.168.1.4:3000/prod/'
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
-  apiUrl = 'https://api.creativethoughts.ai/';
+  // apiUrl = 'https://api.creativethoughts.ai/';
   imageUrl = 'https://api.creativethoughts.ai';
 
   // apiUrl = 'http://localhost:4500/';
 
 
   private clearInputSubject = new Subject<void>();
+  _rate = signal<any>(null);
 
-  constructor(private http: HttpClient, private route: Router, private auth: Auth) { }
+  constructor(private http: HttpClient, private route: Router, private auth: Auth) {
+    const user = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
+    if (user) {
+      this.getRates(user.currency);
+    }
+  }
 
   getApi<T>(url: string): Observable<T> {
     return this.http.get<T>(this.apiUrl + url);
@@ -34,10 +41,18 @@ export class ApiService {
     return this.http.get<T>(this.apiUrl + url, { headers });
   }
 
-  getRates(base: string = 'USD', symbols: string[] = ['INR']) {
-    const url = `https://api.frankfurter.app/latest?from=INR&to=USD`;
-    return this.http.get(url);
+  getRates(base: string) {
+    const url = `https://api.frankfurter.app/latest?from=INR&to=${base}`;
+    this.http.get(url).subscribe((res: any) => {
+      this._rate.set(res.rates[base]);
+    });
   }
+
+  //  getRates(base: string) {
+  //   this.apiService.getRates('USD', ['INR', 'ERU']).subscribe((res: any) => {
+  //     this.rates = res.rates
+  //   })
+  // }
 
   isLogedIn() {
     return this.getToken() !== null;

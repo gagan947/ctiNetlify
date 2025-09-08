@@ -3540,6 +3540,7 @@ table.table.ct_compare_table {
   padding: 18px;
   top: auto;
   overflow: hidden;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.09);
 }
 
 .ct_tool_tip_cnt.ct_superpower_card_main_overlay:before {

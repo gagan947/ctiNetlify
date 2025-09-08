@@ -10,11 +10,12 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input-gg';
 import { CountryISO, SearchCountryField } from 'ngx-intl-tel-input-gg';
 import { NzFlexDirective } from 'ng-zorro-antd/flex';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { RouterLink } from '@angular/router';
 declare var bootstrap: any;
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [SidebarComponent, CommonModule, FormsModule, NzSelectModule, NgxIntlTelInputModule, NzInputOtpComponent, NzFlexDirective],
+  imports: [SidebarComponent, CommonModule, FormsModule, NzSelectModule, NgxIntlTelInputModule, NzInputOtpComponent, NzFlexDirective, RouterLink],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -29,6 +30,7 @@ export class ProfileComponent {
   phone: any;
   verifyOtp = false;
   currencies = [
+    { code: 'INR', name: 'India Rupee' },
     { code: 'USD', name: 'United States Dollar' },
     { code: 'EUR', name: 'Euro' },
     { code: 'SGD', name: 'Singapore Dollar' },
@@ -40,8 +42,9 @@ export class ProfileComponent {
   countdown: number = 60;
   interval: any;
   isLoading: boolean = false;
+  verificationType: string = '';
   selectedCurrency: string = 'USD'; // default
-  private apiService = inject(ApiService);
+  public apiService = inject(ApiService);
   private message = inject(NzMessageService); // Inject the service
 
   ngOnInit() {
@@ -52,7 +55,7 @@ export class ProfileComponent {
     this.apiService.getApi<ApiResponse<UserProfile>>('api/user/getUserProfile').subscribe((res) => {
       if (res.success && res.data.length > 0) {
         this.user = res.data[0];
-
+        localStorage.setItem('userDetailCTI', JSON.stringify(this.user));
         // Pre-select tax type based on existing data
         if (this.user.gst_number) this.selectedType = 'GST';
         else if (this.user.vat_number) this.selectedType = 'VAT';
@@ -73,15 +76,32 @@ export class ProfileComponent {
   }
 
   verifyEmail() {
+    if (this.user?.email) {
+      return;
+    }
+    this.verificationType = 'E'
+    const userData = {
+      email: this.user?.email,
+    }
 
+    this.apiService.postAPI('api/user/sendProfileOTPEmail', userData).subscribe((res: any) => {
+      if (res.success) {
+        this.startCountdown()
+        const otpModalEl = document.getElementById('otpVerifyModal');
+        if (otpModalEl) {
+          const modal = new bootstrap.Modal(otpModalEl);
+          modal.show();
+        }
+      }
+    })
   }
+
   verifySendOtp(form: NgForm) {
     if (form.invalid || !this.phone?.number) {
       console.log("Invalid form", form);
       return;
     }
-
-    console.log("Valid form, phone:", this.phone);
+    this.verificationType = 'M'
     const userData = {
       phoneNumber: this.phone!.number,
       country_code: this.phone!.dialCode,
@@ -102,10 +122,21 @@ export class ProfileComponent {
   errMsg: string = '';
   verifyOtpNumber() {
     this.isLoading = true
-    const userData = {
+    let userData: any = {
       otp: this.otp
     }
-    this.apiService.postAPI('api/user/verifyOtpNumberProfile', userData).subscribe((res: any) => {
+
+    let apiUrl = '';
+    if (this.verificationType === 'E') {
+      apiUrl = 'api/user/verifyEmailOtp';
+      userData = {
+        email: this.user?.email,
+        ...userData
+      }
+    } else {
+      apiUrl = 'api/user/verifyOtpNumberProfile';
+    }
+    this.apiService.postAPI(apiUrl, userData).subscribe((res: any) => {
       if (res.success) {
         this.message.success('OTP verified successfully');
         this.closeBtn.nativeElement.click();
@@ -125,7 +156,6 @@ export class ProfileComponent {
       this.user.country_code = this.phone!.dialCode;
       this.user.phoneNumber = this.phone!.number;
     }
-
     this.apiService.postAPI('api/user/updateUserProfile', this.user).subscribe((res: any) => {
       if (res.success) {
         this.message.success('Profile updated successfully');
@@ -136,14 +166,12 @@ export class ProfileComponent {
     });
   }
 
-
   restrictToNumbers(event: KeyboardEvent) {
     const charCode = event.which ? event.which : event.keyCode;
     if (charCode < 48 || charCode > 57) {
       event.preventDefault();
     }
   }
-
 
   startCountdown() {
     this.isResendDisabled = true;
@@ -168,6 +196,31 @@ export class ProfileComponent {
     this.apiService.postAPI('api/user/sendOtpNumberProfile', userData).subscribe((res: any) => {
       if (res.success) {
         this.startCountdown()
+      }
+    })
+  }
+
+  logoImg: any;
+  imagePreview: any;
+  onFileSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    this.logoImg = file;
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+        this.updateImage();
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  updateImage() {
+    let formData = new FormData();
+    formData.append('profile_image', this.logoImg ? this.logoImg : '');
+    this.apiService.postAPI('api/user/updateProfileImage', formData).subscribe((res: any) => {
+      if (res.success) {
+        this.message.success('Profile image updated successfully');
       }
     })
   }

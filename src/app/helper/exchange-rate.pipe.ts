@@ -6,13 +6,20 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true,
 })
 export class ExchangeRatePipe implements PipeTransform {
-  transform(value: number, rate: number, currencyCode: string): string {
+
+  private currencyCode: string = 'INR';
+  constructor() {
+    const user = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
+    this.currencyCode = user.currency
+  }
+
+  transform(value: number, rate: number): string {
     if (!value || !rate) return '';
     const converted = value * rate;
 
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: currencyCode,
+      currency: this.currencyCode,
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(converted);

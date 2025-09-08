@@ -200,7 +200,7 @@ export class LoginComponent {
           next: (res: any) => {
             if (res.success == true) {
               this.apiService.setToken(res.data.token);
-              localStorage.setItem('userDetailCTI', JSON.stringify(res.data.users));
+              localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
               this.message.success(res.message)
               this.router.navigate(['/main'])
               // this.projectInfo = res.projectInfo

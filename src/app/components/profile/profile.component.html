@@ -11,10 +11,12 @@
                               <div class="ct_profile_page_main ct_py_70 pt-0">
                                     <div>
                                           <div class="ct_profile_user">
-                                                <img loading="lazy" src="assets/img/men_user.png"
+                                                <img loading="lazy"
+                                                      [src]="imagePreview || apiService.imageUrl + user?.profile_image || 'assets/img/np_pro.png'"
                                                       alt="AI app builder for mobile and web">
                                                 <label for="ct_profile_img_icon">
-                                                      <input type="file" class="d-none" id="ct_profile_img_icon">
+                                                      <input type="file" class="d-none" id="ct_profile_img_icon"
+                                                            accept="image/*" (change)="onFileSelected($event)">
                                                       <div class="ct_edit_profile_icon">
                                                             <i class="fa-solid fa-pen"></i>
 
@@ -233,7 +235,8 @@
                                     class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center">
                                     <button class="ct_blue_outline_btn  justify-content-center"
                                           data-bs-dismiss="modal">Cancel</button>
-
+                                    <button class="ct_blue_btn_fill  justify-content-center" data-bs-dismiss="modal"
+                                          routerLink="/main">Proceed</button>
                               </div>
                         </div>
                   </div>
