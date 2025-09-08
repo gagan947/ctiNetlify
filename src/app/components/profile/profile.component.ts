@@ -76,7 +76,7 @@ export class ProfileComponent {
   }
 
   verifyEmail() {
-    if (this.user?.email) {
+    if (!this.user?.email) {
       return;
     }
     this.verificationType = 'E'
@@ -140,6 +140,7 @@ export class ProfileComponent {
       if (res.success) {
         this.message.success('OTP verified successfully');
         this.closeBtn.nativeElement.click();
+        this.otp = '';
         this.isLoading = false
         this.getProfile();
       } else {
@@ -188,12 +189,22 @@ export class ProfileComponent {
   }
 
   resendOtp() {
-    const userData = {
-      phoneNumber: this.phone!.number,
-      country_code: this.phone!.dialCode,
+    let userData: any = {};
+    let apiUrl = '';
+    if (this.verificationType === 'E') {
+      apiUrl = 'api/user/sendProfileOTPEmail';
+      userData = {
+        email: this.user?.email,
+      }
+    } else {
+      apiUrl = 'api/user/sendOtpNumberProfile';
+      userData = {
+        phoneNumber: this.phone!.number,
+        country_code: this.phone!.dialCode,
+      }
     }
 
-    this.apiService.postAPI('api/user/sendOtpNumberProfile', userData).subscribe((res: any) => {
+    this.apiService.postAPI(apiUrl, userData).subscribe((res: any) => {
       if (res.success) {
         this.startCountdown()
       }

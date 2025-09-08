@@ -255,7 +255,12 @@
                         <!-- You Need To Import Schedule Form here -->
                         <div class="text-center mb-4">
                               <h4 class="ct_fs_20 ct_fw_600 mb-1">OTP Verification</h4>
-                              <p class="mb-0 ct_text_op_5">Enter OTP code sent to {{phone?.dialCode}} {{phone?.number}}
+                              <p class="mb-0 ct_text_op_5">Enter OTP code sent to
+                                    @if(verificationType === 'E'){
+                                    {{ user?.email}}
+                                    }@else{
+                                    {{phone?.dialCode}} {{phone?.number}}
+                                    }
                               </p>
                         </div>
                         <div class="form-group mb-3">
@@ -273,7 +278,7 @@
                         <div>
                               <p class="mb-0 ct_fs_14 ct_fw_500 text-center">
                                     Didn’t receive the code?
-                                    <a class="ct_purple_link ct_fs_14" (click)="isResendDisabled ? null : resendOtp()"
+                                    <a class="ct_purple_link ct_fs_14" (click)="isResendDisabled  ? null : resendOtp()"
                                           [class.disabled]="isResendDisabled">
                                           Resend OTP
                                     </a>
