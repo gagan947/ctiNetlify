@@ -247,8 +247,6 @@ span.sender {
     height: auto;
     overflow-y: auto;
     max-height: calc(100vh - 200px);
-    background-color: #fff9f99e;
-    padding: 30px;
-    border-radius: 10px;
+   
 }
 
