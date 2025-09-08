@@ -9,119 +9,131 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../../sidebar/sidebar.component";
 @Component({
-  selector: 'app-make-it-mine',
-  standalone: true,
-  imports: [RouterLink, FormsModule, CommonModule, ColorPickerModule, SidebarComponent],
-  templateUrl: './make-it-mine.component.html',
-  styleUrl: './make-it-mine.component.css'
+    selector: 'app-make-it-mine',
+    standalone: true,
+    imports: [RouterLink, FormsModule, CommonModule, ColorPickerModule, SidebarComponent],
+    templateUrl: './make-it-mine.component.html',
+    styleUrl: './make-it-mine.component.css'
 })
 export class MakeItMineComponent {
-  @ViewChild('preview', { static: true }) iframe!: ElementRef<HTMLIFrameElement>;
-  @Input() id!: string;
-  projectsData: any;
-  projectName: string = 'My Creative Project';
-  imagePreview: any;
-  public color: string = '#2889e9';
-  selectedColor: any
-  logoImg: File | undefined
-  @ViewChild('logoBox') logoBox!: ElementRef;
-  nameInvalid = false
-  mobile_base = true;
-  submitted: boolean = false
-  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService,) {
-    let projectData = sessionStorage.getItem('projectData');
-    this.projectsData = JSON.parse(projectData!);
-    if (this.projectsData) {
-      this.imagePreview = this.projectsData.projectLogo
-      this.projectName = this.projectsData.projectName
-    }
-  }
-
-  ngAfterViewInit() {
-    const doc = this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow?.document;
-    if (doc) {
-      doc.open();
-      doc.write(this.htmlCode);
-      doc.close();
-    }
-  }
-
-  updateLogo() {
-    const doc = this.iframe.nativeElement.contentDocument;
-    if (doc) {
-      const logo = doc.querySelector('#myLogo') as HTMLImageElement;
-      if (logo) {
-        logo.src = this.imagePreview
-        logo.style.width = '100px'
-        logo.style.height = '30px'
-      }
-    }
-  }
-
-  updateName(name: any) {
-    this.projectName = name.trim();
-    if (!this.projectName) {
-      this.nameInvalid = true
-    } else {
-      this.nameInvalid = false
-    }
-  };
-
-  onFileSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    this.logoImg = file;
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreview = reader.result;
-        this.updateLogo();
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  onColorChange(color: string) {
-    this.selectedColor = color;
-  }
-
-
-  Navigate(id: any) {
-
-    if (this.projectName == '') {
-      this.submitted = true
-      return
-    }
-
-    let formData = new FormData();
-    formData.append('logoImg', this.logoImg ? this.logoImg : '');
-    formData.append('projectName', this.projectName);
-    formData.append('projectId', this.id);
-    // formData.append('logoSize', this.logoBox.nativeElement.getAttribute('style'));
-
-    this.apiService.postAPI('api/user/addProjectNameAndLogo', formData).subscribe({
-      next: (res: any) => {
-        if (res.success == true) {
-          let projectData = {
-            ...this.projectsData,
-            clientEnquryId: res.data,
-            selectedColor: this.selectedColor,
-            projectName: this.projectName,
-            projectLogo: this.imagePreview,
-            // logoStyle: this.logoBox.nativeElement.getAttribute('style'),
-          }
-
-          sessionStorage.setItem('projectData', JSON.stringify(projectData))
-          this.router.navigate([`/refine-idea/${id}`])
+    @ViewChild('preview', { static: true }) iframe!: ElementRef<HTMLIFrameElement>;
+    @ViewChild('preview1', { static: true }) iframe1!: ElementRef<HTMLIFrameElement>;
+    @Input() id!: string;
+    projectsData: any;
+    projectName: string = 'My Creative Project';
+    imagePreview: any;
+    public color: string = '#2889e9';
+    selectedColor: any
+    logoImg: File | undefined
+    @ViewChild('logoBox') logoBox!: ElementRef;
+    nameInvalid = false
+    mobile_base = true;
+    submitted: boolean = false
+    constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService,) {
+        let projectData = sessionStorage.getItem('projectData');
+        this.projectsData = JSON.parse(projectData!);
+        if (this.projectsData) {
+            this.imagePreview = this.projectsData.projectLogo
+            this.projectName = this.projectsData.projectName
         }
-      },
-      error: err => {
-        this.message.error(err.error.message);
-      }
-    })
-  }
+    }
+
+    ngAfterViewInit() {
+        const doc = this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow?.document;
+        const doc1 = this.iframe1.nativeElement.contentDocument || this.iframe1.nativeElement.contentWindow?.document;
+        if (doc && doc1) {
+            doc.open();
+            doc.write(this.htmlCode);
+            doc.close();
+
+            doc1.open();
+            doc1.write(this.htmlCode);
+            doc1.close();
+        }
+    }
+
+    updateLogo() {
+        const doc = this.iframe.nativeElement.contentDocument;
+        const doc1 = this.iframe1.nativeElement.contentDocument;
+        if (doc && doc1) {
+            const logo = doc.querySelector('#myLogo') as HTMLImageElement;
+            const logo1 = doc1.querySelector('#myLogo') as HTMLImageElement;
+            if (logo && logo1) {
+                logo.src = this.imagePreview
+                logo.style.width = '100px'
+                logo.style.height = '30px'
+
+                logo1.src = this.imagePreview
+                logo1.style.width = '100px'
+                logo1.style.height = '30px'
+            }
+        }
+    }
+
+    updateName(name: any) {
+        this.projectName = name.trim();
+        if (!this.projectName) {
+            this.nameInvalid = true
+        } else {
+            this.nameInvalid = false
+        }
+    };
+
+    onFileSelected(event: Event) {
+        const file = (event.target as HTMLInputElement).files?.[0];
+        this.logoImg = file;
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                this.imagePreview = reader.result;
+                this.updateLogo();
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    onColorChange(color: string) {
+        this.selectedColor = color;
+    }
 
 
-  htmlCode = `<!DOCTYPE html>
+    Navigate(id: any) {
+
+        if (this.projectName == '') {
+            this.submitted = true
+            return
+        }
+
+        let formData = new FormData();
+        formData.append('logoImg', this.logoImg ? this.logoImg : '');
+        formData.append('projectName', this.projectName);
+        formData.append('projectId', this.id);
+        // formData.append('logoSize', this.logoBox.nativeElement.getAttribute('style'));
+
+        this.apiService.postAPI('api/user/addProjectNameAndLogo', formData).subscribe({
+            next: (res: any) => {
+                if (res.success == true) {
+                    let projectData = {
+                        ...this.projectsData,
+                        clientEnquryId: res.data,
+                        selectedColor: this.selectedColor,
+                        projectName: this.projectName,
+                        projectLogo: this.imagePreview,
+                        // logoStyle: this.logoBox.nativeElement.getAttribute('style'),
+                    }
+
+                    sessionStorage.setItem('projectData', JSON.stringify(projectData))
+                    this.router.navigate([`/refine-idea/${id}`])
+                }
+            },
+            error: err => {
+                this.message.error(err.error.message);
+            }
+        })
+    }
+
+
+    htmlCode = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -396,7 +408,7 @@ export class MakeItMineComponent {
                     <hr class="my-4" style="border-color: var(--border);">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <button class="btn-ghost text-sm gap-1">
+                            <button class="btn-ghost text-sm gap-1 flex items-center">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
                                     <circle cx="9" cy="9" r="2"/>
@@ -404,7 +416,7 @@ export class MakeItMineComponent {
                                 </svg>
                                 Photo/video
                             </button>
-                            <button class="btn-ghost text-sm gap-1">
+                            <button class="btn-ghost text-sm gap-1 flex items-center">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -485,19 +497,19 @@ export class MakeItMineComponent {
                     <!-- Action Buttons -->
                     <div class="p-2">
                         <div class="flex items-center">
-                            <button class="btn-ghost flex-1 justify-center gap-2">
+                            <button class="btn-ghost flex-1 justify-center gap-2 flex items-center">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                                 </svg>
                                 Like
                             </button>
-                            <button class="btn-ghost flex-1 justify-center gap-2">
+                            <button class="btn-ghost flex-1 justify-center gap-2 flex items-center">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                                 </svg>
                                 Comment
                             </button>
-                            <button class="btn-ghost flex-1 justify-center gap-2">
+                            <button class="btn-ghost flex-1 justify-center gap-2 flex items-center">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
                                 </svg>
@@ -576,19 +588,19 @@ export class MakeItMineComponent {
                     <!-- Action Buttons -->
                     <div class="p-2">
                         <div class="flex items-center">
-                            <button class="btn-ghost flex-1 justify-center gap-2">
+                            <button class="btn-ghost flex-1 justify-center gap-2 flex items-center">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                                 </svg>
                                 Like
                             </button>
-                            <button class="btn-ghost flex-1 justify-center gap-2">
+                            <button class="btn-ghost flex-1 justify-center gap-2 flex items-center">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                                 </svg>
                                 Comment
                             </button>
-                            <button class="btn-ghost flex-1 justify-center gap-2">
+                            <button class="btn-ghost flex-1 justify-center gap-2 flex items-center">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
                                 </svg>
@@ -667,19 +679,19 @@ export class MakeItMineComponent {
                     <!-- Action Buttons -->
                     <div class="p-2">
                         <div class="flex items-center">
-                            <button class="btn-ghost flex-1 justify-center gap-2">
+                            <button class="btn-ghost flex-1 justify-center gap-2 flex items-center">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                                 </svg>
                                 Like
                             </button>
-                            <button class="btn-ghost flex-1 justify-center gap-2">
+                            <button class="btn-ghost flex-1 justify-center gap-2 flex items-center">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                                 </svg>
                                 Comment
                             </button>
-                            <button class="btn-ghost flex-1 justify-center gap-2">
+                            <button class="btn-ghost flex-1 justify-center gap-2 flex items-center">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
                                 </svg>
