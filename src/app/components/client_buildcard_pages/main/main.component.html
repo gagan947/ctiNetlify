@@ -1,7 +1,7 @@
 <section class="ct_dash_board_main" style="display: block !important">
       <app-sidebar></app-sidebar>
       <div class="ct_dash_right_content"
-            style="    background: linear-gradient(90deg, rgb(250 218 188 / 44%), rgb(234 170 213 / 36%), rgb(220 229 244 / 69%)); height: auto; min-height: 100vh;">
+            style="background: linear-gradient(90deg, rgb(250 218 188 / 44%), rgb(234 170 213 / 36%), rgb(220 229 244 / 69%)); height: auto; min-height: 100vh;">
             <div class="ct_dash_toggle_bar">
                   <i class="fa-solid fa-bars"></i>
             </div>
@@ -94,7 +94,6 @@
 
 
                   <div class="row ct_mt_100 ct_py_70 pt-0">
-
                         @for (item of projectsData; track $index) {
                         <div class=" col-xl-4 col-lg-6 mb-4">
                               <div class="ct_white_bg ct_ecommerse_web_card h-100">
@@ -103,9 +102,8 @@
                                                 <img [src]="imageURL+ item.projectImage"
                                                       alt="AI app builder for mobile and web">
                                           </div>
-                                          <div class="ct_bash_icon12"
-                                                (click)="updateProjectId(item.id , item.subFeaturesCount)"
-                                                data-bs-toggle="modal" data-bs-target="#ct_base_modal_1">
+                                          <div class="ct_bash_icon12" data-bs-toggle="modal"
+                                                data-bs-target="#calendlyModal">
                                                 <i class="bi bi-telephone"></i>
                                           </div>
                                     </div>
@@ -124,19 +122,13 @@
                                     </ul>
 
                                     <button class="ct_schedule_call_btn w-100 justify-content-center"
-                                          data-bs-toggle="modal" data-bs-target="#calendlyModal">Schedule a
-
-                                          call <i class="bi bi-telephone"></i></button>
+                                          [routerLink]="['/make-it-mine/', item.id ]">Build Project</button>
 
                               </div>
                         </div>
-
                         }
-
-
                         <div #anchor></div>
                   </div>
-
             </div>
       </div>
 </section>
@@ -183,7 +175,6 @@
 <!-- Mobile page section E -->
 
 <!-- Shedule Call Modal S -->
-
 <div class="modal fade  modal-xl" id="ct_schedule_call_modal" tabindex="-1"
       aria-labelledby="ct_schedule_call_modalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -359,12 +350,8 @@
                                     <a [routerLink]="['/make-it-mine/', projectId ]" data-bs-dismiss="modal"
                                           class="ct_blue_btn_fill  justify-content-center px-4">Next</a>
                               </div>
-
-
-
                         </div>
                   </div>
-
             </div>
       </div>
 </div>

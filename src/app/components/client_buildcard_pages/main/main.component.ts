@@ -33,15 +33,11 @@ export class MainComponent {
     this.imageURL = this.apiservice.imageUrl
   }
 
-
-
   ngOnInit(): void {
     this.getProjects();
     sessionStorage.removeItem('projectData');
     // this.socket = io(this.apiservice.apiUrl);
-
     let currentBotMsg = "";
-
     // listen for streaming tokens
     this.socket.on('botReply', (msg: string) => {
 
@@ -49,7 +45,6 @@ export class MainComponent {
         console.log("✅ Stream finished");
         return;
       }
-
       // Append stream to last bot message
       if (
         this.messages.length > 0 &&
@@ -79,15 +74,7 @@ export class MainComponent {
     this.observer.observe(this.anchor.nativeElement);
   }
 
-
-
-
-
-
-
-
   getProjects() {
-
     this.apiservice.getApi<ProjectResponse>(`api/user/fetchAllProjects?page=${this.page}`)
       .subscribe({
         next: (res) => {
@@ -97,7 +84,6 @@ export class MainComponent {
               contain: item.contain ? item.contain.split(',') : []
             }));
             this.projectsData = [...this.projectsData, ...mappedData];
-
           } else {
             // this.loading = false
           }
@@ -127,7 +113,6 @@ export class MainComponent {
 
     this.projectId = id;
     this.featureCount = featureCount
-
   }
 
   LogOut() {
@@ -137,7 +122,6 @@ export class MainComponent {
 
   sendMessage() {
     if (!this.userMessage.trim()) return;
-
     this.messages.push({ sender: 'You', text: this.userMessage });
     this.socket.emit('chatMessage', this.userMessage);
     this.isLoading = true;
