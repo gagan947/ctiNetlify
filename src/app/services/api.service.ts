@@ -34,6 +34,11 @@ export class ApiService {
     return this.http.get<T>(this.apiUrl + url, { headers });
   }
 
+  getRates(base: string = 'USD', symbols: string[] = ['INR']) {
+    const url = `https://api.frankfurter.app/latest?from=INR&to=USD`;
+    return this.http.get(url);
+  }
+
   isLogedIn() {
     return this.getToken() !== null;
   }

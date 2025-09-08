@@ -478,7 +478,7 @@
                                                                   </div>
                                                                </td>
                                                                <td><span
-                                                                  class="ct_fw_600">{{item.featureTime * 1750 | currency : 'INR'}}</span>
+                                                                  class="ct_fw_600">{{item.featureTime * 1750 | convertCurrency:0.00124:'USD'}}</span>
                                                                </td>
                                                                <td><span
                                                                   class="ct_fw_600">{{item.featureTime}}</span>
@@ -510,10 +510,8 @@
                                                                </td>
                                                                <td><span
                                                                   class="">{{item2.estimated_time * 1750
-                                                                  |
-                                                                  currency
-                                                                  :
-                                                                  'INR'}}</span>
+                                                                  
+                                                                  | convertCurrency:0.00124:'USD'}}</span>
                                                                </td>
                                                                <td><span
                                                                   class="">
@@ -581,7 +579,7 @@
                                              </span>
                                              <p
                                                 class="mb-0 mt-1 ct_fw_700">
-                                                {{ totalPrice | currency:'INR' }}
+                                                {{ totalPrice | convertCurrency:0.00124:'USD' }}
                                              </p>
                                           </div>
                                           <div class="">
