@@ -72,7 +72,7 @@ export const chatbotFlow: any = {
     step: "details",
     message: "Great! 👌\nCould you share the main objective of your project **{projectName}**? \nFor example: what it should solves, who will use it, or the core purpose behind building it.",
     input: true,
-    next: "features"
+    next: "stop"
   },
 
   features: {
@@ -163,6 +163,10 @@ export const chatbotFlow: any = {
 
   end: {
     step: "end",
+    message: "👍 Thanks for chatting! 🚀"
+  },
+  stop: {
+    step: "stop",
     message: "👍 Thanks for chatting! 🚀"
   }
 };

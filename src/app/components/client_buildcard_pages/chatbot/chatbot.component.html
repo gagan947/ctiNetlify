@@ -33,6 +33,16 @@
                         {{ option.label }}
                     </button>
                 </div>
+                @if(currentStep == 'details' || currentStep == 'stop'){
+                <div class="options ct_creative_msg_card cti_msg_left ms-5" *ngIf="relevantFeatures.length > 0">
+                    <ul style="list-style: disc;" class="">
+                        @for (item of relevantFeatures; track $index) {
+                        <li>{{item.featuresName}}</li>
+                        }
+                    </ul>
+                </div>
+
+                }
                 <div *ngIf="isLoading" class="msg-row in">
                     <div class="spinner-grow" role="status">
                         <span class="sr-only">Loading...</span>
