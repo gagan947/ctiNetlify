@@ -5,7 +5,6 @@ import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { Project, ProjectResponse } from '../../../models/projects';
 import { SidebarComponent } from "../sidebar/sidebar.component";
-import { io } from 'socket.io-client';
 import { ChatbotComponent } from "../chatbot/chatbot.component";
 declare var Calendly: any;
 @Component({
@@ -29,10 +28,9 @@ export class MainComponent {
   isLoading: boolean = false;
   page = 1;
   imageURL: any
+  isSuggested: boolean = false
   constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
     this.imageURL = this.apiservice.imageUrl;
-
-    
   }
 
   ngOnInit(): void {
@@ -66,9 +64,21 @@ export class MainComponent {
     });
   }
 
+  receiveData(data: any) {
+    if (data.length > 0) {
+      this.isSuggested = true
+    }
+    const mappedData = data.map((item: any) => ({
+      ...item,
+      contain: item.contain ? item.contain.split(',') : []
+    }));
+    this.projectsData = [...mappedData];
+    console.log('Got from child:', this.projectsData);
+  }
+
   ngAfterViewInit() {
     this.observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
+      if (entry.isIntersecting && !this.isSuggested) {
         this.page += 1;
         this.getProjects();
       }

@@ -22,12 +22,12 @@ export class ApiService {
   _rate = signal<any>(null);
 
   constructor(private http: HttpClient, private route: Router, private auth: Auth) {
-    const data:any = localStorage.getItem('userDetailCTI')
-    if(data !== 'undefined'){
+    const data: any = localStorage.getItem('userDetailCTI')
+    if (data !== 'undefined') {
       const user = JSON.parse(data);
-      this.getRates(user.currency);
+      this.getRates(user?.currency);
     }
-    
+
   }
 
   getApi<T>(url: string): Observable<T> {

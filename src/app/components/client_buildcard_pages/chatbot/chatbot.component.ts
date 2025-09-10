@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -23,6 +23,7 @@ export class ChatbotComponent {
   userInput: string = '';
   standardChatbot: boolean = true;
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  @Output() dataEmitter = new EventEmitter<string>();
   constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
     this.addBotMessage(this.flow[this.currentStep].message);
   }
@@ -45,7 +46,6 @@ export class ChatbotComponent {
   }
 
   sendMessage() {
-
     this.userInput = this.userInput.trim();
     if (this.standardChatbot) {
       if (this.userInput.trim()) {
@@ -143,7 +143,6 @@ export class ChatbotComponent {
       this.userInput = '';
       setTimeout(() => {
         this.isLoading = false;
-
         this.addBotMessage(response.answer);
         if (response.flow == 1) {
           this.currentStep = 'welcome'
@@ -158,11 +157,11 @@ export class ChatbotComponent {
     this.apiservice.postAPI<any, any>('api/user/projectSuggestions', { description: description }).subscribe((response) => {
       this.userInput = '';
       setTimeout(() => {
-        this.isLoading = false;
-      
-
+        this.isLoading = false
+        if (response.suggestions.length > 0) {
+          this.dataEmitter.emit(response.suggestions);
+        }
         this.addBotMessage(response.answer);
-
         if (response.flow == 1) {
           this.currentStep = 'details'
         } else {
