@@ -18,6 +18,7 @@ export class ChatbotComponent {
   socket: any;
   userMessage = '';
   messages: any[] = [];
+  relevantFeatures: any[] = [];
   isLoading: boolean = false;
   userData: any = {};
   userInput: string = '';
@@ -75,15 +76,20 @@ export class ChatbotComponent {
         }
 
         const nextStep = this.flow[this.currentStep].next;
+        console.log("Next step:", nextStep);
         this.userInput = '';
 
         setTimeout(() => {
           this.isLoading = false;
           this.currentStep = nextStep;
-          const botMsg = this.replacePlaceholders(this.flow[this.currentStep].message);
+          if (this.currentStep === 'stop') {
 
-          this.addBotMessage(botMsg);
-          this.userInput = '';
+          } else {
+            const botMsg = this.replacePlaceholders(this.flow[this.currentStep].message);
+            this.addBotMessage(botMsg);
+            this.userInput = '';
+
+          }
 
         }, 2000)
 
@@ -160,12 +166,13 @@ export class ChatbotComponent {
         this.isLoading = false
         if (response.suggestions.length > 0) {
           this.dataEmitter.emit(response.suggestions);
+          this.relevantFeatures =response.relevantFeatures
         }
         this.addBotMessage(response.answer);
         if (response.flow == 1) {
           this.currentStep = 'details'
         } else {
-
+         this.standardChatbot = false;
         }
       }, 500)
     })
