@@ -152,5 +152,16 @@
     font-weight: 600;
 }
 
-
-
+button.ct_grey_btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    font-size: 28px;
+    border: none;
+    margin-inline: auto;
+    display: block;
+    background: linear-gradient(346deg, rgb(0 100 255 / 9%) 0%, rgb(182 12 254 / 18%) 50%, rgb(250 187 0 / 17%) 100%);
+}
+.ct_ecommerse_web_card{
+  display: grid;
+}
