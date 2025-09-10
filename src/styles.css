@@ -87,6 +87,20 @@ ul.iti__country-list {
       height: 30px;
 }
 
+.ct_currency_input nz-select-top-control.ant-select-selector.ng-tns-c2110204387-0 {
+      height: 48px;
+      border: 1px solid #e6e6e6;
+      border-radius: 5px;
+}
+
+.ct_currency_input .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+      box-shadow: unset !important;
+}
+
+.ct_currency_input nz-select-item.ant-select-selection-item.ng-star-inserted {
+      line-height: 44px;
+}
+
 ::-webkit-scrollbar {
       width: 5px;
       height: 5px;
