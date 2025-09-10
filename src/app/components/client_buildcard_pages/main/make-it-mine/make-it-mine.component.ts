@@ -107,7 +107,7 @@ export class MakeItMineComponent {
         let formData = new FormData();
         formData.append('logoImg', this.logoImg ? this.logoImg : '');
         formData.append('projectName', this.projectName);
-        formData.append('projectId', this.id);
+        formData.append('projectId', this.id ? this.id : '0');
         // formData.append('logoSize', this.logoBox.nativeElement.getAttribute('style'));
 
         this.apiService.postAPI('api/user/addProjectNameAndLogo', formData).subscribe({

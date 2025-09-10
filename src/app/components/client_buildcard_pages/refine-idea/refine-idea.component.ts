@@ -55,7 +55,7 @@ export class RefineIdeaComponent {
       .subscribe({
         next: (res) => {
           if (res.success == true) {
-            this.allFeatures = this.projectsFeaturs = res.data;
+            this.allFeatures = this.projectsFeaturs = res.data.length > 0 ? res.data : [];
             this.projectsFeaturs.map((feature: any) => {
               feature.featureTime = feature.subFeatures.reduce(
                 (pre: number, next: { estimated_time: number }) => pre + Number(next.estimated_time),
