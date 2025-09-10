@@ -14,7 +14,8 @@
                                     <div>
                                           <div class="d-flex align-items-center justify-content-between gap-2 mb-4">
                                                 <div class="ct_ecommerse_web_icon mb-0">
-                                                      <img [src]="" alt="AI app builder for mobile and web">
+                                                      <img src="assets/img/custom app logo.png"
+                                                            alt="AI app builder for mobile and web">
                                                 </div>
                                                 <div class="ct_bash_icon12" data-bs-toggle="modal"
                                                       data-bs-target="#calendlyModal">
@@ -26,12 +27,13 @@
                                                 <p class="mb-0 ct_fw_500">BUILD CUSTOM APP</p>
                                           </div>
                                           <div class="pt-5">
-                                                <button class="ct_grey_btn">+ </button>
+                                                <button class="ct_grey_btn" [routerLink]="['/make-it-mine']">+
+                                                </button>
                                           </div>
                                     </div>
 
                                     <button class="ct_schedule_call_btn w-100 justify-content-center mt-auto"
-                                          [routerLink]="['/make-it-mine/' ]">Build Project</button>
+                                          [routerLink]="['/make-it-mine' ]">Build Project</button>
 
                               </div>
                         </div>
@@ -301,8 +303,9 @@
 </div>
 <!-- Refrsh page modal E -->
 
-<div class="modal fade" id="calendlyModal" tabindex="-1" aria-labelledby="calendlyModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
+<div class="modal fade modal-xl" id="calendlyModal" tabindex="-1" aria-labelledby="calendlyModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
             <div class="modal-content">
                   <div class="modal-header">
                         <h5 class="modal-title" id="calendlyModalLabel">Schedule a Call</h5>

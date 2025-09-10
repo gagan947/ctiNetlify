@@ -84,6 +84,14 @@ export class MainComponent {
       }
     });
     this.observer.observe(this.anchor.nativeElement);
+
+    const calendlyContainer = document.getElementById('calendly-inline-widget');
+    if (calendlyContainer) {
+      Calendly.initInlineWidget({
+        url: 'https://calendly.com/creativethoughts/30min',
+        parentElement: calendlyContainer,
+      });
+    }
   }
 
   getProjects() {
@@ -110,16 +118,6 @@ export class MainComponent {
   openCalendly() {
     Calendly.initPopupWidget({ url: 'https://calendly.com/mohdfaraz-ctinfotech/30min' });
   };
-
-  // ngAfterViewInit() {
-  //   const calendlyContainer = document.getElementById('calendly-inline-widget');
-  //   if (calendlyContainer) {
-  //     Calendly.initInlineWidget({
-  //       url: 'https://calendly.com/mohdfaraz-ctinfotech/30min',
-  //       parentElement: calendlyContainer
-  //     });
-  //   }
-  // };
 
   updateProjectId(id: any, featureCount: number) {
 

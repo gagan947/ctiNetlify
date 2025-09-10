@@ -1,4 +1,4 @@
-<div class="modal fade" id="calendlyModal" tabindex="-1" aria-labelledby="calendlyModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="calendlyModal" tabindex="-1" aria-labelledby="calendlyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,44 +10,44 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 <div class="row">
     <div class="col-lg-8 mx-auto">
-       <div style=" background-color: #fff9f99e;
+        <div style=" background-color: #fff9f99e;
     padding: 30px;
     border-radius: 10px;">
-         <div #scrollContainer class="ct_creative_msg_top_bar px-3">
-            @for (item of messages; track $index) {
-            <div class="d-flex align-items-center gap-2 mb-3" class="msg-row"
-                [ngClass]="item.sender === 'You' ? 'out' : 'in'">
-                <div class="avatar">{{ item.sender === 'You' ? 'Y' : 'B' }}</div>
-                <div class="ct_creative_msg_card cti_msg_left mb-0">
-                    <p class="mb-0" style="white-space: pre-wrap;   font-size: 14px;">{{ item.text }}</p>
+            <div #scrollContainer class="ct_creative_msg_top_bar px-3">
+                @for (item of messages; track $index) {
+                <div class="d-flex align-items-center gap-2 mb-3" class="msg-row"
+                    [ngClass]="item.sender === 'You' ? 'out' : 'in'">
+                    <div class="avatar">{{ item.sender === 'You' ? 'Y' : 'B' }}</div>
+                    <div class="ct_creative_msg_card cti_msg_left mb-0">
+                        <p class="mb-0" style="white-space: pre-wrap;   font-size: 14px;">{{ item.text }}</p>
+                    </div>
                 </div>
-            </div>
-            }
-            <div class="options" *ngIf="getOptions().length">
-                <button *ngFor="let option of getOptions()" (click)="selectOption(option)">
-                    {{ option.label }}
-                </button>
-            </div>
-            <div *ngIf="isLoading" class="msg-row in">
-                <div class="spinner-grow" role="status">
-                    <span class="sr-only">Loading...</span>
+                }
+                <div class="options" *ngIf="getOptions().length">
+                    <button *ngFor="let option of getOptions()" (click)="selectOption(option)">
+                        {{ option.label }}
+                    </button>
                 </div>
-            </div>
+                <div *ngIf="isLoading" class="msg-row in">
+                    <div class="spinner-grow" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
 
-           
-        </div>
-         <footer class="chat-input">
+
+            </div>
+            <footer class="chat-input">
                 <input [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Type your message…"
                     autocomplete="off" />
                 <button (click)="sendMessage()" aria-label="Send message">
                     ➤
                 </button>
             </footer>
-       </div>
+        </div>
     </div>
 </div>
