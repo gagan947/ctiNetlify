@@ -20,6 +20,9 @@ export const routes: Routes = [
             path: 'main', loadComponent: () => import('./components/client_buildcard_pages/main/main.component').then(c => c.MainComponent)
       },
       {
+            path: 'make-it-mine', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent)
+      },
+      {
             path: 'make-it-mine/:id', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent)
       },
       {
