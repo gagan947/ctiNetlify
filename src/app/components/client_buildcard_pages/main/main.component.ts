@@ -30,7 +30,9 @@ export class MainComponent {
   page = 1;
   imageURL: any
   constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
-    this.imageURL = this.apiservice.imageUrl
+    this.imageURL = this.apiservice.imageUrl;
+
+    
   }
 
   ngOnInit(): void {

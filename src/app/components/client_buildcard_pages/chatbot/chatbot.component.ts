@@ -66,7 +66,9 @@ export class ChatbotComponent {
           this.userData.projectName = this.userInput.trim();
         }
         if (this.currentStep === 'details') {
+          console.log("Here to give project suggestions");
           this.userData.details = this.userInput.trim();
+          this.getProjectSuggestions(this.userData.details);
         }
         if (this.currentStep === 'features') {
           this.userData.features = this.userInput.trim();
@@ -148,7 +150,25 @@ export class ChatbotComponent {
         } else {
 
         }
-      }, 2000)
+      }, 500)
+    })
+  }
+  getProjectSuggestions(description: string) {
+    this.isLoading = true;
+    this.apiservice.postAPI<any, any>('api/user/projectSuggestions', { description: description }).subscribe((response) => {
+      this.userInput = '';
+      setTimeout(() => {
+        this.isLoading = false;
+      
+
+        this.addBotMessage(response.answer);
+
+        if (response.flow == 1) {
+          this.currentStep = 'details'
+        } else {
+
+        }
+      }, 500)
     })
   }
 }
