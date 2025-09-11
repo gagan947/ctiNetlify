@@ -48,6 +48,7 @@ export class ChatbotComponent {
 
   sendMessage() {
     this.userInput = this.userInput.trim();
+    this.relevantFeatures = [];
     if (this.standardChatbot) {
       if (this.userInput.trim()) {
         const isValid = this.flow[this.currentStep].input;
@@ -67,7 +68,7 @@ export class ChatbotComponent {
           this.userData.projectName = this.userInput.trim();
         }
         if (this.currentStep === 'details') {
-          console.log("Here to give project suggestions");
+          
           this.userData.details = this.userInput.trim();
           this.getProjectSuggestions(this.userData.details);
         }
@@ -76,11 +77,14 @@ export class ChatbotComponent {
         }
 
         const nextStep = this.flow[this.currentStep].next;
-        console.log("Next step:", nextStep);
         this.userInput = '';
 
         setTimeout(() => {
-          this.isLoading = false;
+          if(this.currentStep === 'details')  {
+          
+          }else{
+            this.isLoading = false;
+          }
           this.currentStep = nextStep;
           if (this.currentStep === 'stop') {
 
@@ -100,9 +104,7 @@ export class ChatbotComponent {
     }
   }
   replacePlaceholders(message: string): string {
-    console.log("here", message, this.userData);
     const replaced = message.replace(/{projectName}/g, this.userData.projectName || '');
-    console.log("after replace:", replaced);
     return replaced;
   }
 
@@ -122,10 +124,11 @@ export class ChatbotComponent {
     this.currentStep = option.next;
     this.isLoading = true;
     if (this.currentStep !== 'chatbot') {
+      this.standardChatbot = true;
       setTimeout(() => {
         this.isLoading = false;
         if (this.flow[this.currentStep]) {
-          console.log("this.flow[this.currentStep]", this.flow[this.currentStep]);
+        
           const botMsg = this.replacePlaceholders(this.flow[this.currentStep].message);
 
           this.addBotMessage(botMsg);
@@ -152,6 +155,7 @@ export class ChatbotComponent {
         this.addBotMessage(response.answer);
         if (response.flow == 1) {
           this.currentStep = 'welcome'
+          this.standardChatbot = true
         } else {
 
         }
@@ -163,15 +167,17 @@ export class ChatbotComponent {
     this.apiservice.postAPI<any, any>('api/user/projectSuggestions', { description: description }).subscribe((response) => {
       this.userInput = '';
       setTimeout(() => {
-        this.isLoading = false
+       
         if (response.suggestions.length > 0) {
           this.dataEmitter.emit(response.suggestions);
           this.relevantFeatures =response.relevantFeatures
+          this.isLoading = false
         }
         this.addBotMessage(response.answer);
         if (response.flow == 1) {
           this.currentStep = 'details'
         } else {
+          this.currentStep = 'chatbot'
          this.standardChatbot = false;
         }
       }, 500)

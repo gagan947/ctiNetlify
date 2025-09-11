@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, effect, Input } from '@angular/core';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Feature } from '../../../models/projects';
@@ -7,16 +7,18 @@ import { CommonModule } from '@angular/common';
 import { ProjectData } from '../../../models/sessionData';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
+import { ExchangeRatePipe } from "../../../helper/exchange-rate.pipe";
 
 @Component({
   selector: 'app-plan-delivery',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule, SidebarComponent],
+  imports: [RouterLink, CommonModule, FormsModule, SidebarComponent, ExchangeRatePipe],
   templateUrl: './plan-delivery.component.html',
   styleUrl: './plan-delivery.component.css'
 })
 export class PlanDeliveryComponent {
   @Input() id!: string;
+  rate: any;
   projectsData: ProjectData;
   projectsFeaturs: Feature[] = [];
   commongFeaturs: any[] = [];
@@ -48,6 +50,9 @@ export class PlanDeliveryComponent {
   PhasesDeliverables: any[] = [{ design: "We do your designs" }, "Product Roadmap", "Clickable prototype", "Basic build", "Full build"];
   originalProjectCost: any;
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService) {
+    effect(() => {
+      this.rate = this.apiService._rate()
+    })
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
     this.totalPrice = this.projectsData.totalCost;

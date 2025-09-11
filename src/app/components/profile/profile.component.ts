@@ -160,6 +160,8 @@ export class ProfileComponent {
     this.apiService.postAPI('api/user/updateUserProfile', this.user).subscribe((res: any) => {
       if (res.success) {
         this.message.success('Profile updated successfully');
+        console.log(this.user?.currency);
+        this.apiService.getRates(this.user?.currency);
         this.getProfile();
       } else {
         this.message.error(res.message);

@@ -49,25 +49,31 @@ export class ApiService {
   //     this._rate.set(1);
   //     return;
   //   }
-  
+
   //   const url = `https://api.frankfurter.app/latest?from=INR&to=${base}`;
   //   this.http.get(url).subscribe((res: any) => {
   //     this._rate.set(res.rates[base]);
   //   });
   // }
 
-  getRates(base: string) {
+  getRates(base: any) {
+    const key = 'b0cb67a3bd5f488aa622b7fb10006590';
+  
+    // handle INR directly
     if (base === 'INR') {
       this._rate.set(1);
       return;
     }
   
-    const url = `https://api.exchangerate.host/latest?base=INR&symbols=${base}`;
+    const url = `https://api.exchangerate.host/live?access_key=${key}&currencies=${base}&source=INR`;
+  
     this.http.get(url).subscribe((res: any) => {
-      this._rate.set(res.rates[base]);
+      if (res.success) {
+        this._rate.set(res.quotes[`INR${base}`]);
+      }
     });
   }
-  
+
 
   //  getRates(base: string) {
   //   this.apiService.getRates('USD', ['INR', 'ERU']).subscribe((res: any) => {

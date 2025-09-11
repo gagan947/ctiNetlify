@@ -93,10 +93,8 @@
                                                                   <h6 class="ct_fs_14 mb-0 text-white">TOTAL PROJECT
                                                                         COST</h6>
                                                                   <h5 class="ct_fs_18 ct_fw_700 text-white mb-0">
-                                                                        {{projectsData.finalCost |
-                                                                        currency
-                                                                        :
-                                                                        'INR'}}
+                                                                        {{projectsData.finalCost 
+                                                                        | convertCurrency:rate}}
                                                                   </h5>
                                                             </li>
                                                             <li>
@@ -324,7 +322,7 @@
                                           <div class="position-relative ct_w_fit_content mx-auto">
                                                 <img loading="lazy" src="assets/img/iPhone_14 Plus_ (new).png" style="height: 350px;"
                                                       alt="AI app builder for mobile and web">
-                                                <div class="ct_mob_overlay_top_cnt_12">
+                                                <div class="ct_mob_overlay_top_cnt_12 d-none">
                                                       <div class="ct_add_logo_by_ai" [style]="projectsData.logoStyle">
                                                             @if(!projectsData.projectLogo){
                                                             <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
