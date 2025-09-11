@@ -43,12 +43,12 @@ export class ChatbotComponent {
     if (text.includes('{name}') && this.userData.name) {
       text = text.replace('{name}', this.userData.name);
     }
-    this.messages.push({ sender: 'bot', text, step: this.currentStep });
+    this.messages.push({ sender: 'bot', text, step: this.currentStep, features: this.relevantFeatures });
   }
 
   sendMessage() {
     this.userInput = this.userInput.trim();
-    this.relevantFeatures = [];
+    // this.relevantFeatures = [];
     if (this.standardChatbot) {
       if (this.userInput.trim()) {
         const isValid = this.flow[this.currentStep].input;
@@ -68,7 +68,7 @@ export class ChatbotComponent {
           this.userData.projectName = this.userInput.trim();
         }
         if (this.currentStep === 'details') {
-          
+
           this.userData.details = this.userInput.trim();
           this.getProjectSuggestions(this.userData.details);
         }
@@ -80,9 +80,9 @@ export class ChatbotComponent {
         this.userInput = '';
 
         setTimeout(() => {
-          if(this.currentStep === 'details')  {
-          
-          }else{
+          if (this.currentStep === 'details') {
+
+          } else {
             this.isLoading = false;
           }
           this.currentStep = nextStep;
@@ -128,7 +128,7 @@ export class ChatbotComponent {
       setTimeout(() => {
         this.isLoading = false;
         if (this.flow[this.currentStep]) {
-        
+
           const botMsg = this.replacePlaceholders(this.flow[this.currentStep].message);
 
           this.addBotMessage(botMsg);
@@ -167,19 +167,19 @@ export class ChatbotComponent {
     this.apiservice.postAPI<any, any>('api/user/projectSuggestions', { description: description }).subscribe((response) => {
       this.userInput = '';
       setTimeout(() => {
-       
+
         if (response.suggestions.length > 0) {
           this.dataEmitter.emit(response.suggestions);
-          this.relevantFeatures =response.relevantFeatures
+          this.relevantFeatures = response.relevantFeatures
           this.isLoading = false
         }
-        this.addBotMessage(response.answer);
         if (response.flow == 1) {
           this.currentStep = 'details'
         } else {
           this.currentStep = 'chatbot'
-         this.standardChatbot = false;
+          this.standardChatbot = false;
         }
+        this.addBotMessage(response.answer);
       }, 500)
     })
   }
