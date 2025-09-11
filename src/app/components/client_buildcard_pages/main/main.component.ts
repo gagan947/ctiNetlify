@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { Project, ProjectResponse } from '../../../models/projects';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ChatbotComponent } from "../chatbot/chatbot.component";
+import { BdLoaderComponent } from "../../shared/bd-loader/bd-loader.component";
 declare var Calendly: any;
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule, ChatbotComponent],
+  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule, ChatbotComponent, BdLoaderComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
@@ -28,7 +29,8 @@ export class MainComponent {
   isLoading: boolean = false;
   page = 1;
   imageURL: any
-  isSuggested: boolean = false
+  isSuggested: boolean = false;
+  loading: boolean = false;
   constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
     this.imageURL = this.apiservice.imageUrl;
   }

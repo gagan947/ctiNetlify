@@ -1,0 +1,94 @@
+.loader-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: #fff;
+    gap: 16px;
+  }
+  
+  svg {
+    width: 90px;
+    height: auto;
+    animation: pulseScale 2s infinite ease-in-out;
+  }
+  
+  .part {
+    opacity: 0;
+    transform-origin: center;
+  }
+  
+  /* Red Part */
+  .red {
+    fill: #FF5F4C;
+    animation: drawRed 2s infinite, glowRed 2s infinite alternate;
+  }
+  
+  /* Blue Part */
+  .blue {
+    fill: #1E91D6;
+    animation: drawBlue 2s infinite, glowBlue 2s infinite alternate;
+  }
+  
+  /* Green Part */
+  .green {
+    fill: #00B355;
+    animation: drawGreen 2s infinite, glowGreen 2s infinite alternate;
+  }
+  
+  /* Fade In Sequence */
+  @keyframes drawRed {
+    0%   { opacity: 0; transform: scale(0.5) rotate(-20deg); }
+    15%  { opacity: 1; transform: scale(1) rotate(0); }
+    100% { opacity: 1; }
+  }
+  
+  @keyframes drawBlue {
+    0%,15% { opacity: 0; transform: scale(0.5) rotate(-20deg); }
+    16%    { opacity: 1; transform: scale(1) rotate(0); }
+    30%    { opacity: 1; }
+    100%   { opacity: 1; }
+  }
+  
+  @keyframes drawGreen {
+    0%,30% { opacity: 0; transform: scale(0.5) rotate(-20deg); }
+    31%    { opacity: 1; transform: scale(1) rotate(0); }
+    45%    { opacity: 1; }
+    80%    { opacity: 1; }
+    100%   { opacity: 1; }
+  }
+  
+  /* Glow Effects */
+  @keyframes glowRed {
+    0%   { filter: drop-shadow(0 0 0px #FF5F4C); }
+    100% { filter: drop-shadow(0 0 8px #FF5F4C); }
+  }
+  @keyframes glowBlue {
+    0%   { filter: drop-shadow(0 0 0px #1E91D6); }
+    100% { filter: drop-shadow(0 0 8px #1E91D6); }
+  }
+  @keyframes glowGreen {
+    0%   { filter: drop-shadow(0 0 0px #00B355); }
+    100% { filter: drop-shadow(0 0 8px #00B355); }
+  }
+  
+  /* Whole SVG Pulsing */
+  @keyframes pulseScale {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  
+  /* Loader Text */
+  .loader-wrapper p {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    animation: fadeText 2s infinite;
+  }
+  
+  @keyframes fadeText {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+  

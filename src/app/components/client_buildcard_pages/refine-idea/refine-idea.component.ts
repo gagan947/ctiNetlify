@@ -62,6 +62,7 @@ export class RefineIdeaComponent {
                 0
               );
             });
+            
 
             let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
             this.totalPrice = (totalTime * 1750)

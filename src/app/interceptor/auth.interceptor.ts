@@ -10,6 +10,10 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const authToken = localStorage.getItem('tokenCTi');
 
+    if (request.url.includes('exchangerate.host')) {
+      return next.handle(request);
+    }
+
     if(request.url.startsWith('https://api.frankfurter')) {
       return next.handle(request);
       

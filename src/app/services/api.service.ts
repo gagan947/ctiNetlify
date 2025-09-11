@@ -8,11 +8,11 @@ import { Auth, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
   providedIn: 'root'
 })
 export class ApiService {
-  apiUrl = 'http://192.168.29.241:4500/'
+  // apiUrl = 'http://192.168.29.241:4500/'
   // imageUrl = 'http://192.168.29.241:4500/'
   // apiUrl = 'http://192.168.1.4:3000/prod/'
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
-  // apiUrl = 'https://api.creativethoughts.ai/';
+  apiUrl = 'https://api.creativethoughts.ai/';
   imageUrl = 'https://api.creativethoughts.ai';
 
   // apiUrl = 'http://localhost:4500/';
@@ -43,12 +43,31 @@ export class ApiService {
     return this.http.get<T>(this.apiUrl + url, { headers });
   }
 
+  // getRates(base: string) {
+  //   if (base === 'INR') {
+  //     // same currency → no API call needed
+  //     this._rate.set(1);
+  //     return;
+  //   }
+  
+  //   const url = `https://api.frankfurter.app/latest?from=INR&to=${base}`;
+  //   this.http.get(url).subscribe((res: any) => {
+  //     this._rate.set(res.rates[base]);
+  //   });
+  // }
+
   getRates(base: string) {
-    const url = `https://api.frankfurter.app/latest?from=INR&to=${base}`;
+    if (base === 'INR') {
+      this._rate.set(1);
+      return;
+    }
+  
+    const url = `https://api.exchangerate.host/latest?base=INR&symbols=${base}`;
     this.http.get(url).subscribe((res: any) => {
       this._rate.set(res.rates[base]);
     });
   }
+  
 
   //  getRates(base: string) {
   //   this.apiService.getRates('USD', ['INR', 'ERU']).subscribe((res: any) => {
