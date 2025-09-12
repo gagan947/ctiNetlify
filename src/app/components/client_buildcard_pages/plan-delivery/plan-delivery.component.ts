@@ -8,11 +8,12 @@ import { ProjectData } from '../../../models/sessionData';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ExchangeRatePipe } from "../../../helper/exchange-rate.pipe";
+import { MobileViewComponent } from '../main/mobile-view/mobile-view.component';
 
 @Component({
   selector: 'app-plan-delivery',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule, SidebarComponent, ExchangeRatePipe],
+  imports: [RouterLink, CommonModule, FormsModule, SidebarComponent, ExchangeRatePipe, MobileViewComponent],
   templateUrl: './plan-delivery.component.html',
   styleUrl: './plan-delivery.component.css'
 })
@@ -33,7 +34,7 @@ export class PlanDeliveryComponent {
   rangeValue: string = '0';
   projectSecondCost!: number;
   projectThirdCost!: number;
-  devices: any[] = ['Android', 'iOS', 'Web','Ai Chatbot Integration'];
+  devices: any[] = ['Android', 'iOS', 'Web', 'Ai Chatbot Integration'];
   estimatedDate: Date | undefined;
   estimatedWeeks: any;
   customWeeks: any;
@@ -57,7 +58,7 @@ export class PlanDeliveryComponent {
     this.projectsData = JSON.parse(projectData!);
     this.totalPrice = this.projectsData.totalCost;
     this.projectCost = this.totalPrice;
-
+    this.apiService._imagePreview.set(this.projectsData.projectLogo);
     this.originalProjectCost = this.projectCost;
 
     this.updateCosts();
@@ -185,7 +186,7 @@ export class PlanDeliveryComponent {
           if (res.success) {
             this.projectsData.estimated_time = this.estimatedWeeks;
 
-            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...{ finalCost: this.totalPrice }, ...{ projectId: this.id }, ...{ 'featuresCost': this.totalFeatureCost }, ...{ 'customisationCost': this.totalCustomizeCost }, ...{ platform: this.selectedDevices }, ...{ speed: this.rangeValue == '0' ? 'Standard' : this.rangeValue == '2' ? 'Fast' : 'Speedy' }, ...{ estimatedDate: this.estimatedDate }, ...{ 'PhasesDeliverables': this.PhasesDeliverables } }))
+            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...{ finalCost: this.totalPrice - ((this.totalPrice * 40) / 100) }, ...{ projectId: this.id }, ...{ 'featuresCost': this.totalFeatureCost }, ...{ 'customisationCost': this.totalCustomizeCost }, ...{ platform: this.selectedDevices }, ...{ speed: this.rangeValue == '0' ? 'Standard' : this.rangeValue == '2' ? 'Fast' : 'Speedy' }, ...{ estimatedDate: this.estimatedDate }, ...{ 'PhasesDeliverables': this.PhasesDeliverables } }))
             this.router.navigate([`/review-buildcard`])
           } else {
             this.message.error(res.message);

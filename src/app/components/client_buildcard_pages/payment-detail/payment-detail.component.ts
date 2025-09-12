@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -7,12 +7,14 @@ import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { SidebarComponent } from "../sidebar/sidebar.component";
+import { MobileViewComponent } from '../main/mobile-view/mobile-view.component';
+import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 declare var Razorpay: any;
 declare var Calendly: any;
 @Component({
   selector: 'app-payment-detail',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent],
+  imports: [RouterLink, CommonModule, SidebarComponent, MobileViewComponent, ExchangeRatePipe],
   templateUrl: './payment-detail.component.html',
   styleUrl: './payment-detail.component.css'
 })
@@ -37,12 +39,17 @@ export class PaymentDetailComponent {
     emi: false
   }
   userData: any
+  rate: any;
 
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private http: HttpClient) {
+    effect(() => {
+      this.rate = this.apiService._rate()
+    })
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
     this.totalCost = this.projectsData.finalCost;
     this.projectsFeatures = this.projectsData.selectdFeature;
+    this.apiService._imagePreview.set(this.projectsData.projectLogo);
     this.onPaymentChange(this.projectsData.paymentPlan)
 
     this.userData = localStorage.getItem('userDetailCTI');
@@ -178,10 +185,9 @@ export class PaymentDetailComponent {
 
 
   openCalendly() {
-    console.log("here1");
-    // Calendly.initPopupWidget({ url: 'https://calendly.com/amitholkar/30min' });
     Calendly.initPopupWidget({ url: 'https://calendly.com/mohdfaraz-ctinfotech/30min' });
   };
+
 
   // ngAfterViewInit() {
   //   const calendlyContainer = document.getElementById('calendly-inline-widget');
@@ -195,17 +201,13 @@ export class PaymentDetailComponent {
 
   ngAfterViewInit() {
     console.log("here2");
-    Calendly.initInlineWidget({
-      // url: 'https://calendly.com/amitholkar/30min',
-      url: 'https://calendly.com/mohdfaraz-ctinfotech/30min',
-      parentElement: document.getElementById('calendly-inline-widget'),
-      prefill: {},
-      utm: {},
-      onEventScheduled: (e: any) => {
-        console.log('Event scheduled:', e);
-        // this.sendConfirmationEmail();
-      }
-    });
+    const calendlyContainer = document.getElementById('calendly-inline-widget');
+    if (calendlyContainer) {
+      Calendly.initInlineWidget({
+        url: 'https://calendly.com/creativethoughts/30min',
+        parentElement: calendlyContainer,
+      });
+    }
     window.addEventListener('message', this.handleCalendlyEvent.bind(this));
   };
 

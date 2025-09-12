@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Feature } from '../../../models/projects';
 import { FormBuilder, FormsModule } from '@angular/forms';
@@ -7,12 +7,14 @@ import { CommonModule } from '@angular/common';
 import { ProjectData, SelectedFeature } from '../../../models/sessionData';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
+import { MobileViewComponent } from "../main/mobile-view/mobile-view.component";
+import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 declare var bootstrap: any;
 declare var Calendly: any;
 @Component({
   selector: 'app-payment-plan',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule, SidebarComponent],
+  imports: [RouterLink, CommonModule, FormsModule, SidebarComponent, MobileViewComponent, ExchangeRatePipe],
   templateUrl: './payment-plan.component.html',
   styleUrl: './payment-plan.component.css'
 })
@@ -28,11 +30,16 @@ export class PaymentPlanComponent {
   actualCost: number | null | undefined
   securityDeposit!: number
   installmentDates: any[] = []
+  rate: any;
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService) {
+    effect(() => {
+      this.rate = this.apiService._rate()
+    })
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
     this.totalCost = this.projectsData.finalCost;
     this.projectsFeatures = this.projectsData.selectdFeature;
+    this.apiService._imagePreview.set(this.projectsData.projectLogo);
     if (this.projectsData.paymentPlan) {
       this.onPaymentChange(this.projectsData.paymentPlan)
     }
@@ -178,7 +185,7 @@ export class PaymentPlanComponent {
     }
   };
 
-  sendConfirmationEmail(){
+  sendConfirmationEmail() {
     this.apiService.getApi(`api/user/sendClientEnquiryEmail?inquiryId=${this.projectsData.clientEnquryId}`).subscribe({
       next: (res: any) => {
         if (res.success) {

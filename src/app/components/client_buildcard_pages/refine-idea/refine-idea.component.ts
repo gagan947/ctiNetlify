@@ -1,4 +1,4 @@
-import { Component, effect, Input, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -11,11 +11,13 @@ import { ALLFeatures } from '../../../models/allfeatures';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
+import { DiscountModalComponent } from './discount-modal/discount-modal.component';
+import { BdLoaderComponent } from '../../shared/bd-loader/bd-loader.component';
 
 @Component({
   selector: 'app-refine-idea',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe],
+  imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe, DiscountModalComponent, BdLoaderComponent],
   templateUrl: './refine-idea.component.html',
   styleUrl: './refine-idea.component.css',
 
@@ -30,7 +32,7 @@ export class RefineIdeaComponent {
   estimatedWeeks: number | undefined;
   noOfFeaturs: number = 0
   rate: any;
-
+  isLoading: boolean = false
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService, private http: HttpClient) {
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
@@ -51,6 +53,7 @@ export class RefineIdeaComponent {
   }
 
   getProjects() {
+    this.isLoading = true
     this.apiService.getApi<FeatureResponse>(`api/user/fetchProjectDetailedById?projectId=${this.id}`)
       .subscribe({
         next: (res) => {
@@ -62,36 +65,39 @@ export class RefineIdeaComponent {
                 0
               );
             });
-            
+
 
             let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
             this.totalPrice = (totalTime * 1750)
             this.estimatedWeeks = Math.ceil((totalTime / 8) / 5);
             this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
-
+            // this.isLoading = false
             // this.estimatedWeeks = res.data[0].estimated_time
             // this.totalCost(this.projectsFeaturs)
           } else {
-            // this.loading = false
+            // this.isLoading = false
           }
         },
         error: err => {
-          // this.loading = false
+          // this.isLoading = false
         }
       });
   };
   getFeatures() {
+    this.isLoading = true
     this.apiService.getApi<any>(`api/user/fetchFeaturesAndThereSubFeatures`)
       .subscribe({
         next: (res) => {
+          debugger
           if (res.success == true) {
             this.findDifferences(res.data, this.projectsFeaturs)
+            this.isLoading = false
           } else {
-            // this.loading = false
+            this.isLoading = false
           }
         },
         error: err => {
-          // this.loading = false
+          this.isLoading = false
         }
       });
   };

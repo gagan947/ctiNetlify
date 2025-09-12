@@ -8,16 +8,16 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../../sidebar/sidebar.component";
 import { BdLoaderComponent } from "../../../shared/bd-loader/bd-loader.component";
+import { MobileViewComponent } from "../mobile-view/mobile-view.component";
 
 @Component({
     selector: 'app-make-it-mine',
     standalone: true,
-    imports: [RouterLink, FormsModule, CommonModule, ColorPickerModule, SidebarComponent, BdLoaderComponent],
+    imports: [RouterLink, FormsModule, CommonModule, ColorPickerModule, SidebarComponent, BdLoaderComponent, MobileViewComponent],
     templateUrl: './make-it-mine.component.html',
     styleUrl: './make-it-mine.component.css'
 })
 export class MakeItMineComponent {
-    @ViewChild('preview', { static: true }) iframe!: ElementRef<HTMLIFrameElement>;
     @ViewChild('preview1', { static: true }) iframe1!: ElementRef<HTMLIFrameElement>;
     @Input() id!: string;
     projectsData: any;
@@ -38,6 +38,7 @@ export class MakeItMineComponent {
         if (this.projectsData) {
             this.imagePreview = this.projectsData.projectLogo
             this.projectName = this.projectsData.projectName
+            this.apiService._imagePreview.set(this.imagePreview);
         }
     }
 
@@ -49,15 +50,12 @@ export class MakeItMineComponent {
 
     updateLogo() {
         console.log("this.imagePreview", this.imagePreview);
-        const doc = this.iframe.nativeElement.contentDocument;
         const doc1 = this.iframe1.nativeElement.contentDocument;
-        if (doc && doc1) {
-            const logo = doc.querySelector('#mylogo') as HTMLElement;
+        if (doc1) {
             const logo1 = doc1.querySelector('#mylogo') as HTMLElement;
 
             const newLogoHtml = `<img id="mylogo" loading="lazy" src="${this.imagePreview || 'https://https://creativethoughts.ai/assets/img/c.png'}" alt="AI app builder for mobile and web" style="width: 70px; height: 30px;">`;
 
-            if (logo) logo.outerHTML = newLogoHtml;
             if (logo1) logo1.outerHTML = newLogoHtml;
         }
     }
@@ -78,6 +76,7 @@ export class MakeItMineComponent {
             const reader = new FileReader();
             reader.onload = () => {
                 this.imagePreview = reader.result;
+                this.apiService._imagePreview.set(this.imagePreview);
                 this.updateLogo();
             };
             reader.readAsDataURL(file);
@@ -128,14 +127,10 @@ export class MakeItMineComponent {
         this.apiService.getApi('api/user/getProjectHtml?id=' + this.id + '').subscribe((res: any) => {
             if (res.success == true) {
                 this.htmlCode = (res.data[0].html_pages);
-
-                const doc = this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow?.document;
+                sessionStorage.setItem('htmlCode', this.htmlCode);
+                this.apiService._htmlCode.set(this.htmlCode);
                 const doc1 = this.iframe1.nativeElement.contentDocument || this.iframe1.nativeElement.contentWindow?.document;
-                if (doc && doc1) {
-                    doc.open();
-                    doc.write(this.htmlCode);
-                    doc.close();
-
+                if (doc1) {
                     doc1.open();
                     doc1.write(this.htmlCode);
                     doc1.close();
