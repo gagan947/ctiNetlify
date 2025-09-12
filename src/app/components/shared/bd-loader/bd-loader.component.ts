@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-bd-loader',
@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './bd-loader.component.css'
 })
 export class BdLoaderComponent {
-
+  @Input() loadingText = ''
 }

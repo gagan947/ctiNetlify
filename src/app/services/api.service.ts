@@ -20,7 +20,8 @@ export class ApiService {
 
   private clearInputSubject = new Subject<void>();
   _rate = signal<any>(null);
-
+  _imagePreview = signal<any>(null);
+  _htmlCode = signal<any>(null);
   constructor(private http: HttpClient, private route: Router, private auth: Auth) {
     const data: any = localStorage.getItem('userDetailCTI')
     if (data !== 'undefined') {
@@ -65,9 +66,9 @@ export class ApiService {
       this._rate.set(1);
       return;
     }
-  
+
     const url = `https://api.exchangerate.host/live?access_key=${key}&currencies=${base}&source=INR`;
-  
+
     this.http.get(url).subscribe((res: any) => {
       if (res.success) {
         this._rate.set(res.quotes[`INR${base}`]);

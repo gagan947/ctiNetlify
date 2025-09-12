@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Feature } from '../../../models/projects';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -8,11 +8,13 @@ import { Country, State, City } from 'country-state-city'
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input-gg';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
+import { MobileViewComponent } from "../main/mobile-view/mobile-view.component";
+import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 
 @Component({
   selector: 'app-billing-details',
   standalone: true,
-  imports: [NgxIntlTelInputModule, CommonModule, FormsModule, ReactiveFormsModule, RouterLink, SidebarComponent],
+  imports: [NgxIntlTelInputModule, CommonModule, FormsModule, ReactiveFormsModule, RouterLink, SidebarComponent, MobileViewComponent, ExchangeRatePipe],
   templateUrl: './billing-details.component.html',
   styleUrl: './billing-details.component.css'
 })
@@ -29,10 +31,14 @@ export class BillingDetailsComponent {
   CountryISO = CountryISO
   billingDetails: any;
   countryName: string = '';
-
+  rate: any
   constructor(private fb: FormBuilder, private apiService: ApiService, private message: NzMessageService, private router: Router) {
+    effect(() => {
+      this.rate = this.apiService._rate()
+    })
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
+    this.apiService._imagePreview.set(this.projectsData.projectLogo);
     this.projectsFeatures = this.projectsData.selectdFeature;
     this.billingDetails = this.projectsData.bellingDetails ? this.projectsData.bellingDetails[0] : {};
     this.totalSubFeatures = this.projectsData.no_of_features

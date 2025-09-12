@@ -10,63 +10,30 @@
         <div class="col-md-12">
           <div class="d-grid">
             <div class="ct_step-container d-flex justify-content-between">
-              <div
-                class="ct_step-circle cursor-pointer"
-                [routerLink]="['/main']"
-              >
+              <div class="ct_step-circle cursor-pointer" [routerLink]="['/main']">
                 <!-- <p class=" mb-0">1</p> -->
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="35"
-                  height="35"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="#17b400"
-                    fill-rule="evenodd"
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24">
+                  <path fill="#17b400" fill-rule="evenodd"
                     d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
-                    clip-rule="evenodd"
-                  />
+                    clip-rule="evenodd" />
                 </svg>
                 <p class="mb-0 ct_fs_14 ct_fw_600">Choose Base</p>
               </div>
-              <div
-                class="ct_step-circle cursor-pointer"
-                [routerLink]="['/make-it-mine/' + id]"
-              >
+              <div class="ct_step-circle cursor-pointer" [routerLink]="['/make-it-mine/' + id]">
                 <!-- <p class=" mb-0">2</p> -->
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="35"
-                  height="35"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="#17b400"
-                    fill-rule="evenodd"
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24">
+                  <path fill="#17b400" fill-rule="evenodd"
                     d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
-                    clip-rule="evenodd"
-                  />
+                    clip-rule="evenodd" />
                 </svg>
                 <p class="mb-0 ct_fs_14 ct_fw_600">Make it Mine</p>
               </div>
-              <div
-                class="ct_step-circle cursor-pointer"
-                [routerLink]="['/refine-idea/' + id]"
-              >
+              <div class="ct_step-circle cursor-pointer" [routerLink]="['/refine-idea/' + id]">
                 <!-- <p class=" mb-0">3</p> -->
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="35"
-                  height="35"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="#17b400"
-                    fill-rule="evenodd"
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24">
+                  <path fill="#17b400" fill-rule="evenodd"
                     d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
-                    clip-rule="evenodd"
-                  />
+                    clip-rule="evenodd" />
                 </svg>
                 <p class="mb-0 ct_fs_14 ct_fw_600">Refine Idea</p>
               </div>
@@ -97,9 +64,7 @@
       <div class="row mt-0">
         <div class="col-lg-8 mb-4 mb-lg-0">
           <div class="ct_light_grey_bg mb-4">
-            <div
-              class="d-flex align-items-center justify-content-between gap-3"
-            >
+            <div class="d-flex align-items-center justify-content-between gap-3">
               <h5 class="mb-0 ct_fs_18 ct_fw_700">Confirm app details</h5>
               <div class="form-check form-switch ct_custom_switch">
                 <!-- <label class="form-check-label"
@@ -115,32 +80,17 @@
                 @for (item of devices.slice(0,2);track devices; let i = $index;
                 ) {
                 <div class="col-lg-6 mb-4 mb-lg-0">
-                  <label
-                    for="flexCheckDefault{{ i }}"
-                    class="ct_app_detail_card"
-                    [ngClass]="{ active: selectedDevices.includes(item) }"
-                    (click)="onDeviceSelect(item)"
-                  >
-                    <svg
-                      width="22"
-                      height="12"
-                      viewBox="0 0 22 12"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
+                  <label for="flexCheckDefault{{ i }}" class="ct_app_detail_card"
+                    [ngClass]="{ active: selectedDevices.includes(item) }" (click)="onDeviceSelect(item)">
+                    <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
                         d="M15.5148 8.81392C14.9908 8.76628 14.7051 8.4805 14.6574 7.95658C14.7051 7.43264 14.9908 7.14686 15.5148 7.09923C16.0149 7.14686 16.3007 7.43264 16.3721 7.95658C16.3007 8.4805 16.0149 8.76628 15.5148 8.81392ZM6.01259 8.81392C5.51247 8.76628 5.22669 8.4805 5.15525 7.95658C5.22669 7.43264 5.51247 7.14686 6.01259 7.09923C6.53652 7.14686 6.8223 7.43264 6.86993 7.95658C6.8223 8.4805 6.53652 8.76628 6.01259 8.81392ZM15.8006 3.63414L17.5152 0.669141C17.5867 0.550074 17.5986 0.431005 17.551 0.311938C17.4796 0.19287 17.3724 0.133337 17.2295 0.133337C17.0866 0.133337 16.9794 0.19287 16.908 0.311938L15.1576 3.34836C13.7525 2.70534 12.2879 2.38383 10.7637 2.38383C9.23953 2.38383 7.7749 2.70534 6.36981 3.34836L4.61941 0.311938C4.54796 0.19287 4.44079 0.133337 4.2979 0.133337C4.15501 0.133337 4.04784 0.19287 3.97639 0.311938C3.92877 0.431005 3.94068 0.550074 4.01212 0.669141L5.72681 3.63414C4.22646 4.46766 3.0238 5.58697 2.11883 6.99206C1.19004 8.37333 0.642292 9.95703 0.475586 11.7432H21.0518C20.8851 9.95703 20.3374 8.37333 19.4085 6.99206C18.5036 5.58697 17.3009 4.46766 15.8006 3.63414Z"
-                        fill="black"
-                      />
+                        fill="black" />
                     </svg>
                     <h4 class="mb-0 ct_fs_14 ct_fw_700">{{ item }}</h4>
                     <div class="form-check ct_transparent_checkbox">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        [checked]="selectedDevices.includes(item)"
-                        (change)="onDeviceSelect(item)"
-                      />
+                      <input class="form-check-input" type="checkbox" [checked]="selectedDevices.includes(item)"
+                        (change)="onDeviceSelect(item)" />
                     </div>
                   </label>
                 </div>
@@ -153,32 +103,17 @@
                 @for (item of devices.slice(2,4);track devices; let i = $index;
                 ) {
                 <div class="col-lg-6 mb-4 mb-lg-0">
-                  <label
-                    for="flexCheckDefault{{ i }}"
-                    class="ct_app_detail_card"
-                    [ngClass]="{ active: selectedDevices.includes(item) }"
-                    (click)="onDeviceSelect(item)"
-                  >
-                    <svg
-                      width="22"
-                      height="12"
-                      viewBox="0 0 22 12"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
+                  <label for="flexCheckDefault{{ i }}" class="ct_app_detail_card"
+                    [ngClass]="{ active: selectedDevices.includes(item) }" (click)="onDeviceSelect(item)">
+                    <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
                         d="M15.5148 8.81392C14.9908 8.76628 14.7051 8.4805 14.6574 7.95658C14.7051 7.43264 14.9908 7.14686 15.5148 7.09923C16.0149 7.14686 16.3007 7.43264 16.3721 7.95658C16.3007 8.4805 16.0149 8.76628 15.5148 8.81392ZM6.01259 8.81392C5.51247 8.76628 5.22669 8.4805 5.15525 7.95658C5.22669 7.43264 5.51247 7.14686 6.01259 7.09923C6.53652 7.14686 6.8223 7.43264 6.86993 7.95658C6.8223 8.4805 6.53652 8.76628 6.01259 8.81392ZM15.8006 3.63414L17.5152 0.669141C17.5867 0.550074 17.5986 0.431005 17.551 0.311938C17.4796 0.19287 17.3724 0.133337 17.2295 0.133337C17.0866 0.133337 16.9794 0.19287 16.908 0.311938L15.1576 3.34836C13.7525 2.70534 12.2879 2.38383 10.7637 2.38383C9.23953 2.38383 7.7749 2.70534 6.36981 3.34836L4.61941 0.311938C4.54796 0.19287 4.44079 0.133337 4.2979 0.133337C4.15501 0.133337 4.04784 0.19287 3.97639 0.311938C3.92877 0.431005 3.94068 0.550074 4.01212 0.669141L5.72681 3.63414C4.22646 4.46766 3.0238 5.58697 2.11883 6.99206C1.19004 8.37333 0.642292 9.95703 0.475586 11.7432H21.0518C20.8851 9.95703 20.3374 8.37333 19.4085 6.99206C18.5036 5.58697 17.3009 4.46766 15.8006 3.63414Z"
-                        fill="black"
-                      />
+                        fill="black" />
                     </svg>
                     <h4 class="mb-0 ct_fs_14 ct_fw_700">{{ item }}</h4>
                     <div class="form-check ct_transparent_checkbox">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        [checked]="selectedDevices.includes(item)"
-                        (change)="onDeviceSelect(item)"
-                      />
+                      <input class="form-check-input" type="checkbox" [checked]="selectedDevices.includes(item)"
+                        (change)="onDeviceSelect(item)" />
                     </div>
                   </label>
                 </div>
@@ -212,16 +147,8 @@
             <h5 class="mb-0 ct_fs_18 ct_fw_700 mb-3">Development speed</h5>
             <div class="ct_light_grey_bg">
               <div>
-                <input
-                  type="range"
-                  class="form-range"
-                  min="0"
-                  max="4"
-                  step="2"
-                  id="customRange3"
-                  [value]="rangeValue"
-                  (input)="onRangeChange($event)"
-                />
+                <input type="range" class="form-range" min="0" max="4" step="2" id="customRange3" [value]="rangeValue"
+                  (input)="onRangeChange($event)" />
                 <div class="ct_range_grid_5 mt-4">
                   <div class="" [ngClass]="{ rangeActive: rangeValue == '0' }">
                     <h6 class="mb-0 ct_fs_16 ct_fw_600">Standard</h6>
@@ -239,10 +166,7 @@
                       {{ projectCost | convertCurrency:rate }}
                     </p>
                   </div>
-                  <div
-                    class="text-center"
-                    [ngClass]="{ rangeActive: rangeValue == '2' }"
-                  >
+                  <div class="text-center" [ngClass]="{ rangeActive: rangeValue == '2' }">
                     <h6 class="mb-0 ct_fs_16 ct_fw_600">Fast</h6>
                     <p class="mb-0 ct_fs_14">
                       {{
@@ -258,10 +182,7 @@
                       {{ projectSecondCost | convertCurrency:rate}}
                     </p>
                   </div>
-                  <div
-                    class="text-end"
-                    [ngClass]="{ rangeActive: rangeValue == '4' }"
-                  >
+                  <div class="text-end" [ngClass]="{ rangeActive: rangeValue == '4' }">
                     <h6 class="mb-0 ct_fs_16 ct_fw_600">Speedy</h6>
                     <p class="mb-0 ct_fs_14">
                       {{
@@ -293,21 +214,12 @@
             <h5 class="mb-0 ct_fs_18 ct_fw_700">Phases & deliverables</h5>
             <div class="ct_light_grey_bg ct_p_20 mt-3">
               <div class="form-check ct_checkbox_with_border mb-0">
-                <input
-                  class="form-check-input mt-1 me-2"
-                  type="checkbox"
-                  [checked]="
+                <input class="form-check-input mt-1 me-2" type="checkbox" [checked]="
                     PhasesDeliverables
                       ? PhasesDeliverables.includes('Product Roadmap')
                       : false
-                  "
-                  (change)="selectDeliveryPhase($event, 'Product Roadmap')"
-                  id="flexCheckChecked"
-                />
-                <label
-                  class="form-check-label ct_fw_700 ct_fs_18"
-                  for="flexCheckChecked"
-                >
+                  " (change)="selectDeliveryPhase($event, 'Product Roadmap')" id="flexCheckChecked" />
+                <label class="form-check-label ct_fw_700 ct_fs_18" for="flexCheckChecked">
                   Product Roadmap
                 </label>
               </div>
@@ -317,23 +229,12 @@
             </div>
 
             <div class="ct_light_grey_bg ct_p_20 mt-3">
-              <div
-                class="d-flex align-items-center justify-content-between gap-3"
-              >
+              <div class="d-flex align-items-center justify-content-between gap-3">
                 <div>
                   <div class="form-check ct_checkbox_with_border mb-0">
-                    <input
-                      class="form-check-input mt-1 ct_grey_checkbox1 mt-1 me-2"
-                      type="checkbox"
-                      value=""
-                      id="flexCheckChecked"
-                      checked
-                      disabled
-                    />
-                    <label
-                      class="form-check-label ct_fw_700 ct_fs_18"
-                      for="flexCheckChecked"
-                    >
+                    <input class="form-check-input mt-1 ct_grey_checkbox1 mt-1 me-2" type="checkbox" value=""
+                      id="flexCheckChecked" checked disabled />
+                    <label class="form-check-label ct_fw_700 ct_fs_18" for="flexCheckChecked">
                       Design
                     </label>
                   </div>
@@ -356,17 +257,9 @@
                 <div class="col-md-4 mb-4">
                   <div>
                     <div class="form-check ct_custom_radio_check">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        checked
-                        (change)="
+                      <input class="form-check-input" type="radio" checked (change)="
                           selectDesignPhase($event, 'We do your designs')
-                        "
-                        name="flexRadioDefault"
-                        id="flexRadioDefault1"
-                        checked
-                      />
+                        " name="flexRadioDefault" id="flexRadioDefault1" checked />
                       <label class="form-check-label" for="flexRadioDefault1">
                         <h5 class="ct_fs_14 ct_fw_700 mb-0">
                           We do your designs
@@ -383,13 +276,8 @@
                 <div class="col-md-4 mb-4">
                   <div>
                     <div class="form-check ct_custom_radio_check">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                        (change)="selectDesignPhase($event, 'You have designs')"
-                      />
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                        (change)="selectDesignPhase($event, 'You have designs')" />
                       <label class="form-check-label" for="flexRadioDefault2">
                         <h5 class="ct_fs_14 ct_fw_700 mb-0">
                           You have designs
@@ -405,15 +293,10 @@
                 <div class="col-md-4 mb-4">
                   <div>
                     <div class="form-check ct_custom_radio_check">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault3"
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3"
                         (change)="
                           selectDesignPhase($event, 'You have a designer')
-                        "
-                      />
+                        " />
                       <label class="form-check-label" for="flexRadioDefault3">
                         <h5 class="ct_fs_14 ct_fw_700 mb-0">
                           You have a designer
@@ -428,94 +311,72 @@
                 </div>
               </div>
               <!-- when share your design click then show this div -->
-               <div class="d-none">
-                  <div class="ct_upload_product_main ct_upload_product_main_180">
-                <svg
-                  width="33"
-                  height="33"
-                  viewBox="0 0 33 33"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M5.87174 22.0167C4.26376 20.9403 3.20508 19.1073 3.20508 17.027C3.20508 13.9023 5.59376 11.3354 8.64473 11.0528C9.26883 7.25653 12.5654 4.36035 16.5384 4.36035C20.5114 4.36035 23.808 7.25653 24.4321 11.0528C27.4831 11.3354 29.8717 13.9023 29.8717 17.027C29.8717 19.1073 28.8131 20.9403 27.2051 22.0167M11.2051 21.6937L16.5384 16.3604M16.5384 16.3604L21.8717 21.6937M16.5384 16.3604V28.3604"
-                    stroke="#9CA3AF"
-                    stroke-width="2.66667"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
+              <div class="d-none">
+                <div class="ct_upload_product_main ct_upload_product_main_180">
+                  <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M5.87174 22.0167C4.26376 20.9403 3.20508 19.1073 3.20508 17.027C3.20508 13.9023 5.59376 11.3354 8.64473 11.0528C9.26883 7.25653 12.5654 4.36035 16.5384 4.36035C20.5114 4.36035 23.808 7.25653 24.4321 11.0528C27.4831 11.3354 29.8717 13.9023 29.8717 17.027C29.8717 19.1073 28.8131 20.9403 27.2051 22.0167M11.2051 21.6937L16.5384 16.3604M16.5384 16.3604L21.8717 21.6937M16.5384 16.3604V28.3604"
+                      stroke="#9CA3AF" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
 
-                <p class="text-center ct_fs_18 ct_text_op_07 mb-0">
-                  Upload your file here
-                </p>
-                <label for="ct_upload_product">
-                  <input
-                    type="file"
-                    name=""
-                    id="ct_upload_product"
-                    class="d-none"
-                  />
-                  <div class="ct_browse_btn mt-3">
-                    <span>Browse Files</span>
+                  <p class="text-center ct_fs_18 ct_text_op_07 mb-0">
+                    Upload your file here
+                  </p>
+                  <label for="ct_upload_product">
+                    <input type="file" name="" id="ct_upload_product" class="d-none" />
+                    <div class="ct_browse_btn mt-3">
+                      <span>Browse Files</span>
+                    </div>
+                  </label>
+                </div>
+
+                <div class="ct_multiple_img_div ct_custom_scroll">
+                  <div class="ct_uploaded_img123 position-relative">
+                    <div class="ct_uploaded_img_w">
+                      <img src="assets/img/app_4.png" alt="" />
+                      <i class="fa-solid fa-xmark"></i>
+                    </div>
                   </div>
-                </label>
+                  <div class="ct_uploaded_img123 position-relative">
+                    <div class="ct_uploaded_img_w">
+                      <img src="assets/img/app_4.png" alt="" />
+                      <i class="fa-solid fa-xmark"></i>
+                    </div>
+                  </div>
+                  <div class="ct_uploaded_img123 position-relative">
+                    <div class="ct_uploaded_img_w">
+                      <img src="assets/img/app_4.png" alt="" />
+                      <i class="fa-solid fa-xmark"></i>
+                    </div>
+                  </div>
+                  <div class="ct_uploaded_img123 position-relative">
+                    <div class="ct_uploaded_img_w">
+                      <img src="assets/img/app_4.png" alt="" />
+                      <i class="fa-solid fa-xmark"></i>
+                    </div>
+                  </div>
+                  <div class="ct_uploaded_img123 position-relative">
+                    <div class="ct_uploaded_img_w">
+                      <img src="assets/img/app_4.png" alt="" />
+                      <i class="fa-solid fa-xmark"></i>
+                    </div>
+                  </div>
+                  <div class="ct_uploaded_img123 position-relative">
+                    <div class="ct_uploaded_img_w">
+                      <img src="assets/img/app_4.png" alt="" />
+                      <i class="fa-solid fa-xmark"></i>
+                    </div>
+                  </div>
+                </div>
+
               </div>
-
-              <div class="ct_multiple_img_div ct_custom_scroll">
-                <div class="ct_uploaded_img123 position-relative">
-                  <div class="ct_uploaded_img_w">
-                    <img src="assets/img/app_4.png" alt="" />
-                    <i class="fa-solid fa-xmark"></i>
-                  </div>
-                </div>
-                <div class="ct_uploaded_img123 position-relative">
-                  <div class="ct_uploaded_img_w">
-                    <img src="assets/img/app_4.png" alt="" />
-                    <i class="fa-solid fa-xmark"></i>
-                  </div>
-                </div>
-                <div class="ct_uploaded_img123 position-relative">
-                  <div class="ct_uploaded_img_w">
-                    <img src="assets/img/app_4.png" alt="" />
-                    <i class="fa-solid fa-xmark"></i>
-                  </div>
-                </div>
-                <div class="ct_uploaded_img123 position-relative">
-                  <div class="ct_uploaded_img_w">
-                    <img src="assets/img/app_4.png" alt="" />
-                    <i class="fa-solid fa-xmark"></i>
-                  </div>
-                </div>
-                <div class="ct_uploaded_img123 position-relative">
-                  <div class="ct_uploaded_img_w">
-                    <img src="assets/img/app_4.png" alt="" />
-                    <i class="fa-solid fa-xmark"></i>
-                  </div>
-                </div>
-                <div class="ct_uploaded_img123 position-relative">
-                  <div class="ct_uploaded_img_w">
-                    <img src="assets/img/app_4.png" alt="" />
-                    <i class="fa-solid fa-xmark"></i>
-                  </div>
-                </div>
-              </div>
-
-               </div>
             </div>
             <div class="ct_light_grey_bg ct_p_20 mt-3">
               <div class="form-check ct_checkbox_with_border mb-0">
-                <input
-                  class="form-check-input mt-1 me-2"
-                  type="checkbox"
-                  id="flexCheckChecked33"
+                <input class="form-check-input mt-1 me-2" type="checkbox" id="flexCheckChecked33"
                   [checked]="PhasesDeliverables.includes('Clickable prototype')"
-                  (change)="selectDeliveryPhase($event, 'Clickable prototype')"
-                />
-                <label
-                  class="form-check-label ct_fw_700 ct_fs_18"
-                  for="flexCheckChecked33"
-                >
+                  (change)="selectDeliveryPhase($event, 'Clickable prototype')" />
+                <label class="form-check-label ct_fw_700 ct_fs_18" for="flexCheckChecked33">
                   Clickable prototype
                 </label>
               </div>
@@ -525,17 +386,10 @@
             </div>
             <div class="ct_light_grey_bg ct_p_20 mt-3">
               <div class="form-check ct_checkbox_with_border mb-0">
-                <input
-                  class="form-check-input mt-1 me-2"
-                  type="checkbox"
-                  id="flexCheckChecked22"
+                <input class="form-check-input mt-1 me-2" type="checkbox" id="flexCheckChecked22"
                   [checked]="PhasesDeliverables.includes('Basic build')"
-                  (change)="selectDeliveryPhase($event, 'Basic build')"
-                />
-                <label
-                  class="form-check-label ct_fw_700 ct_fs_18"
-                  for="flexCheckChecked22"
-                >
+                  (change)="selectDeliveryPhase($event, 'Basic build')" />
+                <label class="form-check-label ct_fw_700 ct_fs_18" for="flexCheckChecked22">
                   Basic build
                 </label>
               </div>
@@ -545,22 +399,13 @@
               </p>
             </div>
             <div class="ct_light_grey_bg ct_p_20 mt-3">
-              <div
-                class="d-flex align-items-center justify-content-between gap-3"
-              >
+              <div class="d-flex align-items-center justify-content-between gap-3">
                 <div>
                   <div class="form-check ct_checkbox_with_border mb-0">
-                    <input
-                      class="form-check-input mt-1 me-2"
-                      type="checkbox"
-                      id="flexCheckChecked11"
+                    <input class="form-check-input mt-1 me-2" type="checkbox" id="flexCheckChecked11"
                       [checked]="PhasesDeliverables.includes('Full build')"
-                      (change)="selectDeliveryPhase($event, 'Full build')"
-                    />
-                    <label
-                      class="form-check-label ct_fw_700 ct_fs_18"
-                      for="flexCheckChecked11"
-                    >
+                      (change)="selectDeliveryPhase($event, 'Full build')" />
+                    <label class="form-check-label ct_fw_700 ct_fs_18" for="flexCheckChecked11">
                       Full Build
                     </label>
                   </div>
@@ -587,52 +432,7 @@
           <div class="ct_right_sidebar_12 ct_light_grey_bg position-sticky top-0">
             <div>
               <div class="position-relative ct_w_fit_content mx-auto">
-                <img
-                  loading="lazy"
-                  src="assets/img/iPhone_14 Plus_ (new).png"
-                  alt="AI app builder for mobile and web"
-                  style="width: 100%; height: 350px"
-                />
-                <div class="ct_mob_overlay_top_cnt_12 d-none">
-                  <div
-                    class="ct_add_logo_by_ai"
-                    [style]="projectsData.logoStyle"
-                  >
-                    @if(!projectsData.projectLogo){
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle
-                        cx="5.6658"
-                        cy="5.82644"
-                        r="5.13414"
-                        stroke="white"
-                        stroke-width="0.789868"
-                      />
-                      <path
-                        d="M5.83104 3.45752V8.52584M3.29688 5.99168H8.3652"
-                        stroke="white"
-                        stroke-width="0.724046"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                    } @else {
-                    <img
-                      [src]="projectsData.projectLogo"
-                      alt="AI app builder for mobile and web"
-                      class="ct_img_logo_123"
-                    />
-                    }
-                  </div>
-                  <h6 class="text-white ct_fs_14">
-                    {{ projectsData.projectName }}
-                  </h6>
-                </div>
+                <app-mobile-view />
               </div>
               <div class="mt-3">
                 <h5 class="ct_fs_16 ct_fw_700 text-center">
@@ -644,17 +444,13 @@
                 </p>
               </div>
               <div class="mt-5">
-                <div
-                  class="d-flex align-items-center justify-content-between gap-3 mb-3"
-                >
+                <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
                   <p class="mb-0 ct_text_op_7 ct_fs_14">Estimated Duration</p>
                   <p class="mb-0 ct_fw_700 ct_fs_14">
                     {{ estimatedWeeks }} weeks
                   </p>
                 </div>
-                <div
-                  class="d-flex align-items-center justify-content-between gap-3 mb-3"
-                >
+                <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
                   <p class="mb-0 ct_text_op_7 ct_fs_14">Expected Completion</p>
                   <p class="mb-0 ct_fw_700 ct_fs_14">
                     {{ estimatedDate | date }}
@@ -662,33 +458,29 @@
                 </div>
               </div>
               <div class="mt-4 pt-4 ct_border_top_1">
-                <!-- <div
-                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
-                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Features</p>
-                                                      <p class="mb-0 ct_fw_700 ct_fs_14">{{totalFeatureCost | currency
-                                                                                          :'INR'}}</p>
-                                                </div>
-                                                <div
-                                                      class="d-flex align-items-center justify-content-between gap-3  mb-3">
-                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Customisation</p>
-                                                      <p class="mb-0 ct_fw_700 ct_fs_14">{{totalCustomizeCost | currency
-                                                                                          :'INR'}}</p>
-                                                </div> -->
-                <div
-                  class="d-flex align-items-center justify-content-between gap-3 mb-3"
-                >
+                <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
                   <p class="mb-0 ct_fw_700 ct_fs_18">Total Cost</p>
                   <p class="mb-0 ct_fw_700 ct_fs_18">
                     {{ totalPrice | convertCurrency:rate}}
                   </p>
                 </div>
+                <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+                  <p class="mb-0 ct_fw_700 ct_fs_18">Discount (40%)</p>
+                  <p class="mb-0 ct_fw_700 ct_fs_18">
+                    {{ (totalPrice * 40)/100 | convertCurrency:rate}}
+                  </p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+                  <p class="mb-0 ct_fw_700 ct_fs_18">Final Cost</p>
+                  <p class="mb-0 ct_fw_700 ct_fs_18">
+                    {{ totalPrice - ((totalPrice * 40)/100) | convertCurrency:rate}}
+                  </p>
+                </div>
               </div>
               <div class="mt-5">
-                <a
-                  (click)="Navigate()"
-                  class="ct_schedule_call_btn w-100 d-flex justify-content-center align-items-center"
-                  >View Creative Card</a
-                >
+                <a (click)="Navigate()"
+                  class="ct_schedule_call_btn w-100 d-flex justify-content-center align-items-center">View Creative
+                  Card</a>
               </div>
             </div>
           </div>
@@ -701,11 +493,7 @@
 <!-- Mobile page section S -->
 <section class="ct_mobile_section_main">
   <div class="ct_mobile_header_main_bg">
-    <img
-      loading="lazy"
-      src="assets/img/cti_black_logo.svg"
-      alt="AI app builder for mobile and web"
-    />
+    <img loading="lazy" src="assets/img/cti_black_logo.svg" alt="AI app builder for mobile and web" />
   </div>
   <div class="container">
     <div class="row">
@@ -735,9 +523,7 @@
             to life!
           </p>
           <div class="mt-5">
-            <a href="index.html" class="ct_blue_btn_fill w-100"
-              >Return to Creative AI</a
-            >
+            <a href="index.html" class="ct_blue_btn_fill w-100">Return to Creative AI</a>
           </div>
         </div>
       </div>
@@ -748,13 +534,8 @@
 
 <!-- Refrsh page modal S -->
 
-<div
-  class="modal fade modal-lg"
-  id="ct_refresh_page"
-  tabindex="-1"
-  aria-labelledby="ct_refresh_pageLabel"
-  aria-hidden="true"
->
+<div class="modal fade modal-lg" id="ct_refresh_page" tabindex="-1" aria-labelledby="ct_refresh_pageLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content p-4">
       <div class="modal-body p-0">
@@ -767,20 +548,11 @@
             Doing so may result in the loss of your recent interactions and
             changes.
           </p>
-          <div
-            class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center"
-          >
-            <button
-              class="ct_blue_outline_btn justify-content-center"
-              data-bs-dismiss="modal"
-            >
+          <div class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center">
+            <button class="ct_blue_outline_btn justify-content-center" data-bs-dismiss="modal">
               Cancel
             </button>
-            <button
-              class="ct_blue_btn_fill justify-content-center"
-              data-bs-dismiss="modal"
-              routerLink="/main"
-            >
+            <button class="ct_blue_btn_fill justify-content-center" data-bs-dismiss="modal" routerLink="/main">
               Proceed
             </button>
           </div>
