@@ -1,5 +1,5 @@
-<app-discount-modal></app-discount-modal>
-<!-- <app-bd-loader *ngIf="isLoading" [loadingText]="'Customizing Features'"></app-bd-loader> -->
+<app-discount-modal *ngIf="!isLoading"></app-discount-modal>
+<app-bd-loader *ngIf="isLoading" [loadingText]="'Customizing Features'"></app-bd-loader>
 <section class="ct_dash_board_main">
    <app-sidebar></app-sidebar>
    <div class="ct_dash_right_content p-0 ct_white_bg_page">

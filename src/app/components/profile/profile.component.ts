@@ -34,7 +34,9 @@ export class ProfileComponent {
     { code: 'USD', name: 'United States Dollar' },
     { code: 'EUR', name: 'Euro' },
     { code: 'SGD', name: 'Singapore Dollar' },
-    { code: 'AED', name: 'UAE Dirham' }
+    { code: 'AED', name: 'UAE Dirham' },
+    { code: 'GBP', name: 'United Kingdom Pound' },
+    {code : 'AUD', name:'Australian Dollar'}
   ];
   otp: any;
   isResendDisabled: boolean = false;

@@ -88,10 +88,12 @@ export class RefineIdeaComponent {
     this.apiService.getApi<any>(`api/user/fetchFeaturesAndThereSubFeatures`)
       .subscribe({
         next: (res) => {
-          debugger
+          
           if (res.success == true) {
             this.findDifferences(res.data, this.projectsFeaturs)
+          setTimeout(() => {
             this.isLoading = false
+          },2000)
           } else {
             this.isLoading = false
           }

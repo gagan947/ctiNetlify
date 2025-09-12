@@ -21,11 +21,7 @@ export class LocationService {
    */
   async getUserLocation(): Promise<UserLocation> {
     try {
-      if (this.useIpFallback) {
-  
-        const country = await this.getCountryFromIP();
-        return { latitude: 0, longitude: 0, country }; 
-      }
+    
       const coords = await this.getCurrentLocation();
       console.log('coords', coords);
       const country = await this.getCountryFromCoords(coords.latitude, coords.longitude);
