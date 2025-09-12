@@ -33,6 +33,7 @@ export class RefineIdeaComponent {
   noOfFeaturs: number = 0
   rate: any;
   isLoading: boolean = false
+  orgCommonFeatures: any[] = [];
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService, private http: HttpClient) {
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
@@ -66,7 +67,6 @@ export class RefineIdeaComponent {
               );
             });
 
-
             let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
             this.totalPrice = (totalTime * 1750)
             this.estimatedWeeks = Math.ceil((totalTime / 8) / 5);
@@ -88,7 +88,6 @@ export class RefineIdeaComponent {
     this.apiService.getApi<any>(`api/user/fetchFeaturesAndThereSubFeatures`)
       .subscribe({
         next: (res) => {
-          
           if (res.success == true) {
             this.findDifferences(res.data, this.projectsFeaturs)
           setTimeout(() => {
@@ -155,12 +154,11 @@ export class RefineIdeaComponent {
   }
 
   Navigate() {
-
     let formData = {
       formNumber: 2,
       projectFeatures: this.projectsFeaturs,
       durations: this.estimatedWeeks,
-      totalCost: this.totalPrice,
+      totalCost: this.totalPrice - ((this.totalPrice * 40) / 100),
       currentRoutes: this.router.url,
       no_of_features: this.noOfFeaturs
     }
@@ -170,7 +168,7 @@ export class RefineIdeaComponent {
         next: (res: any) => {
           if (res.success) {
             let totalProjectCost = {
-              totalCost: this.totalPrice
+              totalCost: this.totalPrice - ((this.totalPrice * 40) / 100)
             }
 
             let selectdFeature = {
@@ -192,7 +190,7 @@ export class RefineIdeaComponent {
     const newSubFeaturesSet = new Set(newArray?.flatMap(feature => feature.subFeatures.map((subFeature) =>
       subFeature.subFeatureName)));
 
-    this.commongFeaturs = originalArray.map(f => ({
+    this.commongFeaturs = this.orgCommonFeatures = originalArray.map(f => ({
       ...f,
       selected: newFeaturesSet.has(f.featureName),
       subFeaturesList: f.subFeatures.map((sf) => ({
@@ -288,31 +286,24 @@ export class RefineIdeaComponent {
     }
   }
 
-  // searchCoreFeatures(event: any) {
-  //   const searchTerm = (event.target.value).toLowerCase();
-   
-  
-  //   if (searchTerm) {
-     
-  
-  //     const filteredData = this.commongFeaturs.filter((item: any) => {
-  //       const featureMatch = item.featureName?.toLowerCase().includes(searchTerm);
-  
-  //       const subFeatureMatch = item.subFeaturesList?.some(
-  //         (subFeature: any) =>
-  //           subFeature?.subFeatureName?.toLowerCase().includes(searchTerm)
-  //       );
-  
-  //       return featureMatch || subFeatureMatch;
-  //     });
-  
-  //     this.commongFeaturs = filteredData.length ? filteredData : [];
-      
-  //   } else {
-  //     // Reset to original data if search is empty
-  //     this.commongFeaturs = [...this.commongFeaturs];
-  //   }
-  // }
+  searchCoreFeatures(event: any) {
+    const searchTerm = (event.target.value).toLowerCase();
+    if (searchTerm) {
+      const filteredData = this.orgCommonFeatures.filter((item: any) => {
+        const featureMatch = item.featureName?.toLowerCase().includes(searchTerm);
+        const subFeatureMatch = item.subFeaturesList?.some(
+          (subFeature: any) =>
+            subFeature?.subFeatureName?.toLowerCase().includes(searchTerm)
+        );
+        return featureMatch || subFeatureMatch;
+      });
+
+      this.commongFeaturs = filteredData.length ? filteredData : [];
+    } else {
+      // Reset to original data if search is empty
+      this.commongFeaturs = [...this.orgCommonFeatures];
+    }
+  }
 
 
 }

@@ -4042,23 +4042,23 @@ table.table.ct_compare_table {
   right: 0px;
 } */
 .ct_mob_overlay_top_cnt_12 {
-    position: absolute;
-    top: 21px;
-    left: 18px;
-    transform: translateY(0%);
-    text-align: center;
-    /* padding-top: 20px; */
-    /* padding-inline: 10px; */
-    /* right: 0px; */
-    position: absolute;
-    top: 21px;
-    left: 0;
-    width: 427px;
-    height: 100vh;
-    border: none;
-    /* transform: scale(0.55); */
-    transform-origin: top left;
-    left: 16px;
+  position: absolute;
+  top: 21px;
+  left: 18px;
+  transform: translateY(0%);
+  text-align: center;
+  /* padding-top: 20px; */
+  /* padding-inline: 10px; */
+  /* right: 0px; */
+  position: absolute;
+  top: 21px;
+  left: 0;
+  width: 427px;
+  height: 100vh;
+  border: none;
+  /* transform: scale(0.55); */
+  transform-origin: top left;
+  left: 16px;
 }
 
 /* step Form Css S */
@@ -4546,8 +4546,8 @@ ul.floatingBoxes li:nth-child(10) {
 }
 
 
-.ct_moc_clip_mask_main{
-     position: relative;
+.ct_moc_clip_mask_main {
+  position: relative;
   width: 227px;
   height: 464px;
 
@@ -4562,10 +4562,12 @@ ul.floatingBoxes li:nth-child(10) {
 
   /* optional, back color if needed */
   background: #000;
-  border-radius: 27px; /* if your mask also has rounded edges */
+  border-radius: 27px;
+  /* if your mask also has rounded edges */
 }
-.ct_moc_clip_mask_main_desk{
-    position: relative;
+
+.ct_moc_clip_mask_main_desk {
+  position: relative;
   width: 227px;
   height: 464px;
 
@@ -4580,8 +4582,10 @@ ul.floatingBoxes li:nth-child(10) {
 
   /* optional, back color if needed */
   background: #000;
-  border-radius: 27px; /* if your mask also has rounded edges */
+  border-radius: 27px;
+  /* if your mask also has rounded edges */
 }
+
 /* Loader page setion Css E */
 
 .ct_progress_btn_white {
@@ -4676,7 +4680,7 @@ ul.floatingBoxes li:nth-child(10) {
 }
 
 .ct_code_features_list.ct_mt_4 {
-  height: calc(100vh - 209px);
+  height: calc(100vh - 140px);
   overflow-y: auto;
 }
 

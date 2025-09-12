@@ -36,11 +36,12 @@ export class BillingDetailsComponent {
     effect(() => {
       this.rate = this.apiService._rate()
     })
+    let userData = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
     this.apiService._imagePreview.set(this.projectsData.projectLogo);
     this.projectsFeatures = this.projectsData.selectdFeature;
-    this.billingDetails = this.projectsData.bellingDetails ? this.projectsData.bellingDetails[0] : {};
+    this.billingDetails = this.projectsData.bellingDetails ? this.projectsData.bellingDetails[0] : userData;
     this.totalSubFeatures = this.projectsData.no_of_features
   };
 
@@ -54,17 +55,27 @@ export class BillingDetailsComponent {
 
     this.billingForm = this.fb.group({
       customer_type: [this.billingDetails.customer_type || 'individual', Validators.required],
-      company_name: [this.billingDetails.company_name || ''],
+      company_name: [this.billingDetails.company_name || this.billingDetails.companyName || ''],
       email: [this.billingDetails.email || '', [Validators.required, Validators.email]],
-      phone: [this.billingDetails.phone || '', Validators.required],
+      phone: [this.billingDetails.phone || this.billingDetails.phoneNumber || '', Validators.required],
       company_location: [this.billingDetails.company_location || '', Validators.required],
       address_line_1: [this.billingDetails.address_line_1 || '', Validators.required],
       address_line_2: [this.billingDetails.address_line_2 || ''],
       city: [this.billingDetails.city || '', Validators.required],
       state: [this.billingDetails.state || '', Validators.required],
       postal_code: [this.billingDetails.postal_code || '', [Validators.required, Validators.pattern(/^\d{5,6}$/)]],
-      full_name: [this.billingDetails.full_name || '', Validators.required],
+      full_name: [this.billingDetails.full_name || this.billingDetails.name || '', Validators.required],
     });
+
+    this.billingForm.get('customer_type')?.valueChanges.subscribe(value => {
+      if (value === 'company') {
+        this.billingForm.get('company_name')?.setValidators([Validators.required]);
+        this.billingForm.get('company_name')?.updateValueAndValidity();
+      } else {
+        this.billingForm.get('company_name')?.clearValidators();
+        this.billingForm.get('company_name')?.updateValueAndValidity();
+      }
+    })
   };
 
   getStateByCountry(event: any) {
@@ -107,6 +118,5 @@ export class BillingDetailsComponent {
         this.message.error(err.error.message);
       }
     })
-
   }
 }
