@@ -250,16 +250,7 @@ export class RefineIdeaComponent {
     this.allFeatures = this.projectsFeaturs
   }
 
-  search(event: any) {
-    const searchTerm = event.target.value.toLowerCase();
-    if (searchTerm) {
-      const filteredData = this.allFeatures.filter((item: any) => item.featureName.toLowerCase().includes(searchTerm) ||
-        item.subFeatures.some((subFeature: any) => subFeature.subFeatureName.toLowerCase().includes(searchTerm)));
-      this.projectsFeaturs = filteredData.length ? filteredData : [];
-    } else {
-      this.projectsFeaturs = [...this.allFeatures];
-    }
-  }
+
 
   getEstimatedTime(item: any): number {
     const subFeatured = Number(item.totalSubFeaturedPrice) || 0;
@@ -278,4 +269,42 @@ export class RefineIdeaComponent {
 
     return Math.ceil(((subFeatured + customisation) / cost) * (weeks * 5 * 8));
   }
+  search(event: any) {
+    const searchTerm = event.target.value.toLowerCase();
+    if (searchTerm) {
+      const filteredData = this.allFeatures.filter((item: any) => item.featureName.toLowerCase().includes(searchTerm) ||
+        item.subFeatures.some((subFeature: any) => subFeature.subFeatureName.toLowerCase().includes(searchTerm)));
+      this.projectsFeaturs = filteredData.length ? filteredData : [];
+    } else {
+      this.projectsFeaturs = [...this.allFeatures];
+    }
+  }
+
+  // searchCoreFeatures(event: any) {
+  //   const searchTerm = (event.target.value).toLowerCase();
+   
+  
+  //   if (searchTerm) {
+     
+  
+  //     const filteredData = this.commongFeaturs.filter((item: any) => {
+  //       const featureMatch = item.featureName?.toLowerCase().includes(searchTerm);
+  
+  //       const subFeatureMatch = item.subFeaturesList?.some(
+  //         (subFeature: any) =>
+  //           subFeature?.subFeatureName?.toLowerCase().includes(searchTerm)
+  //       );
+  
+  //       return featureMatch || subFeatureMatch;
+  //     });
+  
+  //     this.commongFeaturs = filteredData.length ? filteredData : [];
+      
+  //   } else {
+  //     // Reset to original data if search is empty
+  //     this.commongFeaturs = [...this.commongFeaturs];
+  //   }
+  // }
+
+
 }

@@ -8,11 +8,11 @@ import { Auth, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
   providedIn: 'root'
 })
 export class ApiService {
-  // apiUrl = 'http://192.168.29.241:4500/'
+  apiUrl = 'http://192.168.29.241:4500/'
   // imageUrl = 'http://192.168.29.241:4500/'
   // apiUrl = 'http://192.168.1.4:3000/prod/'
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
-  apiUrl = 'https://api.creativethoughts.ai/';
+  // apiUrl = 'https://api.creativethoughts.ai/';
   imageUrl = 'https://api.creativethoughts.ai';
 
   // apiUrl = 'http://localhost:4500/';
@@ -58,7 +58,8 @@ export class ApiService {
 
   getRates(base: any) {
     const key = 'b0cb67a3bd5f488aa622b7fb10006590';
-  
+    this._rate.set(1);
+    return;
     // handle INR directly
     if (base === 'INR') {
       this._rate.set(1);

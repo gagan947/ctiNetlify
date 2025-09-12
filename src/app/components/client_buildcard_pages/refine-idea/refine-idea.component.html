@@ -142,16 +142,26 @@
                </div>
                <!-- make it mine Chat show E -->
                <!-- code feature list S -->
-               <div class="ct_code_features_list mt-4">
-                  <h4 data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-                     aria-controls="collapseExample"
-                     class="ct_fs_22 ct_fw_600 d-flex align-items-center justify-content-between mb-0">
-                     <span>Core
-                        Features</span> <i class="fa-solid fa-angle-down"></i>
-                  </h4>
-                  <div class="collapse show ct_feature_card_scroll" id="collapseExample">
+              <div class="mt-4 mb-3">
+               <h4 
+               class="ct_fs_22 ct_fw_600 d-flex align-items-center justify-content-between mb-0">
+               <span>Core
+                  Features</span> 
+            </h4>
+            <!-- <div class="ct_search_input"
+               style="max-width: 350px;">
+               <input type="text" class="form-control"
+                  name="search2" (input)="searchCoreFeatures($event)"
+                  placeholder="Search feature">
+               <i class="fa-solid fa-magnifying-glass"></i>
+            </div> -->
+              </div>
+               <div class="ct_code_features_list ct_mt_4">
+                  
+                  <div class=" ct_feature_card_scroll" >
+                     
                      @for (item of commongFeaturs; track $index) {
-                     <div class="ct_dragable_card_main_bg mt-4" [id]="'todoList'">
+                     <div class="ct_dragable_card_main_bg mt-0" [id]="'todoList'">
                         <h2 class="ct_fs_18 ct_fw_700 mb-0 d-flex align-items-center justify-content-between">
                            {{ item.featureName }}
                            @if (item.selected) {

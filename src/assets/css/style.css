@@ -4675,7 +4675,7 @@ ul.floatingBoxes li:nth-child(10) {
     overflow-y: auto; */
 }
 
-.ct_code_features_list.mt-4 {
+.ct_code_features_list.ct_mt_4 {
   height: calc(100vh - 209px);
   overflow-y: auto;
 }
