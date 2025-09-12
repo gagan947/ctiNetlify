@@ -157,7 +157,11 @@ export class LoginComponent {
               case 'false_false':
                 this.apiService.setToken(res.data.token);
                 localStorage.setItem('userDetailCTI', JSON.stringify(res.data.users));
-                this.router.navigate(['/main']);
+                if (res.data.user.profile_visited) {
+                  this.router.navigate(['/main']);
+                } else {
+                  this.router.navigate(['/profile']);
+                }
                 break;
             }
           } else {
@@ -202,7 +206,12 @@ export class LoginComponent {
               this.apiService.setToken(res.data.token);
               localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
               this.message.success(res.message)
-              this.router.navigate(['/main'])
+              debugger
+              if (res.data.user.profile_visited) {
+                this.router.navigate(['/main']);
+              } else {
+                this.router.navigate(['/profile']);
+              }
               // this.projectInfo = res.projectInfo
               // this, this.getProjectMedia()
               this.isLoading = false

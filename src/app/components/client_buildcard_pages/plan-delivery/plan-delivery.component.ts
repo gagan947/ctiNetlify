@@ -186,7 +186,7 @@ export class PlanDeliveryComponent {
           if (res.success) {
             this.projectsData.estimated_time = this.estimatedWeeks;
 
-            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...{ finalCost: this.totalPrice - ((this.totalPrice * 40) / 100) }, ...{ projectId: this.id }, ...{ 'featuresCost': this.totalFeatureCost }, ...{ 'customisationCost': this.totalCustomizeCost }, ...{ platform: this.selectedDevices }, ...{ speed: this.rangeValue == '0' ? 'Standard' : this.rangeValue == '2' ? 'Fast' : 'Speedy' }, ...{ estimatedDate: this.estimatedDate }, ...{ 'PhasesDeliverables': this.PhasesDeliverables } }))
+            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...{ finalCost: this.totalPrice }, ...{ projectId: this.id }, ...{ 'featuresCost': this.totalFeatureCost }, ...{ 'customisationCost': this.totalCustomizeCost }, ...{ platform: this.selectedDevices }, ...{ speed: this.rangeValue == '0' ? 'Standard' : this.rangeValue == '2' ? 'Fast' : 'Speedy' }, ...{ estimatedDate: this.estimatedDate }, ...{ 'PhasesDeliverables': this.PhasesDeliverables } }))
             this.router.navigate([`/review-buildcard`])
           } else {
             this.message.error(res.message);

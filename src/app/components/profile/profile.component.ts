@@ -56,11 +56,13 @@ export class ProfileComponent {
       if (res.success && res.data.length > 0) {
         this.user = res.data[0];
         localStorage.setItem('userDetailCTI', JSON.stringify(this.user));
+        if (!this.user.profile_visited) {
+          this.updateProfileVisited();
+        }
         // Pre-select tax type based on existing data
         if (this.user.gst_number) this.selectedType = 'GST';
         else if (this.user.vat_number) this.selectedType = 'VAT';
         else if (this.user.tan_number) this.selectedType = 'TAN';
-
         if (this.user.country_code && this.user.phoneNumber) {
           this.phone = {
             number: this.user.phoneNumber,
@@ -73,6 +75,10 @@ export class ProfileComponent {
         }
       }
     });
+  }
+
+  updateProfileVisited() {
+    this.apiService.getApi('api/user/updateProfileVisited').subscribe();
   }
 
   verifyEmail() {

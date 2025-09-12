@@ -229,8 +229,6 @@ ul.iti__country-list {
 }
 
 
-
-
 nz-input-otp.ant-otp {
       justify-content: center;
 }
@@ -240,4 +238,8 @@ nz-input-otp.ant-otp {
       height: 40px;
       border-radius: 5px !important;
       background-color: #f5f5f5 !important;
+}
+
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+      height: auto !important;
 }
