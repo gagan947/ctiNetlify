@@ -4,12 +4,12 @@ import { HeaderComponent } from "../../shared/header/header.component";
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-blog-cards',
+  selector: 'app-blog-detail',
   standalone: true,
-  imports: [FooterComponent, HeaderComponent,RouterLink],
-  templateUrl: './blog-cards.component.html',
-  styleUrl: './blog-cards.component.css'
+    imports: [FooterComponent, HeaderComponent,RouterLink],
+  templateUrl: './blog-detail.component.html',
+  styleUrl: './blog-detail.component.css'
 })
-export class BlogCardsComponent {
+export class BlogDetailComponent {
 
 }

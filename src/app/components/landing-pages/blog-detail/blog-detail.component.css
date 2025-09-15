@@ -1,0 +1,30 @@
+.ct_blog_dtl_box {
+    background: #fff;
+    box-shadow: 0 0 25px #00000017;
+    padding: 25px;
+    border-radius: 5px;
+}
+
+.ct_blog_dtl_img {
+    overflow: hidden;
+}
+
+.ct_blog_dtl_img img {
+    width: 100%;
+    height: 350px;
+    object-fit: contain;
+    transition: .4s 
+    
+ease all;
+background-color: #f2f2f2;
+    border-radius: 5px;
+}
+
+.ct_blog_dtl_box h6 {
+    font-size: 16px;
+    margin-top: 25px;
+}
+
+.ct_blog_dtl_box h4 {
+    font-size: 22px;
+}
