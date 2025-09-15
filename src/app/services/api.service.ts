@@ -104,24 +104,10 @@ export class ApiService {
 
   logout() {
     localStorage.removeItem('tokenCTi');
-    localStorage.removeItem('userDetailAuc');
+    localStorage.removeItem('userDetailCTI');
     this.route.navigateByUrl('/');
   };
 
-  private dataKey = 'auctionData';
-
-  setProduct(data: any) {
-    localStorage.setItem('auctionProducts', JSON.stringify(data));
-  }
-
-  getProduct() {
-    const data = localStorage.getItem('auctionProducts');
-    return data ? JSON.parse(data) : null;
-  };
-
-  clearProducts() {
-    localStorage.removeItem('auctionProducts');
-  };
 
   private offersSubject = new Subject<any>();
   offers$ = this.offersSubject.asObservable();

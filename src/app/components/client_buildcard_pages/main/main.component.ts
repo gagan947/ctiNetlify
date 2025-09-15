@@ -36,6 +36,11 @@ export class MainComponent {
   }
 
   ngOnInit(): void {
+    const data: any = localStorage.getItem('userDetailCTI')
+    if (data !== 'undefined') {
+      const user = JSON.parse(data);
+      this.apiservice.getRates(user?.currency);
+    }
     this.getProjects();
     sessionStorage.removeItem('projectData');
     // this.socket = io(this.apiservice.apiUrl);

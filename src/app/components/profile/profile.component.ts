@@ -44,6 +44,7 @@ export class ProfileComponent {
   countdown: number = 60;
   interval: any;
   isLoading: boolean = false;
+  isLoading2: boolean = false;
   verificationType: string = '';
   selectedCurrency: string = 'USD'; // default
   public apiService = inject(ApiService);
@@ -88,6 +89,7 @@ export class ProfileComponent {
     if (!this.user?.email) {
       return;
     }
+    this.isLoading2 = true
     this.verificationType = 'E'
     const userData = {
       email: this.user?.email,
@@ -100,8 +102,14 @@ export class ProfileComponent {
         if (otpModalEl) {
           const modal = new bootstrap.Modal(otpModalEl);
           modal.show();
+          this.isLoading2 = true
         }
+      } else {
+        this.isLoading2 = false
       }
+    }, (err: any) => {
+      this.message.error(err.error.message)
+      this.isLoading2 = false
     })
   }
 
@@ -110,6 +118,7 @@ export class ProfileComponent {
       console.log("Invalid form", form);
       return;
     }
+    this.isLoading2 = true
     this.verificationType = 'M'
     const userData = {
       phoneNumber: this.phone!.number,
@@ -120,11 +129,18 @@ export class ProfileComponent {
       if (res.success) {
         this.startCountdown()
         const otpModalEl = document.getElementById('otpVerifyModal');
+        this.message.success(res.message);
         if (otpModalEl) {
           const modal = new bootstrap.Modal(otpModalEl);
           modal.show();
+          this.isLoading2 = true
         }
+      } else {
+        this.isLoading2 = false
       }
+    }, (err: any) => {
+      this.message.error(err.error.message)
+      this.isLoading2 = false
     })
   };
 
@@ -217,6 +233,7 @@ export class ProfileComponent {
     this.apiService.postAPI(apiUrl, userData).subscribe((res: any) => {
       if (res.success) {
         this.startCountdown()
+        this.message.success(res.message);
       }
     })
   }

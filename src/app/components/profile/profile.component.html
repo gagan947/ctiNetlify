@@ -56,7 +56,14 @@
 
                                                                         }@else {
                                                                         <button class="ct_green_btn ct_eye_show"
-                                                                              (click)="verifyEmail()">Verify</button>
+                                                                              (click)="verifyEmail()"
+                                                                              [disabled]="isLoading2">
+                                                                              <span *ngIf="isLoading2"
+                                                                                    class="spinner-border spinner-border-sm me-2"
+                                                                                    role="status"
+                                                                                    aria-hidden="true"></span>
+                                                                              {{ isLoading2 ? '' : 'Verify' }}
+                                                                        </button>
 
                                                                         }
                                                                   </div>
@@ -94,7 +101,13 @@
 
                                                                         }@else {
                                                                         <button class="ct_green_btn ct_eye_show"
-                                                                              type="submit">Verify</button>
+                                                                              type="submit" [disabled]="isLoading2">
+                                                                              <span *ngIf="isLoading2"
+                                                                                    class="spinner-border spinner-border-sm me-2"
+                                                                                    role="status"
+                                                                                    aria-hidden="true"></span>
+                                                                              {{ isLoading2 ? '' : 'Verify' }}
+                                                                        </button>
 
                                                                         }
                                                                   </div>
@@ -258,7 +271,7 @@
 
 
 <div class="modal fade modal-lg" id="otpVerifyModal" tabindex="-1" aria-labelledby="ct_refresh_pageLabel"
-      aria-hidden="true">
+      aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
       <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content  p-4">
 
@@ -299,7 +312,7 @@
                         </div>
                         <div class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center">
                               <button class="ct_blue_outline_btn  justify-content-center" data-bs-dismiss="modal"
-                                    #closeBtn>Cancel</button>
+                                    (click)="isLoading2 = false" #closeBtn>Cancel</button>
                               <button class="ct_blue_btn_fill  justify-content-center" [disabled]="isLoading"
                                     (click)="verifyOtpNumber()">
                                     <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"
