@@ -103,7 +103,6 @@
                   </div>
                </div>
                <div class="ct_code_features_list ct_mt_4">
-
                   <div class=" ct_feature_card_scroll">
                      @if (commongFeaturs.length > 0) {
                      @for (item of commongFeaturs; track $index) {
@@ -340,7 +339,8 @@
                                                             track
                                                             $index)
                                                             {
-                                                            <tr>
+                                                            <tr [attr.data-feature-id]="item.id"
+                                                               [ngClass]="item.flashClass">
                                                                <td>
                                                                   <div class="d-flex align-items-center gap-2">
                                                                      <span class="SubfeatursCount">
@@ -376,7 +376,8 @@
                                                             track
                                                             $index)
                                                             {
-                                                            <tr>
+                                                            <tr [attr.data-subfeature-id]="item2.id"
+                                                               [ngClass]="item2.flashClass">
                                                                <td>
                                                                   <span class="ct_fs_14">{{item2.subFeatureName}}</span>
                                                                </td>

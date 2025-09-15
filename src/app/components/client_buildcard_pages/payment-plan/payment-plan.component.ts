@@ -164,18 +164,14 @@ export class PaymentPlanComponent {
 
   ngAfterViewInit() {
     console.log("here2");
-    Calendly.initInlineWidget({
-      // url: 'https://calendly.com/amitholkar/30min',
-      url: 'https://calendly.com/mohdfaraz-ctinfotech/30min',
-      parentElement: document.getElementById('calendly-inline-widget'),
-      prefill: {},
-      utm: {},
-      onEventScheduled: (e: any) => {
-        console.log('Event scheduled:', e);
-        // this.sendConfirmationEmail();
-      }
-    });
-    window.addEventListener('message', this.handleCalendlyEvent.bind(this));
+    const calendlyContainer = document.getElementById('calendly-inline-widget');
+    if (calendlyContainer) {
+      Calendly.initInlineWidget({
+        url: 'https://calendly.com/creativethoughts/30min',
+        parentElement: calendlyContainer,
+      });
+    }
+    // window.addEventListener('message', this.handleCalendlyEvent.bind(this));
   };
 
   handleCalendlyEvent(e: MessageEvent) {

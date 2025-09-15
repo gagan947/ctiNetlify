@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 Disallow: /cgi-bin/
-Sitemap: https://www.Creative AI/sitemap.xml
+Sitemap: https://creativethoughts.ai/sitemap.xml

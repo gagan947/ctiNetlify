@@ -77,3 +77,19 @@ table.table.ct_help_user_table {
     border-spacing: 0px 4px;
     border-collapse: separate;
 }
+
+
+
+@keyframes highlightGreen {
+    0% {
+        background-color: #17b400;
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+.flash-added {
+    animation: highlightGreen 2s ease-out;
+}

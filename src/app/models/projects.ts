@@ -22,6 +22,7 @@ export interface SubFeature {
   id: number;
   estimated_time: any,
   subFeatureName: string
+  flashClass?: string
 }
 
 export interface Feature {
@@ -29,6 +30,7 @@ export interface Feature {
   featureName: string;
   subFeatures: SubFeature[];
   featureTime: any
+  flashClass?: string
 }
 
 export interface FeatureResponse {

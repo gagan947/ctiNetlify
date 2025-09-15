@@ -12,7 +12,7 @@
                                     <div>
                                           <div class="ct_profile_user">
                                                 <img loading="lazy"
-                                                      [src]="imagePreview || apiService.imageUrl + user?.profile_image || 'assets/img/np_pro.png'"
+                                                      [src]="imagePreview ? imagePreview : user?.profile_image ? apiService.imageUrl + user?.profile_image : 'assets/img/np_pro.png'"
                                                       alt="AI app builder for mobile and web">
                                                 <label for="ct_profile_img_icon">
                                                       <input type="file" class="d-none" id="ct_profile_img_icon"
@@ -34,7 +34,7 @@
                                                             <label for="" class="ct_fw_500 mb-2">Full Name</label>
                                                             <input type="text" class="form-control ct_input"
                                                                   placeholder="Enter Full Name" [(ngModel)]="user.name"
-                                                                  name="name">
+                                                                  name="name" [ngModelOptions]="{standalone: true}">
                                                       </div>
                                                       <div class="form-group mb-4">
                                                             <label for="" class="ct_fw_500 mb-2">Email Address</label>
@@ -44,6 +44,7 @@
                                                                               class="form-control ct_input pe-5 ct_pe_90"
                                                                               placeholder="Enter Email Address"
                                                                               [(ngModel)]="user.email" name="email"
+                                                                              [ngModelOptions]="{standalone: true}"
                                                                               [disabled]="user.is_email_verified ===1">
                                                                         @if(user.is_email_verified){
                                                                         <svg width="24" height="24" class="ct_eye_show"
@@ -80,7 +81,8 @@
                                                                               [selectFirstCountry]="false"
                                                                               [selectedCountryISO]="selectedCountry"
                                                                               [maxLength]="15" [phoneValidation]="true"
-                                                                              [disabled]="user.is_phone_verified ===1">
+                                                                              [disabled]="user.is_phone_verified ===1"
+                                                                              [ngModelOptions]="{standalone: true}">
                                                                         </ngx-intl-tel-input>
                                                                         @if(user.is_phone_verified){
                                                                         <svg width="24" height="24" class="ct_eye_show"
@@ -122,13 +124,15 @@
                                                             <label for="" class="ct_fw_500 mb-2">Company Name</label>
                                                             <input type="text" class="form-control ct_input"
                                                                   placeholder="Enter Company Name"
-                                                                  [(ngModel)]="user.companyName">
+                                                                  [(ngModel)]="user.companyName"
+                                                                  [ngModelOptions]="{standalone: true}">
                                                       </div>
                                                       <div class="form-group mb-4 d-flex gap-2">
                                                             <div class="form-check">
                                                                   <input class="form-check-input" type="radio"
                                                                         name="taxType" id="gst"
-                                                                        [(ngModel)]="selectedType" value="GST">
+                                                                        [(ngModel)]="selectedType" value="GST"
+                                                                        [ngModelOptions]="{standalone: true}">
                                                                   <label class="form-check-label" for="gst">GST
                                                                         Number</label>
                                                             </div>
@@ -136,7 +140,8 @@
                                                             <div class="form-check">
                                                                   <input class="form-check-input" type="radio"
                                                                         name="taxType" id="vat"
-                                                                        [(ngModel)]="selectedType" value="VAT">
+                                                                        [(ngModel)]="selectedType" value="VAT"
+                                                                        [ngModelOptions]="{standalone: true}">
                                                                   <label class="form-check-label" for="vat">VAT
                                                                         Number</label>
                                                             </div>
@@ -144,7 +149,8 @@
                                                             <div class="form-check">
                                                                   <input class="form-check-input" type="radio"
                                                                         name="taxType" id="tan"
-                                                                        [(ngModel)]="selectedType" value="TAN">
+                                                                        [(ngModel)]="selectedType" value="TAN"
+                                                                        [ngModelOptions]="{standalone: true}">
                                                                   <label class="form-check-label" for="tan">TAN
                                                                         Number</label>
                                                             </div>
@@ -155,7 +161,8 @@
                                                             <label class="ct_fw_500 mb-2">GST Number</label>
                                                             <input type="text" class="form-control ct_input"
                                                                   placeholder="Enter GST Number"
-                                                                  [(ngModel)]="user.gst_number" name="gst_number">
+                                                                  [(ngModel)]="user.gst_number" name="gst_number"
+                                                                  [ngModelOptions]="{standalone: true}">
                                                       </div>
 
                                                       <!-- VAT -->
@@ -163,7 +170,8 @@
                                                             <label class="ct_fw_500 mb-2">VAT Number</label>
                                                             <input type="text" class="form-control ct_input"
                                                                   placeholder="Enter VAT Number"
-                                                                  [(ngModel)]="user.vat_number" name="vat_number">
+                                                                  [(ngModel)]="user.vat_number" name="vat_number"
+                                                                  [ngModelOptions]="{standalone: true}">
                                                       </div>
 
                                                       <!-- TAN -->
@@ -171,7 +179,8 @@
                                                             <label class="ct_fw_500 mb-2">TAN Number</label>
                                                             <input type="text" class="form-control ct_input"
                                                                   placeholder="Enter TAN Number"
-                                                                  [(ngModel)]="user.tan_number" name="tan_number">
+                                                                  [(ngModel)]="user.tan_number" name="tan_number"
+                                                                  [ngModelOptions]="{standalone: true}">
                                                       </div>
 
                                                       <div class="form-group mb-4">
@@ -179,7 +188,8 @@
                                                             <nz-select class="form-control  ct_currency_input"
                                                                   [(ngModel)]="user.currency"
                                                                   nzPlaceHolder="Select Currency"
-                                                                  [nzDropdownMatchSelectWidth]="false">
+                                                                  [nzDropdownMatchSelectWidth]="false"
+                                                                  [ngModelOptions]="{standalone: true}">
 
                                                                   @for (item of currencies; track $index) {
                                                                   <nz-option [nzValue]="item.code"

@@ -91,7 +91,8 @@ export class LoginComponent {
     const phoneData = this.loginForm.value.contact;
     const formattedPhoneNumber = phoneData.number;
     const payload = {
-      phoneNumber: +(formattedPhoneNumber),
+      phoneNumber: formattedPhoneNumber,
+      country_code: phoneData.dialCode
     }
     let url = 'api/user/sendOtpNumber';
     this.apiService.postAPI(url, payload)
@@ -156,7 +157,7 @@ export class LoginComponent {
               case 'true_true':
               case 'false_false':
                 this.apiService.setToken(res.data.token);
-                localStorage.setItem('userDetailCTI', JSON.stringify(res.data.users));
+                localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
                 if (res.data.user.profile_visited) {
                   this.router.navigate(['/main']);
                 } else {
@@ -206,7 +207,7 @@ export class LoginComponent {
               this.apiService.setToken(res.data.token);
               localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
               this.message.success(res.message)
-              debugger
+
               if (res.data.user.profile_visited) {
                 this.router.navigate(['/main']);
               } else {

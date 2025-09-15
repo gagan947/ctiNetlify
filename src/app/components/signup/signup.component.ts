@@ -198,6 +198,7 @@ export class SignupComponent {
       const formattedPhoneNumber = phoneData.number;
       payload = {
         phoneNumber: +(formattedPhoneNumber),
+        country_code: phoneData.dialCode,
         password: this.signupForm.value.password
       }
       url = 'api/user/userSignUpPhoneNumber';
@@ -233,15 +234,16 @@ export class SignupComponent {
           next: (res: any) => {
             if (res.success == true) {
               this.apiservice.setToken(res.data.token);
-              localStorage.setItem('userDetailCTI', JSON.stringify(res.data.users));
+              localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
               this.message.success(res.message)
-              this.router.navigate(['/main'])
-              // this.projectInfo = res.projectInfo
-              // this, this.getProjectMedia()
+              if (res.data.user.profile_visited) {
+                this.router.navigate(['/main']);
+              } else {
+                this.router.navigate(['/profile']);
+              }
               this.isLoading = false
             } else {
               this.isLoading = false
-              // this.loading = false
               this.message.error(res.message)
             }
           },

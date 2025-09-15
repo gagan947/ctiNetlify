@@ -1,5 +1,5 @@
-import { Component, effect, ElementRef, Input, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, effect, Input } from '@angular/core';
+import { FormBuilder } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { Feature, FeatureResponse, SubFeature } from '../../../models/projects';
@@ -8,7 +8,6 @@ import { Location } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ALLFeatures } from '../../../models/allfeatures';
-import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 import { DiscountModalComponent } from './discount-modal/discount-modal.component';
@@ -20,7 +19,6 @@ import { BdLoaderComponent } from '../../shared/bd-loader/bd-loader.component';
   imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe, DiscountModalComponent, BdLoaderComponent],
   templateUrl: './refine-idea.component.html',
   styleUrl: './refine-idea.component.css',
-
 })
 export class RefineIdeaComponent {
   @Input() id!: string;
@@ -71,15 +69,10 @@ export class RefineIdeaComponent {
             this.totalPrice = (totalTime * 1750)
             this.estimatedWeeks = Math.ceil((totalTime / 8) / 5);
             this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
-            // this.isLoading = false
-            // this.estimatedWeeks = res.data[0].estimated_time
-            // this.totalCost(this.projectsFeaturs)
           } else {
-            // this.isLoading = false
           }
         },
         error: err => {
-          // this.isLoading = false
         }
       });
   };
@@ -90,9 +83,9 @@ export class RefineIdeaComponent {
         next: (res) => {
           if (res.success == true) {
             this.findDifferences(res.data, this.projectsFeaturs)
-          setTimeout(() => {
-            this.isLoading = false
-          },2000)
+            setTimeout(() => {
+              this.isLoading = false
+            }, 2000)
           } else {
             this.isLoading = false
           }
@@ -201,60 +194,165 @@ export class RefineIdeaComponent {
 
   }
 
-  selectSubFeature(features: ALLFeatures, items: SubFeature) {
-    const featureIndex = this.projectsFeaturs.findIndex(f => f.featureName === features.featureName);
-    if (featureIndex > -1) {
-      this.projectsFeaturs[featureIndex].subFeatures.push(items);
+  selectSubFeature(features: ALLFeatures, item: SubFeature) {
+    const featureIndex = this.projectsFeaturs.findIndex(
+      f => f.featureName === features.featureName
+    );
 
-      this.projectsFeaturs = [...this.projectsFeaturs];
+    if (featureIndex > -1) {
+      const subFeatureIndex = this.projectsFeaturs[featureIndex].subFeatures.findIndex(
+        sf => sf.id === item.id
+      );
+
+      if (subFeatureIndex > -1) {
+        this.projectsFeaturs[featureIndex].subFeatures.splice(subFeatureIndex, 1);
+      } else {
+        const newSub = { ...item, flashClass: 'flash-added' };
+        this.projectsFeaturs[featureIndex].subFeatures.push(newSub);
+
+        setTimeout(() => {
+          const el = document.querySelector(
+            `[data-subfeature-id="${newSub.id}"]`
+          );
+          if (el) {
+            el.scrollIntoView({ behavior: 'instant', block: 'center' });
+          }
+        }, 50);
+
+        setTimeout(() => {
+          newSub.flashClass = '';
+        }, 2000);
+      }
+
+      if (this.projectsFeaturs[featureIndex].subFeatures.length === 0) {
+        this.projectsFeaturs.splice(featureIndex, 1);
+      }
     } else {
-      this.projectsFeaturs.unshift({
+      const newSub = { ...item, flashClass: 'flash-added' };
+      const newFeature = {
+        flashClass: 'flash-added',
         id: features.id,
         featureName: features.featureName,
-        subFeatures: [items],
+        subFeatures: [newSub],
         featureTime: features.subFeatures.reduce(
-          (pre: number, next: { estimated_time: number }) => pre + Number(next.estimated_time),
+          (pre: number, next: { estimated_time: number }) =>
+            pre + Number(next.estimated_time),
           0
         )
-      })
+      };
+
+      this.projectsFeaturs.unshift(newFeature);
+
+      setTimeout(() => {
+        const el = document.querySelector(
+          `[data-subfeature-id="${newSub.id}"]`
+        );
+        if (el) {
+          el.scrollIntoView({ behavior: 'instant', block: 'center' });
+        }
+      }, 50);
+
+      setTimeout(() => {
+        newSub.flashClass = '';
+      }, 2000);
     }
-    const commonFeatureIndex = this.commongFeaturs.findIndex(f => f.featureName === features.featureName);
+
+    const commonFeatureIndex = this.commongFeaturs.findIndex(
+      f => f.featureName === features.featureName
+    );
     if (commonFeatureIndex > -1) {
-      this.commongFeaturs[commonFeatureIndex].subFeaturesList.map((item: any) => {
-        item == items ? item.selected = true : ''
-      })
-      this.commongFeaturs[commonFeatureIndex].selected = true
+      this.commongFeaturs[commonFeatureIndex].subFeaturesList.forEach(
+        (sf: any) => {
+          if (sf.id === item.id) {
+            sf.selected = !sf.selected;
+          }
+        }
+      );
+
+      this.commongFeaturs[commonFeatureIndex].selected =
+        this.commongFeaturs[commonFeatureIndex].subFeaturesList.some(
+          (sf: any) => sf.selected
+        );
     }
-    let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
-    this.totalPrice = (totalTime * 1750)
-    this.estimatedWeeks = Math.ceil((totalTime / 8) / 5);
-    this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
-    this.allFeatures = this.projectsFeaturs
+
+    const totalTime = this.projectsFeaturs
+      .map(feature =>
+        feature.subFeatures.reduce(
+          (pre: any, next: { estimated_time: any }) =>
+            pre + Number(next.estimated_time),
+          0
+        )
+      )
+      .reduce((pre: any, next: any) => pre + next, 0);
+
+    this.totalPrice = totalTime * 1750;
+    this.estimatedWeeks = Math.ceil(totalTime / 40);
+    this.noOfFeaturs = this.projectsFeaturs.reduce(
+      (pre: any, next: any) => pre + next.subFeatures.length,
+      0
+    );
+
+    this.allFeatures = [...this.projectsFeaturs];
   }
 
   selectFeature(feature: ALLFeatures) {
-    const commonFeatureIndex = this.commongFeaturs.findIndex(f => f.featureName === feature.featureName);
+    const commonFeatureIndex = this.commongFeaturs.findIndex(
+      f => f.featureName === feature.featureName
+    );
+
     if (commonFeatureIndex > -1) {
-      this.commongFeaturs[commonFeatureIndex].subFeaturesList.map((item: any) => {
-        item.selected = true
-      })
-      this.commongFeaturs[commonFeatureIndex].selected = true
-      this.projectsFeaturs.unshift({
+      this.commongFeaturs[commonFeatureIndex].subFeaturesList.forEach((item: any) => {
+        item.selected = true;
+      });
+      this.commongFeaturs[commonFeatureIndex].selected = true;
+
+      const newFeature = {
         id: feature.id,
         featureName: feature.featureName,
         subFeatures: feature.subFeatures,
         featureTime: feature.subFeatures.reduce(
-          (pre: number, next: { estimated_time: number }) => pre + Number(next.estimated_time),
+          (pre: number, next: { estimated_time: number }) =>
+            pre + Number(next.estimated_time),
+          0
+        ),
+        flashClass: 'flash-added'
+      };
+
+      this.projectsFeaturs.unshift(newFeature);
+
+      setTimeout(() => {
+        const el = document.querySelector(
+          `[data-feature-id="${newFeature.id}"]`
+        );
+        if (el) {
+          el.scrollIntoView({ behavior: 'instant', block: 'center' });
+        }
+      }, 50);
+
+      setTimeout(() => {
+        newFeature.flashClass = '';
+      }, 2000);
+    }
+
+    let totalTime = this.projectsFeaturs
+      .map(feature =>
+        feature.subFeatures.reduce(
+          (pre: any, next: { estimated_time: any }) =>
+            pre + Number(next.estimated_time),
           0
         )
-      })
-    }
-    let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
-    this.totalPrice = (totalTime * 1750)
-    this.estimatedWeeks = Math.ceil((totalTime / 8) / 5);
-    this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
-    this.allFeatures = this.projectsFeaturs
+      )
+      .reduce((pre: any, next: any) => pre + next, 0);
+
+    this.totalPrice = totalTime * 1750;
+    this.estimatedWeeks = Math.ceil(totalTime / 40);
+    this.noOfFeaturs = this.projectsFeaturs.reduce(
+      (pre: any, next: any) => pre + next.subFeatures.length,
+      0
+    );
+    this.allFeatures = this.projectsFeaturs;
   }
+
 
 
 

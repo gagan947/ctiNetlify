@@ -36,7 +36,7 @@ export class ProfileComponent {
     { code: 'SGD', name: 'Singapore Dollar' },
     { code: 'AED', name: 'UAE Dirham' },
     { code: 'GBP', name: 'United Kingdom Pound' },
-    {code : 'AUD', name:'Australian Dollar'}
+    { code: 'AUD', name: 'Australian Dollar' }
   ];
   otp: any;
   isResendDisabled: boolean = false;
@@ -61,6 +61,7 @@ export class ProfileComponent {
         if (!this.user.profile_visited) {
           this.updateProfileVisited();
         }
+        this.apiService.getRates(this.user?.currency);
         // Pre-select tax type based on existing data
         if (this.user.gst_number) this.selectedType = 'GST';
         else if (this.user.vat_number) this.selectedType = 'VAT';
@@ -168,7 +169,6 @@ export class ProfileComponent {
     this.apiService.postAPI('api/user/updateUserProfile', this.user).subscribe((res: any) => {
       if (res.success) {
         this.message.success('Profile updated successfully');
-        console.log(this.user?.currency);
         this.apiService.getRates(this.user?.currency);
         this.getProfile();
       } else {
