@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { canDeactivateGuard } from './helper/guards/can-deactivate.guard';
 
 export const routes: Routes = [
       {
@@ -21,6 +22,7 @@ export const routes: Routes = [
       },
       {
             path: 'make-it-mine', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent)
+
       },
       {
             path: 'make-it-mine/:id', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent)

@@ -1,10 +1,11 @@
 import { Component, ElementRef, viewChild, ViewChild } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { GlobalModalComponent } from "./components/shared/global-modal/global-modal.component";
 declare var bootstrap: any;
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, GlobalModalComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

@@ -7,11 +7,12 @@ import { Project, ProjectResponse } from '../../../models/projects';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ChatbotComponent } from "../chatbot/chatbot.component";
 import { BdLoaderComponent } from "../../shared/bd-loader/bd-loader.component";
+import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
 declare var Calendly: any;
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule, ChatbotComponent, BdLoaderComponent],
+  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule, ChatbotComponent, BdLoaderComponent,CalendlyDirective],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
@@ -36,6 +37,11 @@ export class MainComponent {
   }
 
   ngOnInit(): void {
+    const data: any = localStorage.getItem('userDetailCTI')
+    if (data !== 'undefined') {
+      const user = JSON.parse(data);
+      this.apiservice.getRates(user?.currency);
+    }
     this.getProjects();
     sessionStorage.removeItem('projectData');
     // this.socket = io(this.apiservice.apiUrl);
@@ -87,13 +93,13 @@ export class MainComponent {
     });
     this.observer.observe(this.anchor.nativeElement);
 
-    const calendlyContainer = document.getElementById('calendly-inline-widget');
-    if (calendlyContainer) {
-      Calendly.initInlineWidget({
-        url: 'https://calendly.com/creativethoughts/30min',
-        parentElement: calendlyContainer,
-      });
-    }
+    // const calendlyContainer = document.getElementById('calendly-inline-widget');
+    // if (calendlyContainer) {
+    //   Calendly.initInlineWidget({
+    //     url: 'https://calendly.com/creativethoughts/30min',
+    //     parentElement: calendlyContainer,
+    //   });
+    // }
   }
 
   getProjects() {
