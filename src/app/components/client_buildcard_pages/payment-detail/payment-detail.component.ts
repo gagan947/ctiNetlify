@@ -9,12 +9,13 @@ import { HttpClient } from '@angular/common/http';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { MobileViewComponent } from '../main/mobile-view/mobile-view.component';
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
+import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
 declare var Razorpay: any;
 declare var Calendly: any;
 @Component({
   selector: 'app-payment-detail',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, MobileViewComponent, ExchangeRatePipe],
+  imports: [RouterLink, CommonModule, SidebarComponent, MobileViewComponent, ExchangeRatePipe,CalendlyDirective],
   templateUrl: './payment-detail.component.html',
   styleUrl: './payment-detail.component.css'
 })
@@ -189,48 +190,40 @@ export class PaymentDetailComponent {
   };
 
 
+
+
   // ngAfterViewInit() {
+  //   console.log("here2");
   //   const calendlyContainer = document.getElementById('calendly-inline-widget');
   //   if (calendlyContainer) {
   //     Calendly.initInlineWidget({
-  //       url: 'https://calendly.com/amitholkar/30min',
-  //       parentElement: calendlyContainer
+  //       url: 'https://calendly.com/creativethoughts/30min',
+  //       parentElement: calendlyContainer,
   //     });
   //   }
+  //   window.addEventListener('message', this.handleCalendlyEvent.bind(this));
+  // };
+
+  // handleCalendlyEvent(e: MessageEvent) {
+  //   if (e.origin === 'https://calendly.com' && e.data.event === 'calendly.event_scheduled') {
+  //     console.log('Calendly event scheduled:', e.data);
+  //     this.sendConfirmationEmail();
+  //   }
+  // };
+
+  // sendConfirmationEmail() {
+  //   this.apiService.getApi(`api/user/sendClientEnquiryEmail?inquiryId=${this.projectsData.clientEnquryId}`).subscribe({
+  //     next: (res: any) => {
+  //       if (res.success) {
+  //       }
+  //     }, error(err) {
+  //       // this.message.error(err.error.message)
+  //     },
+  //   })
   // }
 
-  ngAfterViewInit() {
-    console.log("here2");
-    const calendlyContainer = document.getElementById('calendly-inline-widget');
-    if (calendlyContainer) {
-      Calendly.initInlineWidget({
-        url: 'https://calendly.com/creativethoughts/30min',
-        parentElement: calendlyContainer,
-      });
-    }
-    window.addEventListener('message', this.handleCalendlyEvent.bind(this));
-  };
-
-  handleCalendlyEvent(e: MessageEvent) {
-    if (e.origin === 'https://calendly.com' && e.data.event === 'calendly.event_scheduled') {
-      console.log('Calendly event scheduled:', e.data);
-      this.sendConfirmationEmail();
-    }
-  };
-
-  sendConfirmationEmail() {
-    this.apiService.getApi(`api/user/sendClientEnquiryEmail?inquiryId=${this.projectsData.clientEnquryId}`).subscribe({
-      next: (res: any) => {
-        if (res.success) {
-        }
-      }, error(err) {
-        // this.message.error(err.error.message)
-      },
-    })
-  }
-
-  ngOnDestroy() {
-    // Clean up the listener to avoid memory leaks
-    window.removeEventListener('message', this.handleCalendlyEvent.bind(this));
-  }
+  // ngOnDestroy() {
+  //   // Clean up the listener to avoid memory leaks
+  //   window.removeEventListener('message', this.handleCalendlyEvent.bind(this));
+  // }
 }

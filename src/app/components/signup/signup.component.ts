@@ -33,6 +33,7 @@ export class SignupComponent {
   phoneNumber: string = '';
   otp: any
   ngOnInit(): void {
+    localStorage.clear();
     this.countries = Country.getAllCountries()
   };
 

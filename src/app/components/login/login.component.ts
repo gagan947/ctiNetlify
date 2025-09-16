@@ -38,7 +38,7 @@ export class LoginComponent {
   }
 
   ngOnInit(): void {
-
+    localStorage.clear();
   }
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;

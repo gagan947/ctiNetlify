@@ -190,7 +190,11 @@ export class ProfileComponent {
       } else {
         this.message.error(res.message);
       }
-    });
+    }, (err: any) => {
+      this.message.error(err.error.message)
+      this.isLoading2 = false
+    })
+  ;
   }
 
   restrictToNumbers(event: KeyboardEvent) {

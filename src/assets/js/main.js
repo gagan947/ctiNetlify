@@ -390,24 +390,24 @@ $(window).scroll(function () {
   }
 }); //missing );
 
-window.onload = function () {
-  var amount = document.getElementById("amount");
-  var countUp = new CountUp(amount, 0, 450, 0, 2.5, {
-    useEasing: true,
-    useGrouping: true,
-    separator: ",",
-  });
+// window.onload = function () {
+//   var amount = document.getElementById("amount");
+//   var countUp = new CountUp(amount, 0, 450, 0, 2.5, {
+//     useEasing: true,
+//     useGrouping: true,
+//     separator: ",",
+//   });
 
-  if (!countUp.error) {
-    countUp.start();
-  }
+//   if (!countUp.error) {
+//     countUp.start();
+//   }
 
-  // Append 'm+' after the count
-  setTimeout(function () {
-    document.getElementById("funding-counter").innerHTML =
-      "$" + amount.innerHTML + "m+";
-  }, 2500); // Match this with the count-up animation duration
-};
+
+//   setTimeout(function () {
+//     document.getElementById("funding-counter").innerHTML =
+//       "$" + amount.innerHTML + "m+";
+//   }, 2500);
+// };
 
 var options = {
   chart: {
