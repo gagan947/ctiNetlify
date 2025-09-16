@@ -7,8 +7,13 @@ export const canDeactivateGuard: CanDeactivateFn<CanComponentDeactivate> =
   (component, currentRoute, currentState, nextState) => {
     if (!nextState) return true;
     const nextUrl = nextState.url;
-    const triggerRoutes = ['/dashboard', '/profile', '/logout'];
-    if (triggerRoutes.includes(nextUrl)) return true;
- 
-    return component.canDeactivate ? component.canDeactivate() : true;
+    console.log('nextUrl', nextUrl);
+    const triggerRoutes = ['/dashboard', '/profile', '/logout', '/', '/main'];
+    // Only trigger canDeactivate if the next route is in triggerRoutes
+    if (triggerRoutes.includes(nextUrl)) {
+      return component.canDeactivate ? component.canDeactivate() : true;
+    }
+
+    // Otherwise, allow navigation without confirmation
+    return true;
   };

@@ -35,6 +35,10 @@
                                                             <input type="text" class="form-control ct_input"
                                                                   placeholder="Enter Full Name" [(ngModel)]="user.name"
                                                                   name="name" [ngModelOptions]="{standalone: true}">
+                                                            <small class="text-danger"
+                                                                  *ngIf="!user.name || user.name.trim().length < 3">
+                                                                  Name is required (min 3 characters)
+                                                            </small>
                                                       </div>
                                                       <div class="form-group mb-4">
                                                             <label for="" class="ct_fw_500 mb-2">Email Address</label>
@@ -146,7 +150,7 @@
                                                                         name="taxType" id="gst"
                                                                         [(ngModel)]="selectedType" value="GST"
                                                                         [ngModelOptions]="{standalone: true}">
-                                                                  <label class="form-check-label" for="gst">GST
+                                                                  <label class="form-check-label ct_fw_500" for="gst">GST
                                                                         Number</label>
                                                             </div>
 
@@ -155,7 +159,7 @@
                                                                         name="taxType" id="vat"
                                                                         [(ngModel)]="selectedType" value="VAT"
                                                                         [ngModelOptions]="{standalone: true}">
-                                                                  <label class="form-check-label" for="vat">VAT
+                                                                  <label class="form-check-label ct_fw_500" for="vat">VAT
                                                                         Number</label>
                                                             </div>
 
@@ -164,7 +168,7 @@
                                                                         name="taxType" id="tan"
                                                                         [(ngModel)]="selectedType" value="TAN"
                                                                         [ngModelOptions]="{standalone: true}">
-                                                                  <label class="form-check-label" for="tan">TAN
+                                                                  <label class="form-check-label ct_fw_500" for="tan">TAN
                                                                         Number</label>
                                                             </div>
                                                       </div>

@@ -16,14 +16,14 @@ export class HomeComponent {
   location: UserLocation | null = null;
   error: string | null = null;
   constructor(private meta: Meta, private locationService: LocationService) {
-    this.fetchLocation();
+    // this.fetchLocation();
     this.meta.updateTag({ name: 'description', content: ' Build mobile and web apps faster with CreativeThoughts AI app builder. Turn your ideas into real apps easily, without coding hassle — smart, fast, and scalable.' });
   }
 
   async fetchLocation() {
     try {
       this.location = await this.locationService.getUserLocation();
-      console.log('this.location', this.location);
+   
       this.error = null;
     } catch (err: any) {
       this.error = err;

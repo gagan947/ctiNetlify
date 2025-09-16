@@ -158,6 +158,7 @@ export class LoginComponent {
               case 'false_false':
                 this.apiService.setToken(res.data.token);
                 localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
+               
                 if (res.data.user.profile_visited) {
                   this.router.navigate(['/main']);
                 } else {
