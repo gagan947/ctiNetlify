@@ -92,8 +92,7 @@
                                                                               [selectFirstCountry]="false"
                                                                               [selectedCountryISO]="selectedCountry"
                                                                               [maxLength]="15" [phoneValidation]="true"
-                                                                              [disabled]="user.is_phone_verified ===1"
-                                                                              [ngModelOptions]="{standalone: true}">
+                                                                              [disabled]="user.is_phone_verified ===1">
                                                                         </ngx-intl-tel-input>
                                                                         @if(user.is_phone_verified){
                                                                         <svg width="24" height="24" class="ct_eye_show"
@@ -150,7 +149,8 @@
                                                                         name="taxType" id="gst"
                                                                         [(ngModel)]="selectedType" value="GST"
                                                                         [ngModelOptions]="{standalone: true}">
-                                                                  <label class="form-check-label ct_fw_500" for="gst">GST
+                                                                  <label class="form-check-label ct_fw_500"
+                                                                        for="gst">GST
                                                                         Number</label>
                                                             </div>
 
@@ -159,7 +159,8 @@
                                                                         name="taxType" id="vat"
                                                                         [(ngModel)]="selectedType" value="VAT"
                                                                         [ngModelOptions]="{standalone: true}">
-                                                                  <label class="form-check-label ct_fw_500" for="vat">VAT
+                                                                  <label class="form-check-label ct_fw_500"
+                                                                        for="vat">VAT
                                                                         Number</label>
                                                             </div>
 
@@ -168,7 +169,8 @@
                                                                         name="taxType" id="tan"
                                                                         [(ngModel)]="selectedType" value="TAN"
                                                                         [ngModelOptions]="{standalone: true}">
-                                                                  <label class="form-check-label ct_fw_500" for="tan">TAN
+                                                                  <label class="form-check-label ct_fw_500"
+                                                                        for="tan">TAN
                                                                         Number</label>
                                                             </div>
                                                       </div>

@@ -24,7 +24,7 @@ export const routes: Routes = [
             path: 'make-it-mine', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent)
       },
       {
-            path: 'make-it-mine/:id', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent), canDeactivate: [canDeactivateGuard]
+            path: 'make-it-mine/:id', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent)
       },
       {
             path: 'chatbot', loadComponent: () => import('./components/client_buildcard_pages/chatbot/chatbot.component').then(c => c.ChatbotComponent)

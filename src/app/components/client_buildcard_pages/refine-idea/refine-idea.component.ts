@@ -39,7 +39,7 @@ export class RefineIdeaComponent {
     this.projectsData = JSON.parse(projectData!);
     this.projectsFeaturs = this.projectsData.selectdFeature
     this.estimatedWeeks = this.projectsData.estimated_time
-    this.totalPrice = this.projectsData.totalCost
+    this.totalPrice = this.projectsData.mainCost
     this.noOfFeaturs = this.projectsData.no_of_features
     effect(() => {
       this.rate = this.apiService._rate()
@@ -125,6 +125,7 @@ export class RefineIdeaComponent {
     const featureIndex = this.projectsFeaturs.findIndex(f => f.featureName === features.featureName);
     if (featureIndex > -1) {
       this.projectsFeaturs[featureIndex].subFeatures = this.projectsFeaturs[featureIndex].subFeatures.filter(el => el !== item2);
+      this.projectsFeaturs[featureIndex].featureTime = this.projectsFeaturs[featureIndex].subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0);
       if (this.projectsFeaturs[featureIndex].subFeatures.length === 0) {
         this.projectsFeaturs.splice(featureIndex, 1);
         const commonFeatureIndex = this.commongFeaturs.findIndex(f => f.featuresName === features.featuresName);
@@ -133,7 +134,6 @@ export class RefineIdeaComponent {
         }
       }
       this.projectsFeaturs = [...this.projectsFeaturs];
-
       const commonFeatureIndex = this.commongFeaturs.findIndex(f => f.featureName === features.featureName);
       if (commonFeatureIndex > -1) {
         this.commongFeaturs[commonFeatureIndex].subFeaturesList.map((item: any) => {
@@ -163,7 +163,8 @@ export class RefineIdeaComponent {
         next: (res: any) => {
           if (res.success) {
             let totalProjectCost = {
-              totalCost: this.totalPrice - ((this.totalPrice * 40) / 100)
+              totalCost: this.totalPrice - ((this.totalPrice * 40) / 100),
+              mainCost: this.totalPrice
             }
 
             let selectdFeature = {
@@ -200,7 +201,6 @@ export class RefineIdeaComponent {
     const featureIndex = this.projectsFeaturs.findIndex(
       f => f.featureName === features.featureName
     );
-
     if (featureIndex > -1) {
       const subFeatureIndex = this.projectsFeaturs[featureIndex].subFeatures.findIndex(
         sf => sf.id === item.id
@@ -211,7 +211,7 @@ export class RefineIdeaComponent {
       } else {
         const newSub = { ...item, flashClass: 'flash-added' };
         this.projectsFeaturs[featureIndex].subFeatures.push(newSub);
-
+        this.projectsFeaturs[featureIndex].featureTime = this.projectsFeaturs[featureIndex].subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0);
         setTimeout(() => {
           const el = document.querySelector(
             `[data-subfeature-id="${newSub.id}"]`
@@ -236,11 +236,7 @@ export class RefineIdeaComponent {
         id: features.id,
         featureName: features.featureName,
         subFeatures: [newSub],
-        featureTime: features.subFeatures.reduce(
-          (pre: number, next: { estimated_time: number }) =>
-            pre + Number(next.estimated_time),
-          0
-        )
+        featureTime: item.estimated_time
       };
 
       this.projectsFeaturs.unshift(newFeature);
