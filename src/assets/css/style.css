@@ -1618,9 +1618,10 @@ a.ct_login_icon_site img {
 }
 
 .ct_login_icon_site span {
-  font-size: 16px;
-  color: #fff;
-  font-weight: 600;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+    margin-left: 21px;
 }
 
 .ct_left_input_icon {
@@ -4182,22 +4183,17 @@ table.table.ct_compare_table {
   left: 0px;
   width: 100%;
   height: calc(100vh - 142px);
-  /* overflow-y: auto; */
-  /* top: -100%; */
+
   transition: 0.6s linear all;
   transform: translateY(100%);
   transform: scaleY(0);
-  /* transform-origin: top; */
-  /* top: 0px; */
 }
 
 .ct_my_creative_project_overlay_main.ct_project_show_section {
   transform: translateY(0%) scaleY(1);
-  /* top: 0; */
-  /* height: calc(100vh - 138px); */
+
   transition: 0.6s linear all;
-  /* bottom: 0px; */
-  /* top: auto; */
+
 }
 
 .ct_table_without_bg tr td {

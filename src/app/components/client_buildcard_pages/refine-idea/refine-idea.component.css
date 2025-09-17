@@ -39,8 +39,16 @@ section.ct_create_verticle_h_scroll_new {
 }
 
 .ct_grid_60_auto_auto {
-    display: grid;
-    grid-template-columns: 50% auto auto auto auto;
+    /* display: grid;
+    grid-template-columns: 50% auto auto auto auto; */
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    overflow-x: auto;
+}
+
+.ct_white_nowrap{
+    white-space: nowrap;
 }
 
 .ct_help_user_table th {
@@ -48,6 +56,7 @@ section.ct_create_verticle_h_scroll_new {
     background-color: #d3e1f5;
     font-weight: 600;
     font-size: 16px;
+    white-space: nowrap;
 }
 
 a.ct_delete_icon {

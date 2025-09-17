@@ -50,6 +50,9 @@
     perspective: 500px;
     perspective-origin: top;
   }
+  .ct_add_the_power_content:after{
+    display: none;
+  }
 
   .ct_project_detail_point_list_2 li {
     font-size: 14px;
@@ -312,13 +315,8 @@
     background: #555;
   }
 
-  .ct_dash_board_main {
-    display: none;
-  }
 
-  .ct_mobile_section_main {
-    display: block;
-  }
+
   .ct_inner_banner_main_cnt:before,  .ct_inner_banner_main_cnt:after ,.ct_inner_hero_bg:before,  .ct_inner_hero_bg:after {
     height: 120px !important;
     max-width: 250px !important;
@@ -492,7 +490,8 @@
 
   .ct_dash_toggle_bar {
     position: absolute;
-    top: 30px;
+    top: 20px;
+    left: 15px;
     transition: 0.4s ease all;
   }
 
@@ -502,8 +501,8 @@
   }
 
   section.ct_dash_board_main.ct_show_sidebar .ct_dash_toggle_bar {
-    width: calc(100% - 151px);
-    margin-left: 150px;
+    width: calc(100% - 101px);
+    margin-left: 100px;
   }
 
   .ct_superpower_card_main_overlay {
@@ -538,6 +537,7 @@
 .ct_login_left_bg{
   max-width: 90%;
 }
+
 
 }
 
@@ -653,5 +653,20 @@
   }
   .ct_fs_35{
     font-size: 24px !important;
+  }
+  .ct_flex_col_575{
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+}
+
+
+@media screen and (max-width:550px){
+    .ct_mobile_section_main {
+    display: block;
+  }
+  
+  .ct_dash_board_main {
+    display: none;
   }
 }
