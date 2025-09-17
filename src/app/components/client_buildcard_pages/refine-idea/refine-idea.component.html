@@ -290,7 +290,7 @@
                                  </div>
                                  <!-- overlay section S -->
                                  <div class="ct_project_show_section ct_my_creative_project_overlay_main">
-                                    <section class="ct_create_verticle_h_scroll_new">
+                                    <section class="ct_create_verticle_h_scroll_new" style="overflow: auto;">
                                        <div class="container">
                                           <div class="row">
                                              <div class="col-md-12 px-0">
@@ -299,7 +299,8 @@
                                                       <!-- <h6 class="ct_fs_16 ct_fw_700">Help users sign
                                                          up & login
                                                          </h6> -->
-                                                      <table class="table ct_help_user_table ">
+                                                     <div class="table-responsive" style="overflow-x: inherit;">
+                                                       <table class="table ct_help_user_table ">
                                                          <thead>
                                                             <tr>
                                                                <th class="pb-2 ">
@@ -347,7 +348,7 @@
                                                                         {{$index+1}}
                                                                      </span>
                                                                      <span
-                                                                        class="ct_fs_18 ct_fw_700 mb-0">{{item.featureName}}</span>
+                                                                        class="ct_fs_18 ct_fw_700 mb-0 ct_white_nowrap">{{item.featureName}}</span>
                                                                   </div>
                                                                </td>
                                                                <td><span
@@ -409,8 +410,9 @@
                                                             </tr>
                                                             }
                                                          </tbody>
-
+                                                         
                                                       </table>
+                                                     </div>
                                                    </div>
 
                                                 </div>
@@ -424,53 +426,53 @@
                                        <div class="ct_grid_60_auto_auto">
                                           <div class="d-flex align-items-center gap-5">
                                              <div>
-                                                <span class="ct_text_clr_7F8188  ct_fs_14">MY
+                                                <span class="ct_text_clr_7F8188 ct_white_nowrap  ct_fs_14">MY
                                                    APP</span>
-                                                <p class="mb-0 mt-1 ct_fw_700">
+                                                <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
                                                    {{projectsData.projectName}}
                                                 </p>
                                              </div>
                                              <div>
-                                                <span class="ct_text_clr_7F8188 ct_fs_14">Total
+                                                <span class="ct_text_clr_7F8188 ct_fs_14 ct_white_nowrap">Total
                                                    Features</span>
-                                                <p class="mb-0 mt-1 ct_fw_700">
+                                                <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
                                                    {{noOfFeaturs}}
                                                 </p>
                                              </div>
                                           </div>
                                           <div>
-                                             <span class="ct_text_clr_7F8188  ct_fs_14">Total
+                                             <span class="ct_text_clr_7F8188  ct_fs_14 ct_white_nowrap">Total
                                                 Cost
                                              </span>
-                                             <p class="mb-0 mt-1 ct_fw_700">
+                                             <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
                                                 {{ totalPrice | convertCurrency:rate }}
                                              </p>
                                           </div>
                                           <div>
-                                             <span class="ct_text_clr_7F8188  ct_fs_14">Discount
+                                             <span class="ct_text_clr_7F8188  ct_fs_14 ct_white_nowrap">Discount
                                                 (40%)
                                              </span>
-                                             <p class="mb-0 mt-1 ct_fw_700">
+                                             <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
                                                 {{ ((totalPrice * 40)/100) | convertCurrency:rate }}
                                              </p>
                                           </div>
                                           <div>
-                                             <span class="ct_text_clr_7F8188  ct_fs_14">Final Cost
+                                             <span class="ct_text_clr_7F8188  ct_fs_14 ct_white_nowrap">Final Cost
                                              </span>
                                              <p class="mb-0 mt-1 ct_fw_700">
                                                 {{totalPrice - ((totalPrice * 40)/100) | convertCurrency:rate }}
                                              </p>
                                           </div>
                                           <div class="">
-                                             <span class="ct_text_clr_7F8188  ct_fs_14">Total
+                                             <span class="ct_text_clr_7F8188  ct_fs_14 ct_white_nowrap">Total
                                                 Weeks
                                              </span>
-                                             <p class="mb-0 mt-1 ct_fw_700">
+                                             <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
                                                 {{ estimatedWeeks }}
                                              </p>
                                           </div>
                                        </div>
-                                       <div class="d-flex align-items-center justify-content-between gap-3 mt-3">
+                                       <div class="d-flex align-items-center justify-content-between gap-3 mt-3 ct_flex_col_575">
                                           <button type="button" (click)="location.back()"
                                              class="ct_blue_outline_btn w-100 prev-step">Cancel</button>
                                           <a (click)="Navigate()" type="button"

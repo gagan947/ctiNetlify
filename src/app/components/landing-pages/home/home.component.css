@@ -128,3 +128,8 @@
 }
 
 
+@media screen and (max-width: 767px) {
+ .ct_img_211 {
+    height: 336px !important;
+}
+}

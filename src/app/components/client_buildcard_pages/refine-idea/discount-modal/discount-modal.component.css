@@ -22,6 +22,7 @@
       pointer-events: none;
       overflow: hidden;
       z-index: 1000;
+      opacity: 0.1;
 }
 
 
