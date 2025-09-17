@@ -298,7 +298,7 @@
                                                 </div> -->
                                                 <div
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
-                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Taxes (18% GST)</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Tax (18% GST)</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">
                                                             {{( totalCost * 18)/100 | convertCurrency:rate }}
                                                       </p>
@@ -328,7 +328,7 @@
                                                 </div>
                                                 <div
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
-                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Taxe (18% GST)</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Tax (18% GST)</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">
                                                             {{( securityDeposit * 18)/100 | convertCurrency:rate }}
                                                       </p>
@@ -339,10 +339,11 @@
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">Total</p>
                                                       @if(paymentPlan =="2"){
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">
-                                                            {{ securityDeposit + (securityDeposit * 18)/100 | currency : 'INR' }}
+                                                            {{ securityDeposit + (securityDeposit * 18)/100 | convertCurrency:rate}}
                                                       </p>
                                                       }@else {
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">
+                                                            
                                                             {{ actualCost  ?  (actualCost | convertCurrency:rate) : (totalCost + (totalCost * 18)/100) -
                                                             (((totalCost + (totalCost * 18)/100) * 10) / 100) | convertCurrency:rate }}
                                                       </p>
@@ -454,7 +455,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                        <div id="calendly-inline-widget" style="min-width:320px;height:630px;"></div>
+                        <div appCalendlyWidget [calendlyUrl]="'https://calendly.com/creativethoughts/30min'" 
+                        style="min-width:320px; height:630px;">
                   </div>
             </div>
       </div>

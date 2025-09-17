@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { FormBuilder, FormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../../../services/api.service';
@@ -9,6 +9,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../../sidebar/sidebar.component";
 import { BdLoaderComponent } from "../../../shared/bd-loader/bd-loader.component";
 import { MobileViewComponent } from "../mobile-view/mobile-view.component";
+import { CanComponentDeactivate } from '../../../../helper/guards/can-deactivate.guard';
+import { ModalService } from '../../../../services/modal.service';
 
 @Component({
     selector: 'app-make-it-mine',
@@ -17,7 +19,7 @@ import { MobileViewComponent } from "../mobile-view/mobile-view.component";
     templateUrl: './make-it-mine.component.html',
     styleUrl: './make-it-mine.component.css'
 })
-export class MakeItMineComponent {
+export class MakeItMineComponent  implements CanComponentDeactivate{
     @ViewChild('preview1', { static: true }) iframe1!: ElementRef<HTMLIFrameElement>;
     @Input() id!: string;
     projectsData: any;
@@ -31,7 +33,9 @@ export class MakeItMineComponent {
     mobile_base = true;
     submitted: boolean = false;
     htmlCode: any = '';
-    loading: boolean = true
+    loading: boolean = true;
+    hasUnsavedChanges: boolean = true;
+    private modal = inject(ModalService);
     constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService,) {
         let projectData = sessionStorage.getItem('projectData');
         this.projectsData = JSON.parse(projectData!);
@@ -140,5 +144,12 @@ export class MakeItMineComponent {
             }
         });
     }
+    canDeactivate(): Promise<boolean> | boolean {
+        if (this.hasUnsavedChanges) {
+            this.modal.inquiryProjectID.set(4);
+          return this.modal.open('Do you want to save this step as draft before leaving?');
+        }
+        return true;
+      }
 
 }

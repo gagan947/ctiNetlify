@@ -1,0 +1,19 @@
+<div class="modal-backdrop" *ngIf="service.visible"></div>
+
+<div class="modal fade" [class.show]="service.visible" *ngIf="service.visible">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Save as draft ?</h5>
+        <button type="button" class="btn-close" (click)="service.close(false)"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ service.message }}</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="discardProject()">Discard</button>
+        <button class="btn btn-primary" (click)="service.close(true)">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

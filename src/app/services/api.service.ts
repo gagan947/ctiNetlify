@@ -8,11 +8,11 @@ import { Auth, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
   providedIn: 'root'
 })
 export class ApiService {
-  // apiUrl = 'http://192.168.29.241:4500/'
+  apiUrl = 'http://192.168.29.241:4500/'
   // imageUrl = 'http://192.168.29.241:4500/'
   // apiUrl = 'http://192.168.1.4:3000/prod/'
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
-  apiUrl = 'https://api.creativethoughts.ai/';
+  // apiUrl = 'https://api.creativethoughts.ai/';
   imageUrl = 'https://api.creativethoughts.ai';
 
   // apiUrl = 'http://localhost:4500/';
@@ -47,36 +47,42 @@ export class ApiService {
 
   getRates(base: any) {
     const key = 'cd5719e03a530cce0636b0693b6e72c5';
-    // this._rate.set(1);
-    // return;
-    // handle INR directly
+    const today = new Date().toISOString().split('T')[0]; // Always YYYY-MM-DD format
+  
     if (base === 'INR') {
       this._rate.set(1);
       return;
     } else {
       let params = {
         currency_code: base,
-        date: new Date().toLocaleDateString()
-      }
+        date: today
+      };
+  
       this.getApi(`api/user/getCurrencyRate?${new URLSearchParams(params).toString()}`).subscribe({
         next: (res: any) => {
           if (res.success) {
             if (res.data.length > 0) {
               this._rate.set(Number(res.data[0].rate));
             } else {
-              const url = `https://api.exchangerate.host/live?access_key=${key}&currencies=${base}&source=INR`;
+              const url = `https://api.exchangerate.host/live?access_key=${key}&source=INR&currencies=AUD,AED,SGD,USD,EUR,GBP`;
               this.http.get(url).subscribe((res: any) => {
                 if (res.success) {
+                  console.log(res);
                   this._rate.set(res.quotes[`INR${base}`]);
-                  this.postAPI('api/user/updateCurrencyRate', { currency_code: base, rate: this._rate(), todays_date: new Date().toLocaleDateString() }).subscribe();
+                  this.postAPI('api/user/updateCurrencyRate', { 
+                    currency_code: base, 
+                    rate: this._rate(), 
+                    todays_date: today   // same consistent format
+                  }).subscribe();
                 }
               });
             }
           }
-        }, error: err => {
+        }, 
+        error: err => {
           console.log(err);
         }
-      })
+      });
     }
   }
 

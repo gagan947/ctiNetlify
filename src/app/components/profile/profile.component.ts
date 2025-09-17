@@ -10,7 +10,7 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input-gg';
 import { CountryISO, SearchCountryField } from 'ngx-intl-tel-input-gg';
 import { NzFlexDirective } from 'ng-zorro-antd/flex';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 declare var bootstrap: any;
 @Component({
   selector: 'app-profile',
@@ -22,7 +22,7 @@ declare var bootstrap: any;
 export class ProfileComponent {
   @ViewChild('profilePhoneForm') profilePhoneForm!: NgForm;
   @ViewChild('closeBtn') closeBtn!: ElementRef;
-  selectedType: string = 'VAT';
+  selectedType: string = 'GST';
   user: UserProfile | null = null;
   SearchCountryField = SearchCountryField
   CountryISO = CountryISO;
@@ -48,6 +48,7 @@ export class ProfileComponent {
   verificationType: string = '';
   selectedCurrency: string = 'USD'; // default
   public apiService = inject(ApiService);
+  private router = inject(Router);
   private message = inject(NzMessageService); // Inject the service
 
   ngOnInit() {
@@ -182,15 +183,22 @@ export class ProfileComponent {
       this.user.country_code = this.phone!.dialCode;
       this.user.phoneNumber = this.phone!.number;
     }
+    if (!this.user?.name || this.user.name.trim().length < 3) {
+      return
+    }
     this.apiService.postAPI('api/user/updateUserProfile', this.user).subscribe((res: any) => {
       if (res.success) {
         this.message.success('Profile updated successfully');
         this.apiService.getRates(this.user?.currency);
-        this.getProfile();
+        this.router.navigate(['/main']);
       } else {
         this.message.error(res.message);
       }
-    });
+    }, (err: any) => {
+      this.message.error(err.error.message)
+      this.isLoading2 = false
+    })
+      ;
   }
 
   restrictToNumbers(event: KeyboardEvent) {

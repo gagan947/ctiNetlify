@@ -11,6 +11,7 @@ declare var bootstrap: any;
 declare var Calendly: any;
 
 import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { CalendlyDirective } from '../../helper/directives/calendly.directive';
 
 export function noWhitespaceValidator(control: FormControl) {
   const value = String(control.value || '');
@@ -20,7 +21,7 @@ export function noWhitespaceValidator(control: FormControl) {
 @Component({
   selector: 'app-free-demo',
   standalone: true,
-  imports: [HeaderComponent, FooterComponent, NgxIntlTelInputModule, ReactiveFormsModule, CommonModule, FormsModule],
+  imports: [HeaderComponent, FooterComponent, NgxIntlTelInputModule, ReactiveFormsModule, CommonModule, FormsModule,CalendlyDirective],
   templateUrl: './free-demo.component.html',
   styleUrl: './free-demo.component.css'
 })
@@ -165,6 +166,14 @@ export class FreeDemoComponent {
   //       url: 'https://calendly.com/creativethoughts/30min',
   //       parentElement: calendlyContainer,
   //     });
+  //   }
+  // }
+
+  // ngOnDestroy(): void {
+  //   console.log('ngOnDestroy');
+  //   const calendlyContainer = document.getElementById('calendly-inline-widget');
+  //   if (calendlyContainer) {
+  //     calendlyContainer.innerHTML = ''; // cleanup when leaving
   //   }
   // }
 }

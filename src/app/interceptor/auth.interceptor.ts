@@ -1,43 +1,46 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-
-  constructor() { }
+  constructor(private router: Router) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const authToken = localStorage.getItem('tokenCTi');
 
-    if (request.url.includes('exchangerate.host')) {
+    // Skip certain URLs
+    if (request.url.includes('exchangerate.host') || request.url.startsWith('https://api.frankfurter')) {
       return next.handle(request);
     }
 
-    if(request.url.startsWith('https://api.frankfurter')) {
-      return next.handle(request);
-      
-    }else{
-      if (request.body instanceof FormData) {
-      
-        const modifiedRequest = request.clone({
-          setHeaders: {
-            Authorization: `Bearer ${authToken}`
-          }
-        });
-        return next.handle(modifiedRequest);
-      } else {
-        
-        const modifiedRequest = request.clone({
-          setHeaders: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${authToken}`
-          }
-        });
-        return next.handle(modifiedRequest);
-      }
+    // Clone request and add Authorization header
+    let modifiedRequest = request;
+    if (request.body instanceof FormData) {
+      modifiedRequest = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${authToken}`
+        }
+      });
+    } else {
+      modifiedRequest = request.clone({
+        setHeaders: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`
+        }
+      });
     }
-    return next.handle(request);
 
+    // Handle response and catch errors
+    return next.handle(modifiedRequest).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          localStorage.clear()
+          this.router.navigate(['/login']); // redirect to login page
+        }
+        return throwError(() => error); // rethrow the error if needed
+      })
+    );
   }
 }

@@ -328,7 +328,7 @@
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">Total</p>
                                                       @if(paymentPlan =="2"){
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">
-                                                            {{ securityDeposit + (securityDeposit * 18)/100 | currency : 'INR' }}
+                                                            {{ securityDeposit + (securityDeposit * 18)/100  | convertCurrency:rate  }}
                                                       </p>
                                                       }@else {
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">

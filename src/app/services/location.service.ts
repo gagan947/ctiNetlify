@@ -23,7 +23,7 @@ export class LocationService {
     try {
     
       const coords = await this.getCurrentLocation();
-      console.log('coords', coords);
+    
       const country = await this.getCountryFromCoords(coords.latitude, coords.longitude);
       return { ...coords, country };
     } catch (error) {

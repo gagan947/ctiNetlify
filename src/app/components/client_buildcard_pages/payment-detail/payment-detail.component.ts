@@ -9,12 +9,13 @@ import { HttpClient } from '@angular/common/http';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { MobileViewComponent } from '../main/mobile-view/mobile-view.component';
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
+import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
 declare var Razorpay: any;
 declare var Calendly: any;
 @Component({
   selector: 'app-payment-detail',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, MobileViewComponent, ExchangeRatePipe],
+  imports: [RouterLink, CommonModule, SidebarComponent, MobileViewComponent, ExchangeRatePipe,CalendlyDirective],
   templateUrl: './payment-detail.component.html',
   styleUrl: './payment-detail.component.css'
 })
@@ -40,6 +41,7 @@ export class PaymentDetailComponent {
   }
   userData: any
   rate: any;
+  currencyCode = 'INR';
 
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private http: HttpClient) {
     effect(() => {
@@ -52,7 +54,9 @@ export class PaymentDetailComponent {
     this.apiService._imagePreview.set(this.projectsData.projectLogo);
     this.onPaymentChange(this.projectsData.paymentPlan)
 
-    this.userData = localStorage.getItem('userDetailCTI');
+    this.userData = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
+    // const user = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
+    this.currencyCode =   this.userData.currency
   };
 
   onPaymentChange(id: any) {
@@ -112,13 +116,13 @@ export class PaymentDetailComponent {
     let formData = {
       amount: Math.round(this.paymentPlan == '1' ? (this.actualCost || (this.totalCost + (this.totalCost * 18) / 100) - (((this.totalCost + (this.totalCost * 18) / 100) * 10) / 100)) : (this.securityDeposit + (this.securityDeposit * 18) / 100))
     }
-
-    this.apiService.postAPI(`api/payment/createRazorpayOrder`, { amount: 100000 }).subscribe({
+    
+    this.apiService.postAPI(`api/payment/createRazorpayOrder`, { amount: 1000, currency: this.currencyCode }).subscribe({
       next: (data: any) => {
         const options: any = {
           key: 'rzp_test_nyohAyx081ZtAn', // replace with your Razorpay Key ID
           amount: data.amount,
-          currency: 'INR',
+          currency:this.currencyCode,
           name: 'Creative.ai',
           image: "assets/img/cti_black_logo.svg",
           order_id: data.orderId,
@@ -189,48 +193,40 @@ export class PaymentDetailComponent {
   };
 
 
+
+
   // ngAfterViewInit() {
+  //   console.log("here2");
   //   const calendlyContainer = document.getElementById('calendly-inline-widget');
   //   if (calendlyContainer) {
   //     Calendly.initInlineWidget({
-  //       url: 'https://calendly.com/amitholkar/30min',
-  //       parentElement: calendlyContainer
+  //       url: 'https://calendly.com/creativethoughts/30min',
+  //       parentElement: calendlyContainer,
   //     });
   //   }
+  //   window.addEventListener('message', this.handleCalendlyEvent.bind(this));
+  // };
+
+  // handleCalendlyEvent(e: MessageEvent) {
+  //   if (e.origin === 'https://calendly.com' && e.data.event === 'calendly.event_scheduled') {
+  //     console.log('Calendly event scheduled:', e.data);
+  //     this.sendConfirmationEmail();
+  //   }
+  // };
+
+  // sendConfirmationEmail() {
+  //   this.apiService.getApi(`api/user/sendClientEnquiryEmail?inquiryId=${this.projectsData.clientEnquryId}`).subscribe({
+  //     next: (res: any) => {
+  //       if (res.success) {
+  //       }
+  //     }, error(err) {
+  //       // this.message.error(err.error.message)
+  //     },
+  //   })
   // }
 
-  ngAfterViewInit() {
-    console.log("here2");
-    const calendlyContainer = document.getElementById('calendly-inline-widget');
-    if (calendlyContainer) {
-      Calendly.initInlineWidget({
-        url: 'https://calendly.com/creativethoughts/30min',
-        parentElement: calendlyContainer,
-      });
-    }
-    window.addEventListener('message', this.handleCalendlyEvent.bind(this));
-  };
-
-  handleCalendlyEvent(e: MessageEvent) {
-    if (e.origin === 'https://calendly.com' && e.data.event === 'calendly.event_scheduled') {
-      console.log('Calendly event scheduled:', e.data);
-      this.sendConfirmationEmail();
-    }
-  };
-
-  sendConfirmationEmail() {
-    this.apiService.getApi(`api/user/sendClientEnquiryEmail?inquiryId=${this.projectsData.clientEnquryId}`).subscribe({
-      next: (res: any) => {
-        if (res.success) {
-        }
-      }, error(err) {
-        // this.message.error(err.error.message)
-      },
-    })
-  }
-
-  ngOnDestroy() {
-    // Clean up the listener to avoid memory leaks
-    window.removeEventListener('message', this.handleCalendlyEvent.bind(this));
-  }
+  // ngOnDestroy() {
+  //   // Clean up the listener to avoid memory leaks
+  //   window.removeEventListener('message', this.handleCalendlyEvent.bind(this));
+  // }
 }
