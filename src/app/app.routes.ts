@@ -21,11 +21,11 @@ export const routes: Routes = [
             path: 'main', loadComponent: () => import('./components/client_buildcard_pages/main/main.component').then(c => c.MainComponent)
       },
       {
-            path: 'make-it-mine', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent)
+            path: 'make-it-mine', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent),canDeactivate: [canDeactivateGuard]
 
       },
       {
-            path: 'make-it-mine/:id', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent)
+            path: 'make-it-mine/:id', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent),canDeactivate: [canDeactivateGuard]
       },
       {
             path: 'chatbot', loadComponent: () => import('./components/client_buildcard_pages/chatbot/chatbot.component').then(c => c.ChatbotComponent)
@@ -34,7 +34,7 @@ export const routes: Routes = [
             path: 'schedule-a-call', loadComponent: () => import('./components/schedule-a-call/schedule-a-call.component').then(c => c.ScheduleACallComponent)
       },
       {
-            path: 'refine-idea/:id', loadComponent: () => import('./components/client_buildcard_pages/refine-idea/refine-idea.component').then(c => c.RefineIdeaComponent)
+            path: 'refine-idea/:id', loadComponent: () => import('./components/client_buildcard_pages/refine-idea/refine-idea.component').then(c => c.RefineIdeaComponent),canDeactivate: [canDeactivateGuard]
       },
       {
             path: 'plan-delivery/:id', loadComponent: () => import('./components/client_buildcard_pages/plan-delivery/plan-delivery.component').then(c => c.PlanDeliveryComponent)

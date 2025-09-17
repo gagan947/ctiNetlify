@@ -1,4 +1,4 @@
-import { Component, effect, Input } from '@angular/core';
+import { Component, effect, inject, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 import { DiscountModalComponent } from './discount-modal/discount-modal.component';
 import { BdLoaderComponent } from '../../shared/bd-loader/bd-loader.component';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'app-refine-idea',
@@ -32,6 +33,7 @@ export class RefineIdeaComponent {
   rate: any;
   isLoading: boolean = false
   orgCommonFeatures: any[] = [];
+  private modal = inject(ModalService);
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService, private http: HttpClient) {
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
@@ -401,6 +403,14 @@ export class RefineIdeaComponent {
       // Reset to original data if search is empty
       this.commongFeaturs = [...this.orgCommonFeatures];
     }
+  }
+
+  canDeactivate(): Promise<boolean> | boolean {
+   
+        this.modal.inquiryProjectID.set(4);
+      return this.modal.open('Do you want to save this step as draft before leaving?');
+    
+   
   }
 
 

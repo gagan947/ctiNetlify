@@ -41,6 +41,7 @@ export class PaymentDetailComponent {
   }
   userData: any
   rate: any;
+  currencyCode = 'INR';
 
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private http: HttpClient) {
     effect(() => {
@@ -53,7 +54,9 @@ export class PaymentDetailComponent {
     this.apiService._imagePreview.set(this.projectsData.projectLogo);
     this.onPaymentChange(this.projectsData.paymentPlan)
 
-    this.userData = localStorage.getItem('userDetailCTI');
+    this.userData = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
+    // const user = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
+    this.currencyCode =   this.userData.currency
   };
 
   onPaymentChange(id: any) {
@@ -113,13 +116,13 @@ export class PaymentDetailComponent {
     let formData = {
       amount: Math.round(this.paymentPlan == '1' ? (this.actualCost || (this.totalCost + (this.totalCost * 18) / 100) - (((this.totalCost + (this.totalCost * 18) / 100) * 10) / 100)) : (this.securityDeposit + (this.securityDeposit * 18) / 100))
     }
-
-    this.apiService.postAPI(`api/payment/createRazorpayOrder`, { amount: 100000 }).subscribe({
+    
+    this.apiService.postAPI(`api/payment/createRazorpayOrder`, { amount: 1000, currency: this.currencyCode }).subscribe({
       next: (data: any) => {
         const options: any = {
           key: 'rzp_test_nyohAyx081ZtAn', // replace with your Razorpay Key ID
           amount: data.amount,
-          currency: 'INR',
+          currency:this.currencyCode,
           name: 'Creative.ai',
           image: "assets/img/cti_black_logo.svg",
           order_id: data.orderId,

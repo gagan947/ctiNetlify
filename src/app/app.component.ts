@@ -1,7 +1,9 @@
 import { Component, ElementRef, viewChild, ViewChild } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { GlobalModalComponent } from "./components/shared/global-modal/global-modal.component";
+import { filter } from 'rxjs';
 declare var bootstrap: any;
+declare let fbq: Function; 
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -15,8 +17,10 @@ export class AppComponent {
   constructor(private router: Router) { }
 
   ngOnInit() {
-    this.router.events.subscribe((event: any) => {
-      if (event instanceof NavigationEnd) {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        // Reload your main.js script (your current logic)
         const existingScript = document.querySelector('script[src="assets/js/main.js"]');
         if (existingScript) {
           existingScript.remove();
@@ -25,8 +29,12 @@ export class AppComponent {
         scriptElement.src = 'assets/js/main.js';
         scriptElement.async = true;
         document.body.appendChild(scriptElement);
-      }
-    });
+
+        // 👇 Trigger Facebook Pixel page view
+        if (typeof fbq === 'function') {
+          fbq('track', 'PageView');
+        }
+      });
   }
 
   @ViewChild('myModal') modalRef!: ElementRef;

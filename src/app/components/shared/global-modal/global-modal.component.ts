@@ -1,6 +1,7 @@
 import { Component, effect } from '@angular/core';
 import { ModalService } from '../../../services/modal.service';
 import { CommonModule } from '@angular/common';
+import { ApiService } from '../../../services/api.service';
 
 @Component({
   selector: 'app-global-modal',
@@ -11,10 +12,11 @@ import { CommonModule } from '@angular/common';
 })
 export class GlobalModalComponent {
   inquiryId: any
-  constructor(public service: ModalService) {
+  constructor(public service: ModalService, private apiService: ApiService) {
     effect(() => {
-      console.log('Updated Inquiry ID:', this.service.inquiryProjectID());
+     
       this.inquiryId = this.service.inquiryProjectID();
+      console.log(this.inquiryId);
     });
   }
 
@@ -22,4 +24,19 @@ export class GlobalModalComponent {
    
   
   }
+
+  discardProject(){
+    this.apiService.getApi(`api/user/discardProject/${this.inquiryId}`).subscribe({
+      next: (res: any) => {
+        
+        this.service.close(true);
+      },
+      error: (err: any) => {
+        this.service.close(true);
+      }
+    })
+   
+    this.service.close(true);
+}
+
 }
