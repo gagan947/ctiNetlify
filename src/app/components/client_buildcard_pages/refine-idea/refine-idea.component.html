@@ -1,14 +1,13 @@
 <app-discount-modal *ngIf="!isLoading"></app-discount-modal>
 <app-bd-loader *ngIf="isLoading" [loadingText]="'Customizing Features'"></app-bd-loader>
-<section class="ct_dash_board_main" *ngIf="!isLoading">
+<section class="ct_dash_board_main" [ngClass]="{'ct_show_sidebar' : showSidebar }" *ngIf="!isLoading">
    <app-sidebar></app-sidebar>
    <div class="ct_dash_right_content p-0 ct_white_bg_page">
-      <div class="ct_dash_toggle_bar">
+      <div class="ct_dash_toggle_bar" (click)="showSidebar = !showSidebar">
          <i class="fa-solid fa-bars"></i>
       </div>
       <div class="d-flex ">
          <div class="ct_middile_sidebar">
-
             <div class="ct_cti_chat_box">
                <!-- choose Base Chat show S -->
                <div class="d-none">
@@ -299,120 +298,122 @@
                                                       <!-- <h6 class="ct_fs_16 ct_fw_700">Help users sign
                                                          up & login
                                                          </h6> -->
-                                                     <div class="table-responsive" style="overflow-x: inherit;">
-                                                       <table class="table ct_help_user_table ">
-                                                         <thead>
-                                                            <tr>
-                                                               <th class="pb-2 ">
-                                                                  <div class="ct_search_input"
-                                                                     style="max-width: 350px;">
-                                                                     <input type="text" class="form-control"
-                                                                        name="search" (input)="search($event)"
-                                                                        placeholder="Search feature">
-                                                                     <i class="fa-solid fa-magnifying-glass"></i>
-                                                                  </div>
-                                                               </th>
-                                                               <th class="ct_fw_400 pb-2 ">
-                                                                  Cost
-                                                               </th>
-                                                               <th class="ct_fw_400 pb-2 ">
-                                                                  Estimated
-                                                                  Time
-                                                               </th>
-                                                               <th class="">
-                                                               </th>
-                                                               <!-- <th
+                                                      <div class="table-responsive" style="overflow-x: inherit;">
+                                                         <table class="table ct_help_user_table ">
+                                                            <thead>
+                                                               <tr>
+                                                                  <th class="pb-2 ">
+                                                                     <div class="ct_search_input"
+                                                                        style="max-width: 350px;">
+                                                                        <input type="text" class="form-control"
+                                                                           name="search" (input)="search($event)"
+                                                                           placeholder="Search feature">
+                                                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                                                     </div>
+                                                                  </th>
+                                                                  <th class="ct_fw_400 pb-2 ">
+                                                                     Cost
+                                                                  </th>
+                                                                  <th class="ct_fw_400 pb-2 ">
+                                                                     Estimated
+                                                                     Time
+                                                                  </th>
+                                                                  <th class="">
+                                                                  </th>
+                                                                  <!-- <th
                                                                   class="">
                                                                </th> -->
-                                                            </tr>
-                                                         </thead>
-                                                         <tbody>
-                                                            @if(
-                                                            projectsFeaturs
-                                                            &&
-                                                            projectsFeaturs.length
-                                                            >
-                                                            0){
-                                                            @for
-                                                            (item
-                                                            of
-                                                            projectsFeaturs;
-                                                            track
-                                                            $index)
-                                                            {
-                                                            <tr [attr.data-feature-id]="item.id"
-                                                               [ngClass]="item.flashClass">
-                                                               <td>
-                                                                  <div class="d-flex align-items-center gap-2">
-                                                                     <span class="SubfeatursCount">
-                                                                        {{$index+1}}
-                                                                     </span>
-                                                                     <span
-                                                                        class="ct_fs_18 ct_fw_700 mb-0 ct_white_nowrap">{{item.featureName}}</span>
-                                                                  </div>
-                                                               </td>
-                                                               <td><span
-                                                                     class="ct_fw_600">{{item.featureTime * 1750 | convertCurrency:rate}}</span>
-                                                               </td>
-                                                               <td><span class="ct_fw_600">{{item.featureTime}}</span>
-                                                               </td>
-                                                               <!-- <td><span
+                                                               </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                               @if(
+                                                               projectsFeaturs
+                                                               &&
+                                                               projectsFeaturs.length
+                                                               >
+                                                               0){
+                                                               @for
+                                                               (item
+                                                               of
+                                                               projectsFeaturs;
+                                                               track
+                                                               $index)
+                                                               {
+                                                               <tr [attr.data-feature-id]="item.id"
+                                                                  [ngClass]="item.flashClass">
+                                                                  <td>
+                                                                     <div class="d-flex align-items-center gap-2">
+                                                                        <span class="SubfeatursCount">
+                                                                           {{$index+1}}
+                                                                        </span>
+                                                                        <span
+                                                                           class="ct_fs_18 ct_fw_700 mb-0 ct_white_nowrap">{{item.featureName}}</span>
+                                                                     </div>
+                                                                  </td>
+                                                                  <td><span
+                                                                        class="ct_fw_600">{{item.featureTime * 1750 | convertCurrency:rate}}</span>
+                                                                  </td>
+                                                                  <td><span
+                                                                        class="ct_fw_600">{{item.featureTime}}</span>
+                                                                  </td>
+                                                                  <!-- <td><span
                                                                   class="ct_fw_600">₹1,26,844.69</span>
                                                                   </td> -->
-                                                               <!-- <td><span
+                                                                  <!-- <td><span
                                                                   class="ct_fw_600">
                                                                   {{getEstimatedTime(item) | number : '1.0-2'}}
                                                                   HRS</span>
                                                                   </td> -->
-                                                               <td>
-                                                                  <a class="ct_delete_icon"
-                                                                     (click)="removeFeture(item)"><i
-                                                                        class="fa-solid fa-trash-can"></i></a>
-                                                               </td>
-                                                            </tr>
-                                                            @for
-                                                            (item2
-                                                            of
-                                                            item.subFeatures;
-                                                            track
-                                                            $index)
-                                                            {
-                                                            <tr [attr.data-subfeature-id]="item2.id"
-                                                               [ngClass]="item2.flashClass">
-                                                               <td>
-                                                                  <span class="ct_fs_14">{{item2.subFeatureName}}</span>
-                                                               </td>
-                                                               <td><span class="">{{item2.estimated_time * 1750
+                                                                  <td>
+                                                                     <a class="ct_delete_icon"
+                                                                        (click)="removeFeture(item)"><i
+                                                                           class="fa-solid fa-trash-can"></i></a>
+                                                                  </td>
+                                                               </tr>
+                                                               @for
+                                                               (item2
+                                                               of
+                                                               item.subFeatures;
+                                                               track
+                                                               $index)
+                                                               {
+                                                               <tr [attr.data-subfeature-id]="item2.id"
+                                                                  [ngClass]="item2.flashClass">
+                                                                  <td>
+                                                                     <span
+                                                                        class="ct_fs_14">{{item2.subFeatureName}}</span>
+                                                                  </td>
+                                                                  <td><span class="">{{item2.estimated_time * 1750
                                                                   
                                                                   | convertCurrency:rate}}</span>
-                                                               </td>
-                                                               <td><span class="">
-                                                                     {{item2.estimated_time | number : '1.0-2'}}
-                                                                     HRS</span>
-                                                               </td>
-                                                               <td>
-                                                                  <a class="ct_delete_icon"
-                                                                     (click)="removeSubFeture(item,item2)"><i
-                                                                        class="fa-solid fa-trash-can"></i></a>
-                                                               </td>
-                                                            </tr>
-                                                            }
-                                                            }
-                                                            }
-                                                            @else
-                                                            {
-                                                            <tr>
-                                                               <td colspan="6" class="text-center">
-                                                                  No
-                                                                  data
-                                                                  found
-                                                               </td>
-                                                            </tr>
-                                                            }
-                                                         </tbody>
-                                                         
-                                                      </table>
-                                                     </div>
+                                                                  </td>
+                                                                  <td><span class="">
+                                                                        {{item2.estimated_time | number : '1.0-2'}}
+                                                                        HRS</span>
+                                                                  </td>
+                                                                  <td>
+                                                                     <a class="ct_delete_icon"
+                                                                        (click)="removeSubFeture(item,item2)"><i
+                                                                           class="fa-solid fa-trash-can"></i></a>
+                                                                  </td>
+                                                               </tr>
+                                                               }
+                                                               }
+                                                               }
+                                                               @else
+                                                               {
+                                                               <tr>
+                                                                  <td colspan="6" class="text-center">
+                                                                     No
+                                                                     data
+                                                                     found
+                                                                  </td>
+                                                               </tr>
+                                                               }
+                                                            </tbody>
+
+                                                         </table>
+                                                      </div>
                                                    </div>
 
                                                 </div>
@@ -472,7 +473,8 @@
                                              </p>
                                           </div>
                                        </div>
-                                       <div class="d-flex align-items-center justify-content-between gap-3 mt-3 ct_flex_col_575">
+                                       <div
+                                          class="d-flex align-items-center justify-content-between gap-3 mt-3 ct_flex_col_575">
                                           <button type="button" (click)="location.back()"
                                              class="ct_blue_outline_btn w-100 prev-step">Cancel</button>
                                           <a (click)="Navigate()" type="button"

@@ -1618,10 +1618,10 @@ a.ct_login_icon_site img {
 }
 
 .ct_login_icon_site span {
-    font-size: 16px;
-    color: #fff;
-    font-weight: 600;
-    margin-left: 21px;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 600;
+  margin-left: 21px;
 }
 
 .ct_left_input_icon {
@@ -3911,6 +3911,7 @@ table.table.ct_compare_table {
   background: #e6e6e6;
 }
 
+/* 
 .ct_middile_sidebar:before {
   content: "";
   position: absolute;
@@ -3922,7 +3923,7 @@ table.table.ct_compare_table {
   background-size: cover;
   background-repeat: no-repeat;
   z-index: -1;
-}
+} */
 
 .ct_cti_chat_animate_round {
   position: relative;

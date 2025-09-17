@@ -34,6 +34,7 @@ export class RefineIdeaComponent {
   isLoading: boolean = false
   orgCommonFeatures: any[] = [];
   private modal = inject(ModalService);
+  showSidebar: boolean = false
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService, private http: HttpClient) {
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
