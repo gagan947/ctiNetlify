@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Feature } from '../../../models/projects';
 import { FormBuilder, FormsModule } from '@angular/forms';
@@ -9,6 +9,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { MobileViewComponent } from "../main/mobile-view/mobile-view.component";
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
+import { ModalService } from '../../../services/modal.service';
 declare var bootstrap: any;
 declare var Calendly: any;
 @Component({
@@ -31,6 +32,7 @@ export class PaymentPlanComponent {
   securityDeposit!: number
   installmentDates: any[] = []
   rate: any;
+  private modal = inject(ModalService);
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService) {
     effect(() => {
       this.rate = this.apiService._rate()
@@ -195,5 +197,10 @@ export class PaymentPlanComponent {
   ngOnDestroy() {
     // Clean up the listener to avoid memory leaks
     window.removeEventListener('message', this.handleCalendlyEvent.bind(this));
+  }
+
+  canDeactivate(): Promise<boolean> | boolean {
+    this.modal.inquiryProjectID.set(this.projectsData.clientEnquryId);
+    return this.modal.open('Do you want to save this step as draft before leaving?');
   }
 }

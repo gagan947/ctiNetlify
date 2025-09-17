@@ -9,7 +9,6 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../../sidebar/sidebar.component";
 import { BdLoaderComponent } from "../../../shared/bd-loader/bd-loader.component";
 import { MobileViewComponent } from "../mobile-view/mobile-view.component";
-import { CanComponentDeactivate } from '../../../../helper/guards/can-deactivate.guard';
 import { ModalService } from '../../../../services/modal.service';
 
 @Component({
@@ -19,7 +18,7 @@ import { ModalService } from '../../../../services/modal.service';
     templateUrl: './make-it-mine.component.html',
     styleUrl: './make-it-mine.component.css'
 })
-export class MakeItMineComponent  implements CanComponentDeactivate{
+export class MakeItMineComponent {
     @ViewChild('preview1', { static: true }) iframe1!: ElementRef<HTMLIFrameElement>;
     @Input() id!: string;
     projectsData: any;
@@ -144,12 +143,5 @@ export class MakeItMineComponent  implements CanComponentDeactivate{
             }
         });
     }
-    canDeactivate(): Promise<boolean> | boolean {
-        if (this.hasUnsavedChanges) {
-            this.modal.inquiryProjectID.set(4);
-          return this.modal.open('Do you want to save this step as draft before leaving?');
-        }
-        return true;
-      }
 
 }

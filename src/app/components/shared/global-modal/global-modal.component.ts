@@ -14,29 +14,29 @@ export class GlobalModalComponent {
   inquiryId: any
   constructor(public service: ModalService, private apiService: ApiService) {
     effect(() => {
-     
+
       this.inquiryId = this.service.inquiryProjectID();
       console.log(this.inquiryId);
     });
   }
 
   ngOnInit() {
-   
-  
+
+
   }
 
-  discardProject(){
-    this.apiService.getApi(`api/user/discardProject/${this.inquiryId}`).subscribe({
+  discardProject() {
+    this.apiService.getApi(`api/user/discardProject?id=${this.inquiryId}`).subscribe({
       next: (res: any) => {
-        
+
         this.service.close(true);
       },
       error: (err: any) => {
         this.service.close(true);
       }
     })
-   
+
     this.service.close(true);
-}
+  }
 
 }

@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ExchangeRatePipe } from "../../../helper/exchange-rate.pipe";
 import { MobileViewComponent } from '../main/mobile-view/mobile-view.component';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'app-review-buildcard',
@@ -20,6 +21,7 @@ export class ReviewBuildcardComponent {
   projectsData: any;
   totalSubFeatures: any;
   rate: any
+  private modal = inject(ModalService);
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router) {
     effect(() => {
       this.rate = this.apiService._rate()
@@ -37,4 +39,8 @@ export class ReviewBuildcardComponent {
     });
   };
 
+  canDeactivate(): Promise<boolean> | boolean {
+    this.modal.inquiryProjectID.set(this.projectsData.clientEnquryId);
+    return this.modal.open('Do you want to save this step as draft before leaving?');
+  }
 }

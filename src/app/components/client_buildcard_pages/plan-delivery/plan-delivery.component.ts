@@ -1,4 +1,4 @@
-import { Component, effect, Input } from '@angular/core';
+import { Component, effect, inject, Input } from '@angular/core';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Feature } from '../../../models/projects';
@@ -9,6 +9,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ExchangeRatePipe } from "../../../helper/exchange-rate.pipe";
 import { MobileViewComponent } from '../main/mobile-view/mobile-view.component';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'app-plan-delivery',
@@ -50,6 +51,7 @@ export class PlanDeliveryComponent {
   selectedDevices: string[] = ['Android'];
   PhasesDeliverables: any[] = [{ design: "We do your designs" }, "Product Roadmap", "Clickable prototype", "Basic build", "Full build"];
   originalProjectCost: any;
+  private modal = inject(ModalService);
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService) {
     effect(() => {
       this.rate = this.apiService._rate()
@@ -220,5 +222,10 @@ export class PlanDeliveryComponent {
 
   totalCost(featureData: any) {
     // this.projectCost = featureData.reduce((pre: any, next: { totalSubFeaturedPrice: any; totalCustomisationPrice: any; }) => pre + next.totalSubFeaturedPrice + next.totalCustomisationPrice, 0);
+  }
+
+  canDeactivate(): Promise<boolean> | boolean {
+    this.modal.inquiryProjectID.set(this.projectsData.clientEnquryId);
+    return this.modal.open('Do you want to save this step as draft before leaving?');
   }
 }

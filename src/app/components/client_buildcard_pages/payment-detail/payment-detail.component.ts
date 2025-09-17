@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -10,12 +10,13 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
 import { MobileViewComponent } from '../main/mobile-view/mobile-view.component';
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
+import { ModalService } from '../../../services/modal.service';
 declare var Razorpay: any;
 declare var Calendly: any;
 @Component({
   selector: 'app-payment-detail',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, MobileViewComponent, ExchangeRatePipe,CalendlyDirective],
+  imports: [RouterLink, CommonModule, SidebarComponent, MobileViewComponent, ExchangeRatePipe, CalendlyDirective],
   templateUrl: './payment-detail.component.html',
   styleUrl: './payment-detail.component.css'
 })
@@ -42,7 +43,7 @@ export class PaymentDetailComponent {
   userData: any
   rate: any;
   currencyCode = 'INR';
-
+  private modal = inject(ModalService);
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private http: HttpClient) {
     effect(() => {
       this.rate = this.apiService._rate()
@@ -56,7 +57,7 @@ export class PaymentDetailComponent {
 
     this.userData = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
     // const user = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
-    this.currencyCode =   this.userData.currency
+    this.currencyCode = this.userData.currency
   };
 
   onPaymentChange(id: any) {
@@ -116,13 +117,13 @@ export class PaymentDetailComponent {
     let formData = {
       amount: Math.round(this.paymentPlan == '1' ? (this.actualCost || (this.totalCost + (this.totalCost * 18) / 100) - (((this.totalCost + (this.totalCost * 18) / 100) * 10) / 100)) : (this.securityDeposit + (this.securityDeposit * 18) / 100))
     }
-    
+
     this.apiService.postAPI(`api/payment/createRazorpayOrder`, { amount: 1000, currency: this.currencyCode }).subscribe({
       next: (data: any) => {
         const options: any = {
           key: 'rzp_test_nyohAyx081ZtAn', // replace with your Razorpay Key ID
           amount: data.amount,
-          currency:this.currencyCode,
+          currency: this.currencyCode,
           name: 'Creative.ai',
           image: "assets/img/cti_black_logo.svg",
           order_id: data.orderId,
@@ -193,7 +194,10 @@ export class PaymentDetailComponent {
   };
 
 
-
+  canDeactivate(): Promise<boolean> | boolean {
+    this.modal.inquiryProjectID.set(this.projectsData.clientEnquryId);
+    return this.modal.open('Do you want to save this step as draft before leaving?');
+  }
 
   // ngAfterViewInit() {
   //   console.log("here2");

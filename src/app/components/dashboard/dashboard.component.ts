@@ -18,6 +18,10 @@ export class DashboardComponent {
   constructor(private apiService: ApiService, private message: NzMessageService, private router: Router) {
   }
   ngOnInit(): void {
+    this.getProjects();
+  }
+
+  getProjects() {
     this.apiService.getApi<any>('api/user/fetchClientAllProjects').subscribe(
       (res) => (res.success ? (this.allProjectsList = res.data) : null)
     );
@@ -57,6 +61,18 @@ export class DashboardComponent {
         }
       }
     )
+  }
+
+  discardProject(id: number) {
+    this.apiService.getApi(`api/user/discardProject?id=${id}`).subscribe({
+      next: (res: any) => {
+        this.message.success(res.message);
+        this.getProjects();
+      },
+      error: (err: any) => {
+        this.message.error(err);
+      }
+    })
   }
 
   checkStatus(url: string): string {

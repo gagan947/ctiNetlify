@@ -47,8 +47,8 @@ export class ApiService {
 
   getRates(base: any) {
     const key = 'cd5719e03a530cce0636b0693b6e72c5';
-    const today = new Date().toISOString().split('T')[0]; // Always YYYY-MM-DD format
-  
+    const today = new Date().toISOString().split('T')[0];
+
     if (base === 'INR') {
       this._rate.set(1);
       return;
@@ -57,7 +57,7 @@ export class ApiService {
         currency_code: base,
         date: today
       };
-  
+
       this.getApi(`api/user/getCurrencyRate?${new URLSearchParams(params).toString()}`).subscribe({
         next: (res: any) => {
           if (res.success) {
@@ -69,16 +69,18 @@ export class ApiService {
                 if (res.success) {
                   console.log(res);
                   this._rate.set(res.quotes[`INR${base}`]);
-                  this.postAPI('api/user/updateCurrencyRate', { 
-                    currency_code: base, 
-                    rate: this._rate(), 
-                    todays_date: today   // same consistent format
+                  const result = Object.entries(res.quotes).map(([key, value]) => {
+                    return { [key.replace("INR", "")]: value };
+                  });
+                  this.postAPI('api/user/updateCurrencyRate', {
+                    rate: result,
+                    todays_date: today
                   }).subscribe();
                 }
               });
             }
           }
-        }, 
+        },
         error: err => {
           console.log(err);
         }

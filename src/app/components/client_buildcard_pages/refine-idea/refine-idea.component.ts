@@ -406,12 +406,7 @@ export class RefineIdeaComponent {
   }
 
   canDeactivate(): Promise<boolean> | boolean {
-   
-        this.modal.inquiryProjectID.set(4);
-      return this.modal.open('Do you want to save this step as draft before leaving?');
-    
-   
+    this.modal.inquiryProjectID.set(this.projectsData.clientEnquryId);
+    return this.modal.open('Do you want to save this step as draft before leaving?');
   }
-
-
 }

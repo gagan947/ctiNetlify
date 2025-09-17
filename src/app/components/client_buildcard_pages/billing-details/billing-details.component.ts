@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Feature } from '../../../models/projects';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -10,6 +10,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { MobileViewComponent } from "../main/mobile-view/mobile-view.component";
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'app-billing-details',
@@ -32,6 +33,7 @@ export class BillingDetailsComponent {
   billingDetails: any;
   countryName: string = '';
   rate: any
+  private modal = inject(ModalService);
   constructor(private fb: FormBuilder, private apiService: ApiService, private message: NzMessageService, private router: Router) {
     effect(() => {
       this.rate = this.apiService._rate()
@@ -118,5 +120,10 @@ export class BillingDetailsComponent {
         this.message.error(err.error.message);
       }
     })
+  }
+
+  canDeactivate(): Promise<boolean> | boolean {
+    this.modal.inquiryProjectID.set(this.projectsData.clientEnquryId);
+    return this.modal.open('Do you want to save this step as draft before leaving?');
   }
 }
