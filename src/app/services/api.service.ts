@@ -46,7 +46,7 @@ export class ApiService {
   }
 
   getRates(base: any) {
-    const key = 'cd5719e03a530cce0636b0693b6e72c5';
+    const key = '5606f101bb2a1853bbe166f02ed4633c';
     const today = new Date().toISOString().split('T')[0];
 
     if (base === 'INR') {
@@ -72,6 +72,7 @@ export class ApiService {
                   const result = Object.entries(res.quotes).map(([key, value]) => {
                     return { [key.replace("INR", "")]: value };
                   });
+
                   this.postAPI('api/user/updateCurrencyRate', {
                     rate: result,
                     todays_date: today
