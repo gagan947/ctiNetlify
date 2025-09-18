@@ -249,4 +249,54 @@ span.sender {
     max-height: calc(100vh - 200px);
    
 }
+.ct_text_op_06{
+  opacity: 0.6;
+}
+.ct_gradient_clr {
+  background: linear-gradient(90.18deg, #3D40F6 18.49%, #D000FF 33.41%, #FF2929 56.34%, #FABB00 75.95%);
 
+ 
+  display: inline-block;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+ 
+}
+
+.ct_grid_6_new{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 15px;
+  align-items: center;
+}
+
+.ct_key_point_box {
+    /* background: linear-gradient(346deg, rgba(0, 100, 255, 0.10) 0%, rgba(182, 12, 254, 0.10) 50%, rgba(250, 187, 0, 0.10) 100%); */
+    padding: 15px;
+    border-radius: 10px;
+    display: grid
+;
+    gap: 15px;
+    background-color: #0064ff1f;
+}
+.ct_key_point_box p + p {
+  text-align: end;
+    font-size: 22px;
+    background-color: #fff;
+    width: 40px;
+    height: 40px;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
+    padding: 5px;
+    margin-left: auto;
+}
+
+.msg-row.out .cti_msg_left {
+    background: linear-gradient(346deg, rgba(0, 100, 255, 0.10) 0%, rgba(182, 12, 254, 0.10) 50%, rgba(250, 187, 0, 0.10) 100%);
+    border-radius: 10px;
+    border-bottom-right-radius: 0px;
+    color: #000;
+    box-shadow: unset;
+}

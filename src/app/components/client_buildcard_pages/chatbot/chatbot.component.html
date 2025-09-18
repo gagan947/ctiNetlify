@@ -19,10 +19,52 @@
     padding: 30px;
     border-radius: 10px;">
             <div #scrollContainer class="ct_creative_msg_top_bar px-3">
+                <h4 class="ct_fs_28 ct_fw_600 mb-0">Hello, <span class="ct_gradient_clr ct_fw_600">Victoria</span></h4>
+                <p class="ct_fs_28 ct_text_op_06 ct_fw_600 mb-4">How can i help you today?</p>
+                <div class="ct_grid_6_new">
+                    
+                        <div class="ct_key_point_box">
+                            <p class="mb-0 ct_fs_16 ct_fw_600">  Build an App </p>
+                            <p class="mb-0">💡</p>
+
+                        </div>
+                         <div class="ct_key_point_box">
+                            <p class="mb-0 ct_fs_16 ct_fw_600"> Build a Website  </p>
+                            <p class="mb-0">💻 </p>
+
+                        </div>
+                         <div class="ct_key_point_box">
+                            <p class="mb-0 ct_fs_16 ct_fw_600">  Pricing & Plans  </p>
+                            <p class="mb-0">💰 </p>
+
+                        </div>
+                        <div class="ct_key_point_box">
+                            <p class="mb-0 ct_fs_16 ct_fw_600">   Development Time   </p>
+                            <p class="mb-0">⏱️ </p>
+
+                        </div>
+                         <div class="ct_key_point_box">
+                            <p class="mb-0 ct_fs_16 ct_fw_600">  Contact Support   </p>
+                            <p class="mb-0">📞 </p>
+
+                        </div>
+                            <div class="ct_key_point_box">
+                            <p class="mb-0 ct_fs_16 ct_fw_600">   Ask a Question    </p>
+                            <p class="mb-0">❓ </p>
+
+                        </div>
+
+                    
+
+                </div>
                 @for (item of messages; track $index) {
                 <div class="d-flex align-items-center gap-2 mb-3" class="msg-row"
                     [ngClass]="item.sender === 'You' ? 'out' : 'in'">
-                    <div class="avatar">{{ item.sender === 'You' ? 'Y' : 'B' }}</div>
+                    @if(item.sender === 'You') {
+                    <img src="assets/img/photo21.jpg" alt="" class="avatar" />
+                    } @else {   
+                    <img src="assets/img/photo20.jpg" alt="" class="avatar" />
+                    }
                     <div class="ct_creative_msg_card cti_msg_left mb-0">
                         <p class="mb-0" style="white-space: pre-wrap;   font-size: 14px;">{{ item.text }}</p>
                         @if(item.features?.length > 0 && item.step == 'chatbot'){
@@ -31,7 +73,9 @@
                                 @for (item2 of item.features; track $index) {
                                 <li>{{item2.featuresName}}</li>
                                 }
+                                
                             </ul>
+                           
                         </div>
                         }
                     </div>
