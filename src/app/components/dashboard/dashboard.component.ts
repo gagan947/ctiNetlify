@@ -23,8 +23,20 @@ export class DashboardComponent {
 
   getProjects() {
     this.apiService.getApi<any>('api/user/fetchClientAllProjects').subscribe(
-      (res) => (res.success ? (this.allProjectsList = res.data) : null)
+      (res) => {
+        if (res.success) {
+          this.allProjectsList = res.data;
+          this.allProjectsList = this.allProjectsList.map(item => {
+            const activeStep = item.currentRoutes?.split("/")[1]?.replace("-", " ") || "";
+            console.log(activeStep);
+            const activeIndex = this.steps.findIndex(step => step.routes.includes(activeStep));
+            console.log(activeIndex);
+            return { ...item, activeIndex };
+          });
+        }
+      }
     );
+
   }
 
   Navigate(url: string, id: number) {
@@ -76,13 +88,31 @@ export class DashboardComponent {
     })
   }
 
-  checkStatus(url: string): string {
-    switch (url) {
-      case '/payment-plan':
-        return 'Ready';
+  checkStatus(status: number): string {
+    switch (status) {
+      case 0:
+        return 'Draft';
+      case 1:
+        return 'Paid';
+      case 2:
+        return 'Running';
+      case 4:
+        return 'Completed';
       default:
         return 'Draft';
     }
   }
+
+  steps = [
+    { id: "list_1", icon: "🏗️", routes: ["make it-mine"] },
+    { id: "list_2", icon: "✏️", routes: ["refine idea",] },
+    { id: "list_3", icon: "💡", routes: ["plan delivery",] },
+    { id: "list_4", icon: "📝", routes: ["billing details",] },
+    { id: "list_5", icon: "💳", routes: ["payment plan",] },
+    { id: "list_6", icon: "💳", routes: ["payment option"] }
+  ];
+
+
+
 
 }
