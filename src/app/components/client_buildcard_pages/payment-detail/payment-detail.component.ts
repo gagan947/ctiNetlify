@@ -52,6 +52,7 @@ export class PaymentDetailComponent {
     this.projectsData = JSON.parse(projectData!);
     this.totalCost = this.projectsData.finalCost;
     this.projectsFeatures = this.projectsData.selectdFeature;
+    this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
     this.apiService._imagePreview.set(this.projectsData.projectLogo);
     this.onPaymentChange(this.projectsData.paymentPlan)
 

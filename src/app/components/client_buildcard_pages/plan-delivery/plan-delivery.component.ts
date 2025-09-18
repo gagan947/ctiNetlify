@@ -60,6 +60,7 @@ export class PlanDeliveryComponent {
     this.projectsData = JSON.parse(projectData!);
     this.totalPrice = this.projectsData.totalCost;
     this.projectCost = this.totalPrice;
+    this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
     this.apiService._imagePreview.set(this.projectsData.projectLogo);
     this.originalProjectCost = this.projectCost;
 

@@ -29,7 +29,8 @@ export class ReviewBuildcardComponent {
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
     this.projectsFeatures = this.projectsData.selectdFeature;
-    this.totalSubFeatures = this.projectsData.no_of_features
+    this.totalSubFeatures = this.projectsData.no_of_features;
+    this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
     this.apiService._imagePreview.set(this.projectsData.projectLogo);
     this.projectsFeatures.map((feature: any) => {
       feature.featureTime = feature.subFeatures.reduce(

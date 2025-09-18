@@ -41,6 +41,7 @@ export class MakeItMineComponent {
         if (this.projectsData) {
             this.imagePreview = this.projectsData.projectLogo
             this.projectName = this.projectsData.projectName
+            this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
             this.apiService._imagePreview.set(this.imagePreview);
         }
     }
@@ -102,6 +103,7 @@ export class MakeItMineComponent {
         formData.append('logoImg', this.logoImg ? this.logoImg : '');
         formData.append('projectName', this.projectName);
         formData.append('projectId', this.id ? this.id : '0');
+        formData.append('currentRoutes', this.router.url);
         // formData.append('logoSize', this.logoBox.nativeElement.getAttribute('style'));
 
         this.apiService.postAPI('api/user/addProjectNameAndLogo', formData).subscribe({

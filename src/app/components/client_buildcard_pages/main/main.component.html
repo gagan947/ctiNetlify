@@ -1,7 +1,7 @@
 @if(!loading){
 <section class="ct_dash_board_main" style="display: block !important">
       <app-sidebar></app-sidebar>
-      <div class="ct_dash_right_content"
+      <div class="ct_dash_right_content pt-5"
             style="background: linear-gradient(90deg, rgb(250 218 188 / 44%), rgb(234 170 213 / 36%), rgb(220 229 244 / 69%)); height: auto; min-height: 100vh;">
             <div class="ct_dash_toggle_bar">
                   <i class="fa-solid fa-bars"></i>
@@ -9,7 +9,7 @@
             <div class="container-fluid">
                   <app-chatbot (dataEmitter)="receiveData($event)"></app-chatbot>
                   <!-- chatbot -->
-                  <div class="row ct_mt_70 ct_py_70 pt-0">
+                  <div class="row ct_mt_70 ct_py_70 pt-0 mt-4">
                         @if(isSuggested){
                         <h2 class="ct_fs_24 ct_fw_600 mb-3">Suggested projects based on your requirements</h2>
 
@@ -321,9 +321,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                        <div appCalendlyWidget [calendlyUrl]="'https://calendly.com/creativethoughts/30min'" 
-                        style="min-width:320px; height:630px;">
-                   </div>
+                        <div appCalendlyWidget [calendlyUrl]="'https://calendly.com/creativethoughts/30min'"
+                              style="min-width:320px; height:630px;">
+                        </div>
                   </div>
             </div>
       </div>

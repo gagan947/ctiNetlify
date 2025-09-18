@@ -41,6 +41,7 @@ export class BillingDetailsComponent {
     let userData = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
+    this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
     this.apiService._imagePreview.set(this.projectsData.projectLogo);
     this.projectsFeatures = this.projectsData.selectdFeature;
     this.billingDetails = this.projectsData.bellingDetails ? this.projectsData.bellingDetails[0] : userData;

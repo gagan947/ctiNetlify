@@ -41,6 +41,7 @@ export class PaymentPlanComponent {
     this.projectsData = JSON.parse(projectData!);
     this.totalCost = this.projectsData.finalCost;
     this.projectsFeatures = this.projectsData.selectdFeature;
+    this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
     this.apiService._imagePreview.set(this.projectsData.projectLogo);
     if (this.projectsData.paymentPlan) {
       this.onPaymentChange(this.projectsData.paymentPlan)
