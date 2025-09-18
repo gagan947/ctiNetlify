@@ -134,14 +134,21 @@ export class MakeItMineComponent {
                 this.htmlCode = (res.data[0].html_pages);
                 sessionStorage.setItem('htmlCode', this.htmlCode);
                 this.apiService._htmlCode.set(this.htmlCode);
+
                 const doc1 = this.iframe1.nativeElement.contentDocument || this.iframe1.nativeElement.contentWindow?.document;
                 if (doc1) {
                     doc1.open();
                     doc1.write(this.htmlCode);
                     doc1.close();
-                }
-            } else {
+                    const logo1 = doc1.querySelector('#mylogo') as HTMLElement;
 
+                    const newLogoHtml = `<img id="mylogo" loading="lazy" src="${res.data[0].projectImage || 'https://https://creativethoughts.ai/assets/img/c.png'}" alt="AI app builder for mobile and web" style="width: 70px; height: 30px;">`;
+
+                    if (logo1) logo1.outerHTML = newLogoHtml;
+                }
+                this.projectName = res.data[0].projectName;
+                this.apiService._imagePreview.set(res.data[0].projectImage);
+                // this.updateLogo();
             }
         });
     }
