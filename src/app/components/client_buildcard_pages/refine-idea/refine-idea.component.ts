@@ -13,11 +13,12 @@ import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 import { DiscountModalComponent } from './discount-modal/discount-modal.component';
 import { BdLoaderComponent } from '../../shared/bd-loader/bd-loader.component';
 import { ModalService } from '../../../services/modal.service';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-refine-idea',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe, DiscountModalComponent, BdLoaderComponent],
+  imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe, DiscountModalComponent, BdLoaderComponent, ScrollingModule],
   templateUrl: './refine-idea.component.html',
   styleUrl: './refine-idea.component.css',
 })
@@ -383,23 +384,33 @@ export class RefineIdeaComponent {
     }
   }
 
+  private searchTimeout: any;
   searchCoreFeatures(event: any) {
-    const searchTerm = (event.target.value).toLowerCase();
-    if (searchTerm) {
-      const filteredData = this.orgCommonFeatures.filter((item: any) => {
-        const featureMatch = item.featureName?.toLowerCase().includes(searchTerm);
-        const subFeatureMatch = item.subFeaturesList?.some(
-          (subFeature: any) =>
-            subFeature?.subFeatureName?.toLowerCase().includes(searchTerm)
-        );
-        return featureMatch || subFeatureMatch;
-      });
+    clearTimeout(this.searchTimeout);
+    const searchTerm = (event.target.value.trim()).toLowerCase();
 
-      this.commongFeaturs = filteredData.length ? filteredData : [];
-    } else {
-      // Reset to original data if search is empty
-      this.commongFeaturs = [...this.orgCommonFeatures];
-    }
+    this.searchTimeout = setTimeout(() => {
+      if (searchTerm) {
+        this.commongFeaturs = this.orgCommonFeatures.filter((item: any) => {
+          const featureMatch = item.featureName?.toLowerCase().includes(searchTerm);
+          const subFeatureMatch = item.subFeaturesList?.some(
+            (subFeature: any) =>
+              subFeature?.subFeatureName?.toLowerCase().includes(searchTerm)
+          );
+          return featureMatch || subFeatureMatch;
+        });
+      } else {
+        this.commongFeaturs = [...this.orgCommonFeatures];
+      }
+    }, 300);
+  }
+
+  trackByFeature(index: number, item: any) {
+    return item.id || index;
+  }
+
+  trackBySubFeature(index: number, item: any) {
+    return item.id || index;
   }
 
   canDeactivate(): Promise<boolean> | boolean {

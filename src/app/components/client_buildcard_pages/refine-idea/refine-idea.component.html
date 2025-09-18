@@ -92,19 +92,18 @@
                <!-- code feature list S -->
                <div class="mt-4 mb-3">
                   <h4 class="ct_fs_22 ct_fw_600 d-flex align-items-center justify-content-between mb-0">
-                     <span>Core
-                        Features</span>
+                     <span>Core Features</span>
                   </h4>
                   <div class="ct_search_input" style="max-width: 350px;">
                      <input type="text" class="form-control" name="search2" (input)="searchCoreFeatures($event)"
-                        placeholder="Search feature">
+                        placeholder="Search feature" autocomplete="off">
                      <i class="fa-solid fa-magnifying-glass"></i>
                   </div>
                </div>
                <div class="ct_code_features_list ct_mt_4">
                   <div class=" ct_feature_card_scroll">
                      @if (commongFeaturs.length > 0) {
-                     @for (item of commongFeaturs; track $index) {
+                     @for (item of commongFeaturs; track trackByFeature($index, item)) {
                      <div class="ct_dragable_card_main_bg mt-0" [id]="'todoList'">
                         <h2 class="ct_fs_18 ct_fw_700 mb-0 d-flex align-items-center justify-content-between">
                            {{ item.featureName }}
@@ -118,7 +117,7 @@
                            </span>
                            }
                         </h2>
-                        @for (items of item.subFeaturesList; track $index) {
+                        @for (items of item.subFeaturesList; track trackBySubFeature($index, items)) {
                         <div class="ct_feature_card_12 mt-2 position-relative"
                            [ngClass]="{'opacity-50' : items.selected}">
                            <div class="d-flex justify-content-between gap-3 w-100">
