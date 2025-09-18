@@ -67,7 +67,7 @@ export class ApiService {
               const url = `https://api.exchangerate.host/live?access_key=${key}&source=INR&currencies=AUD,AED,SGD,USD,EUR,GBP`;
               this.http.get(url).subscribe((res: any) => {
                 if (res.success) {
-                  console.log(res);
+                 
                   this._rate.set(res.quotes[`INR${base}`]);
                   const result = Object.entries(res.quotes).map(([key, value]) => {
                     return { [key.replace("INR", "")]: value };

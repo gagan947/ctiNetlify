@@ -48,7 +48,7 @@ export const routes: Routes = [
             path: 'payment-plan', loadComponent: () => import('./components/client_buildcard_pages/payment-plan/payment-plan.component').then(c => c.PaymentPlanComponent), canDeactivate: [canDeactivateGuard]
       },
       {
-            path: 'payment-detail', loadComponent: () => import('./components/client_buildcard_pages/payment-detail/payment-detail.component').then(c => c.PaymentDetailComponent), canDeactivate: [canDeactivateGuard]
+            path: 'payment-option', loadComponent: () => import('./components/client_buildcard_pages/payment-detail/payment-detail.component').then(c => c.PaymentDetailComponent), canDeactivate: [canDeactivateGuard]
       },
       {
             path: 'payment-sucessfull', loadComponent: () => import('./components/payment-sucessfull/payment-sucessfull.component').then(c => c.PaymentSucessfullComponent)
