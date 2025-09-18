@@ -108,11 +108,7 @@ export class DashboardComponent {
     { id: "list_2", icon: "✏️", routes: ["refine idea",] },
     { id: "list_3", icon: "💡", routes: ["plan delivery",] },
     { id: "list_4", icon: "📝", routes: ["billing details",] },
-    { id: "list_5", icon: "💳", routes: ["payment plan",] },
+    { id: "list_5", icon: "💰", routes: ["payment plan",] },
     { id: "list_6", icon: "💳", routes: ["payment option"] }
   ];
-
-
-
-
 }
