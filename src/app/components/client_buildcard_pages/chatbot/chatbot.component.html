@@ -14,59 +14,38 @@
 
 
 <div class="row">
-    <div class="col-lg-8 mx-auto">
+    <div class="col-xxl-5 col-xl-6 col-lg-8 mx-auto">
         <div style=" background-color: #fff9f99e;
     padding: 30px;
     border-radius: 10px;">
             <div #scrollContainer class="ct_creative_msg_top_bar px-3">
-                <h4 class="ct_fs_28 ct_fw_600 mb-0">Hello, <span class="ct_gradient_clr ct_fw_600">Victoria</span></h4>
-                <p class="ct_fs_28 ct_text_op_06 ct_fw_600 mb-4">How can i help you today?</p>
-                <div class="ct_grid_6_new">
-                    
-                        <div class="ct_key_point_box">
-                            <p class="mb-0 ct_fs_16 ct_fw_600">  Build an App </p>
-                            <p class="mb-0">💡</p>
+                <h4 class="ct_fs_28 ct_fw_600 mb-0">Hello, <span class="ct_gradient_clr ct_fw_600">{{userName}}</span></h4>
+                <p class="ct_fs_28 ct_text_op_06 ct_fw_600 mb-4">How can I help you today?</p>
+                <div class="row">
+                    <div class="col-md-12 mx-auto px-md-4">
+                        <div class="ct_grid_6_new">
+                            @for (item of basicOptions; track $index) {
+                                <div class="ct_key_point_box" (click)="selectOption(item)">
+                                    <p class="mb-0 ct_fs_16 ct_fw_600">  {{item.label}} </p>
+                                    <p class="mb-0">{{item.logo}}</p>
+                                </div>
+                           }
+                       </div>
 
-                        </div>
-                         <div class="ct_key_point_box">
-                            <p class="mb-0 ct_fs_16 ct_fw_600"> Build a Website  </p>
-                            <p class="mb-0">💻 </p>
-
-                        </div>
-                         <div class="ct_key_point_box">
-                            <p class="mb-0 ct_fs_16 ct_fw_600">  Pricing & Plans  </p>
-                            <p class="mb-0">💰 </p>
-
-                        </div>
-                        <div class="ct_key_point_box">
-                            <p class="mb-0 ct_fs_16 ct_fw_600">   Development Time   </p>
-                            <p class="mb-0">⏱️ </p>
-
-                        </div>
-                         <div class="ct_key_point_box">
-                            <p class="mb-0 ct_fs_16 ct_fw_600">  Contact Support   </p>
-                            <p class="mb-0">📞 </p>
-
-                        </div>
-                            <div class="ct_key_point_box">
-                            <p class="mb-0 ct_fs_16 ct_fw_600">   Ask a Question    </p>
-                            <p class="mb-0">❓ </p>
-
-                        </div>
-
-                    
+                    </div>
 
                 </div>
                 @for (item of messages; track $index) {
                 <div class="d-flex align-items-center gap-2 mb-3" class="msg-row"
                     [ngClass]="item.sender === 'You' ? 'out' : 'in'">
                     @if(item.sender === 'You') {
-                    <img src="assets/img/photo21.jpg" alt="" class="avatar" />
+                    <img [src]='profileImage' alt="" class="avatar" />
                     } @else {   
-                    <img src="assets/img/photo20.jpg" alt="" class="avatar" />
+                    <img src="assets/img/c.png" alt="" class="p-1 avatar" />
                     }
                     <div class="ct_creative_msg_card cti_msg_left mb-0">
                         <p class="mb-0" style="white-space: pre-wrap;   font-size: 14px;">{{ item.text }}</p>
+                        <small class="ct_chat_time_local">{{item.time | date:'shortTime'}}</small>
                         @if(item.features?.length > 0 && item.step == 'chatbot'){
                         <div class="options cti_msg_left">
                             <ul style=" list-style: disc;" class="">
@@ -96,8 +75,10 @@
 
             </div>
             <footer class="chat-input">
-                <input [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Type your message…"
-                    autocomplete="off" />
+                <!-- <input [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Type your message…"
+                    autocomplete="off" /> -->
+                    <textarea [autosize]="true" [maxRows]="10" [(ngModel)]="userInput" (keyup.enter)="sendMessage()" class="form-control ct_input" placeholder="Type your message…" [onlyGrow]="false" style="height: 45px !important;"></textarea> 
+                    
                 <button (click)="sendMessage()" aria-label="Send message">
                     ➤
                 </button>

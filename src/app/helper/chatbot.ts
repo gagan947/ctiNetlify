@@ -3,12 +3,12 @@ export const chatbotFlow: any = {
     step: "welcome",
     message: `Welcome to Creative AI \nI’m your AI Assistant Vanya 🤖, here to help you bring your next app or website idea to life.\nI can help you build your next app or website.\n\n👉 Please select an option below to get started.:`,
     options: [
-      { label: "💡 Build an App", next: "projectNameApp" },
-      { label: "💻 Build a Website", next: "projectNameWebsite" },
-      { label: "💰 Pricing & Plans", next: "pricing" },
-      { label: "⏱️ Development Time", next: "timelineInfo" },
-      { label: "📞 Contact Support", next: "support" },
-      { label: "❓ Ask a Question", next: "chatbot" }
+      { label: "Build an App", next: "projectNameApp", logo: '📱' },
+      { label: "Build a Website", next: "projectNameWebsite", logo : '💻' },
+      { label: "Pricing & Plans", next: "pricing" , logo : '💵' },
+      { label: "Development Time", next: "timelineInfo", logo: '⏳' },
+      { label: "Contact Support", next: "support", logo: '📞' },
+      { label: "Ask a Question", next: "chatbot", logo: '❓' }
     ]
   },
 

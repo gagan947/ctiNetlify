@@ -95,9 +95,9 @@ body {
 }
 
 .avatar {
-  flex: 0 0 32px;
-  height: 32px;
-  width: 32px;
+  flex: 0 0 25px;
+  height: 25px;
+  width: 25px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -107,6 +107,7 @@ body {
   border: 1px solid #e6e6e6;
   font-size: 12px;
   font-weight: 700;
+  object-fit: contain;
 }
 
 .bubble {
@@ -275,8 +276,13 @@ span.sender {
     border-radius: 10px;
     display: grid
 ;
+height: 100%;
     gap: 15px;
     background-color: #0064ff1f;
+}
+.msg-row.in .cti_msg_left {
+  border-radius: 10px;
+
 }
 .ct_key_point_box p + p {
   text-align: end;
@@ -293,10 +299,38 @@ span.sender {
     margin-left: auto;
 }
 
+small.ct_chat_time_local {
+  display: block;
+  text-align: end;
+  opacity: 0.6;
+  font-weight: 500;
+  margin-top: 8px;
+}
+textarea{
+  resize: none;
+}
 .msg-row.out .cti_msg_left {
     background: linear-gradient(346deg, rgba(0, 100, 255, 0.10) 0%, rgba(182, 12, 254, 0.10) 50%, rgba(250, 187, 0, 0.10) 100%);
     border-radius: 10px;
-    border-bottom-right-radius: 0px;
     color: #000;
     box-shadow: unset;
 }
+
+.chat-input {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  display: flex;
+  align-items: flex-end;
+  z-index: 10; /* 👈 ensure it stays above messages */
+}
+
+.chat-input textarea {
+  flex: 1;
+  resize: none;
+  overflow-y: auto;
+  max-height: 200px;
+}
+

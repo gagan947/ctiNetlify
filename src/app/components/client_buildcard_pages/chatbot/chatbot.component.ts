@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { chatbotFlow } from '../../../helper/chatbot';
+import { AutosizeModule } from 'ngx-autosize';
 
 @Component({
   selector: 'app-chatbot',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AutosizeModule],
   templateUrl: './chatbot.component.html',
   styleUrl: './chatbot.component.css'
 })
@@ -23,15 +24,30 @@ export class ChatbotComponent {
   userData: any = {};
   userInput: string = '';
   standardChatbot: boolean = true;
+  userName: string = 'there';
+  profileImage: string = 'assets/img/np_pro.png';
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
   @Output() dataEmitter = new EventEmitter<string>();
+  basicOptions : any[]= []
   constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
-    this.addBotMessage(this.flow[this.currentStep].message);
+    const data: any = localStorage.getItem('userDetailCTI')
+    if (data !== 'undefined') {
+      const user = JSON.parse(data);
+      this.userName = user.name || 'there';
+      this.profileImage = this.apiservice.imageUrl + user.profile_image || 'assets/img/np_pro.png';
+    
+    }
+    // this.addBotMessage(this.flow[this.currentStep].message);
   }
 
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
+
+  ngOnInit() {
+    this.basicOptions = this.flow['welcome'].options;
+   
+   }
 
   scrollToBottom(): void {
     try {
@@ -43,7 +59,7 @@ export class ChatbotComponent {
     if (text.includes('{name}') && this.userData.name) {
       text = text.replace('{name}', this.userData.name);
     }
-    this.messages.push({ sender: 'bot', text, step: this.currentStep, features: this.relevantFeatures });
+    this.messages.push({ sender: 'bot', text, step: this.currentStep, features: this.relevantFeatures,time: new Date() });
   }
 
   sendMessage() {
@@ -110,12 +126,9 @@ export class ChatbotComponent {
 
 
   getOptions() {
-    if (!this.isLoading) {
-      return this.flow[this.currentStep]?.options || [];
-
-    }
-    return [];
-
+    return !this.isLoading && this.currentStep !== 'welcome'
+      ? this.flow[this.currentStep]?.options ?? []
+      : [];
   }
 
   selectOption(option: any) {
@@ -143,7 +156,7 @@ export class ChatbotComponent {
   }
 
   addUserMessage(text: string) {
-    this.messages.push({ sender: 'You', text, step: this.currentStep });
+    this.messages.push({ sender: 'You', text, step: this.currentStep,time: new Date() });
   }
 
   askAIQuestion() {
