@@ -140,7 +140,7 @@ export class PaymentPlanComponent {
       next: (res: any) => {
         if (res.success) {
           sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...{ paymentPlan: this.paymentPlan }, ...{ installmentType: this.installmentType } }))
-          this.router.navigate(['/payment-detail'])
+          this.router.navigate(['/payment-option'])
         }
       }, error(err) {
         // this.message.error(err.error.message)

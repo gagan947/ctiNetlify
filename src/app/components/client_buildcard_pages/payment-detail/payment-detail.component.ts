@@ -103,7 +103,7 @@ export class PaymentDetailComponent {
     this.apiService.postAPI(`api/user/addClientPaymentPlan?inquiryId=${this.projectsData.clientEnquryId}`, formData).subscribe({
       next: (res: any) => {
         if (res.success) {
-          this.router.navigate(['/payment-detail'])
+          this.router.navigate(['/payment-option'])
         }
       }, error(err) {
         // this.message.error(err.error.message)
