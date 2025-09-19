@@ -37,6 +37,14 @@ p {
   background-color: #ffc400;
 }
 
+.ct_blue_badge_bg {
+  background-color: #2b98dd;
+}
+
+.ct_green_badge_bg {
+  background-color: #00b355;
+}
+
 .ct_green_text {
   color: var(--green);
 }

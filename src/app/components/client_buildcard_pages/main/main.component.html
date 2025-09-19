@@ -10,12 +10,16 @@
                   <app-chatbot (dataEmitter)="receiveData($event)"></app-chatbot>
                   <!-- chatbot -->
                   <div class="row ct_mt_70 ct_py_70 pt-0 mt-4">
-                        @if(isSuggested){
-                        <h2 class="ct_fs_24 ct_fw_600 mb-3">Suggested projects based on your requirements</h2>
+                        <div class="d-flex align-items-center justify-content-between">
+                              @if(isSuggested){
+                              <h2 class="ct_fs_24 ct_fw_600 mb-3">Suggested projects based on your requirements</h2>
 
-                        }@else {
-                        <h2 class="ct_fs_24 ct_fw_600 mb-3">Build Projects</h2>
-                        }
+                              }@else {
+                              <h2 class="ct_fs_24 ct_fw_600 mb-3">Build Projects</h2>
+                              }
+                              <input type="search" placeholder="Search Project"
+                                    class="form-control ct_search_input w-25 mb-3" (input)="search($event)">
+                        </div>
                         <div class=" col-xl-4 col-lg-6 mb-4">
                               <div class="ct_white_bg ct_ecommerse_web_card h-100">
                                     <div>
@@ -332,5 +336,4 @@
 
 @if(loading){
 <app-bd-loader></app-bd-loader>
-
 }

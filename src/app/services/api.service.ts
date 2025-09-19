@@ -14,7 +14,6 @@ export class ApiService {
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
   // apiUrl = 'https://api.creativethoughts.ai/';
   imageUrl = 'https://api.creativethoughts.ai';
-
   // apiUrl = 'http://localhost:4500/';
 
 
@@ -28,13 +27,11 @@ export class ApiService {
       const user = JSON.parse(data);
       this.getRates(user?.currency);
     }
-
   }
 
   getApi<T>(url: string): Observable<T> {
     return this.http.get<T>(this.apiUrl + url);
   }
-
 
   deleteApi<T>(url: string): Observable<T> {
     return this.http.delete<T>(this.apiUrl + url);
@@ -67,7 +64,7 @@ export class ApiService {
               const url = `https://api.exchangerate.host/live?access_key=${key}&source=INR&currencies=AUD,AED,SGD,USD,EUR,GBP`;
               this.http.get(url).subscribe((res: any) => {
                 if (res.success) {
-                 
+
                   this._rate.set(res.quotes[`INR${base}`]);
                   const result = Object.entries(res.quotes).map(([key, value]) => {
                     return { [key.replace("INR", "")]: value };
@@ -88,7 +85,6 @@ export class ApiService {
       });
     }
   }
-
 
   isLogedIn() {
     return this.getToken() !== null;

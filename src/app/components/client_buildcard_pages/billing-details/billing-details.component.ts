@@ -4,7 +4,7 @@ import { Feature } from '../../../models/projects';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { Country, State, City } from 'country-state-city'
+import { Country } from 'country-state-city'
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input-gg';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
@@ -50,25 +50,30 @@ export class BillingDetailsComponent {
 
   ngOnInit(): void {
     this.countries = Country.getAllCountries();
-
-    if (this.billingDetails.company_location) {
-      this.getStateByCountry({ target: { value: this.billingDetails.company_location } });
-      this.getCityByState({ target: { value: this.billingDetails.state } });
-    }
-
     this.billingForm = this.fb.group({
       customer_type: [this.billingDetails.customer_type || 'individual', Validators.required],
       company_name: [this.billingDetails.company_name || this.billingDetails.companyName || ''],
       email: [this.billingDetails.email || '', [Validators.required, Validators.email]],
-      phone: [this.billingDetails.phone || this.billingDetails.phoneNumber || '', Validators.required],
+      phoneNumber: ['', Validators.required],
       company_location: [this.billingDetails.company_location || '', Validators.required],
       address_line_1: [this.billingDetails.address_line_1 || '', Validators.required],
       address_line_2: [this.billingDetails.address_line_2 || ''],
       city: [this.billingDetails.city || '', Validators.required],
-      state: [this.billingDetails.state || '', Validators.required],
+      state: [this.billingDetails.state || ''],
       postal_code: [this.billingDetails.postal_code || '', [Validators.required, Validators.pattern(/^\d{5,6}$/)]],
       full_name: [this.billingDetails.full_name || this.billingDetails.name || '', Validators.required],
     });
+
+    this.billingForm.patchValue({
+      phoneNumber: {
+        number: this.billingDetails.phoneNumber,
+        internationalNumber: `${this.billingDetails.country_code} ${this.billingDetails.phoneNumber}`,
+        nationalNumber: this.billingDetails.phoneNumber,
+        e164Number: `${this.billingDetails.country_code}${this.billingDetails.phoneNumber}`,
+        dialCode: this.billingDetails.country_code,
+        countryCode: this.billingDetails.country_code.replace('+', '') // optional mapping
+      }
+    })
 
     this.billingForm.get('customer_type')?.valueChanges.subscribe(value => {
       if (value === 'company') {
@@ -81,15 +86,6 @@ export class BillingDetailsComponent {
     })
   };
 
-  getStateByCountry(event: any) {
-    this.countryCode = event.target.value;
-    this.countryName = this.countries.find((country: any) => country.isoCode === this.countryCode)?.name;
-    this.states = State.getStatesOfCountry(this.countryCode);
-  };
-
-  getCityByState(event: any) {
-    this.cities = City.getCitiesOfState(this.countryCode, event.target.value);
-  };
 
   onSubmit() {
     this.billingForm.markAllAsTouched()
@@ -97,9 +93,11 @@ export class BillingDetailsComponent {
       return;
     }
 
-    let data = this.billingForm.value;
-    data.phone = data.phone.number
-    data.company_location = this.countryName;
+    let country_code = {
+      country_code: this.billingForm.value.phoneNumber.dialCode
+    }
+    let data = { ...this.billingForm.value, ...country_code };
+    data.phoneNumber = data.phoneNumber.number;
 
     let formData = {
       formNumber: 6,

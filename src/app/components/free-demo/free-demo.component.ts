@@ -8,9 +8,6 @@ import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 declare var bootstrap: any;
-declare var Calendly: any;
-
-import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { CalendlyDirective } from '../../helper/directives/calendly.directive';
 
 export function noWhitespaceValidator(control: FormControl) {
@@ -21,7 +18,7 @@ export function noWhitespaceValidator(control: FormControl) {
 @Component({
   selector: 'app-free-demo',
   standalone: true,
-  imports: [HeaderComponent, FooterComponent, NgxIntlTelInputModule, ReactiveFormsModule, CommonModule, FormsModule,CalendlyDirective],
+  imports: [HeaderComponent, FooterComponent, NgxIntlTelInputModule, ReactiveFormsModule, CommonModule, FormsModule, CalendlyDirective],
   templateUrl: './free-demo.component.html',
   styleUrl: './free-demo.component.css'
 })
@@ -52,7 +49,6 @@ export class FreeDemoComponent {
     return this.myForm.controls;
   };
 
-
   onSubmit(): void {
     if (this.myForm.invalid) {
       this.myForm.markAllAsTouched(); // Show all errors
@@ -60,8 +56,6 @@ export class FreeDemoComponent {
     }
 
     this.isSubmitting = true;
-
-
     const formData = { ...this.myForm.value };
 
     const formData2 = {
@@ -85,10 +79,6 @@ export class FreeDemoComponent {
     // updloadData.append('businessEmail', formData.businessEmail.trim());
     // updloadData.append('companyName', formData.companyName.trim());
 
-
-
-
-
     this.apiService.postAPI('api/user/getFreeDemo', formData2).subscribe({
       next: (response: any) => {
         if (response.success) {
@@ -108,8 +98,6 @@ export class FreeDemoComponent {
             modal.show();
           }, 1000); // 5000ms = 5 seconds
         }
-
-
       },
       error: (error) => {
         this.isSubmitting = false;

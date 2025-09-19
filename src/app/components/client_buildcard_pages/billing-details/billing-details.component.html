@@ -5,7 +5,6 @@
                   <i class="fa-solid fa-bars"></i>
             </div>
             <div class="container-fluid">
-
                   <div class="row">
                         <div class="col-md-12">
                               <div class="d-grid">
@@ -155,10 +154,10 @@
                                                       [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
                                                       [selectFirstCountry]="false"
                                                       [selectedCountryISO]="CountryISO.India" [maxLength]="15"
-                                                      [phoneValidation]="true" formControlName="phone">
+                                                      [phoneValidation]="true" formControlName="phoneNumber">
                                                 </ngx-intl-tel-input>
                                                 <small class="text-danger"
-                                                      *ngIf="billingForm.get('phone')?.invalid && billingForm.get('phone')?.touched">Valid
+                                                      *ngIf="billingForm.get('phoneNumber')?.invalid && billingForm.get('phoneNumber')?.touched">Valid
                                                       phone number is
                                                       required</small>
                                           </div>
@@ -209,11 +208,10 @@
                                                             <label for=""
                                                                   class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Country</label>
                                                             <select class="form-control ct_input"
-                                                                  formControlName="company_location"
-                                                                  (change)="getStateByCountry($event)">
+                                                                  formControlName="company_location">
                                                                   <option value="">Select Country</option>
                                                                   @for (item of countries; track $index) {
-                                                                  <option [value]="item.isoCode">{{item.name}}
+                                                                  <option [value]="item.name">{{item.name}}
                                                                   </option>
                                                                   }
                                                             </select>
@@ -226,15 +224,8 @@
                                                       <div class="form-group mb-3">
                                                             <label for=""
                                                                   class="mb-2 d-block ct_fw_500 ct_text_clr_374151">State</label>
-                                                            <select class="form-control ct_input"
-                                                                  formControlName="state"
-                                                                  (change)="getCityByState($event)">
-                                                                  <option value="">Select State</option>
-                                                                  @for (item of states; track $index) {
-                                                                  <option [value]="item.isoCode">{{item.name}}
-                                                                  </option>
-                                                                  }
-                                                            </select>
+                                                            <input type="text" class="form-control ct_input"
+                                                                  formControlName="state" placeholder="Enter State" />
                                                             <small class="text-danger"
                                                                   *ngIf="billingForm.get('state')?.invalid && billingForm.get('state')?.touched">State
                                                                   is required.</small>
@@ -244,14 +235,8 @@
                                                       <div class="form-group mb-3">
                                                             <label for=""
                                                                   class="mb-2 d-block ct_fw_500 ct_text_clr_374151">City</label>
-                                                            <select class="form-control ct_input"
-                                                                  formControlName="city">
-                                                                  <option value="">Select City</option>
-                                                                  @for (item of cities; track $index) {
-                                                                  <option [value]="item.name">{{item.name}}
-                                                                  </option>
-                                                                  }
-                                                            </select>
+                                                            <input type="text" class="form-control ct_input"
+                                                                  formControlName="city" placeholder="Enter City" />
                                                             <small class="text-danger"
                                                                   *ngIf="billingForm.get('city')?.invalid && billingForm.get('city')?.touched">City
                                                                   is required.</small>

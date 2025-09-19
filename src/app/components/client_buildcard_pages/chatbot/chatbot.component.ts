@@ -28,14 +28,13 @@ export class ChatbotComponent {
   profileImage: string = 'assets/img/np_pro.png';
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
   @Output() dataEmitter = new EventEmitter<string>();
-  basicOptions : any[]= []
+  basicOptions: any[] = []
   constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
     const data: any = localStorage.getItem('userDetailCTI')
     if (data !== 'undefined') {
       const user = JSON.parse(data);
       this.userName = user.name || 'there';
       this.profileImage = this.apiservice.imageUrl + user.profile_image || 'assets/img/np_pro.png';
-    
     }
     // this.addBotMessage(this.flow[this.currentStep].message);
   }
@@ -46,8 +45,7 @@ export class ChatbotComponent {
 
   ngOnInit() {
     this.basicOptions = this.flow['welcome'].options;
-   
-   }
+  }
 
   scrollToBottom(): void {
     try {
@@ -59,7 +57,7 @@ export class ChatbotComponent {
     if (text.includes('{name}') && this.userData.name) {
       text = text.replace('{name}', this.userData.name);
     }
-    this.messages.push({ sender: 'bot', text, step: this.currentStep, features: this.relevantFeatures,time: new Date() });
+    this.messages.push({ sender: 'bot', text, step: this.currentStep, features: this.relevantFeatures, time: new Date() });
   }
 
   sendMessage() {
@@ -75,10 +73,8 @@ export class ChatbotComponent {
           return;
         }
 
-
         this.isLoading = true;
         this.addUserMessage(this.userInput);
-
 
         if (!this.userData.projectName && (this.currentStep === 'projectNameApp' || this.currentStep === 'projectNameWebsite')) {
           this.userData.projectName = this.userInput.trim();
@@ -108,7 +104,6 @@ export class ChatbotComponent {
             const botMsg = this.replacePlaceholders(this.flow[this.currentStep].message);
             this.addBotMessage(botMsg);
             this.userInput = '';
-
           }
 
         }, 2000)
@@ -132,22 +127,21 @@ export class ChatbotComponent {
   }
 
   selectOption(option: any) {
-
     this.addUserMessage(option.label);
     this.currentStep = option.next;
+    if (this.currentStep === 'projectNameApp' || this.currentStep === 'projectNameWebsite') {
+      this.userData.projectName = undefined
+    }
     this.isLoading = true;
     if (this.currentStep !== 'chatbot') {
       this.standardChatbot = true;
       setTimeout(() => {
         this.isLoading = false;
         if (this.flow[this.currentStep]) {
-
           const botMsg = this.replacePlaceholders(this.flow[this.currentStep].message);
-
           this.addBotMessage(botMsg);
         }
       }, 2500)
-
     } else {
       this.isLoading = false;
       this.standardChatbot = false;
@@ -156,7 +150,7 @@ export class ChatbotComponent {
   }
 
   addUserMessage(text: string) {
-    this.messages.push({ sender: 'You', text, step: this.currentStep,time: new Date() });
+    this.messages.push({ sender: 'You', text, step: this.currentStep, time: new Date() });
   }
 
   askAIQuestion() {
@@ -169,8 +163,6 @@ export class ChatbotComponent {
         if (response.flow == 1) {
           this.currentStep = 'welcome'
           this.standardChatbot = true
-        } else {
-
         }
       }, 500)
     })
@@ -180,7 +172,6 @@ export class ChatbotComponent {
     this.apiservice.postAPI<any, any>('api/user/projectSuggestions', { description: description }).subscribe((response) => {
       this.userInput = '';
       setTimeout(() => {
-
         if (response.suggestions.length > 0) {
           this.dataEmitter.emit(response.suggestions);
           this.relevantFeatures = response.relevantFeatures

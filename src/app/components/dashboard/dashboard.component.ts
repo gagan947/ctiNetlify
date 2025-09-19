@@ -14,7 +14,9 @@ import { SidebarComponent } from "../client_buildcard_pages/sidebar/sidebar.comp
 })
 export class DashboardComponent {
   allProjectsList: any[] = []
+  orgProjectList: any[] = []
   estimatedDate: Date | undefined;
+  status: number | null = null
   constructor(private apiService: ApiService, private message: NzMessageService, private router: Router) {
   }
   ngOnInit(): void {
@@ -25,12 +27,10 @@ export class DashboardComponent {
     this.apiService.getApi<any>('api/user/fetchClientAllProjects').subscribe(
       (res) => {
         if (res.success) {
-          this.allProjectsList = res.data;
+          this.allProjectsList = this.orgProjectList = res.data;
           this.allProjectsList = this.allProjectsList.map(item => {
             const activeStep = item.currentRoutes?.split("/")[1]?.replace("-", " ") || "";
-            console.log(activeStep);
             const activeIndex = this.steps.findIndex(step => step.routes.includes(activeStep));
-            console.log(activeIndex);
             return { ...item, activeIndex };
           });
         }
@@ -40,7 +40,6 @@ export class DashboardComponent {
   }
 
   Navigate(url: string, id: number) {
-
     const today = new Date();
     this.estimatedDate = new Date(today);
     this.apiService.getApi(`api/user/fetchClientInquries?inquiryId=${id}`).subscribe(
@@ -96,7 +95,22 @@ export class DashboardComponent {
         return 'Paid';
       case 2:
         return 'Running';
-      case 4:
+      case 3:
+        return 'Completed';
+      default:
+        return 'Draft';
+    }
+  }
+
+  getStatusClass(status: number): string {
+    switch (status) {
+      case 0:
+        return 'ct_yellow_badge_bg';
+      case 1:
+        return 'ct_green_badge_bg';
+      case 2:
+        return 'ct_blue_badge_bg';
+      case 3:
         return 'Completed';
       default:
         return 'Draft';
@@ -111,4 +125,24 @@ export class DashboardComponent {
     { id: "list_5", icon: "💰", routes: ["payment plan",] },
     { id: "list_6", icon: "💳", routes: ["payment option"] }
   ];
+
+
+  filterByStatus(status: number | null) {
+    this.status = status;
+    this.applyFilters();
+  }
+
+  applyFilters() {
+    this.allProjectsList = this.orgProjectList.filter((item: {
+      projectStatus: number
+    }) => {
+      const matchStatus =
+        this.status == null || item.projectStatus === this.status;
+      return matchStatus
+    }).map(item => {
+      const activeStep = item.currentRoutes?.split("/")[1]?.replace("-", " ") || "";
+      const activeIndex = this.steps.findIndex(step => step.routes.includes(activeStep));
+      return { ...item, activeIndex };
+    });
+  }
 }

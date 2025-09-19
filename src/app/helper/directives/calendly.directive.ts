@@ -6,12 +6,12 @@ declare var Calendly: any;
 })
 export class CalendlyDirective {
   @Input() calendlyUrl!: string;
-  @Output() eventScheduled = new EventEmitter<any>(); // 👈 Angular event
+  @Output() eventScheduled = new EventEmitter<any>();
   private loader!: HTMLElement;
 
-  
+
   private handleCalendlyEvent = this.onCalendlyEvent.bind(this);
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
+  constructor(private el: ElementRef, private renderer: Renderer2) { }
 
   ngAfterViewInit(): void {
     this.showLoader();
@@ -54,7 +54,7 @@ export class CalendlyDirective {
   private onCalendlyEvent(e: MessageEvent) {
     if (e.origin === 'https://calendly.com' && e.data.event === 'calendly.event_scheduled') {
       console.log('Calendly event scheduled', e.data);
-      this.eventScheduled.emit(e.data); // 👈 emit Angular event
+      this.eventScheduled.emit(e.data);
     }
   }
 

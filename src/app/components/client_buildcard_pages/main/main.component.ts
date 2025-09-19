@@ -12,7 +12,7 @@ declare var Calendly: any;
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule, ChatbotComponent, BdLoaderComponent,CalendlyDirective],
+  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule, ChatbotComponent, BdLoaderComponent, CalendlyDirective],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
@@ -32,6 +32,7 @@ export class MainComponent {
   imageURL: any
   isSuggested: boolean = false;
   loading: boolean = false;
+  searchTerm: string = '';
   constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
     this.imageURL = this.apiservice.imageUrl;
   }
@@ -43,7 +44,7 @@ export class MainComponent {
       this.apiservice.getRates(user?.currency);
     }
     this.getProjects();
-    sessionStorage.removeItem('projectData');
+    sessionStorage.clear();
     // this.socket = io(this.apiservice.apiUrl);
     let currentBotMsg = "";
     // listen for streaming tokens
@@ -86,7 +87,7 @@ export class MainComponent {
 
   ngAfterViewInit() {
     this.observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !this.isSuggested) {
+      if (entry.isIntersecting && !this.isSuggested && !this.searchTerm) {
         this.page += 1;
         this.getProjects();
       }
@@ -102,8 +103,38 @@ export class MainComponent {
     // }
   }
 
+  searchDebounceTimeout: any;
+  search(event: any) {
+    clearTimeout(this.searchDebounceTimeout);
+    this.searchDebounceTimeout = setTimeout(() => {
+      this.searchTerm = event.target.value.trim().toLowerCase();
+      if (this.searchTerm) {
+        this.page = 1;
+        this.apiservice.getApi<ProjectResponse>(`api/user/fetchAllProjects?page=${this.page}&search=${this.searchTerm}`)
+          .subscribe({
+            next: (res) => {
+              if (res.success == true) {
+                const mappedData = res.data.map((item: any) => ({
+                  ...item,
+                  contain: item.contain ? item.contain.split(',') : []
+                }));
+                this.projectsData = [...mappedData];
+              } else {
+              }
+            },
+            error: err => {
+              this.projectsData = [];
+            }
+          });
+      } else {
+        this.projectsData = [];
+        this.getProjects();
+      }
+    }, 500);
+  }
+
   getProjects() {
-    this.apiservice.getApi<ProjectResponse>(`api/user/fetchAllProjects?page=${this.page}`)
+    this.apiservice.getApi<ProjectResponse>(`api/user/fetchAllProjects?page=${this.page}&search=${this.searchTerm}`)
       .subscribe({
         next: (res) => {
           if (res.success == true) {
