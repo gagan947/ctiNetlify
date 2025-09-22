@@ -14,7 +14,6 @@ export class GlobalModalComponent {
   inquiryId: any
   constructor(public service: ModalService, private apiService: ApiService) {
     effect(() => {
-
       this.inquiryId = this.service.inquiryProjectID();
       console.log(this.inquiryId);
     });

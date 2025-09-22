@@ -189,6 +189,9 @@ export class ProfileComponent {
     this.apiService.postAPI('api/user/updateUserProfile', this.user).subscribe((res: any) => {
       if (res.success) {
         this.message.success('Profile updated successfully');
+        const userData = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
+        userData.currency = this.user?.currency;
+        localStorage.setItem('userDetailCTI', JSON.stringify(userData));
         this.apiService.getRates(this.user?.currency);
         this.router.navigate(['/main']);
       } else {
