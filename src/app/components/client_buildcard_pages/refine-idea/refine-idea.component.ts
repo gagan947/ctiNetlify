@@ -41,7 +41,7 @@ export class RefineIdeaComponent {
     this.projectsData = JSON.parse(projectData!);
     this.projectsFeaturs = this.projectsData.selectdFeature
     this.estimatedWeeks = this.projectsData.estimated_time
-    this.totalPrice = this.projectsData.mainCost
+    this.totalPrice = this.projectsData.totalCost
     this.noOfFeaturs = this.projectsData.no_of_features
     effect(() => {
       this.rate = this.apiService._rate()
@@ -155,7 +155,7 @@ export class RefineIdeaComponent {
       formNumber: 2,
       projectFeatures: this.projectsFeaturs,
       durations: this.estimatedWeeks,
-      totalCost: this.totalPrice ,
+      totalCost: this.totalPrice,
       currentRoutes: this.router.url,
       no_of_features: this.noOfFeaturs
     }
