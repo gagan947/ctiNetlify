@@ -64,7 +64,8 @@ export class DashboardComponent {
               installmentType: data.installmentType,
               featuresCost: data.featuresPrice,
               customisationCost: data.totalCost - data.featuresPrice,
-              estimatedDate: this.estimatedDate?.setDate(today.getDate() + data.durations * 7)
+              estimatedDate: this.estimatedDate?.setDate(today.getDate() + data.durations * 7),
+              no_of_features: data.no_of_features
             };
             sessionStorage.setItem('htmlCode', data.html_pages);
             sessionStorage.setItem('projectData', JSON.stringify(projectData));

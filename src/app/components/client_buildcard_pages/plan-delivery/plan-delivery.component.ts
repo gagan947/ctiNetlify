@@ -35,7 +35,7 @@ export class PlanDeliveryComponent {
   rangeValue: string = '0';
   projectSecondCost!: number;
   projectThirdCost!: number;
-  devices: any[] = ['Android', 'iOS', 'Web', 'Ai Chatbot Integration'];
+  devices: any[] = ['Android', 'iOS', 'Web', 'AI Integration'];
   estimatedDate: Date | undefined;
   estimatedWeeks: any;
   customWeeks: any;
@@ -52,6 +52,8 @@ export class PlanDeliveryComponent {
   PhasesDeliverables: any[] = [{ design: "We do your designs" }, "Product Roadmap", "Clickable prototype", "Basic build", "Full build"];
   originalProjectCost: any;
   private modal = inject(ModalService);
+  designLinkBox = false;
+  designLink = '';
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService) {
     effect(() => {
       this.rate = this.apiService._rate()
@@ -180,7 +182,8 @@ export class PlanDeliveryComponent {
       durations: this.estimatedWeeks,
       totalCost: this.totalPrice,
       currentRoutes: this.router.url,
-      estimated_time: this.estimatedWeeks
+      estimated_time: this.estimatedWeeks,
+      design_url: this.designLink
     }
 
     this.apiService.postAPI(`api/user/addClientInquries?inquiryId=${this.projectsData.clientEnquryId}`, formData)
@@ -209,6 +212,7 @@ export class PlanDeliveryComponent {
 
   selectDesignPhase(event: any, item: string) {
     if (event.target.checked) {
+      this.designLinkBox = false
       const existingDesign = this.PhasesDeliverables.find((phase) => phase.design);
       if (existingDesign) {
         existingDesign.design = item
@@ -217,6 +221,9 @@ export class PlanDeliveryComponent {
           design: item
         }
         this.PhasesDeliverables.push(design)
+      }
+      if (item == 'You have designs') {
+        this.designLinkBox = true
       }
     }
   }

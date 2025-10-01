@@ -1,4 +1,4 @@
-<app-discount-modal *ngIf="!isLoading"></app-discount-modal>
+<!-- <app-discount-modal *ngIf="!isLoading"></app-discount-modal> -->
 <app-bd-loader *ngIf="isLoading" [loadingText]="'Customizing Features'"></app-bd-loader>
 <section class="ct_dash_board_main" [ngClass]="{'ct_show_sidebar' : showSidebar }" *ngIf="!isLoading">
    <app-sidebar></app-sidebar>
@@ -433,7 +433,7 @@
                                                 </p>
                                              </div>
                                              <div>
-                                                <span class="ct_text_clr_7F8188 ct_fs_14 ct_white_nowrap">Total
+                                                <span class="ct_text_clr_7F8188 ct_fs_14 ct_white_nowrap">Total Project
                                                    Features</span>
                                                 <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
                                                    {{noOfFeaturs}}
@@ -448,21 +448,21 @@
                                                 {{ totalPrice | convertCurrency:rate }}
                                              </p>
                                           </div>
-                                          <div>
+                                          <!-- <div>
                                              <span class="ct_text_clr_7F8188  ct_fs_14 ct_white_nowrap">Discount
                                                 (40%)
                                              </span>
                                              <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
                                                 {{ ((totalPrice * 40)/100) | convertCurrency:rate }}
                                              </p>
-                                          </div>
-                                          <div>
+                                          </div> -->
+                                          <!-- <div>
                                              <span class="ct_text_clr_7F8188  ct_fs_14 ct_white_nowrap">Final Cost
                                              </span>
                                              <p class="mb-0 mt-1 ct_fw_700">
-                                                {{totalPrice - ((totalPrice * 40)/100) | convertCurrency:rate }}
+                                                {{totalPrice  | convertCurrency:rate }}
                                              </p>
-                                          </div>
+                                          </div> -->
                                           <div class="">
                                              <span class="ct_text_clr_7F8188  ct_fs_14 ct_white_nowrap">Total
                                                 Weeks

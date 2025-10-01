@@ -34,7 +34,7 @@ export class ChatbotComponent {
     if (data !== 'undefined') {
       const user = JSON.parse(data);
       this.userName = user.name || 'there';
-      this.profileImage = this.apiservice.imageUrl + user.profile_image || 'assets/img/np_pro.png';
+      this.profileImage =  user.profile_image ? (this.apiservice.imageUrl + user.profile_image) : 'assets/img/np_pro.png';
     }
     // this.addBotMessage(this.flow[this.currentStep].message);
   }

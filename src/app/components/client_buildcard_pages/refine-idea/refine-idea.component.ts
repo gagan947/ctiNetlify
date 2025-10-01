@@ -155,7 +155,7 @@ export class RefineIdeaComponent {
       formNumber: 2,
       projectFeatures: this.projectsFeaturs,
       durations: this.estimatedWeeks,
-      totalCost: this.totalPrice - ((this.totalPrice * 40) / 100),
+      totalCost: this.totalPrice ,
       currentRoutes: this.router.url,
       no_of_features: this.noOfFeaturs
     }
@@ -165,7 +165,7 @@ export class RefineIdeaComponent {
         next: (res: any) => {
           if (res.success) {
             let totalProjectCost = {
-              totalCost: this.totalPrice - ((this.totalPrice * 40) / 100),
+              totalCost: this.totalPrice,
               mainCost: this.totalPrice
             }
 

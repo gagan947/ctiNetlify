@@ -82,11 +82,7 @@
                 <div class="col-lg-6 mb-4 mb-lg-0">
                   <label for="flexCheckDefault{{ i }}" class="ct_app_detail_card"
                     [ngClass]="{ active: selectedDevices.includes(item) }" (click)="onDeviceSelect(item)">
-                    <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M15.5148 8.81392C14.9908 8.76628 14.7051 8.4805 14.6574 7.95658C14.7051 7.43264 14.9908 7.14686 15.5148 7.09923C16.0149 7.14686 16.3007 7.43264 16.3721 7.95658C16.3007 8.4805 16.0149 8.76628 15.5148 8.81392ZM6.01259 8.81392C5.51247 8.76628 5.22669 8.4805 5.15525 7.95658C5.22669 7.43264 5.51247 7.14686 6.01259 7.09923C6.53652 7.14686 6.8223 7.43264 6.86993 7.95658C6.8223 8.4805 6.53652 8.76628 6.01259 8.81392ZM15.8006 3.63414L17.5152 0.669141C17.5867 0.550074 17.5986 0.431005 17.551 0.311938C17.4796 0.19287 17.3724 0.133337 17.2295 0.133337C17.0866 0.133337 16.9794 0.19287 16.908 0.311938L15.1576 3.34836C13.7525 2.70534 12.2879 2.38383 10.7637 2.38383C9.23953 2.38383 7.7749 2.70534 6.36981 3.34836L4.61941 0.311938C4.54796 0.19287 4.44079 0.133337 4.2979 0.133337C4.15501 0.133337 4.04784 0.19287 3.97639 0.311938C3.92877 0.431005 3.94068 0.550074 4.01212 0.669141L5.72681 3.63414C4.22646 4.46766 3.0238 5.58697 2.11883 6.99206C1.19004 8.37333 0.642292 9.95703 0.475586 11.7432H21.0518C20.8851 9.95703 20.3374 8.37333 19.4085 6.99206C18.5036 5.58697 17.3009 4.46766 15.8006 3.63414Z"
-                        fill="black" />
-                    </svg>
+                    <img [src]="i == 0 ? 'assets/img/android.png' : 'assets/img/apple.png'" alt="">
                     <h4 class="mb-0 ct_fs_14 ct_fw_700">{{ item }}</h4>
                     <div class="form-check ct_transparent_checkbox">
                       <input class="form-check-input" type="checkbox" [checked]="selectedDevices.includes(item)"
@@ -105,11 +101,7 @@
                 <div class="col-lg-6 mb-4 mb-lg-0">
                   <label for="flexCheckDefault{{ i }}" class="ct_app_detail_card"
                     [ngClass]="{ active: selectedDevices.includes(item) }" (click)="onDeviceSelect(item)">
-                    <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M15.5148 8.81392C14.9908 8.76628 14.7051 8.4805 14.6574 7.95658C14.7051 7.43264 14.9908 7.14686 15.5148 7.09923C16.0149 7.14686 16.3007 7.43264 16.3721 7.95658C16.3007 8.4805 16.0149 8.76628 15.5148 8.81392ZM6.01259 8.81392C5.51247 8.76628 5.22669 8.4805 5.15525 7.95658C5.22669 7.43264 5.51247 7.14686 6.01259 7.09923C6.53652 7.14686 6.8223 7.43264 6.86993 7.95658C6.8223 8.4805 6.53652 8.76628 6.01259 8.81392ZM15.8006 3.63414L17.5152 0.669141C17.5867 0.550074 17.5986 0.431005 17.551 0.311938C17.4796 0.19287 17.3724 0.133337 17.2295 0.133337C17.0866 0.133337 16.9794 0.19287 16.908 0.311938L15.1576 3.34836C13.7525 2.70534 12.2879 2.38383 10.7637 2.38383C9.23953 2.38383 7.7749 2.70534 6.36981 3.34836L4.61941 0.311938C4.54796 0.19287 4.44079 0.133337 4.2979 0.133337C4.15501 0.133337 4.04784 0.19287 3.97639 0.311938C3.92877 0.431005 3.94068 0.550074 4.01212 0.669141L5.72681 3.63414C4.22646 4.46766 3.0238 5.58697 2.11883 6.99206C1.19004 8.37333 0.642292 9.95703 0.475586 11.7432H21.0518C20.8851 9.95703 20.3374 8.37333 19.4085 6.99206C18.5036 5.58697 17.3009 4.46766 15.8006 3.63414Z"
-                        fill="black" />
-                    </svg>
+                    <img [src]="i == 0 ? 'assets/img/internet.png' : 'assets/img/microchip.png'" alt="">
                     <h4 class="mb-0 ct_fs_14 ct_fw_700">{{ item }}</h4>
                     <div class="form-check ct_transparent_checkbox">
                       <input class="form-check-input" type="checkbox" [checked]="selectedDevices.includes(item)"
@@ -154,11 +146,11 @@
                     <h6 class="mb-0 ct_fs_16 ct_fw_600">Standard</h6>
                     <p class="mb-0 ct_fs_14">
                       {{
-                        this.projectsData.speed === "Fast"
-                          ? projectsData.estimated_time + 2
-                          : this.projectsData.speed === "Speedy"
-                          ? projectsData.estimated_time + 4
-                          : projectsData.estimated_time
+                      this.projectsData.speed === "Fast"
+                      ? projectsData.estimated_time + 2
+                      : this.projectsData.speed === "Speedy"
+                      ? projectsData.estimated_time + 4
+                      : projectsData.estimated_time
                       }}
                       weeks
                     </p>
@@ -170,11 +162,11 @@
                     <h6 class="mb-0 ct_fs_16 ct_fw_600">Fast</h6>
                     <p class="mb-0 ct_fs_14">
                       {{
-                        this.projectsData.speed === "Fast"
-                          ? projectsData.estimated_time
-                          : this.projectsData.speed === "Speedy"
-                          ? projectsData.estimated_time + 2
-                          : projectsData.estimated_time - 2
+                      this.projectsData.speed === "Fast"
+                      ? projectsData.estimated_time
+                      : this.projectsData.speed === "Speedy"
+                      ? projectsData.estimated_time + 2
+                      : projectsData.estimated_time - 2
                       }}
                       weeks
                     </p>
@@ -186,11 +178,11 @@
                     <h6 class="mb-0 ct_fs_16 ct_fw_600">Speedy</h6>
                     <p class="mb-0 ct_fs_14">
                       {{
-                        this.projectsData.speed === "Fast"
-                          ? projectsData.estimated_time - 2
-                          : this.projectsData.speed === "Speedy"
-                          ? projectsData.estimated_time
-                          : projectsData.estimated_time - 4
+                      this.projectsData.speed === "Fast"
+                      ? projectsData.estimated_time - 2
+                      : this.projectsData.speed === "Speedy"
+                      ? projectsData.estimated_time
+                      : projectsData.estimated_time - 4
                       }}
                       weeks
                     </p>
@@ -245,12 +237,9 @@
                 <div class="d-flex align-items-center gap-3">
                   <div class="text-center">
                     <h5 class="ct_fs_16 ct_fw_500">Estimated Duration</h5>
-                    <p class="mb-0">6 weeks</p>
+                    <p class="mb-0">1 weeks</p>
                   </div>
-                  <div class="text-center">
-                    <h5 class="ct_fs_16 ct_fw_500">Estimated Duration</h5>
-                    <p class="mb-0">6 weeks</p>
-                  </div>
+
                 </div>
               </div>
               <div class="row pt-4 ct_border_top_1 mt-4">
@@ -311,65 +300,23 @@
                 </div>
               </div>
               <!-- when share your design click then show this div -->
-              <div class="d-none">
-                <div class="ct_upload_product_main ct_upload_product_main_180">
-                  <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M5.87174 22.0167C4.26376 20.9403 3.20508 19.1073 3.20508 17.027C3.20508 13.9023 5.59376 11.3354 8.64473 11.0528C9.26883 7.25653 12.5654 4.36035 16.5384 4.36035C20.5114 4.36035 23.808 7.25653 24.4321 11.0528C27.4831 11.3354 29.8717 13.9023 29.8717 17.027C29.8717 19.1073 28.8131 20.9403 27.2051 22.0167M11.2051 21.6937L16.5384 16.3604M16.5384 16.3604L21.8717 21.6937M16.5384 16.3604V28.3604"
-                      stroke="#9CA3AF" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"></path>
-                  </svg>
 
-                  <p class="text-center ct_fs_18 ct_text_op_07 mb-0">
-                    Upload your file here
-                  </p>
-                  <label for="ct_upload_product">
-                    <input type="file" name="" id="ct_upload_product" class="d-none" />
-                    <div class="ct_browse_btn mt-3">
-                      <span>Browse Files</span>
-                    </div>
-                  </label>
+              @if(designLinkBox){
+
+                <div class="form-group mb-3">
+                  <label for="" class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Upload Design Link</label>
+                  <input type="text" placeholder="Enter url" class="form-control ct_input" [(ngModel)]="designLink" [ngModelOptions]="{standalone: true}">
+                  <!-- <small class="text-danger"
+                        *ngIf="billingForm.get('full_name')?.invalid && billingForm.get('full_name')?.touched">
+                        Full name is required.
+                  </small> -->
                 </div>
 
-                <div class="ct_multiple_img_div ct_custom_scroll">
-                  <div class="ct_uploaded_img123 position-relative">
-                    <div class="ct_uploaded_img_w">
-                      <img src="assets/img/app_4.png" alt="" />
-                      <i class="fa-solid fa-xmark"></i>
-                    </div>
-                  </div>
-                  <div class="ct_uploaded_img123 position-relative">
-                    <div class="ct_uploaded_img_w">
-                      <img src="assets/img/app_4.png" alt="" />
-                      <i class="fa-solid fa-xmark"></i>
-                    </div>
-                  </div>
-                  <div class="ct_uploaded_img123 position-relative">
-                    <div class="ct_uploaded_img_w">
-                      <img src="assets/img/app_4.png" alt="" />
-                      <i class="fa-solid fa-xmark"></i>
-                    </div>
-                  </div>
-                  <div class="ct_uploaded_img123 position-relative">
-                    <div class="ct_uploaded_img_w">
-                      <img src="assets/img/app_4.png" alt="" />
-                      <i class="fa-solid fa-xmark"></i>
-                    </div>
-                  </div>
-                  <div class="ct_uploaded_img123 position-relative">
-                    <div class="ct_uploaded_img_w">
-                      <img src="assets/img/app_4.png" alt="" />
-                      <i class="fa-solid fa-xmark"></i>
-                    </div>
-                  </div>
-                  <div class="ct_uploaded_img123 position-relative">
-                    <div class="ct_uploaded_img_w">
-                      <img src="assets/img/app_4.png" alt="" />
-                      <i class="fa-solid fa-xmark"></i>
-                    </div>
-                  </div>
-                </div>
+              }
 
-              </div>
+
+
+
             </div>
             <div class="ct_light_grey_bg ct_p_20 mt-3">
               <div class="form-check ct_checkbox_with_border mb-0">
@@ -406,23 +353,20 @@
                       [checked]="PhasesDeliverables.includes('Full build')"
                       (change)="selectDeliveryPhase($event, 'Full build')" />
                     <label class="form-check-label ct_fw_700 ct_fs_18" for="flexCheckChecked11">
-                      Full Build
+                      Full Server Build
                     </label>
                   </div>
                   <p class="mb-0 ct_fs_14">
                     We deliver market-ready software with a product team
-                    kick-off, review sessions, and a year of Studio One support.
+                    kick-off, review sessions, and a year of Creative AI support.
                   </p>
                 </div>
                 <div class="d-flex align-items-center gap-3">
                   <div class="text-center">
                     <h5 class="ct_fs_16 ct_fw_500">Estimated Duration</h5>
-                    <p class="mb-0">6 weeks</p>
+                    <p class="mb-0">1 year</p>
                   </div>
-                  <div class="text-center">
-                    <h5 class="ct_fs_16 ct_fw_500">Estimated Duration</h5>
-                    <p class="mb-0">6 weeks</p>
-                  </div>
+
                 </div>
               </div>
             </div>

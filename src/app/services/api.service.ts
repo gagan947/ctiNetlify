@@ -43,7 +43,7 @@ export class ApiService {
   }
 
   getRates(base: any) {
-    const key = '5606f101bb2a1853bbe166f02ed4633c';
+    const key = '5606f101bb2a1853bbe166f02ed4633c'; // mohd faraz acount key
     const today = new Date().toISOString().split('T')[0];
 
     if (base === 'INR') {
