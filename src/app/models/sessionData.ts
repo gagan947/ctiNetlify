@@ -5,7 +5,7 @@ export interface ProjectData {
   phases_deliverables: [];
   estimatedDate: string; // ISO string format for date
   estimated_time: number;
-  finalCost: number;
+  total_cost_delivery: number;
   logoStyle: string | null;
   platform: string[];
   projectId: string;

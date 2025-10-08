@@ -281,7 +281,7 @@
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">Features</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">
-                                                            {{ projectsData.finalCost | convertCurrency:rate}}
+                                                            {{ projectsData.total_cost_delivery | convertCurrency:rate}}
                                                       </p>
                                                 </div>
                                                 <!-- <div
@@ -300,7 +300,7 @@
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">Tax (18% GST)</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">
-                                                            {{( totalCost * 18)/100 | convertCurrency:rate }}
+                                                            {{( total_cost_delivery * 18)/100 | convertCurrency:rate }}
                                                       </p>
                                                 </div>
 
@@ -308,8 +308,8 @@
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">Total Cost</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">
-                                                            {{ actualCost  ?  (actualCost | convertCurrency:rate) : (totalCost + (totalCost * 18)/100) -
-                                                      (((totalCost + (totalCost * 18)/100) * 10) / 100) | convertCurrency:rate }}
+                                                            {{ actualCost  ?  (actualCost | convertCurrency:rate) : (total_cost_delivery + (total_cost_delivery * 18)/100) -
+                                                      (((total_cost_delivery + (total_cost_delivery * 18)/100) * 10) / 100) | convertCurrency:rate }}
                                                       </p>
                                                 </div>
                                           </div>
@@ -344,8 +344,8 @@
                                                       }@else {
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">
 
-                                                            {{ actualCost  ?  (actualCost | convertCurrency:rate) : (totalCost + (totalCost * 18)/100) -
-                                                            (((totalCost + (totalCost * 18)/100) * 10) / 100) | convertCurrency:rate }}
+                                                            {{ actualCost  ?  (actualCost | convertCurrency:rate) : (total_cost_delivery + (total_cost_delivery * 18)/100) -
+                                                            (((total_cost_delivery + (total_cost_delivery * 18)/100) * 10) / 100) | convertCurrency:rate }}
                                                       </p>
                                                       }
                                                 </div>

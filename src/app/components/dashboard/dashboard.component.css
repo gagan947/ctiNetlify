@@ -2,6 +2,39 @@
       padding: 5px 12px;
       cursor: pointer;
 }
+
 .ct_creative_task_list_122 ul li p {
-      margin:0px;
+      margin: 0px;
+}
+
+.no-build-container {
+      min-height: 55vh;
+      background: linear-gradient(180deg, #fafbff 0%, #ffffff 100%);
+      border-radius: 12px;
+      padding: 50px 20px;
+      color: #333;
+}
+
+.no-build-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #e8ebff, #f8f9ff);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.no-build-icon {
+      font-size: 64px;
+      color: #3b5bfd;
+      opacity: 0.85;
+}
+
+.no-build-title {
+      font-weight: 600;
+      color: #2a2e45;
+}
+
+.no-build-subtitle {
+      color: #6b6f85;
+      max-width: 420px;
 }

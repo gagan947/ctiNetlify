@@ -24,8 +24,8 @@ export class PaymentPlanComponent {
   today: Date = new Date();
   projectsData: ProjectData;
   totalSubFeatures: any;
-  totalCost!: number;
-  paymentPlan = '1';
+  total_cost_delivery!: number;
+  paymentPlan = '2';
   noOfInstallments!: number;
   installmentType!: string;
   actualCost: number | null | undefined
@@ -39,12 +39,14 @@ export class PaymentPlanComponent {
     })
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
-    this.totalCost = this.projectsData.finalCost;
+    this.total_cost_delivery = this.projectsData.total_cost_delivery;
     this.projectsFeatures = this.projectsData.selectdFeature;
     this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
     this.apiService._imagePreview.set(this.projectsData.projectLogo);
     if (this.projectsData.paymentPlan) {
       this.onPaymentChange(this.projectsData.paymentPlan)
+    } else {
+      this.onPaymentChange('2')
     }
     if (this.projectsData.installmentType) {
       this.onInstallmentChange(this.projectsData.installmentType)
@@ -53,11 +55,11 @@ export class PaymentPlanComponent {
 
   onPaymentChange(id: any) {
     if (id == 1) {
-      this.totalCost = this.projectsData.finalCost
+      this.total_cost_delivery = this.projectsData.total_cost_delivery
       this.actualCost = null
     } else {
       this.paymentPlan = '2'
-      this.actualCost = this.projectsData.finalCost + (this.projectsData.finalCost * 18) / 100
+      this.actualCost = this.projectsData.total_cost_delivery + (this.projectsData.total_cost_delivery * 18) / 100 - ((this.projectsData.total_cost_delivery + (this.projectsData.total_cost_delivery * 18) / 100) * 10) / 100
       this.securityDeposit = (this.actualCost * 20) / 100
       this.generateInstallemnts(this.projectsData.estimated_time)
     }
@@ -116,7 +118,7 @@ export class PaymentPlanComponent {
       formData = {
         payment_plan: this.paymentPlan == '2' ? 'Installment' : 'Upfront',
         installment_type: this.installmentType,
-        tax_amount: (this.totalCost * 18) / 100,
+        tax_amount: (this.total_cost_delivery * 18) / 100,
         final_cost_with_tax_discount: this.actualCost,
         security_deposit: this.securityDeposit,
         currentRoutes: this.router.url,
@@ -131,9 +133,9 @@ export class PaymentPlanComponent {
     } else {
       formData = {
         payment_plan: this.paymentPlan == '1' ? 'Upfront' : 'Installment',
-        tax_amount: (this.totalCost * 18) / 100,
+        tax_amount: (this.total_cost_delivery * 18) / 100,
         currentRoutes: this.router.url,
-        final_cost_with_tax_discount: this.totalCost + (this.totalCost * 18) / 100 - ((this.totalCost + (this.totalCost * 18) / 100) * 10) / 100
+        final_cost_with_tax_discount: this.total_cost_delivery + (this.total_cost_delivery * 18) / 100 - ((this.total_cost_delivery + (this.total_cost_delivery * 18) / 100) * 10) / 100
       }
     }
 

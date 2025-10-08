@@ -28,7 +28,7 @@ export class PaymentDetailComponent {
   today: Date = new Date();
   projectsData: ProjectData;
   totalSubFeatures: any;
-  totalCost!: number;
+  total_cost_delivery!: number;
   paymentPlan = '1';
   noOfInstallments!: number;
   installmentType!: string;
@@ -52,14 +52,14 @@ export class PaymentDetailComponent {
   customerEmail: string = '23546ASD';
   customerPhone: string = '+919090407368';
   private modal = inject(ModalService);
-  billingDetails:any
+  billingDetails: any
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private http: HttpClient) {
     effect(() => {
       this.rate = this.apiService._rate()
     })
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
-    this.totalCost = this.orderAmount = this.projectsData.finalCost;
+    this.total_cost_delivery = this.orderAmount = this.projectsData.total_cost_delivery;
     this.projectsFeatures = this.projectsData.selectdFeature;
     this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
     this.apiService._imagePreview.set(this.projectsData.projectLogo);
@@ -70,17 +70,17 @@ export class PaymentDetailComponent {
     this.currencyCode = this.userData.currency;
     this.generateOrderId()
   };
-  ngOnInit(){
+  ngOnInit() {
     this.getBillingDetails()
   }
 
   onPaymentChange(id: any) {
     if (id == 1) {
-      this.totalCost = this.projectsData.finalCost
+      this.total_cost_delivery = this.projectsData.total_cost_delivery
       this.actualCost = null
     } else {
       this.paymentPlan = '2'
-      this.actualCost = this.projectsData.finalCost + (this.projectsData.finalCost * 18) / 100
+      this.actualCost = this.projectsData.total_cost_delivery + (this.projectsData.total_cost_delivery * 18) / 100
       this.securityDeposit = (this.actualCost * 20) / 100
     }
   };
@@ -93,7 +93,7 @@ export class PaymentDetailComponent {
       formData = {
         paymentPlan: this.paymentPlan == '2' ? 'Installment' : 'Upfront',
         installmentType: this.installmentType,
-        taxes: (this.totalCost * 18) / 100,
+        taxes: (this.total_cost_delivery * 18) / 100,
         gstTotalCost: this.actualCost,
         securityDeposit: this.securityDeposit,
         currentRoutes: this.router.url,
@@ -108,9 +108,9 @@ export class PaymentDetailComponent {
     } else {
       formData = {
         paymentPlan: this.paymentPlan == '1' ? 'Upfront' : 'Installment',
-        taxes: (this.totalCost * 18) / 100,
+        taxes: (this.total_cost_delivery * 18) / 100,
         currentRoutes: this.router.url,
-        gstTotalCost: this.totalCost + (this.totalCost * 18) / 100 - ((this.totalCost + (this.totalCost * 18) / 100) * 10) / 100
+        gstTotalCost: this.total_cost_delivery + (this.total_cost_delivery * 18) / 100 - ((this.total_cost_delivery + (this.total_cost_delivery * 18) / 100) * 10) / 100
       }
     }
 
@@ -129,7 +129,7 @@ export class PaymentDetailComponent {
     await this.loadRazorpayScript();
 
     let formData = {
-      amount: Math.round(this.paymentPlan == '1' ? (this.actualCost || (this.totalCost + (this.totalCost * 18) / 100) - (((this.totalCost + (this.totalCost * 18) / 100) * 10) / 100)) : (this.securityDeposit + (this.securityDeposit * 18) / 100))
+      amount: Math.round(this.paymentPlan == '1' ? (this.actualCost || (this.total_cost_delivery + (this.total_cost_delivery * 18) / 100) - (((this.total_cost_delivery + (this.total_cost_delivery * 18) / 100) * 10) / 100)) : (this.securityDeposit + (this.securityDeposit * 18) / 100))
     }
     debugger
     this.apiService.postAPI(`api/payment/createRazorpayOrder`, { amount: formData.amount, currency: this.currencyCode }).subscribe({
@@ -155,7 +155,7 @@ export class PaymentDetailComponent {
                     clientInquiryId: this.projectsData.clientEnquryId,
                     paymentMethod: Object.keys(this.paymentMethods).find((method: string) => this.paymentMethods[method]),
                     installmentType: this.projectsData.installmentType === 'weekly' ? 2 : 1,
-                    gstTotalCost: Math.round(this.paymentPlan == '1' ? (this.actualCost || (this.totalCost + (this.totalCost * 18) / 100) - (((this.totalCost + (this.totalCost * 18) / 100) * 10) / 100)) : (this.securityDeposit + (this.securityDeposit * 18) / 100)),
+                    gstTotalCost: Math.round(this.paymentPlan == '1' ? (this.actualCost || (this.total_cost_delivery + (this.total_cost_delivery * 18) / 100) - (((this.total_cost_delivery + (this.total_cost_delivery * 18) / 100) * 10) / 100)) : (this.securityDeposit + (this.securityDeposit * 18) / 100)),
                     paymentPlan: Number(this.projectsData.paymentPlan)
                   }
 
@@ -285,23 +285,23 @@ export class PaymentDetailComponent {
   }
 
   initiateCheckout() {
-const user = {
-  name: this.billingDetails.name,
-  email: this.billingDetails.email,
-  phoneNumber: this.billingDetails.phoneNumber,
-  addressLine1: this.billingDetails.address_line_1,
-  addressLine2: this.billingDetails.address_line_2,
-  city: this.billingDetails.city,
-  state: this.billingDetails.state,
-  pincode : this.billingDetails.postal_code,
-}
-console.log(user);
+    const user = {
+      name: this.billingDetails.name,
+      email: this.billingDetails.email,
+      phoneNumber: this.billingDetails.phoneNumber,
+      addressLine1: this.billingDetails.address_line_1,
+      addressLine2: this.billingDetails.address_line_2,
+      city: this.billingDetails.city,
+      state: this.billingDetails.state,
+      pincode: this.billingDetails.postal_code,
+    }
+    console.log(user);
     this.http
       .post(this.apiService.apiUrl + 'api/payment/create-order', {
         // amount: this.orderAmount,
         amount: 450000,
         user,
-        currency:this.currencyCode
+        currency: this.currencyCode
       })
       .subscribe(
         (response: any) => {
@@ -316,7 +316,7 @@ console.log(user);
 
           const cashfree = new window.Cashfree({
             paymentSessionId: paymentSessionId,
-            mode: 'product',
+            mode: 'sandbox',
             paymentOption: 'card'  // Use 'production' for live transactions
           });
           cashfree.checkout(checkoutOptions).then((result: any) => {
@@ -336,7 +336,7 @@ console.log(user);
     this.apiService.getApi(`api/user/getBillingDetails?id=${this.projectsData.clientEnquryId}`)
       .subscribe({
         next: (res: any) => {
-          if(res.success){
+          if (res.success) {
             this.billingDetails = JSON.parse(res.data.billing_details)[0]
           }
           console.log('Blogs:', this.billingDetails);

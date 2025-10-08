@@ -121,18 +121,18 @@
                                           <div class="form-check ct_custom_radio_check">
                                                 <input id="Upfront" class="form-check-input" type="radio"
                                                       [(ngModel)]="paymentPlan" value="1"
-                                                      (change)="onPaymentChange('1')">
+                                                      (change)="onPaymentChange('1')" disabled>
                                                 <label for="Upfront" class="form-check-label">
                                                       <h5 class="ct_fs_14 ct_fw_700 mb-0">Upfront payment</h5>
                                                 </label>
                                           </div>
                                           <div>
                                                 <p class="mb-0"><del
-                                                            class="ct_text_op_7">{{ totalCost + (totalCost * 18)/100 | convertCurrency:rate }}
+                                                            class="ct_text_op_7">{{ total_cost_delivery + (total_cost_delivery * 18)/100 | convertCurrency:rate }}
                                                       </del></p>
                                                 <h4 class="mb-0 ct_fw_700">
-                                                      {{(totalCost + (totalCost * 18)/100) -
-                                                      (((totalCost + (totalCost * 18)/100) * 10) / 100) | convertCurrency:rate }}
+                                                      {{(total_cost_delivery + (total_cost_delivery * 18)/100) -
+                                                      (((total_cost_delivery + (total_cost_delivery * 18)/100) * 10) / 100) | convertCurrency:rate }}
                                                 </h4>
                                           </div>
 
@@ -262,7 +262,7 @@
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">Features</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">
-                                                            {{ totalCost | convertCurrency:rate}}
+                                                            {{ total_cost_delivery | convertCurrency:rate}}
                                                       </p>
                                                 </div>
                                                 <!-- <div
@@ -281,14 +281,14 @@
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">Taxes (18% GST)</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">
-                                                            {{( totalCost * 18)/100 | convertCurrency:rate }}
+                                                            {{( total_cost_delivery * 18)/100 | convertCurrency:rate }}
                                                       </p>
                                                 </div>
                                                 <div
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
-                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Upfront Discount (10%)</p>
+                                                      <p class="mb-0 ct_fw_700 ct_fs_14">Discount (10%)</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">
-                                                            {{( totalCost * 10)/100 | convertCurrency:rate }}
+                                                            {{( total_cost_delivery * 10)/100 | convertCurrency:rate }}
                                                       </p>
                                                 </div>
 
@@ -296,8 +296,8 @@
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">Total Cost</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">
-                                                            {{ actualCost  ?  (actualCost | convertCurrency:rate) : (totalCost + (totalCost * 18)/100) -
-                                                      (((totalCost + (totalCost * 18)/100) * 10) / 100) | convertCurrency:rate }}
+                                                            {{ actualCost  ?  (actualCost | convertCurrency:rate) : (total_cost_delivery + (total_cost_delivery * 18)/100) -
+                                                      (((total_cost_delivery - (total_cost_delivery * 18)/100) * 10) / 100) | convertCurrency:rate }}
                                                       </p>
                                                 </div>
                                           </div>
@@ -315,25 +315,25 @@
                                                             {{ securityDeposit | convertCurrency:rate}}
                                                       </p>
                                                 </div>
-                                                <div
+                                                <!-- <div
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">Taxe (18% GST)</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_14">
                                                             {{( securityDeposit * 18)/100 | convertCurrency:rate }}
                                                       </p>
-                                                </div>
+                                                </div> -->
                                                 }
                                                 <div
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">Total</p>
                                                       @if(paymentPlan =="2"){
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">
-                                                            {{ securityDeposit + (securityDeposit * 18)/100  | convertCurrency:rate  }}
+                                                            {{ securityDeposit  | convertCurrency:rate  }}
                                                       </p>
                                                       }@else {
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">
-                                                            {{ actualCost  ?  (actualCost | convertCurrency:rate) : (totalCost + (totalCost * 18)/100) -
-                                                            (((totalCost + (totalCost * 18)/100) * 10) / 100) | convertCurrency:rate }}
+                                                            {{ actualCost  ?  (actualCost | convertCurrency:rate) : (total_cost_delivery + (total_cost_delivery * 18)/100) -
+                                                            (((total_cost_delivery + (total_cost_delivery * 18)/100) * 10) / 100) | convertCurrency:rate }}
                                                       </p>
                                                       }
                                                 </div>
@@ -463,9 +463,6 @@
                                           }
                                     </tbody>
                               </table>
-
-
-
                         </div>
                   </div>
 
