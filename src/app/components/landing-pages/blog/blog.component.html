@@ -58,115 +58,36 @@
       </div>
     </div>
     <div class="row pt-5">
-      <div class="col-lg-4 col-md-6 mb-4">
-        <div class="ct_related_article_card">
-          <figure>
-            <div class="ct_article_img">
-              <img loading="lazy" src="assets/img/related_img_1.png" alt="AI app builder for mobile and web" />
-            </div>
-            <figcaption class="mt-4 px-3">
-              <div>
-                <p class="mb-0 ct_fs_14 ct_fw_600">6 Oct 2025</p>
-
-                <h4 class="ct_fs_18 ct_fw_700">
-                  How to Create Your Own App in 2025: A Complete Step-by-Step Guide
-
-                </h4>
-                <p class="mb-0 ct_fs_14">
-                  By 2025, creating your own mobile app will be easier than ever before. Whether you’re looking to start
-                  a business, work on a personal project, or bring an entirely new idea to life, the tools and resources
-                  available today make mobile app development accessible to everyone.
-                </p>
+      @for (item of blogData; track $index) {
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="ct_related_article_card">
+            <figure>
+              <div class="ct_article_img" routerLink="/blog-detail" [queryParams]="{blog: item.id}">
+                <img  [src]="imageUrl + item.banner_image" alt="AI app builder for mobile and web" />
               </div>
-              <div class="mt-auto">
-                <button class="ct_blue_btn_fill w-100 mt-4" routerLink="/blog-detail">Learn More</button>
-              </div>
-
-            </figcaption>
-          </figure>
+              <figcaption class="mt-4 px-3">
+                <div>
+                  <p class="mb-0 ct_fs_14 ct_fw_600">{{item.post_date}}</p>
+  
+                  <h4 class="ct_fs_18 ct_fw_700">
+                    {{item.title}}
+  
+                  </h4>
+                  <p class="mb-0 ct_fs_14 ct_minimise_cnt">
+                 {{item.description }}
+                  </p>
+                </div>
+                <div class="mt-auto">
+                  <button class="ct_blue_btn_fill w-100 mt-4" routerLink="/blog-detail" [queryParams]="{blog: item.id}">Learn More</button>
+                </div>
+  
+              </figcaption>
+            </figure>
+          </div>
         </div>
-      </div>
-      <div class="col-lg-4 col-md-6 mb-4">
-        <div class="ct_related_article_card">
-          <figure>
-            <div class="ct_article_img">
-              <img loading="lazy" src="assets/img/related_img_2.png" alt="AI app builder for mobile and web" />
-            </div>
-            <figcaption class="mt-4 px-3">
-              <div>
-                <p class="mb-0 ct_fs_14 ct_fw_600">8 Aug 2023</p>
-                <h4 class="ct_fs_18 ct_fw_700">
-                  How AI Is Redefining Mobile App & Web Development in 2025
-                </h4>
-                <p class="mb-0 ct_fs_14">
-                  In 2025, artificial intelligence( AI) transforms how we develop and interact with mobile apps and
-                  websites. From further intelligent stoner interfaces to completely automated law creation, AI enables
-                  inventors to design more effective, intuitive, and scalable digital products
-                </p>
-              </div>
-              <div class="mt-auto">
-                <button class="ct_blue_btn_fill w-100 mt-4" routerLink="/blog-detail">Learn More</button>
-              </div>
 
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-      <div class="col-lg-4 col-md-6 mb-4">
-        <div class="ct_related_article_card">
-          <figure>
-            <div class="ct_article_img">
-              <img loading="lazy" src="assets/img/related_img_4.png" alt="AI app builder for mobile and web" />
-            </div>
-            <figcaption class="mt-4 px-3">
-              <div>
-                <p class="mb-0 ct_fs_14 ct_fw_600">2 June 2025</p>
-                <h4 class="ct_fs_18 ct_fw_700 ">
-                  AI in Mobile App Development: Explanation, Examples, and Benefits
-
-                </h4>
-                <p class="mb-0 ct_fs_14">
-                  The world of mobile app development is rapidly evolving, and one of the most groundbreaking trends
-                  we've seen in recent years is the integration of Artificial Intelligence (AI).
-                </p>
-              </div>
-              <div class="mt-auto">
-                <button class="ct_blue_btn_fill w-100 mt-4" routerLink="/blog-detail">Learn More</button>
-              </div>
-
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-
-
-      <div class="col-lg-4 col-md-6 mb-4">
-        <div class="ct_related_article_card">
-          <figure>
-            <div class="ct_article_img">
-              <img loading="lazy" src="assets/img/related_img_3.png" alt="AI app builder for mobile and web" />
-            </div>
-            <figcaption class="mt-4 px-3">
-              <div>
-                <p class="mb-0 ct_fs_14 ct_fw_600">5 May 2025</p>
-                <h4 class="ct_fs_18 ct_fw_700">
-                  Best App Builders for 2025
-
-                </h4>
-                <p class="mb-0 ct_fs_14">
-                  In 2025, businesses are under growing pressure to deliver high-quality mobile and web applications
-                  quickly. Customers expect seamless experiences, fast performance, and reliable functionality.
-                </p>
-              </div>
-
-              <div class="mt-auto">
-                <button class="ct_blue_btn_fill w-100 mt-4" routerLink="/blog-detail">Learn More</button>
-              </div>
-
-            </figcaption>
-          </figure>
-        </div>
-      </div>
+      }
+   
 
     </div>
 

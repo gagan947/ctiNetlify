@@ -13,6 +13,8 @@ import { CalendlyDirective } from '../../../helper/directives/calendly.directive
 import { ModalService } from '../../../services/modal.service';
 declare var Razorpay: any;
 declare var Calendly: any;
+declare var cashfree: any;
+declare var window: any;
 @Component({
   selector: 'app-payment-detail',
   standalone: true,
@@ -43,6 +45,11 @@ export class PaymentDetailComponent {
   userData: any
   rate: any;
   currencyCode = 'INR';
+  orderId: string = '';
+  orderAmount: number = 100; // in INR
+  customerName: string = 'faraz';
+  customerEmail: string = '23546ASD';
+  customerPhone: string = '+919090407368';
   private modal = inject(ModalService);
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private http: HttpClient) {
     effect(() => {
@@ -58,7 +65,8 @@ export class PaymentDetailComponent {
 
     this.userData = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
     // const user = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
-    this.currencyCode = this.userData.currency
+    this.currencyCode = this.userData.currency;
+    this.generateOrderId()
   };
 
   onPaymentChange(id: any) {
@@ -119,10 +127,11 @@ export class PaymentDetailComponent {
       amount: Math.round(this.paymentPlan == '1' ? (this.actualCost || (this.totalCost + (this.totalCost * 18) / 100) - (((this.totalCost + (this.totalCost * 18) / 100) * 10) / 100)) : (this.securityDeposit + (this.securityDeposit * 18) / 100))
     }
 
-    this.apiService.postAPI(`api/payment/createRazorpayOrder`, { amount: 1000, currency: this.currencyCode }).subscribe({
+    this.apiService.postAPI(`api/payment/createRazorpayOrder`, { amount:500000 , currency: this.currencyCode }).subscribe({
       next: (data: any) => {
         const options: any = {
-          key: 'rzp_test_nyohAyx081ZtAn', // replace with your Razorpay Key ID
+          // key: 'rzp_test_nyohAyx081ZtAn', // test key
+          key: 'rzp_live_RQZRNuAawKMTzH', // live key
           amount: data.amount,
           currency: this.currencyCode,
           name: 'Creative.ai',
@@ -200,38 +209,110 @@ export class PaymentDetailComponent {
     return this.modal.open('Do you want to save this step as draft before leaving?');
   }
 
-  // ngAfterViewInit() {
-  //   console.log("here2");
-  //   const calendlyContainer = document.getElementById('calendly-inline-widget');
-  //   if (calendlyContainer) {
-  //     Calendly.initInlineWidget({
-  //       url: 'https://calendly.com/creativethoughts/30min',
-  //       parentElement: calendlyContainer,
+  
+  generateOrderId() {
+    this.orderId = 'order_' + Math.random().toString(36).substr(2, 9);
+  }
+
+  async initializePayment() {
+    try {
+      // Create order in backend
+      const orderResponse: any = await this.http.post('http://localhost:4500/api/payment/create-order', {
+        orderAmount: this.orderAmount,
+        orderCurrency: 'INR', // Use 'USD', 'EUR' for international
+        customerName: this.customerName,
+        customerEmail: this.customerEmail,
+        customerPhone: this.customerPhone
+      }).toPromise();
+
+      if (orderResponse.success) {
+        // this.openCashfreeCheckout(orderResponse.paymentSessionId);
+      } else {
+        console.log('Error creating order:', orderResponse.error);
+        alert('Failed to create order: ' + orderResponse.error);
+      }
+    } catch (error) {
+      console.log('Error creating order:', error);
+      // alert('Failed to initialize payment');
+    }
+  }
+
+  // openCashfreeCheckout(sessionId: string) {
+  //   try {
+  //     if (typeof Cashfree === 'undefined') {
+  //       console.error('Cashfree SDK not loaded yet');
+  //       return;
+  //     }
+  
+  //     // Initialize Cashfree SDK
+  //     const cashfree = new Cashfree({
+  //       mode: 'sandbox', // Change to 'production' for live mode
   //     });
+  
+  //     // Call pay(), not checkout()
+  //     cashfree.pay({
+  //       paymentSessionId: sessionId,
+  //       redirectTarget: "_self" // or "_blank" if you want new tab
+  //     });
+  
+  //   } catch (error) {
+  //     console.error('Error launching Cashfree checkout:', error);
   //   }
-  //   window.addEventListener('message', this.handleCalendlyEvent.bind(this));
-  // };
-
-  // handleCalendlyEvent(e: MessageEvent) {
-  //   if (e.origin === 'https://calendly.com' && e.data.event === 'calendly.event_scheduled') {
-  //     console.log('Calendly event scheduled:', e.data);
-  //     this.sendConfirmationEmail();
-  //   }
-  // };
-
-  // sendConfirmationEmail() {
-  //   this.apiService.getApi(`api/user/sendClientEnquiryEmail?inquiryId=${this.projectsData.clientEnquryId}`).subscribe({
-  //     next: (res: any) => {
-  //       if (res.success) {
-  //       }
-  //     }, error(err) {
-  //       // this.message.error(err.error.message)
-  //     },
-  //   })
   // }
+  async verifyPayment(orderId: string) {
+    try {
+      const verificationResponse: any = await this.http.post('/verify-payment', {
+        orderId: orderId
+      }).toPromise();
 
-  // ngOnDestroy() {
-  //   // Clean up the listener to avoid memory leaks
-  //   window.removeEventListener('message', this.handleCalendlyEvent.bind(this));
-  // }
+      if (verificationResponse.success) {
+        const status = verificationResponse.orderStatus;
+        if (status === 'PAID') {
+          alert('Payment Successful!');
+          // Handle successful payment
+        } else {
+          alert(`Payment Status: ${status}`);
+        }
+      }
+    } catch (error) {
+      console.error('Verification error:', error);
+    }
+  }
+
+  initiateCheckout(orderId: string, amount: number) {
+   
+    this.http
+      .post('http://localhost:4500/api/payment/create-order', {
+        orderId,
+        amount,
+        customerId: 'customer123',
+        customerPhone: '9999999999',
+        customerEmail: 'customer@example.com',
+      })
+      .subscribe(
+        (response: any) => {
+          const paymentSessionId = response.payment_session_id;
+
+          const checkoutOptions = {
+            paymentSessionId,
+            returnUrl: 'http://localhost:4200/payment-status',
+          };
+
+          const cashfree = new window.Cashfree({
+            paymentSessionId: paymentSessionId,
+            mode: 'sandbox' // Use 'production' for live transactions
+          });
+          cashfree.checkout(checkoutOptions).then((result: any) => {
+            if (result.error) {
+              alert(result.error.message);
+            } else if (result.redirect) {
+              console.log('Redirecting to payment page...');
+            }
+          });
+        },
+        (error) => {
+          console.error('Error initiating checkout:', error);
+        }
+      );
+  }
 }

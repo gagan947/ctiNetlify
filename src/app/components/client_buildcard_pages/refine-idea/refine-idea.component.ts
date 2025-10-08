@@ -18,7 +18,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 @Component({
   selector: 'app-refine-idea',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe, DiscountModalComponent, BdLoaderComponent, ScrollingModule],
+  imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe, BdLoaderComponent, ScrollingModule],
   templateUrl: './refine-idea.component.html',
   styleUrl: './refine-idea.component.css',
 })
@@ -52,7 +52,9 @@ export class RefineIdeaComponent {
     if (!this.projectsData.selectdFeature) {
       this.getProjects();
     }
-    this.getFeatures()
+    setTimeout(() => {
+      this.getFeatures()
+    }, 200);
   }
 
   getProjects() {

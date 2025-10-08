@@ -103,8 +103,11 @@ export const LandingRoutes: Routes = [
       {
             path: 'convert-web-to-app', loadComponent: () => import('./convert-web-to-app/convert-web-to-app.component').then(c => c.ConvertWebToAppComponent)
       },
-         {
+      {
             path: 'blog-detail', loadComponent: () => import('./blog-detail/blog-detail.component').then(c => c.BlogDetailComponent)
+      },
+      {
+            path: 'cancellation-refund', loadComponent: () => import('./cancel-refund-policy/cancel-refund-policy.component').then(c => c.CancelRefundPolicyComponent)
       },
 
 ]

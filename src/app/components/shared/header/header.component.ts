@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 declare let bootstrap: any;
@@ -5,7 +6,7 @@ declare let Calendly: any;  // 👈 declare Calendly from script
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink,NgOptimizedImage],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })

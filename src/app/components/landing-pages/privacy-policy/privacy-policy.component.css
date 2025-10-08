@@ -1,9 +1,123 @@
-.ct_dot_8_span {
+/* Base Page Layout */
+.ct_py_70 {
+    padding: 70px 0;
+    background: #f9f9f9;
+    color: #333;
+    font-family: "Poppins", "Helvetica", "Arial", sans-serif;
+  }
+  
+  /* Container & Typography */
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 40px 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .ct_fs_35 {
+    font-size: 35px;
+    color: #111;
+    font-weight: 700;
+    border-bottom: 3px solid #007bff;
+    display: inline-block;
+    padding-bottom: 8px;
+  }
+  
+  .ct_fs_20 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #222;
+    margin-top: 25px;
+    margin-bottom: 10px;
+  }
+  
+  .ct_fs_18 {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.7;
+  }
+  
+  .ct_fs_14 {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  .ct_fw_700 {
+    font-weight: 700;
+  }
+  
+  /* List Styles */
+  ul {
+    margin: 10px 0 20px 20px;
+    padding-left: 20px;
+    list-style: none;
+  }
+  
+  ul li {
+    position: relative;
+    margin-bottom: 10px;
+    padding-left: 25px;
+    line-height: 1.6;
+    color: #444;
+  }
+  
+  /* Custom bullet dot */
+  .ct_dot_8_span {
+    position: absolute;
+    left: 0;
+    top: 9px;
     width: 8px;
     height: 8px;
-    border-radius: 100px;
-    display: inline-flex
-;
-    background-color: #aaa;
-    margin-right: 6px;
-}
+    border-radius: 50%;
+    background: #007bff;
+  }
+  
+  /* Section spacing */
+  section {
+    margin-bottom: 25px;
+    border-left: 3px solid #e6e6e6;
+    padding-left: 15px;
+    transition: border-color 0.3s ease;
+  }
+  
+  section:hover {
+    border-color: #007bff;
+  }
+  
+  /* Links */
+  a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Contact Info List */
+  section:last-child ul li {
+    font-size: 16px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .container {
+      padding: 25px 20px;
+    }
+  
+    .ct_fs_35 {
+      font-size: 26px;
+    }
+  
+    .ct_fs_20 {
+      font-size: 18px;
+    }
+  
+    .ct_fs_18 {
+      font-size: 15px;
+    }
+  }
+  
