@@ -457,7 +457,7 @@
                                                 <th scope="row">{{ $index + 1 }}</th>
                                                 <td>{{item | date}}</td>
                                                 <td>Development</td>
-                                                <td>{{ actualCost ? ((actualCost - (securityDeposit + (securityDeposit * 18)/100))/noOfInstallments | convertCurrency:rate) : '' }}
+                                                <td>{{ actualCost ? ((actualCost - securityDeposit)/noOfInstallments | convertCurrency:rate) : '' }}
                                                 </td>
                                           </tr>
                                           }

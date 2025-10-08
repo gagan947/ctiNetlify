@@ -19,6 +19,7 @@ export interface ProjectData {
   no_of_features: number;
   paymentPlan: string;
   installmentType: string;
+  final_cost_with_tax_discount: number;
 }
 
 export interface SelectedFeature {

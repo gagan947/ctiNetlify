@@ -119,14 +119,14 @@ export class PaymentPlanComponent {
         payment_plan: this.paymentPlan == '2' ? 'Installment' : 'Upfront',
         installment_type: this.installmentType,
         tax_amount: (this.total_cost_delivery * 18) / 100,
-        final_cost_with_tax_discount: this.actualCost,
+        final_cost_with_tax_discount: (this.actualCost! * 20) / 100,
         security_deposit: this.securityDeposit,
         currentRoutes: this.router.url,
         installmentPlan: this.installmentDates.map((ele) => {
           return {
             dueDate: ele,
             projectStage: "Development",
-            amount: (this.actualCost! - this.securityDeposit - (this.securityDeposit * 18) / 100) / this.noOfInstallments
+            amount: (this.actualCost! - this.securityDeposit) / this.noOfInstallments
           }
         })
       }
@@ -142,7 +142,7 @@ export class PaymentPlanComponent {
     this.apiService.postAPI(`api/user/addClientPaymentPlan?inquiryId=${this.projectsData.clientEnquryId}`, formData).subscribe({
       next: (res: any) => {
         if (res.success) {
-          sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...{ paymentPlan: this.paymentPlan }, ...{ installmentType: this.installmentType } }))
+          sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...{ paymentPlan: this.paymentPlan }, ...{ installmentType: this.installmentType }, ...{ final_cost_with_tax_discount: formData.final_cost_with_tax_discount } }))
           this.router.navigate(['/payment-option'])
         }
       }, error(err) {

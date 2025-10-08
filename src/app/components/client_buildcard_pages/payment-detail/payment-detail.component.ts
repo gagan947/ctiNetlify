@@ -80,7 +80,7 @@ export class PaymentDetailComponent {
       this.actualCost = null
     } else {
       this.paymentPlan = '2'
-      this.actualCost = this.projectsData.total_cost_delivery + (this.projectsData.total_cost_delivery * 18) / 100
+      this.actualCost = this.projectsData.total_cost_delivery + (this.projectsData.total_cost_delivery * 18) / 100 - ((this.projectsData.total_cost_delivery + (this.projectsData.total_cost_delivery * 18) / 100) * 10) / 100
       this.securityDeposit = (this.actualCost * 20) / 100
     }
   };
@@ -299,9 +299,10 @@ export class PaymentDetailComponent {
     this.http
       .post(this.apiService.apiUrl + 'api/payment/create-order', {
         // amount: this.orderAmount,
-        amount: 450000,
+        amount: Math.floor(this.projectsData.final_cost_with_tax_discount),
         user,
-        currency: this.currencyCode
+        currency: this.currencyCode,
+        clientEnquryId: this.projectsData.clientEnquryId
       })
       .subscribe(
         (response: any) => {
@@ -309,15 +310,13 @@ export class PaymentDetailComponent {
 
           const checkoutOptions = {
             paymentSessionId,
-            returnUrl: 'http://localhost:4200/payment-status',
-            paymentOption: 'card', // 👈 open directly card screen
             redirectTarget: '_self',
           };
 
           const cashfree = new window.Cashfree({
             paymentSessionId: paymentSessionId,
             mode: 'sandbox',
-            paymentOption: 'card'  // Use 'production' for live transactions
+           
           });
           cashfree.checkout(checkoutOptions).then((result: any) => {
             if (result.error) {
