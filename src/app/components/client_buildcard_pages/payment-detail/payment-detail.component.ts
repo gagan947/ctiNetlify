@@ -57,7 +57,7 @@ export class PaymentDetailComponent {
     })
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
-    this.totalCost = this.projectsData.finalCost;
+    this.totalCost = this.orderAmount = this.projectsData.finalCost;
     this.projectsFeatures = this.projectsData.selectdFeature;
     this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
     this.apiService._imagePreview.set(this.projectsData.projectLogo);
@@ -126,8 +126,8 @@ export class PaymentDetailComponent {
     let formData = {
       amount: Math.round(this.paymentPlan == '1' ? (this.actualCost || (this.totalCost + (this.totalCost * 18) / 100) - (((this.totalCost + (this.totalCost * 18) / 100) * 10) / 100)) : (this.securityDeposit + (this.securityDeposit * 18) / 100))
     }
-
-    this.apiService.postAPI(`api/payment/createRazorpayOrder`, { amount:500000 , currency: this.currencyCode }).subscribe({
+    debugger
+    this.apiService.postAPI(`api/payment/createRazorpayOrder`, { amount: formData.amount, currency: this.currencyCode }).subscribe({
       next: (data: any) => {
         const options: any = {
           // key: 'rzp_test_nyohAyx081ZtAn', // test key
@@ -209,7 +209,7 @@ export class PaymentDetailComponent {
     return this.modal.open('Do you want to save this step as draft before leaving?');
   }
 
-  
+
   generateOrderId() {
     this.orderId = 'order_' + Math.random().toString(36).substr(2, 9);
   }
@@ -217,9 +217,9 @@ export class PaymentDetailComponent {
   async initializePayment() {
     try {
       // Create order in backend
-      const orderResponse: any = await this.http.post('http://localhost:4500/api/payment/create-order', {
+      const orderResponse: any = await this.http.post(this.apiService.apiUrl + 'api/payment/create-order', {
         orderAmount: this.orderAmount,
-        orderCurrency: 'INR', // Use 'USD', 'EUR' for international
+        orderCurrency: this.currencyCode, // Use 'USD', 'EUR' for international
         customerName: this.customerName,
         customerEmail: this.customerEmail,
         customerPhone: this.customerPhone
@@ -243,18 +243,18 @@ export class PaymentDetailComponent {
   //       console.error('Cashfree SDK not loaded yet');
   //       return;
   //     }
-  
+
   //     // Initialize Cashfree SDK
   //     const cashfree = new Cashfree({
   //       mode: 'sandbox', // Change to 'production' for live mode
   //     });
-  
+
   //     // Call pay(), not checkout()
   //     cashfree.pay({
   //       paymentSessionId: sessionId,
   //       redirectTarget: "_self" // or "_blank" if you want new tab
   //     });
-  
+
   //   } catch (error) {
   //     console.error('Error launching Cashfree checkout:', error);
   //   }
@@ -279,12 +279,11 @@ export class PaymentDetailComponent {
     }
   }
 
-  initiateCheckout(orderId: string, amount: number) {
-   
+  initiateCheckout() {
+
     this.http
-      .post('http://localhost:4500/api/payment/create-order', {
-        orderId,
-        amount,
+      .post(this.apiService.apiUrl + 'api/payment/create-order', {
+        amount: this.orderAmount,
         customerId: 'customer123',
         customerPhone: '9999999999',
         customerEmail: 'customer@example.com',

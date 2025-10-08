@@ -24,14 +24,14 @@ export class PlanDeliveryComponent {
   projectsData: ProjectData;
   projectsFeaturs: Feature[] = [];
   commongFeaturs: any[] = [];
-  totalPrice: any;
+  features_cost: any;
   isActiveAND = true;
   isActiveIOS = false;
   isActiveWeb = false;
   isActiveMobileSite = false;
   thirtyPercent!: number;
   twelvePercent!: number;
-  projectCost: any;
+  total_cost_delivery: any;
   rangeValue: string = '0';
   projectSecondCost!: number;
   projectThirdCost!: number;
@@ -49,7 +49,7 @@ export class PlanDeliveryComponent {
   customizationThirdCost!: number;
   totalCustomizeCost!: number;
   selectedDevices: string[] = ['Android'];
-  PhasesDeliverables: any[] = [{ design: "We do your designs" }, "Product Roadmap", "Clickable prototype", "Basic build", "Full build"];
+  phases_deliverables: any[] = [{ design: "We do your designs" }, "Product Roadmap", "Clickable prototype", "Basic build", "Full build"];
   originalProjectCost: any;
   private modal = inject(ModalService);
   designLinkBox = false;
@@ -60,11 +60,11 @@ export class PlanDeliveryComponent {
     })
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
-    this.totalPrice = this.projectsData.totalCost;
-    this.projectCost = this.totalPrice;
+    this.features_cost = this.projectsData.features_cost;
+    this.total_cost_delivery = this.features_cost;
     this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
     this.apiService._imagePreview.set(this.projectsData.projectLogo);
-    this.originalProjectCost = this.projectCost;
+    this.originalProjectCost = this.total_cost_delivery;
 
     this.updateCosts();
 
@@ -72,7 +72,7 @@ export class PlanDeliveryComponent {
     let speed = this.projectsData?.speed === 'Fast' ? '2' : this.projectsData?.speed === 'Speedy' ? '4' : '0';
     this.onRangeChange({ target: { value: speed } });
 
-    this.PhasesDeliverables = this.projectsData?.PhasesDeliverables || [
+    this.phases_deliverables = this.projectsData?.phases_deliverables || [
       { design: "We do your designs" }, "Product Roadmap", "Clickable prototype", "Basic build", "Full build"
     ];
 
@@ -84,8 +84,8 @@ export class PlanDeliveryComponent {
   }
 
   private updateCosts(): void {
-    this.projectSecondCost = this.projectCost + (this.projectCost * 12) / 100;
-    this.projectThirdCost = this.projectCost + (this.projectCost * 24) / 100;
+    this.projectSecondCost = this.total_cost_delivery + (this.total_cost_delivery * 12) / 100;
+    this.projectThirdCost = this.total_cost_delivery + (this.total_cost_delivery * 24) / 100;
 
     // this.featureSecondCost = this.featureCost + (this.featureCost * 12) / 100;
     // this.featureThirdCost = this.featureCost + (this.featureCost * 24) / 100;
@@ -93,7 +93,7 @@ export class PlanDeliveryComponent {
     // this.customizationSecondCost = this.customizationCost + (this.customizationCost * 12) / 100;
     // this.customizationThirdCost = this.customizationCost + (this.customizationCost * 24) / 100;
 
-    // this.totalPrice = this.projectCost;
+    // this.features_cost = this.total_cost_delivery;
     // this.totalFeatureCost = this.featureCost;
     // this.totalCustomizeCost = this.customizationCost;
   }
@@ -130,7 +130,7 @@ export class PlanDeliveryComponent {
       }
     }
 
-    this.projectCost = this.originalProjectCost * (1 + incrementValue * (this.selectedDevices.length - 1));
+    this.total_cost_delivery = this.originalProjectCost * (1 + incrementValue * (this.selectedDevices.length - 1));
 
 
     this.updateCosts();
@@ -157,15 +157,15 @@ export class PlanDeliveryComponent {
 
   private applyRangeValue(): void {
     if (this.rangeValue === '2') {
-      this.totalPrice = this.projectSecondCost;
+      this.features_cost = this.projectSecondCost;
       this.totalFeatureCost = this.featureSecondCost;
       this.totalCustomizeCost = this.customizationSecondCost;
     } else if (this.rangeValue === '4') {
-      this.totalPrice = this.projectThirdCost;
+      this.features_cost = this.projectThirdCost;
       this.totalFeatureCost = this.featureThirdCost;
       this.totalCustomizeCost = this.customizationThirdCost;
     } else {
-      this.totalPrice = this.projectCost;
+      this.features_cost = this.total_cost_delivery;
       this.totalFeatureCost = this.featureCost;
       this.totalCustomizeCost = this.customizationCost;
     }
@@ -175,12 +175,10 @@ export class PlanDeliveryComponent {
     let formData = {
       formNumber: 3,
       platforms: this.selectedDevices,
-      developmentSpeed: this.rangeValue == '0' ? 'Standard' : this.rangeValue == '2' ? 'Fast' : 'Speedy',
-      PhasesAndDeliverables: this.PhasesDeliverables,
-      featuresPrice: this.totalFeatureCost,
-      customisationPrice: this.totalCustomizeCost,
-      durations: this.estimatedWeeks,
-      totalCost: this.totalPrice,
+      development_speed: this.rangeValue == '0' ? 'Standard' : this.rangeValue == '2' ? 'Fast' : 'Speedy',
+      phases_deliverables: this.phases_deliverables,
+      expected_duration: this.estimatedWeeks,
+      total_cost_delivery: this.features_cost,
       currentRoutes: this.router.url,
       estimated_time: this.estimatedWeeks,
       design_url: this.designLink
@@ -192,7 +190,7 @@ export class PlanDeliveryComponent {
           if (res.success) {
             this.projectsData.estimated_time = this.estimatedWeeks;
 
-            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...{ finalCost: this.totalPrice }, ...{ projectId: this.id }, ...{ 'featuresCost': this.totalFeatureCost }, ...{ 'customisationCost': this.totalCustomizeCost }, ...{ platform: this.selectedDevices }, ...{ speed: this.rangeValue == '0' ? 'Standard' : this.rangeValue == '2' ? 'Fast' : 'Speedy' }, ...{ estimatedDate: this.estimatedDate }, ...{ 'PhasesDeliverables': this.PhasesDeliverables } }))
+            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...{ finalCost: this.features_cost }, ...{ projectId: this.id }, ...{ 'featuresCost': this.totalFeatureCost }, ...{ 'customisationCost': this.totalCustomizeCost }, ...{ platform: this.selectedDevices }, ...{ speed: this.rangeValue == '0' ? 'Standard' : this.rangeValue == '2' ? 'Fast' : 'Speedy' }, ...{ estimatedDate: this.estimatedDate }, ...{ 'phases_deliverables': this.phases_deliverables } }))
             this.router.navigate([`/review-buildcard`])
           } else {
             this.message.error(res.message);
@@ -203,24 +201,24 @@ export class PlanDeliveryComponent {
 
   selectDeliveryPhase(event: any, item: any) {
     if (event.target.checked) {
-      this.PhasesDeliverables.push(item)
+      this.phases_deliverables.push(item)
     } else {
-      const index = this.PhasesDeliverables.indexOf(item);
-      this.PhasesDeliverables.splice(index, 1);
+      const index = this.phases_deliverables.indexOf(item);
+      this.phases_deliverables.splice(index, 1);
     }
   }
 
   selectDesignPhase(event: any, item: string) {
     if (event.target.checked) {
       this.designLinkBox = false
-      const existingDesign = this.PhasesDeliverables.find((phase) => phase.design);
+      const existingDesign = this.phases_deliverables.find((phase) => phase.design);
       if (existingDesign) {
         existingDesign.design = item
       } else {
         const design = {
           design: item
         }
-        this.PhasesDeliverables.push(design)
+        this.phases_deliverables.push(design)
       }
       if (item == 'You have designs') {
         this.designLinkBox = true
@@ -229,7 +227,7 @@ export class PlanDeliveryComponent {
   }
 
   totalCost(featureData: any) {
-    // this.projectCost = featureData.reduce((pre: any, next: { totalSubFeaturedPrice: any; totalCustomisationPrice: any; }) => pre + next.totalSubFeaturedPrice + next.totalCustomisationPrice, 0);
+    // this.total_cost_delivery = featureData.reduce((pre: any, next: { totalSubFeaturedPrice: any; totalCustomisationPrice: any; }) => pre + next.totalSubFeaturedPrice + next.totalCustomisationPrice, 0);
   }
 
   canDeactivate(): Promise<boolean> | boolean {

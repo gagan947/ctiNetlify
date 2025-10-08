@@ -26,7 +26,7 @@
               "src/sitemap.xml",
               "src/robots.txt",
               "src/_redirects",
-              "src/_headers"  
+              "src/_headers"
             ],
             "styles": [
               "src/styles.css",
@@ -36,7 +36,7 @@
               "node_modules/ng-zorro-antd/code-editor/style/index.min.css",
               "node_modules/ng-zorro-antd/graph/style/index.min.css"
             ],
-            "scripts": ["https://sdk.cashfree.com/js/v3/cashfree.js"]
+            "scripts": []
           },
           "configurations": {
             "production": {

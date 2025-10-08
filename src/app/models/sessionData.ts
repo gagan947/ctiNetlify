@@ -2,7 +2,7 @@ import { SubFeature } from "./projects";
 
 export interface ProjectData {
   clientEnquryId: number;
-  PhasesDeliverables: [];
+  phases_deliverables: [];
   estimatedDate: string; // ISO string format for date
   estimated_time: number;
   finalCost: number;
@@ -13,7 +13,7 @@ export interface ProjectData {
   projectName: string;
   selectdFeature: SelectedFeature[];
   speed: string;
-  totalCost: number;
+  features_cost: number;
   featuresCost: number;
   customisationCost: number;
   no_of_features: number;

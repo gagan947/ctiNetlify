@@ -263,7 +263,7 @@
                                              <span class="ct_text_clr_7F8188 ct_fs_14">ESTIMATED
                                                 DURATION</span>
                                              <p class="mb-0 mt-1 ct_fw_700">
-                                                {{estimatedWeeks}}
+                                                {{durations}}
                                                 WEEKS
                                              </p>
                                           </div>
@@ -273,7 +273,7 @@
                                              TOTAL
                                           </span>
                                           <p class="mb-0 mt-1 ct_fw_700">
-                                             {{totalPrice | currency
+                                             {{totalFeatureCost | currency
                                              :'INR'}}
                                           </p>
                                        </div>
@@ -445,7 +445,7 @@
                                                 Cost
                                              </span>
                                              <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
-                                                {{ totalPrice | convertCurrency:rate }}
+                                                {{ totalFeatureCost | convertCurrency:rate }}
                                              </p>
                                           </div>
                                           <!-- <div>
@@ -453,14 +453,14 @@
                                                 (40%)
                                              </span>
                                              <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
-                                                {{ ((totalPrice * 40)/100) | convertCurrency:rate }}
+                                                {{ ((totalFeatureCost * 40)/100) | convertCurrency:rate }}
                                              </p>
                                           </div> -->
                                           <!-- <div>
                                              <span class="ct_text_clr_7F8188  ct_fs_14 ct_white_nowrap">Final Cost
                                              </span>
                                              <p class="mb-0 mt-1 ct_fw_700">
-                                                {{totalPrice  | convertCurrency:rate }}
+                                                {{totalFeatureCost  | convertCurrency:rate }}
                                              </p>
                                           </div> -->
                                           <div class="">
@@ -468,7 +468,7 @@
                                                 Weeks
                                              </span>
                                              <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
-                                                {{ estimatedWeeks }}
+                                                {{ durations }}
                                              </p>
                                           </div>
                                        </div>
@@ -565,7 +565,7 @@
                                           <span class="ct_text_clr_7F8188 ct_fs_14">TOTAL
                                           </span>
                                           <p class="mb-0 mt-1 ct_fw_700">
-                                             {{totalPrice}}
+                                             {{totalFeatureCost}}
                                           </p>
                                        </div>
                                     </div>

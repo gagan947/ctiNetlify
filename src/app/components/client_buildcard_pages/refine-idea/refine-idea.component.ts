@@ -28,20 +28,24 @@ export class RefineIdeaComponent {
   projectsFeaturs: Feature[] = [];
   allFeatures: Feature[] = [];
   commongFeaturs: any[] = [];
-  totalPrice: any;
-  estimatedWeeks: number | undefined;
+  totalFeatureCost: any;
+  durations: number | undefined;
   noOfFeaturs: number = 0
   rate: any;
   isLoading: boolean = false
   orgCommonFeatures: any[] = [];
   private modal = inject(ModalService);
   showSidebar: boolean = false
-  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService, private http: HttpClient) {
+  currencyCode: string = 'INR'
+  userData: any
+  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService) {
     let projectData = sessionStorage.getItem('projectData');
+    this.userData = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
+    this.currencyCode = this.userData.currency;
     this.projectsData = JSON.parse(projectData!);
     this.projectsFeaturs = this.projectsData.selectdFeature
-    this.estimatedWeeks = this.projectsData.estimated_time
-    this.totalPrice = this.projectsData.totalCost
+    this.durations = this.projectsData.estimated_time
+    this.totalFeatureCost = this.projectsData.features_cost
     this.noOfFeaturs = this.projectsData.no_of_features
     effect(() => {
       this.rate = this.apiService._rate()
@@ -72,8 +76,8 @@ export class RefineIdeaComponent {
             });
 
             let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
-            this.totalPrice = (totalTime * 1750)
-            this.estimatedWeeks = Math.ceil((totalTime / 8) / 5);
+            this.totalFeatureCost = (totalTime * 1750)
+            this.durations = Math.ceil((totalTime / 8) / 5);
             this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
           } else {
           }
@@ -119,8 +123,8 @@ export class RefineIdeaComponent {
       this.projectsFeaturs.splice(featureIndex, 1)
     }
     let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
-    this.totalPrice = (totalTime * 1750)
-    this.estimatedWeeks = Math.ceil((totalTime / 8) / 5);
+    this.totalFeatureCost = (totalTime * 1750)
+    this.durations = Math.ceil((totalTime / 8) / 5);
     this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
     // this.allFeatures = this.projectsFeaturs
   }
@@ -146,8 +150,8 @@ export class RefineIdeaComponent {
       }
     }
     let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
-    this.totalPrice = (totalTime * 1750)
-    this.estimatedWeeks = Math.ceil((totalTime / 8) / 5);
+    this.totalFeatureCost = (totalTime * 1750)
+    this.durations = Math.ceil((totalTime / 8) / 5);
     this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
     this.allFeatures = this.projectsFeaturs
   }
@@ -156,26 +160,27 @@ export class RefineIdeaComponent {
     let formData = {
       formNumber: 2,
       projectFeatures: this.projectsFeaturs,
-      durations: this.estimatedWeeks,
-      totalCost: this.totalPrice,
+      durations: this.durations,
+      features_cost: this.totalFeatureCost,
       currentRoutes: this.router.url,
-      no_of_features: this.noOfFeaturs
+      no_of_features: this.noOfFeaturs,
+      client_currency_code: this.currencyCode,
+      currency_rate: this.rate
     }
 
     this.apiService.postAPI(`api/user/addClientInquries?inquiryId=${this.projectsData.clientEnquryId}`, formData)
       .subscribe({
         next: (res: any) => {
           if (res.success) {
-            let totalProjectCost = {
-              totalCost: this.totalPrice,
-              mainCost: this.totalPrice
+            let totalFeatureCost = {
+              features_cost: this.totalFeatureCost,
             }
 
             let selectdFeature = {
               selectdFeature: this.projectsFeaturs
             }
 
-            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalProjectCost, ...selectdFeature, ...{ 'no_of_features': this.noOfFeaturs }, ...{ 'estimated_time': this.estimatedWeeks } }))
+            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalFeatureCost, ...selectdFeature, ...{ 'no_of_features': this.noOfFeaturs }, ...{ 'estimated_time': this.durations } }))
             this.router.navigate([`/plan-delivery/${this.id}`])
           } else {
             this.message.error(res.message);
@@ -287,8 +292,8 @@ export class RefineIdeaComponent {
       )
       .reduce((pre: any, next: any) => pre + next, 0);
 
-    this.totalPrice = totalTime * 1750;
-    this.estimatedWeeks = Math.ceil(totalTime / 40);
+    this.totalFeatureCost = totalTime * 1750;
+    this.durations = Math.ceil(totalTime / 40);
     this.noOfFeaturs = this.projectsFeaturs.reduce(
       (pre: any, next: any) => pre + next.subFeatures.length,
       0
@@ -346,8 +351,8 @@ export class RefineIdeaComponent {
       )
       .reduce((pre: any, next: any) => pre + next, 0);
 
-    this.totalPrice = totalTime * 1750;
-    this.estimatedWeeks = Math.ceil(totalTime / 40);
+    this.totalFeatureCost = totalTime * 1750;
+    this.durations = Math.ceil(totalTime / 40);
     this.noOfFeaturs = this.projectsFeaturs.reduce(
       (pre: any, next: any) => pre + next.subFeatures.length,
       0
@@ -361,8 +366,8 @@ export class RefineIdeaComponent {
   getEstimatedTime(item: any): number {
     const subFeatured = Number(item.totalSubFeaturedPrice) || 0;
     const customisation = Number(item.totalCustomisationPrice) || 0;
-    const cost = Number(this.totalPrice) || 1;
-    const weeks = Number(this.estimatedWeeks) || 0;
+    const cost = Number(this.totalFeatureCost) || 1;
+    const weeks = Number(this.durations) || 0;
 
     return Math.ceil(((subFeatured + customisation) / cost) * (weeks * 5 * 8));
   }
@@ -370,8 +375,8 @@ export class RefineIdeaComponent {
   getSubEstimatedTime(item: any): number {
     const subFeatured = Number(item.subFeaturedPrice) || 0;
     const customisation = Number(item.customisationPrice) || 0;
-    const cost = Number(this.totalPrice) || 1;
-    const weeks = Number(this.estimatedWeeks) || 0;
+    const cost = Number(this.totalFeatureCost) || 1;
+    const weeks = Number(this.durations) || 0;
 
     return Math.ceil(((subFeatured + customisation) / cost) * (weeks * 5 * 8));
   }

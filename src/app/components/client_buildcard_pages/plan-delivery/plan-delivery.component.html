@@ -155,7 +155,7 @@
                       weeks
                     </p>
                     <p class="mb-0 ct_fs_14">
-                      {{ projectCost | convertCurrency:rate }}
+                      {{ total_cost_delivery | convertCurrency:rate }}
                     </p>
                   </div>
                   <div class="text-center" [ngClass]="{ rangeActive: rangeValue == '2' }">
@@ -207,8 +207,8 @@
             <div class="ct_light_grey_bg ct_p_20 mt-3">
               <div class="form-check ct_checkbox_with_border mb-0">
                 <input class="form-check-input mt-1 me-2" type="checkbox" [checked]="
-                    PhasesDeliverables
-                      ? PhasesDeliverables.includes('Product Roadmap')
+                    phases_deliverables
+                      ? phases_deliverables.includes('Product Roadmap')
                       : false
                   " (change)="selectDeliveryPhase($event, 'Product Roadmap')" id="flexCheckChecked" />
                 <label class="form-check-label ct_fw_700 ct_fs_18" for="flexCheckChecked">
@@ -303,14 +303,15 @@
 
               @if(designLinkBox){
 
-                <div class="form-group mb-3">
-                  <label for="" class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Upload Design Link</label>
-                  <input type="text" placeholder="Enter url" class="form-control ct_input" [(ngModel)]="designLink" [ngModelOptions]="{standalone: true}">
-                  <!-- <small class="text-danger"
+              <div class="form-group mb-3">
+                <label for="" class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Upload Design Link</label>
+                <input type="text" placeholder="Enter url" class="form-control ct_input" [(ngModel)]="designLink"
+                  [ngModelOptions]="{standalone: true}">
+                <!-- <small class="text-danger"
                         *ngIf="billingForm.get('full_name')?.invalid && billingForm.get('full_name')?.touched">
                         Full name is required.
                   </small> -->
-                </div>
+              </div>
 
               }
 
@@ -321,7 +322,7 @@
             <div class="ct_light_grey_bg ct_p_20 mt-3">
               <div class="form-check ct_checkbox_with_border mb-0">
                 <input class="form-check-input mt-1 me-2" type="checkbox" id="flexCheckChecked33"
-                  [checked]="PhasesDeliverables.includes('Clickable prototype')"
+                  [checked]="phases_deliverables.includes('Clickable prototype')"
                   (change)="selectDeliveryPhase($event, 'Clickable prototype')" />
                 <label class="form-check-label ct_fw_700 ct_fs_18" for="flexCheckChecked33">
                   Clickable prototype
@@ -334,7 +335,7 @@
             <div class="ct_light_grey_bg ct_p_20 mt-3">
               <div class="form-check ct_checkbox_with_border mb-0">
                 <input class="form-check-input mt-1 me-2" type="checkbox" id="flexCheckChecked22"
-                  [checked]="PhasesDeliverables.includes('Basic build')"
+                  [checked]="phases_deliverables.includes('Basic build')"
                   (change)="selectDeliveryPhase($event, 'Basic build')" />
                 <label class="form-check-label ct_fw_700 ct_fs_18" for="flexCheckChecked22">
                   Basic build
@@ -350,7 +351,7 @@
                 <div>
                   <div class="form-check ct_checkbox_with_border mb-0">
                     <input class="form-check-input mt-1 me-2" type="checkbox" id="flexCheckChecked11"
-                      [checked]="PhasesDeliverables.includes('Full build')"
+                      [checked]="phases_deliverables.includes('Full build')"
                       (change)="selectDeliveryPhase($event, 'Full build')" />
                     <label class="form-check-label ct_fw_700 ct_fs_18" for="flexCheckChecked11">
                       Full Server Build
@@ -405,19 +406,19 @@
                 <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
                   <p class="mb-0 ct_fw_700 ct_fs_18">Total Cost</p>
                   <p class="mb-0 ct_fw_700 ct_fs_18">
-                    {{ totalPrice | convertCurrency:rate}}
+                    {{ features_cost | convertCurrency:rate}}
                   </p>
                 </div>
                 <!-- <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
                   <p class="mb-0 ct_fw_700 ct_fs_18">Discount (40%)</p>
                   <p class="mb-0 ct_fw_700 ct_fs_18">
-                    {{ (totalPrice * 40)/100 | convertCurrency:rate}}
+                    {{ (features_cost * 40)/100 | convertCurrency:rate}}
                   </p>
                 </div>
                 <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
                   <p class="mb-0 ct_fw_700 ct_fs_18">Final Cost</p>
                   <p class="mb-0 ct_fw_700 ct_fs_18">
-                    {{ totalPrice - ((totalPrice * 40)/100) | convertCurrency:rate}}
+                    {{ features_cost - ((features_cost * 40)/100) | convertCurrency:rate}}
                   </p>
                 </div> -->
               </div>

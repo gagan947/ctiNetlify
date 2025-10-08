@@ -47,13 +47,12 @@ export class MakeItMineComponent {
     }
 
     ngOnInit() {
-        if (this.id) {
+        if (this.id && !this.projectsData) {
             this.getProjectHtml()
         }
     }
 
     updateLogo() {
-        console.log("this.imagePreview", this.imagePreview);
         const doc1 = this.iframe1.nativeElement.contentDocument;
         if (doc1) {
             const logo1 = doc1.querySelector('#mylogo') as HTMLElement;
@@ -104,7 +103,7 @@ export class MakeItMineComponent {
         formData.append('projectName', this.projectName);
         formData.append('projectId', this.id ? this.id : '0');
         formData.append('currentRoutes', this.router.url);
-        // formData.append('logoSize', this.logoBox.nativeElement.getAttribute('style'));
+        formData.append('clientEnquryId', this.projectsData?.clientEnquryId ? this.projectsData.clientEnquryId : '');
 
         this.apiService.postAPI('api/user/addProjectNameAndLogo', formData).subscribe({
             next: (res: any) => {
@@ -112,10 +111,8 @@ export class MakeItMineComponent {
                     let projectData = {
                         ...this.projectsData,
                         clientEnquryId: res.data,
-                        selectedColor: this.selectedColor,
                         projectName: this.projectName,
                         projectLogo: this.imagePreview,
-                        // logoStyle: this.logoBox.nativeElement.getAttribute('style'),
                     }
 
                     sessionStorage.setItem('projectData', JSON.stringify(projectData))
@@ -148,7 +145,6 @@ export class MakeItMineComponent {
                 }
                 this.projectName = res.data[0].projectName;
                 this.apiService._imagePreview.set(res.data[0].projectImage);
-                // this.updateLogo();
             }
         });
     }
