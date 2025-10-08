@@ -54,6 +54,7 @@ export class PlanDeliveryComponent {
   private modal = inject(ModalService);
   designLinkBox = false;
   designLink = '';
+  originalEstimatedTime: number = 0;
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService) {
     effect(() => {
       this.rate = this.apiService._rate()
@@ -67,6 +68,7 @@ export class PlanDeliveryComponent {
     this.originalProjectCost = this.total_cost_delivery;
 
     this.updateCosts();
+    this.customWeeks = this.estimatedWeeks = this.projectsData?.speed === 'Fast' ? this.projectsData?.estimated_time + 2 : this.projectsData?.speed === 'Speedy' ? this.projectsData?.estimated_time + 4 : this.projectsData?.estimated_time;
 
     this.projectsData?.platform?.forEach((device: string) => this.onDeviceSelect(device));
     let speed = this.projectsData?.speed === 'Fast' ? '2' : this.projectsData?.speed === 'Speedy' ? '4' : '0';
@@ -77,8 +79,7 @@ export class PlanDeliveryComponent {
     ];
 
     const today = new Date();
-    this.customWeeks = this.estimatedWeeks = this.projectsData?.speed === 'Fast' ? this.projectsData?.estimated_time + 2 : this.projectsData?.speed === 'Speedy' ? this.projectsData?.estimated_time + 4 : this.projectsData?.estimated_time;
-    ;
+
     this.estimatedDate = new Date(today);
     this.estimatedDate.setDate(today.getDate() + this.estimatedWeeks * 7);
   }
@@ -86,16 +87,6 @@ export class PlanDeliveryComponent {
   private updateCosts(): void {
     this.projectSecondCost = this.total_cost_delivery + (this.total_cost_delivery * 12) / 100;
     this.projectThirdCost = this.total_cost_delivery + (this.total_cost_delivery * 24) / 100;
-
-    // this.featureSecondCost = this.featureCost + (this.featureCost * 12) / 100;
-    // this.featureThirdCost = this.featureCost + (this.featureCost * 24) / 100;
-
-    // this.customizationSecondCost = this.customizationCost + (this.customizationCost * 12) / 100;
-    // this.customizationThirdCost = this.customizationCost + (this.customizationCost * 24) / 100;
-
-    // this.features_cost = this.total_cost_delivery;
-    // this.totalFeatureCost = this.featureCost;
-    // this.totalCustomizeCost = this.customizationCost;
   }
 
   onDeviceSelect(device: string): void {
@@ -132,7 +123,6 @@ export class PlanDeliveryComponent {
 
     this.total_cost_delivery = this.originalProjectCost * (1 + incrementValue * (this.selectedDevices.length - 1));
 
-
     this.updateCosts();
     this.applyRangeValue();
   }
@@ -140,13 +130,12 @@ export class PlanDeliveryComponent {
   onRangeChange(event: any) {
     const today = new Date();
     this.rangeValue = event.target.value;
-
     if (this.rangeValue === '2') {
-      this.estimatedWeeks = this.customWeeks - 2;
+      this.estimatedWeeks = this.projectsData.estimated_time - 2;
     } else if (this.rangeValue === '4') {
-      this.estimatedWeeks = this.customWeeks - 4;
+      this.estimatedWeeks = this.projectsData.estimated_time - 4;
     } else {
-      this.estimatedWeeks = this.customWeeks;
+      this.estimatedWeeks = this.projectsData.estimated_time;
     }
 
     this.estimatedDate = new Date(today);
@@ -180,7 +169,6 @@ export class PlanDeliveryComponent {
       expected_duration: this.estimatedWeeks,
       total_cost_delivery: this.features_cost,
       currentRoutes: this.router.url,
-      estimated_time: this.estimatedWeeks,
       design_url: this.designLink
     }
 
@@ -190,7 +178,7 @@ export class PlanDeliveryComponent {
           if (res.success) {
             this.projectsData.estimated_time = this.estimatedWeeks;
 
-            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...{ finalCost: this.features_cost }, ...{ projectId: this.id }, ...{ 'featuresCost': this.totalFeatureCost }, ...{ 'customisationCost': this.totalCustomizeCost }, ...{ platform: this.selectedDevices }, ...{ speed: this.rangeValue == '0' ? 'Standard' : this.rangeValue == '2' ? 'Fast' : 'Speedy' }, ...{ estimatedDate: this.estimatedDate }, ...{ 'phases_deliverables': this.phases_deliverables } }))
+            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...{ total_cost_delivery: this.features_cost }, ...{ projectId: this.id }, ...{ 'featuresCost': this.totalFeatureCost }, ...{ 'customisationCost': this.totalCustomizeCost }, ...{ platform: this.selectedDevices }, ...{ speed: this.rangeValue == '0' ? 'Standard' : this.rangeValue == '2' ? 'Fast' : 'Speedy' }, ...{ estimatedDate: this.estimatedDate }, ...{ 'phases_deliverables': this.phases_deliverables } }))
             this.router.navigate([`/review-buildcard`])
           } else {
             this.message.error(res.message);
