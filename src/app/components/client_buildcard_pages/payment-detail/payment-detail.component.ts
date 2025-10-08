@@ -11,6 +11,7 @@ import { MobileViewComponent } from '../main/mobile-view/mobile-view.component';
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
 import { ModalService } from '../../../services/modal.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 declare var Razorpay: any;
 declare var Calendly: any;
 declare var cashfree: any;
@@ -51,6 +52,7 @@ export class PaymentDetailComponent {
   customerEmail: string = '23546ASD';
   customerPhone: string = '+919090407368';
   private modal = inject(ModalService);
+  billingDetails:any
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private http: HttpClient) {
     effect(() => {
       this.rate = this.apiService._rate()
@@ -68,6 +70,9 @@ export class PaymentDetailComponent {
     this.currencyCode = this.userData.currency;
     this.generateOrderId()
   };
+  ngOnInit(){
+    this.getBillingDetails()
+  }
 
   onPaymentChange(id: any) {
     if (id == 1) {
@@ -280,13 +285,23 @@ export class PaymentDetailComponent {
   }
 
   initiateCheckout() {
-
+const user = {
+  name: this.billingDetails.name,
+  email: this.billingDetails.email,
+  phoneNumber: this.billingDetails.phoneNumber,
+  addressLine1: this.billingDetails.address_line_1,
+  addressLine2: this.billingDetails.address_line_2,
+  city: this.billingDetails.city,
+  state: this.billingDetails.state,
+  pincode : this.billingDetails.postal_code,
+}
+console.log(user);
     this.http
       .post(this.apiService.apiUrl + 'api/payment/create-order', {
-        amount: this.orderAmount,
-        customerId: 'customer123',
-        customerPhone: '9999999999',
-        customerEmail: 'customer@example.com',
+        // amount: this.orderAmount,
+        amount: 450000,
+        user,
+        currency:this.currencyCode
       })
       .subscribe(
         (response: any) => {
@@ -295,11 +310,14 @@ export class PaymentDetailComponent {
           const checkoutOptions = {
             paymentSessionId,
             returnUrl: 'http://localhost:4200/payment-status',
+            paymentOption: 'card', // 👈 open directly card screen
+            redirectTarget: '_self',
           };
 
           const cashfree = new window.Cashfree({
             paymentSessionId: paymentSessionId,
-            mode: 'sandbox' // Use 'production' for live transactions
+            mode: 'product',
+            paymentOption: 'card'  // Use 'production' for live transactions
           });
           cashfree.checkout(checkoutOptions).then((result: any) => {
             if (result.error) {
@@ -313,5 +331,19 @@ export class PaymentDetailComponent {
           console.error('Error initiating checkout:', error);
         }
       );
+  }
+  getBillingDetails(): void {
+    this.apiService.getApi(`api/user/getBillingDetails?id=${this.projectsData.clientEnquryId}`)
+      .subscribe({
+        next: (res: any) => {
+          if(res.success){
+            this.billingDetails = JSON.parse(res.data.billing_details)[0]
+          }
+          console.log('Blogs:', this.billingDetails);
+        },
+        error: (err) => {
+          console.error('Error fetching blogs:', err);
+        }
+      });
   }
 }

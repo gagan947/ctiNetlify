@@ -114,11 +114,11 @@ export class PaymentPlanComponent {
     let formData = undefined
     if (this.paymentPlan == '2') {
       formData = {
-        paymentPlan: this.paymentPlan == '2' ? 'Installment' : 'Upfront',
-        installmentType: this.installmentType,
-        taxes: (this.totalCost * 18) / 100,
-        gstTotalCost: this.actualCost,
-        securityDeposit: this.securityDeposit,
+        payment_plan: this.paymentPlan == '2' ? 'Installment' : 'Upfront',
+        installment_type: this.installmentType,
+        tax_amount: (this.totalCost * 18) / 100,
+        final_cost_with_tax_discount: this.actualCost,
+        security_deposit: this.securityDeposit,
         currentRoutes: this.router.url,
         installmentPlan: this.installmentDates.map((ele) => {
           return {
@@ -130,10 +130,10 @@ export class PaymentPlanComponent {
       }
     } else {
       formData = {
-        paymentPlan: this.paymentPlan == '1' ? 'Upfront' : 'Installment',
-        taxes: (this.totalCost * 18) / 100,
+        payment_plan: this.paymentPlan == '1' ? 'Upfront' : 'Installment',
+        tax_amount: (this.totalCost * 18) / 100,
         currentRoutes: this.router.url,
-        gstTotalCost: this.totalCost + (this.totalCost * 18) / 100 - ((this.totalCost + (this.totalCost * 18) / 100) * 10) / 100
+        final_cost_with_tax_discount: this.totalCost + (this.totalCost * 18) / 100 - ((this.totalCost + (this.totalCost * 18) / 100) * 10) / 100
       }
     }
 
