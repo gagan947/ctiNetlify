@@ -105,6 +105,10 @@ export class PlanDeliveryComponent {
           this.projectsData.estimated_time = +this.projectsData.estimated_time + 2;
           this.estimatedWeeks = +this.estimatedWeeks + 2;
           break;
+        case 'AI Integration':
+          this.projectsData.estimated_time = +this.projectsData.estimated_time + 2;
+          this.estimatedWeeks = +this.estimatedWeeks + 2;
+          break;
       }
     } else {
       if (this.selectedDevices.length > 1) {
@@ -115,6 +119,10 @@ export class PlanDeliveryComponent {
             this.estimatedWeeks = +this.estimatedWeeks - 3;
             break;
           case 'Web':
+            this.projectsData.estimated_time = +this.projectsData.estimated_time - 2;
+            this.estimatedWeeks = +this.estimatedWeeks - 2;
+            break;
+          case 'AI Integration':
             this.projectsData.estimated_time = +this.projectsData.estimated_time - 2;
             this.estimatedWeeks = +this.estimatedWeeks - 2;
             break;
