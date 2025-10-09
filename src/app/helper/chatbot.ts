@@ -6,9 +6,9 @@ export const chatbotFlow: any = {
       { label: "Build an App", next: "projectNameApp", logo: '📱' },
       { label: "Build a Website", next: "projectNameWebsite", logo : '💻' },
       { label: "Pricing & Plans", next: "pricing" , logo : '💵' },
-      { label: "Development Time", next: "timelineInfo", logo: '⏳' },
+      // { label: "Development Time", next: "timelineInfo", logo: '⏳' },
       { label: "Contact Support", next: "support", logo: '📞' },
-      { label: "Ask a Question", next: "chatbot", logo: '❓' }
+      // { label: "Ask a Question", next: "chatbot", logo: '❓' }
     ]
   },
 

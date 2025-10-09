@@ -34,9 +34,10 @@
                                                             <label for="" class="ct_fw_500 mb-2">Full Name</label>
                                                             <input type="text" class="form-control ct_input"
                                                                   placeholder="Enter Full Name" [(ngModel)]="user.name"
-                                                                  name="name" [ngModelOptions]="{standalone: true}">
+                                                                  name="name" [ngModelOptions]="{standalone: true}"
+                                                                  #nameModel="ngModel">
                                                             <small class="text-danger"
-                                                                  *ngIf="!user.name || user.name.trim().length < 3">
+                                                                  *ngIf="nameModel.touched && (!user.name || user.name.trim().length < 3)">
                                                                   Name is required (min 3 characters)
                                                             </small>
                                                       </div>

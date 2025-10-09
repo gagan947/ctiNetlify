@@ -188,7 +188,7 @@
                      </div>
                   </div>
                </div>
-               <form class="pt-0 pb-0">
+               <div class="pt-0 pb-0">
                   <div class="ct_step">
                      <div class="pt-0">
 
@@ -445,7 +445,7 @@
                                                 Cost
                                              </span>
                                              <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
-                                                {{ totalFeatureCost | convertCurrency:rate }}
+                                                {{ (totalFeatureCost | convertCurrency:rate) || 0 }}
                                              </p>
                                           </div>
                                           <!-- <div>
@@ -476,9 +476,14 @@
                                           class="d-flex align-items-center justify-content-between gap-3 mt-3 ct_flex_col_575">
                                           <button type="button" (click)="location.back()"
                                              class="ct_blue_outline_btn w-100 prev-step">Cancel</button>
-                                          <a (click)="Navigate()" type="button"
+
+                                          <app-submit-button class="w-100" [isLoading]="isLoading2"
+                                             [text]="'Save & Continue'" [class]="'ct_blue_btn_fill next-step w-100'"
+                                             (click)="Navigate()"></app-submit-button>
+
+                                          <!-- <a (click)="Navigate()" type="button"
                                              class="ct_blue_btn_fill next-step w-100">Save
-                                             & Continue</a>
+                                             & Continue</a> -->
                                        </div>
                                     </div>
                                  </div>
@@ -633,8 +638,6 @@
                                                       </thead>
                                                       <tbody>
                                                          @if(projectsFeaturs && projectsFeaturs.length > 0){
-
-
                                                          @for
                                                          (item
                                                          of
@@ -686,7 +689,7 @@
                         </div>
                      </div>
                   </div>
-               </form>
+               </div>
             </div>
          </div>
       </div>

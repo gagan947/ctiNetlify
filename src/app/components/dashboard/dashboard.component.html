@@ -118,9 +118,8 @@
                                                                               </div>
 
                                                                               <div class="mt-5 border-5">
-                                                                                    <a (click)="Navigate(item.currentRoutes, item.projectId)"
-                                                                                          class="ct_schedule_call_btn w-100 justify-content-center">Continue
-                                                                                          building</a>
+                                                                                    <a (click)="Navigate(item)"
+                                                                                          class="ct_schedule_call_btn w-100 justify-content-center">{{item.projectStatus == 1 ? 'Check Status' : 'Continue Building'}}</a>
                                                                               </div>
                                                                         </div>
                                                                   </div>

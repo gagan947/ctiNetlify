@@ -39,16 +39,16 @@ export class DashboardComponent {
 
   }
 
-  Navigate(url: string, id: number) {
+  Navigate(item: any) {
     const today = new Date();
     this.estimatedDate = new Date(today);
-    this.apiService.getApi(`api/user/fetchClientInquries?inquiryId=${id}`).subscribe(
+    this.apiService.getApi(`api/user/fetchClientInquries?inquiryId=${item.projectId}`).subscribe(
       {
         next: (res: any) => {
           if (res.success) {
             const data = res.data
             let projectData = {
-              clientEnquryId: id,
+              clientEnquryId: item.projectId,
               phases_deliverables: data.phases_deliverables,
               bellingDetails: data.billing_details,
               estimated_time: data.durations,
@@ -67,7 +67,11 @@ export class DashboardComponent {
             };
             sessionStorage.setItem('htmlCode', data.html_pages);
             sessionStorage.setItem('projectData', JSON.stringify(projectData));
-            this.router.navigate([url]);
+            if (item.projectStatus == 1) {
+              this.router.navigate(['/payment-success']);
+            } else {
+              this.router.navigate([item.currentRoutes]);
+            }
           }
         }
       }
@@ -122,7 +126,7 @@ export class DashboardComponent {
     { id: "list_3", icon: "💡", routes: ["plan delivery",] },
     { id: "list_4", icon: "📝", routes: ["billing details",] },
     { id: "list_5", icon: "💰", routes: ["payment plan",] },
-    { id: "list_6", icon: "💳", routes: ["payment option"] }
+    // { id: "list_6", icon: "💳", routes: ["payment option"] }
   ];
 
 

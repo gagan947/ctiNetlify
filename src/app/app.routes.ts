@@ -54,7 +54,7 @@ export const routes: Routes = [
             path: 'payment-status', loadComponent: () => import('./components/client_buildcard_pages/payment-status/payment-status.component').then(c => c.PaymentStatusComponent), canDeactivate: [canDeactivateGuard]
       },
       {
-            path: 'payment-sucessfull', loadComponent: () => import('./components/payment-sucessfull/payment-sucessfull.component').then(c => c.PaymentSucessfullComponent)
+            path: 'payment-success', loadComponent: () => import('./components/payment-sucessfull/payment-sucessfull.component').then(c => c.PaymentSucessfullComponent)
       },
       {
             path: 'profile', loadComponent: () => import('./components/profile/profile.component').then(c => c.ProfileComponent)

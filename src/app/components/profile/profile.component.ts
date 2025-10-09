@@ -168,7 +168,7 @@ export class ProfileComponent {
         this.closeBtn.nativeElement.click();
         this.otp = '';
         this.isLoading = false
-        this.getProfile();
+        this.user!.is_phone_verified = 1
       } else {
         this.isLoading = false
       }

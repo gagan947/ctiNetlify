@@ -45,6 +45,7 @@ export class MainComponent {
     }
     this.getProjects();
     sessionStorage.clear();
+    this.apiservice._htmlCode.set(null);
     // this.socket = io(this.apiservice.apiUrl);
     let currentBotMsg = "";
     // listen for streaming tokens

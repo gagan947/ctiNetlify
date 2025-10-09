@@ -31,7 +31,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptorsFromDi()
     ),
-
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    provideRouter(routes, withPreloading(PreloadAllModules) , withComponentInputBinding(), withInMemoryScrolling(scrollConfig))]
+    provideRouter(routes, withPreloading(PreloadAllModules), withComponentInputBinding(), withInMemoryScrolling(scrollConfig))]
 };
