@@ -31,7 +31,9 @@ export class ReviewBuildcardComponent {
     this.projectsFeatures = this.projectsData.selectdFeature;
     this.totalSubFeatures = this.projectsData.no_of_features;
     this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
-    this.apiService._imagePreview.set(this.projectsData.projectLogo);
+    if (this.projectsData.projectLogo) {
+      this.apiService._imagePreview.set(this.projectsData.projectLogo);
+    }
     this.projectsFeatures.map((feature: any) => {
       feature.featureTime = feature.subFeatures.reduce(
         (pre: number, next: { estimated_time: number }) => pre + Number(next.estimated_time),

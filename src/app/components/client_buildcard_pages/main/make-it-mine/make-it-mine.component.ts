@@ -42,7 +42,9 @@ export class MakeItMineComponent {
             this.imagePreview = this.projectsData.projectLogo
             this.projectName = this.projectsData.projectName
             this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
-            this.apiService._imagePreview.set(this.imagePreview);
+            if (this.projectsData.projectLogo) {
+                this.apiService._imagePreview.set(this.projectsData.projectLogo);
+            }
         }
     }
 

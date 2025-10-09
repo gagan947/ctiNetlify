@@ -9,15 +9,24 @@
   position: relative;
   overflow: hidden;
 }
+
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* ===== Inner Light Glass Card ===== */
 .ct_inner_light_shadow_bg {
-  padding: 60px 40px;
+  padding: 30px 40px;
   background: rgba(255, 255, 255, 0.55);
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -28,6 +37,7 @@
   position: relative;
   overflow: hidden;
 }
+
 .ct_inner_light_shadow_bg::before {
   content: "";
   position: absolute;
@@ -35,14 +45,20 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(60deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent);
+  background: linear-gradient(60deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
   background-size: 50px 50px;
   opacity: 0.2;
   animation: lightMove 12s linear infinite;
 }
+
 @keyframes lightMove {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(50px, 50px); }
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(50px, 50px);
+  }
 }
 
 /* ===== Glowing Loader ===== */
@@ -52,7 +68,9 @@
   position: relative;
   margin-inline: auto;
 }
-.et_loader_44::before, .et_loader_44::after {
+
+.et_loader_44::before,
+.et_loader_44::after {
   content: '';
   position: absolute;
   left: 50%;
@@ -70,26 +88,51 @@
     radial-gradient(circle 10px, #2192d7 100%, transparent 0),
     radial-gradient(circle 10px, #2192d7 100%, transparent 0);
   background-position: 0em -20em, 0em 20em, 20em 0em, -20em 0em,
-                       14em -14em, -14em -14em, 14em 14em, -14em 14em;
+    14em -14em, -14em -14em, 14em 14em, -14em 14em;
   background-repeat: no-repeat;
   font-size: 0.5px;
   border-radius: 50%;
   animation: blastGlow 1.5s ease-in-out infinite;
 }
+
 .et_loader_44::after {
   font-size: 1px;
   background: radial-gradient(circle, #66b4e6, #2192d7);
   border-radius: 50%;
   animation: bounceGlow 1.5s ease-in-out infinite;
 }
+
 @keyframes bounceGlow {
-  0%, 100% { font-size: 0.75px; opacity: 0.8; }
-  50% { font-size: 1.6px; opacity: 1; }
+
+  0%,
+  100% {
+    font-size: 0.75px;
+    opacity: 0.8;
+  }
+
+  50% {
+    font-size: 1.6px;
+    opacity: 1;
+  }
 }
+
 @keyframes blastGlow {
-  0%, 40% { font-size: 0.5px; opacity: 0.7; }
-  70% { font-size: 4px; opacity: 1; }
-  100% { font-size: 6px; opacity: 0; }
+
+  0%,
+  40% {
+    font-size: 0.5px;
+    opacity: 0.7;
+  }
+
+  70% {
+    font-size: 4px;
+    opacity: 1;
+  }
+
+  100% {
+    font-size: 6px;
+    opacity: 0;
+  }
 }
 
 /* ===== Countdown Section ===== */
@@ -100,6 +143,7 @@
   gap: 40px;
   flex-wrap: wrap;
 }
+
 .ct_counter_clock_cnt {
   width: 90px;
   height: 90px;
@@ -123,10 +167,17 @@ h4.ct_fs_24.ct_fw_700.text-center {
   animation: fadeInUp 1.2s ease forwards;
   opacity: 0;
 }
+
 @keyframes fadeInUp {
-  0% { transform: translateY(20px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* ===== Button Enhancement ===== */
-

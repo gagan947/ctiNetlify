@@ -47,7 +47,9 @@ export class PaymentPlanComponent {
     this.total_cost_delivery = this.projectsData.total_cost_delivery;
     this.projectsFeatures = this.projectsData.selectdFeature;
     this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
-    this.apiService._imagePreview.set(this.projectsData.projectLogo);
+    if (this.projectsData.projectLogo) {
+      this.apiService._imagePreview.set(this.projectsData.projectLogo);
+    }
     this.onPaymentChange('2')
     if (this.projectsData.installmentType) {
       this.onInstallmentChange(this.projectsData.installmentType)
