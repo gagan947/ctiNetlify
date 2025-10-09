@@ -10,10 +10,27 @@
 <div class="support">
       <p>
             Having trouble?
-            <a href="https://calendly.com/creativethoughts/30min" target="_blank">Book a Call</a><br />
+            <a data-bs-toggle="modal" data-bs-target="#calendlyModal">Book a Call</a><br />
             Contact Us:
             <a href="mailto:info@creativethoughtsinfo.com">info&#64;creativethoughtsinfo.com</a>
             <br />
             <a routerLink="/dashboard">Back to Dashboard</a>
       </p>
+</div>
+
+<div class="modal fade modal-xl" id="calendlyModal" tabindex="-1" aria-labelledby="calendlyModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog ">
+            <div class="modal-content">
+                  <div class="modal-header">
+                        <h5 class="modal-title" id="calendlyModalLabel">Schedule a Call</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                        <div appCalendlyWidget [calendlyUrl]="'https://calendly.com/creativethoughts/30min'"
+                              style="min-width:320px; height:900px;">
+                        </div>
+                  </div>
+            </div>
+      </div>
 </div>

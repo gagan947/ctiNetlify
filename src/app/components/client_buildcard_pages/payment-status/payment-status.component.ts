@@ -3,13 +3,13 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
-import { SidebarComponent } from '../sidebar/sidebar.component';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
 
 @Component({
   selector: 'app-payment-status',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, RouterLink],
+  imports: [CommonModule, CalendlyDirective, RouterLink],
   templateUrl: './payment-status.component.html',
   styleUrl: './payment-status.component.css',
   animations: [
