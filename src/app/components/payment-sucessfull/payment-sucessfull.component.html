@@ -203,27 +203,4 @@
       </div>
 </div> -->
 
-<section class="processing-section">
-      <div class="animation-container">
-        <!-- You could embed a Lottie component or custom SVG here -->
-        <!-- <ng-lottie [options]="lottieOptions"></ng-lottie> -->
-      </div>
-    
-      <h2 class="status-text">Your project is being prepared</h2>
-      <p class="subtext">We are working behind the scenes. Your MVP will be ready in:</p>
-    
-      <div class="countdown-timer">
-        <span>{{ days }}d</span> :
-        <span>{{ hours }}h</span> :
-        <span>{{ minutes }}m</span> :
-        <span>{{ seconds }}s</span>
-      </div>
-    
-      <div class="steps-list">
-        <div *ngFor="let step of steps; let i = index" class="step-item">
-          <div class="step-indicator">{{ i + 1 }}</div>
-          <div class="step-text">{{ step }}</div>
-        </div>
-      </div>
-    </section>
     

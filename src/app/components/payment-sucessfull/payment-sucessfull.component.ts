@@ -29,7 +29,7 @@ export class PaymentSucessfullComponent {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.orderId = params['order_id'];
-      this.clientEnquryId = params['clientEnquryId'];
+      this.clientEnquryId = params['enquiryId'];
       if (this.orderId) {
         this.checkPaymentStatus();
       }
