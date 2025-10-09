@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class PaymentSucessfullComponent {
   orderId: string = '';
+  status = 0 ;
   paymentStatus: string = 'Checking...';
   clientEnquryId: string = '';
   constructor(private route: ActivatedRoute, private service: ApiService) { }
@@ -27,8 +28,10 @@ export class PaymentSucessfullComponent {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.orderId = params['order_id'];
+      this.status = params['status'];
       this.clientEnquryId = params['enquiryId'];
-      if (this.orderId) {
+      console.log(this.status);
+      if (this.orderId && this.status != 1)  {
         this.checkPaymentStatus();
       }
     });
@@ -44,7 +47,7 @@ export class PaymentSucessfullComponent {
         if (response.orderStatus === 'PAID') {
           console.log('✅ Payment successful!', response.orderData);
         } else {
-          console.log('ℹ️ Payment not completed yet:', response.orderStatus);
+          
         }
       } else {
         console.warn('⚠️ Payment verification failed or no response received.');
@@ -87,12 +90,21 @@ export class PaymentSucessfullComponent {
 
 
   ngAfterViewInit(): void {
-    // Set target time = now + 7 days (in ms)
-    const now = new Date().getTime();
-    const sevenDays = 7 * 24 * 60 * 60 * 1000;
-    const target = now + sevenDays;
+    // Fetch end_time from API
+    this.service.getApi(`api/payment/getPaymentDetails?orderId=${this.orderId}`).subscribe((res: any) => {
+      if (res.data.length > 0) {
+        const targetTime = new Date(res.data[0].fetch_mvp_date).getTime();
+        this.startCountdown(targetTime);
+      } else {
+        const now = new Date();
+        const targetTime = now.getTime() + 7 * 24 * 60 * 60 * 1000;
+        this.startCountdown(targetTime);
+      }
+    });
+  }
 
-    const daysEl: any = document.getElementById('days');
+  startCountdown(target: number) {
+    const daysEl = document.getElementById('days');
     const hoursEl = document.getElementById('hours');
     const minsEl = document.getElementById('minutes');
     const secsEl = document.getElementById('seconds');
@@ -101,22 +113,19 @@ export class PaymentSucessfullComponent {
       const current = new Date().getTime();
       let diff = target - current;
 
-      if (diff < 0) {
-        diff = 0;
-      }
+      if (diff < 0) diff = 0;
 
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
-      daysEl!.textContent = days;
-      hoursEl!.textContent = String(hours).padStart(2, '0');
-      minsEl!.textContent = String(mins).padStart(2, '0');
-      secsEl!.textContent = String(secs).padStart(2, '0');
+      if (daysEl) daysEl.textContent = days.toString();
+      if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+      if (minsEl) minsEl.textContent = String(mins).padStart(2, '0');
+      if (secsEl) secsEl.textContent = String(secs).padStart(2, '0');
     }
 
-    // Run immediately and then every second
     updateTimer();
     setInterval(updateTimer, 1000);
   }
