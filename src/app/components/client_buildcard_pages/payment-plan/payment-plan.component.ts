@@ -73,7 +73,6 @@ export class PaymentPlanComponent {
     }
   };
 
-
   onInstallmentChange(type: any) {
     const today = new Date()
     if (type == 'weekly') {
@@ -120,7 +119,6 @@ export class PaymentPlanComponent {
   }
 
   Navigate() {
-
     let formData = undefined
     if (this.paymentPlan == '2') {
       formData = {
@@ -161,19 +159,8 @@ export class PaymentPlanComponent {
 
   openCalendly() {
     console.log("here1");
-    // Calendly.initPopupWidget({ url: 'https://calendly.com/amitholkar/30min' });
     Calendly.initPopupWidget({ url: 'https://calendly.com/mohdfaraz-ctinfotech/30min' });
   };
-
-  // ngAfterViewInit() {
-  //   const calendlyContainer = document.getElementById('calendly-inline-widget');
-  //   if (calendlyContainer) {
-  //     Calendly.initInlineWidget({
-  //       url: 'https://calendly.com/amitholkar/30min',
-  //       parentElement: calendlyContainer
-  //     });
-  //   }
-  // }
 
   ngAfterViewInit() {
     console.log("here2");
@@ -184,7 +171,6 @@ export class PaymentPlanComponent {
         parentElement: calendlyContainer,
       });
     }
-    // window.addEventListener('message', this.handleCalendlyEvent.bind(this));
   };
 
   handleCalendlyEvent(e: MessageEvent) {
@@ -200,13 +186,12 @@ export class PaymentPlanComponent {
         if (res.success) {
         }
       }, error(err) {
-        // this.message.error(err.error.message)
+
       },
     })
   }
 
   ngOnDestroy() {
-    // Clean up the listener to avoid memory leaks
     window.removeEventListener('message', this.handleCalendlyEvent.bind(this));
   }
 
@@ -234,7 +219,8 @@ export class PaymentPlanComponent {
         amount: Math.floor((this.actualCost! * 20) / 100),
         user,
         currency: this.currencyCode,
-        clientEnquryId: this.projectsData.clientEnquryId
+        clientEnquryId: this.projectsData.clientEnquryId,
+        currentRoutes: this.router.url,
       })
       .subscribe(
         (response: any) => {
