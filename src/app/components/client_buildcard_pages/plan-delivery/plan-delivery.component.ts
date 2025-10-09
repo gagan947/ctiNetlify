@@ -92,6 +92,7 @@ export class PlanDeliveryComponent {
   onDeviceSelect(device: string): void {
     const index = this.selectedDevices.indexOf(device);
     const incrementValue = 0.3;
+    const today = new Date();
 
     if (index === -1) {
       this.selectedDevices.push(device);
@@ -122,7 +123,8 @@ export class PlanDeliveryComponent {
     }
 
     this.total_cost_delivery = this.originalProjectCost * (1 + incrementValue * (this.selectedDevices.length - 1));
-
+    this.estimatedDate = new Date(today);
+    this.estimatedDate.setDate(today.getDate() + this.estimatedWeeks * 7);
     this.updateCosts();
     this.applyRangeValue();
   }

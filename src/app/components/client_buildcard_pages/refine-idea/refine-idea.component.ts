@@ -14,11 +14,12 @@ import { DiscountModalComponent } from './discount-modal/discount-modal.componen
 import { BdLoaderComponent } from '../../shared/bd-loader/bd-loader.component';
 import { ModalService } from '../../../services/modal.service';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { SubmitButtonComponent } from '../../shared/submit-button/submit-button.component';
 
 @Component({
   selector: 'app-refine-idea',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe, BdLoaderComponent, ScrollingModule],
+  imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe, BdLoaderComponent, ScrollingModule, SubmitButtonComponent],
   templateUrl: './refine-idea.component.html',
   styleUrl: './refine-idea.component.css',
 })
@@ -28,7 +29,7 @@ export class RefineIdeaComponent {
   projectsFeaturs: Feature[] = [];
   allFeatures: Feature[] = [];
   commongFeaturs: any[] = [];
-  totalFeatureCost: any;
+  totalFeatureCost: number = 0;
   durations: number | undefined;
   noOfFeaturs: number = 0
   rate: any;
@@ -38,6 +39,7 @@ export class RefineIdeaComponent {
   showSidebar: boolean = false
   currencyCode: string = 'INR'
   userData: any
+  isLoading2: boolean = false
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService) {
     let projectData = sessionStorage.getItem('projectData');
     this.userData = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
@@ -157,6 +159,14 @@ export class RefineIdeaComponent {
   }
 
   Navigate() {
+
+    if ((this.durations && this.durations < 6) || this.durations == 0) {
+      this.message.warning('Estimated duration must be more than 6 weeks to proceed with planning.');
+      return
+    }
+
+    this.isLoading2 = true
+
     let formData = {
       formNumber: 2,
       projectFeatures: this.projectsFeaturs,
@@ -182,10 +192,15 @@ export class RefineIdeaComponent {
 
             sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalFeatureCost, ...selectdFeature, ...{ 'no_of_features': this.noOfFeaturs }, ...{ 'estimated_time': this.durations } }))
             this.router.navigate([`/plan-delivery/${this.id}`])
+            this.isLoading2 = false
           } else {
             this.message.error(res.message);
+            this.isLoading2 = false
           }
-        }, error: err => { this.message.error(err.error.message); }
+        }, error: err => {
+          this.message.error(err.error.message);
+          this.isLoading2 = false
+        }
       });
   }
 

@@ -203,27 +203,39 @@
       </div>
 </div> -->
 
-<section class="processing-section">
-      <div class="animation-container">
-        <!-- You could embed a Lottie component or custom SVG here -->
-        <!-- <ng-lottie [options]="lottieOptions"></ng-lottie> -->
+<div class="container">
+      <div class="loader-wrapper">
+            <div class="spinner"></div>
+            <div class="inner-dots">
+                  <div class="dot dot1"></div>
+                  <div class="dot dot2"></div>
+                  <div class="dot dot3"></div>
+            </div>
       </div>
-    
-      <h2 class="status-text">Your project is being prepared</h2>
-      <p class="subtext">We are working behind the scenes. Your MVP will be ready in:</p>
-    
-      <div class="countdown-timer">
-        <span>{{ days }}d</span> :
-        <span>{{ hours }}h</span> :
-        <span>{{ minutes }}m</span> :
-        <span>{{ seconds }}s</span>
+
+      <h2>Your project is being prepared</h2>
+      <p>We are working behind the scenes. Your MVP will be ready in:</p>
+
+      <div class="countdown">
+            <div class="time-box">
+                  <span id="days">0</span><small>Days</small>
+            </div>
+            <div class="time-box">
+                  <span id="hours">00</span><small>Hours</small>
+            </div>
+            <div class="time-box">
+                  <span id="minutes">00</span><small>Minutes</small>
+            </div>
+            <div class="time-box">
+                  <span id="seconds">00</span><small>Seconds</small>
+            </div>
       </div>
-    
-      <div class="steps-list">
-        <div *ngFor="let step of steps; let i = index" class="step-item">
-          <div class="step-indicator">{{ i + 1 }}</div>
-          <div class="step-text">{{ step }}</div>
-        </div>
+
+      <div class="steps">
+            <div class="step">1. Initial setup</div>
+            <div class="step">2. Design & architecture</div>
+            <div class="step">3. Development in progress</div>
+            <div class="step">4. Testing & QA</div>
+            <div class="step">5. Final touches & review</div>
       </div>
-    </section>
-    
+</div>
