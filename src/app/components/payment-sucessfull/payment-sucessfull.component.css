@@ -1,0 +1,57 @@
+.processing-section {
+    text-align: center;
+    padding: 2rem;
+  
+    .animation-container {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+    }
+  
+    .status-text {
+      font-size: 2rem;
+      margin-top: 1rem;
+    }
+    .subtext {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+  
+    .countdown-timer {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+  
+      span {
+        margin: 0 0.25rem;
+      }
+    }
+  
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+  
+      .step-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+  
+        .step-indicator {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          background: #007bff;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .step-text {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+  

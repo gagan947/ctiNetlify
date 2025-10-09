@@ -1,4 +1,4 @@
-<section class="ct_dash_board_main">
+<!-- <section class="ct_dash_board_main">
       <app-sidebar></app-sidebar>
       <div class="ct_dash_right_content ct_white_bg_page h-auto">
             <div class="ct_dash_toggle_bar">
@@ -129,7 +129,7 @@
       </div>
 </section>
 
-<!-- Mobile page section S -->
+
 <section class="ct_mobile_section_main">
       <div class="ct_mobile_header_main_bg">
             <img loading="lazy" src="assets/img/cti_black_logo.svg" alt="AI app builder for mobile and web">
@@ -168,11 +168,6 @@
 
       </div>
 </section>
-<!-- Mobile page section E -->
-
-
-
-<!-- Refrsh page modal S -->
 
 <div class="modal fade modal-lg" id="ct_refresh_page" tabindex="-1" aria-labelledby="ct_refresh_pageLabel"
       aria-hidden="true">
@@ -180,7 +175,7 @@
             <div class="modal-content  p-4">
 
                   <div class="modal-body  p-0">
-                        <!-- You Need To Import Schedule Form here -->
+                       
                         <div class="ct_schedule_call_main12">
 
                               <h4 class="ct_fs_24 ct_fw_700 text-center mb-2">Are you sure you want to continue with
@@ -206,5 +201,29 @@
 
             </div>
       </div>
-</div>
-<!-- Refrsh page modal E -->
+</div> -->
+
+<section class="processing-section">
+      <div class="animation-container">
+        <!-- You could embed a Lottie component or custom SVG here -->
+        <!-- <ng-lottie [options]="lottieOptions"></ng-lottie> -->
+      </div>
+    
+      <h2 class="status-text">Your project is being prepared</h2>
+      <p class="subtext">We are working behind the scenes. Your MVP will be ready in:</p>
+    
+      <div class="countdown-timer">
+        <span>{{ days }}d</span> :
+        <span>{{ hours }}h</span> :
+        <span>{{ minutes }}m</span> :
+        <span>{{ seconds }}s</span>
+      </div>
+    
+      <div class="steps-list">
+        <div *ngFor="let step of steps; let i = index" class="step-item">
+          <div class="step-indicator">{{ i + 1 }}</div>
+          <div class="step-text">{{ step }}</div>
+        </div>
+      </div>
+    </section>
+    
