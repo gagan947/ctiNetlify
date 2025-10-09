@@ -345,6 +345,11 @@
   .ct_px_80 {
     padding-inline: 30px;
   }
+  .ct_chat_item_left {
+
+    height: calc(100vh - 60px) !important;
+    margin-top: 30px;
+}
 
   .ct_blue_outline_btn,
   .ct_blue_btn_fill {
@@ -497,8 +502,8 @@
 
   .ct_dash_toggle_bar {
     position: absolute;
-    top: 20px;
-    left: 15px;
+    top: 10px;
+    left: 10px;
     transition: 0.4s ease all;
   }
 

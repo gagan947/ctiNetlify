@@ -3,16 +3,17 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { SidebarComponent } from '../client_buildcard_pages/sidebar/sidebar.component';
 @Component({
   selector: 'app-payment-sucessfull',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SidebarComponent],
   templateUrl: './payment-sucessfull.component.html',
   styleUrl: './payment-sucessfull.component.css',
 })
 export class PaymentSucessfullComponent {
   orderId: string = '';
-  status = 0 ;
+  status = 0;
   paymentStatus: string = 'Checking...';
   clientEnquryId: string = '';
   constructor(private route: ActivatedRoute, private service: ApiService) { }
@@ -31,7 +32,7 @@ export class PaymentSucessfullComponent {
       this.status = params['status'];
       this.clientEnquryId = params['enquiryId'];
       console.log(this.status);
-      if (this.orderId && this.status != 1)  {
+      if (this.orderId && this.status != 1) {
         this.checkPaymentStatus();
       }
     });
@@ -47,7 +48,7 @@ export class PaymentSucessfullComponent {
         if (response.orderStatus === 'PAID') {
           console.log('✅ Payment successful!', response.orderData);
         } else {
-          
+
         }
       } else {
         console.warn('⚠️ Payment verification failed or no response received.');
@@ -100,6 +101,10 @@ export class PaymentSucessfullComponent {
         const targetTime = now.getTime() + 7 * 24 * 60 * 60 * 1000;
         this.startCountdown(targetTime);
       }
+    }, error => {
+      const now = new Date();
+      const targetTime = now.getTime() + 7 * 24 * 60 * 60 * 1000;
+      this.startCountdown(targetTime);
     });
   }
 

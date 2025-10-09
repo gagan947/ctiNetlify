@@ -1,8 +1,11 @@
 .preview-image {
       height: 103px;
       border-radius: 10px;
+      object-fit: contain;
 }
-
+#mylogo{
+  object-fit: contain !important;
+}
 .ct_mobile_w_screen {
       width: 144px !important;
       height: 304px;
@@ -127,7 +130,7 @@
   border: none;
   transform: scale(1);          
   transform-origin: top left;  */
-      width: 420px;
+      width: 407px;
       height: 750px;
       border: none;
       transform: scale(0.65);

@@ -1,6 +1,10 @@
 .preview-image {
   height: 103px;
   border-radius: 10px;
+  object-fit: contain;
+}
+#mylogo{
+  object-fit: contain !important;
 }
 
 .ct_mobile_w_screen {

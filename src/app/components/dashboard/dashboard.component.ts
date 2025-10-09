@@ -65,12 +65,12 @@ export class DashboardComponent {
               estimatedDate: this.estimatedDate?.setDate(today.getDate() + data.durations * 7),
               no_of_features: data.no_of_features
             };
-           
+
             sessionStorage.setItem('htmlCode', data.html_pages);
             sessionStorage.setItem('projectData', JSON.stringify(projectData));
             if (item.projectStatus == 1) {
-              this.router.navigate(['/payment-success'], {
-                queryParams: { order_id: item.order_id,status:1 }
+              this.router.navigate(['/payment-status'], {
+                queryParams: { order_id: item.order_id, status: 1 }
               });
             } else {
               this.router.navigate([item.currentRoutes]);

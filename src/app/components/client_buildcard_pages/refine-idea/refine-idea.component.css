@@ -2,7 +2,9 @@
     height: 103px;
     border-radius: 10px;
 }
-
+#mylogo{
+  object-fit: contain;
+}
 .ct_mobile_w_screen {
     width: 144px !important;
     height: 304px;

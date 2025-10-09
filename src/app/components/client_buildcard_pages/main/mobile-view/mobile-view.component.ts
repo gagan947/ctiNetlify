@@ -37,7 +37,7 @@ export class MobileViewComponent {
     if (doc) {
       const logo = doc.querySelector('#mylogo') as HTMLElement;
 
-      const newLogoHtml = `<img id="mylogo" loading="lazy" src="${this.imagePreview || 'https://https://creativethoughts.ai/assets/img/c.png'}" alt="AI app builder for mobile and web" style="width: 70px; height: 30px;">`;
+      const newLogoHtml = `<img id="mylogo" loading="lazy" src="${this.imagePreview || 'https://creativethoughts.ai/assets/img/c.png'}" alt="AI app builder for mobile and web" style="width: 70px; height: 30px;">`;
 
       if (logo) logo.outerHTML = newLogoHtml;
     }

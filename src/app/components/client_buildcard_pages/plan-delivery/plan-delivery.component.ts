@@ -64,7 +64,9 @@ export class PlanDeliveryComponent {
     this.features_cost = this.projectsData.features_cost;
     this.total_cost_delivery = this.features_cost;
     this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
-    this.apiService._imagePreview.set(this.projectsData.projectLogo);
+    if (this.projectsData.projectLogo) {
+      this.apiService._imagePreview.set(this.projectsData.projectLogo);
+    }
     this.originalProjectCost = this.total_cost_delivery;
 
     this.updateCosts();

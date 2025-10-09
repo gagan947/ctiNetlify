@@ -42,7 +42,9 @@ export class BillingDetailsComponent {
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
     this.apiService._htmlCode.set(sessionStorage.getItem('htmlCode'));
-    this.apiService._imagePreview.set(this.projectsData.projectLogo);
+    if (this.projectsData.projectLogo) {
+      this.apiService._imagePreview.set(this.projectsData.projectLogo);
+    }
     this.projectsFeatures = this.projectsData.selectdFeature;
     this.billingDetails = this.projectsData.bellingDetails ? this.projectsData.bellingDetails[0] : userData;
     this.totalSubFeatures = this.projectsData.no_of_features
