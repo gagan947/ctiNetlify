@@ -50,18 +50,21 @@
                                                                                                 {{item.projectName}}
                                                                                           </h6>
                                                                                     </div>
-                                                                                    <div class="dropdown">
-                                                                                          <i class="fa-solid fa-ellipsis-vertical"
-                                                                                                id="dropdownMenuButton1"
-                                                                                                data-bs-toggle="dropdown"
-                                                                                                aria-expanded="false"></i>
-                                                                                          <ul class="dropdown-menu"
-                                                                                                aria-labelledby="dropdownMenuButton1">
-                                                                                                <li><a (click)="discardProject(item.projectId)"
-                                                                                                            class="dropdown-item">Remove</a>
-                                                                                                </li>
-                                                                                          </ul>
-                                                                                    </div>
+                                                                                    @if(item.projectStatus == 0){
+                                                                                          <div class="dropdown" >
+                                                                                                <i class="fa-solid fa-ellipsis-vertical"
+                                                                                                      id="dropdownMenuButton1"
+                                                                                                      data-bs-toggle="dropdown"
+                                                                                                      aria-expanded="false"></i>
+                                                                                                <ul class="dropdown-menu"
+                                                                                                      aria-labelledby="dropdownMenuButton1">
+                                                                                                      <li><a (click)="discardProject(item.projectId)"
+                                                                                                                  class="dropdown-item">Remove</a>
+                                                                                                      </li>
+                                                                                                </ul>
+                                                                                          </div>
+
+                                                                                    }
                                                                               </div>
                                                                               <div
                                                                                     class="d-flex align-items-center justify-content-between gap-3 mt-4">
