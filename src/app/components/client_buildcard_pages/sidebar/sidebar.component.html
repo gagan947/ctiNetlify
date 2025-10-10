@@ -27,15 +27,22 @@
                         </div>
                   </li>
                   <li class="ct_tool_tip_main">
-                        <a routerLink="/schedule-a-call">
+                        <a >
                               <img loading="lazy" src="assets/img/head_dash_icon.svg"
                                     alt="AI app builder for mobile and web">
                         </a>
-                        <div class="ct_tool_tip_cnt ct_tooltip_schedule_btn">
-                              <button class="ct_schedule_call_btn" data-bs-toggle="modal"
-                              data-bs-target="#calendlyModal"><i class="bi bi-telephone"></i>schedule a
-                                    call</button>
+
+                        <div class="ct_tool_tip_cnt"data-bs-toggle="modal"
+                        data-bs-target="#calendlyModal">
+                              <p class="mb-0" ><i class="bi bi-telephone"></i>  Schedule a call</p>
+
                         </div>
+                        <!-- <div class="ct_tool_tip_cnt ct_tooltip_schedule_btn">
+                              <button class="ct_schedule_call_btn" data-bs-toggle="modal"
+                                    data-bs-target="#calendlyModal"><i class="bi bi-telephone"></i>schedule a
+                                    call</button>
+                              
+                        </div> -->
                   </li>
             </ul>
             <ul>
@@ -91,5 +98,22 @@
                         </div>
                   </li>
             </ul>
+      </div>
+</div>
+
+<div class="modal fade modal-xl" id="calendlyModal" tabindex="-1" aria-labelledby="calendlyModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+            <div class="modal-content">
+                  <div class="modal-header">
+                        <h5 class="modal-title" id="calendlyModalLabel">Schedule a Call</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                        <div appCalendlyWidget [calendlyUrl]="'https://calendly.com/creativethoughts/30min'"
+                              style="min-width:320px; height:630px;">
+                        </div>
+                  </div>
+            </div>
       </div>
 </div>

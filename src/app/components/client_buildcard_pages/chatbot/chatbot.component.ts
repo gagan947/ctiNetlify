@@ -45,6 +45,32 @@ export class ChatbotComponent {
 
   ngOnInit() {
     this.basicOptions = this.flow['welcome'].options;
+      // this.socket = io(this.apiservice.apiUrl);
+      let currentBotMsg = "";
+      // listen for streaming tokens
+      // this.socket.on('botReply', (msg: string) => {
+  
+      //   if (msg === "[END]") {
+      //     console.log("✅ Stream finished");
+      //     return;
+      //   }
+      //   // Append stream to last bot message
+      //   if (
+      //     this.messages.length > 0 &&
+      //     this.messages[this.messages.length - 1].sender === "Bot"
+      //   ) {
+      //     this.messages[this.messages.length - 1].text += msg;
+      //   } else {
+      //     this.messages.push({ sender: "Bot", text: msg });
+      //   }
+      //   this.isLoading = false; // hide spinner after response
+      // });
+  
+      // // when streaming ends
+      // this.socket.on('botDone', () => {
+      //   console.log("✅ Bot finished response");
+      //   currentBotMsg = "";
+      // });
   }
 
   scrollToBottom(): void {

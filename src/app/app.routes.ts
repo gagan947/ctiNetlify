@@ -57,6 +57,9 @@ export const routes: Routes = [
             path: 'payment-success', loadComponent: () => import('./components/payment-sucessfull/payment-sucessfull.component').then(c => c.PaymentSucessfullComponent)
       },
       {
+            path: 'bd_loader', loadComponent: () => import('./components/client_buildcard_pages/builder-loader/builder-loader.component').then(c => c.BuilderLoaderComponent)
+      },
+      {
             path: 'profile', loadComponent: () => import('./components/profile/profile.component').then(c => c.ProfileComponent)
       },
       {
