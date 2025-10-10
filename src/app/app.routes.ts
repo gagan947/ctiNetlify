@@ -65,12 +65,15 @@ export const routes: Routes = [
             path: 'profile', loadComponent: () => import('./components/profile/profile.component').then(c => c.ProfileComponent), canActivate: [authGuard]
       },
       {
-            path: 'contact', loadComponent: () => import('./components/contactus/contactus.component').then(c => c.ContactusComponent), canActivate: [authGuard]
+            path: 'contact', loadComponent: () => import('./components/contactus/contactus.component').then(c => c.ContactusComponent)
       },
       {
             path: '', loadChildren: () => import('./components/landing-pages/landing.routes').then(r => r.LandingRoutes), canActivate: [loginGuard]
       },
       {
             path: 'user', loadChildren: () => import('./components/user-section/user.routes').then(r => r.UserRoutes)
+      },
+      {
+            path: '**', loadChildren: () => import('./components/landing-pages/landing.routes').then(r => r.LandingRoutes), canActivate: [loginGuard]
       }
 ];
