@@ -1,33 +1,35 @@
 import { Routes } from '@angular/router';
 import { canDeactivateGuard } from './helper/guards/can-deactivate.guard';
+import { loginGuard } from './guard/login.guard';
+import { authGuard } from './guard/auth.guard';
 
 export const routes: Routes = [
       {
-            path: 'login', loadComponent: () => import('./components/login/login.component').then(c => c.LoginComponent)
+            path: 'login', loadComponent: () => import('./components/login/login.component').then(c => c.LoginComponent), canActivate: [loginGuard]
       },
       {
-            path: 'signup', loadComponent: () => import('./components/signup/signup.component').then(c => c.SignupComponent)
+            path: 'signup', loadComponent: () => import('./components/signup/signup.component').then(c => c.SignupComponent), canActivate: [loginGuard]
       },
       {
-            path: 'forgot-password', loadComponent: () => import('./components/forgot-password/forgot-password.component').then(c => c.ForgotPasswordComponent)
+            path: 'forgot-password', loadComponent: () => import('./components/forgot-password/forgot-password.component').then(c => c.ForgotPasswordComponent), canActivate: [loginGuard]
       },
       {
-            path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(c => c.DashboardComponent)
+            path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(c => c.DashboardComponent), canActivate: [authGuard]
       },
       {
-            path: 'free-demo', loadComponent: () => import('./components/free-demo/free-demo.component').then(c => c.FreeDemoComponent)
+            path: 'free-demo', loadComponent: () => import('./components/free-demo/free-demo.component').then(c => c.FreeDemoComponent), canActivate: [authGuard]
       },
       {
-            path: 'main', loadComponent: () => import('./components/client_buildcard_pages/main/main.component').then(c => c.MainComponent)
+            path: 'main', loadComponent: () => import('./components/client_buildcard_pages/main/main.component').then(c => c.MainComponent), canActivate: [authGuard]
       },
       {
-            path: 'make-it-mine', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent)
+            path: 'make-it-mine', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent), canActivate: [authGuard]
       },
       {
-            path: 'make-it-mine/:id', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent)
+            path: 'make-it-mine/:id', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent), canActivate: [authGuard]
       },
       {
-            path: 'chatbot', loadComponent: () => import('./components/client_buildcard_pages/chatbot/chatbot.component').then(c => c.ChatbotComponent)
+            path: 'chatbot', loadComponent: () => import('./components/client_buildcard_pages/chatbot/chatbot.component').then(c => c.ChatbotComponent), canActivate: [authGuard]
       },
       {
             path: 'schedule-a-call', loadComponent: () => import('./components/schedule-a-call/schedule-a-call.component').then(c => c.ScheduleACallComponent)
@@ -51,19 +53,19 @@ export const routes: Routes = [
             path: 'payment-option', loadComponent: () => import('./components/client_buildcard_pages/payment-detail/payment-detail.component').then(c => c.PaymentDetailComponent), canDeactivate: [canDeactivateGuard]
       },
       {
-            path: 'payment-status', loadComponent: () => import('./components/client_buildcard_pages/payment-status/payment-status.component').then(c => c.PaymentStatusComponent), canDeactivate: [canDeactivateGuard]
+            path: 'payment-status', loadComponent: () => import('./components/client_buildcard_pages/payment-status/payment-status.component').then(c => c.PaymentStatusComponent), canActivate: [authGuard]
       },
       {
-            path: 'payment-success', loadComponent: () => import('./components/payment-sucessfull/payment-sucessfull.component').then(c => c.PaymentSucessfullComponent)
+            path: 'payment-success', loadComponent: () => import('./components/payment-sucessfull/payment-sucessfull.component').then(c => c.PaymentSucessfullComponent), canActivate: [authGuard]
       },
       {
-            path: 'profile', loadComponent: () => import('./components/profile/profile.component').then(c => c.ProfileComponent)
+            path: 'profile', loadComponent: () => import('./components/profile/profile.component').then(c => c.ProfileComponent), canActivate: [authGuard]
       },
       {
-            path: 'contact', loadComponent: () => import('./components/contactus/contactus.component').then(c => c.ContactusComponent)
+            path: 'contact', loadComponent: () => import('./components/contactus/contactus.component').then(c => c.ContactusComponent), canActivate: [authGuard]
       },
       {
-            path: '', loadChildren: () => import('./components/landing-pages/landing.routes').then(r => r.LandingRoutes)
+            path: '', loadChildren: () => import('./components/landing-pages/landing.routes').then(r => r.LandingRoutes), canActivate: [loginGuard]
       },
       {
             path: 'user', loadChildren: () => import('./components/user-section/user.routes').then(r => r.UserRoutes)
