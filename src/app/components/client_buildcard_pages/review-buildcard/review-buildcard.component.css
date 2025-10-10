@@ -28,3 +28,15 @@
 .ct_help_user_table tr td {
     vertical-align: middle;
 }
+.ct_project_list_56 li {
+    padding-right: 15px;
+}
+
+@media screen and (max-width:700px){
+    .ct_project_list_56 {
+        display: grid
+    ;
+        grid-template-columns: auto auto;
+        gap: 20px;
+    }
+}

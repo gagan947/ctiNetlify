@@ -177,4 +177,11 @@ export class MainComponent {
     this.isLoading = true;
     this.userMessage = '';
   }
+
+  navigateTool(id: any) {
+    this.router.navigate(['/bd_loader'], { 
+      queryParams: { id },
+      skipLocationChange: true  // <-- URL won't change, user stays on original route
+    });
+  }
 }

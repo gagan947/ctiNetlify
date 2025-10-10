@@ -51,6 +51,20 @@ export class MakeItMineComponent {
     ngOnInit() {
         if (this.id && !this.projectsData) {
             this.getProjectHtml()
+        }else{
+            const doc1 = this.iframe1.nativeElement.contentDocument || this.iframe1.nativeElement.contentWindow?.document;
+                if (doc1) {
+                    doc1.open();
+                    doc1.write(this.apiService._htmlCode());
+
+                    
+                    doc1.close();
+                    const logo1 = doc1.querySelector('#mylogo') as HTMLElement;
+
+                    const newLogoHtml = `<img id="mylogo" loading="lazy" src="${this.apiService._imagePreview() || 'https://https://creativethoughts.ai/assets/img/c.png'}" alt="AI app builder for mobile and web" style="width: 70px; height: 30px;">`;
+
+                    if (logo1) logo1.outerHTML = newLogoHtml;
+                }
         }
     }
 
@@ -114,7 +128,7 @@ export class MakeItMineComponent {
                         ...this.projectsData,
                         clientEnquryId: res.data,
                         projectName: this.projectName,
-                        projectLogo: this.imagePreview,
+                        projectLogo: this.imagePreview ? this.imagePreview : this.apiService._imagePreview(),
                     }
 
                     sessionStorage.setItem('projectData', JSON.stringify(projectData))
