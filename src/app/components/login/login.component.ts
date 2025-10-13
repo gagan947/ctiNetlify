@@ -172,6 +172,7 @@ export class LoginComponent {
           this.isLoading = false;
         },
         error: err => {
+          console.log(err);
           switch (true) {
             case err.status === 0:
               this.message.error('Network error, please check your connection.');
@@ -195,6 +196,7 @@ export class LoginComponent {
   }
 
   loginWithGoogle() {
+  
     this.apiService.googleLogin().then((res: any) => {
 
       const formData = {
