@@ -249,3 +249,11 @@ nz-input-otp.ant-otp {
 #mylogo{
   object-fit: contain !important;
 }
+
+.ct_blog_dlt_text_ui ul{
+      list-style: disc !important;
+      padding-left: 20px;
+  }
+  .ct_blog_dlt_text_ui ul li p{
+      margin-bottom: 6px;
+  }

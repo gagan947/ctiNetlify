@@ -196,11 +196,14 @@ export class ChatbotComponent {
   getProjectSuggestions(description: string) {
     this.isLoading = true;
     this.apiservice.postAPI<any, any>('api/user/projectSuggestions', { description: description }).subscribe((response) => {
+      console.log(response);
       this.userInput = '';
       setTimeout(() => {
         if (response.suggestions.length > 0) {
           this.dataEmitter.emit(response.suggestions);
           this.relevantFeatures = response.relevantFeatures
+          this.isLoading = false
+        }else{
           this.isLoading = false
         }
         if (response.flow == 1) {
