@@ -133,7 +133,7 @@ export const chatbotFlow: any = {
 
   pricing: {
     step: "pricing",
-    message: "Here’s how our pricing works 💵:\n• ✨ Free plan → Create a prototype\n• ⚡ Starter → MVP in days\n• 🚀 Premium → Full-scale app with AI & integrations\n\n👉 Want me to connect you with our team for a custom quote?",
+    message: "Here’s how our pricing works 💵:\n• ✨ Free plan → Create a prototype\n• ⚡ Starter → MVP in days\n• 🚀 Premium → Full-scale app with AI & integrations",
     options: [
       { label: "📞 Yes, connect me", next: "end" },
       { label: "⏩ Not now", next: "end" },

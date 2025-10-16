@@ -5,7 +5,7 @@ import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { chatbotFlow } from '../../../helper/chatbot';
 import { AutosizeModule } from 'ngx-autosize';
-
+import { io } from 'socket.io-client';
 @Component({
   selector: 'app-chatbot',
   standalone: true,
@@ -45,32 +45,47 @@ export class ChatbotComponent {
 
   ngOnInit() {
     this.basicOptions = this.flow['welcome'].options;
-      // this.socket = io(this.apiservice.apiUrl);
+      this.socket = io(this.apiservice.apiUrl);
       let currentBotMsg = "";
       // listen for streaming tokens
-      // this.socket.on('botReply', (msg: string) => {
+      this.socket.on('botReply', (msg: string) => {
   
-      //   if (msg === "[END]") {
-      //     console.log("✅ Stream finished");
-      //     return;
-      //   }
-      //   // Append stream to last bot message
-      //   if (
-      //     this.messages.length > 0 &&
-      //     this.messages[this.messages.length - 1].sender === "Bot"
-      //   ) {
-      //     this.messages[this.messages.length - 1].text += msg;
-      //   } else {
-      //     this.messages.push({ sender: "Bot", text: msg });
-      //   }
-      //   this.isLoading = false; // hide spinner after response
-      // });
+        if (msg === "[END]") {
+          console.log("✅ Stream finished");
+          return;
+        }
+        // Append stream to last bot message
+        if (
+          this.messages.length > 0 &&
+          this.messages[this.messages.length - 1].sender === "Bot"
+        ) {
+          this.messages[this.messages.length - 1].text += msg;
+        } else {
+          this.messages.push({ sender: "Bot", text: msg });
+        }
+        this.isLoading = false; // hide spinner after response
+      });
+      this.socket.on('navigateToBuilder', (msg: any) => {
+        // If server sends a JSON string, parse it
+        const data = typeof msg === 'string' ? JSON.parse(msg) : msg;
+      
+        if (data?.projectId) {
+          this.router.navigate(['/bd_loader'], { 
+            queryParams: { projectId: data.projectId },
+            skipLocationChange: true  // URL won't change, user stays on original route
+          });
+        } else {
+          console.error('Project ID not found in server response:', data);
+        }
+      
+        this.isLoading = false; // hide spinner after response
+      });
   
-      // // when streaming ends
-      // this.socket.on('botDone', () => {
-      //   console.log("✅ Bot finished response");
-      //   currentBotMsg = "";
-      // });
+      // when streaming ends
+      this.socket.on('botDone', () => {
+        console.log("✅ Bot finished response");
+        currentBotMsg = "";
+      });
   }
 
   scrollToBottom(): void {
@@ -86,59 +101,67 @@ export class ChatbotComponent {
     this.messages.push({ sender: 'bot', text, step: this.currentStep, features: this.relevantFeatures, time: new Date() });
   }
 
+  // sendMessage() {
+  //   this.userInput = this.userInput.trim();
+  //   // this.relevantFeatures = [];
+  //   if (this.standardChatbot) {
+  //     if (this.userInput.trim()) {
+  //       const isValid = this.flow[this.currentStep].input;
+  //       if (!isValid) {
+  //         this.addUserMessage(this.userInput);
+  //         this.askAIQuestion();
+  //         this.userInput = '';
+  //         return;
+  //       }
+
+  //       this.isLoading = true;
+  //       this.addUserMessage(this.userInput);
+
+  //       if (!this.userData.projectName && (this.currentStep === 'projectNameApp' || this.currentStep === 'projectNameWebsite')) {
+  //         this.userData.projectName = this.userInput.trim();
+  //       }
+  //       if (this.currentStep === 'details') {
+
+  //         this.userData.details = this.userInput.trim();
+  //         this.getProjectSuggestions(this.userData.details);
+  //       }
+  //       if (this.currentStep === 'features') {
+  //         this.userData.features = this.userInput.trim();
+  //       }
+
+  //       const nextStep = this.flow[this.currentStep].next;
+  //       this.userInput = '';
+
+  //       setTimeout(() => {
+  //         if (this.currentStep === 'details') {
+
+  //         } else {
+  //           this.isLoading = false;
+  //         }
+  //         this.currentStep = nextStep;
+  //         if (this.currentStep === 'stop') {
+
+  //         } else {
+  //           const botMsg = this.replacePlaceholders(this.flow[this.currentStep].message);
+  //           this.addBotMessage(botMsg);
+  //           this.userInput = '';
+  //         }
+
+  //       }, 2000)
+
+  //     }
+  //   } else if (this.userInput.trim()) {
+  //     this.addUserMessage(this.userInput);
+  //     this.askAIQuestion();
+  //   }
+  // }
   sendMessage() {
-    this.userInput = this.userInput.trim();
-    // this.relevantFeatures = [];
-    if (this.standardChatbot) {
-      if (this.userInput.trim()) {
-        const isValid = this.flow[this.currentStep].input;
-        if (!isValid) {
-          this.addUserMessage(this.userInput);
-          this.askAIQuestion();
-          this.userInput = '';
-          return;
-        }
+    if (!this.userMessage.trim()) return;
 
-        this.isLoading = true;
-        this.addUserMessage(this.userInput);
-
-        if (!this.userData.projectName && (this.currentStep === 'projectNameApp' || this.currentStep === 'projectNameWebsite')) {
-          this.userData.projectName = this.userInput.trim();
-        }
-        if (this.currentStep === 'details') {
-
-          this.userData.details = this.userInput.trim();
-          this.getProjectSuggestions(this.userData.details);
-        }
-        if (this.currentStep === 'features') {
-          this.userData.features = this.userInput.trim();
-        }
-
-        const nextStep = this.flow[this.currentStep].next;
-        this.userInput = '';
-
-        setTimeout(() => {
-          if (this.currentStep === 'details') {
-
-          } else {
-            this.isLoading = false;
-          }
-          this.currentStep = nextStep;
-          if (this.currentStep === 'stop') {
-
-          } else {
-            const botMsg = this.replacePlaceholders(this.flow[this.currentStep].message);
-            this.addBotMessage(botMsg);
-            this.userInput = '';
-          }
-
-        }, 2000)
-
-      }
-    } else if (this.userInput.trim()) {
-      this.addUserMessage(this.userInput);
-      this.askAIQuestion();
-    }
+    this.messages.push({ sender: 'You', text: this.userMessage });
+    this.socket.emit('chatMessage', this.userMessage);
+    this.isLoading = true;
+    this.userMessage = '';
   }
   replacePlaceholders(message: string): string {
     const replaced = message.replace(/{projectName}/g, this.userData.projectName || '');
@@ -156,7 +179,10 @@ export class ChatbotComponent {
     this.addUserMessage(option.label);
     this.currentStep = option.next;
     if (this.currentStep === 'projectNameApp' || this.currentStep === 'projectNameWebsite') {
-      this.userData.projectName = undefined
+      this.socket.emit('chatMessage', option.label);
+      this.isLoading = true;
+      this.userMessage = '';
+      return
     }
     this.isLoading = true;
     if (this.currentStep !== 'chatbot') {

@@ -38,6 +38,33 @@
 
                 </div>
                 @for (item of messages; track $index) {
+
+                    <div  class="d-flex align-items-center gap-2 mb-3" class="msg-row" [ngClass]="item.sender === 'You' ? 'out' : 'in'">
+                        @if(item.sender === 'You') {
+                            <img [src]='profileImage' alt="" class="avatar" />
+                            } @else {
+                            <img src="assets/img/c.png" alt="" class="p-1 avatar" />
+                            }
+                            <div class="ct_creative_msg_card cti_msg_left mb-0">
+                                <p class="mb-0" style="white-space: pre-wrap;   font-size: 14px;">{{ item.text }}</p>
+                                <small class="ct_chat_time_local">{{item.time | date:'shortTime'}}</small>
+                              
+                            </div>
+    
+                       
+                    </div>
+                }
+
+                <!-- Spinner while waiting for bot -->
+                <!-- <div *ngIf="isLoading" class="msg-row in">
+
+
+                    <div class="spinner-grow" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+
+                </div> -->
+                <!-- @for (item of messages; track $index) {
                 <div class="d-flex align-items-center gap-2 mb-3" class="msg-row"
                     [ngClass]="item.sender === 'You' ? 'out' : 'in'">
                     @if(item.sender === 'You') {
@@ -61,12 +88,12 @@
                         }
                     </div>
                 </div>
-                }
-                <div class="options" *ngIf="getOptions().length">
+                } -->
+                <!-- <div class="options" *ngIf="getOptions().length">
                     <button *ngFor="let option of getOptions()" (click)="selectOption(option)">
                         {{ option.label }}
                     </button>
-                </div>
+                </div> -->
 
                 <div *ngIf="isLoading" class="msg-row in">
                     <div class="spinner-grow" role="status">
@@ -79,7 +106,7 @@
             <footer class="chat-input">
                 <!-- <input [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Type your message…"
                     autocomplete="off" /> -->
-                <textarea [autosize]="true" [rows]="1" [maxRows]="6" [(ngModel)]="userInput"
+                <textarea [autosize]="true" [rows]="1" [maxRows]="6" [(ngModel)]="userMessage"
                     (keyup.enter)="sendMessage()" class="form-control ct_input" placeholder="Type your message…"
                     [onlyGrow]="false" style="height: 45px !important;"></textarea>
 
