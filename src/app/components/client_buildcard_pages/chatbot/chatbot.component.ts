@@ -66,19 +66,20 @@ export class ChatbotComponent {
         this.isLoading = false; // hide spinner after response
       });
       this.socket.on('navigateToBuilder', (msg: any) => {
+      
         // If server sends a JSON string, parse it
         const data = typeof msg === 'string' ? JSON.parse(msg) : msg;
       
         if (data?.projectId) {
           this.router.navigate(['/bd_loader'], { 
-            queryParams: { projectId: data.projectId },
+            queryParams: { id: data.projectId },
             skipLocationChange: true  // URL won't change, user stays on original route
           });
         } else {
           console.error('Project ID not found in server response:', data);
         }
       
-        this.isLoading = false; // hide spinner after response
+        this.isLoading = false; 
       });
   
       // when streaming ends
@@ -176,6 +177,8 @@ export class ChatbotComponent {
   }
 
   selectOption(option: any) {
+    if(this.isLoading)return;
+
     this.addUserMessage(option.label);
     this.currentStep = option.next;
     if (this.currentStep === 'projectNameApp' || this.currentStep === 'projectNameWebsite') {

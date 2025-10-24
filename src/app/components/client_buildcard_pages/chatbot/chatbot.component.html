@@ -106,7 +106,7 @@
             <footer class="chat-input">
                 <!-- <input [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Type your message…"
                     autocomplete="off" /> -->
-                <textarea [autosize]="true" [rows]="1" [maxRows]="6" [(ngModel)]="userMessage"
+                <textarea [autosize]="true" [rows]="1" [maxRows]="6" [(ngModel)]="userMessage" [disabled]="isLoading"
                     (keyup.enter)="sendMessage()" class="form-control ct_input" placeholder="Type your message…"
                     [onlyGrow]="false" style="height: 45px !important;"></textarea>
 
