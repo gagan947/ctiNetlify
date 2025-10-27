@@ -8,8 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "compress:images": "node scripts/compress-images.js",
-    "build": "npm run compress:images && ng build",
-    "build:prod": "npm run compress:images && ng build --configuration production"
+    "build": "ng build",
+    "build:prod": "ng build --configuration production"
   },
   "private": true,
   "dependencies": {
