@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { InMemoryScrollingOptions, PreloadAllModules, provideRouter, withComponentInputBinding, withInMemoryScrolling, withPreloading } from '@angular/router';
+import { InMemoryScrollingOptions, provideRouter, withComponentInputBinding, withInMemoryScrolling, withPreloading } from '@angular/router';
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
@@ -7,6 +7,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
+import { SelectivePreloadingStrategy } from './helper/selective-preloading.strategy';
 const scrollConfig: InMemoryScrollingOptions = {
   scrollPositionRestoration: 'top',
   anchorScrolling: 'enabled',
@@ -32,5 +33,5 @@ export const appConfig: ApplicationConfig = {
       withInterceptorsFromDi()
     ),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    provideRouter(routes, withPreloading(PreloadAllModules), withComponentInputBinding(), withInMemoryScrolling(scrollConfig))]
+    provideRouter(routes, withPreloading(SelectivePreloadingStrategy), withComponentInputBinding(), withInMemoryScrolling(scrollConfig))]
 };

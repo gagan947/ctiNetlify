@@ -2,7 +2,8 @@ import { Routes } from '@angular/router';
 
 export const LandingRoutes: Routes = [
       {
-            path: '', loadComponent: () => import('./home/home.component').then(c => c.HomeComponent)
+            path: '', loadComponent: () => import('./home/home.component').then(c => c.HomeComponent),
+            data: { preload: true }
       },
       {
             path: 'creative-studio', loadComponent: () => import('./creative-studio/creative-studio.component').then(c => c.CreativeStudioComponent)
