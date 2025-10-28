@@ -17,7 +17,7 @@ export class HomeComponent {
   error: string | null = null;
   constructor(private meta: Meta, private locationService: LocationService) {
     // this.fetchLocation();
-    this.meta.updateTag({ name: 'description', content: 'Build mobile and web apps faster with Creative AI app builder. Turn your ideas into real apps easily, without coding hassle — smart, fast, and scalable.' });
+    this.meta.updateTag({ name: 'description', content: 'Build next-gen apps with Creative AI. Our AI app builder and AI app generator help you create intelligent, fast, and user-friendly digital experiences with ease.' });
   }
 
   async fetchLocation() {

@@ -39,20 +39,19 @@
                 </div>
                 @for (item of messages; track $index) {
 
-                    <div  class="d-flex align-items-center gap-2 mb-3" class="msg-row" [ngClass]="item.sender === 'You' ? 'out' : 'in'">
-                        @if(item.sender === 'You') {
-                            <img [src]='profileImage' alt="AI app builder for mobile and web" class="avatar" />
-                            } @else {
-                            <img src="assets/img/c.png" alt="AI app builder for mobile and web" class="p-1 avatar" />
-                            }
-                            <div class="ct_creative_msg_card cti_msg_left mb-0">
-                                <p class="mb-0" style="white-space: pre-wrap;   font-size: 14px;">{{ item.text }}</p>
-                                <small class="ct_chat_time_local">{{item.time | date:'shortTime'}}</small>
-                              
-                            </div>
-    
-                       
+                <div class="d-flex align-items-center gap-2 mb-3" class="msg-row"
+                    [ngClass]="item.sender === 'You' ? 'out' : 'in'">
+                    @if(item.sender === 'You') {
+                    <img [src]='profileImage' alt="AI app builder for mobile and web" class="avatar" />
+                    } @else {
+                    <img src="assets/img/c.png" alt="AI app builder for mobile and web" class="p-1 avatar" />
+                    }
+                    <div class="ct_creative_msg_card cti_msg_left mb-0">
+                        <p class="mb-0" style="white-space: pre-wrap;   font-size: 14px;">{{ item.text }}</p>
+                        <small class="ct_chat_time_local">{{item.time | date:'shortTime'}}</small>
+
                     </div>
+                </div>
                 }
 
                 <!-- Spinner while waiting for bot -->
@@ -96,9 +95,14 @@
                 </div> -->
 
                 <div *ngIf="isLoading" class="msg-row in">
-                    <div class="spinner-grow" role="status">
+                    <!-- <div class="spinner-grow" role="status">
                         <span class="sr-only">Loading...</span>
-                    </div>
+                    </div> -->
+                    <h1 class="ct_wave-text">
+                        @for (item of loadingText; track $index) {
+                            <span>{{item}}</span>
+                        }
+                    </h1>
                 </div>
 
 

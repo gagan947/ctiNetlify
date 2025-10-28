@@ -82,7 +82,8 @@
                 <div class="col-lg-6 mb-4 mb-lg-0">
                   <label for="flexCheckDefault{{ i }}" class="ct_app_detail_card"
                     [ngClass]="{ active: selectedDevices.includes(item) }" (click)="onDeviceSelect(item)">
-                    <img [src]="i == 0 ? 'assets/img/android.png' : 'assets/img/apple.png'" alt="AI app builder for mobile and web">
+                    <img [src]="i == 0 ? 'assets/img/android.png' : 'assets/img/apple.png'"
+                      alt="AI app builder for mobile and web">
                     <h4 class="mb-0 ct_fs_14 ct_fw_700">{{ item }}</h4>
                     <div class="form-check ct_transparent_checkbox">
                       <input class="form-check-input" type="checkbox" [checked]="selectedDevices.includes(item)"
@@ -101,7 +102,8 @@
                 <div class="col-lg-6 mb-4 mb-lg-0">
                   <label for="flexCheckDefault{{ i }}" class="ct_app_detail_card"
                     [ngClass]="{ active: selectedDevices.includes(item) }" (click)="onDeviceSelect(item)">
-                    <img [src]="i == 0 ? 'assets/img/internet.png' : 'assets/img/microchip.png'" alt="AI app builder for mobile and web">
+                    <img [src]="i == 0 ? 'assets/img/internet.png' : 'assets/img/microchip.png'"
+                      alt="AI app builder for mobile and web">
                     <h4 class="mb-0 ct_fs_14 ct_fw_700">{{ item }}</h4>
                     <div class="form-check ct_transparent_checkbox">
                       <input class="form-check-input" type="checkbox" [checked]="selectedDevices.includes(item)"

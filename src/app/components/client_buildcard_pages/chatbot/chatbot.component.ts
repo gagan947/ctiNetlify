@@ -14,6 +14,7 @@ import { io } from 'socket.io-client';
   styleUrl: './chatbot.component.css'
 })
 export class ChatbotComponent {
+  loadingText: string[] = ["P", "r", "o", "c", "e", "s", "s", "i", "n", "g", " ", "n", "e", "x", "t", " ", "s", "t", "e", "p", ".", ".", "."];
   flow = chatbotFlow;
   currentStep = 'welcome';
   socket: any;
