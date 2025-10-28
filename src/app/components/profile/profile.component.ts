@@ -11,17 +11,19 @@ import { CountryISO, SearchCountryField } from 'ngx-intl-tel-input-gg';
 import { NzFlexDirective } from 'ng-zorro-antd/flex';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router, RouterLink } from '@angular/router';
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 declare var bootstrap: any;
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [SidebarComponent, CommonModule, FormsModule, NzSelectModule, NgxIntlTelInputModule, NzInputOtpComponent, NzFlexDirective, RouterLink],
+  imports: [SidebarComponent, CommonModule, FormsModule, NzSelectModule, NgxIntlTelInputModule, NzInputOtpComponent, NzFlexDirective, RouterLink, ImageCropperComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
   @ViewChild('profilePhoneForm') profilePhoneForm!: NgForm;
   @ViewChild('closeBtn') closeBtn!: ElementRef;
+   @ViewChild('closeBtn2') closeBtn2!: ElementRef<HTMLButtonElement>
   selectedType: string = 'GST';
   user: UserProfile | null = null;
   SearchCountryField = SearchCountryField
@@ -251,16 +253,48 @@ export class ProfileComponent {
 
   logoImg: any;
   imagePreview: any;
-  onFileSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    this.logoImg = file;
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreview = reader.result;
-        this.updateImage();
-      };
-      reader.readAsDataURL(file);
+  // onFileSelected(event: Event) {
+  //   const file = (event.target as HTMLInputElement).files?.[0];
+  //   this.logoImg = file;
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       this.imagePreview = reader.result;
+  //       this.updateImage();
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // }
+
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+  croppedImageBlob: any = '';
+  onFileSelected(event: any): void {
+    this.imageChangedEvent = event
+    if(event.target.files && event.target.files[0]) {
+      this.openModal()
+    }
+  }
+
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImageBlob = event.blob
+    this.croppedImage = event.objectUrl
+  }
+
+  onDone() {
+    this.imagePreview = this.croppedImage
+    this.logoImg = new File([this.croppedImageBlob], 'profile.png', {
+      type: 'image/png'
+    })
+    this.updateImage();
+    this.closeBtn2.nativeElement.click()
+  }
+
+  openModal() {
+    const modalElement = document.getElementById('ct_feedback_detail_modal');
+    if (modalElement) {
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
     }
   }
 

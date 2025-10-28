@@ -332,3 +332,21 @@
             </div>
       </div>
 </div>
+
+<div class="modal fade modal-lg" id="ct_feedback_detail_modal" tabindex="-1"
+      aria-labelledby="ct_feedback_detail_modalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                  <div class="modal-body">
+                        <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+                              [aspectRatio]="38 / 27" [resizeToWidth]="190" [resizeToHeight]="135" format="png"
+                              (imageCropped)="imageCropped($event)">
+                        </image-cropper>
+                  </div>
+                  <div class="modal-footer">
+                        <button type="button" class="ct_blue_outline_btn" data-bs-dismiss="modal" #closeBtn2>Cancel</button>
+                        <button type="button" class="ct_blue_btn_fill" (click)="onDone()">Done</button>
+                  </div>
+            </div>
+      </div>
+</div>
