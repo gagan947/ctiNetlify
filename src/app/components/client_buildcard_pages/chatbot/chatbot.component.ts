@@ -35,7 +35,7 @@ export class ChatbotComponent {
     if (data !== 'undefined') {
       const user = JSON.parse(data);
       this.userName = user.name || 'there';
-      this.profileImage =  user.profile_image ? (this.apiservice.imageUrl + user.profile_image) : 'assets/img/np_pro.png';
+      this.profileImage = user.profile_image ? (this.apiservice.imageUrl + user.profile_image) : 'assets/img/np_pro.png';
     }
     // this.addBotMessage(this.flow[this.currentStep].message);
   }
@@ -46,48 +46,48 @@ export class ChatbotComponent {
 
   ngOnInit() {
     this.basicOptions = this.flow['welcome'].options;
-      this.socket = io(this.apiservice.apiUrl);
-      let currentBotMsg = "";
-      // listen for streaming tokens
-      this.socket.on('botReply', (msg: string) => {
-  
-        if (msg === "[END]") {
-          console.log("✅ Stream finished");
-          return;
-        }
-        // Append stream to last bot message
-        if (
-          this.messages.length > 0 &&
-          this.messages[this.messages.length - 1].sender === "Bot"
-        ) {
-          this.messages[this.messages.length - 1].text += msg;
-        } else {
-          this.messages.push({ sender: "Bot", text: msg });
-        }
-        this.isLoading = false; // hide spinner after response
-      });
-      this.socket.on('navigateToBuilder', (msg: any) => {
-      
-        // If server sends a JSON string, parse it
-        const data = typeof msg === 'string' ? JSON.parse(msg) : msg;
-      
-        if (data?.projectId) {
-          this.router.navigate(['/bd_loader'], { 
-            queryParams: { id: data.projectId },
-            skipLocationChange: true  // URL won't change, user stays on original route
-          });
-        } else {
-          console.error('Project ID not found in server response:', data);
-        }
-      
-        this.isLoading = false; 
-      });
-  
-      // when streaming ends
-      this.socket.on('botDone', () => {
-        console.log("✅ Bot finished response");
-        currentBotMsg = "";
-      });
+    this.socket = io(this.apiservice.apiUrl);
+    let currentBotMsg = "";
+    // listen for streaming tokens
+    this.socket.on('botReply', (msg: string) => {
+
+      if (msg === "[END]") {
+        console.log("✅ Stream finished");
+        return;
+      }
+      // Append stream to last bot message
+      if (
+        this.messages.length > 0 &&
+        this.messages[this.messages.length - 1].sender === "Bot"
+      ) {
+        this.messages[this.messages.length - 1].text += msg;
+      } else {
+        this.messages.push({ sender: "Bot", text: msg });
+      }
+      this.isLoading = false; // hide spinner after response
+    });
+    this.socket.on('navigateToBuilder', (msg: any) => {
+
+      // If server sends a JSON string, parse it
+      const data = typeof msg === 'string' ? JSON.parse(msg) : msg;
+
+      if (data?.projectId) {
+        this.router.navigate(['/bd_loader'], {
+          queryParams: { id: data.projectId },
+          skipLocationChange: true  // URL won't change, user stays on original route
+        });
+      } else {
+        console.error('Project ID not found in server response:', data);
+      }
+
+      this.isLoading = false;
+    });
+
+    // when streaming ends
+    this.socket.on('botDone', () => {
+      console.log("✅ Bot finished response");
+      currentBotMsg = "";
+    });
   }
 
   scrollToBottom(): void {
@@ -178,7 +178,7 @@ export class ChatbotComponent {
   }
 
   selectOption(option: any) {
-    if(this.isLoading)return;
+    if (this.isLoading) return;
 
     this.addUserMessage(option.label);
     this.currentStep = option.next;
@@ -233,7 +233,7 @@ export class ChatbotComponent {
           this.dataEmitter.emit(response.suggestions);
           this.relevantFeatures = response.relevantFeatures
           this.isLoading = false
-        }else{
+        } else {
           this.isLoading = false
         }
         if (response.flow == 1) {
@@ -245,5 +245,9 @@ export class ChatbotComponent {
         this.addBotMessage(response.answer);
       }, 500)
     })
+  }
+
+  ngOnDestroy(): void {
+    this.socket.disconnect();
   }
 }
