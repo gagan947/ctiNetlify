@@ -294,7 +294,7 @@ textarea {
   /* font-weight: 800; */
   position: relative;
   color: transparent;
-  background: linear-gradient(90.18deg, #3D40F6 33.49%, #D000FF 33.41%, #FF2929 33.34%);
+  background: linear-gradient(90.18deg, #3D40F6 18.49%, #D000FF 33.41%, #FF2929 56.34%);
   background-size: 300%;
   -webkit-background-clip: text;
   animation: gradientFlow 3s linear infinite;
@@ -305,9 +305,9 @@ textarea {
   position: absolute;
   top: 0;
   left: -50%;
-  width: 50%;
+  width: 30%;
   height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.481), transparent);
   animation: shineMove 2.5s infinite;
 }
 
