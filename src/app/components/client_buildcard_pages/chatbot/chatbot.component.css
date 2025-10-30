@@ -209,7 +209,7 @@ span.sender {
   border-radius: 10px;
 }
 
-.ct_key_point_box p+p {
+.ct_key_point_box p:first-child {
   text-align: end;
   font-size: 22px;
   background-color: #fff;
@@ -220,7 +220,10 @@ span.sender {
   justify-content: center;
   border-radius: 100px;
   padding: 5px;
-  margin-left: auto;
+  margin-inline: auto;
+}
+.ct_key_point_box p + p{
+  text-align: center;
 }
 
 small.ct_chat_time_local {
@@ -332,5 +335,13 @@ textarea {
       0 4px 12 rgba(0,0,0,0.8),
       0 4px 20 rgba(0,0,0,0.6);
       transform: translateY(-0px);
+  }
+}
+.ct_key_point_box img {
+  width: 22px;
+}
+@media screen and (max-width:767px){
+  .ct_grid_6_new{
+    grid-template-columns: repeat(2,1fr);
   }
 }

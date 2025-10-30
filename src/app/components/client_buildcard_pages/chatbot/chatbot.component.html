@@ -14,9 +14,9 @@
 
 
 <div class="row">
-    <div class="col-xxl-8 col-xl-8 col-lg-8 mx-auto">
-        <div style=" background-color: #fff9f99e;
-    padding: 30px;
+    <div class="col-xxl-8 col-xl-9 col-lg-9 mx-auto">
+        <div class="px-3 px-md-4" style=" background-color: #fff9f99e;
+    padding-block: 30px;
     border-radius: 10px;
     position: relative;">
             <div #scrollContainer class="ct_creative_msg_top_bar px-3">
@@ -28,8 +28,8 @@
                         <div class="ct_grid_6_new">
                             @for (item of basicOptions; track $index) {
                             <div class="ct_key_point_box" (click)="selectOption(item)">
+                                <p class="mb-0"><img [src]="item.logo" alt=""></p>
                                 <p class="mb-0 ct_fs_16 ct_fw_600"> {{item.label}} </p>
-                                <p class="mb-0">{{item.logo}}</p>
                             </div>
                             }
                         </div>

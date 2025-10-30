@@ -3,11 +3,11 @@ export const chatbotFlow: any = {
     step: "welcome",
     message: `Welcome to Creative AI \nI’m your AI Assistant Vanya 🤖, here to help you bring your next app or website idea to life.\nI can help you build your next app or website.\n\n👉 Please select an option below to get started.:`,
     options: [
-      { label: "Build an App", next: "projectNameApp", logo: '📱' },
-      { label: "Build a Website", next: "projectNameWebsite", logo : '💻' },
-      { label: "Pricing & Plans", next: "pricing" , logo : '💵' },
+      { label: "Build an App", next: "projectNameApp", logo: 'assets/img/app.svg' },
+      { label: "Build a Website", next: "projectNameWebsite", logo : 'assets/img/websie.svg' },
+      { label: "Pricing & Plans", next: "pricing" , logo : 'assets/img/pricing.png' },
       // { label: "Development Time", next: "timelineInfo", logo: '⏳' },
-      { label: "Contact Support", next: "support", logo: '📞' },
+      { label: "Contact Support", next: "support", logo: 'assets/img/contactss.svg' },
       // { label: "Ask a Question", next: "chatbot", logo: '❓' }
     ]
   },
@@ -153,7 +153,7 @@ export const chatbotFlow: any = {
 
   support: {
     step: "support",
-    message: "You can reach us at:\n📧 support@Creative AI\n📞 Direct call available on request\n\n👉 How do you prefer to connect?",
+    message: "You can reach us at:\n📧 info@creativethoughtsinfo.com\n📞 Direct call available on request\n\n",
     options: [
       { label: "💬 Chat here", next: "chatbot" },
       { label: "📧 Email us", next: "end" },
