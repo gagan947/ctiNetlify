@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { Country } from 'country-state-city'
-import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input-gg';
+import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { MobileViewComponent } from "../main/mobile-view/mobile-view.component";
