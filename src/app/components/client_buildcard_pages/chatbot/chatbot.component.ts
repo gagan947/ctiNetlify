@@ -14,7 +14,7 @@ import { io } from 'socket.io-client';
   styleUrl: './chatbot.component.css'
 })
 export class ChatbotComponent {
-  loadingText: string[] = ["P", "r", "o", "c", "e", "s", "s", "i", "n", "g", " ", "n", "e", "x", "t", " ", "s", "t", "e", "p", ".", ".", "."];
+  loadingText: string = 'Processing next steps...';
   flow = chatbotFlow;
   currentStep = 'welcome';
   socket: any;
@@ -81,6 +81,10 @@ export class ChatbotComponent {
       }
 
       this.isLoading = false;
+    });
+
+    this.socket.on('loader_message', (msg: any) => {
+      this.loadingText = msg;
     });
 
     // when streaming ends

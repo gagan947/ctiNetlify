@@ -98,11 +98,7 @@
                     <!-- <div class="spinner-grow" role="status">
                         <span class="sr-only">Loading...</span>
                     </div> -->
-                    <h1 class="ct_wave-text">
-                        @for (item of loadingText; track $index) {
-                            <span>{{item}}</span>
-                        }
-                    </h1>
+                    <div class="loader-gradient-wave" [attr.data-text]="loadingText">{{ loadingText }}</div>
                 </div>
 
 
