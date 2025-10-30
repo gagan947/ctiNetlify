@@ -6,7 +6,7 @@ import { ApiService } from '../../services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router, RouterLink } from '@angular/router';
 import { SubmitButtonComponent } from "../shared/submit-button/submit-button.component";
-import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input-gg';
+import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzFlexDirective } from 'ng-zorro-antd/flex';

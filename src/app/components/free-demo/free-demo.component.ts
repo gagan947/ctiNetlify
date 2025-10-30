@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { HeaderComponent } from "../shared/header/header.component";
 import { FooterComponent } from "../shared/footer/footer.component";
-import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input-gg';
+import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';

@@ -14,7 +14,7 @@ import { io } from 'socket.io-client';
   styleUrl: './chatbot.component.css'
 })
 export class ChatbotComponent {
-  loadingText: string = 'Processing next steps...';
+  loadingText: string = 'Thinking...';
   flow = chatbotFlow;
   currentStep = 'welcome';
   socket: any;
