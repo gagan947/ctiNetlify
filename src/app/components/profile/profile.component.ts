@@ -23,7 +23,7 @@ declare var bootstrap: any;
 export class ProfileComponent {
   @ViewChild('profilePhoneForm') profilePhoneForm!: NgForm;
   @ViewChild('closeBtn') closeBtn!: ElementRef;
-   @ViewChild('closeBtn2') closeBtn2!: ElementRef<HTMLButtonElement>
+  @ViewChild('closeBtn2') closeBtn2!: ElementRef<HTMLButtonElement>
   selectedType: string = 'GST';
   user: UserProfile | null = null;
   SearchCountryField = SearchCountryField
@@ -52,7 +52,7 @@ export class ProfileComponent {
   public apiService = inject(ApiService);
   private router = inject(Router);
   private message = inject(NzMessageService); // Inject the service
-
+  submitted: boolean = false;
   ngOnInit() {
     this.getProfile();
   }
@@ -185,7 +185,8 @@ export class ProfileComponent {
       this.user.country_code = this.phone!.dialCode;
       this.user.phoneNumber = this.phone!.number;
     }
-    if (!this.user?.name || this.user.name.trim().length < 3) {
+    if (!this.user?.name || this.user.name.trim().length < 3 || this.profilePhoneForm.invalid || !this.phone?.number) {
+      this.submitted = true;
       return
     }
     this.apiService.postAPI('api/user/updateUserProfile', this.user).subscribe((res: any) => {
@@ -271,7 +272,7 @@ export class ProfileComponent {
   croppedImageBlob: any = '';
   onFileSelected(event: any): void {
     this.imageChangedEvent = event
-    if(event.target.files && event.target.files[0]) {
+    if (event.target.files && event.target.files[0]) {
       this.openModal()
     }
   }

@@ -45,9 +45,10 @@
       padding: 0 55px;
 }
 
-.dropdown-menu.country-dropdown.show {
-      font-size: 12px;
-      width: 250px;
+.dropdown-menu.show {
+      display: block;
+      width: 250px !important;
+      font-size: 14px !important;
 }
 
 ul.iti__country-list {
@@ -135,8 +136,6 @@ ul.iti__country-list {
       border-radius: 0px 0px 28px 28px;
       padding: 30px;
 }
-
-
 
 .ct_how_creative_work_list li {
       padding: 15px;
@@ -246,14 +245,15 @@ nz-input-otp.ant-otp {
 }
 
 
-#mylogo{
-  object-fit: contain !important;
+#mylogo {
+      object-fit: contain !important;
 }
 
-.ct_blog_dlt_text_ui ul{
+.ct_blog_dlt_text_ui ul {
       list-style: disc !important;
       padding-left: 20px;
-  }
-  .ct_blog_dlt_text_ui ul li p{
+}
+
+.ct_blog_dlt_text_ui ul li p {
       margin-bottom: 6px;
-  }
+}

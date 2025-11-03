@@ -6,7 +6,7 @@ import { authGuard } from './guard/auth.guard';
 export const routes: Routes = [
       {
             path: 'login', loadComponent: () => import('./components/login/login.component').then(c => c.LoginComponent), canActivate: [loginGuard],
-            data: { preload: true }
+            // data: { preload: true }
       },
       {
             path: 'signup', loadComponent: () => import('./components/signup/signup.component').then(c => c.SignupComponent), canActivate: [loginGuard]

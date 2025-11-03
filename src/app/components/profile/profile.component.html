@@ -115,7 +115,7 @@
 
                                                                         }
                                                                   </div>
-                                                                  <div *ngIf="profilePhoneForm.submitted && phoneInput.invalid"
+                                                                  <div *ngIf="profilePhoneForm.submitted && phoneInput.invalid || submitted"
                                                                         class="text-danger">
                                                                         <span *ngIf="phoneInput.errors?.['required']">Phone
                                                                               number is required.</span>
@@ -344,7 +344,8 @@
                         </image-cropper>
                   </div>
                   <div class="modal-footer">
-                        <button type="button" class="ct_blue_outline_btn" data-bs-dismiss="modal" #closeBtn2>Cancel</button>
+                        <button type="button" class="ct_blue_outline_btn" data-bs-dismiss="modal"
+                              #closeBtn2>Cancel</button>
                         <button type="button" class="ct_blue_btn_fill" (click)="onDone()">Done</button>
                   </div>
             </div>

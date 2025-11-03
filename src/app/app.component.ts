@@ -3,7 +3,7 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { GlobalModalComponent } from "./components/shared/global-modal/global-modal.component";
 import { filter } from 'rxjs';
 declare var bootstrap: any;
-declare let fbq: Function; 
+declare let fbq: Function;
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -38,7 +38,6 @@ export class AppComponent {
   }
 
   @ViewChild('myModal') modalRef!: ElementRef;
-
 
   closeModal2() {
     this.closeModal.nativeElement.click();

@@ -1,5 +1,3 @@
-
-
 export interface CommonFeatures {
   success: boolean;
   status: number;
