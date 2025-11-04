@@ -8,9 +8,7 @@ import { Location } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ALLFeatures } from '../../../models/allfeatures';
-import { HttpClient } from '@angular/common/http';
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
-import { DiscountModalComponent } from './discount-modal/discount-modal.component';
 import { BdLoaderComponent } from '../../shared/bd-loader/bd-loader.component';
 import { ModalService } from '../../../services/modal.service';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -40,7 +38,7 @@ export class RefineIdeaComponent {
   currencyCode: string = 'INR'
   userData: any
   isLoading2: boolean = false
-  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService) {
+  constructor(private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService) {
     let projectData = sessionStorage.getItem('projectData');
     this.userData = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
     this.currencyCode = this.userData.currency;
