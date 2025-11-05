@@ -11,6 +11,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzFlexDirective } from 'ng-zorro-antd/flex';
 import { NzInputOtpComponent } from 'ng-zorro-antd/input';
+declare const google: any;
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -35,6 +36,16 @@ export class SignupComponent {
   ngOnInit(): void {
     localStorage.clear();
     this.countries = Country.getAllCountries()
+    google.accounts.id.initialize({
+      client_id: '994120717709-6hec26klmpd1h9eif5vcahincbbn2m1u.apps.googleusercontent.com', // ← use from Cloud Console
+      callback: (response: any) => this.loginWithGoogle(response),
+      ux_mode: 'popup' // prevents redirect-based popups
+    });
+
+    google.accounts.id.renderButton(
+      document.getElementById('googleSignInDiv'),
+      { theme: 'filled_blue', size: 'large' }
+    );
   };
 
   signupForm: FormGroup;
@@ -53,6 +64,9 @@ export class SignupComponent {
       ]
     });
   };
+    
+
+  
 
   get f() {
     return this.signupForm.controls;
@@ -223,14 +237,12 @@ export class SignupComponent {
       })
   };
 
-  loginWithGoogle() {
-    this.apiservice.googleLogin().then((res: any) => {
+  loginWithGoogle(response: any) {
+    const formData = {
+      credential: response.credential,
+    }
 
-      const formData = {
-        token: res.user.accessToken,
-      }
-
-      this.apiservice.postAPI(`api/user/googleLogin`, formData)
+    this.apiservice.postAPI(`api/user/googleLogin`, formData)
         .subscribe({
           next: (res: any) => {
             if (res.success == true) {
@@ -258,8 +270,7 @@ export class SignupComponent {
             }
             this.isLoading = false
           }
-        });
-    });
+      });
   }
 }
 

@@ -8,6 +8,8 @@ import { SubmitButtonComponent } from "../shared/submit-button/submit-button.com
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { NzInputOtpComponent } from 'ng-zorro-antd/input';
 import { NzFlexDirective } from 'ng-zorro-antd/flex';
+import { GoogleAuthService } from '../../services/google-auth.service';
+declare const google: any;
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -29,7 +31,7 @@ export class LoginComponent {
   phoneNumber: string = ''
   otpVisible: boolean = false;
   otp: any
-  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService,) {
+  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private googleAuth: GoogleAuthService,) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required]],
       contact: [''],
@@ -39,6 +41,20 @@ export class LoginComponent {
 
   ngOnInit(): void {
     localStorage.clear();
+
+
+    google.accounts.id.initialize({
+      client_id: '994120717709-6hec26klmpd1h9eif5vcahincbbn2m1u.apps.googleusercontent.com', // ← use from Cloud Console
+      callback: (response: any) => this.handleCredentialResponse(response),
+      ux_mode: 'popup' // prevents redirect-based popups
+    });
+
+    google.accounts.id.renderButton(
+      document.getElementById('googleSignInDiv'),
+      { theme: 'filled_blue', size: 'large' }
+    );
+
+
   }
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
@@ -158,7 +174,7 @@ export class LoginComponent {
               case 'false_false':
                 this.apiService.setToken(res.data.token);
                 localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
-               
+
                 if (res.data.user.profile_visited) {
                   this.router.navigate(['/main']);
                 } else {
@@ -195,12 +211,12 @@ export class LoginComponent {
     return this.loginForm.controls;
   }
 
-  loginWithGoogle() {
-  
-    this.apiService.googleLogin().then((res: any) => {
+  handleCredentialResponse(response: any) {
+    console.log(response);
+   
 
       const formData = {
-        token: res.user.accessToken,
+        credential: response.credential
       }
 
       this.apiService.postAPI(`api/user/googleLogin`, formData)
@@ -234,8 +250,12 @@ export class LoginComponent {
               this.message.error('Unexpected error occurred.');
             }
             this.isLoading = false
-          }
-        });
-    });
+        }
+      });
+    
+  };
+
+  handleCredentialResponseError(error: any) {
+    console.log(error);
   }
 }
