@@ -19,7 +19,7 @@ declare var Calendly: any;
 export class MainComponent {
 
   @ViewChild('anchor', { static: false }) anchor!: ElementRef;
-
+@ViewChild('SearchInput', { static: false }) SearchInput!: ElementRef;
   private observer!: IntersectionObserver;
   projectsData: Project[] = []
   projectId: any;
@@ -33,6 +33,7 @@ export class MainComponent {
   isSuggested: boolean = false;
   loading: boolean = false;
   searchTerm: string = '';
+  orgProjectsData: Project[] = [];
   constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
     this.imageURL = this.apiservice.imageUrl;
   }
@@ -144,6 +145,7 @@ export class MainComponent {
               contain: item.contain ? item.contain.split(',') : []
             }));
             this.projectsData = [...this.projectsData, ...mappedData];
+            this.orgProjectsData = [...this.projectsData];
           } else {
             // this.loading = false
           }
@@ -179,9 +181,17 @@ export class MainComponent {
   }
 
   navigateTool(id: any) {
-    this.router.navigate(['/bd_loader'], { 
+    this.router.navigate(['/bd_loader'], {
       queryParams: { id },
       skipLocationChange: true  // <-- URL won't change, user stays on original route
     });
+  }
+
+  clearSearch() {
+    this.isSuggested = false
+    this.searchTerm = '';
+    this.page = this.page;
+    this.SearchInput.nativeElement.value = '';
+    this.projectsData = [...this.orgProjectsData];
   }
 }
