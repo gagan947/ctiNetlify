@@ -17,8 +17,23 @@
                               }@else {
                               <h2 class="ct_fs_24 ct_fw_600 mb-3">Build Projects</h2>
                               }
-                              <input type="search" placeholder="Search Project"
-                                    class="form-control ct_search_input w-25 mb-3" (input)="search($event)">
+                              <div class="d-flex align-items-center gap-2">
+                                    <input type="search" placeholder="Search Project"
+                                          class="form-control ct_search_input w-100 mb-3" #SearchInput (input)="search($event)">
+
+                                    <a (click)="clearSearch()">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                                viewBox="0 0 24 24" class="cursor-pointer mb-3">
+                                                <g fill="none">
+                                                      <path d="M19.5 4h-15l6 8.5V20h3v-7.5z" clip-rule="evenodd" />
+                                                      <path stroke="#0d0d0d" stroke-linecap="square" stroke-width="2"
+                                                            d="M19.5 4h-15l6 8.5V20h3v-7.5z" clip-rule="evenodd" />
+                                                      <path stroke="#0d0d0d" stroke-linecap="square" stroke-width="2"
+                                                            d="M22.122 14.879L20 17m0 0l-2.121 2.122M20 17l-2.12-2.12M20 17l2.122 2.122" />
+                                                </g>
+                                          </svg>
+                                    </a>
+                              </div>
                         </div>
                         <div class=" col-xl-4 col-lg-6 mb-4">
                               <div class="ct_white_bg ct_ecommerse_web_card h-100">

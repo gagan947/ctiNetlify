@@ -43,8 +43,8 @@ export class ChatbotComponent {
     // this.addBotMessage(this.flow[this.currentStep].message);
   }
 
- 
-  
+
+
   ngOnInit() {
     this.basicOptions = this.flow['welcome'].options;
     this.socket = io(this.apiservice.apiUrl);
@@ -89,6 +89,11 @@ export class ChatbotComponent {
 
     this.socket.on('loader_message', (msg: any) => {
       this.loadingText = msg;
+    });
+
+    this.socket.on('suggestedProjects', (projects: any) => {
+      console.log('Suggested projects:', projects);
+      this.dataEmitter.emit(projects);
     });
 
     // when streaming ends
