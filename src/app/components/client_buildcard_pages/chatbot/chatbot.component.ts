@@ -14,6 +14,8 @@ import { io } from 'socket.io-client';
   styleUrl: './chatbot.component.css'
 })
 export class ChatbotComponent {
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  autoScrollEnabled = true;
   loadingText: string = 'Thinking...';
   flow = chatbotFlow;
   currentStep = 'welcome';
@@ -27,7 +29,7 @@ export class ChatbotComponent {
   standardChatbot: boolean = true;
   userName: string = 'there';
   profileImage: string = 'assets/img/np_pro.png';
-  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  private autoScroll = true;
   @Output() dataEmitter = new EventEmitter<string>();
   basicOptions: any[] = []
   constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
@@ -40,8 +42,21 @@ export class ChatbotComponent {
     // this.addBotMessage(this.flow[this.currentStep].message);
   }
 
+  ngAfterViewInit() {
+    const container = this.scrollContainer.nativeElement;
+    container.addEventListener('scroll', () => {
+      const threshold = 100; // pixels from the bottom
+      const position = container.scrollTop + container.clientHeight;
+      const height = container.scrollHeight;
+      // Disable autoscroll if user scrolls up more than threshold
+      this.autoScroll = height - position < threshold;
+    });
+  }
+  
+  
+
   ngAfterViewChecked() {
-    this.scrollToBottom();
+    this.scrollToBottomIfNeeded();
   }
 
   ngOnInit() {
@@ -94,11 +109,17 @@ export class ChatbotComponent {
     });
   }
 
-  scrollToBottom(): void {
-    try {
-      this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
-    } catch (err) { }
+
+  private scrollToBottomIfNeeded() {
+    if (this.autoScroll) {
+      const container = this.scrollContainer.nativeElement;
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
   }
+  
 
   addBotMessage(text: string) {
     if (text.includes('{name}') && this.userData.name) {

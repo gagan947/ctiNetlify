@@ -1,16 +1,4 @@
-<!-- <div class="modal fade" id="calendlyModal" tabindex="-1" aria-labelledby="calendlyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="calendlyModalLabel">Schedule a Call</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="calendly-inline-widget" style="min-width:320px;height:630px;"></div>
-            </div>
-        </div>
-    </div>
-</div> -->
+
 
 
 <div class="row">
@@ -54,45 +42,7 @@
                 </div>
                 }
 
-                <!-- Spinner while waiting for bot -->
-                <!-- <div *ngIf="isLoading" class="msg-row in">
-
-
-                    <div class="spinner-grow" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-
-                </div> -->
-                <!-- @for (item of messages; track $index) {
-                <div class="d-flex align-items-center gap-2 mb-3" class="msg-row"
-                    [ngClass]="item.sender === 'You' ? 'out' : 'in'">
-                    @if(item.sender === 'You') {
-                    <img [src]='profileImage' alt="AI app builder for mobile and web" class="avatar" />
-                    } @else {
-                    <img src="assets/img/c.png" alt="AI app builder for mobile and web" class="p-1 avatar" />
-                    }
-                    <div class="ct_creative_msg_card cti_msg_left mb-0">
-                        <p class="mb-0" style="white-space: pre-wrap;   font-size: 14px;">{{ item.text }}</p>
-                        <small class="ct_chat_time_local">{{item.time | date:'shortTime'}}</small>
-                        @if(item.features?.length > 0 && item.step == 'chatbot'){
-                        <div class="options cti_msg_left">
-                            <ul style=" list-style: disc;" class="">
-                                @for (item2 of item.features; track $index) {
-                                <li>{{item2.featuresName}}</li>
-                                }
-
-                            </ul>
-
-                        </div>
-                        }
-                    </div>
-                </div>
-                } -->
-                <!-- <div class="options" *ngIf="getOptions().length">
-                    <button *ngFor="let option of getOptions()" (click)="selectOption(option)">
-                        {{ option.label }}
-                    </button>
-                </div> -->
+             
 
                 <div *ngIf="isLoading" class="msg-row in">
                     <!-- <div class="spinner-grow" role="status">
