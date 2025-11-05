@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, NgZone, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { chatbotFlow } from '../../../helper/chatbot';
 import { AutosizeModule } from 'ngx-autosize';
 import { io } from 'socket.io-client';
+import { take } from 'rxjs/operators';
 @Component({
   selector: 'app-chatbot',
   standalone: true,
@@ -32,7 +33,7 @@ export class ChatbotComponent {
   private autoScroll = true;
   @Output() dataEmitter = new EventEmitter<string>();
   basicOptions: any[] = []
-  constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
+  constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router, private ngZone: NgZone) {
     const data: any = localStorage.getItem('userDetailCTI')
     if (data !== 'undefined') {
       const user = JSON.parse(data);
@@ -42,23 +43,8 @@ export class ChatbotComponent {
     // this.addBotMessage(this.flow[this.currentStep].message);
   }
 
-  ngAfterViewInit() {
-    const container = this.scrollContainer.nativeElement;
-    container.addEventListener('scroll', () => {
-      const threshold = 100; // pixels from the bottom
-      const position = container.scrollTop + container.clientHeight;
-      const height = container.scrollHeight;
-      // Disable autoscroll if user scrolls up more than threshold
-      this.autoScroll = height - position < threshold;
-    });
-  }
+ 
   
-  
-
-  ngAfterViewChecked() {
-    this.scrollToBottomIfNeeded();
-  }
-
   ngOnInit() {
     this.basicOptions = this.flow['welcome'].options;
     this.socket = io(this.apiservice.apiUrl);
@@ -78,6 +64,9 @@ export class ChatbotComponent {
         this.messages[this.messages.length - 1].text += msg;
       } else {
         this.messages.push({ sender: "Bot", text: msg });
+        this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+          this.scrollToBottom();
+        });
       }
       this.isLoading = false; // hide spinner after response
     });
@@ -110,22 +99,26 @@ export class ChatbotComponent {
   }
 
 
-  private scrollToBottomIfNeeded() {
-    if (this.autoScroll) {
+  scrollToBottom() {
+    try {
       const container = this.scrollContainer.nativeElement;
       container.scrollTo({
         top: container.scrollHeight,
-        behavior: 'smooth',
+        behavior: 'smooth'
       });
+    } catch (err) {
+      console.error('Scroll failed:', err);
     }
   }
-  
 
   addBotMessage(text: string) {
     if (text.includes('{name}') && this.userData.name) {
       text = text.replace('{name}', this.userData.name);
     }
     this.messages.push({ sender: 'bot', text, step: this.currentStep, features: this.relevantFeatures, time: new Date() });
+    this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+      this.scrollToBottom();
+    });
   }
 
   // sendMessage() {
@@ -186,6 +179,9 @@ export class ChatbotComponent {
     if (!this.userMessage.trim()) return;
 
     this.messages.push({ sender: 'You', text: this.userMessage });
+    this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+      this.scrollToBottom();
+    });
     this.socket.emit('chatMessage', this.userMessage);
     this.isLoading = true;
     this.userMessage = '';
@@ -232,6 +228,9 @@ export class ChatbotComponent {
 
   addUserMessage(text: string) {
     this.messages.push({ sender: 'You', text, step: this.currentStep, time: new Date() });
+    this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+      this.scrollToBottom();
+    });
   }
 
   askAIQuestion() {
