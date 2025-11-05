@@ -257,3 +257,7 @@ nz-input-otp.ant-otp {
 .ct_blog_dlt_text_ui ul li p {
       margin-bottom: 6px;
 }
+
+#googleSignInDiv iframe {
+      margin-inline: auto !important;
+  }

@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -43,18 +43,49 @@ export class LoginComponent {
     localStorage.clear();
 
 
+    // google.accounts.id.initialize({
+    //   client_id: '994120717709-6hec26klmpd1h9eif5vcahincbbn2m1u.apps.googleusercontent.com', // ← use from Cloud Console
+    //   callback: (response: any) => this.handleCredentialResponse(response),
+    //   ux_mode: 'popup' // prevents redirect-based popups
+    // });
+
+    // google.accounts.id.renderButton(
+    //   document.getElementById('googleSignInDiv'),
+    //   { theme: 'filled_blue', size: 'large' }
+    // );
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        // re-render button if DOM is available
+        setTimeout(() => this.renderGoogleButton(), 100);
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.initGoogleAuth();
+  }
+
+  initGoogleAuth() {
     google.accounts.id.initialize({
-      client_id: '994120717709-6hec26klmpd1h9eif5vcahincbbn2m1u.apps.googleusercontent.com', // ← use from Cloud Console
+      client_id: '994120717709-6hec26klmpd1h9eif5vcahincbbn2m1u.apps.googleusercontent.com',
       callback: (response: any) => this.handleCredentialResponse(response),
-      ux_mode: 'popup' // prevents redirect-based popups
+      ux_mode: 'popup',
     });
 
-    google.accounts.id.renderButton(
-      document.getElementById('googleSignInDiv'),
-      { theme: 'filled_blue', size: 'large' }
-    );
+    this.renderGoogleButton();
+  }
 
-
+  renderGoogleButton() {
+    const buttonDiv = document.getElementById('googleSignInDiv');
+    if (buttonDiv) {
+      buttonDiv.innerHTML = ''; // clear any duplicate render
+      google.accounts.id.renderButton(buttonDiv, {
+        theme: 'filled_blue',
+        size: 'large',
+        
+      });
+    }
   }
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
@@ -211,10 +242,9 @@ export class LoginComponent {
     return this.loginForm.controls;
   }
 
-  handleCredentialResponse(response: any) {
-    console.log(response);
-   
 
+  handleCredentialResponse(response: any) {
+   
       const formData = {
         credential: response.credential
       }
