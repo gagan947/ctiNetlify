@@ -226,6 +226,7 @@ export class PaymentPlanComponent {
       })
       .subscribe(
         (response: any) => {
+          console.log(response);
           const paymentSessionId = response.payment_session_id;
 
           const checkoutOptions = {
@@ -235,7 +236,7 @@ export class PaymentPlanComponent {
 
           const cashfree = new window.Cashfree({
             paymentSessionId: paymentSessionId,
-            mode: 'sandbox',
+            mode: 'production'
 
           });
           cashfree.checkout(checkoutOptions).then((result: any) => {

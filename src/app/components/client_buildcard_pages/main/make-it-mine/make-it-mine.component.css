@@ -137,7 +137,9 @@
   transform: scale(0.65);
   transform-origin: top left;
 }
-
+.ct_screens_black_bg_12{
+  background-color: #aaa !important;
+}
 @media screen and (max-width:1400px) {
   .ct_mobile_app_builder {
     width: 100%;
