@@ -1,0 +1,38 @@
+<div class="dropdown ct_color_picker_dropdown">
+    <!-- <div class=""> -->
+    <button class="btn btn-light border dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        <div class="color-preview rounded me-2" [style.background]="color"></div>
+        <!-- Pick Color -->
+        <i class="fa-solid fa-pencil ct_color_edit_center"></i>
+
+    </button>
+    <!-- </div> -->
+
+    <div class="dropdown-menu p-2 shadow color-dropdown">
+
+        <div class="sat-box mb-3 position-relative rounded overflow-hidden" #satBox (mousedown)="startSatDrag($event)"
+            [style.background]="'hsl(' + hue + ', 100%, 50%)'">
+
+            <div class="sat-white"></div>
+            <div class="sat-black"></div>
+
+            <div class="picker-dot" [style.left.%]="saturation" [style.top.%]="100 - brightness"></div>
+        </div>
+
+        <input type="range" min="0" max="360" class="form-range hue-slider mb-2" [(ngModel)]="hue"
+            (input)="applyColor()" />
+
+        <input type="range" min="0" max="100" class="form-range opacity-slider mb-2" [(ngModel)]="alpha"
+            (input)="applyColor()" />
+
+        <input type="text" class="form-control mb-2" [(ngModel)]="hexValue" (input)="onHexChange()" />
+
+        <div class="row g-1 mt-2">
+            <div class="col-2" *ngFor="let sw of swatches">
+                <div class="swatch" [style.background]="sw" (click)="setColor(sw)"></div>
+            </div>
+        </div>
+
+    </div>
+</div>

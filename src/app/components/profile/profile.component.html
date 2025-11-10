@@ -333,14 +333,13 @@
       </div>
 </div>
 
-<div class="modal fade modal-lg" id="ct_feedback_detail_modal" tabindex="-1"
+<div class="modal fade modal-md" id="ct_feedback_detail_modal" tabindex="-1"
       aria-labelledby="ct_feedback_detail_modalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                   <div class="modal-body">
                         <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
-                              [aspectRatio]="38 / 27" [resizeToWidth]="190" [resizeToHeight]="135" format="png"
-                              (imageCropped)="imageCropped($event)">
+                              [aspectRatio]="38 / 27" (imageCropped)="imageCropped($event)">
                         </image-cropper>
                   </div>
                   <div class="modal-footer">

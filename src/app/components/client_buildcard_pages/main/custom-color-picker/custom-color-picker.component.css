@@ -1,0 +1,99 @@
+.color-preview {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #ccc;
+}
+
+.color-dropdown {
+    width: 280px;
+}
+
+.ct_color_edit_center {
+    width: 30px;
+    height: 30px;
+    background-color: #d1d9e7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
+    position: absolute;
+    bottom: -10px;
+    font-size: 12px;
+    right: 0px;
+    color: #000;
+    border: 1px solid #e6e6e6;
+    pointer-events: none;
+    /* z-index: -1; */
+}
+
+.sat-box {
+    height: 120px !important;
+    cursor: crosshair;
+    position: relative;
+}
+
+.sat-white {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, #fff, transparent);
+}
+
+.sat-black {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #000, transparent);
+}
+
+.picker-dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-left: -6px;
+    margin-top: -6px;
+    box-shadow: 0 0 4px #000;
+}
+
+.hue-slider {
+    background: linear-gradient(to right,
+            red, yellow, lime, cyan, blue, magenta, red);
+    height: 12px;
+    border-radius: 6px;
+}
+
+.opacity-slider {
+    background: linear-gradient(to right,
+            rgba(0, 0, 0, 0),
+            rgba(0, 0, 0, 1));
+    height: 12px;
+    border-radius: 6px;
+}
+
+.swatch {
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+}
+
+.ct_color_picker_dropdown button {
+    padding: 0px;
+    background-color: transparent;
+    border: 0px !important;
+}
+
+.ct_color_picker_dropdown .dropdown-toggle::after {
+    display: none;
+}
+
+.ct_color_picker_dropdown .dropdown-menu.show {
+    width: 208px !important;
+    top: 0px !important;
+    inset: unset !important;
+    transform: translate(-26%, 0px) !important;
+    top: 0px !important;
+    /* transform: translateY(-96%) !important; */
+    /* position: unset !important; */
+}

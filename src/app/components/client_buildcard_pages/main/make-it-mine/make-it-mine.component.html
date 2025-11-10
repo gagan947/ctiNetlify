@@ -92,17 +92,17 @@
                                                             aria-labelledby="pills-Past_Calls-tab">
                                                             <div
                                                                   class="d-flex align-items-center justify-content-center">
-                                                                  <input [(colorPicker)]="color"
+                                                                  <!-- <input [(colorPicker)]="color"
                                                                         [style.background]="color"
                                                                         (colorPickerChange)="onColorChange($event)"
-                                                                        class="colorPickdr" />
+                                                                        class="colorPickdr" /> -->
+                                                                  <app-custom-color-picker
+                                                                        (colorChange)="onColorChange($event)"></app-custom-color-picker>
                                                             </div>
                                                       </div>
                                                 </div>
                                           </div>
                                     </div>
-
-                              
                               </div>
                               <!-- </div> -->
                               <!-- choose Base Chat show S -->
@@ -187,15 +187,21 @@
                                                       <div class="position-relative ct_w_fit_content mx-auto tab-pane fade show active"
                                                             id="pills-mob" role="tabpanel">
                                                             <div class="ct_moc_clip_mask_main234 ">
-                                                                  <div class="ct_mob_overlay_top_cnt_new_12344 ct_screens_black_bg_12">
-                                                                        <!-- <iframe #preview></iframe> -->
+                                                                  <div
+                                                                        class="ct_mob_overlay_top_cnt_new_12344 ct_screens_black_bg_12">
+                                                                        <img [src]="imagePreview || 'assets/img/c.png'"
+                                                                              alt="Mobile View"
+                                                                              class="et_logo_cener_5677">
                                                                   </div>
                                                             </div>
                                                       </div>
 
                                                       <div class="position-relative laptop-wrap ct_w_fit_content mx-auto tab-pane fade show"
                                                             style="width: 100%;" id="pillsdesk" role="tabpanel">
-                                                            <div class="ct_mob_overlay_top_cnt_12 ct_screens_black_bg_12" id="laptop_screen">
+                                                            <div class="ct_mob_overlay_top_cnt_12 ct_screens_black_bg_12"
+                                                                  id="laptop_screen">
+                                                                  <img [src]="imagePreview || 'assets/img/c.png'"
+                                                                        alt="Mobile View" class="et_logo_cener_5677">
                                                                   <!-- <iframe #preview1 id="ct_iframe"
                                                                         style="width: 100%;border: none;border-radius: 10px;transform-origin: top left;"></iframe> -->
                                                             </div>
@@ -335,6 +341,24 @@
             </div>
       </div>
 </section>
+
+<div class="modal fade modal-md" id="ct_feedback_detail_modal" tabindex="-1"
+      aria-labelledby="ct_feedback_detail_modalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                  <div class="modal-body">
+                        <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+                              [aspectRatio]="70 / 40" (imageCropped)="imageCropped($event)">
+                        </image-cropper>
+                  </div>
+                  <div class="modal-footer">
+                        <button type="button" class="ct_blue_outline_btn" data-bs-dismiss="modal"
+                              #closeBtn2>Cancel</button>
+                        <button type="button" class="ct_blue_btn_fill" (click)="onDone()">Done</button>
+                  </div>
+            </div>
+      </div>
+</div>
 <!-- loader page section E -->
 
 <!-- @if(loading){

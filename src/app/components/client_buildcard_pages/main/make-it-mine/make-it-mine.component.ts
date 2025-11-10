@@ -7,19 +7,21 @@ import { Location } from '@angular/common';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../../sidebar/sidebar.component";
-import { BdLoaderComponent } from "../../../shared/bd-loader/bd-loader.component";
-import { MobileViewComponent } from "../mobile-view/mobile-view.component";
 import { ModalService } from '../../../../services/modal.service';
+import { ImageCropperComponent, ImageCroppedEvent } from 'ngx-image-cropper';
+import { CustomColorPickerComponent } from '../custom-color-picker/custom-color-picker.component';
+declare var bootstrap: any;
 
 @Component({
     selector: 'app-make-it-mine',
     standalone: true,
-    imports: [RouterLink, FormsModule, CommonModule, ColorPickerModule, SidebarComponent, BdLoaderComponent, MobileViewComponent],
+    imports: [RouterLink, FormsModule, CommonModule, ColorPickerModule, SidebarComponent, ImageCropperComponent, CustomColorPickerComponent],
     templateUrl: './make-it-mine.component.html',
     styleUrl: './make-it-mine.component.css'
 })
 export class MakeItMineComponent {
     @ViewChild('preview1', { static: true }) iframe1!: ElementRef<HTMLIFrameElement>;
+    @ViewChild('closeBtn2') closeBtn2!: ElementRef<HTMLButtonElement>
     @Input() id!: string;
     projectsData: any;
     projectName: string = 'My Creative Project';
@@ -52,19 +54,19 @@ export class MakeItMineComponent {
         if (this.id && !this.projectsData) {
             this.getProjectHtml()
         } else {
-            const doc1 = this.iframe1.nativeElement.contentDocument || this.iframe1.nativeElement.contentWindow?.document;
-            if (doc1) {
-                doc1.open();
-                doc1.write(this.apiService._htmlCode());
+            // const doc1 = this.iframe1.nativeElement.contentDocument || this.iframe1.nativeElement.contentWindow?.document;
+            // if (doc1) {
+            //     doc1.open();
+            //     doc1.write(this.apiService._htmlCode());
 
 
-                doc1.close();
-                const logo1 = doc1.querySelector('#mylogo') as HTMLElement;
+            //     doc1.close();
+            //     const logo1 = doc1.querySelector('#mylogo') as HTMLElement;
 
-                const newLogoHtml = `<img id="mylogo" loading="lazy" src="${this.apiService._imagePreview() || 'https://creativethoughts.ai/assets/img/c.png'}" alt="AI app builder for mobile and web" style="width: 70px; height: 30px;">`;
+            //     const newLogoHtml = `<img id="mylogo" loading="lazy" src="${this.apiService._imagePreview() || 'https://creativethoughts.ai/assets/img/c.png'}" alt="AI app builder for mobile and web" style="width: 70px; height: 30px;">`;
 
-                if (logo1) logo1.outerHTML = newLogoHtml;
-            }
+            //     if (logo1) logo1.outerHTML = newLogoHtml;
+            // }
         }
     }
 
@@ -88,22 +90,61 @@ export class MakeItMineComponent {
         }
     };
 
-    onFileSelected(event: Event) {
-        const file = (event.target as HTMLInputElement).files?.[0];
-        this.logoImg = file;
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                this.imagePreview = reader.result;
-                this.apiService._imagePreview.set(this.imagePreview);
-                this.updateLogo();
-            };
-            reader.readAsDataURL(file);
+
+    imageChangedEvent: any = '';
+    croppedImage: any = '';
+    croppedImageBlob: any = '';
+    onFileSelected(event: any): void {
+        this.imageChangedEvent = event
+        if (event.target.files && event.target.files[0]) {
+            this.openModal()
         }
     }
 
+    imageCropped(event: ImageCroppedEvent) {
+        this.croppedImageBlob = event.blob
+        this.croppedImage = event.objectUrl
+    }
+
+    onDone() {
+        this.imagePreview = this.croppedImage
+        this.logoImg = new File([this.croppedImageBlob], 'logo.png', {
+            type: 'image/png'
+        })
+        this.detectLogoBackground(this.croppedImage);
+        this.closeBtn2.nativeElement.click()
+    }
+
+    openModal() {
+        const modalElement = document.getElementById('ct_feedback_detail_modal');
+        if (modalElement) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+    }
+
+    // onFileSelected(event: Event) {
+    //     const file = (event.target as HTMLInputElement).files?.[0];
+    //     this.logoImg = file;
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         reader.onload = () => {
+    //             this.imagePreview = reader.result;
+    //             this.apiService._imagePreview.set(this.imagePreview);
+    //             // this.updateLogo();
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // }
+
     onColorChange(color: string) {
+        console.log(color);
         this.selectedColor = color;
+        let element = document.querySelectorAll('.ct_screens_black_bg_12') as NodeListOf<HTMLElement>
+        element.forEach(element => {
+            element.style.backgroundColor = color;
+        });
+
     }
 
 
@@ -148,20 +189,106 @@ export class MakeItMineComponent {
                 sessionStorage.setItem('htmlCode', this.htmlCode);
                 this.apiService._htmlCode.set(this.htmlCode);
 
-                const doc1 = this.iframe1.nativeElement.contentDocument || this.iframe1.nativeElement.contentWindow?.document;
-                if (doc1) {
-                    doc1.open();
-                    doc1.write(this.htmlCode);
-                    doc1.close();
-                    const logo1 = doc1.querySelector('#mylogo') as HTMLElement;
+                // const doc1 = this.iframe1.nativeElement.contentDocument || this.iframe1.nativeElement.contentWindow?.document;
+                // if (doc1) {
+                //     doc1.open();
+                //     doc1.write(this.htmlCode);
+                //     doc1.close();
+                //     const logo1 = doc1.querySelector('#mylogo') as HTMLElement;
 
-                    const newLogoHtml = `<img id="mylogo" loading="lazy" src="${res.data[0].projectImage || 'https://creativethoughts.ai/assets/img/c.png'}" alt="AI app builder for mobile and web" style="width: 70px; height: 30px;">`;
+                //     const newLogoHtml = `<img id="mylogo" loading="lazy" src="${res.data[0].projectImage || 'https://creativethoughts.ai/assets/img/c.png'}" alt="AI app builder for mobile and web" style="width: 70px; height: 30px;">`;
 
-                    if (logo1) logo1.outerHTML = newLogoHtml;
-                }
+                //     if (logo1) logo1.outerHTML = newLogoHtml;
+                // }
                 this.projectName = res.data[0].projectName;
                 this.apiService._imagePreview.set(res.data[0].projectImage);
+                this.imagePreview = res.data[0].projectImage;
+                this.detectLogoBackground(this.imagePreview);
             }
+        });
+    }
+
+
+
+
+    detectLogoBackground(imageUrl: string) {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = imageUrl;
+
+        img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            const ctx = canvas.getContext("2d");
+            if (!ctx) return;
+
+            ctx.drawImage(img, 0, 0);
+            const corners = [
+                ctx.getImageData(5, 5, 1, 1).data,
+                ctx.getImageData(img.width - 5, 5, 1, 1).data,
+                ctx.getImageData(5, img.height - 5, 1, 1).data,
+                ctx.getImageData(img.width - 5, img.height - 5, 1, 1).data
+            ];
+
+            let totalBrightness = 0;
+
+            corners.forEach(px => {
+                const [r, g, b] = px;
+                totalBrightness += (r + g + b) / 3;
+            });
+
+            const avgBrightness = totalBrightness / corners.length;
+            if (avgBrightness > 180) {
+                this.selectedColor = "#000000";
+            } else {
+                this.selectedColor = "#ffffff";
+            }
+
+            this.onColorChange(this.selectedColor);
+            // this.removeWhiteBg(this.croppedImage).then(result => {
+            //     this.imagePreview = result;
+            // });
+        };
+    }
+
+
+    removeWhiteBg(imageUrl: string): Promise<string> {
+        return new Promise(resolve => {
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = imageUrl;
+
+            img.onload = () => {
+                const canvas = document.createElement("canvas");
+                canvas.width = img.width;
+                canvas.height = img.height;
+
+                const ctx = canvas.getContext("2d");
+                if (!ctx) return resolve(imageUrl);
+
+                ctx.drawImage(img, 0, 0);
+
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+
+                    const brightness = (r + g + b) / 3;
+
+                    // threshold for white
+                    if (brightness > 240) {
+                        data[i + 3] = 0; // make pixel transparent
+                    }
+                }
+
+                ctx.putImageData(imageData, 0, 0);
+                resolve(canvas.toDataURL("image/png"));
+            };
         });
     }
 
