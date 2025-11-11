@@ -160,12 +160,12 @@ export class PaymentPlanComponent {
   };
 
   openCalendly() {
-    console.log("here1");
+ 
     Calendly.initPopupWidget({ url: 'https://calendly.com/mohdfaraz-ctinfotech/30min' });
   };
 
   ngAfterViewInit() {
-    console.log("here2");
+    
     const calendlyContainer = document.getElementById('calendly-inline-widget');
     if (calendlyContainer) {
       Calendly.initInlineWidget({
@@ -204,8 +204,9 @@ export class PaymentPlanComponent {
 
 
   initiateCheckout() {
+    console.log(this.billingDetails);
     const user = {
-      name: this.billingDetails.name,
+      name: this.billingDetails.full_name,
       email: this.billingDetails.email,
       phoneNumber: this.billingDetails.phoneNumber,
       addressLine1: this.billingDetails.address_line_1,
@@ -214,7 +215,7 @@ export class PaymentPlanComponent {
       state: this.billingDetails.state,
       pincode: this.billingDetails.postal_code,
     }
-    console.log(user);
+    
     this.http
       .post(this.apiService.apiUrl + 'api/payment/create-order', {
         // amount: this.orderAmount,
@@ -226,8 +227,8 @@ export class PaymentPlanComponent {
       })
       .subscribe(
         (response: any) => {
-          console.log(response);
-          const paymentSessionId = response.payment_session_id;
+          console.log(" order response", response);
+          const paymentSessionId = response.data.payment_session_id;
 
           const checkoutOptions = {
             paymentSessionId,
@@ -259,7 +260,6 @@ export class PaymentPlanComponent {
           if (res.success) {
             this.billingDetails = JSON.parse(res.data.billing_details)[0]
           }
-          console.log('Blogs:', this.billingDetails);
         },
         error: (err) => {
           console.error('Error fetching blogs:', err);
