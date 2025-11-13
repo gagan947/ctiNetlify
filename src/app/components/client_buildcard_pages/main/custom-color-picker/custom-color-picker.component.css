@@ -97,3 +97,11 @@
     /* transform: translateY(-96%) !important; */
     /* position: unset !important; */
 }
+
+.color-picker-container {
+    width: 215px;
+    border-radius: 10px;
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}

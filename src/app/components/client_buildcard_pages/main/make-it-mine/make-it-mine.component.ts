@@ -10,17 +10,18 @@ import { SidebarComponent } from "../../sidebar/sidebar.component";
 import { ModalService } from '../../../../services/modal.service';
 import { ImageCropperComponent, ImageCroppedEvent } from 'ngx-image-cropper';
 import { CustomColorPickerComponent } from '../custom-color-picker/custom-color-picker.component';
+import { MobileViewComponent } from '../mobile-view/mobile-view.component';
 declare var bootstrap: any;
 
 @Component({
     selector: 'app-make-it-mine',
     standalone: true,
-    imports: [RouterLink, FormsModule, CommonModule, ColorPickerModule, SidebarComponent, ImageCropperComponent, CustomColorPickerComponent],
+    imports: [RouterLink, FormsModule, CommonModule, ColorPickerModule, SidebarComponent, ImageCropperComponent, CustomColorPickerComponent, MobileViewComponent],
     templateUrl: './make-it-mine.component.html',
     styleUrl: './make-it-mine.component.css'
 })
 export class MakeItMineComponent {
-    @ViewChild('preview1', { static: true }) iframe1!: ElementRef<HTMLIFrameElement>;
+    @ViewChild('preview1', { static: false }) iframe1!: ElementRef<HTMLIFrameElement>;
     @ViewChild('closeBtn2') closeBtn2!: ElementRef<HTMLButtonElement>
     @Input() id!: string;
     projectsData: any;
@@ -36,6 +37,7 @@ export class MakeItMineComponent {
     htmlCode: any = '';
     loading: boolean = true;
     hasUnsavedChanges: boolean = true;
+    previewProject: boolean = false;
     private modal = inject(ModalService);
     constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService,) {
         let projectData = sessionStorage.getItem('projectData');
@@ -54,24 +56,23 @@ export class MakeItMineComponent {
         if (this.id && !this.projectsData) {
             this.getProjectHtml()
         } else {
-            // const doc1 = this.iframe1.nativeElement.contentDocument || this.iframe1.nativeElement.contentWindow?.document;
-            // if (doc1) {
-            //     doc1.open();
-            //     doc1.write(this.apiService._htmlCode());
+            const doc1 = this.iframe1.nativeElement.contentDocument || this.iframe1.nativeElement.contentWindow?.document;
+            if (doc1) {
+                doc1.open();
+                doc1.write(this.apiService._htmlCode());
 
+                doc1.close();
+                const logo1 = doc1.querySelector('#mylogo') as HTMLElement;
 
-            //     doc1.close();
-            //     const logo1 = doc1.querySelector('#mylogo') as HTMLElement;
+                const newLogoHtml = `<img id="mylogo" loading="lazy" src="${this.apiService._imagePreview() || 'https://creativethoughts.ai/assets/img/c.png'}" alt="AI app builder for mobile and web" style="width: 70px; height: 30px;">`;
 
-            //     const newLogoHtml = `<img id="mylogo" loading="lazy" src="${this.apiService._imagePreview() || 'https://creativethoughts.ai/assets/img/c.png'}" alt="AI app builder for mobile and web" style="width: 70px; height: 30px;">`;
-
-            //     if (logo1) logo1.outerHTML = newLogoHtml;
-            // }
+                if (logo1) logo1.outerHTML = newLogoHtml;
+            }
         }
     }
 
     updateLogo() {
-        const doc1 = this.iframe1.nativeElement.contentDocument;
+        const doc1 = this.iframe1?.nativeElement?.contentDocument;
         if (doc1) {
             const logo1 = doc1.querySelector('#mylogo') as HTMLElement;
 
@@ -108,11 +109,13 @@ export class MakeItMineComponent {
 
     onDone() {
         this.imagePreview = this.croppedImage
+        this.apiService._imagePreview.set(this.croppedImage);
         this.logoImg = new File([this.croppedImageBlob], 'logo.png', {
             type: 'image/png'
         })
         this.detectLogoBackground(this.croppedImage);
         this.closeBtn2.nativeElement.click()
+        this.updateLogo();
     }
 
     openModal() {
@@ -137,19 +140,35 @@ export class MakeItMineComponent {
     //     }
     // }
 
+    startPreview() {
+        this.previewProject = !this.previewProject;
+        setTimeout(() => {
+            const doc1 = this.iframe1.nativeElement.contentDocument || this.iframe1.nativeElement.contentWindow?.document;
+            if (doc1) {
+                doc1.open();
+                doc1.write(this.htmlCode);
+                doc1.close();
+                const logo1 = doc1.querySelector('#mylogo') as HTMLElement;
+
+                const newLogoHtml = `<img id="mylogo" loading="lazy" src="${this.imagePreview || 'https://creativethoughts.ai/assets/img/c.png'}" alt="AI app builder for mobile and web" style="width: 70px; height: 30px;">`;
+
+                if (logo1) logo1.outerHTML = newLogoHtml;
+            }
+        });
+    }
+
+
     onColorChange(color: string) {
-        console.log(color);
         this.selectedColor = color;
         let element = document.querySelectorAll('.ct_screens_black_bg_12') as NodeListOf<HTMLElement>
         element.forEach(element => {
             element.style.backgroundColor = color;
+            (element.querySelector('h2') as HTMLElement).style.color = this.selectedColor == '#ffffff' ? '#000000' : '#ffffff';
         });
-
     }
 
 
     Navigate(id: any) {
-
         if (this.projectName == '') {
             this.submitted = true
             return
@@ -207,8 +226,6 @@ export class MakeItMineComponent {
             }
         });
     }
-
-
 
 
     detectLogoBackground(imageUrl: string) {
@@ -291,5 +308,4 @@ export class MakeItMineComponent {
             };
         });
     }
-
 }
