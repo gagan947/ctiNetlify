@@ -71,6 +71,8 @@ export class LoginComponent {
       client_id: '994120717709-6hec26klmpd1h9eif5vcahincbbn2m1u.apps.googleusercontent.com',
       callback: (response: any) => this.handleCredentialResponse(response),
       ux_mode: 'popup',
+      auto_select: false,
+      cancel_on_tap_outside: true
     });
 
     this.renderGoogleButton();
@@ -83,7 +85,7 @@ export class LoginComponent {
       google.accounts.id.renderButton(buttonDiv, {
         theme: 'filled_blue',
         size: 'large',
-        
+
       });
     }
   }
@@ -244,45 +246,45 @@ export class LoginComponent {
 
 
   handleCredentialResponse(response: any) {
-   
-      const formData = {
-        credential: response.credential
-      }
 
-      this.apiService.postAPI(`api/user/googleLogin`, formData)
-        .subscribe({
-          next: (res: any) => {
-            if (res.success == true) {
-              this.apiService.setToken(res.data.token);
-              localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
-              this.message.success(res.message)
+    const formData = {
+      credential: response.credential
+    }
 
-              if (res.data.user.profile_visited) {
-                this.router.navigate(['/main']);
-              } else {
-                this.router.navigate(['/profile']);
-              }
-              // this.projectInfo = res.projectInfo
-              // this, this.getProjectMedia()
-              this.isLoading = false
+    this.apiService.postAPI(`api/user/googleLogin`, formData)
+      .subscribe({
+        next: (res: any) => {
+          if (res.success == true) {
+            this.apiService.setToken(res.data.token);
+            localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
+            this.message.success(res.message)
+
+            if (res.data.user.profile_visited) {
+              this.router.navigate(['/main']);
             } else {
-              this.isLoading = false
-              // this.loading = false
-              this.message.error(res.message)
+              this.router.navigate(['/profile']);
             }
-          },
-          error: err => {
-            if (err.status === 0) {
-              this.message.error('Network error, please check your connection.');
-            } else if (err.error?.message) {
-              this.message.error(err.error.message);
-            } else {
-              this.message.error('Unexpected error occurred.');
-            }
+            // this.projectInfo = res.projectInfo
+            // this, this.getProjectMedia()
             this.isLoading = false
+          } else {
+            this.isLoading = false
+            // this.loading = false
+            this.message.error(res.message)
+          }
+        },
+        error: err => {
+          if (err.status === 0) {
+            this.message.error('Network error, please check your connection.');
+          } else if (err.error?.message) {
+            this.message.error(err.error.message);
+          } else {
+            this.message.error('Unexpected error occurred.');
+          }
+          this.isLoading = false
         }
       });
-    
+
   };
 
   handleCredentialResponseError(error: any) {

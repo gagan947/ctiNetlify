@@ -113,7 +113,7 @@ export class MakeItMineComponent {
         this.logoImg = new File([this.croppedImageBlob], 'logo.png', {
             type: 'image/png'
         })
-        this.detectLogoBackground(this.croppedImage);
+        // this.detectLogoBackground(this.croppedImage);
         this.closeBtn2.nativeElement.click()
         this.updateLogo();
     }
@@ -222,7 +222,7 @@ export class MakeItMineComponent {
                 this.projectName = res.data[0].projectName;
                 this.apiService._imagePreview.set(res.data[0].projectImage);
                 this.imagePreview = res.data[0].projectImage;
-                this.detectLogoBackground(this.imagePreview);
+                // this.detectLogoBackground(this.imagePreview);
             }
         });
     }
