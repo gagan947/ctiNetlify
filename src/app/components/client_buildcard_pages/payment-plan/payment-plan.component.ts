@@ -39,9 +39,7 @@ export class PaymentPlanComponent {
   userData: any;
   currencyCode = 'INR';
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private http: HttpClient) {
-    effect(() => {
-      this.rate = this.apiService._rate()
-    })
+   
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
     this.total_cost_delivery = this.projectsData.total_cost_delivery;
@@ -57,10 +55,13 @@ export class PaymentPlanComponent {
 
     this.userData = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
     this.currencyCode = this.userData.currency;
+    this.getRates(this.currencyCode);
+ 
   };
 
   ngOnInit(): void {
-    this.getBillingDetails()
+    this.getBillingDetails();
+    
   }
 
   onPaymentChange(id: any) {
@@ -69,7 +70,7 @@ export class PaymentPlanComponent {
       this.actualCost = null
     } else {
       this.paymentPlan = '2'
-      this.actualCost = this.projectsData.total_cost_delivery + (this.projectsData.total_cost_delivery * 18) / 100 - ((this.projectsData.total_cost_delivery + (this.projectsData.total_cost_delivery * 18) / 100) * 10) / 100
+      this.actualCost = this.projectsData.total_cost_delivery * 1.18 * 0.90;
       this.securityDeposit = (this.actualCost * 20) / 100
       this.generateInstallemnts(this.projectsData.estimated_time)
     }
@@ -120,45 +121,6 @@ export class PaymentPlanComponent {
     }
   }
 
-  Navigate() {
-    let formData = undefined
-    if (this.paymentPlan == '2') {
-      formData = {
-        payment_plan: this.paymentPlan == '2' ? 'Installment' : 'Upfront',
-        installment_type: this.installmentType,
-        tax_amount: (this.total_cost_delivery * 18) / 100,
-        final_cost_with_tax_discount: (this.actualCost! * 20) / 100,
-        security_deposit: this.securityDeposit,
-        currentRoutes: this.router.url,
-        installmentPlan: this.installmentDates.map((ele) => {
-          return {
-            dueDate: ele,
-            projectStage: "Development",
-            amount: (this.actualCost! - this.securityDeposit) / this.noOfInstallments
-          }
-        })
-      }
-    } else {
-      formData = {
-        payment_plan: this.paymentPlan == '1' ? 'Upfront' : 'Installment',
-        tax_amount: (this.total_cost_delivery * 18) / 100,
-        currentRoutes: this.router.url,
-        final_cost_with_tax_discount: this.total_cost_delivery + (this.total_cost_delivery * 18) / 100 - ((this.total_cost_delivery + (this.total_cost_delivery * 18) / 100) * 10) / 100
-      }
-    }
-
-    this.apiService.postAPI(`api/user/addClientPaymentPlan?inquiryId=${this.projectsData.clientEnquryId}`, formData).subscribe({
-      next: (res: any) => {
-        if (res.success) {
-          sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...{ paymentPlan: this.paymentPlan }, ...{ installmentType: this.installmentType }, ...{ final_cost_with_tax_discount: formData.final_cost_with_tax_discount } }))
-          this.router.navigate(['/payment-option'])
-        }
-      }, error(err) {
-        // this.message.error(err.error.message)
-      },
-    })
-  };
-
   openCalendly() {
  
     Calendly.initPopupWidget({ url: 'https://calendly.com/mohdfaraz-ctinfotech/30min' });
@@ -204,7 +166,7 @@ export class PaymentPlanComponent {
 
 
   initiateCheckout() {
-    console.log(this.billingDetails);
+
     const user = {
       name: this.billingDetails.full_name,
       email: this.billingDetails.email,
@@ -215,44 +177,50 @@ export class PaymentPlanComponent {
       state: this.billingDetails.state,
       pincode: this.billingDetails.postal_code,
     }
-    
-    this.http
-      .post(this.apiService.apiUrl + 'api/payment/create-order', {
-        // amount: this.orderAmount,
-        amount: Math.floor((this.actualCost! * 20) / 100),
+
+  
+    this.http.post(this.apiService.apiUrl + 'api/payment/create-order', {
+        amount: Math.floor(this.securityDeposit * this.rate),
         user,
         currency: this.currencyCode,
         clientEnquryId: this.projectsData.clientEnquryId,
         currentRoutes: this.router.url,
-      })
-      .subscribe(
-        (response: any) => {
-          console.log(" order response", response);
-          const paymentSessionId = response.data.payment_session_id;
-
-          const checkoutOptions = {
-            paymentSessionId,
-            redirectTarget: '_self',
-          };
-
-          const cashfree = new window.Cashfree({
-            paymentSessionId: paymentSessionId,
-            mode: 'production'
-
-          });
-          cashfree.checkout(checkoutOptions).then((result: any) => {
-            if (result.error) {
-              alert(result.error.message);
-            } else if (result.redirect) {
-              console.log('Redirecting to payment page...');
-            }
-          });
-        },
-        (error) => {
-          console.error('Error initiating checkout:', error);
+    })
+    .subscribe(
+      (response: any) => {
+  console.log(response.data);
+  console.log(response.data.cf_offer_id);
+  
+        const paymentSessionId = response?.data?.payment_session_id;
+        const cf_offer_id = response?.data?.cf_offer_id;
+  
+        if (!paymentSessionId) {
+          alert("Payment session missing");
+          return;
         }
-      );
+  
+        // ✔ Correct initialization (no session here)
+        const cashfree = new window.Cashfree({ mode: "production" });
+  
+        // ✔ Correct checkout call
+        cashfree.checkout({
+          paymentSessionId: paymentSessionId, // EXACT KEY
+          redirectTarget: "_self"
+        })
+        .then((result: any) => {
+          if (result.error) {
+            console.error(result.error);
+            alert(result.error.message);
+          }
+        });
+  
+      },
+      (error) => {
+        console.error('Error initiating checkout:', error);
+      }
+    );
   }
+  
   getBillingDetails(): void {
     this.apiService.getApi(`api/user/getBillingDetails?id=${this.projectsData.clientEnquryId}`)
       .subscribe({
@@ -265,5 +233,49 @@ export class PaymentPlanComponent {
           console.error('Error fetching blogs:', err);
         }
       });
+  }
+
+  getRates(base: any) {
+    const key = '5606f101bb2a1853bbe166f02ed4633c'; // mohd faraz acount key
+    const today = new Date().toISOString().split('T')[0];
+
+    if (base === 'INR') {
+      this.rate = 1
+      return;
+    } else {
+      let params = {
+        currency_code: base,
+        date: today
+      };
+
+      this.apiService.getApi(`api/user/getCurrencyRate?${new URLSearchParams(params).toString()}`).subscribe({
+        next: (res: any) => {
+          if (res.success) {
+            if (res.data.length > 0) {
+              this.rate = Number(res.data[0].rate);
+            } else {
+              const url = `https://api.exchangerate.host/live?access_key=${key}&source=INR&currencies=AUD,AED,SGD,USD,EUR,GBP`;
+              this.http.get(url).subscribe((res: any) => {
+                if (res.success) {
+
+                  this.rate = res.quotes[`INR${base}`];
+                  const result = Object.entries(res.quotes).map(([key, value]) => {
+                    return { [key.replace("INR", "")]: value };
+                  });
+
+                  this.apiService.postAPI('api/user/updateCurrencyRate', {
+                    rate: result,
+                    todays_date: today
+                  }).subscribe();
+                }
+              });
+            }
+          }
+        },
+        error: err => {
+          console.log(err);
+        }
+      });
+    }
   }
 }
