@@ -2,6 +2,7 @@ import { Component, ElementRef, viewChild, ViewChild } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { GlobalModalComponent } from "./components/shared/global-modal/global-modal.component";
 import { filter } from 'rxjs';
+import { Meta } from '@angular/platform-browser';
 declare var bootstrap: any;
 declare let fbq: Function;
 @Component({
@@ -14,7 +15,9 @@ declare let fbq: Function;
 export class AppComponent {
   title = 'creative_ai';
   @ViewChild('closeModal') closeModal!: ElementRef;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private meta: Meta) {
+    this.meta.updateTag({ property: 'og:site_name', content: 'Creative AI' });
+  }
 
   ngOnInit() {
     this.router.events
