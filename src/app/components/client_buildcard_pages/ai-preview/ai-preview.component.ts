@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
-
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
   selector: 'app-ai-preview',
   standalone: true,
@@ -10,110 +10,66 @@ import { CommonModule } from '@angular/common';
   styleUrl: './ai-preview.component.css'
 })
 export class AiPreviewComponent {
-  pages: any[] = [];
-  currentHtml: string = '';
-  currentCss: string = '';
-  currentJs: string = '';
-  
-  loading: boolean = false;
-  error: string = '';
+  pages: any = {};           // Full response from backend
+  currentHTML: SafeHtml = "";  // Current page HTML
+  currentCSS: string = "";   // Current page CSS
+  styleTag!: HTMLStyleElement;
 
-  constructor(private apiService: ApiService) {
-    this.GetAiPreview();
+  constructor(
+    private apiService: ApiService,
+    private el: ElementRef,
+    private renderer: Renderer2,
+    private sanitizer: DomSanitizer
+  ) {}
+
+  ngOnInit() {
+    const payload = {
+      project_id: 47,
+      project_description: "Airbnb revolutionizes travel by connecting users with unique accommodations and experiences worldwide. Perfect for travelers seeking personalized stays, the app allows users to list, discover, and book properties ranging from cozy apartments to luxury villas. Its intuitive interface simplifies browsing, with filters for location, price, and amenities like Wi-Fi or pet-friendly spaces. Users can save favorite listings to plan dream vacations or quick getaways. Hosts can showcase their properties with detailed descriptions, photos, and verified reviews, fostering trust and transparency. The booking process is seamless, with secure payments and instant confirmations. Airbnb’s messaging system enables direct communication between hosts and guests, ensuring smooth coordination. Beyond stays, the app offers curated experiences, from cooking classes to guided tours, led by local experts. Travelers can explore destinations through reviews and host recommendations, making every trip memorable. The app’s global reach supports diverse travel needs, whether for solo adventurers, families, or business travelers. Features like flexible cancellation policies and wishlists enhance user convenience. Airbnb’s community-driven platform promotes cultural exchange and authentic travel, making it a go-to choice for modern explorers seeking more than just a place to stay.",
+      sub_features: ["1", "2","47","27","28","42","32","91","3"],
+      project_type: "ecommerce",
+
+    };
+
+    this.apiService.postAPI<any, any>('api/user/generatePreview', payload).subscribe((res: any) => {
+      this.pages = res.data;  // example: { login_email: {...}, login_phone: {...} }
+
+      // Load default page
+      const firstKey = Object.keys(res.data)[0];
+      if (firstKey) this.loadPage(firstKey);
+    });
   }
 
-  GetAiPreview() {
-    let formData = {
-      
-        "projectName": "Social Media App",
-        "pages": [
-          {
-            "pageName": "Login Page",
-            "description": "User login screen with email, password and login button.",
-            "features": ["email input", "password input", "login button", "forgot password link"]
-          },
-          {
-            "pageName": "Signup Page",
-            "description": "Create account with name, email, password.",
-            "features": ["full name input", "email input", "password input", "signup button"]
-          },
-          {
-            "pageName": "Feed Page",
-            "description": "Main feed where users scroll posts.",
-            "features": ["post card", "like button", "comment button", "share button", "bottom navbar"]
-          },
-          {
-            "pageName": "Chat Screen",
-            "description": "User chat screen with message list and input box.",
-            "features": ["message list", "send message box", "send button", "user header"]
-          },
-          {
-            "pageName": "Profile Page",
-            "description": "User profile with photo, bio and follower counts.",
-            "features": ["profile picture", "cover photo", "bio", "followers count", "edit profile button"]
-          }
-        ],
-        "style": {
-          "theme": "modern clean UI",
-          "colors": ["#4A90E2", "#FFFFFF", "#222222"]
-        },
-        "output": {
-          "includeCSS": true,
-          "includeJS": true,
-          "multiPage": true
-        }
-      }
-      
-      this.apiService.postAPI<any, any>('api/user/generateCode', formData)
-        .subscribe({
-          next: (res: any) => {
-            this.loading = false;
-            this.pages = res.data;
-    
-            if (this.pages.length > 0) {
-              this.loadPage(this.pages[0]);
-            }
-          },
-          error: (err: any) => {
-            this.loading = false;
-            this.error = err.error.message;
-          }
-        });
-    
+  /** Load selected HTML + CSS */
+  loadPage(key: string) {
+    this.currentHTML = this.sanitizer.bypassSecurityTrustHtml(
+      this.pages[key].html
+    );
+
+    this.injectCSS(this.pages[key].css);
+  }
+
+
+  /** Dynamically inject CSS into document head */
+  injectCSS(css: string) {
+    if (this.styleTag) {
+      document.head.removeChild(this.styleTag);
     }
 
-    loadPage(page: any) {
-      this.currentHtml = page.html;
-      this.currentCss = page.css;
-      this.currentJs = page.js;
-  
-      this.injectCSS(page.css);
-      this.runJS(page.js);
+    this.styleTag = this.renderer.createElement('style');
+    this.styleTag.innerHTML = css;
+    document.head.appendChild(this.styleTag);
+  }
+
+  /** Navigation handler */
+  onPreviewClick(event: any) {
+    let el = event.target;
+
+    const feature = el.closest("[data-sub-feature]")?.getAttribute("data-sub-feature");
+    if (feature && this.pages[feature]) {
+      this.loadPage(feature);
     }
-  
-    injectCSS(css: string) {
-      const styleTag = document.getElementById('dynamic-ai-style');
-      if (styleTag) {
-        styleTag.innerHTML = css;
-        return;
-      }
-  
-      const style = document.createElement('style');
-      style.id = 'dynamic-ai-style';
-      style.innerHTML = css;
-      document.head.appendChild(style);
-    }
-  
-    runJS(jsCode: string) {
-      const oldScript = document.getElementById('dynamic-ai-script');
-      if (oldScript) oldScript.remove();
-  
-      const script = document.createElement('script');
-      script.id = 'dynamic-ai-script';
-      script.innerHTML = jsCode;
-      
-      document.body.appendChild(script);
-    }
+  }
 
 
 }

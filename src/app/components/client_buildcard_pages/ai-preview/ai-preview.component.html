@@ -1,16 +1,3 @@
-<div class="wrapper">
-
-    <div class="sidebar">
-      <button 
-        *ngFor="let page of pages"
-        class="page-btn"
-        (click)="loadPage(page)">
-        {{ page.pageName }}
-      </button>
-    </div>
-  
-    <div class="content">
-      <div class="render-box" [innerHTML]="currentHtml"></div>
-    </div>
-  
-  </div>
+<div class="preview-wrapper" (click)="onPreviewClick($event)">
+  <div [innerHTML]="currentHTML"></div>
+</div>
