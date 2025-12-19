@@ -24,10 +24,10 @@ export class AiPreviewComponent {
 
   ngOnInit() {
     const payload = {
-      project_id: 47,
+      project_id: 5,
       project_description: "Airbnb revolutionizes travel by connecting users with unique accommodations and experiences worldwide. Perfect for travelers seeking personalized stays, the app allows users to list, discover, and book properties ranging from cozy apartments to luxury villas. Its intuitive interface simplifies browsing, with filters for location, price, and amenities like Wi-Fi or pet-friendly spaces. Users can save favorite listings to plan dream vacations or quick getaways. Hosts can showcase their properties with detailed descriptions, photos, and verified reviews, fostering trust and transparency. The booking process is seamless, with secure payments and instant confirmations. Airbnb’s messaging system enables direct communication between hosts and guests, ensuring smooth coordination. Beyond stays, the app offers curated experiences, from cooking classes to guided tours, led by local experts. Travelers can explore destinations through reviews and host recommendations, making every trip memorable. The app’s global reach supports diverse travel needs, whether for solo adventurers, families, or business travelers. Features like flexible cancellation policies and wishlists enhance user convenience. Airbnb’s community-driven platform promotes cultural exchange and authentic travel, making it a go-to choice for modern explorers seeking more than just a place to stay.",
-      sub_features: ["1", "2","47","27","28","42","32","91","3"],
-      project_type: "ecommerce",
+      sub_features: ["1","2","47","28","32","27","42","85","11","35","36","30"],
+      project_type: "Ecommerce",
 
     };
 
