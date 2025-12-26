@@ -10,7 +10,6 @@ $(document).ready(function () {
     $(".et_dashbaord_main").toggleClass("et_dash_show");
   });
 
-  // ct_recent_work_slider Brand Slider S
   $(".ct_recent_work_slider").owlCarousel({
     loop: true,
     margin: 10,
@@ -29,9 +28,7 @@ $(document).ready(function () {
       },
     },
   });
-  // ct_recent_work_slider Brand Slider E
 
-  // ct_featured_slider Brand Slider S
   $(".ct_featured_slider").owlCarousel({
     loop: true,
     margin: 10,
@@ -52,9 +49,7 @@ $(document).ready(function () {
       },
     },
   });
-  // ct_featured_slider Brand Slider J
 
-  // ct_recent_work_slider Brand Slider S
   $(".ct_testimonial_slider").owlCarousel({
     loop: true,
     margin: 15,
@@ -75,9 +70,7 @@ $(document).ready(function () {
       },
     },
   });
-  // ct_recent_work_slider Brand Slider E
 
-  // Pricing Works Slider S
   $(".ct_pricing_works")
     .on("initialized.owl.carousel changed.owl.carousel", function (e) {
       if (!e.namespace) {
@@ -103,9 +96,7 @@ $(document).ready(function () {
         },
       },
     });
-  // Pricing Works Slider E
 
-  // Latesh Project Slider S
   $("#ct_builder_studio_slider").owlCarousel({
     loop: true,
     margin: 100,
@@ -390,24 +381,6 @@ $(window).scroll(function () {
   }
 }); //missing );
 
-// window.onload = function () {
-//   var amount = document.getElementById("amount");
-//   var countUp = new CountUp(amount, 0, 450, 0, 2.5, {
-//     useEasing: true,
-//     useGrouping: true,
-//     separator: ",",
-//   });
-
-//   if (!countUp.error) {
-//     countUp.start();
-//   }
-
-
-//   setTimeout(function () {
-//     document.getElementById("funding-counter").innerHTML =
-//       "$" + amount.innerHTML + "m+";
-//   }, 2500);
-// };
 
 var options = {
   chart: {
@@ -448,8 +421,6 @@ var options = {
   tooltip: { enabled: false },
 };
 
-// var chart = new ApexCharts(document.querySelector("#et_linear_chart"), options);
-// chart.render();
 
 var options = {
   series: [
@@ -496,12 +467,6 @@ var options = {
   },
 };
 
-// var chart = new ApexCharts(
-//   document.querySelector("#ghg-emission-bar"),
-//   options
-// );
-// chart.render();
-
 $(document).ready(function () {
   $(".et_buildcard_collapse_icon").click(function () {
     $("#ct_collapse_build_first").addClass("d-none");
@@ -521,64 +486,6 @@ var thumbLeft = document.querySelector(".et-slider > .et-thumb.et-left");
 var thumbRight = document.querySelector(".et-slider > .et-thumb.et-right");
 var range = document.querySelector(".et-slider > .et-range");
 
-// function setLeftValue() {
-//   var _this = inputLeft,
-//     min = parseInt(_this.min),
-//     max = parseInt(_this.max);
-
-//   _this.value = Math.min(parseInt(_this.value), parseInt(inputRight.value) - 1);
-
-//   var percent = ((_this.value - min) / (max - min)) * 100;
-
-//   thumbLeft.style.left = percent + "%";
-//   range.style.left = percent + "%";
-// }
-// setLeftValue();
-
-// function setRightValue() {
-//   var _this = inputRight,
-//     min = parseInt(_this.min),
-//     max = parseInt(_this.max);
-
-//   _this.value = Math.max(parseInt(_this.value), parseInt(inputLeft.value) + 1);
-
-//   var percent = ((_this.value - min) / (max - min)) * 100;
-
-//   thumbRight.style.right = 100 - percent + "%";
-//   range.style.right = 100 - percent + "%";
-// }
-// setRightValue();
-
-// inputLeft.addEventListener("input", setLeftValue);
-// inputRight.addEventListener("input", setRightValue);
-
-// inputLeft.addEventListener("mouseover", function () {
-//   thumbLeft.classList.add("et-hover");
-// });
-// inputLeft.addEventListener("mouseout", function () {
-//   thumbLeft.classList.remove("et-hover");
-// });
-// inputLeft.addEventListener("mousedown", function () {
-//   thumbLeft.classList.add("et-active");
-// });
-// inputLeft.addEventListener("mouseup", function () {
-//   thumbLeft.classList.remove("et-active");
-// });
-
-// inputRight.addEventListener("mouseover", function () {
-//   thumbRight.classList.add("et-hover");
-// });
-// inputRight.addEventListener("mouseout", function () {
-//   thumbRight.classList.remove("et-hover");
-// });
-// inputRight.addEventListener("mousedown", function () {
-//   thumbRight.classList.add("et-active");
-// });
-// inputRight.addEventListener("mouseup", function () {
-//   thumbRight.classList.remove("et-active");
-// });
-
-// Range Slider js E
 
 var ml4 = {};
 ml4.opacityIn = [0, 1];

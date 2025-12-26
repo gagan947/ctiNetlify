@@ -78,6 +78,6 @@ export const routes: Routes = [
             path: 'user', loadChildren: () => import('./components/user-section/user.routes').then(r => r.UserRoutes)
       },
       {
-            path: '**', loadChildren: () => import('./components/landing-pages/landing.routes').then(r => r.LandingRoutes), canActivate: [loginGuard]
+            path: '**', loadComponent: () => import('./components/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent)
       }
 ];

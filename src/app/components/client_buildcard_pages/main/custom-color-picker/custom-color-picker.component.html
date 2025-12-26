@@ -1,15 +1,12 @@
 <div class="dropdown ct_color_picker_dropdown">
-    <!-- <div class=""> -->
-    <button class="btn btn-light border dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown"
+    <!-- <button class="btn btn-light border dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown"
         aria-expanded="false">
         <div class="color-preview rounded me-2" [style.background]="color"></div>
-        <!-- Pick Color -->
         <i class="fa-solid fa-pencil ct_color_edit_center"></i>
-
-    </button>
+    </button> -->
     <!-- </div> -->
 
-    <div class="dropdown-menu p-2 shadow color-dropdown">
+    <div class="color-picker-container">
 
         <div class="sat-box mb-3 position-relative rounded overflow-hidden" #satBox (mousedown)="startSatDrag($event)"
             [style.background]="'hsl(' + hue + ', 100%, 50%)'">

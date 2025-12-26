@@ -63,10 +63,16 @@
                                                                   <input type="file" class="d-none" id="ct_upload_logo"
                                                                         accept="image/*"
                                                                         (change)="onFileSelected($event)">
-                                                                  <div class="ct_upload_logo_div">
+                                                                  <div
+                                                                        class="ct_upload_logo_div ct_w_fit_content mx-auto">
                                                                         @if(imagePreview){
-                                                                        <img [src]="imagePreview" alt="Preview"
-                                                                              class="preview-image w-100">
+                                                                        <div class="position-relative">
+                                                                              <img [src]="imagePreview" alt="Preview"
+                                                                                    class="preview-image w-100">
+                                                                              <div class="ct_img_close_icon">
+                                                                                    <i class="fa-solid fa-pencil"></i>
+                                                                              </div>
+                                                                        </div>
                                                                         }@else {
                                                                         <div>
                                                                               <svg width="22" height="21"
@@ -182,30 +188,60 @@
                                                 </li>
                                           </ul>
                                           <div class="d-grid" style="height: calc(100vh - 180px)">
-                                                <div class="ct_base_section_main"
-                                                      class="tab-content d-flex align-items-center" id="myTabContent">
+                                                <div class="tab-content d-flex align-items-center position-relative "
+                                                      id="myTabContent">
+                                                      <div class="ct_custom_chev_icons">
+                                                            <button class="ct_custom_chev_left"
+                                                                  [disabled]="!previewProject"
+                                                                  [class.disabled]="!previewProject"
+                                                                  (click)="startPreview()"><i
+                                                                        class="fa-solid fa-chevron-left"></i></button>
+                                                            <button class="ct_custom_chev_right"
+                                                                  [disabled]="previewProject" (click)="startPreview()"
+                                                                  [class.disabled]="previewProject">
+                                                                  <i class="fa-solid fa-chevron-right"></i>
+                                                            </button>
+                                                      </div>
                                                       <div class="position-relative ct_w_fit_content mx-auto tab-pane fade show active"
                                                             id="pills-mob" role="tabpanel">
-                                                            <div class="ct_moc_clip_mask_main234 ">
-                                                                  <div
-                                                                        class="ct_mob_overlay_top_cnt_new_12344 ct_screens_black_bg_12">
-                                                                        <img [src]="imagePreview || 'assets/img/c.png'"
-                                                                              alt="Mobile View"
-                                                                              class="et_logo_cener_5677">
+                                                            <div class="position-relative">
+                                                                  @if(previewProject){
+                                                                  <app-mobile-view></app-mobile-view>
+                                                                  }@else {
+                                                                  <div class="ct_moc_clip_mask_main234">
+                                                                        <div
+                                                                              class="ct_mob_overlay_top_cnt_new_12344 ct_screens_black_bg_12">
+                                                                              <div class="et_logo_cener_5677">
+                                                                                    <img [src]="imagePreview || 'assets/img/c.png'"
+                                                                                          alt="Mobile View" class="">
+                                                                                    <h2>{{projectName}}</h2>
+                                                                              </div>
+                                                                        </div>
                                                                   </div>
+                                                                  }
                                                             </div>
                                                       </div>
 
                                                       <div class="position-relative laptop-wrap ct_w_fit_content mx-auto tab-pane fade show"
                                                             style="width: 100%;" id="pillsdesk" role="tabpanel">
-                                                            <div class="ct_mob_overlay_top_cnt_12 ct_screens_black_bg_12"
-                                                                  id="laptop_screen">
-                                                                  <img [src]="imagePreview || 'assets/img/c.png'"
-                                                                        alt="Mobile View" class="et_logo_cener_5677">
-                                                                  <!-- <iframe #preview1 id="ct_iframe"
-                                                                        style="width: 100%;border: none;border-radius: 10px;transform-origin: top left;"></iframe> -->
+                                                            <div>
+                                                                  <div class="ct_mob_overlay_top_cnt_12 ct_screens_black_bg_12"
+                                                                        id="laptop_screen">
+                                                                        @if(previewProject){
+                                                                        <iframe #preview1 id="ct_iframe"
+                                                                              style="width: 100%;border: none;border-radius: 10px;transform-origin: top left;"></iframe>
+                                                                        }@else {
+                                                                        <div class="et_logo_cener_5677">
+                                                                              <img [src]="imagePreview || 'assets/img/c.png'"
+                                                                                    alt="Mobile View" class="">
+                                                                              <h2>{{projectName}}</h2>
+                                                                        </div>
+                                                                        }
+                                                                        <!-- <iframe #preview1 id="ct_iframe"
+                                                                                                                                          style="width: 100%;border: none;border-radius: 10px;transform-origin: top left;"></iframe> -->
+                                                                  </div>
+                                                                  <div class="base"></div>
                                                             </div>
-                                                            <div class="base"></div>
                                                       </div>
                                                 </div>
                                                 <div class="mt-auto  pt-3">
@@ -347,8 +383,9 @@
       <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                   <div class="modal-body">
-                        <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
-                              [aspectRatio]="70 / 40" (imageCropped)="imageCropped($event)">
+                        <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="false"
+                              [aspectRatio]="1 / 1" [cropperMinWidth]="100" [cropperMinHeight]="80"
+                              (imageCropped)="imageCropped($event)">
                         </image-cropper>
                   </div>
                   <div class="modal-footer">
