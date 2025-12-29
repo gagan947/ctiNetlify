@@ -221,10 +221,153 @@ background:linear-gradient(
     color: #000;
     font-weight: 400;
 }
+
+
+.ct_ai_project_build_empty_inner_card {
+    background-color: #f5f5f5;
+    padding: 48px;
+    text-align: center;
+    border-radius: 20px;
+    max-width: 800px;
+}
+.ct_ai_project_build_empty_inner_card h2{
+  font-size: 28px;
+  font-weight: 600;
+  max-width: 380px;
+  margin-inline: auto;
+}
+
+.ct_ai_project_build_empty_section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 30px);
+    gap: 20px;
+}
 /* HTML: <div class="loader"></div> */
 
 
 
 
+
+/* right side waiting loader css S */
+/* From Uiverse.io by dexter-st */ 
+.rgt_loader-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 180px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+  border-radius: 50%;
+  background-color: transparent;
+  user-select: none;
+  margin-inline: auto;
+}
+
+.rgt_loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background-color: transparent;
+  animation: rgt_loader-rotate 2s linear infinite;
+  
+  z-index: 0;
+    
+  
+}
+.ct_dash_right_content_side_ai_loader {
+    height: calc(100vh - 60px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border-radius: 20px;
+  
+}
+@keyframes rgt_loader-rotate {
+  0% {
+    transform: rotate(90deg);
+    box-shadow:
+    0 10px 20px 0 #fff inset, 0 20px 30px 0 hsl(288.94deg 100% 50% / 34%) inset, 0 60px 60px 0 hsl(239deg 91% 60% / 34%) inset
+  }
+  
+  50% {
+    transform: rotate(270deg);
+    box-shadow:
+   0 10px 20px 0 #fff inset, 0 20px 10px 0 hsl(0deg 100% 58% / 34%) inset, 0 40px 60px 0 hsl(239deg 91% 60% / 34%) inset
+  }
+  100% {
+    transform: rotate(450deg);
+    box-shadow:
+    0 10px 20px 0 #fff inset, 0 20px 30px 0 hsl(288.94deg 100% 50% / 34%) inset, 0 60px 60px 0 hsl(239deg 91% 60% / 34%) inset
+  }
+}
+
+.rgt_loader-letter {
+  display: inline-block;
+  opacity: 0.4;
+  transform: translateY(0);
+  animation: rgt_loader-letter-anim 2s infinite;
+  z-index: 1;
+  border-radius: 50ch;
+  border: none;
+}
+
+.rgt_loader-letter:nth-child(1) {
+  animation-delay: 0s;
+}
+.rgt_loader-letter:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.rgt_loader-letter:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.rgt_loader-letter:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.rgt_loader-letter:nth-child(5) {
+  animation-delay: 0.4s;
+}
+.rgt_loader-letter:nth-child(6) {
+  animation-delay: 0.5s;
+}
+.rgt_loader-letter:nth-child(7) {
+  animation-delay: 0.6s;
+}
+.rgt_loader-letter:nth-child(8) {
+  animation-delay: 0.7s;
+}
+.rgt_loader-letter:nth-child(9) {
+  animation-delay: 0.8s;
+}
+.rgt_loader-letter:nth-child(10) {
+  animation-delay: 0.9s;
+}
+
+@keyframes rgt_loader-letter-anim {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translateY(0);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  40% {
+    opacity: 0.7;
+    transform: translateY(0);
+  }
+}
+
+/* right side waiting loader css E */
 
 
