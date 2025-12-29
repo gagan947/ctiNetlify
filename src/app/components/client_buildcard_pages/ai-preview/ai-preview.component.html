@@ -66,7 +66,9 @@
 
   </aside>
   <div class="ct_ai_project_preview_right">
-    <h4>Faraz</h4>
+ <div class="preview-wrapper" (click)="onPreviewClick($event)" id="topScrollDiv">
+  <div [innerHTML]="currentHTML"></div>
+</div>
     
   </div>
 

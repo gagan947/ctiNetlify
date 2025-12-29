@@ -19,6 +19,7 @@ export class AiPreviewComponent {
   activeJsKeys: string[] = [];      // js_keys for current page
   loginRedirect: string = ""; 
   activeMenuKey: string | null = null;
+  projectsData: any;
       // Redirect page for login action
   constructor(
     private apiService: ApiService,
@@ -28,12 +29,24 @@ export class AiPreviewComponent {
   ) {}
 
   ngOnInit() {
+    let projectData = sessionStorage.getItem('projectData');
+    this.projectsData = JSON.parse(projectData!);
+
+    console.log(this.projectsData);
+   const subFeatureIds:any = [];
+   this.projectsData.selectdFeature.forEach((items:any) => {
+    items.subFeatures.forEach((subFeatures:any) =>{
+      subFeatureIds.push(subFeatures.id);
+    })
+   });
+   console.log("sub", subFeatureIds);
+
     const payload = {
-      project_id: 5,
-      project_description: "Airbnb revolutionizes travel by connecting users with unique accommodations and experiences worldwide...",
-      sub_features: ["1","2","3","7","11","13","47", "61","63","77","45","100"],
-      project_type: "Social",
-      clientEnquryId:302
+      project_id: this.projectsData.projectId,
+      project_description: this.projectsData.projectDescription,
+      sub_features: subFeatureIds,
+      project_type: this.projectsData.projectType,
+      clientEnquryId:this.projectsData.clientEnquryId
     };
 
     this.apiService
