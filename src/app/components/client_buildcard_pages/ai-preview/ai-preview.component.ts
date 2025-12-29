@@ -32,7 +32,8 @@ export class AiPreviewComponent {
       project_id: 5,
       project_description: "Airbnb revolutionizes travel by connecting users with unique accommodations and experiences worldwide...",
       sub_features: ["1","2","3","7","11","13","47", "61","63","77","45","100"],
-      project_type: "Social"
+      project_type: "Social",
+      clientEnquryId:302
     };
 
     this.apiService
