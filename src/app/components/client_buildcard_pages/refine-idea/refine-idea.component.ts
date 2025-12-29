@@ -159,10 +159,6 @@ export class RefineIdeaComponent {
 
   Navigate() {
 
-    if ((this.durations && this.durations < 6) || this.durations == 0) {
-      this.message.warning('Estimated duration must be more than 6 weeks to proceed with planning.');
-      return
-    }
 
     this.isLoading2 = true
 
@@ -174,7 +170,8 @@ export class RefineIdeaComponent {
       currentRoutes: this.router.url,
       no_of_features: this.noOfFeaturs,
       client_currency_code: this.currencyCode,
-      currency_rate: this.rate
+      currency_rate: this.rate,
+      additionalFeatures: this.addtionalFeatures.length > 0 ? JSON.stringify(this.addtionalFeatures) : ''
     }
 
     this.apiService.postAPI(`api/user/addClientInquries?inquiryId=${this.projectsData.clientEnquryId}`, formData)
@@ -189,8 +186,8 @@ export class RefineIdeaComponent {
               selectdFeature: this.projectsFeaturs
             }
 
-            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalFeatureCost, ...selectdFeature, ...{ 'no_of_features': this.noOfFeaturs }, ...{ 'estimated_time': this.durations } }))
-            this.router.navigate([`/plan-delivery/${this.id}`])
+            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalFeatureCost, ...selectdFeature, ...{ 'no_of_features': this.noOfFeaturs }, ...{ 'estimated_time': this.durations },...{additionalFeatures:this.addtionalFeatures} }))
+            this.router.navigate([`/ai-preview`])
             this.isLoading2 = false
           } else {
             this.message.error(res.message);
