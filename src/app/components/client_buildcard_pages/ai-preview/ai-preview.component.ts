@@ -2,7 +2,9 @@ import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
+import { io } from 'socket.io-client';
+import { AiSocketService } from '../../../services/ai-socket.service';
+import { filter } from 'rxjs';
 @Component({
   selector: 'app-ai-preview',
   standalone: true,
@@ -11,7 +13,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   styleUrl: './ai-preview.component.css'
 })
 export class AiPreviewComponent {
-
+blocks: any[] = [];
   pages: any = {};                 // Full response from backend
   currentHTML: SafeHtml = "";       // Current page HTML
   currentCSS: string = "";          // Current page CSS
@@ -20,33 +22,48 @@ export class AiPreviewComponent {
   loginRedirect: string = ""; 
   activeMenuKey: string | null = null;
   projectsData: any;
+   socket_id: any;
       // Redirect page for login action
   constructor(
     private apiService: ApiService,
     private el: ElementRef,
     private renderer: Renderer2,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private aiService: AiSocketService
   ) {}
 
   ngOnInit() {
+    this.aiService.socketReady$
+    .pipe(filter(id => !!id))
+    .subscribe(socket_id => {
+  
+      this.aiService.listen((blocks) => {
+        console.log("blocks", blocks);
+        this.blocks = blocks;
+      });
+    this.socket_id = socket_id
+
+   
+  
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
 
-    console.log(this.projectsData);
    const subFeatureIds:any = [];
    this.projectsData.selectdFeature.forEach((items:any) => {
     items.subFeatures.forEach((subFeatures:any) =>{
       subFeatureIds.push(subFeatures.id);
     })
    });
-   console.log("sub", subFeatureIds);
+ 
 
     const payload = {
       project_id: this.projectsData.projectId,
       project_description: this.projectsData.projectDescription,
       sub_features: subFeatureIds,
       project_type: this.projectsData.projectType,
-      clientEnquryId:this.projectsData.clientEnquryId
+      clientEnquryId:this.projectsData.clientEnquryId,
+      socket_id:this.socket_id
+      
     };
 
     this.apiService
@@ -57,6 +74,7 @@ export class AiPreviewComponent {
         const firstKey = Object.keys(this.pages)[0];
         if (firstKey) this.loadPage(firstKey);
       });
+    });
   }
 
   /** ================= LOAD PAGE ================= */

@@ -39,6 +39,10 @@ aside.ct_project_ai_chat_section{
     flex-wrap: wrap;
     gap: 6px;
     justify-content: start;
+    padding-left: 40px;
+}
+.ct_ai_project_lefr_btns p{
+  font-size: 14px;
 }
 .ct_ai_project_lefr button
  {

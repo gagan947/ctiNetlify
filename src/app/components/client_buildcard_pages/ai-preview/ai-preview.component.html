@@ -7,59 +7,20 @@
   <aside class="ct_project_ai_chat_section">
     <ul>
       <li class="ct_ai_project_lefr">
-        <div class="ct_chat_ai_brand_logo">
-          <img src="assets/img/c.png" alt="">
-          <p class="mb-0">Creative.ai</p>
-
-        </div>
-        <div class="ct_ai_project_lefr_btns">
-            <button>E-commerse</button>
-        <button>E-commerse</button>
-        <button>E-commerse</button>
-          <button>E-commerse</button>
-        </div>
-        <div class="ct_chat_ai_thinking">
-          <img src="assets/img/c.png" alt="">
-
-          <div class="ai_thinking_loader-wrapper">
-  <span class="ai_thinking_loader-letter">G</span>
-  <span class="ai_thinking_loader-letter">e</span>
-  <span class="ai_thinking_loader-letter">n</span>
-  <span class="ai_thinking_loader-letter">e</span>
-  <span class="ai_thinking_loader-letter">r</span>
-  <span class="ai_thinking_loader-letter">a</span>
-  <span class="ai_thinking_loader-letter">t</span>
-  <span class="ai_thinking_loader-letter">i</span>
-  <span class="ai_thinking_loader-letter">n</span>
-  <span class="ai_thinking_loader-letter">g</span>
-
-  <div class="ai_thinking_loader"></div>
-</div>
-
-        </div>
-      </li>
-      <li class="ct_ai_project_right">
-         <button>E-commerse</button>
-        <button>E-commerse</button>
-        <button>E-commerse</button>
-          <button>E-commerse</button>
-      </li>
-
+       
       <li class="ct_ai_project_lefr">
            <div class="ct_chat_ai_brand_logo">
           <img src="assets/img/c.png" alt="">
-          <p class="mb-0">Creative.ai</p>
+          <p class="mb-0">Creative AI</p>
+          <small class="ct_text_op_7">Dec 30, 2025, 11:36 AM</small>
 
         </div>
           <div class="ct_ai_project_lefr_btns">
            
-          <p class="mb-0 ct_fs_14">Your ecommerce foundation needs these core screens to enable complete shopping workflows</p>
-          <p class="mb-0 ct_fs_14">Your ecommerce foundation needs these core screens to enable complete shopping workflows</p>
-          <div class="ct_select_chat_features_btns mt-2">
-            <button>Add product detail screen</button>
-            <button>Add shopping cart screen</button>
-
-          </div>
+            <div *ngFor="let block of blocks">
+              <p>{{ block.text }}</p>
+              <!-- <span *ngIf="!block.done">▍</span> -->
+            </div>
           </div>
       </li>
     </ul>
