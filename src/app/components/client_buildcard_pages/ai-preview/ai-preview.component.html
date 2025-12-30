@@ -9,19 +9,29 @@
       <li class="ct_ai_project_lefr">
 
       <li class="ct_ai_project_lefr">
-        <div class="ct_chat_ai_brand_logo">
-          <img src="assets/img/c.png" alt="">
-          <p class="mb-0">Creative AI</p>
-          <small class="ct_text_op_7">Dec 30, 2025, 11:36 AM</small>
+     
+        @for (block of blocks; track $index) {
 
-        </div>
-        <div class="ct_ai_project_lefr_btns">
+          @if(block.id == 'loader'){
 
-          <div *ngFor="let block of blocks">
-            <p>{{ block.text }}</p>
-            <!-- <span *ngIf="!block.done">▍</span> -->
+          }@else {
+            
+          }
+          <div class="ct_chat_ai_brand_logo">
+            <img src="assets/img/c.png" alt="">
+            <p class="mb-0">Creative AI</p>
+            <small class="ct_text_op_7">Dec 30, 2025, 11:36 AM</small>
+            
           </div>
-        </div>
+          <div class="ct_ai_project_lefr_btns">
+  
+            <div >
+              <p>{{ block.text }}</p>
+              <!-- <span *ngIf="!block.done">▍</span> -->
+            </div>
+          </div>
+
+        }
       </li>
     </ul>
 

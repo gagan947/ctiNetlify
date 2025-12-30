@@ -19,14 +19,20 @@ export class AiSocketService {
   
 
   listen(cb: (blocks: any[]) => void) {
-    console.log("eresdg");
+  
     this.socket.on("ai:stream", (data) => {
-        console.log(data);
+        // console.log(data);
       let block = this.blocks.find(b => b.id === data.blockId);
 
       if (!block) {
         block = { id: data.blockId, text: "", done: false };
+      
+        if(this.blocks.length > 0 ){
+          this.blocks = this.blocks.filter(items=>items.id !== 'loader');
+         
+        }
         this.blocks.push(block);
+        
       }
 
       block.text = data.content;
