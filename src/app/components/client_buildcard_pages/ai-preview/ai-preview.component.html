@@ -7,21 +7,21 @@
   <aside class="ct_project_ai_chat_section">
     <ul>
       <li class="ct_ai_project_lefr">
-       
+
       <li class="ct_ai_project_lefr">
-           <div class="ct_chat_ai_brand_logo">
+        <div class="ct_chat_ai_brand_logo">
           <img src="assets/img/c.png" alt="">
           <p class="mb-0">Creative AI</p>
           <small class="ct_text_op_7">Dec 30, 2025, 11:36 AM</small>
 
         </div>
-          <div class="ct_ai_project_lefr_btns">
-           
-            <div *ngFor="let block of blocks">
-              <p>{{ block.text }}</p>
-              <!-- <span *ngIf="!block.done">▍</span> -->
-            </div>
+        <div class="ct_ai_project_lefr_btns">
+
+          <div *ngFor="let block of blocks">
+            <p>{{ block.text }}</p>
+            <!-- <span *ngIf="!block.done">▍</span> -->
           </div>
+        </div>
       </li>
     </ul>
 
@@ -29,7 +29,7 @@
     <div class="ct_project_ai_btm_action_btns">
       <button class="ct_blue_outline_btn w-100">Regenerate</button>
       <button class="ct_schedule_call_btn w-100 justify-content-center mt-auto">Save</button>
-      
+
 
     </div>
 
@@ -37,34 +37,30 @@
   <div class="ct_ai_project_preview_right">
     <div class="ct_ai_prjct_prev_header">
       <ul>
+       
         <li>
-          <div class="et_reload_icon">
-            <i class="fa-solid fa-arrow-rotate-right"></i>
-          </div>
-        </li>
-        <li>
-          <div class="et_reload_icon">
+          <div class="et_reload_icon" (click)="setWidth('desktop')">
             <i class="fa-solid fa-display"></i>
           </div>
         </li>
-       
+
         <li>
-          <div class="et_reload_icon">
-           <i class="fa-solid fa-tablet-screen-button"></i>
+          <div class="et_reload_icon"  (click)="setWidth('tablet')">
+            <i class="fa-solid fa-tablet-screen-button"></i>
           </div>
         </li>
-          <li>
-          <div class="et_reload_icon">
-       <i class="fa-solid fa-mobile-screen"></i>
+        <li>
+          <div class="et_reload_icon" (click)="setWidth('mobile')">
+            <i class="fa-solid fa-mobile-screen"></i>
           </div>
         </li>
       </ul>
 
     </div>
- <div class="preview-wrapper" (click)="onPreviewClick($event)" id="topScrollDiv">
-  <div [innerHTML]="currentHTML"></div>
-</div>
-    
+    <div class="preview-wrapper" id="topScrollDiv">
+      <iframe #previewFrame class="preview-iframe mx-auto d-block" [style.width.px]="previewWidth" [style.height.%]="100"></iframe>
+    </div>
+
   </div>
 
 </section>
