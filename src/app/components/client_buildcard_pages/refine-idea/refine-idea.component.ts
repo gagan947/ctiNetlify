@@ -187,7 +187,7 @@ export class RefineIdeaComponent {
             }
 
             sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalFeatureCost, ...selectdFeature, ...{ 'no_of_features': this.noOfFeaturs }, ...{ 'estimated_time': this.durations },...{additionalFeatures:this.addtionalFeatures} }))
-            this.router.navigate([`/ai-preview`])
+            this.router.navigate([`/ai-preview/${this.projectsData.clientEnquryId }`])
             this.isLoading2 = false
           } else {
             this.message.error(res.message);

@@ -33,7 +33,7 @@ export const routes: Routes = [
             path: 'chatbot', loadComponent: () => import('./components/client_buildcard_pages/chatbot/chatbot.component').then(c => c.ChatbotComponent), canActivate: [authGuard]
       },
       {
-            path: 'ai-preview', loadComponent: () => import('./components/client_buildcard_pages/ai-preview/ai-preview.component').then(c => c.AiPreviewComponent), canActivate: [authGuard]
+            path: 'ai-preview/:id', loadComponent: () => import('./components/client_buildcard_pages/ai-preview/ai-preview.component').then(c => c.AiPreviewComponent), canActivate: [authGuard]
       },
       {
             path: 'schedule-a-call', loadComponent: () => import('./components/schedule-a-call/schedule-a-call.component').then(c => c.ScheduleACallComponent)
