@@ -9,6 +9,8 @@ export class AiSocketService {
   socketId!: any;
   socketReady$ = new BehaviorSubject<string | undefined>(undefined);
   private listening = false;
+  private frontendJobId = 0;
+
   constructor(private apiService: ApiService) {
     this.socket = io(this.apiService.apiUrl);
 
@@ -27,11 +29,16 @@ export class AiSocketService {
     if (this.listening) return;
     this.listening = true;
 
+    this.socket.on("ai:reset", () => {
+      this.blocks = [];
+      cb([]);
+    });
+
     this.socket.on("ai:stream", (data) => {
       let block = this.blocks.find(b => b.id === data.blockId);
 
       if (!block) {
-        block = { id: data.blockId, text: "", done: false };
+        block = { id: data.blockId, text: "", done: false,timestamp: new Date() };
 
         if (this.blocks.length > 0) {
           this.blocks = this.blocks.filter(item => item.id !== 'loader');
@@ -57,11 +64,55 @@ export class AiSocketService {
 
    /** 🔥 cleanup hook */
    stop() {
+    console.log("stopeed");
     this.socket.off('ai:stream');
     this.socket.off('ai:done');
     this.blocks = [];
     this.listening = false;
   }
 
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
+ 
+  
+
+  getRegenCommands(buildId: number): string[] {
+    const variants = [
+      {
+        theme: 'modern',
+        layout: 'spacing',
+        style: 'refresh'
+      },
+      {
+        theme: 'minimal',
+        layout: 'density',
+        style: 'polish'
+      },
+      {
+        theme: 'bold',
+        layout: 'hierarchy',
+        style: 'contrast'
+      },
+      {
+        theme: 'clean',
+        layout: 'alignment',
+        style: 'refine'
+      }
+    ];
+  
+    const v = variants[buildId % variants.length];
+  
+    return [
+      `$ ai theme --switch=${v.theme}`,
+      `$ ai layout --optimize=${v.layout}`,
+      `$ ai style --${v.style}`
+    ];
+  }
+  
+
+
+  
+  
 }

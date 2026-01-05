@@ -4,65 +4,48 @@
 
 
 <section class="ct_project_ai_preview_main">
-  <aside class="ct_project_ai_chat_section">
-    <ul>
+  <aside class="ct_project_ai_chat_section"  >
+   <div cdkScrollable #chatScroll>
+    @for (item of builds; track $index; let last = $last) {
+    <ul class="pe-3" [class.ct_min_minus_height_scroll]="last">
 
-
-      <li class="ct_ai_project_lefr">
-
-        @for (block of blocks; track $index) {
-        <div class="ct_chat_ai_brand_logo">
-          <img src="assets/img/c.png" alt="">
-          <p class="mb-0">Creative AI</p>
-          <small class="ct_text_op_7">Dec 30, 2025, 11:36 AM</small>
-
-        </div>
-        @if(block.id !== 'loader'){
-        <div class="ct_ai_project_lefr_btns">
-
-          <div>
-            <p>{{ block.text }}</p>
-            <!-- <span *ngIf="!block.done">▍</span> -->
+      @for (block of item.blocks; track $index) {
+        <li class="ct_ai_project_lefr"   [attr.id]="block.isRegenerate ? block.domId : null">
+    
+          <div class="ct_chat_ai_brand_logo">
+            <img src="assets/img/c.png" alt="">
+            <p class="mb-0">Creative AI</p>
+            <small class="ct_text_op_7">
+              {{ block.timestamp | date:'MMM d, y, h:mm a' }}
+            </small>
           </div>
-        </div>
-
-        }@else {
-        <div aria-label="Loading..." role="status" class="ct_ai_thiking_loader">
-          <svg class="ct_ai_thiking_icon" viewBox="0 0 256 256">
-            <line x1="128" y1="32" x2="128" y2="64" stroke-linecap="round" stroke-linejoin="round" stroke-width="24">
-            </line>
-            <line x1="195.9" y1="60.1" x2="173.3" y2="82.7" stroke-linecap="round" stroke-linejoin="round"
-              stroke-width="24"></line>
-            <line x1="224" y1="128" x2="192" y2="128" stroke-linecap="round" stroke-linejoin="round" stroke-width="24">
-            </line>
-            <line x1="195.9" y1="195.9" x2="173.3" y2="173.3" stroke-linecap="round" stroke-linejoin="round"
-              stroke-width="24"></line>
-            <line x1="128" y1="224" x2="128" y2="192" stroke-linecap="round" stroke-linejoin="round" stroke-width="24">
-            </line>
-            <line x1="60.1" y1="195.9" x2="82.7" y2="173.3" stroke-linecap="round" stroke-linejoin="round"
-              stroke-width="24"></line>
-            <line x1="32" y1="128" x2="64" y2="128" stroke-linecap="round" stroke-linejoin="round" stroke-width="24">
-            </line>
-            <line x1="60.1" y1="60.1" x2="82.7" y2="82.7" stroke-linecap="round" stroke-linejoin="round"
-              stroke-width="24"></line>
-          </svg>
-          <span class="ct_ai_thiking_loading-text">{{ block.text }}</span>
-        </div>
-
-        }
-
-        }
-
-
-
-      </li>
+    
+          @if (block.id !== 'loader') {
+            <div
+              class="ct_ai_project_lefr_btns"
+              [ngClass]="block.id.startsWith('cmd') ? 'block-cmd' : 'block-' + block.id"
+            >
+              <p>{{ block.text }}</p>
+            </div>
+          } @else {
+            <div class="ct_ai_thiking_loader">
+              <svg class="ct_ai_thiking_icon" viewBox="0 0 256 256">...</svg>
+              <span class="ct_ai_thiking_loading-text">{{ block.text }}</span>
+            </div>
+          }
+    
+        </li>
+      }
+    
     </ul>
+  }
+        
+   </div>
 
 
     <div class="ct_project_ai_btm_action_btns">
-      <button class="ct_blue_outline_btn w-100">Regenerate</button>
-      <button class="ct_schedule_call_btn w-100 justify-content-center mt-auto">Save</button>
-
+      <button class="ct_blue_outline_btn w-100" (click)="regenerate()" [disabled]="isTyping">Regenerate</button>
+      <button class="ct_schedule_call_btn w-100 justify-content-center mt-auto" (click)="saveDesign()">Save</button>
 
     </div>
 
@@ -70,6 +53,14 @@
   <div class="ct_ai_project_preview_right">
     
       <div class="ct_ai_prjct_prev_header">
+        <div class="d-flex align-items-center gap-2">
+          <button class="ct_design_tab_btn  active">Design 1</button>
+          <button class="ct_design_tab_btn">Design 2</button>
+          <button class="ct_design_tab_btn">Design 3</button>
+          <button class="ct_design_tab_btn">Design 4</button>
+          <button class="ct_design_tab_btn">Design 5</button>
+
+        </div>
         <ul>
 
           <li>
@@ -93,7 +84,7 @@
       </div>
       
       <div class="preview-wrapper" id="topScrollDiv " [ngClass]="previewShow ? 'd-block':'d-none'">
-        <iframe #previewFrame class="preview-iframe mx-auto d-block" [style.width.px]="previewWidth"
+        <iframe #previewFrame class="preview-iframe mx-auto d-block w-100" [style.maxWidth]="previewWidth + 'px'"
           [style.height.%]="100"></iframe>
       </div>
 
