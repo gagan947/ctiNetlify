@@ -5,12 +5,12 @@
 
 <section class="ct_project_ai_preview_main">
   <aside class="ct_project_ai_chat_section">
-    <div >
+    <div #chatScroll [scrollTop]="chatScroll.scrollHeight">
 
-      <ul class="pe-3" #chatScroll>
+      <ul class="pe-3">
 
         @for (block of blocks; track $index) {
-        <li class="ct_ai_project_lefr"   [class.ct_first_regen_block]="block.isFirstOfRegenerate">
+        <li class="ct_ai_project_lefr" [class.ct_first_regen_block]="block.isFirstOfRegenerate">
 
           <div class="ct_chat_ai_brand_logo">
             <img src="assets/img/c.png" alt="">

@@ -19,7 +19,7 @@ interface DesignSnapshot {
 @Component({
   selector: 'app-ai-preview',
   standalone: true,
-  imports: [CommonModule,ScrollingModule],
+  imports: [CommonModule, ScrollingModule],
   templateUrl: './ai-preview.component.html',
   styleUrl: './ai-preview.component.css'
 })
@@ -27,7 +27,7 @@ export class AiPreviewComponent {
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
   @ViewChild('chatScroll', { static: false })
   chatScroll!: ElementRef<HTMLElement>;
-  
+
 
   previewWidth = 1366; // desktop default
   @ViewChild('preview', { static: false }) iframe!: ElementRef<HTMLIFrameElement>;
@@ -59,7 +59,7 @@ export class AiPreviewComponent {
     private renderer: Renderer2,
     private sanitizer: DomSanitizer,
     private aiService: AiSocketService,
-    private router: Router,private ngZone: NgZone
+    private router: Router, private ngZone: NgZone
   ) { }
 
   ngOnInit() {
@@ -78,7 +78,7 @@ export class AiPreviewComponent {
 
           this.blocks = blocks;
           this.isNearBottom()
-         
+
 
           const last = blocks[blocks.length - 1];
           if (last?.id === 'final' && last?.done) {
@@ -101,13 +101,13 @@ export class AiPreviewComponent {
   isNearBottom(): boolean {
     // console.log("calling bootm");
     if (!this.chatScroll) return true;
-  
+
     const el = this.chatScroll.nativeElement;
     console.log("el", el.scrollHeight - el.scrollTop - el.clientHeight < 120);
     return el.scrollHeight - el.scrollTop - el.clientHeight < 120;
   }
-  
-  startPreview(socket_id: string  | null) {
+
+  startPreview(socket_id: string | null) {
 
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
@@ -337,13 +337,13 @@ export class AiPreviewComponent {
   async regenerate() {
     if (this.isTyping) return;
 
-
+    this.clearFirstBlockMinHeight()
     this.isTyping = true;
     // scroll to top using CDK
-    
+
     const jobId = ++this.frontendJobId;
     this.currentBuildId++;
-   
+
     const commands = this.aiService.getRegenCommands(this.currentBuildId);
 
     /* ---------- INTRO PARAGRAPH ---------- */
@@ -353,11 +353,11 @@ export class AiPreviewComponent {
       `Let’s redesign your application with a fresh visual direction.
   I’ll rework the layout structure, refine spacing, and enhance the CSS
   to deliver a cleaner, more modern user experience.`,
-      jobId
+      jobId, 1
     );
 
     this.showLoader('Analyzing design direction…');
-    await this.delay(900);
+    await this.delay(1200);
     this.hideLoader();
 
     /* ---------- CMD 1 ---------- */
@@ -404,7 +404,7 @@ export class AiPreviewComponent {
   Your updated layout and styling provide better visual hierarchy,
   improved readability, and a more engaging overall experience.
   You can continue refining or generate another variation.`,
-      jobId
+      jobId, 2
     );
 
     this.isTyping = false;
@@ -424,14 +424,13 @@ export class AiPreviewComponent {
     jobId: number
   ) {
 
-      // 🔥 second block starts → remove min-height
     this.clearFirstBlockMinHeight();
     let block = this.blocks.find(b => b.id === blockId);
 
     if (!block) {
       block = { id: blockId, text: '', done: false, timestamp: new Date() };
       this.blocks.push(block);
-     
+
     }
 
     let buffer = '';
@@ -452,9 +451,10 @@ export class AiPreviewComponent {
   async streamFrontendParagraph(
     blockId: string,
     text: string,
-    jobId: number
+    jobId: number,
+    order: number
   ) {
-    const isFirst = !this.hasMarkedFirstBlock;
+    const isFirst = order === 1 && !this.hasMarkedFirstBlock;
     let block = {
       id: blockId,
       text: '',
@@ -463,9 +463,9 @@ export class AiPreviewComponent {
       isFirstOfRegenerate: isFirst
     };
     // 🔥 mark first block only once
-  if (isFirst) {
-    this.hasMarkedFirstBlock = true;
-  }
+    if (isFirst && order === 1) {
+      this.hasMarkedFirstBlock = true;
+    }
 
     this.blocks.push(block);
 
@@ -511,37 +511,35 @@ export class AiPreviewComponent {
     window.removeEventListener('message', this.previewListener);
   }
 
- 
-  
+
+
   scrollToBottom() {
-    if (!this.chatScroll) return;
-  
-    const el = this.chatScroll.nativeElement;
-  
+    let el = this.chatScroll.nativeElement;
+    if (!el) return;
     el.scrollTo({
       top: el.scrollHeight,
       behavior: 'smooth'
     });
   }
-  
-  
+
+
   scrollRegenerateBlockToTop(domId: string) {
     requestAnimationFrame(() => {
       const el = document.getElementById(domId);
       console.log("el", el);
       if (!el) return;
-  
+
       el.scrollIntoView({
         behavior: 'smooth',
         block: 'start'   // 👈 aligns THIS block to top
       });
     });
   }
-  
+
   handleGenerateResponse(res: any) {
 
     const designId = `design-${this.designOrder.length + 1}`;
-  
+
     const snapshot: DesignSnapshot = {
       id: designId,
       label: `Design ${this.designOrder.length + 1}`,
@@ -549,32 +547,32 @@ export class AiPreviewComponent {
       loginRedirect: res.data.login_redirect,
       createdAt: new Date()
     };
-  
+
     // store
     this.designMap.set(designId, snapshot);
     this.designOrder.push(designId);
-  
+
     // activate
     this.activeDesignId = designId;
-  
+
     // load first page
     const firstKey = Object.keys(snapshot.pages)[0];
     if (firstKey) {
       this.loadPageFromDesign(designId, firstKey);
     }
   }
-  
+
   switchDesign(designId: string) {
     if (!this.designMap.has(designId)) return;
-  
+
     this.activeDesignId = designId;
-  
+
     const design = this.designMap.get(designId)!;
-  
+
     // reset menu / state
     this.pages = design.pages;
     this.loginRedirect = design.loginRedirect;
-  
+
     const firstKey = Object.keys(design.pages)[0];
     if (firstKey) {
       this.loadPageFromDesign(designId, firstKey);
@@ -585,17 +583,17 @@ export class AiPreviewComponent {
 
     const design = this.designMap.get(designId);
     if (!design) return;
-  
+
     const page = design.pages[key];
     if (!page) return;
-  
+
     this.activeJsKeys = page.js_keys || [];
     this.activeMenuKey = key;
-  
+
     const iframe = this.previewFrame.nativeElement;
     const doc = iframe.contentDocument || iframe.contentWindow?.document;
     if (!doc) return;
-  
+
     doc.open();
     doc.write(`
       <!DOCTYPE html>
@@ -627,18 +625,19 @@ export class AiPreviewComponent {
       </html>
     `);
     doc.close();
-  
+
     setTimeout(() => this.updateActiveMenuUI(), 50);
   }
-  
+
 
   clearFirstBlockMinHeight() {
+    return
     const first = this.blocks.find(b => b.isFirstOfRegenerate);
     if (first) {
       first.isFirstOfRegenerate = false;
       this.hasMarkedFirstBlock = false
     }
   }
-  
+
 
 }
