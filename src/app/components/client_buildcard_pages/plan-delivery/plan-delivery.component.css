@@ -69,3 +69,118 @@
         max-height: 225px;
         overflow-y: auto;
     }
+
+
+
+    .ct_pricing_section {
+      padding: 80px 0;
+    }
+
+    .ct_pricing_card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 30px 28px;
+      height: 100%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      display: grid;
+    }
+
+    .ct_pricing_card h6 {
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .ct_price {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .ct_price span {
+      font-size: 14px;
+      color: #777;
+      font-weight: 500;
+    }
+
+    .ct_btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 20px 0 0px;
+      font-size: 16px;
+    }
+
+    .ct_btn_light {
+      background: #f1f1f1;
+      border: none;
+      color: #000;
+      transition: 0.4s ease all;
+      border: 1px solid #f1f1f1;
+      font-size: 16px;
+    }
+
+    .ct_btn_light:hover{
+        background-color: var(--dark_blue);
+        border-color: var(--dark_blue);
+        color: #fff;
+    }
+    .ct_btn_dark {
+      background: var(--dark_blue);
+      border: none;
+      color: #fff;
+      transition: 0.4s ease all;
+      border: 1px solid var(--dark_blue);
+    }
+    .ct_btn_dark:hover{
+        background-color: transparent;
+        color: #000;
+
+    }
+
+    .ct_features_title {
+      font-size: 16px;
+      letter-spacing: 1px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #777;
+    }
+
+    .ct_features {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .ct_features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: #757575;
+    }
+
+    .ct_features li i {
+      font-size: 14px;
+      color: #000;
+    }
+
+    /* Active Card */
+    .ct_active {
+      border: 2px solid var(--dark_blue);
+      position: relative;
+    }
+
+    .ct_badge {
+      position: absolute;
+      top: -21px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--dark_blue);
+      color: #fff;
+      font-size: 15px;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }

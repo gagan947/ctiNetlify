@@ -88,9 +88,31 @@ table.table.ct_help_user_table {
     border-spacing: 0px 4px;
     border-collapse: separate;
 }
+.ct_table_column_change1{
+    display: flex;
+    align-items: start;
+}
+.ct_table_column_change1 tr {
+    flex-direction: column;
+    display: flex;
+    flex: 1;
+}
+.ct_table_column_change1 ul li{
+    padding: 10px .5rem;
+}
 
 
-
+.ct_table_column_change1 p {
+    vertical-align: middle;
+    background-color: #d3e1f5;
+    font-weight: 600;
+    font-size: 16px;
+    white-space: nowrap;
+    padding: .5rem .5rem;
+}
+.ct_table_column_change1 td{
+    padding: 0px;
+}
 @keyframes highlightGreen {
     0% {
         background-color: #17b400;

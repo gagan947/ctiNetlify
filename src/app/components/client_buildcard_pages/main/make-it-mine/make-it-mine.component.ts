@@ -38,6 +38,8 @@ export class MakeItMineComponent {
     loading: boolean = true;
     hasUnsavedChanges: boolean = true;
     previewProject: boolean = false;
+    projectType!:string;
+
     private modal = inject(ModalService);
     constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService,) {
         let projectData = sessionStorage.getItem('projectData');
@@ -189,6 +191,8 @@ export class MakeItMineComponent {
                         clientEnquryId: res.data,
                         projectName: this.projectName,
                         projectLogo: this.imagePreview ? this.imagePreview : this.apiService._imagePreview(),
+                        projectType : this.projectType,
+                        projectId : this.id ? this.id : '0'
                     }
 
                     sessionStorage.setItem('projectData', JSON.stringify(projectData))
@@ -205,6 +209,7 @@ export class MakeItMineComponent {
         this.apiService.getApi('api/user/getProjectHtml?id=' + this.id + '').subscribe((res: any) => {
             if (res.success == true) {
                 this.htmlCode = (res.data[0].html_pages);
+                this.projectType = res.data[0].type;
                 sessionStorage.setItem('htmlCode', this.htmlCode);
                 this.apiService._htmlCode.set(this.htmlCode);
 

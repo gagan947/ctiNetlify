@@ -25,6 +25,7 @@ export class RefineIdeaComponent {
   @Input() id!: string;
   projectsData: any
   projectsFeaturs: Feature[] = [];
+  addtionalFeatures: any[] = [];
   allFeatures: Feature[] = [];
   commongFeaturs: any[] = [];
   totalFeatureCost: number = 0;
@@ -75,8 +76,8 @@ export class RefineIdeaComponent {
               );
             });
 
-            let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
-            this.totalFeatureCost = (totalTime * 1750)
+            let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0);
+            this.totalFeatureCost = (totalTime * 1750);
             this.durations = Math.ceil((totalTime / 8) / 5);
             this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
           } else {
@@ -158,10 +159,6 @@ export class RefineIdeaComponent {
 
   Navigate() {
 
-    if ((this.durations && this.durations < 6) || this.durations == 0) {
-      this.message.warning('Estimated duration must be more than 6 weeks to proceed with planning.');
-      return
-    }
 
     this.isLoading2 = true
 
@@ -173,7 +170,8 @@ export class RefineIdeaComponent {
       currentRoutes: this.router.url,
       no_of_features: this.noOfFeaturs,
       client_currency_code: this.currencyCode,
-      currency_rate: this.rate
+      currency_rate: this.rate,
+      additionalFeatures: this.addtionalFeatures.length > 0 ? JSON.stringify(this.addtionalFeatures) : ''
     }
 
     this.apiService.postAPI(`api/user/addClientInquries?inquiryId=${this.projectsData.clientEnquryId}`, formData)
@@ -188,8 +186,8 @@ export class RefineIdeaComponent {
               selectdFeature: this.projectsFeaturs
             }
 
-            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalFeatureCost, ...selectdFeature, ...{ 'no_of_features': this.noOfFeaturs }, ...{ 'estimated_time': this.durations } }))
-            this.router.navigate([`/plan-delivery/${this.id}`])
+            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalFeatureCost, ...selectdFeature, ...{ 'no_of_features': this.noOfFeaturs }, ...{ 'estimated_time': this.durations },...{additionalFeatures:this.addtionalFeatures} }))
+            this.router.navigate([`/ai-preview/${this.projectsData.clientEnquryId }`])
             this.isLoading2 = false
           } else {
             this.message.error(res.message);
@@ -220,19 +218,28 @@ export class RefineIdeaComponent {
   }
 
   selectSubFeature(features: ALLFeatures, item: SubFeature) {
-    const featureIndex = this.projectsFeaturs.findIndex(
+    
+    // console.log("features", features, item);
+    const featureIndex = this.addtionalFeatures.findIndex(
       f => f.featureName === features.featureName
     );
+    console.log("featue index", featureIndex);
     if (featureIndex > -1) {
-      const subFeatureIndex = this.projectsFeaturs[featureIndex].subFeatures.findIndex(
-        sf => sf.id === item.id
-      );
-
+      const subFeatureIndex = this.addtionalFeatures[featureIndex].subFeatures.findIndex((sf:any) => sf.id === item.id);
+      console.log("subFeatureIndex ", subFeatureIndex);
       if (subFeatureIndex > -1) {
-        this.projectsFeaturs[featureIndex].subFeatures.splice(subFeatureIndex, 1);
+        this.addtionalFeatures[featureIndex].subFeatures.splice(subFeatureIndex, 1);
       } else {
         const newSub = { ...item, flashClass: 'flash-added' };
-        this.projectsFeaturs[featureIndex].subFeatures.push(newSub);
+        const newFeature = [{
+          flashClass: 'flash-added',
+          id: features.id,
+          featureName: features.featureName,
+          subFeatures: [newSub],
+          featureTime: item.estimated_time
+        }];
+        this.addtionalFeatures[featureIndex].subFeatures.push(newSub);
+      
         this.projectsFeaturs[featureIndex].featureTime = this.projectsFeaturs[featureIndex].subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0);
         setTimeout(() => {
           const el = document.querySelector(
@@ -261,7 +268,9 @@ export class RefineIdeaComponent {
         featureTime: item.estimated_time
       };
 
-      this.projectsFeaturs.unshift(newFeature);
+   
+     this.addtionalFeatures.unshift(newFeature)
+      // this.projectsFeaturs.unshift(newFeature);
 
       setTimeout(() => {
         const el = document.querySelector(
@@ -338,8 +347,7 @@ export class RefineIdeaComponent {
         flashClass: 'flash-added'
       };
 
-      this.projectsFeaturs.unshift(newFeature);
-
+      this.addtionalFeatures.unshift(newFeature);
       setTimeout(() => {
         const el = document.querySelector(
           `[data-feature-id="${newFeature.id}"]`

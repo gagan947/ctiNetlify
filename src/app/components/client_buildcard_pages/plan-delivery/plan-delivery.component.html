@@ -10,30 +10,63 @@
         <div class="col-md-12">
           <div class="d-grid">
             <div class="ct_step-container d-flex justify-content-between">
-              <div class="ct_step-circle cursor-pointer" [routerLink]="['/main']">
+              <div
+                class="ct_step-circle cursor-pointer"
+                [routerLink]="['/main']"
+              >
                 <!-- <p class=" mb-0">1</p> -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24">
-                  <path fill="#17b400" fill-rule="evenodd"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="35"
+                  height="35"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="#17b400"
+                    fill-rule="evenodd"
                     d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
-                    clip-rule="evenodd" />
+                    clip-rule="evenodd"
+                  />
                 </svg>
                 <p class="mb-0 ct_fs_14 ct_fw_600">Choose Base</p>
               </div>
-              <div class="ct_step-circle cursor-pointer" [routerLink]="['/make-it-mine/' + id]">
+              <div
+                class="ct_step-circle cursor-pointer"
+                [routerLink]="['/make-it-mine/' + id]"
+              >
                 <!-- <p class=" mb-0">2</p> -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24">
-                  <path fill="#17b400" fill-rule="evenodd"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="35"
+                  height="35"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="#17b400"
+                    fill-rule="evenodd"
                     d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
-                    clip-rule="evenodd" />
+                    clip-rule="evenodd"
+                  />
                 </svg>
                 <p class="mb-0 ct_fs_14 ct_fw_600">Make it Mine</p>
               </div>
-              <div class="ct_step-circle cursor-pointer" [routerLink]="['/refine-idea/' + id]">
+              <div
+                class="ct_step-circle cursor-pointer"
+                [routerLink]="['/refine-idea/' + id]"
+              >
                 <!-- <p class=" mb-0">3</p> -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24">
-                  <path fill="#17b400" fill-rule="evenodd"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="35"
+                  height="35"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="#17b400"
+                    fill-rule="evenodd"
                     d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
-                    clip-rule="evenodd" />
+                    clip-rule="evenodd"
+                  />
                 </svg>
                 <p class="mb-0 ct_fs_14 ct_fw_600">Refine Idea</p>
               </div>
@@ -61,16 +94,127 @@
           </div>
         </div>
       </div>
-      <div class="row mt-0">
-        <div class="col-xl-8 mb-4 mb-xl-0">
+
+      <div class="row">
+        <div class="ct_light_grey_bg mb-4">
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <h5 class="mb-0 ct_fs_18 ct_fw_700">Pricing Plans</h5>
+            <div class="form-check form-switch ct_custom_switch"></div>
+          </div>
+          <div class="mt-4">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                <label class="ct_app_detail_card active" for="flexCheckDefault0"
+                  ><img
+                    alt="AI app builder for mobile and web"
+                    src="assets/img/internet.png" />
+                  <h4 class="mb-0 ct_fs_14 ct_fw_700">Web</h4>
+                  <div class="form-check ct_transparent_checkbox">
+                    <input type="checkbox" class="form-check-input" checked/></div
+                ></label>
+              </div>
+               <div class="col-md-4 mb-4 ">
+                <label class="ct_app_detail_card active" for="flexCheckDefault1"
+                  ><img
+                    alt="AI app builder for mobile and web"
+                    src="assets/img/apple.png" />
+                  <h4 class="mb-0 ct_fs_14 ct_fw_700">iOS</h4>
+                  <div class="form-check ct_transparent_checkbox">
+                    <input type="checkbox" class="form-check-input" checked /></div
+                ></label>
+              </div>
+              <div class="col-md-4 mb-4 ">
+                <label class="ct_app_detail_card active" for="flexCheckDefault0" checked
+                  ><img
+                    alt="AI app builder for mobile and web"
+                    src="assets/img/android.png" />
+                  <h4 class="mb-0 ct_fs_14 ct_fw_700">Android</h4>
+                  <div class="form-check ct_transparent_checkbox">
+                    <input type="checkbox" class="form-check-input" checked /></div
+                ></label>
+              </div>
+             
+             
+              <!---->
+            </div>
+          </div>
+        
+        </div>
+      </div>
+      <div class="row mt-4 justify-content-center ">
+        <div class="col-md-6 col-lg-5 col-xl-4 mt-lg-4 mt-5">
+          <div class="ct_pricing_card">
+           <div>
+             <h6>Basic plan</h6>
+            <div class="ct_price">$22 <span>per month</span></div>
+
+           
+
+            <div class="ct_features_title">FEATURES</div>
+            <ul class="ct_features">
+              <li>
+                <i class="fa-solid fa-circle-check"></i> 200+ integrations
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Advanced reporting
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Custom branded forms
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Automated workflows
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Email & chat support
+              </li>
+            </ul>
+           </div>
+            <div class="mt-auto">
+             <button class="ct_btn ct_btn_light">Get started</button>
+              </div>
+          </div>
+        </div>
+
+        <!-- Business -->
+        <div class="col-md-6 col-lg-5 col-xl-4  mt-lg-4 mt-5">
+          <div class="ct_pricing_card ct_active">
+            <div>
+              <span class="ct_badge">Most popular</span>
+
+            <h6>Business plan</h6>
+            <div class="ct_price">$40 <span>per month</span></div>
+
+           
+
+            <div class="ct_features_title">FEATURES</div>
+            <ul class="ct_features">
+              <li>
+                <i class="fa-solid fa-circle-check"></i> 200+ integrations
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Advanced reporting
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Custom branded forms
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Automated workflows
+              </li>
+              <li><i class="fa-solid fa-circle-check"></i> Priority support</li>
+            </ul>
+            </div>
+
+            <div class="mt-auto">
+               <button class="ct_btn ct_btn_dark">Get started</button>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-xl-8 mb-4 mb-xl-0">
           <div class="ct_light_grey_bg mb-4">
             <div class="d-flex align-items-center justify-content-between gap-3">
               <h5 class="mb-0 ct_fs_18 ct_fw_700">Confirm app details</h5>
               <div class="form-check form-switch ct_custom_switch">
-                <!-- <label class="form-check-label"
-                                                      for="flexSwitchCheckChecked">Advanced</label>
-                                                <input class="form-check-input" type="checkbox" role="switch"
-                                                      id="flexSwitchCheckChecked" checked> -->
+               
               </div>
             </div>
 
@@ -279,7 +423,6 @@
                   </div>
                 </div>
               </div>
-              <!-- when share your design click then show this div -->
 
               @if(designLinkBox){
 
@@ -287,10 +430,7 @@
                 <label for="" class="mb-2 d-block ct_fw_500 ct_text_clr_374151">Upload Design Link</label>
                 <input type="text" placeholder="Enter url" class="form-control ct_input" [(ngModel)]="designLink"
                   [ngModelOptions]="{standalone: true}">
-                <!-- <small class="text-danger"
-                        *ngIf="billingForm.get('full_name')?.invalid && billingForm.get('full_name')?.touched">
-                        Full name is required.
-                  </small> -->
+               
               </div>
               }
             </div>
@@ -384,18 +524,7 @@
                     {{ features_cost | convertCurrency:rate}}
                   </p>
                 </div>
-                <!-- <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
-                  <p class="mb-0 ct_fw_700 ct_fs_18">Discount (40%)</p>
-                  <p class="mb-0 ct_fw_700 ct_fs_18">
-                    {{ (totalPrice * 40)/100 | convertCurrency:rate}}
-                  </p>
-                </div>
-                <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
-                  <p class="mb-0 ct_fw_700 ct_fs_18">Final Cost</p>
-                  <p class="mb-0 ct_fw_700 ct_fs_18">
-                    {{ totalPrice - ((totalPrice * 40)/100) | convertCurrency:rate}}
-                  </p>
-                </div> -->
+             
               </div>
               <div class="mt-5">
                 <a (click)="Navigate()"
@@ -404,16 +533,19 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 </section>
 
-<!-- Mobile page section S -->
 <section class="ct_mobile_section_main">
   <div class="ct_mobile_header_main_bg">
-    <img loading="lazy" src="assets/img/cti_black_logo.svg" alt="AI app builder for mobile and web" />
+    <img
+      loading="lazy"
+      src="assets/img/cti_black_logo.svg"
+      alt="AI app builder for mobile and web"
+    />
   </div>
   <div class="container">
     <div class="row">
@@ -443,19 +575,23 @@
             to life!
           </p>
           <div class="mt-5">
-            <a href="index.html" class="ct_blue_btn_fill w-100">Return to Creative AI</a>
+            <a href="index.html" class="ct_blue_btn_fill w-100"
+              >Return to Creative AI</a
+            >
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
-<!-- Mobile page section E -->
 
-<!-- Refrsh page modal S -->
-
-<div class="modal fade modal-lg" id="ct_refresh_page" tabindex="-1" aria-labelledby="ct_refresh_pageLabel"
-  aria-hidden="true">
+<div
+  class="modal fade modal-lg"
+  id="ct_refresh_page"
+  tabindex="-1"
+  aria-labelledby="ct_refresh_pageLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content p-4">
       <div class="modal-body p-0">
@@ -468,11 +604,20 @@
             Doing so may result in the loss of your recent interactions and
             changes.
           </p>
-          <div class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center">
-            <button class="ct_blue_outline_btn justify-content-center" data-bs-dismiss="modal">
+          <div
+            class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center"
+          >
+            <button
+              class="ct_blue_outline_btn justify-content-center"
+              data-bs-dismiss="modal"
+            >
               Cancel
             </button>
-            <button class="ct_blue_btn_fill justify-content-center" data-bs-dismiss="modal" routerLink="/main">
+            <button
+              class="ct_blue_btn_fill justify-content-center"
+              data-bs-dismiss="modal"
+              routerLink="/main"
+            >
               Proceed
             </button>
           </div>

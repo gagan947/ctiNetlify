@@ -9,86 +9,7 @@
       <div class="d-flex ">
          <div class="ct_middile_sidebar">
             <div class="ct_cti_chat_box">
-               <!-- choose Base Chat show S -->
-               <div class="d-none">
-                  <div class="ct_chat_item_left">
-                     <p class="ct_mb_20 ct_fs_14 ct_line_h_25">What should we call your app? Don't
-                        worry we
-                        can
-                        change this later.
-                     </p>
-                     <div class="form-group">
-                        <input type="text" class="form-control ct_input ct_border_radius_10 ct_fs_14 ct_input_h_32"
-                           placeholder="Enter Project Name" value="My Creative Project">
-                        <button
-                           class="ct_schedule_call_btn w-100 mt-3 justify-content-center ct_fs_14 ct_fw_500 py-2">Update
-                           app
-                           name</button>
-                     </div>
-                  </div>
-                  <div class="ct_chat_item_right">
-                     <p class="mb-0 ct_fs_14 ct_line_h_25">{{projectsData.projectName}}</p>
-                  </div>
-                  <div class="ct_chat_item_left mt-2">
-                     <p class="ct_mb_20 ct_fs_14 ct_line_h_25">Now let's really make it yours.
-                        Select a
-                        colour
-                        and upload a logo (if you have one) to customise your app.
-                     </p>
-                     <div class="pt-2">
-                        <ul class="nav nav-pills mb-3 ct_dash_board_tab justify-content-center" id="pills-tab"
-                           role="tablist">
-                           <li class="nav-item" role="presentation">
-                              <button class="nav-link active ct_fs_14" id="pills-Upcoming-Calls-tab"
-                                 data-bs-toggle="pill" data-bs-target="#pills-Upcoming-Calls" type="button" role="tab"
-                                 aria-controls="pills-Upcoming-Calls" aria-selected="true">Upload
-                                 logo</button>
-                           </li>
-                           <li class="nav-item" role="presentation">
-                              <button class="nav-link ct_fs_14" id="pills-Past_Calls-tab" data-bs-toggle="pill"
-                                 data-bs-target="#pills-Past_Calls" type="button" role="tab"
-                                 aria-controls="pills-Past_Calls" aria-selected="false">Select
-                                 colour</button>
-                           </li>
-                        </ul>
-                        <div class="tab-content mt-4 pt-2" id="pills-tabContent">
-                           <div class="tab-pane fade show active" id="pills-Upcoming-Calls" role="tabpanel"
-                              aria-labelledby="pills-Upcoming-Calls-tab">
-                              <label for="ct_upload_logo" class="d-block">
-                                 <input type="file" class="d-none" id="ct_upload_logo">
-                                 <div class="ct_upload_logo_div">
-                                    <svg width="22" height="21" viewBox="0 0 22 21" fill="none"
-                                       xmlns="http://www.w3.org/2000/svg">
-                                       <path
-                                          d="M3 14.7422C1.79401 13.935 1 12.5602 1 11C1 8.65643 2.79151 6.73129 5.07974 6.51937C5.54781 3.67213 8.02024 1.5 11 1.5C13.9798 1.5 16.4522 3.67213 16.9203 6.51937C19.2085 6.73129 21 8.65643 21 11C21 12.5602 20.206 13.935 19 14.7422M7 14.5L11 10.5M11 10.5L15 14.5M11 10.5V19.5"
-                                          stroke="#1B83C1" stroke-width="2" stroke-linecap="round"
-                                          stroke-linejoin="round" />
-                                    </svg>
-                                 </div>
-                                 <div class="ct_or_text_main">
-                                    <p class="mb-0">OR</p>
-                                 </div>
-                                 <div class="form-group mt-2">
-                                    <label for="" class="ct_fs_14 mb-2">Already have
-                                       your website
-                                       ?</label>
-                                    <input type="text"
-                                       class="form-control ct_input ct_border_radius_10 ct_fs_14 ct_input_h_32"
-                                       placeholder="Type url">
-                                 </div>
-                              </label>
-                           </div>
-                           <div class="tab-pane fade" id="pills-Past_Calls" role="tabpanel"
-                              aria-labelledby="pills-Past_Calls-tab">
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <!-- choose Base Chat show S -->
-               <!-- make it mine Chat show S -->
 
-               <!-- make it mine Chat show E -->
                <!-- code feature list S -->
                <div class="mt-4 mb-3">
                   <h4 class="ct_fs_22 ct_fw_600 d-flex align-items-center justify-content-between mb-0">
@@ -125,7 +46,7 @@
                                  {{ items.subFeatureName }}
                               </h4>
                               <span class="mb-0 ct_fs_14">{{ items.subFeaturedPrice | currency :
-                              'INR' }}</span>
+                                 'INR' }}</span>
                            </div>
                            <div class="ct_drag_icon12">
                               @if (items.selected) {
@@ -297,35 +218,156 @@
                                                       <!-- <h6 class="ct_fs_16 ct_fw_700">Help users sign
                                                          up & login
                                                          </h6> -->
+
+                                                      <div class="ct_search_input mb-3 ms-auto me-3"
+                                                         style="max-width: 350px;">
+                                                         <input type="text" class="form-control" name="search"
+                                                            (input)="search($event)"
+                                                            placeholder="Search project feature">
+                                                         <i class="fa-solid fa-magnifying-glass"></i>
+                                                      </div>
                                                       <div class="table-responsive" style="overflow-x: inherit;">
                                                          <table class="table ct_help_user_table ">
-                                                            <thead>
-                                                               <tr>
+                                                            <!-- <thead> -->
+                                                            <!-- <tr>
                                                                   <th class="pb-2 ">
-                                                                     <div class="ct_search_input"
-                                                                        style="max-width: 350px;">
-                                                                        <input type="text" class="form-control"
-                                                                           name="search" (input)="search($event)"
-                                                                           placeholder="Search project feature">
-                                                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                                                     </div>
+                                                                   MVP Features
                                                                   </th>
-                                                                  <th class="ct_fw_400 pb-2 ">
-                                                                     Cost
-                                                                  </th>
-                                                                  <th class="ct_fw_400 pb-2 ">
-                                                                     Estimated
-                                                                     Time
-                                                                  </th>
+                                                                
                                                                   <th class="">
+                                                                     Additional Features
                                                                   </th>
-                                                                  <!-- <th
-                                                                  class="">
-                                                               </th> -->
+                                                                  <th></th>
+                                                               
+                                                               </tr> -->
+                                                            <!-- </thead> -->
+                                                            <tbody class="ct_table_column_change1">
+
+                                                               <tr>
+                                                                  <td>
+                                                                     <p>MVP Features</p>
+
+                                                                     @if( projectsFeaturs && projectsFeaturs.length > 0){
+                                                                     @for (item of  projectsFeaturs;
+                                                                     track
+                                                                     $index)
+                                                                     { 
+                                                                        <div>
+                                                                           <div class="d-flex align-items-center gap-2">
+                                                                              <span class="SubfeatursCount">  {{$index+1}}</span>
+                                                                              <span
+                                                                                 class="ct_fs_18 ct_fw_700 mb-0 ct_white_nowrap">{{item.featureName}}</span>
+                                                                           </div>
+                                                                           <ul>
+                                                                           @for
+                                                                           (item2
+                                                                           of
+                                                                           item.subFeatures;
+                                                                           track
+                                                                           $index)
+                                                                           {   
+                                                                              <li class="ct_fs_14">{{item2.subFeatureName}} </li>
+                                                                            
+
+                                                                           }
+                                                                           </ul>
+                                                                        </div>
+                                                                     }
+                                                                     }@else {
+                                                                        <tr>
+                                                                           <td colspan="6" class="text-center">
+                                                                              No
+                                                                              data
+                                                                              found
+                                                                           </td>
+                                                                        </tr>
+                                                                     }
+                                                                    
+                                                                  
+                                                                  </td>
+
                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                               @if(
+                                                               <tr>
+                                                                  <td>
+                                                                     <p>Additional Features</p>
+                                                                     @if( addtionalFeatures && addtionalFeatures.length > 0){
+                                                                        @for (item of  addtionalFeatures;
+                                                                        track
+                                                                        $index)
+                                                                        { 
+                                                                         
+                                                                           <div >
+                                                                              <div [attr.data-feature-id]="item.id"
+                                                                              [ngClass]="item.flashClass" class="d-flex align-items-center gap-2">
+                                                                                 <span class="SubfeatursCount">  {{$index+1}}</span>
+                                                                                 <span
+                                                                                    class="ct_fs_18 ct_fw_700 mb-0 ct_white_nowrap">{{item.featureName}}</span>
+                                                                              </div>
+                                                                              <ul>
+                                                                              @for
+                                                                              (item2
+                                                                              of
+                                                                              item.subFeatures;
+                                                                              track
+                                                                              $index)
+                                                                              {   
+                                                                                 <li class="ct_fs_14">
+                                                                                    <div class="d-flex align-items-center justify-content-between gap-2" [attr.data-subfeature-id]="item2.id"
+                                                                                    [ngClass]="item2.flashClass">
+                                                                                       {{item2.subFeatureName}}
+                                                                                       <i class="fa-solid fa-trash-can text-danger"></i>
+                                                                                    </div>
+                                                                                 </li>
+                                                                               
+   
+                                                                              }
+                                                                              </ul>
+                                                                           </div>
+                                                                        }
+                                                                        }@else {
+                                                                           <tr>
+                                                                              <td colspan="6" class="text-center">
+                                                                                 No
+                                                                                 data
+                                                                                 found
+                                                                              </td>
+                                                                           </tr>
+                                                                        }
+                                                                       
+                                                                  </td>
+
+                                                               </tr>
+                                                               <!-- <tr>
+                                                                  <td>
+                                                                     <div>
+                                                                         <h4>User autejtoca</h4>
+                                                                        
+                                                                        <ul>
+                                                                           <li>Login </li>
+                                                                           <li>Signup </li>
+                                                                        </ul>
+                                                                     </div>
+                                                                     <div>
+                                                                         <h4>User autejtoca</h4>
+                                                                        
+                                                                        <ul>
+                                                                           <li>Login </li>
+                                                                           <li>Signup </li>
+                                                                        </ul>
+                                                                     </div>
+                                                                     <div>
+                                                                         <h4>User autejtoca</h4>
+                                                                        
+                                                                        <ul>
+                                                                           <li>Login </li>
+                                                                           <li>Signup </li>
+                                                                        </ul>
+                                                                     </div>
+                                                                  </td>
+                                                               </tr> -->
+
+
+                                                               <!-- @if(
                                                                projectsFeaturs
                                                                &&
                                                                projectsFeaturs.length
@@ -349,20 +391,7 @@
                                                                            class="ct_fs_18 ct_fw_700 mb-0 ct_white_nowrap">{{item.featureName}}</span>
                                                                      </div>
                                                                   </td>
-                                                                  <td><span
-                                                                        class="ct_fw_600">{{item.featureTime * 1750 | convertCurrency:rate}}</span>
-                                                                  </td>
-                                                                  <td><span
-                                                                        class="ct_fw_600">{{item.featureTime}}</span>
-                                                                  </td>
-                                                                  <!-- <td><span
-                                                                  class="ct_fw_600">₹1,26,844.69</span>
-                                                                  </td> -->
-                                                                  <!-- <td><span
-                                                                  class="ct_fw_600">
-                                                                  {{getEstimatedTime(item) | number : '1.0-2'}}
-                                                                  HRS</span>
-                                                                  </td> -->
+                                                                
                                                                   <td>
                                                                      <a class="ct_delete_icon"
                                                                         (click)="removeFeture(item)"><i
@@ -382,14 +411,9 @@
                                                                      <span
                                                                         class="ct_fs_14">{{item2.subFeatureName}}</span>
                                                                   </td>
-                                                                  <td><span class="">{{item2.estimated_time * 1750
-                                                                  
-                                                                  | convertCurrency:rate}}</span>
-                                                                  </td>
-                                                                  <td><span class="">
-                                                                        {{item2.estimated_time | number : '1.0-2'}}
-                                                                        HRS</span>
-                                                                  </td>
+
+                                                                 
+                                                          
                                                                   <td>
                                                                      <a class="ct_delete_icon"
                                                                         (click)="removeSubFeture(item,item2)"><i
@@ -408,7 +432,7 @@
                                                                      found
                                                                   </td>
                                                                </tr>
-                                                               }
+                                                               } -->
                                                             </tbody>
 
                                                          </table>
@@ -440,37 +464,23 @@
                                                 </p>
                                              </div>
                                           </div>
-                                          <div>
+                                          <!-- <div>
                                              <span class="ct_text_clr_7F8188  ct_fs_14 ct_white_nowrap">Total
                                                 Cost
                                              </span>
                                              <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
                                                 {{ (totalFeatureCost | convertCurrency:rate) || 0 }}
                                              </p>
-                                          </div>
-                                          <!-- <div>
-                                             <span class="ct_text_clr_7F8188  ct_fs_14 ct_white_nowrap">Discount
-                                                (40%)
-                                             </span>
-                                             <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
-                                                {{ ((totalFeatureCost * 40)/100) | convertCurrency:rate }}
-                                             </p>
                                           </div> -->
-                                          <!-- <div>
-                                             <span class="ct_text_clr_7F8188  ct_fs_14 ct_white_nowrap">Final Cost
-                                             </span>
-                                             <p class="mb-0 mt-1 ct_fw_700">
-                                                {{totalFeatureCost  | convertCurrency:rate }}
-                                             </p>
-                                          </div> -->
-                                          <div class="">
+
+                                          <!-- <div class="">
                                              <span class="ct_text_clr_7F8188  ct_fs_14 ct_white_nowrap">Total
                                                 Weeks
                                              </span>
                                              <p class="mb-0 mt-1 ct_fw_700 ct_white_nowrap">
                                                 {{ durations }}
                                              </p>
-                                          </div>
+                                          </div> -->
                                        </div>
                                        <div
                                           class="d-flex align-items-center justify-content-between gap-3 mt-3 ct_flex_col_575">
@@ -481,9 +491,7 @@
                                              [text]="'Save & Continue'" [class]="'ct_blue_btn_fill next-step w-100'"
                                              (click)="Navigate()"></app-submit-button>
 
-                                          <!-- <a (click)="Navigate()" type="button"
-                                             class="ct_blue_btn_fill next-step w-100">Save
-                                             & Continue</a> -->
+
                                        </div>
                                     </div>
                                  </div>
