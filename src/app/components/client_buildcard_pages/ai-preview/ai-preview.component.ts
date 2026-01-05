@@ -7,6 +7,15 @@ import { AiSocketService } from '../../../services/ai-socket.service';
 import { filter, Subject, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
+
+interface DesignSnapshot {
+  id: string;                 // design-1, design-2
+  label: string;              // Design 1, Design 2
+  pages: any;                 // full pages object
+  loginRedirect?: string;
+  createdAt: Date;
+}
+
 @Component({
   selector: 'app-ai-preview',
   standalone: true,
@@ -16,7 +25,9 @@ import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
 })
 export class AiPreviewComponent {
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
-  @ViewChild('chatScroll', { read: CdkScrollable }) scrollable!: CdkScrollable;
+  @ViewChild('chatScroll', { static: false })
+  chatScroll!: ElementRef<HTMLElement>;
+  
 
   previewWidth = 1366; // desktop default
   @ViewChild('preview', { static: false }) iframe!: ElementRef<HTMLIFrameElement>;
@@ -26,7 +37,7 @@ export class AiPreviewComponent {
   currentCSS: string = "";          // Current page CSS
   styleTag!: HTMLStyleElement;
   activeJsKeys: string[] = [];      // js_keys for current page
-  loginRedirect: string = "";
+  loginRedirect: any = "";
   activeMenuKey: string | null = null;
   projectsData: any;
   socket_id: any;
@@ -37,7 +48,10 @@ export class AiPreviewComponent {
   private destroy$ = new Subject<void>();
   isTyping = true;
   private frontendJobId = 0;
-
+  designMap = new Map<string, DesignSnapshot>();
+  designOrder: string[] = [];   // keeps tab order
+  activeDesignId!: string;
+  hasMarkedFirstBlock = false;
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
@@ -63,6 +77,8 @@ export class AiPreviewComponent {
         this.aiService.listen((blocks) => {
 
           this.blocks = blocks;
+          this.isNearBottom()
+         
 
           const last = blocks[blocks.length - 1];
           if (last?.id === 'final' && last?.done) {
@@ -82,7 +98,16 @@ export class AiPreviewComponent {
         this.startPreview(socket_id!);
       });
   }
-  startPreview(socket_id: string) {
+  isNearBottom(): boolean {
+    // console.log("calling bootm");
+    if (!this.chatScroll) return true;
+  
+    const el = this.chatScroll.nativeElement;
+    console.log("el", el.scrollHeight - el.scrollTop - el.clientHeight < 120);
+    return el.scrollHeight - el.scrollTop - el.clientHeight < 120;
+  }
+  
+  startPreview(socket_id: string  | null) {
 
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
@@ -106,11 +131,12 @@ export class AiPreviewComponent {
     this.apiService
       .postAPI('api/user/generatePreview', payload)
       .subscribe((res: any) => {
-        this.pages = res.data.pages;
-        this.loginRedirect = res.data.login_redirect;
+        this.handleGenerateResponse(res)
+        // this.pages = res.data.pages;
+        // this.loginRedirect = res.data.login_redirect;
 
-        const firstKey = Object.keys(this.pages)[0];
-        if (firstKey) this.loadPage(firstKey);
+        // const firstKey = Object.keys(this.pages)[0];
+        // if (firstKey) this.loadPage(firstKey);
       });
   }
 
@@ -317,29 +343,7 @@ export class AiPreviewComponent {
     
     const jobId = ++this.frontendJobId;
     this.currentBuildId++;
-    const block = {
-      id: `regen-intro-${this.currentBuildId}`,
-      domId: `regen-dom-${Date.now()}`, // unique
-      text: '',
-      done: false,
-      timestamp: new Date(),
-      isRegenerate: true
-    };
-    this.blocks.push(block);
-    this.builds.push({
-      buildId: this.currentBuildId,
-      blocks: this.blocks,
-      createdAt: new Date()
-    })
- 
-
-    console.log(this.builds);
-    
-    
- 
-// 👇 ONLY this new block moves to top of view
-this.scrollRegenerateBlockToTop(block.domId);
-
+   
     const commands = this.aiService.getRegenCommands(this.currentBuildId);
 
     /* ---------- INTRO PARAGRAPH ---------- */
@@ -404,6 +408,8 @@ this.scrollRegenerateBlockToTop(block.domId);
     );
 
     this.isTyping = false;
+
+    this.startPreview(null)
   }
 
 
@@ -417,6 +423,9 @@ this.scrollRegenerateBlockToTop(block.domId);
     text: string,
     jobId: number
   ) {
+
+      // 🔥 second block starts → remove min-height
+    this.clearFirstBlockMinHeight();
     let block = this.blocks.find(b => b.id === blockId);
 
     if (!block) {
@@ -445,12 +454,18 @@ this.scrollRegenerateBlockToTop(block.domId);
     text: string,
     jobId: number
   ) {
+    const isFirst = !this.hasMarkedFirstBlock;
     let block = {
       id: blockId,
       text: '',
       done: false,
-      timestamp: new Date()
+      timestamp: new Date(),
+      isFirstOfRegenerate: isFirst
     };
+    // 🔥 mark first block only once
+  if (isFirst) {
+    this.hasMarkedFirstBlock = true;
+  }
 
     this.blocks.push(block);
 
@@ -498,13 +513,18 @@ this.scrollRegenerateBlockToTop(block.domId);
 
  
   
-  scrollToTop() {
-    console.log("hitting");
-    if (this.scrollable) {
-      console.log("DShdfh");
-      this.scrollable.scrollTo({ top: 0 });
-    }
+  scrollToBottom() {
+    if (!this.chatScroll) return;
+  
+    const el = this.chatScroll.nativeElement;
+  
+    el.scrollTo({
+      top: el.scrollHeight,
+      behavior: 'smooth'
+    });
   }
+  
+  
   scrollRegenerateBlockToTop(domId: string) {
     requestAnimationFrame(() => {
       const el = document.getElementById(domId);
@@ -518,6 +538,107 @@ this.scrollRegenerateBlockToTop(block.domId);
     });
   }
   
+  handleGenerateResponse(res: any) {
 
+    const designId = `design-${this.designOrder.length + 1}`;
+  
+    const snapshot: DesignSnapshot = {
+      id: designId,
+      label: `Design ${this.designOrder.length + 1}`,
+      pages: res.data.pages,
+      loginRedirect: res.data.login_redirect,
+      createdAt: new Date()
+    };
+  
+    // store
+    this.designMap.set(designId, snapshot);
+    this.designOrder.push(designId);
+  
+    // activate
+    this.activeDesignId = designId;
+  
+    // load first page
+    const firstKey = Object.keys(snapshot.pages)[0];
+    if (firstKey) {
+      this.loadPageFromDesign(designId, firstKey);
+    }
+  }
+  
+  switchDesign(designId: string) {
+    if (!this.designMap.has(designId)) return;
+  
+    this.activeDesignId = designId;
+  
+    const design = this.designMap.get(designId)!;
+  
+    // reset menu / state
+    this.pages = design.pages;
+    this.loginRedirect = design.loginRedirect;
+  
+    const firstKey = Object.keys(design.pages)[0];
+    if (firstKey) {
+      this.loadPageFromDesign(designId, firstKey);
+    }
+  }
+
+  loadPageFromDesign(designId: string, key: string) {
+
+    const design = this.designMap.get(designId);
+    if (!design) return;
+  
+    const page = design.pages[key];
+    if (!page) return;
+  
+    this.activeJsKeys = page.js_keys || [];
+    this.activeMenuKey = key;
+  
+    const iframe = this.previewFrame.nativeElement;
+    const doc = iframe.contentDocument || iframe.contentWindow?.document;
+    if (!doc) return;
+  
+    doc.open();
+    doc.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+          <style>${page.css}</style>
+        </head>
+        <body>
+          <div class="preview-wrapper">
+            ${page.html}
+          </div>
+  
+          <script>
+            document.addEventListener('click', function(e) {
+              const el = e.target;
+              parent.postMessage({
+                type: 'preview-click',
+                menuKey: el.closest('[data-menu-key]')?.getAttribute('data-menu-key'),
+                action: el.closest('[data-action]')?.getAttribute('data-action'),
+                subFeature: el.closest('[data-sub-feature]')?.getAttribute('data-sub-feature'),
+                followToggle: !!el.closest('[data-follow-toggle]')
+              }, '*');
+            });
+          </script>
+        </body>
+      </html>
+    `);
+    doc.close();
+  
+    setTimeout(() => this.updateActiveMenuUI(), 50);
+  }
+  
+
+  clearFirstBlockMinHeight() {
+    const first = this.blocks.find(b => b.isFirstOfRegenerate);
+    if (first) {
+      first.isFirstOfRegenerate = false;
+      this.hasMarkedFirstBlock = false
+    }
+  }
+  
 
 }

@@ -4,14 +4,14 @@
 
 
 <section class="ct_project_ai_preview_main">
-  <aside class="ct_project_ai_chat_section"  >
-   <div cdkScrollable #chatScroll>
-    @for (item of builds; track $index; let last = $last) {
-    <ul class="pe-3" [class.ct_min_minus_height_scroll]="last">
+  <aside class="ct_project_ai_chat_section">
+    <div >
 
-      @for (block of item.blocks; track $index) {
-        <li class="ct_ai_project_lefr"   [attr.id]="block.isRegenerate ? block.domId : null">
-    
+      <ul class="pe-3" #chatScroll>
+
+        @for (block of blocks; track $index) {
+        <li class="ct_ai_project_lefr"   [class.ct_first_regen_block]="block.isFirstOfRegenerate">
+
           <div class="ct_chat_ai_brand_logo">
             <img src="assets/img/c.png" alt="">
             <p class="mb-0">Creative AI</p>
@@ -19,28 +19,26 @@
               {{ block.timestamp | date:'MMM d, y, h:mm a' }}
             </small>
           </div>
-    
+
           @if (block.id !== 'loader') {
-            <div
-              class="ct_ai_project_lefr_btns"
-              [ngClass]="block.id.startsWith('cmd') ? 'block-cmd' : 'block-' + block.id"
-            >
-              <p>{{ block.text }}</p>
-            </div>
+          <div class="ct_ai_project_lefr_btns"
+            [ngClass]="block.id.startsWith('cmd') ? 'block-cmd' : 'block-' + block.id">
+            <p>{{ block.text }}</p>
+          </div>
           } @else {
-            <div class="ct_ai_thiking_loader">
-              <svg class="ct_ai_thiking_icon" viewBox="0 0 256 256">...</svg>
-              <span class="ct_ai_thiking_loading-text">{{ block.text }}</span>
-            </div>
+          <div class="ct_ai_thiking_loader">
+            <svg class="ct_ai_thiking_icon" viewBox="0 0 256 256">...</svg>
+            <span class="ct_ai_thiking_loading-text">{{ block.text }}</span>
+          </div>
           }
-    
+
         </li>
-      }
-    
-    </ul>
-  }
-        
-   </div>
+        }
+
+      </ul>
+
+
+    </div>
 
 
     <div class="ct_project_ai_btm_action_btns">
@@ -51,71 +49,71 @@
 
   </aside>
   <div class="ct_ai_project_preview_right">
-    
-      <div class="ct_ai_prjct_prev_header">
-        <div class="d-flex align-items-center gap-2">
-          <button class="ct_design_tab_btn  active">Design 1</button>
-          <button class="ct_design_tab_btn">Design 2</button>
-          <button class="ct_design_tab_btn">Design 3</button>
-          <button class="ct_design_tab_btn">Design 4</button>
-          <button class="ct_design_tab_btn">Design 5</button>
 
-        </div>
-        <ul>
-
-          <li>
-            <div class="et_reload_icon" (click)="setWidth('desktop')">
-              <i class="fa-solid fa-display"></i>
-            </div>
-          </li>
-
-          <li>
-            <div class="et_reload_icon" (click)="setWidth('tablet')">
-              <i class="fa-solid fa-tablet-screen-button"></i>
-            </div>
-          </li>
-          <li>
-            <div class="et_reload_icon" (click)="setWidth('mobile')">
-              <i class="fa-solid fa-mobile-screen"></i>
-            </div>
-          </li>
-        </ul>
+    <div class="ct_ai_prjct_prev_header">
+      <div class="d-flex align-items-center gap-2">
+        @for (id of designOrder; track id) {
+        <button class="ct_design_tab_btn design-tab" [class.active]="id === activeDesignId" (click)="switchDesign(id)">
+          {{ designMap.get(id)?.label }}
+        </button>
+        }
 
       </div>
-      
-      <div class="preview-wrapper" id="topScrollDiv " [ngClass]="previewShow ? 'd-block':'d-none'">
-        <iframe #previewFrame class="preview-iframe mx-auto d-block w-100" [style.maxWidth]="previewWidth + 'px'"
-          [style.height.%]="100"></iframe>
+      <ul>
+
+        <li>
+          <div class="et_reload_icon" (click)="setWidth('desktop')">
+            <i class="fa-solid fa-display"></i>
+          </div>
+        </li>
+
+        <li>
+          <div class="et_reload_icon" (click)="setWidth('tablet')">
+            <i class="fa-solid fa-tablet-screen-button"></i>
+          </div>
+        </li>
+        <li>
+          <div class="et_reload_icon" (click)="setWidth('mobile')">
+            <i class="fa-solid fa-mobile-screen"></i>
+          </div>
+        </li>
+      </ul>
+
+    </div>
+
+    <div class="preview-wrapper" id="topScrollDiv " [ngClass]="previewShow ? 'd-block':'d-none'">
+      <iframe #previewFrame class="preview-iframe mx-auto d-block w-100" [style.maxWidth]="previewWidth + 'px'"
+        [style.height.%]="100"></iframe>
+    </div>
+
+
+    <div class="ct_dash_right_content_side_ai_loader " [ngClass]="previewShow ? 'd-none':'d-flex'">
+      <div class="rgt_loader" id="rgt_loader">
+        <div class="rgt_loader-wrapper">
+          <span class="rgt_loader-letter">G</span>
+          <span class="rgt_loader-letter">e</span>
+          <span class="rgt_loader-letter">n</span>
+          <span class="rgt_loader-letter">e</span>
+          <span class="rgt_loader-letter">r</span>
+          <span class="rgt_loader-letter">a</span>
+          <span class="rgt_loader-letter">t</span>
+          <span class="rgt_loader-letter">i</span>
+          <span class="rgt_loader-letter">n</span>
+          <span class="rgt_loader-letter">g</span>
+          <span class="rgt_loader-letter">.</span>
+          <span class="rgt_loader-letter">.</span>
+          <span class="rgt_loader-letter">.</span>
+          <div class="rgt_loader-circle"></div>
+        </div>
       </div>
 
-      
-        <div class="ct_dash_right_content_side_ai_loader " [ngClass]="previewShow ? 'd-none':'d-flex'">
-          <div class="rgt_loader" id="rgt_loader">
-            <div class="rgt_loader-wrapper">
-              <span class="rgt_loader-letter">G</span>
-              <span class="rgt_loader-letter">e</span>
-              <span class="rgt_loader-letter">n</span>
-              <span class="rgt_loader-letter">e</span>
-              <span class="rgt_loader-letter">r</span>
-              <span class="rgt_loader-letter">a</span>
-              <span class="rgt_loader-letter">t</span>
-              <span class="rgt_loader-letter">i</span>
-              <span class="rgt_loader-letter">n</span>
-              <span class="rgt_loader-letter">g</span>
-              <span class="rgt_loader-letter">.</span>
-              <span class="rgt_loader-letter">.</span>
-              <span class="rgt_loader-letter">.</span>
-              <div class="rgt_loader-circle"></div>
-            </div>
-          </div>
-    
-          <div class="mt-4 text-center">
-            <h4 class="ct_fs_24 ct_fw_600 mb-1">I'm Generating the Preview.</h4>
-            <p class="mb-0 ct_text_op_7"> Hold on for a moment.</p>
-          </div>
-        </div>
+      <div class="mt-4 text-center">
+        <h4 class="ct_fs_24 ct_fw_600 mb-1">I'm Generating the Preview.</h4>
+        <p class="mb-0 ct_text_op_7"> Hold on for a moment.</p>
+      </div>
+    </div>
 
-      
+
 
 
 

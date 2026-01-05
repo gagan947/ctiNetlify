@@ -443,3 +443,8 @@ background:linear-gradient(
 }
 
 
+.ct_first_regen_block {
+  min-height: calc(-188px + 100vh);
+  
+}
+
