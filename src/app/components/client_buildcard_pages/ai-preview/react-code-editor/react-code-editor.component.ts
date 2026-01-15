@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NuMonacoEditorComponent, NuMonacoEditorEvent, NuMonacoEditorModel } from '@ng-util/monaco-editor';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 interface CodeFile {
   id: string;
@@ -15,7 +16,7 @@ interface CodeFile {
 @Component({
   selector: 'app-react-code-editor',
   standalone: true,
-  imports: [NuMonacoEditorComponent, FormsModule , CommonModule  ],
+  imports: [NuMonacoEditorComponent, FormsModule , CommonModule ,NzSelectModule ],
   templateUrl: './react-code-editor.component.html',
   styleUrl: './react-code-editor.component.css'
 })
@@ -45,7 +46,10 @@ export class ReactCodeEditorComponent {
     wordWrap: 'on' as const,
     language : this.language
   };
-
+  languages = [
+    { value: 'javascript', label: 'JavaScript' },
+    { value: 'css', label: 'CSS' },
+  ];
  
 
   onEditorEvent(e: NuMonacoEditorEvent) {
