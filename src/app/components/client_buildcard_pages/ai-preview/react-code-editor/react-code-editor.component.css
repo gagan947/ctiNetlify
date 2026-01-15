@@ -1,0 +1,24 @@
+:host {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+  
+  nu-monaco-editor{
+    height: 100% !important;
+  }
+
+  .ai-code-wrapper{
+    height: calc(100vh - 88px) !important;
+  }
+
+  .code-header {
+    padding: 5px 30px;
+   
+    background-color: #333131 !important;
+}
+.code-header span{
+    font-weight: 500;
+    font-size: 15px;
+    color: #ebebeb;
+}

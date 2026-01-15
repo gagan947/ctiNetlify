@@ -1,4 +1,4 @@
-import { Component, effect, inject, Input } from '@angular/core';
+import { Component, computed, effect, inject, Input, signal } from '@angular/core';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Feature } from '../../../models/projects';
@@ -10,7 +10,8 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ExchangeRatePipe } from "../../../helper/exchange-rate.pipe";
 import { MobileViewComponent } from '../main/mobile-view/mobile-view.component';
 import { ModalService } from '../../../services/modal.service';
-
+type BillingCycle = 'monthly' | 'yearly';
+type PlanType = 'personal' | 'creative' | 'booster';
 @Component({
   selector: 'app-plan-delivery',
   standalone: true,
@@ -55,6 +56,34 @@ export class PlanDeliveryComponent {
   designLinkBox = false;
   designLink = '';
   originalEstimatedTime: number = 0;
+  billingCycle = signal<BillingCycle>('monthly');
+  BASE_PRICES = {
+    personal: 49,
+    creative: 99,
+    booster: 199
+  };
+  YEARLY_DISCOUNT = 0.2;
+
+  PLAN_PRICES = {
+    monthly: {
+      personal: 49,
+      creative: 99,
+      booster: 199
+    },
+    yearly: {
+      personal: 39,
+      creative: 89,
+      booster: 179
+    }
+  };
+  
+ 
+
+selectedPlan = signal<PlanType>('personal');
+
+
+  
+
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService) {
     effect(() => {
       this.rate = this.apiService._rate()
@@ -81,9 +110,8 @@ export class PlanDeliveryComponent {
     ];
 
     const today = new Date();
-
-    this.estimatedDate = new Date(today);
-    this.estimatedDate.setDate(today.getDate() + this.estimatedWeeks * 7);
+    this.estimatedDate = new Date(today)
+    this.estimatedDate.setDate(today.getDate() + this.estimatedWeeks * 7)
   }
 
   private updateCosts(): void {
@@ -229,6 +257,26 @@ export class PlanDeliveryComponent {
   totalCost(featureData: any) {
     // this.total_cost_delivery = featureData.reduce((pre: any, next: { totalSubFeaturedPrice: any; totalCustomisationPrice: any; }) => pre + next.totalSubFeaturedPrice + next.totalCustomisationPrice, 0);
   }
+
+  setBilling(cycle: BillingCycle) {
+    this.billingCycle.set(cycle);
+  }
+
+  planPrices = computed(() => {
+    return this.PLAN_PRICES[this.billingCycle()];
+  });
+  
+
+  selectPlan(plan: PlanType) {
+    this.selectedPlan.set(plan);
+  }
+  
+
+  selectedSubscriptionCost = computed(() => {
+    return this.planPrices()[this.selectedPlan()];
+  });
+  
+  
 
   canDeactivate(): Promise<boolean> | boolean {
     this.modal.inquiryProjectID.set(this.projectsData.clientEnquryId);

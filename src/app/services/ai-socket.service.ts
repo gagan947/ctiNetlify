@@ -41,7 +41,8 @@ export class AiSocketService {
         block = { id: data.blockId, text: "", done: false,timestamp: new Date() };
 
         if (this.blocks.length > 0) {
-          this.blocks = this.blocks.filter(item => item.id !== 'loader');
+          // this.blocks = this.blocks.filter(item => item.id !== 'loader');
+          this.blocks = this.blocks.filter(item => !item.id.startsWith('status'));  
         }
 
         this.blocks.push(block);
@@ -110,6 +111,22 @@ export class AiSocketService {
       `$ ai style --${v.style}`
     ];
   }
+  emitCodeDone() {
+    console.log('emit done');
+  
+    if (this.socket.connected) {
+      console.log('already connected', this.socket.id);
+      this.socket.emit('ai:code:done');
+      return;
+    }
+  
+    this.socket.once('connect', () => {
+      console.log('connected later', this.socket.id);
+      this.socket.emit('ai:code:done');
+    });
+  }
+  
+  
   
 
 

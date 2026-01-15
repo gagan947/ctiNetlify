@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, Renderer2, signal, ViewChild } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -7,6 +7,10 @@ import { AiSocketService } from '../../../services/ai-socket.service';
 import { filter, Subject, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
+import { PlanDeliveryComponent } from '../plan-delivery/plan-delivery.component';
+import { SubcriptionPageComponent } from "../subcription-page/subcription-page.component";
+import { FormBuilder, Validators } from '@angular/forms';
+import { ReactCodeEditorComponent } from './react-code-editor/react-code-editor.component';
 
 interface DesignSnapshot {
   id: string;                 // design-1, design-2
@@ -15,20 +19,25 @@ interface DesignSnapshot {
   loginRedirect?: string;
   createdAt: Date;
 }
+interface ReactFile {
+  id: string;
+  name: string;        // ProductListing.jsx
+  language: 'javascript' | 'css';
+  fullCode: string;
+  typedCode: string;
+}
+
 
 @Component({
   selector: 'app-ai-preview',
   standalone: true,
-  imports: [CommonModule, ScrollingModule],
+  imports: [CommonModule, ScrollingModule, SubcriptionPageComponent, ReactCodeEditorComponent],
   templateUrl: './ai-preview.component.html',
   styleUrl: './ai-preview.component.css'
 })
 export class AiPreviewComponent {
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
-  @ViewChild('chatScroll', { static: false })
-  chatScroll!: ElementRef<HTMLElement>;
-
-
+  @ViewChild('chatScroll') chatScroll!: ElementRef<HTMLDivElement>;
   previewWidth = 1366; // desktop default
   @ViewChild('preview', { static: false }) iframe!: ElementRef<HTMLIFrameElement>;
   blocks: any[] = [];
@@ -42,6 +51,7 @@ export class AiPreviewComponent {
   projectsData: any;
   socket_id: any;
   previewShow = false;
+  previewCodeShow = false;
   builds: any[] = [];
   currentBuildId = 1;
   parentBlock = []
@@ -52,6 +62,16 @@ export class AiPreviewComponent {
   designOrder: string[] = [];   // keeps tab order
   activeDesignId!: string;
   hasMarkedFirstBlock = false;
+  showModal = false;
+  files: ReactFile[] = [];
+  activeFileIndex = 0;
+  activeFile!: ReactFile;
+  fullScreen: boolean = false;;
+  showCodeButton = false;
+  userHasScrolled = false;
+
+
+
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
@@ -59,7 +79,7 @@ export class AiPreviewComponent {
     private renderer: Renderer2,
     private sanitizer: DomSanitizer,
     private aiService: AiSocketService,
-    private router: Router, private ngZone: NgZone
+    private router: Router, private ngZone: NgZone, private fb: FormBuilder
   ) { }
 
   ngOnInit() {
@@ -69,21 +89,34 @@ export class AiPreviewComponent {
     this.aiService.socketReady$
       .pipe(
         filter(id => !!id),
-        take(1) // 🔥 VERY IMPORTANT
+        take(1)
       )
       .subscribe(socket_id => {
 
-        // 🔥 start listening once
         this.aiService.listen((blocks) => {
 
           this.blocks = blocks;
-          this.isNearBottom()
+          setTimeout(() => {
+            this.scrollToBottom();
+          }, 0);
 
 
           const last = blocks[blocks.length - 1];
-          if (last?.id === 'final' && last?.done) {
-            this.previewShow = true;
+          if (last?.id === 'status-code-running' && last?.done) {
             this.isTyping = false;
+            this.showCodeButton = true;
+            this.previewCodeShow = true;
+            const el = document.getElementById('pills-profile-tab');
+            if (!el) return;
+
+            const event = new MouseEvent('click', {
+              bubbles: true,
+              cancelable: true,
+              view: window
+            });
+
+            el.dispatchEvent(event);
+            this.startTyping();
 
             // snapshot current build
             this.builds.push({
@@ -91,6 +124,18 @@ export class AiPreviewComponent {
               blocks: JSON.parse(JSON.stringify(this.blocks)),
               createdAt: new Date()
             });
+          }else if(last?.id === 'paragraph-preview-ready' && last?.done){
+            this.previewShow = true;
+            const el = document.getElementById('pills-home-tab');
+            if (!el) return;
+
+            const event = new MouseEvent('click', {
+              bubbles: true,
+              cancelable: true,
+              view: window
+            });
+
+            el.dispatchEvent(event);
           }
         });
 
@@ -98,14 +143,15 @@ export class AiPreviewComponent {
         this.startPreview(socket_id!);
       });
   }
-  isNearBottom(): boolean {
-    // console.log("calling bootm");
-    if (!this.chatScroll) return true;
-
-    const el = this.chatScroll.nativeElement;
-    console.log("el", el.scrollHeight - el.scrollTop - el.clientHeight < 120);
-    return el.scrollHeight - el.scrollTop - el.clientHeight < 120;
+  ngAfterViewInit() {
+    this.scrollToBottom(true);
   }
+  onUserScroll() {
+    this.userHasScrolled = true;
+  }
+
+
+
 
   startPreview(socket_id: string | null) {
 
@@ -125,7 +171,8 @@ export class AiPreviewComponent {
       sub_features: subFeatureIds,
       project_type: this.projectsData.projectType,
       clientEnquryId: this.projectsData.clientEnquryId,
-      socket_id
+      socket_id,
+      design_no: this.designOrder.length + 1
     };
 
     this.apiService
@@ -145,6 +192,7 @@ export class AiPreviewComponent {
   /** ================= LOAD PAGE ================= */
 
   loadPage(key: string) {
+
     const page = this.pages[key];
     if (!page) return;
 
@@ -173,27 +221,15 @@ export class AiPreviewComponent {
           <div class="preview-wrapper">
             ${page.html}
           </div>
-    <!-- Optional Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-          <script>
-            document.addEventListener('click', function(e) {
-              const el = e.target;
-  
-              const payload = {
-                type: 'preview-click',
-                menuKey: el.closest('[data-menu-key]')?.getAttribute('data-menu-key'),
-                action: el.closest('[data-action]')?.getAttribute('data-action'),
-                subFeature: el.closest('[data-sub-feature]')?.getAttribute('data-sub-feature'),
-                followToggle: !!el.closest('[data-follow-toggle]')
-              };
-  
-              parent.postMessage(payload, '*');
-            });
-          </script>
+          <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+        
         </body>
       </html>
     `);
     doc.close();
+    // 🔥 WAIT for DOM + scripts
+    this.waitForIframeReady(iframe);
 
     // wait for iframe DOM
     setTimeout(() => this.updateActiveMenuUI(), 50);
@@ -285,8 +321,12 @@ export class AiPreviewComponent {
     }
 
     /* NAVIGATION */
+    if (!this.designMap.has(this.activeDesignId)) return;
+    const design = this.designMap.get(this.activeDesignId)!;
+    this.pages = design.pages;
+
     if (data.subFeature && this.pages[data.subFeature]) {
-      this.loadPage(data.subFeature);
+      this.loadPageFromDesign(this.activeDesignId, data.subFeature);
       return;
     }
   };
@@ -336,6 +376,7 @@ export class AiPreviewComponent {
 
   async regenerate() {
     if (this.isTyping) return;
+    this.previewShow = false;
 
     this.clearFirstBlockMinHeight()
     this.isTyping = true;
@@ -347,7 +388,9 @@ export class AiPreviewComponent {
     const commands = this.aiService.getRegenCommands(this.currentBuildId);
 
     /* ---------- INTRO PARAGRAPH ---------- */
-
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 0);
     await this.streamFrontendParagraph(
       `regen-intro-${this.currentBuildId}`,
       `Let’s redesign your application with a fresh visual direction.
@@ -410,6 +453,10 @@ export class AiPreviewComponent {
     this.isTyping = false;
 
     this.startPreview(null)
+    setTimeout(() => {
+      this.previewShow = true;
+    }, 5000)
+
   }
 
 
@@ -430,6 +477,9 @@ export class AiPreviewComponent {
     if (!block) {
       block = { id: blockId, text: '', done: false, timestamp: new Date() };
       this.blocks.push(block);
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 0);
 
     }
 
@@ -468,7 +518,9 @@ export class AiPreviewComponent {
     }
 
     this.blocks.push(block);
-
+    setTimeout(() => {
+      this.scrollToBottom(true);
+    }, 0);
     let buffer = '';
 
     for (const char of text) {
@@ -502,7 +554,7 @@ export class AiPreviewComponent {
 
 
   saveDesign() {
-    this.router.navigate([`plan-delivery/5`])
+    this.router.navigate([`plan-delivery/${this.projectsData.clientEnquryId}`])
   }
 
   ngOnDestroy() {
@@ -511,33 +563,53 @@ export class AiPreviewComponent {
     window.removeEventListener('message', this.previewListener);
   }
 
-
-
-  scrollToBottom() {
-    let el = this.chatScroll.nativeElement;
-    if (!el) return;
-    el.scrollTo({
-      top: el.scrollHeight,
-      behavior: 'smooth'
-    });
+  isNearBottom(): boolean {
+    const el = this.chatScroll.nativeElement;
+    return el.scrollHeight - el.scrollTop - el.clientHeight < 120;
   }
 
-
-  scrollRegenerateBlockToTop(domId: string) {
+  scrollToBottom(force = false) {
+    if (!this.chatScroll) return;
+    const el = this.chatScroll.nativeElement;
+    // 🚀 auto-scroll freely UNTIL user touches scroll
+    // if (!force && this.userHasScrolled && !this.isNearBottom()) return;
     requestAnimationFrame(() => {
-      const el = document.getElementById(domId);
-      console.log("el", el);
-      if (!el) return;
-
-      el.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'   // 👈 aligns THIS block to top
-      });
+      el.scrollTop = el.scrollHeight;
     });
   }
+
+
+
 
   handleGenerateResponse(res: any) {
+    const { Login_now } = res.data.react_files;
 
+    const react_files = { Login_now };
+
+    this.files = [];
+
+    // Object.entries(res.data.react_files).forEach(([page, data]: any) => {
+    Object.entries(react_files).forEach(([page, data]: any) => {
+      this.files.push({
+        id: `${page}-jsx`,
+        name: `${page}.jsx`,
+        language: 'javascript',
+        fullCode: data.jsx,
+        typedCode: ''
+      });
+
+      this.files.push({
+        id: `${page}-css`,
+        name: `${page}.css`,
+        language: 'css',
+        fullCode: data.css,
+        typedCode: ''
+      });
+
+
+    });
+
+    // preview code starts from here 
     const designId = `design-${this.designOrder.length + 1}`;
 
     const snapshot: DesignSnapshot = {
@@ -548,10 +620,13 @@ export class AiPreviewComponent {
       createdAt: new Date()
     };
 
+    this.loginRedirect = res.data.login_redirect
+
     // store
     this.designMap.set(designId, snapshot);
-    this.designOrder.push(designId);
 
+
+    this.designOrder.push(designId);
     // activate
     this.activeDesignId = designId;
 
@@ -590,10 +665,11 @@ export class AiPreviewComponent {
     this.activeJsKeys = page.js_keys || [];
     this.activeMenuKey = key;
 
-    const iframe = this.previewFrame.nativeElement;
+    const iframe = this.previewFrame.nativeElement as HTMLIFrameElement;
     const doc = iframe.contentDocument || iframe.contentWindow?.document;
     if (!doc) return;
 
+    // 🔥 RESET document completely
     doc.open();
     doc.write(`
       <!DOCTYPE html>
@@ -609,35 +685,193 @@ export class AiPreviewComponent {
             ${page.html}
           </div>
   
-          <script>
-            document.addEventListener('click', function(e) {
-              const el = e.target;
-              parent.postMessage({
-                type: 'preview-click',
-                menuKey: el.closest('[data-menu-key]')?.getAttribute('data-menu-key'),
-                action: el.closest('[data-action]')?.getAttribute('data-action'),
-                subFeature: el.closest('[data-sub-feature]')?.getAttribute('data-sub-feature'),
-                followToggle: !!el.closest('[data-follow-toggle]')
-              }, '*');
-            });
-          </script>
+          <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
         </body>
       </html>
     `);
     doc.close();
 
+    // 🔥 WAIT for DOM + scripts
+    this.waitForIframeReady(iframe, true);
+
     setTimeout(() => this.updateActiveMenuUI(), 50);
   }
 
 
+
   clearFirstBlockMinHeight() {
-    return
     const first = this.blocks.find(b => b.isFirstOfRegenerate);
-    if (first) {
-      first.isFirstOfRegenerate = false;
-      this.hasMarkedFirstBlock = false
-    }
+    if (!first || !this.chatScroll) return;
+
+    const el = this.chatScroll.nativeElement;
+
+    const prevScrollTop = el.scrollTop;
+    const prevScrollHeight = el.scrollHeight;
+
+    first.isFirstOfRegenerate = false;
+    this.hasMarkedFirstBlock = false
+
+    setTimeout(() => {
+      const newScrollHeight = el.scrollHeight;
+      el.scrollTop = prevScrollTop + (newScrollHeight - prevScrollHeight);
+    }, 0);
   }
+
+
+  waitForIframeReady(
+    iframe: HTMLIFrameElement,
+    scrollToTop = false
+  ) {
+    const win = iframe.contentWindow as any;
+    const doc = iframe.contentDocument;
+    if (!win || !doc) return;
+
+    const checkReady = () => {
+      if (doc.readyState !== 'complete') {
+        requestAnimationFrame(checkReady);
+        return;
+      }
+
+      // ✅ FORCE scroll to top
+      if (scrollToTop) {
+        this.forceIframeScrollTop(iframe);
+      }
+
+      // bind click once
+      doc.removeEventListener('click', this.iframeClickHandler, true);
+      doc.addEventListener('click', this.iframeClickHandler, true);
+
+      // init bootstrap safely
+      if (win.bootstrap) {
+        this.initIframeBootstrap(iframe);
+      } else {
+        setTimeout(() => this.initIframeBootstrap(iframe), 50);
+      }
+    };
+
+    checkReady();
+  }
+
+
+  forceIframeScrollTop(iframe: HTMLIFrameElement) {
+    const win = iframe.contentWindow;
+    const doc = iframe.contentDocument;
+    if (!win || !doc) return;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        // window scroll
+        win.scrollTo(0, 0);
+
+        // documentElement scroll
+        doc.documentElement.scrollTop = 0;
+
+        // body scroll (some browsers)
+        doc.body.scrollTop = 0;
+      });
+    });
+  }
+
+
+  initIframeBootstrap(iframe: HTMLIFrameElement) {
+    const win = iframe.contentWindow as any;
+    const doc = iframe.contentDocument;
+    if (!win || !doc || !win.bootstrap) return;
+
+    const dropdowns = doc.querySelectorAll('[data-bs-toggle="dropdown"]');
+    dropdowns.forEach(el => {
+      win.bootstrap.Dropdown.getOrCreateInstance(el);
+    });
+  }
+
+  private iframeClickHandler = (e: MouseEvent) => {
+    const el = e.target as HTMLElement;
+
+    window.postMessage(
+      {
+        type: 'preview-click',
+        menuKey: el.closest('[data-menu-key]')?.getAttribute('data-menu-key'),
+        action: el.closest('[data-action]')?.getAttribute('data-action'),
+        subFeature: el.closest('[data-sub-feature]')?.getAttribute('data-sub-feature'),
+        followToggle: !!el.closest('[data-follow-toggle]')
+      },
+      '*'
+    );
+  };
+
+
+  // open modal
+  openModal() {
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+  }
+
+  startTyping() {
+    this.activeFileIndex = 0;
+    this.typeNextFile();
+  }
+
+  get activeFileStatus(): 'typing' | 'done' {
+    if (!this.activeFile) return 'typing';
+    return this.activeFile.typedCode.length < this.activeFile.fullCode.length
+      ? 'typing'
+      : 'done';
+  }
+  typeNextFile() {
+    // ✅ ALL FILES DONE → SHOW PREVIEW UI
+    if (this.activeFileIndex >= this.files.length) {
+      this.aiService.emitCodeDone();
+   
+      return;
+    }
+
+    this.activeFile = this.files[this.activeFileIndex];
+    this.activeFile.typedCode = '';
+
+    let i = 0;
+    let buffer = '';
+    const code = this.activeFile.fullCode;
+
+    const interval = setInterval(() => {
+      buffer += code[i];
+      i++;
+
+      // 🔹 batch updates
+      if (buffer.length % 5 === 0) {
+        this.activeFile.typedCode = buffer;
+      }
+
+      // 🔹 file completed
+      if (i >= code.length) {
+        clearInterval(interval);
+        this.activeFile.typedCode = buffer;
+        this.activeFileIndex++;
+
+        // 🔹 move to next file after delay
+        setTimeout(() => this.typeNextFile(), 100);
+      }
+    }, 10);
+  }
+
+
+
+  openFullPreview() {
+
+    if (!this.previewShow) return
+    this.fullScreen = !this.fullScreen;
+
+  }
+
+
+  isArray(value: any): boolean {
+    return Array.isArray(value);
+  }
+
+
 
 
 }

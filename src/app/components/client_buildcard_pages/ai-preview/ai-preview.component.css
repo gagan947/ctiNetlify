@@ -1,3 +1,17 @@
+:root {
+  --ai-bg: #0f1623;
+  --ai-card: #141c2f;
+  --ai-border: #24304a;
+  --ai-text: #e7ebf3;
+  --ai-muted: #9aa4bf;
+  --ai-accent: #4da3ff;
+  --ai-success: #4ade80;
+  --ai-warning: #facc15;
+  --ai-radius: 10px;
+  --ai-mono: 'JetBrains Mono', monospace;
+}
+
+
 .preview-wrapper {
   width: 100%;
   height: calc(100vh - 64px);
@@ -350,7 +364,7 @@ li.ct_ai_project_right {
   gap: 10px;
   justify-content: space-between;
   padding: 10px 30px;
-  background-color: #f5f5f5;
+  background-color: #000;
 }
 
 .ct_ai_prjct_prev_header ul {
@@ -365,12 +379,13 @@ li.ct_ai_project_right {
 .et_reload_icon {
   width: 30px;
   height: 30px;
-  background-color: #fff;
+  background-color: #333;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  border: 1px solid #e6e6e6;
+  color: #fff;
+  border: 1px solid #333;
   cursor: pointer;
   transition: 0.4s ease all;
 }
@@ -398,10 +413,13 @@ li.ct_ai_project_right {
 
 
 
-.ct_ai_thiking_loader {
+.ct_ai_thiking_loader2 {
   display: flex;
+  flex-direction: column;
   align-items: center;
   padding-left: 40px;
+  justify-content: center;
+  height: calc(100vh - 50px);
 }
 
 .ct_ai_thiking_icon {
@@ -457,16 +475,33 @@ li.ct_ai_project_right {
 
 
 .ct_design_tab_btn {
-  background-color: #fff;
+  background-color: #313131;
   padding: 6px 15px;
+  padding-right: 6px;
   border-radius: 5px;
   font-weight: 500;
   outline: none;
   border: 0px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+}
+.ct_design_tab_btn i {
+  width: 18px;
+  height: 18px;
+  background: #ffffff99;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ct_design_tab_btn.active {
-  background-color: #8bc6e969;
+  background-color: #fff;
+  color: #000;
 
 }
 
@@ -479,4 +514,42 @@ li.ct_ai_project_right {
 .ct_first_regen_block {
   min-height: calc(-100px + 100vh);
 
+}
+
+.ct_ai_project_lefr {
+  transition: min-height 120ms ease-out;
+}
+.ct_no_drop_btn{
+  cursor: no-drop;
+}
+
+
+.ct_preview_tabs button{
+  background-color: #333;
+    border-radius: 5px;
+    border: 1px solid #333;
+    margin-right: 5px;
+    padding-inline: 5px;
+    color: #fff;
+    height: 30px;
+}
+.ct_preview_tabs button.active{
+  background-color: #fff;
+  color: #000;
+  border-color: #fff;
+}
+.block-list {
+  padding: 10px 40px;
+}
+
+.ct_ai_feature_list {
+  padding-left: 18px;
+  margin: 0;
+}
+
+.ct_ai_feature_list li {
+  list-style: disc;
+  color: var(--ai-text);
+  margin-bottom: 6px;
+  font-size: 14px;
 }

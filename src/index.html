@@ -49,27 +49,41 @@
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Creative AI",
-    "url": "https://creativethoughts.ai/",
-    "logo": "https://creativethoughts.ai/assets/img/cti_black_logo.svg",
-    "description": "Build mobile and web apps easily with our no-code AI app builder. Drive digital transformation by creating smart, fast, and scalable apps—no coding required.",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+91-9907337944",
-      "contactType": "sales",
-      "areaServed": ["US", "UAE", "UK", "IN"],
-      "availableLanguage": ["en"]
-    },
-    "sameAs": [
-      "https://www.facebook.com/CTInformatics",
-      "https://www.instagram.com/creativethoughts.ai/",
-      "https://www.linkedin.com/company/creativethoughtsai/"
-    ]
-  }
-  </script>
+    {
+      "@context": "https://schema.org/",
+      "@type": "WebSite",
+      "name": "Creative AI",
+      "url": "https://creativethoughts.ai/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://creativethoughts.ai/contact{search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+     
+     
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Creative AI",
+      "url": "https://creativethoughts.ai/",
+      "logo": "",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "9907337944",
+        "contactType": "customer service",
+        "areaServed": ["US","GB","CA","AU","FR","IN","AE","SG","DE"],
+        "availableLanguage": "en"
+      },
+      "sameAs": [
+        "https://www.instagram.com/creative_ai_app/",
+        "https://www.facebook.com/CTInformatics",
+        "https://www.linkedin.com/company/creativethoughtsai/?viewAsMember=true"
+      ]
+    }
+    </script>
 
   <!-- Defer non-critical JS -->
   <script defer src="https://connect.facebook.net/en_US/fbevents.js"></script>

@@ -26,7 +26,12 @@
               "src/sitemap.xml",
               "src/robots.txt",
               "src/_redirects",
-              "src/_headers"
+              "src/_headers",
+              {
+                "glob": "**/*",
+                "input": "node_modules/monaco-editor/min",
+                "output": "assets/monaco"
+              }
             ],
             "styles": [
               "src/styles.css",

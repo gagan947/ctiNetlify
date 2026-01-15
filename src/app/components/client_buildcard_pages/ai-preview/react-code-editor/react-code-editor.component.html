@@ -1,0 +1,15 @@
+<div class="ai-code-wrapper">
+
+  <div class="code-header">
+    <span class="file-name">src/{{language == 'javascript' ? 'pages' : 'css'}}/{{ fileName | lowercase }}</span>
+
+
+  </div>
+
+  <nu-monaco-editor
+    class="monaco-editor"
+    [options]="options"
+    (event)="onEditorEvent($event)">
+  </nu-monaco-editor>
+
+</div>
