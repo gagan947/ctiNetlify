@@ -6,6 +6,9 @@ export const LandingRoutes: Routes = [
             // data: { preload: true }
       },
       {
+            path: 'ai-app-builder', loadComponent: () => import('./home/home.component').then(c => c.HomeComponent)
+      },
+      {
             path: 'creative-studio', loadComponent: () => import('./creative-studio/creative-studio.component').then(c => c.CreativeStudioComponent)
       },
       {

@@ -125,83 +125,7 @@ export class PaymentDetailComponent {
     })
   }
 
-  async payNow() {
-    await this.loadRazorpayScript();
-
-    let formData = {
-      amount: Math.round(this.paymentPlan == '1' ? (this.actualCost || (this.total_cost_delivery + (this.total_cost_delivery * 18) / 100) - (((this.total_cost_delivery + (this.total_cost_delivery * 18) / 100) * 10) / 100)) : (this.securityDeposit + (this.securityDeposit * 18) / 100))
-    }
-    debugger
-    this.apiService.postAPI(`api/payment/createRazorpayOrder`, { amount: formData.amount, currency: this.currencyCode }).subscribe({
-      next: (data: any) => {
-        const options: any = {
-          // key: 'rzp_test_nyohAyx081ZtAn', // test key
-          key: 'rzp_live_RQZRNuAawKMTzH', // live key
-          amount: data.amount,
-          currency: this.currencyCode,
-          name: 'Creative.ai',
-          image: "assets/img/cti_black_logo.svg",
-          order_id: data.orderId,
-          handler: (response: any) => {
-            // console.log('Payment Success', response);
-            this.apiService.postAPI(`api/payment/verifyPayment`, response).subscribe({
-              next: (res: any) => {
-
-                if (res.status === 'success') {
-                  let formData2 = {
-                    razorpay_order_id: response.razorpay_order_id,
-                    razorpay_payment_id: response.razorpay_payment_id,
-                    razorpay_signature: response.razorpay_signature,
-                    clientInquiryId: this.projectsData.clientEnquryId,
-                    paymentMethod: Object.keys(this.paymentMethods).find((method: string) => this.paymentMethods[method]),
-                    installmentType: this.projectsData.installmentType === 'weekly' ? 2 : 1,
-                    gstTotalCost: Math.round(this.paymentPlan == '1' ? (this.actualCost || (this.total_cost_delivery + (this.total_cost_delivery * 18) / 100) - (((this.total_cost_delivery + (this.total_cost_delivery * 18) / 100) * 10) / 100)) : (this.securityDeposit + (this.securityDeposit * 18) / 100)),
-                    paymentPlan: Number(this.projectsData.paymentPlan)
-                  }
-
-                  this.apiService.postAPI(`api/payment/addClientPayment`, formData2).subscribe({
-                    next: (res: any) => {
-                      if (res.success == true) {
-                        this.router.navigate(['/user'])
-                      }
-                    }
-                  })
-                }
-              }
-            })
-          },
-          prefill: {
-            name: this.userData.name,
-            email: this.userData.email,
-            contact: this.userData.phoneNumber,
-          },
-          method: this.paymentMethods,
-          theme: {
-            color: '#1b83c1'
-          }
-        };
-
-        const razorpay = new Razorpay(options);
-        razorpay.open();
-      }
-    });
-  }
-
-  loadRazorpayScript(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const scriptId = 'razorpay-script';
-      if (document.getElementById(scriptId)) {
-        resolve();
-        return;
-      }
-      const script = document.createElement('script');
-      script.id = scriptId;
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve();
-      script.onerror = () => reject();
-      document.body.appendChild(script);
-    });
-  }
+ 
 
 
   openCalendly() {
@@ -264,6 +188,8 @@ export class PaymentDetailComponent {
   //     console.error('Error launching Cashfree checkout:', error);
   //   }
   // }
+
+  
   async verifyPayment(orderId: string) {
     try {
       const verificationResponse: any = await this.http.post('/verify-payment', {
@@ -283,7 +209,7 @@ export class PaymentDetailComponent {
       console.error('Verification error:', error);
     }
   }
-
+// One time payment code starts from here 
   initiateCheckout() {
     const user = {
       name: this.billingDetails.name,
@@ -295,7 +221,7 @@ export class PaymentDetailComponent {
       state: this.billingDetails.state,
       pincode: this.billingDetails.postal_code,
     }
-    console.log(user);
+   
     this.http
       .post(this.apiService.apiUrl + 'api/payment/create-order', {
         // amount: this.orderAmount,

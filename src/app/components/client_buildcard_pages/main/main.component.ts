@@ -194,4 +194,5 @@ export class MainComponent {
     this.SearchInput.nativeElement.value = '';
     this.projectsData = [...this.orgProjectsData];
   }
+
 }

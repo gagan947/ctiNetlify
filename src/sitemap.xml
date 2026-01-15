@@ -1,127 +1,81 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://creativethoughts.ai/</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/ecommerce-store-builder</loc>
-    <lastmod>2025-12-10T06:09:07+00:00</lastmod>
+    <lastmod>2026-01-02T14:13:45+01:00</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://creativethoughts.ai/ai-app-generator</loc>
-    <lastmod>2025-12-10T06:04:15+00:00</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/iphone-app-builder</loc>
-    <lastmod>2025-12-10T06:05:30+00:00</lastmod>
+    <lastmod>2026-01-02T13:15:09+00:00</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://creativethoughts.ai/android-app-builder</loc>
-    <lastmod>2025-12-10T06:06:43+00:00</lastmod>
+    <lastmod>2026-01-02T13:17:55+00:00</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/login</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
+    <loc>https://creativethoughts.ai/iphone-app-builder</loc>
+    <lastmod>2026-01-02T13:20:05+00:00</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://creativethoughts.ai/ecommerce-store-builder</loc>
+    <lastmod>2026-01-02T13:21:06+00:00</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://creativethoughts.ai/health-app-builder</loc>
+    <lastmod>2026-01-02T13:22:33+00:00</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://creativethoughts.ai/convert-web-to-app</loc>
+    <lastmod>2026-01-02T13:23:38+00:00</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://creativethoughts.ai/ai-app-builder</loc>
+    <lastmod>2026-01-02T13:24:28+00:00</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://creativethoughts.ai/signup</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
+    <lastmod>2026-01-02T14:13:45+01:00</lastmod>
   </url>
   <url>
     <loc>https://creativethoughts.ai/forgot-password</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/dashboard</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
+    <lastmod>2026-01-02T14:13:45+01:00</lastmod>
   </url>
   <url>
     <loc>https://creativethoughts.ai/free-demo</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
+    <lastmod>2026-01-02T14:13:45+01:00</lastmod>
   </url>
   <url>
     <loc>https://creativethoughts.ai/main</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
+    <lastmod>2026-01-02T14:13:45+01:00</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://creativethoughts.ai/make-it-mine</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
+    <lastmod>2026-01-02T14:13:45+01:00</lastmod>
   </url>
   <url>
     <loc>https://creativethoughts.ai/chatbot</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
+    <lastmod>2026-01-02T14:13:45+01:00</lastmod>
   </url>
   <url>
     <loc>https://creativethoughts.ai/ai-preview</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
+    <lastmod>2026-01-02T14:13:45+01:00</lastmod>
   </url>
   <url>
     <loc>https://creativethoughts.ai/schedule-a-call</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/review-buildcard</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/billing-details</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/payment-plan</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/payment-option</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/payment-status</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/payment-success</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/bd_loader</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/profile</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
+    <lastmod>2026-01-02T14:13:45+01:00</lastmod>
   </url>
   <url>
     <loc>https://creativethoughts.ai/contact</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/user</loc>
-    <lastmod>2025-12-10T06:54:16+01:00</lastmod>
-    <priority>1.0</priority>
+    <lastmod>2026-01-02T14:13:45+01:00</lastmod>
   </url>
 </urlset>
+ 
+ 

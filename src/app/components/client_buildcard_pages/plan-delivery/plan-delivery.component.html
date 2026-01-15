@@ -70,6 +70,26 @@
                 </svg>
                 <p class="mb-0 ct_fs_14 ct_fw_600">Refine Idea</p>
               </div>
+              <div
+                class="ct_step-circle cursor-pointer"
+                [routerLink]="['/ai-preview/' + id]"
+              >
+                <!-- <p class=" mb-0">3</p> -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="35"
+                  height="35"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="#17b400"
+                    fill-rule="evenodd"
+                    d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <p class="mb-0 ct_fs_14 ct_fw_600">Design Preview</p>
+              </div>
               <div class="ct_step-circle">
                 <p class="mb-0">4</p>
                 <p class="mb-0 ct_fs_14 ct_fw_600">Plan Delivery</p>
@@ -113,7 +133,7 @@
                     <input type="checkbox" class="form-check-input" checked/></div
                 ></label>
               </div>
-               <div class="col-md-4 mb-4 ">
+               <div class="col-md-4 mb-4">
                 <label class="ct_app_detail_card active" for="flexCheckDefault1"
                   ><img
                     alt="AI app builder for mobile and web"
@@ -141,31 +161,48 @@
         
         </div>
       </div>
-      <div class="row mt-4 justify-content-center ">
+      <ul class="nav nav-pills mb-0 ct_custom_tab mt-4" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true" (click)="setBilling('monthly')" >Monthly</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false" (click)="setBilling('yearly')" >Yearly</button>
+        </li>
+       
+      </ul>
+      <div class="row mt-0 justify-content-center ">
         <div class="col-md-6 col-lg-5 col-xl-4 mt-lg-4 mt-5">
-          <div class="ct_pricing_card">
+          <div class="ct_pricing_card" [class.ct_active]="selectedPlan() === 'personal'" (click)="selectPlan('personal')">
            <div>
-             <h6>Basic plan</h6>
-            <div class="ct_price">$22 <span>per month</span></div>
-
+             <h6>Personal</h6>
+            <div class="ct_price mb-1">$ {{ planPrices().personal }}<span>per month billed {{this.billingCycle()}}</span></div>
+            <p class="mb-3 ct_grey_text">For light, exploratory, and personal use</p>
            
 
-            <div class="ct_features_title">FEATURES</div>
+            <div class="ct_features_title">What`s included :</div>
             <ul class="ct_features">
               <li>
-                <i class="fa-solid fa-circle-check"></i> 200+ integrations
+                <i class="fa-solid fa-circle-check"></i> 1 Project Build
               </li>
               <li>
-                <i class="fa-solid fa-circle-check"></i> Advanced reporting
+                <i class="fa-solid fa-circle-check"></i> 5 Design Templates
               </li>
               <li>
-                <i class="fa-solid fa-circle-check"></i> Custom branded forms
+                <i class="fa-solid fa-circle-check"></i> AI-assisted project creation
               </li>
               <li>
-                <i class="fa-solid fa-circle-check"></i> Automated workflows
+                <i class="fa-solid fa-circle-check"></i>Custom Domain Support
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Deploy to Your Own Server
               </li>
               <li>
-                <i class="fa-solid fa-circle-check"></i> Email & chat support
+                <i class="fa-solid fa-circle-check"></i> Production-ready Code Download
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Email & Chat Support (Standard SLA)
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Upgrade anytime as your needs grow
               </li>
             </ul>
            </div>
@@ -177,30 +214,48 @@
 
         <!-- Business -->
         <div class="col-md-6 col-lg-5 col-xl-4  mt-lg-4 mt-5">
-          <div class="ct_pricing_card ct_active">
+          <div class="ct_pricing_card " [class.ct_active]="selectedPlan() === 'creative'" (click)="selectPlan('creative')">
             <div>
               <span class="ct_badge">Most popular</span>
 
-            <h6>Business plan</h6>
-            <div class="ct_price">$40 <span>per month</span></div>
+            <h6>Creative</h6>
+            <div class="ct_price mb-1">${{ planPrices().creative }}<span>per month billed </span></div>
+            <p class="mb-3 ct_grey_text">
 
+              For professional and frequent use</p>
            
 
-            <div class="ct_features_title">FEATURES</div>
+            <div class="ct_features_title">What`s included :</div>
             <ul class="ct_features">
               <li>
-                <i class="fa-solid fa-circle-check"></i> 200+ integrations
+                <i class="fa-solid fa-circle-check"></i> 2 Project Builds
               </li>
               <li>
-                <i class="fa-solid fa-circle-check"></i> Advanced reporting
+                <i class="fa-solid fa-circle-check"></i> Unlimited Design Templates
               </li>
               <li>
-                <i class="fa-solid fa-circle-check"></i> Custom branded forms
+                <i class="fa-solid fa-circle-check"></i> AI-Assisted Project Creation
               </li>
               <li>
-                <i class="fa-solid fa-circle-check"></i> Automated workflows
+                <i class="fa-solid fa-circle-check"></i>Private Projects
               </li>
-              <li><i class="fa-solid fa-circle-check"></i> Priority support</li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i>Custom Domain Support
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Deploy to Your Own Server
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Production-ready Code Download
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> 24×7 Call Support
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> 2 Additional Customized Features per Month
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Upgrade anytime as your needs grow
+              </li>
             </ul>
             </div>
 
@@ -209,6 +264,63 @@
             </div>
           </div>
         </div>
+        <div class="col-md-6 col-lg-5 col-xl-4  mt-lg-4 mt-5">
+          <div class="ct_pricing_card"  [class.ct_active]="selectedPlan() === 'booster'"
+           (click)="selectPlan('booster')">
+            <div>
+          
+            <h6>Booster</h6>
+            <div class="ct_price mb-1">${{ planPrices().booster }} <span>per month</span></div>
+            <p class="mb-3 ct_grey_text">For power users' daily use as core tool</p>
+           
+
+            <div class="ct_features_title">What`s included :</div>
+            <ul class="ct_features">
+              <li>
+                <i class="fa-solid fa-circle-check"></i> 5 Project Builds
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Unlimited Design Templates
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i>AI-Assisted Project Creation
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i>Private Projects
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i>Custom Domain Support
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Deploy to Your Own Server
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Production-ready Code Download
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> 24×7 Call Support
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> 2 Additional Customized Features per Month
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check"></i> Upgrade anytime as your needs grow
+              </li>
+            </ul>
+            </div>
+
+            <div class="mt-auto">
+               <button class="ct_btn ct_btn_dark">Get started</button>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
         <!-- <div class="col-xl-8 mb-4 mb-xl-0">
           <div class="ct_light_grey_bg mb-4">
             <div class="d-flex align-items-center justify-content-between gap-3">
