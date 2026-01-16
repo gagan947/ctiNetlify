@@ -60,13 +60,15 @@
           </nz-select> -->
           <div class="dropdown ct_dropdown_device_preview123">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fa-solid fa-display"></i>
+              data-bs-toggle="dropdown" aria-expanded="false" [innerHTML]="selectedDeviceType">
             </button>
             <ul class="dropdown-menu mb-0" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="#"> <i class="fa-solid fa-display"></i></a></li>
-              <li><a class="dropdown-item" href="#"> <i class="fa-solid fa-tablet-screen-button"></i></a></li>
-              <li><a class="dropdown-item" href="#"> <i class="fa-solid fa-mobile-screen"></i></a></li>
+              <li><a class="dropdown-item" (click)="onDeviceTypeChange('desktop')"> <i
+                    class="fa-solid fa-display"></i></a></li>
+              <li><a class="dropdown-item" (click)="onDeviceTypeChange('tablet')"> <i
+                    class="fa-solid fa-tablet-screen-button"></i></a></li>
+              <li><a class="dropdown-item" (click)="onDeviceTypeChange('mobile')"> <i
+                    class="fa-solid fa-mobile-screen"></i></a></li>
             </ul>
           </div>
         </li>
