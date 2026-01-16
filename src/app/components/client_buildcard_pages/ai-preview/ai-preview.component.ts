@@ -27,8 +27,6 @@ interface ReactFile {
   fullCode: string;
 }
 
-
-
 @Component({
   selector: 'app-ai-preview',
   standalone: true,
@@ -71,7 +69,7 @@ export class AiPreviewComponent {
   fullScreen: boolean = false;;
   showCodeButton = false;
   userHasScrolled = false;
-
+  selectedDeviceType: string = '<i class="fa-solid fa-display"></i>';
   languages = [
     {
       value: 'USD',
@@ -379,18 +377,6 @@ export class AiPreviewComponent {
     previewRoot
       .querySelectorAll(`.menu-item[data-menu-key="${this.activeMenuKey}"]`)
       .forEach(el => el.classList.add('active'));
-  }
-
-  setWidth(device: string) {
-    if (device == 'mobile') {
-      this.previewWidth = 400
-    } else if (device == 'desktop') {
-      this.previewWidth = 1366
-
-    } else if (device == 'tablet') {
-      this.previewWidth = 768
-    }
-
   }
 
   async regenerate() {
@@ -840,7 +826,20 @@ export class AiPreviewComponent {
     return Array.isArray(value);
   }
 
-
-
-
+  onDeviceTypeChange(deviceType: string) {
+    switch (deviceType) {
+      case 'desktop':
+        this.selectedDeviceType = '<i class="fa-solid fa-display"></i>';
+        this.previewWidth = 1366
+        break;
+      case 'tablet':
+        this.selectedDeviceType = '<i class="fa-solid fa-tablet-screen-button"></i>';
+        this.previewWidth = 768
+        break;
+      case 'mobile':
+        this.selectedDeviceType = '<i class="fa-solid fa-mobile-screen"></i>';
+        this.previewWidth = 400
+        break;
+    }
+  }
 }
