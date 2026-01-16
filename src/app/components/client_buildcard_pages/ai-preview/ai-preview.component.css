@@ -37,7 +37,7 @@ section.ct_project_ai_preview_main {
 aside.ct_project_ai_chat_section {
   height: 100vh;
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   background-color: #f7f7f7;
   padding: 20px;
   border-right: 1px solid #e6e6e6;
@@ -72,7 +72,7 @@ aside.ct_project_ai_chat_section ul {
 }
 
 .ct_ai_project_lefr_btns p {
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .ct_ai_project_lefr button {
@@ -126,7 +126,7 @@ li.ct_ai_project_right {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .ct_chat_ai_brand_logo img {
@@ -542,7 +542,7 @@ li.ct_ai_project_right {
   border-color: #fff;
 }
 .block-list {
-  padding: 10px 40px;
+  padding: 0px 40px;
 }
 
 .ct_ai_feature_list {
@@ -553,6 +553,6 @@ li.ct_ai_project_right {
 .ct_ai_feature_list li {
   list-style: disc;
   color: var(--ai-text);
-  margin-bottom: 6px;
-  font-size: 14px;
+  margin-bottom: 2px;
+  font-size: 13px;
 }
