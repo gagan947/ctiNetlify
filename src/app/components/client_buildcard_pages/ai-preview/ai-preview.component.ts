@@ -32,7 +32,7 @@ interface ReactFile {
 @Component({
   selector: 'app-ai-preview',
   standalone: true,
-  imports: [CommonModule, ScrollingModule, SubcriptionPageComponent, ReactCodeEditorComponent,NzSelectModule,FormsModule],
+  imports: [CommonModule, ScrollingModule, SubcriptionPageComponent, ReactCodeEditorComponent, NzSelectModule, FormsModule],
   templateUrl: './ai-preview.component.html',
   styleUrl: './ai-preview.component.css'
 })
@@ -71,24 +71,24 @@ export class AiPreviewComponent {
   showCodeButton = false;
   userHasScrolled = false;
 
-languages = [
-  {
-    value: 'USD',
-    label: 'US Dollar',
-    icon: 'img/mobile_app_icon_svg.svg'
-  },
-  {
-    value: 'EUR',
-    label: 'Euro',
-    icon: 'img/mobile_app_icon_svg.svg'
-  },
-  {
-    value: 'INR',
-    label: 'Indian Rupee',
-    icon: 'img/mobile_app_icon_svg.svg'
-  }
-];
- 
+  languages = [
+    {
+      value: 'USD',
+      label: 'US Dollar',
+      icon: 'img/mobile_app_icon_svg.svg'
+    },
+    {
+      value: 'EUR',
+      label: 'Euro',
+      icon: 'img/mobile_app_icon_svg.svg'
+    },
+    {
+      value: 'INR',
+      label: 'Indian Rupee',
+      icon: 'img/mobile_app_icon_svg.svg'
+    }
+  ];
+
 
   // Redirect page for login action
   constructor(
@@ -142,7 +142,7 @@ languages = [
               blocks: JSON.parse(JSON.stringify(this.blocks)),
               createdAt: new Date()
             });
-          }else if(last?.id === 'paragraph-preview-ready' && last?.done){
+          } else if (last?.id === 'paragraph-preview-ready' && last?.done) {
             this.previewShow = true;
             const el = document.getElementById('pills-home-tab');
             if (!el) return;
@@ -600,9 +600,9 @@ languages = [
 
 
   handleGenerateResponse(res: any) {
-    const { Login_now } = res.data.react_files;
+    const { Login_now, Forgot_password } = res.data.react_files;
 
-    const react_files = { Login_now };
+    const react_files = { Login_now, Forgot_password };
 
     this.files = [];
 
@@ -616,13 +616,13 @@ languages = [
         typedCode: ''
       });
 
-      this.files.push({
-        id: `${page}-css`,
-        name: `${page}.css`,
-        language: 'css',
-        fullCode: data.css,
-        typedCode: ''
-      });
+      // this.files.push({
+      //   id: `${page}-css`,
+      //   name: `${page}.css`,
+      //   language: 'css',
+      //   fullCode: data.css,
+      //   typedCode: ''
+      // });
 
 
     });
@@ -839,11 +839,13 @@ languages = [
       ? 'typing'
       : 'done';
   }
+
+  // socket preview compltes chat
   typeNextFile() {
     // ✅ ALL FILES DONE → SHOW PREVIEW UI
     if (this.activeFileIndex >= this.files.length) {
       this.aiService.emitCodeDone();
-   
+
       return;
     }
 
