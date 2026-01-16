@@ -4,20 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { NuMonacoEditorComponent, NuMonacoEditorEvent, NuMonacoEditorModel } from '@ng-util/monaco-editor';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 
-interface CodeFile {
-  id: string;
-  name: string;
-  language: 'javascript' | 'css';
-  content: string;
-  typedContent: string;
-  status: 'pending' | 'typing' | 'done';
-}
+
 interface ReactFile {
   id: string;
   name: string;          // ProductListing.jsx
   language: 'javascript' | 'css';
   fullCode: string;
 }
+
+
 
 @Component({
   selector: 'app-react-code-editor',
@@ -28,8 +23,9 @@ interface ReactFile {
 })
 
 export class ReactCodeEditorComponent {
-
+ activeFile:any;
   @Input() files: ReactFile[] = [];
+  generatedFiles:any = []
   editor: any;
   @Output() typingDone = new EventEmitter<void>();
   readonly model: NuMonacoEditorModel = {
@@ -68,6 +64,7 @@ export class ReactCodeEditorComponent {
     if (!this.editor || !this.files.length) return;
 
     this.currentFileIndex = 0;
+    this.activeFile = this.files[0].name
     this.typeNextFile();
   }
 
@@ -82,6 +79,8 @@ export class ReactCodeEditorComponent {
     }
   
     const file = this.files[this.currentFileIndex];
+    this.generatedFiles.push(file)
+   
     const model = this.editor.getModel();
     if (!model) return;
   

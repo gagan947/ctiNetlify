@@ -4,9 +4,9 @@
     width: 100%;
   }
   
-  /* nu-monaco-editor{
+  nu-monaco-editor{
     height: 100% !important;
-  } */
+  }
 
   .ai-code-wrapper{
     height: calc(100vh - 88px) !important;
@@ -21,4 +21,23 @@
     font-weight: 500;
     font-size: 15px;
     color: #ebebeb;
+}
+.ct_dropdown_device_preview123 ul{
+  width: 212px !important;
+  padding-block: 0px !important;
+}
+.ct_dropdown_device_preview123 button{
+  font-size: 12px;
+  padding-block: 3px;
+  background-color: #333;
+  border-color: #333;
+  width: 212px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ct_dropdown_device_preview123 li a{
+  font-size: 12px;
+  border-radius: 5px;
 }

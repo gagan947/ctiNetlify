@@ -5,82 +5,51 @@
 <div class="ct_aappp">
   <div class="ct_ai_prjct_prev_header">
     <div class="d-flex align-items-center gap-2">
+      <!-- <div>
+        <img src="assets/img/cti_black_logo1.png" alt="">
+      </div> -->
       <div class="et_reload_icon">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="22px"
-          height="22px"
-          fill="currentColor"
-          viewBox="0 0 256 256"
-          role="presentation"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" width="22px" height="22px" fill="currentColor" viewBox="0 0 256 256"
+          role="presentation">
           <path
-            d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"
-          ></path>
+            d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z">
+          </path>
         </svg>
       </div>
       <div class="d-flex align-items-center gap-2">
         @for (id of designOrder; track id) {
-        <button
-          class="ct_design_tab_btn design-tab"
-          [class.active]="id === activeDesignId"
-          (click)="switchDesign(id)"
-        >
+        <button class="ct_design_tab_btn design-tab" [class.active]="id === activeDesignId" (click)="switchDesign(id)">
           {{ designMap.get(id)?.label }}
           <i class="fa-solid fa-xmark" *ngIf="id !== '1'"></i>
         </button>
         }
       </div>
-      <div *ngIf="!previewCodeShow">
-        <div class="et_reload_icon" (click)="openFullPreview()">
-          <i
-            class="fa-solid"
-            [ngClass]="fullScreen ? 'fa-minimize' : 'fa-expand'"
-          ></i>
-        </div>
-      </div>
+
     </div>
     <div class="d-flex align-items-center gap-2">
-      <ul
-        class="ct_preview_tabs gap-0"
-        id="pills-tab"
-        role="tablist"
-        style="background-color: #333; border-radius: 5px; padding: 2px"
-      >
+      <div *ngIf="!previewCodeShow">
+        <div class="et_reload_icon" (click)="openFullPreview()">
+          <i class="fa-solid" [ngClass]="fullScreen ? 'fa-minimize' : 'fa-expand'"></i>
+        </div>
+      </div>
+      <ul class="ct_preview_tabs gap-0 mb-0 d-flex align-items-center" id="pills-tab" role="tablist"
+        style="background-color: #333; border-radius: 5px; padding: 2px">
         <li role="presentation">
-          <button
-            class="active"
-            id="pills-home-tab"
-            data-bs-toggle="pill"
-            data-bs-target="#pills-home"
-            type="button"
-            role="tab"
-            aria-controls="pills-home"
-            aria-selected="true"
-            (click)="previewCodeShow = false"
-          >
+          <button class="active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button"
+            role="tab" aria-controls="pills-home" aria-selected="true" (click)="previewCodeShow = false">
             Preview
           </button>
         </li>
         <li role="presentation" [hidden]="!showCodeButton">
-          <button
-            id="pills-profile-tab"
-            data-bs-toggle="pill"
-            data-bs-target="#pills-profile"
-            type="button"
-            role="tab"
-            aria-controls="pills-profile"
-            aria-selected="false"
-            (click)="previewCodeShow = true"
-            class="me-0"
-          >
+          <button id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab"
+            aria-controls="pills-profile" aria-selected="false" (click)="previewCodeShow = true" class="me-0">
             Code
           </button>
         </li>
       </ul>
-      <ul>
+      <ul class="mb-0">
         <li>
-          <nz-select
+          <!-- <nz-select
             class="form-control ct_currency_input ct_currency_input_select_22"
             nzPlaceHolder="Select Currency"
             [nzDropdownMatchSelectWidth]="false"
@@ -91,7 +60,18 @@
               [nzLabel]="item.value"
             ></nz-option>
             }
-          </nz-select>
+          </nz-select> -->
+          <div class="dropdown ct_dropdown_device_preview123">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-display"></i>
+            </button>
+            <ul class="dropdown-menu mb-0" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="#"> <i class="fa-solid fa-display"></i></a></li>
+              <li><a class="dropdown-item" href="#"> <i class="fa-solid fa-tablet-screen-button"></i></a></li>
+              <li><a class="dropdown-item" href="#"> <i class="fa-solid fa-mobile-screen"></i></a></li>
+            </ul>
+          </div>
         </li>
 
         <li>
@@ -185,10 +165,7 @@
     </div>
 
   </aside> -->
-    <aside
-      class="ct_project_ai_chat_section"
-      [ngClass]="!fullScreen ? 'd-block' : 'd-none'"
-    >
+    <aside class="ct_project_ai_chat_section pe-0" [ngClass]="!fullScreen ? 'd-block' : 'd-none'">
       <div #chatScroll>
         <ul class="pe-3">
           @for (block of blocks; track $index) {
@@ -206,78 +183,22 @@
             @if (block.id.startsWith('status')) {
             <div class="ct_ai_thiking_loader">
               <svg class="ct_ai_thiking_icon" viewBox="0 0 256 256">
-                <line
-                  x1="128"
-                  y1="32"
-                  x2="128"
-                  y2="64"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="195.9"
-                  y1="60.1"
-                  x2="173.3"
-                  y2="82.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="224"
-                  y1="128"
-                  x2="192"
-                  y2="128"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="195.9"
-                  y1="195.9"
-                  x2="173.3"
-                  y2="173.3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="128"
-                  y1="224"
-                  x2="128"
-                  y2="192"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="60.1"
-                  y1="195.9"
-                  x2="82.7"
-                  y2="173.3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="32"
-                  y1="128"
-                  x2="64"
-                  y2="128"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="60.1"
-                  y1="60.1"
-                  x2="82.7"
-                  y2="82.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
+                <line x1="128" y1="32" x2="128" y2="64" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="24"></line>
+                <line x1="195.9" y1="60.1" x2="173.3" y2="82.7" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="24"></line>
+                <line x1="224" y1="128" x2="192" y2="128" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="24"></line>
+                <line x1="195.9" y1="195.9" x2="173.3" y2="173.3" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="24"></line>
+                <line x1="128" y1="224" x2="128" y2="192" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="24"></line>
+                <line x1="60.1" y1="195.9" x2="82.7" y2="173.3" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="24"></line>
+                <line x1="32" y1="128" x2="64" y2="128" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="24"></line>
+                <line x1="60.1" y1="60.1" x2="82.7" y2="82.7" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="24"></line>
               </svg>
 
               <span class="ct_ai_thiking_loading-text">
@@ -285,15 +206,12 @@
               </span>
             </div>
             }@else {
-            <div
-              class="ct_ai_project_lefr_btns"
-              [ngClass]="{
+            <div class="ct_ai_project_lefr_btns" [ngClass]="{
                 'block-cmd': block.id.startsWith('cmd'),
                 'block-paragraph': block.id.startsWith('paragraph'),
                 'block-list': block.id.startsWith('list'),
                 'block-intent': block.id.startsWith('intent')
-              }"
-            >
+              }">
               <!-- 🔹 LIST BLOCK -->
               @if (isArray(block.text)) {
               <ul class="ct_ai_feature_list">
@@ -312,21 +230,14 @@
       </div>
 
       <!-- ================= BOTTOM ACTION BUTTONS ================= -->
-      <div class="ct_project_ai_btm_action_btns">
-        <button
-          class="ct_blue_outline_btn w-100"
-          (click)="regenerate()"
-          [disabled]="isTyping"
-          [ngClass]="isTyping ? 'ct_no_drop_btn' : ''"
-        >
+      <div class="ct_project_ai_btm_action_btns pe-3">
+        <button class="ct_blue_outline_btn w-100" (click)="regenerate()" [disabled]="isTyping"
+          [ngClass]="isTyping ? 'ct_no_drop_btn' : ''">
           Regenerate
         </button>
 
-        <button
-          class="ct_schedule_call_btn w-100 justify-content-center mt-auto"
-          (click)="openModal()"
-          [ngClass]="isTyping ? 'ct_no_drop_btn' : ''"
-        >
+        <button class="ct_schedule_call_btn w-100 justify-content-center mt-auto" (click)="openModal()"
+          [ngClass]="isTyping ? 'ct_no_drop_btn' : ''">
           Save
         </button>
       </div>
@@ -334,29 +245,13 @@
 
     <div class="ct_ai_project_preview_right">
       <div class="tab-content" id="pills-tabContent">
-        <div
-          class="tab-pane fade show active"
-          id="pills-home"
-          role="tabpanel"
-          aria-labelledby="pills-home-tab"
-        >
-          <div
-            class="preview-wrapper"
-            id="topScrollDiv "
-            [ngClass]="previewShow ? 'd-block' : 'd-none'"
-          >
-            <iframe
-              #previewFrame
-              class="preview-iframe mx-auto d-block w-100"
-              [style.maxWidth]="previewWidth + 'px'"
-              [style.height.%]="100"
-            ></iframe>
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+          <div class="preview-wrapper" id="topScrollDiv " [ngClass]="previewShow ? 'd-block' : 'd-none'">
+            <iframe #previewFrame class="preview-iframe mx-auto d-block w-100" [style.maxWidth]="previewWidth + 'px'"
+              [style.height.%]="100"></iframe>
           </div>
 
-          <div
-            class="ct_ai_thiking_loader2"
-            [ngClass]="previewShow ? 'd-none' : 'd-flex'"
-          >
+          <div class="ct_ai_thiking_loader2" [ngClass]="previewShow ? 'd-none' : 'd-flex'">
             <div class="rgt_loader" id="rgt_loader">
               <div class="rgt_loader-wrapper">
                 <span class="rgt_loader-letter">G</span>
@@ -402,8 +297,5 @@
     </div>
   </section>
 
-  <app-subcription-page
-    [subscriptionModalOpen]="showModal"
-    (close)="closeModal()"
-  ></app-subcription-page>
+  <app-subcription-page [subscriptionModalOpen]="showModal" (close)="closeModal()"></app-subcription-page>
 </div>
