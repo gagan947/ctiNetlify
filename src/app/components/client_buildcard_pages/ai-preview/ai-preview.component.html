@@ -21,14 +21,15 @@
         </button>
         }
       </div>
+
+    </div>
+    <div class="d-flex align-items-center gap-2">
       <div *ngIf="!previewCodeShow">
         <div class="et_reload_icon" (click)="openFullPreview()">
           <i class="fa-solid" [ngClass]="fullScreen ? 'fa-minimize' : 'fa-expand'"></i>
         </div>
       </div>
-    </div>
-    <div class="d-flex align-items-center gap-2">
-      <ul class="ct_preview_tabs gap-0" id="pills-tab" role="tablist"
+      <ul class="ct_preview_tabs gap-0 mb-0 d-flex align-items-center" id="pills-tab" role="tablist"
         style="background-color: #333; border-radius: 5px; padding: 2px">
         <li role="presentation">
           <button class="active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button"
@@ -43,14 +44,31 @@
           </button>
         </li>
       </ul>
-      <ul>
+      <ul class="mb-0">
         <li>
-          <nz-select class="form-control ct_currency_input ct_currency_input_select_22" nzPlaceHolder="Select Currency"
-            [nzDropdownMatchSelectWidth]="false">
+          <!-- <nz-select
+            class="form-control ct_currency_input ct_currency_input_select_22"
+            nzPlaceHolder="Select Currency"
+            [nzDropdownMatchSelectWidth]="false"
+          >
             @for (item of languages; track $index) {
-            <nz-option [nzValue]="item.value" [nzLabel]="item.value"></nz-option>
+            <nz-option
+              [nzValue]="item.value"
+              [nzLabel]="item.value"
+            ></nz-option>
             }
-          </nz-select>
+          </nz-select> -->
+          <div class="dropdown ct_dropdown_device_preview123">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-display"></i>
+            </button>
+            <ul class="dropdown-menu mb-0" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="#"> <i class="fa-solid fa-display"></i></a></li>
+              <li><a class="dropdown-item" href="#"> <i class="fa-solid fa-tablet-screen-button"></i></a></li>
+              <li><a class="dropdown-item" href="#"> <i class="fa-solid fa-mobile-screen"></i></a></li>
+            </ul>
+          </div>
         </li>
 
         <li>
@@ -144,7 +162,7 @@
     </div>
 
   </aside> -->
-    <aside class="ct_project_ai_chat_section" [ngClass]="!fullScreen ? 'd-block' : 'd-none'">
+    <aside class="ct_project_ai_chat_section pe-0" [ngClass]="!fullScreen ? 'd-block' : 'd-none'">
       <div #chatScroll>
         <ul class="pe-3">
           @for (block of blocks; track $index) {
@@ -152,7 +170,7 @@
             <!-- AI BRAND HEADER -->
             <div class="ct_chat_ai_brand_logo">
               <img src="assets/img/c.png" alt="" />
-              <p class="mb-0">Creative AI</p>
+              <p class="mb-0">Creative</p>
               <small class="ct_text_op_7">
                 {{ block.timestamp | date : "MMM d, y, h:mm a" }}
               </small>
@@ -199,7 +217,7 @@
                 }
               </ul>
               }@else {
-              <p>{{ block.text }}</p>
+              <p class="mb-0">{{ block.text }}</p>
               }
             </div>
             }
