@@ -9,8 +9,9 @@ import { Router } from '@angular/router';
 import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
 import { PlanDeliveryComponent } from '../plan-delivery/plan-delivery.component';
 import { SubcriptionPageComponent } from "../subcription-page/subcription-page.component";
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, Validators } from '@angular/forms';
 import { ReactCodeEditorComponent } from './react-code-editor/react-code-editor.component';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 interface DesignSnapshot {
   id: string;                 // design-1, design-2
@@ -31,7 +32,7 @@ interface ReactFile {
 @Component({
   selector: 'app-ai-preview',
   standalone: true,
-  imports: [CommonModule, ScrollingModule, SubcriptionPageComponent, ReactCodeEditorComponent],
+  imports: [CommonModule, ScrollingModule, SubcriptionPageComponent, ReactCodeEditorComponent,NzSelectModule,FormsModule],
   templateUrl: './ai-preview.component.html',
   styleUrl: './ai-preview.component.css'
 })
@@ -70,7 +71,24 @@ export class AiPreviewComponent {
   showCodeButton = false;
   userHasScrolled = false;
 
-
+languages = [
+  {
+    value: 'USD',
+    label: 'US Dollar',
+    icon: 'img/mobile_app_icon_svg.svg'
+  },
+  {
+    value: 'EUR',
+    label: 'Euro',
+    icon: 'img/mobile_app_icon_svg.svg'
+  },
+  {
+    value: 'INR',
+    label: 'Indian Rupee',
+    icon: 'img/mobile_app_icon_svg.svg'
+  }
+];
+ 
 
   // Redirect page for login action
   constructor(
