@@ -131,18 +131,18 @@ export class RefineIdeaComponent {
   }
 
   removeSubFeture(features: any, item2: any) {
-    const featureIndex = this.projectsFeaturs.findIndex(f => f.featureName === features.featureName);
+    const featureIndex = this.addtionalFeatures.findIndex(f => f.featureName === features.featureName);
     if (featureIndex > -1) {
-      this.projectsFeaturs[featureIndex].subFeatures = this.projectsFeaturs[featureIndex].subFeatures.filter(el => el !== item2);
-      this.projectsFeaturs[featureIndex].featureTime = this.projectsFeaturs[featureIndex].subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0);
-      if (this.projectsFeaturs[featureIndex].subFeatures.length === 0) {
-        this.projectsFeaturs.splice(featureIndex, 1);
+      this.addtionalFeatures[featureIndex].subFeatures = this.addtionalFeatures[featureIndex].subFeatures.filter((el: any) => el !== item2);
+      this.addtionalFeatures[featureIndex].featureTime = this.addtionalFeatures[featureIndex].subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0);
+      if (this.addtionalFeatures[featureIndex].subFeatures.length === 0) {
+        this.addtionalFeatures.splice(featureIndex, 1);
         const commonFeatureIndex = this.commongFeaturs.findIndex(f => f.featuresName === features.featuresName);
         if (commonFeatureIndex > -1) {
           this.commongFeaturs[commonFeatureIndex].selected = false
         }
       }
-      this.projectsFeaturs = [...this.projectsFeaturs];
+      this.addtionalFeatures = [...this.addtionalFeatures];
       const commonFeatureIndex = this.commongFeaturs.findIndex(f => f.featureName === features.featureName);
       if (commonFeatureIndex > -1) {
         this.commongFeaturs[commonFeatureIndex].subFeaturesList.map((item: any) => {
@@ -150,11 +150,6 @@ export class RefineIdeaComponent {
         })
       }
     }
-    let totalTime = this.projectsFeaturs.map(feature => feature.subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0)).reduce((pre: any, next: any) => pre + next, 0)
-    this.totalFeatureCost = (totalTime * 1750)
-    this.durations = Math.ceil((totalTime / 8) / 5);
-    this.noOfFeaturs = this.projectsFeaturs.reduce((pre: any, next: any) => pre + next.subFeatures.length, 0);
-    this.allFeatures = this.projectsFeaturs
   }
 
   Navigate() {
@@ -186,8 +181,8 @@ export class RefineIdeaComponent {
               selectdFeature: this.projectsFeaturs
             }
 
-            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalFeatureCost, ...selectdFeature, ...{ 'no_of_features': this.noOfFeaturs }, ...{ 'estimated_time': this.durations },...{additionalFeatures:this.addtionalFeatures} }))
-            this.router.navigate([`/ai-preview/${this.projectsData.clientEnquryId }`])
+            sessionStorage.setItem('projectData', JSON.stringify({ ...this.projectsData, ...totalFeatureCost, ...selectdFeature, ...{ 'no_of_features': this.noOfFeaturs }, ...{ 'estimated_time': this.durations }, ...{ additionalFeatures: this.addtionalFeatures } }))
+            this.router.navigate([`/ai-preview/${this.projectsData.clientEnquryId}`])
             this.isLoading2 = false
           } else {
             this.message.error(res.message);
@@ -218,14 +213,14 @@ export class RefineIdeaComponent {
   }
 
   selectSubFeature(features: ALLFeatures, item: SubFeature) {
-    
+
     // console.log("features", features, item);
     const featureIndex = this.addtionalFeatures.findIndex(
       f => f.featureName === features.featureName
     );
     console.log("featue index", featureIndex);
     if (featureIndex > -1) {
-      const subFeatureIndex = this.addtionalFeatures[featureIndex].subFeatures.findIndex((sf:any) => sf.id === item.id);
+      const subFeatureIndex = this.addtionalFeatures[featureIndex].subFeatures.findIndex((sf: any) => sf.id === item.id);
       console.log("subFeatureIndex ", subFeatureIndex);
       if (subFeatureIndex > -1) {
         this.addtionalFeatures[featureIndex].subFeatures.splice(subFeatureIndex, 1);
@@ -239,7 +234,7 @@ export class RefineIdeaComponent {
           featureTime: item.estimated_time
         }];
         this.addtionalFeatures[featureIndex].subFeatures.push(newSub);
-      
+
         this.projectsFeaturs[featureIndex].featureTime = this.projectsFeaturs[featureIndex].subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0);
         setTimeout(() => {
           const el = document.querySelector(
@@ -268,8 +263,8 @@ export class RefineIdeaComponent {
         featureTime: item.estimated_time
       };
 
-   
-     this.addtionalFeatures.unshift(newFeature)
+
+      this.addtionalFeatures.unshift(newFeature)
       // this.projectsFeaturs.unshift(newFeature);
 
       setTimeout(() => {
