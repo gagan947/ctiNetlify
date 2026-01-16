@@ -28,14 +28,14 @@ section.ct_project_ai_preview_main {
 }
 
 .ct_ai_project_preview_right {
-  padding: 0px;
-  height: 100vh;
-  flex: 1;
-  word-break: break-word;
+    padding: 0px;
+    height: calc(100vh - 38px);
+    flex: 1;
+    word-break: break-word;
 }
 
 aside.ct_project_ai_chat_section {
-  height: 100vh;
+  /* height: 100vh; */
   width: 100%;
   max-width: 500px;
   background-color: #f7f7f7;
@@ -49,7 +49,7 @@ aside.ct_project_ai_chat_section {
 }
 
 aside.ct_project_ai_chat_section>div:first-child {
-  height: calc(100vh - 102px);
+  height: calc(100vh - 126px);
   overflow-y: auto;
 }
 
@@ -368,7 +368,7 @@ li.ct_ai_project_right {
   background-color: #000;
 }
 
-.ct_ai_prjct_prev_header ul {
+.ct_ai_prjct_prev_header > ul {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -393,6 +393,7 @@ li.ct_ai_project_right {
 
 .et_reload_icon:hover {
   background-color: #e6e6e6;
+  color: #000;
 }
 
 .ct_project_ai_btm_action_btns {
@@ -555,4 +556,33 @@ li.ct_ai_project_right {
   color: var(--ai-text);
   margin-bottom: 2px;
   font-size: 13px;
+}
+
+
+.ct_dropdown_device_preview123 button {
+    background-color: #333;
+    border: 0px;
+    height: 25px;
+    font-size: 12px;
+    padding-inline: 15px;
+    padding-block: 4px;
+}
+
+
+
+.ct_dropdown_device_preview123 ul {
+    flex-direction: column;
+    width: fit-content !important;
+    min-width: fit-content;
+    padding-block: 0px;
+    gap: 2px;
+    padding: 2px;
+}
+.ct_dropdown_device_preview123 a.dropdown-item {
+    border-radius: 5px;
+    font-size: 12px;
+}
+.ct_dropdown_device_preview123 ul a.dropdown-item:focus,.ct_dropdown_device_preview123 ul a.dropdown-item:hover{
+  background-color: #333;
+  color: #fff;
 }

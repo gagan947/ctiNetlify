@@ -4,9 +4,9 @@
     width: 100%;
   }
   
-  /* nu-monaco-editor{
+  nu-monaco-editor{
     height: 100% !important;
-  } */
+  }
 
   .ai-code-wrapper{
     height: calc(100vh - 88px) !important;
@@ -22,3 +22,5 @@
     font-size: 15px;
     color: #ebebeb;
 }
+
+

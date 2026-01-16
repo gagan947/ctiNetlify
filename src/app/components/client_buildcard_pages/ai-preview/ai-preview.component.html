@@ -31,7 +31,10 @@
         </button>
         }
       </div>
-      <div *ngIf="!previewCodeShow">
+    
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <div *ngIf="!previewCodeShow">
         <div class="et_reload_icon" (click)="openFullPreview()">
           <i
             class="fa-solid"
@@ -39,10 +42,8 @@
           ></i>
         </div>
       </div>
-    </div>
-    <div class="d-flex align-items-center gap-2">
       <ul
-        class="ct_preview_tabs gap-0"
+        class="ct_preview_tabs gap-0 mb-0 d-flex align-items-center"
         id="pills-tab"
         role="tablist"
         style="background-color: #333; border-radius: 5px; padding: 2px"
@@ -78,9 +79,9 @@
           </button>
         </li>
       </ul>
-      <ul>
+      <ul class="mb-0">
         <li>
-          <nz-select
+          <!-- <nz-select
             class="form-control ct_currency_input ct_currency_input_select_22"
             nzPlaceHolder="Select Currency"
             [nzDropdownMatchSelectWidth]="false"
@@ -91,7 +92,17 @@
               [nzLabel]="item.value"
             ></nz-option>
             }
-          </nz-select>
+          </nz-select> -->
+          <div class="dropdown ct_dropdown_device_preview123">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="fa-solid fa-display"></i>
+  </button>
+  <ul class="dropdown-menu mb-0" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item" href="#"> <i class="fa-solid fa-display"></i></a></li>
+    <li><a class="dropdown-item" href="#"> <i class="fa-solid fa-tablet-screen-button"></i></a></li>
+    <li><a class="dropdown-item" href="#"> <i class="fa-solid fa-mobile-screen"></i></a></li>
+  </ul>
+</div>
         </li>
 
         <li>
@@ -186,7 +197,7 @@
 
   </aside> -->
     <aside
-      class="ct_project_ai_chat_section"
+      class="ct_project_ai_chat_section pe-0"
       [ngClass]="!fullScreen ? 'd-block' : 'd-none'"
     >
       <div #chatScroll>
