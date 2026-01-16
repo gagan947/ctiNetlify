@@ -22,11 +22,11 @@ interface DesignSnapshot {
 }
 interface ReactFile {
   id: string;
-  name: string;        // ProductListing.jsx
+  name: string;          // ProductListing.jsx
   language: 'javascript' | 'css';
   fullCode: string;
-  typedCode: string;
 }
+
 
 
 @Component({
@@ -39,6 +39,7 @@ interface ReactFile {
 export class AiPreviewComponent {
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
   @ViewChild('chatScroll') chatScroll!: ElementRef<HTMLDivElement>;
+  @ViewChild('codeEditor') codeEditor!: ReactCodeEditorComponent;
   previewWidth = 1366; // desktop default
   @ViewChild('preview', { static: false }) iframe!: ElementRef<HTMLIFrameElement>;
   blocks: any[] = [];
@@ -600,9 +601,9 @@ languages = [
 
 
   handleGenerateResponse(res: any) {
-    const { Login_now } = res.data.react_files;
+    const { Login_now, Forgot_password } = res.data.react_files;
 
-    const react_files = { Login_now };
+    const react_files = { Login_now,Forgot_password };
 
     this.files = [];
 
@@ -612,19 +613,8 @@ languages = [
         id: `${page}-jsx`,
         name: `${page}.jsx`,
         language: 'javascript',
-        fullCode: data.jsx,
-        typedCode: ''
+        fullCode: data.jsx
       });
-
-      this.files.push({
-        id: `${page}-css`,
-        name: `${page}.css`,
-        language: 'css',
-        fullCode: data.css,
-        typedCode: ''
-      });
-
-
     });
 
     // preview code starts from here 
@@ -632,7 +622,7 @@ languages = [
 
     const snapshot: DesignSnapshot = {
       id: designId,
-      label: `Design ${this.designOrder.length + 1}`,
+      label: `Template ${this.designOrder.length + 1}`,
       pages: res.data.pages,
       loginRedirect: res.data.login_redirect,
       createdAt: new Date()
@@ -829,51 +819,12 @@ languages = [
   }
 
   startTyping() {
-    this.activeFileIndex = 0;
-    this.typeNextFile();
-  }
-
-  get activeFileStatus(): 'typing' | 'done' {
-    if (!this.activeFile) return 'typing';
-    return this.activeFile.typedCode.length < this.activeFile.fullCode.length
-      ? 'typing'
-      : 'done';
-  }
-  typeNextFile() {
-    // ✅ ALL FILES DONE → SHOW PREVIEW UI
-    if (this.activeFileIndex >= this.files.length) {
-      this.aiService.emitCodeDone();
+    this.codeEditor.startTyping();
    
-      return;
-    }
-
-    this.activeFile = this.files[this.activeFileIndex];
-    this.activeFile.typedCode = '';
-
-    let i = 0;
-    let buffer = '';
-    const code = this.activeFile.fullCode;
-
-    const interval = setInterval(() => {
-      buffer += code[i];
-      i++;
-
-      // 🔹 batch updates
-      if (buffer.length % 5 === 0) {
-        this.activeFile.typedCode = buffer;
-      }
-
-      // 🔹 file completed
-      if (i >= code.length) {
-        clearInterval(interval);
-        this.activeFile.typedCode = buffer;
-        this.activeFileIndex++;
-
-        // 🔹 move to next file after delay
-        setTimeout(() => this.typeNextFile(), 100);
-      }
-    }, 10);
   }
+
+
+ 
 
 
 

@@ -380,7 +380,7 @@
               <h4 class="ct_fs_24 ct_fw_600 mb-1">
                 I'm Generating the Preview.
               </h4>
-              <p class="mb-0 ct_text_op_7">Hold on for a moment.</p>
+              <p class="mb-0 ct_text_op_7">Hold on for a moment...</p>
             </div>
           </div>
         </div>
@@ -391,14 +391,12 @@
           role="tabpanel"
           aria-labelledby="pills-profile-tab"
         >
-          <app-react-code-editor
-            *ngIf="activeFile"
-            [code]="activeFile.typedCode"
-            [language]="activeFile.language"
-            [fileName]="activeFile.name"
-            [status]="activeFileStatus"
-          >
-          </app-react-code-editor>
+        <app-react-code-editor  #codeEditor 
+        *ngIf="files.length >0"
+        [files]="files"
+        >
+      </app-react-code-editor>
+      
         </div>
       </div>
     </div>
