@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
 import { FormsModule } from '@angular/forms';
 import { NuMonacoEditorComponent, NuMonacoEditorEvent, NuMonacoEditorModel } from '@ng-util/monaco-editor';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { AiSocketService } from '../../../../services/ai-socket.service';
 
 
 interface ReactFile {
@@ -35,17 +36,26 @@ export class ReactCodeEditorComponent {
   currentFileIndex = 0;
   charIndex = 0;
   typingTimer: any;
-
+  filesReady = false;
   options = {
     theme: 'vs-dark',
     readOnly: true,
     automaticLayout: true,
     minimap: { enabled: false },
     fontSize: 13,
-    cursorBlinking: 'blink' as const,
     wordWrap: 'on' as const,
-    scrollBeyondLastLine: false
+  
+    // 🔥 anti-blink
+    cursorBlinking: 'solid' as const,
+    cursorSmoothCaretAnimation: 'off' as const,
+    renderWhitespace: 'none' as const,
+    smoothScrolling: true
   };
+
+  constructor(  private aiService: AiSocketService,){
+
+  }
+  
 
   /* ---------- Monaco Init ---------- */
   onEditorEvent(e: NuMonacoEditorEvent) {
@@ -64,7 +74,8 @@ export class ReactCodeEditorComponent {
     if (!this.editor || !this.files.length) return;
 
     this.currentFileIndex = 0;
-    this.activeFile = this.files[0].name
+    this.activeFile = this.files[0].name;
+
     this.typeNextFile();
   }
 
@@ -75,10 +86,13 @@ export class ReactCodeEditorComponent {
   
     if (this.currentFileIndex >= this.files.length) {
       this.typingDone.emit();
+      this.aiService.emitCodeDone()
+      this.filesReady = true; 
       return;
     }
   
     const file = this.files[this.currentFileIndex];
+    this.activeFile  = file.name;
     this.generatedFiles.push(file)
    
     const model = this.editor.getModel();
@@ -130,6 +144,20 @@ export class ReactCodeEditorComponent {
     }, 12);
   }
   
+  fileChange(fileName:any){
+    if (!this.editor) return;
+
+    const model = this.editor.getModel();
+    if (!model) return;
   
+    const monaco = (window as any).monaco;
+    if (monaco) {
+      monaco.editor.setModelLanguage(model, fileName.language);
+    }
+  
+    model.setValue(fileName.fullCode);
+  
+    this.editor.revealLine(1);
+  }
   
 }

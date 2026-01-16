@@ -2,12 +2,14 @@
   <div class="code-header" style="background-color: #414040 !important;">
     <div class="dropdown ct_dropdown_device_preview123">
       <button class="btn btn-secondary" type="button" id="dropdownMenuButton1"
-        data-bs-toggle="dropdown" aria-expanded="false">
-        {{activeFile.name}} <i class="fa-solid fa-angle-down"></i>
+        data-bs-toggle="dropdown" aria-expanded="false"[disabled]="!filesReady">{{activeFile}} 
+       <i class="fa-solid fa-angle-down"></i>
       </button>
-      <ul class="dropdown-menu mb-0" aria-labelledby="dropdownMenuButton1">
+      <ul class="dropdown-menu mb-0" aria-labelledby="dropdownMenuButton1" >
         @for (item of generatedFiles; track $index) {
-          <li><a class="dropdown-item">/{{item.name}} </a></li>
+          <li (change)="fileChange(item)">
+            <a class="dropdown-item">/{{item.name}} </a>
+          </li>
         }
         
       </ul>

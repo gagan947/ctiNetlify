@@ -290,7 +290,7 @@
         >
         <app-react-code-editor  #codeEditor 
         *ngIf="files.length >0"
-        [files]="files"
+        [files]="files"   (typingDone)="onCodeFinished()"
         >
       </app-react-code-editor>
       

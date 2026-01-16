@@ -810,7 +810,10 @@ export class AiPreviewComponent {
   }
 
 
- 
+  onCodeFinished() {
+
+  }
+  
 
 
 
