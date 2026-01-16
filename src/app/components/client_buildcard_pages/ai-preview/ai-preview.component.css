@@ -44,6 +44,7 @@ aside.ct_project_ai_chat_section {
   position: sticky;
   top: 0px;
   display: grid;
+  flex: 0 0 auto;
 
 }
 
@@ -58,7 +59,7 @@ aside.ct_project_ai_chat_section ul {
 }
 
 .ct_ai_project_lefr {
-  padding-block: 16px;
+  padding-block: 6px;
 }
 
 .ct_ai_project_lefr_btns {
@@ -129,8 +130,8 @@ li.ct_ai_project_right {
 }
 
 .ct_chat_ai_brand_logo img {
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 22px;
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 100px;
   border: 1px solid #e6e6e6;
@@ -363,7 +364,7 @@ li.ct_ai_project_right {
   align-items: center;
   gap: 10px;
   justify-content: space-between;
-  padding: 10px 30px;
+  padding: 4px 30px;
   background-color: #000;
 }
 
@@ -475,19 +476,20 @@ li.ct_ai_project_right {
 
 
 .ct_design_tab_btn {
-  background-color: #313131;
-  padding: 6px 15px;
-  padding-right: 6px;
-  border-radius: 5px;
-  font-weight: 500;
-  outline: none;
-  border: 0px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  position: relative;
+    background-color: #313131;
+    padding: 4px 20px;
+    padding-right: 6px;
+    border-radius: 5px;
+    font-weight: 400;
+    outline: none;
+    border: 0px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: relative;
+    font-size: 12px;
 }
 .ct_design_tab_btn i {
   width: 18px;
@@ -523,15 +525,16 @@ li.ct_ai_project_right {
   cursor: no-drop;
 }
 
-
-.ct_preview_tabs button{
-  background-color: #333;
+.ct_preview_tabs button {
+    background-color: #333;
     border-radius: 5px;
     border: 1px solid #333;
-    margin-right: 5px;
     padding-inline: 5px;
     color: #fff;
-    height: 30px;
+    height: 26px;
+    font-size: 12px;
+    padding: 4px 20px;
+    line-height: 0px;
 }
 .ct_preview_tabs button.active{
   background-color: #fff;

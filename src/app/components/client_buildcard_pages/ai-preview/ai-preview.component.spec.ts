@@ -8,7 +8,7 @@ describe('AiPreviewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AiPreviewComponent]
+      imports: [AiPreviewComponent,]
     })
     .compileComponents();
     
