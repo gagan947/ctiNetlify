@@ -7,8 +7,9 @@
       </button>
       <ul class="dropdown-menu mb-0" aria-labelledby="dropdownMenuButton1" >
         @for (item of generatedFiles; track $index) {
-          <li (change)="fileChange(item)">
-            <a class="dropdown-item">/{{item.name}} </a>
+          <li >
+            <a class="dropdown-item"  href="javascript:void(0)"
+            (click)="fileChange(item)">/{{item.name}} </a>
           </li>
         }
         

@@ -24,9 +24,9 @@ interface ReactFile {
 })
 
 export class ReactCodeEditorComponent {
- activeFile:any;
+  activeFile: any;
   @Input() files: ReactFile[] = [];
-  generatedFiles:any = []
+  generatedFiles: any = []
   editor: any;
   @Output() typingDone = new EventEmitter<void>();
   readonly model: NuMonacoEditorModel = {
@@ -44,7 +44,7 @@ export class ReactCodeEditorComponent {
     minimap: { enabled: false },
     fontSize: 13,
     wordWrap: 'on' as const,
-  
+
     // 🔥 anti-blink
     cursorBlinking: 'solid' as const,
     cursorSmoothCaretAnimation: 'off' as const,
@@ -52,10 +52,10 @@ export class ReactCodeEditorComponent {
     smoothScrolling: true
   };
 
-  constructor(  private aiService: AiSocketService,){
+  constructor(private aiService: AiSocketService,) {
 
   }
-  
+
 
   /* ---------- Monaco Init ---------- */
   onEditorEvent(e: NuMonacoEditorEvent) {
@@ -83,33 +83,33 @@ export class ReactCodeEditorComponent {
 
   private typeNextFile() {
     if (!this.editor) return;
-  
+
     if (this.currentFileIndex >= this.files.length) {
       this.typingDone.emit();
       this.aiService.emitCodeDone()
-      this.filesReady = true; 
+      this.filesReady = true;
       return;
     }
-  
+
     const file = this.files[this.currentFileIndex];
-    this.activeFile  = file.name;
+    this.activeFile = file.name;
     this.generatedFiles.push(file)
-   
+
     const model = this.editor.getModel();
     if (!model) return;
-  
+
     // ✅ Clear once (safe)
     model.setValue('');
-  
+
     // ✅ Set language properly
     const monaco = (window as any).monaco;
     if (monaco) {
       monaco.editor.setModelLanguage(model, file.language);
     }
-  
+
     const code = file.fullCode;
     let i = 0;
-  
+
     this.typingTimer = setInterval(() => {
       if (i >= code.length) {
         clearInterval(this.typingTimer);
@@ -117,10 +117,10 @@ export class ReactCodeEditorComponent {
         setTimeout(() => this.typeNextFile(), 300);
         return;
       }
-  
+
       // 🔥 INSERT AT END (NOT FULL REPLACE)
       const endPos = model.getPositionAt(model.getValueLength());
-  
+
       model.applyEdits([
         {
           range: new monaco.Range(
@@ -133,31 +133,33 @@ export class ReactCodeEditorComponent {
           forceMoveMarkers: true
         }
       ]);
-  
+
       i++;
-  
+
       // ✅ Scroll ONLY when needed
       if (i % 20 === 0) {
         this.editor.revealLine(model.getLineCount());
       }
-  
+
     }, 12);
   }
-  
-  fileChange(fileName:any){
+
+  fileChange(fileName: any) {
+    
     if (!this.editor) return;
+    this.activeFile = fileName.name
 
     const model = this.editor.getModel();
     if (!model) return;
-  
+
     const monaco = (window as any).monaco;
     if (monaco) {
       monaco.editor.setModelLanguage(model, fileName.language);
     }
-  
+
     model.setValue(fileName.fullCode);
-  
+
     this.editor.revealLine(1);
   }
-  
+
 }

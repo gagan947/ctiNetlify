@@ -120,7 +120,7 @@ export class AiPreviewComponent {
 
           const last = blocks[blocks.length - 1];
           if (last?.id === 'status-code-running' && last?.done) {
-            this.isTyping = false;
+           
             this.showCodeButton = true;
             this.previewCodeShow = true;
             const el = document.getElementById('pills-profile-tab');

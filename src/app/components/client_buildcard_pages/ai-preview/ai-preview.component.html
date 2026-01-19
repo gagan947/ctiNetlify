@@ -239,7 +239,7 @@
         </button>
 
         <button class="ct_schedule_call_btn w-100 justify-content-center mt-auto" (click)="openModal()"
-          [ngClass]="isTyping ? 'ct_no_drop_btn' : ''">
+          [ngClass]="isTyping ? 'ct_no_drop_btn' : ''" [disabled]="isTyping">
           Save
         </button>
       </div>
@@ -290,7 +290,7 @@
         >
         <app-react-code-editor  #codeEditor 
         *ngIf="files.length >0"
-        [files]="files"   (typingDone)="onCodeFinished()"
+        [files]="files"  (typingDone)="onCodeFinished()"
         >
       </app-react-code-editor>
       
