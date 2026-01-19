@@ -474,12 +474,15 @@ li.ct_ai_project_right {
   font-size: 10px;
   color: #64748b;
 }
+.design-tab {
+  transition: all 0.25s ease;
+}
 
 
 .ct_design_tab_btn {
     background-color: #313131;
     padding: 4px 20px;
-    padding-right: 6px;
+    /* padding-right: 6px; */
     border-radius: 5px;
     font-weight: 400;
     outline: none;

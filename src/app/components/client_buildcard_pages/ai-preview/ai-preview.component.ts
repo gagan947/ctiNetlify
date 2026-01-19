@@ -5,7 +5,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { io } from 'socket.io-client';
 import { AiSocketService } from '../../../services/ai-socket.service';
 import { filter, Subject, take } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
 import { PlanDeliveryComponent } from '../plan-delivery/plan-delivery.component';
 import { SubcriptionPageComponent } from "../subcription-page/subcription-page.component";
@@ -31,7 +31,7 @@ interface ReactFile {
 @Component({
   selector: 'app-ai-preview',
   standalone: true,
-  imports: [CommonModule, ScrollingModule, SubcriptionPageComponent, ReactCodeEditorComponent, NzSelectModule, FormsModule],
+  imports: [CommonModule, ScrollingModule, SubcriptionPageComponent, ReactCodeEditorComponent, NzSelectModule, FormsModule, RouterLink],
   templateUrl: './ai-preview.component.html',
   styleUrl: './ai-preview.component.css'
 })
@@ -135,7 +135,7 @@ export class AiPreviewComponent {
             });
 
             el.dispatchEvent(event);
-            this.startTyping();
+            
 
             // snapshot current build
             this.builds.push({
@@ -538,10 +538,10 @@ export class AiPreviewComponent {
 
   showLoader(text = 'Thinking…') {
     // remove old loader if any
-    this.blocks = this.blocks.filter(b => b.id !== 'loader');
+    this.blocks = this.blocks.filter(b => b.id !== 'status');
 
     this.blocks.push({
-      id: 'loader',
+      id: 'status',
       text,
       done: false,
       timestamp: new Date()
@@ -549,7 +549,7 @@ export class AiPreviewComponent {
   }
 
   hideLoader() {
-    this.blocks = this.blocks.filter(b => b.id !== 'loader');
+    this.blocks = this.blocks.filter(b => b.id !== 'status');
   }
 
   saveDesign() {
@@ -578,9 +578,9 @@ export class AiPreviewComponent {
   }
 
   handleGenerateResponse(res: any) {
-    const { Login_now, Forgot_password } = res.data.react_files;
+    const {  Forgot_password } = res.data.react_files;
     const user_template_id = res.data.user_template_id;
-    const react_files = { Login_now, Forgot_password };
+    const react_files = {  Forgot_password };
 
     this.files = [];
 
@@ -593,6 +593,13 @@ export class AiPreviewComponent {
         fullCode: data.jsx
       });
     });
+    if(this.designOrder.length ==0){
+      setTimeout(()=>{
+  
+        this.startTyping()
+      },500)
+    }
+   
 
     // preview code starts from here 
     const designId = `design-${this.designOrder.length + 1}`;
@@ -796,8 +803,6 @@ export class AiPreviewComponent {
   }
 
   startTyping() {
-
-    console.log(this.files);
     this.codeEditor.startTyping();
   }
 
@@ -835,11 +840,46 @@ export class AiPreviewComponent {
 
   removeDesign(item: any) {
     this.apiService
-      .postAPI('api/user/deleteUserTemplate', { template_id: item.user_template_id, clientEnquryId: this.projectsData.clientEnquryId })
-      .subscribe((res: any) => {
+      .postAPI('api/user/deleteUserTemplate', {
+        template_id: item.user_template_id,
+        clientEnquryId: this.projectsData.clientEnquryId
+      })
+      .subscribe(() => {
+  
+        // remove from map
         this.designMap.delete(item.designId);
-        this.designOrder = this.designOrder.filter(d => d.designId !== item.designId);
-        this.activeDesignId = this.designOrder[0].designId;
+  
+        // remove from order
+        this.designOrder = this.designOrder.filter(
+          d => d.designId !== item.designId
+        );
+  
+        // 🔥 reorder labels
+        this.reorderTemplates();
+  
+        // handle active design safely
+        if (!this.designMap.has(this.activeDesignId)) {
+          this.activeDesignId = this.designOrder[0]?.designId || null;
+  
+          if (this.activeDesignId) {
+            this.switchDesign(this.activeDesignId);
+          }
+        }
       });
   }
+  
+
+
+private reorderTemplates() {
+  this.designOrder.forEach((item, index) => {
+    const snapshot = this.designMap.get(item.designId);
+    if (snapshot) {
+      snapshot.label = `Template ${index + 1}`;
+    }
+  });
 }
+
+
+
+}
+
