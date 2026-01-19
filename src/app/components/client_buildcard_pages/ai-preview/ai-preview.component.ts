@@ -70,6 +70,7 @@ export class AiPreviewComponent {
   fullScreen: boolean = false;;
   showCodeButton = false;
   userHasScrolled = false;
+  designCount = 0;
   selectedDeviceType: string = '<i class="fa-solid fa-display"></i>';
   languages = [
     {
@@ -135,7 +136,7 @@ export class AiPreviewComponent {
             });
 
             el.dispatchEvent(event);
-            
+
 
             // snapshot current build
             this.builds.push({
@@ -578,9 +579,9 @@ export class AiPreviewComponent {
   }
 
   handleGenerateResponse(res: any) {
-    const {  Forgot_password } = res.data.react_files;
+    const { Forgot_password } = res.data.react_files;
     const user_template_id = res.data.user_template_id;
-    const react_files = {  Forgot_password };
+    const react_files = { Forgot_password };
 
     this.files = [];
 
@@ -593,20 +594,21 @@ export class AiPreviewComponent {
         fullCode: data.jsx
       });
     });
-    if(this.designOrder.length ==0){
-      setTimeout(()=>{
-  
+    if (this.designOrder.length == 0) {
+      setTimeout(() => {
+
         this.startTyping()
-      },500)
+      }, 500)
     }
-   
+
 
     // preview code starts from here 
-    const designId = `design-${this.designOrder.length + 1}`;
-
+    this.designCount = this.designCount + 1;
+    const designId = `design-${this.designCount}`;
+    debugger
     const snapshot: DesignSnapshot = {
       id: designId,
-      label: `Template ${this.designOrder.length + 1}`,
+      label: `Template ${this.designCount}`,
       pages: res.data.pages,
       loginRedirect: res.data.login_redirect,
       createdAt: new Date()
@@ -845,39 +847,39 @@ export class AiPreviewComponent {
         clientEnquryId: this.projectsData.clientEnquryId
       })
       .subscribe(() => {
-  
+
         // remove from map
         this.designMap.delete(item.designId);
-  
+        this.designCount = this.designCount - 1;
         // remove from order
         this.designOrder = this.designOrder.filter(
           d => d.designId !== item.designId
         );
-  
+
         // 🔥 reorder labels
         this.reorderTemplates();
-  
+
         // handle active design safely
         if (!this.designMap.has(this.activeDesignId)) {
           this.activeDesignId = this.designOrder[0]?.designId || null;
-  
+
           if (this.activeDesignId) {
             this.switchDesign(this.activeDesignId);
           }
         }
       });
   }
-  
 
 
-private reorderTemplates() {
-  this.designOrder.forEach((item, index) => {
-    const snapshot = this.designMap.get(item.designId);
-    if (snapshot) {
-      snapshot.label = `Template ${index + 1}`;
-    }
-  });
-}
+
+  private reorderTemplates() {
+    this.designOrder.forEach((item, index) => {
+      const snapshot = this.designMap.get(item.designId);
+      if (snapshot) {
+        snapshot.label = `Template ${index + 1}`;
+      }
+    });
+  }
 
 
 
