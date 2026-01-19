@@ -17,10 +17,10 @@
         </svg>
       </div>
       <div class="d-flex align-items-center gap-2">
-        @for (id of designOrder; track id) {
-        <button class="ct_design_tab_btn design-tab" [class.active]="id === activeDesignId" (click)="switchDesign(id)">
-          {{ designMap.get(id)?.label }}
-          <i class="fa-solid fa-xmark" *ngIf="id !== '1'"></i>
+        @for (item of designOrder; track item.designId) {
+        <button class="ct_design_tab_btn design-tab" [class.active]="item.designId === activeDesignId">
+          <span (click)="switchDesign(item.designId)">{{ designMap.get(item.designId)?.label }}</span>
+          <i *ngIf="designOrder.length > 1" class="fa-solid fa-xmark" (click)="removeDesign(item)"></i>
         </button>
         }
       </div>
@@ -282,18 +282,10 @@
           </div>
         </div>
 
-        <div
-          class="tab-pane fade"
-          id="pills-profile"
-          role="tabpanel"
-          aria-labelledby="pills-profile-tab"
-        >
-        <app-react-code-editor  #codeEditor 
-        *ngIf="files.length >0"
-        [files]="files"  (typingDone)="onCodeFinished()"
-        >
-      </app-react-code-editor>
-      
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+          <app-react-code-editor #codeEditor *ngIf="files.length >0" [files]="files" (typingDone)="onCodeFinished()">
+          </app-react-code-editor>
+
         </div>
       </div>
     </div>

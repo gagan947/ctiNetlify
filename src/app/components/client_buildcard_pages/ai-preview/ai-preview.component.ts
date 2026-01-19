@@ -12,6 +12,7 @@ import { SubcriptionPageComponent } from "../subcription-page/subcription-page.c
 import { FormBuilder, FormsModule, Validators } from '@angular/forms';
 import { ReactCodeEditorComponent } from './react-code-editor/react-code-editor.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 interface DesignSnapshot {
   id: string;                 // design-1, design-2
@@ -59,7 +60,7 @@ export class AiPreviewComponent {
   isTyping = true;
   private frontendJobId = 0;
   designMap = new Map<string, DesignSnapshot>();
-  designOrder: string[] = [];   // keeps tab order
+  designOrder: any[] = [];   // keeps tab order
   activeDesignId!: string;
   hasMarkedFirstBlock = false;
   showModal = false;
@@ -96,7 +97,8 @@ export class AiPreviewComponent {
     private renderer: Renderer2,
     private sanitizer: DomSanitizer,
     private aiService: AiSocketService,
-    private router: Router, private ngZone: NgZone, private fb: FormBuilder
+    private router: Router, private ngZone: NgZone, private fb: FormBuilder,
+    private toster: NzMessageService
   ) { }
 
   ngOnInit() {
@@ -120,7 +122,7 @@ export class AiPreviewComponent {
 
           const last = blocks[blocks.length - 1];
           if (last?.id === 'status-code-running' && last?.done) {
-           
+
             this.showCodeButton = true;
             this.previewCodeShow = true;
             const el = document.getElementById('pills-profile-tab');
@@ -143,6 +145,7 @@ export class AiPreviewComponent {
             });
           } else if (last?.id === 'paragraph-preview-ready' && last?.done) {
             this.previewShow = true;
+            this.isTyping = false;
             const el = document.getElementById('pills-home-tab');
             if (!el) return;
 
@@ -166,9 +169,6 @@ export class AiPreviewComponent {
   onUserScroll() {
     this.userHasScrolled = true;
   }
-
-
-
 
   startPreview(socket_id: string | null) {
 
@@ -240,7 +240,6 @@ export class AiPreviewComponent {
           </div>
           <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-        
         </body>
       </html>
     `);
@@ -381,6 +380,12 @@ export class AiPreviewComponent {
 
   async regenerate() {
     if (this.isTyping) return;
+
+    if (this.designOrder.length >= 5) {
+      this.toster.error('You have reached the maximum limit of 5 design variations. Please select from your existing versions.');
+      return;
+    };
+
     this.previewShow = false;
 
     this.clearFirstBlockMinHeight()
@@ -461,11 +466,7 @@ export class AiPreviewComponent {
     setTimeout(() => {
       this.previewShow = true;
     }, 5000)
-
   }
-
-
-
 
   delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -485,7 +486,6 @@ export class AiPreviewComponent {
       setTimeout(() => {
         this.scrollToBottom();
       }, 0);
-
     }
 
     let buffer = '';
@@ -493,13 +493,11 @@ export class AiPreviewComponent {
     for (const char of text) {
       // 🛑 CANCEL if new regenerate started
       if (jobId !== this.frontendJobId) return;
-
       buffer += char;
       block.text = buffer;
 
       await this.delay(40);
     }
-
     block.done = true;
   }
 
@@ -530,7 +528,6 @@ export class AiPreviewComponent {
 
     for (const char of text) {
       if (jobId !== this.frontendJobId) return;
-
       buffer += char;
       block.text = buffer;
       await this.delay(35);
@@ -538,8 +535,6 @@ export class AiPreviewComponent {
 
     block.done = true;
   }
-
-
 
   showLoader(text = 'Thinking…') {
     // remove old loader if any
@@ -556,7 +551,6 @@ export class AiPreviewComponent {
   hideLoader() {
     this.blocks = this.blocks.filter(b => b.id !== 'loader');
   }
-
 
   saveDesign() {
     this.router.navigate([`plan-delivery/${this.projectsData.clientEnquryId}`])
@@ -583,13 +577,10 @@ export class AiPreviewComponent {
     });
   }
 
-
-
-
   handleGenerateResponse(res: any) {
     const { Login_now, Forgot_password } = res.data.react_files;
-
-    const react_files = { Login_now,Forgot_password };
+    const user_template_id = res.data.user_template_id;
+    const react_files = { Login_now, Forgot_password };
 
     this.files = [];
 
@@ -618,9 +609,10 @@ export class AiPreviewComponent {
 
     // store
     this.designMap.set(designId, snapshot);
-
-
-    this.designOrder.push(designId);
+    this.designOrder.push({
+      designId: designId,
+      user_template_id: user_template_id
+    });
     // activate
     this.activeDesignId = designId;
 
@@ -678,7 +670,6 @@ export class AiPreviewComponent {
           <div class="preview-wrapper">
             ${page.html}
           </div>
-  
           <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
         </body>
@@ -805,23 +796,19 @@ export class AiPreviewComponent {
   }
 
   startTyping() {
+
+    console.log(this.files);
     this.codeEditor.startTyping();
-   
   }
 
 
   onCodeFinished() {
 
   }
-  
-
-
 
   openFullPreview() {
-
     if (!this.previewShow) return
     this.fullScreen = !this.fullScreen;
-
   }
 
 
@@ -844,5 +831,15 @@ export class AiPreviewComponent {
         this.previewWidth = 400
         break;
     }
+  }
+
+  removeDesign(item: any) {
+    this.apiService
+      .postAPI('api/user/deleteUserTemplate', { template_id: item.user_template_id, clientEnquryId: this.projectsData.clientEnquryId })
+      .subscribe((res: any) => {
+        this.designMap.delete(item.designId);
+        this.designOrder = this.designOrder.filter(d => d.designId !== item.designId);
+        this.activeDesignId = this.designOrder[0].designId;
+      });
   }
 }

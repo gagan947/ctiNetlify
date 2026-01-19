@@ -64,7 +64,7 @@ export class ReactCodeEditorComponent {
       this.editor = e.editor;
 
       const model = this.editor.getModel();
-      model?.setValue();
+      // model?.setValue('');
     }
   }
 
@@ -114,7 +114,7 @@ export class ReactCodeEditorComponent {
       if (i >= code.length) {
         clearInterval(this.typingTimer);
         this.currentFileIndex++;
-        setTimeout(() => this.typeNextFile(), 300);
+        setTimeout(() => this.typeNextFile(), 100);
         return;
       }
 
@@ -136,16 +136,15 @@ export class ReactCodeEditorComponent {
 
       i++;
 
-      // ✅ Scroll ONLY when needed
       if (i % 20 === 0) {
         this.editor.revealLine(model.getLineCount());
       }
 
-    }, 12);
+    }, 5);
   }
 
   fileChange(fileName: any) {
-    
+
     if (!this.editor) return;
     this.activeFile = fileName.name
 
