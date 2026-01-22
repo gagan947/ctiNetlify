@@ -1,15 +1,13 @@
-import { Component, ElementRef, Input, NgZone, Renderer2, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, Renderer2, ViewChild } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { io } from 'socket.io-client';
 import { AiSocketService } from '../../../services/ai-socket.service';
 import { filter, Subject, take } from 'rxjs';
 import { Router, RouterLink } from '@angular/router';
-import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
-import { PlanDeliveryComponent } from '../plan-delivery/plan-delivery.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SubcriptionPageComponent } from "../subcription-page/subcription-page.component";
-import { FormBuilder, FormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule } from '@angular/forms';
 import { ReactCodeEditorComponent } from './react-code-editor/react-code-editor.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -167,9 +165,6 @@ export class AiPreviewComponent {
   ngAfterViewInit() {
     this.scrollToBottom(true);
   }
-  onUserScroll() {
-    this.userHasScrolled = true;
-  }
 
   startPreview(socket_id: string | null) {
 
@@ -203,66 +198,6 @@ export class AiPreviewComponent {
         // const firstKey = Object.keys(this.pages)[0];
         // if (firstKey) this.loadPage(firstKey);
       });
-  }
-
-
-
-  /** ================= LOAD PAGE ================= */
-
-  loadPage(key: string) {
-
-    const page = this.pages[key];
-   
-    if (!page) return;
-
-    this.activeJsKeys = page.js_keys || [];
-    this.activeMenuKey = key;
-
-    const iframe = this.previewFrame.nativeElement;
-    const doc = iframe.contentDocument || iframe.contentWindow?.document;
-    if (!doc) return;
-
-    doc.open();
-    doc.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <!-- ✅ BOOTSTRAP CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-          <style>${page.css}</style>
-        </head>
-        <body>
-          <div class="preview-wrapper">
-            ${page.html}
-          </div>
-          <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-        </body>
-      </html>
-    `);
-    doc.close();
-    // 🔥 WAIT for DOM + scripts
-    this.waitForIframeReady(iframe);
-
-    // wait for iframe DOM
-    setTimeout(() => this.updateActiveMenuUI(), 50);
-  }
-
-  /** ================= CSS INJECTION ================= */
-
-  injectCSS(css: string) {
-    if (this.styleTag) {
-      document.head.removeChild(this.styleTag);
-    }
-
-    this.styleTag = this.renderer.createElement('style');
-    this.styleTag.innerHTML = css;
-    document.head.appendChild(this.styleTag);
   }
 
   /** ================= CLICK HANDLER (CORE) ================= */
@@ -319,7 +254,7 @@ export class AiPreviewComponent {
   // }
 
   onPreviewMessage(data: any, event: any) {
-   
+
     /* LOGIN ACTION */
     if (data.action === 'login' && this.loginRedirect) {
       this.loadPageFromDesign(this.activeDesignId, this.loginRedirect);
@@ -559,10 +494,6 @@ export class AiPreviewComponent {
     this.blocks = this.blocks.filter(b => b.id !== 'status');
   }
 
-  saveDesign() {
-    this.router.navigate([`plan-delivery/${this.projectsData.clientEnquryId}`])
-  }
-
   ngOnDestroy() {
     this.blocks = [];
     this.aiService.stop();
@@ -600,7 +531,7 @@ export class AiPreviewComponent {
         fullCode: data.jsx
       });
     });
-   
+
     // preview code starts from here 
     this.designCount = this.designCount + 1;
     const designId = `design-${this.designCount}`;
@@ -816,9 +747,6 @@ export class AiPreviewComponent {
     this.showModal = false;
   }
 
-  startTyping() {
-    // this.codeEditor.startTyping();
-  }
 
 
   onCodeFinished() {
