@@ -62,7 +62,7 @@ export class ReactCodeEditorComponent {
     // grab editor ONCE
     if (!this.editor && e.editor) {
       this.editor = e.editor;
-
+      this.startTyping()
       const model = this.editor.getModel();
       // model?.setValue('');
     }
@@ -71,6 +71,7 @@ export class ReactCodeEditorComponent {
   /* ---------- PUBLIC API ---------- */
   /** Parent will call this explicitly */
   startTyping() {
+    
     if (!this.editor || !this.files.length) return;
 
     this.currentFileIndex = 0;
