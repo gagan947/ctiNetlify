@@ -32,6 +32,7 @@ section.ct_project_ai_preview_main {
     height: calc(100vh - 38px);
     flex: 1;
     word-break: break-word;
+    padding-inline: 12px;
 }
 
 aside.ct_project_ai_chat_section {

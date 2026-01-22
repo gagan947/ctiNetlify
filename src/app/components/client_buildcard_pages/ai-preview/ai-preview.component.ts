@@ -122,7 +122,7 @@ export class AiPreviewComponent {
 
 
           const last = blocks[blocks.length - 1];
-          if (last?.id === 'status-code-running' && last?.done) {
+          if (last?.id === 'status-code-running' && last?.done && this.files.length > 0) {
 
             this.showCodeButton = true;
             this.previewCodeShow = true;
@@ -212,6 +212,7 @@ export class AiPreviewComponent {
   loadPage(key: string) {
 
     const page = this.pages[key];
+   
     if (!page) return;
 
     this.activeJsKeys = page.js_keys || [];
@@ -317,17 +318,18 @@ export class AiPreviewComponent {
   //   }
   // }
 
-  onPreviewMessage(data: any) {
-
+  onPreviewMessage(data: any, event: any) {
+   
     /* LOGIN ACTION */
     if (data.action === 'login' && this.loginRedirect) {
-      this.loadPage(this.loginRedirect);
+      this.loadPageFromDesign(this.activeDesignId, this.loginRedirect);
       return;
     }
 
     /* FOLLOW TOGGLE */
+
     if (data.followToggle && this.activeJsKeys.includes('FOLLOW_TOGGLE')) {
-      // iframe DOM handles UI; backend sync optional
+      this.handleFollowToggle();
       return;
     }
 
@@ -350,17 +352,21 @@ export class AiPreviewComponent {
 
   previewListener = (event: any) => {
     if (event.data?.type === 'preview-click') {
-      this.onPreviewMessage(event.data);
+      this.onPreviewMessage(event.data, event);
     }
   };
 
 
   /** ================= FOLLOW / FOLLOWING ================= */
 
-  handleFollowToggle(btn: HTMLElement) {
-    btn.classList.toggle('is-following');
-    btn.textContent = btn.classList.contains('is-following') ? 'Following' : 'Follow';
+  handleFollowToggle() {
+    const iframe = this.previewFrame.nativeElement as HTMLIFrameElement;
+    iframe.contentWindow?.postMessage(
+      { type: 'toggle-follow' },
+      '*'
+    );
   }
+
 
   updateActiveMenuUI() {
     const iframe = this.previewFrame.nativeElement;
@@ -579,8 +585,8 @@ export class AiPreviewComponent {
   }
 
   handleGenerateResponse(res: any) {
-    const { Forgot_password } = res.data.react_files;
     const user_template_id = res.data.user_template_id;
+    const { Forgot_password } = res.data.react_files;
     const react_files = { Forgot_password };
 
     this.files = [];
@@ -594,18 +600,10 @@ export class AiPreviewComponent {
         fullCode: data.jsx
       });
     });
-    if (this.designOrder.length == 0) {
-      setTimeout(() => {
-
-        this.startTyping()
-      }, 500)
-    }
-
-
+   
     // preview code starts from here 
     this.designCount = this.designCount + 1;
     const designId = `design-${this.designCount}`;
-    debugger
     const snapshot: DesignSnapshot = {
       id: designId,
       label: `Template ${this.designCount}`,
@@ -681,6 +679,20 @@ export class AiPreviewComponent {
           </div>
           <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+            <!-- 🔥 FOLLOW TOGGLE HANDLER -->
+          <script>
+      window.addEventListener('message', function (e) {
+        if (e.data && e.data.type === 'toggle-follow') {
+          const btn = document.querySelector('[data-follow-toggle]');
+          if (!btn) return;
+
+          btn.classList.toggle('is-following');
+          btn.textContent = btn.classList.contains('is-following')
+            ? 'Following'
+            : 'Follow';
+        }
+      });
+          </script>
         </body>
       </html>
     `);
@@ -805,7 +817,7 @@ export class AiPreviewComponent {
   }
 
   startTyping() {
-    this.codeEditor.startTyping();
+    // this.codeEditor.startTyping();
   }
 
 
