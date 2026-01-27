@@ -264,7 +264,7 @@ export class AiPreviewComponent {
     /* FOLLOW TOGGLE */
 
     if (data.followToggle && this.activeJsKeys.includes('FOLLOW_TOGGLE')) {
-      this.handleFollowToggle();
+      this.handleFollowToggle(data.followIndex);
       return;
     }
 
@@ -294,12 +294,15 @@ export class AiPreviewComponent {
 
   /** ================= FOLLOW / FOLLOWING ================= */
 
-  handleFollowToggle() {
+  handleFollowToggle(followIndex: number) {
     const iframe = this.previewFrame.nativeElement as HTMLIFrameElement;
+
     iframe.contentWindow?.postMessage(
-      { type: 'toggle-follow' },
-      '*'
-    );
+      {
+        type: 'toggle-follow',
+        followIndex
+      },
+      '*');
   }
 
 
@@ -611,19 +614,19 @@ export class AiPreviewComponent {
           <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
             <!-- 🔥 FOLLOW TOGGLE HANDLER -->
-          <script>
-      window.addEventListener('message', function (e) {
-        if (e.data && e.data.type === 'toggle-follow') {
-          const btn = document.querySelector('[data-follow-toggle]');
+       <script>window.addEventListener('message', function (e) {
+          if (e.data?.type === 'toggle-follow') {
+          const buttons = document.querySelectorAll('[data-follow-toggle]');
+          const btn = buttons[e.data.followIndex];
+
           if (!btn) return;
 
           btn.classList.toggle('is-following');
           btn.textContent = btn.classList.contains('is-following')
             ? 'Following'
             : 'Follow';
-        }
-      });
-          </script>
+          }
+        });</script>
         </body>
       </html>
     `);
@@ -724,14 +727,26 @@ export class AiPreviewComponent {
 
   private iframeClickHandler = (e: MouseEvent) => {
     const el = e.target as HTMLElement;
+    const followBtn = el.closest('[data-follow-toggle]') as HTMLElement;
+
+    let followIndex = -1;
+
+    if (followBtn) {
+      const allFollowBtns = Array.from(
+        followBtn.ownerDocument.querySelectorAll('[data-follow-toggle]')
+      );
+      followIndex = allFollowBtns.indexOf(followBtn);
+    }
 
     window.postMessage(
       {
         type: 'preview-click',
+        followToggle: followIndex !== -1,
+        followIndex,
         menuKey: el.closest('[data-menu-key]')?.getAttribute('data-menu-key'),
         action: el.closest('[data-action]')?.getAttribute('data-action'),
         subFeature: el.closest('[data-sub-feature]')?.getAttribute('data-sub-feature'),
-        followToggle: !!el.closest('[data-follow-toggle]')
+        // followToggle: !!el.closest('[data-follow-toggle]')
       },
       '*'
     );
