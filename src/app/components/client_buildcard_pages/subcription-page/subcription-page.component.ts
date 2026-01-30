@@ -9,7 +9,7 @@ declare var window: any;
 @Component({
   selector: 'app-subcription-page',
   standalone: true,
-  imports: [FormsModule, CommonModule,ReactiveFormsModule,NgxIntlTelInputModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxIntlTelInputModule],
   templateUrl: './subcription-page.component.html',
   styleUrl: './subcription-page.component.css'
 })
@@ -38,19 +38,15 @@ export class SubcriptionPageComponent {
     }
   };
 
-
-    billingDetails = {
+  billingDetails = {
     name: '',
     email: '',
     phoneNumber: ''
   };
   SearchCountryField = SearchCountryField
   CountryISO = CountryISO
-
- 
-
-selectedPlan = signal<PlanType>('creative');
-  constructor(private apiService: ApiService,private fb: FormBuilder){
+  selectedPlan = signal<PlanType>('creative');
+  constructor(private apiService: ApiService, private fb: FormBuilder) {
 
   }
   billingForm = this.fb.nonNullable.group({
@@ -59,125 +55,108 @@ selectedPlan = signal<PlanType>('creative');
     phoneNumber: [null as any, Validators.required]
   });
 
-
-
-setBilling(cycle: BillingCycle) {
-  this.billingCycle.set(cycle);
-}
-
-planPrices = computed(() => {
-  return this.PLAN_PRICES[this.billingCycle()];
-});
-
-
-selectPlan(plan: PlanType) {
-  this.selectedPlan.set(plan);
-}
-
-
-getStarted(plan: PlanType){
-this.close.emit();
-this.selectedPlan.set(plan);
-this.subscriptionModalOpen = false;
-this.billingSummaryModalOpen = true;
-}
-
-
-selectedSubscriptionCost = computed(() => {
-  return this.planPrices()[this.selectedPlan()];
-});
-
-displayPrice = computed(() => {
-  return this.PLAN_PRICES[this.billingCycle()][this.selectedPlan()];
-});
-
-chargeAmount = computed(() => {
-  const monthly = this.PLAN_PRICES.yearly[this.selectedPlan()];
-  return this.billingCycle() === 'yearly'
-    ? monthly * 12
-    : this.PLAN_PRICES.monthly[this.selectedPlan()];
-});
-
-planKey = computed(() => {
-  return `${this.selectedPlan()}_${this.billingCycle()}`;
-});
-
-
-initiateSubscriptionCheckout(billingDetails :any) {
-  this.apiService.postAPI('api/payment/create-subscription', {
-    planKey: this.planKey(),
-    user: billingDetails
-  }).subscribe((res: any) => {
-    // ⬇️ THIS IS THE KEY
-    this.openCashfreeSubscriptionCheckout(res.subscription_session_id);
-  });
-}
-
-isInvalid(controlName: string) {
-  const control = this.billingForm.get(controlName);
-  return control?.invalid && control?.touched;
-}
-
-confirmAndPay() {
-  if (this.billingForm.invalid) {
-    this.billingForm.markAllAsTouched();
-    return;
+  setBilling(cycle: BillingCycle) {
+    this.billingCycle.set(cycle);
   }
 
-  const raw = this.billingForm.getRawValue();
-
-  const billingDetails = {
-    name: raw.name,
-    email: raw.email,
-    phoneNumber: raw.phoneNumber.e164Number, // ✅ USE THIS
-    countryCode: raw.phoneNumber.countryCode
-  };
-
-  this.initiateSubscriptionCheckout(billingDetails)
-
- 
-}
-
-
-openCashfreeSubscriptionCheckout(subscriptionSessionId: string) {
- 
-  if (!subscriptionSessionId) {
-    console.error("Missing subscription_session_id!");
-    return;
-  }
-
-  const cashfree = new (window as any).Cashfree({
-    mode: "sandbox", // use "production" in live
+  planPrices = computed(() => {
+    return this.PLAN_PRICES[this.billingCycle()];
   });
 
-  cashfree
-    .subscriptionsCheckout({
-      subsSessionId: subscriptionSessionId, // << correct param
-      redirectTarget: "_blank",            // or "_blank"
-    })
-    .then((result: any) => {
-      if (result.error) {
-        console.error("Cashfree subscription error:", result.error.message);
-        alert(result.error.message);
-      } else if (result.redirect) {
-        console.log("Redirecting to Cashfree subscription checkout...");
-      }
-    })
-    .catch((err: any) => {
-      console.error("Unexpected Cashfree subscription error:", err);
+  selectPlan(plan: PlanType) {
+    this.selectedPlan.set(plan);
+  }
+
+  getStarted(plan: PlanType) {
+    this.close.emit();
+    this.selectedPlan.set(plan);
+    this.subscriptionModalOpen = false;
+    this.billingSummaryModalOpen = true;
+  }
+
+  selectedSubscriptionCost = computed(() => {
+    return this.planPrices()[this.selectedPlan()];
+  });
+
+  displayPrice = computed(() => {
+    return this.PLAN_PRICES[this.billingCycle()][this.selectedPlan()];
+  });
+
+  chargeAmount = computed(() => {
+    const monthly = this.PLAN_PRICES.yearly[this.selectedPlan()];
+    return this.billingCycle() === 'yearly'
+      ? monthly * 12
+      : this.PLAN_PRICES.monthly[this.selectedPlan()];
+  });
+
+  planKey = computed(() => {
+    return `${this.selectedPlan()}_${this.billingCycle()}`;
+  });
+
+  initiateSubscriptionCheckout(billingDetails: any) {
+    this.apiService.postAPI('api/payment/create-subscription', {
+      planKey: this.planKey(),
+      user: billingDetails
+    }).subscribe((res: any) => {
+      // ⬇️ THIS IS THE KEY
+      this.openCashfreeSubscriptionCheckout(res.subscription_session_id);
     });
-}
+  }
 
+  isInvalid(controlName: string) {
+    const control = this.billingForm.get(controlName);
+    return control?.invalid && control?.touched;
+  }
 
+  confirmAndPay() {
+    if (this.billingForm.invalid) {
+      this.billingForm.markAllAsTouched();
+      return;
+    }
 
-closeModal(){
-  this.close.emit();
-this.subscriptionModalOpen = false;
-this.billingSummaryModalOpen = false;
-}
+    const raw = this.billingForm.getRawValue();
 
+    const billingDetails = {
+      name: raw.name,
+      email: raw.email,
+      phoneNumber: raw.phoneNumber.e164Number, // ✅ USE THIS
+      countryCode: raw.phoneNumber.countryCode
+    };
 
+    this.initiateSubscriptionCheckout(billingDetails)
+  }
 
+  openCashfreeSubscriptionCheckout(subscriptionSessionId: string) {
+    if (!subscriptionSessionId) {
+      console.error("Missing subscription_session_id!");
+      return;
+    }
 
+    const cashfree = new (window as any).Cashfree({
+      mode: "sandbox",
+    });
 
+    cashfree
+      .subscriptionsCheckout({
+        subsSessionId: subscriptionSessionId,
+        redirectTarget: "_blank",
+      })
+      .then((result: any) => {
+        if (result.error) {
+          console.error("Cashfree subscription error:", result.error.message);
+          alert(result.error.message);
+        } else if (result.redirect) {
+          console.log("Redirecting to Cashfree subscription checkout...");
+        }
+      })
+      .catch((err: any) => {
+        console.error("Unexpected Cashfree subscription error:", err);
+      });
+  }
+
+  closeModal() {
+    this.close.emit();
+    this.subscriptionModalOpen = false;
+    this.billingSummaryModalOpen = false;
+  }
 }

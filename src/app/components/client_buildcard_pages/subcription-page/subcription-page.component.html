@@ -1,12 +1,6 @@
-<div
-  class="modal fade modal-xl show d-block"
-  id="purchasePlan"
-  tabindex="-1"
-  aria-labelledby="purchasePlanLabel"
-  aria-hidden="true"
-  *ngIf="subscriptionModalOpen"
->
-  <div class="modal-dialog modal-dialog-centered" style="max-width: 1250px">
+<div class="modal fade modal-xl show d-block" id="purchasePlan" tabindex="-1" aria-labelledby="purchasePlanLabel"
+  aria-hidden="true" *ngIf="subscriptionModalOpen">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 990px">
     <div class="modal-content p-4 rounded-4 pt-3">
       <div class="modal-header pb-2 pt-0 border-0">
         <h5 class="modal-title ct_fw_600 ct_fs_22">Subcription</h5>
@@ -26,38 +20,18 @@
 
       <div class="d-flex justify-content-between mt-2">
         <div>
-          <ul
-            class="nav nav-pills mb-0 ct_custom_tab mt-0"
-            id="pills-tab"
-            role="tablist"
-          >
+          <ul class="nav nav-pills mb-0 ct_custom_tab mt-0" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
-              <button
-                class="nav-link active"
-                id="pills-home-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#pills-home"
-                type="button"
-                role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
-                (click)="setBilling('monthly')"
-              >
+              <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home-1"
+                type="button" role="tab" aria-controls="pills-home-1" aria-selected="true"
+                (click)="setBilling('monthly')">
                 Monthly
               </button>
             </li>
             <li class="nav-item" role="presentation">
-              <button
-                class="nav-link"
-                id="pills-profile-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#pills-profile"
-                type="button"
-                role="tab"
-                aria-controls="pills-profile"
-                aria-selected="false"
-                (click)="setBilling('yearly')"
-              >
+              <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile-1"
+                type="button" role="tab" aria-controls="pills-profile-1" aria-selected="false"
+                (click)="setBilling('yearly')">
                 Yearly
               </button>
             </li>
@@ -181,10 +155,7 @@
               </ul>
             </div>
             <div class="mt-auto">
-              <button
-                class="ct_btn ct_btn_dark"
-                (click)="getStarted('personal')"
-              >
+              <button class="ct_btn ct_btn_dark" (click)="getStarted('personal')">
                 Get Started
               </button>
             </div>
@@ -254,10 +225,7 @@
             </div>
 
             <div class="mt-auto">
-              <button
-                class="ct_btn ct_btn_dark"
-                (click)="getStarted('creative')"
-              >
+              <button class="ct_btn ct_btn_dark" (click)="getStarted('creative')">
                 Get Started
               </button>
             </div>
@@ -325,10 +293,7 @@
             </div>
 
             <div class="mt-auto">
-              <button
-                class="ct_btn ct_btn_dark"
-                (click)="getStarted('booster')"
-              >
+              <button class="ct_btn ct_btn_dark" (click)="getStarted('booster')">
                 Get Started
               </button>
             </div>
@@ -340,12 +305,8 @@
 </div>
 
 <!-- MODAL -->
-<div
-  class="modal fade show d-block"
-  tabindex="-1"
-  style="background: rgba(0, 0, 0, 0.5)"
-  *ngIf="billingSummaryModalOpen"
->
+<div class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)"
+  *ngIf="billingSummaryModalOpen">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-4">
       <!-- HEADER -->
@@ -393,54 +354,32 @@
 
           <div class="mb-3">
             <label class="form-label">Name *</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="name"
-              [class.is-invalid]="isInvalid('name')"
-            />
+            <input type="text" class="form-control" formControlName="name" [class.is-invalid]="isInvalid('name')" />
             <div class="invalid-feedback">Name is required</div>
           </div>
 
           <div class="mb-3">
             <label class="form-label">Email *</label>
-            <input
-              type="email"
-              class="form-control"
-              formControlName="email"
-              [class.is-invalid]="isInvalid('email')"
-            />
+            <input type="email" class="form-control" formControlName="email" [class.is-invalid]="isInvalid('email')" />
             <div class="invalid-feedback">Enter a valid email</div>
           </div>
 
           <div class="mb-3">
             <label class="form-label">Phone *</label>
 
-            <ngx-intl-tel-input
-              [cssClass]="'form-control ct_input ct_input_phone_number'"
-              [enableAutoCountrySelect]="true"
-              [enablePlaceholder]="true"
-              [searchCountryFlag]="true"
-              [separateDialCode]="true"
-              [searchCountryField]="[
+            <ngx-intl-tel-input [cssClass]="'form-control ct_input ct_input_phone_number'"
+              [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+              [separateDialCode]="true" [searchCountryField]="[
                 SearchCountryField.Iso2,
                 SearchCountryField.Name
-              ]"
-              [selectFirstCountry]="false"
-              [selectedCountryISO]="CountryISO.India"
-              [maxLength]="15"
-              [phoneValidation]="true"
-              formControlName="phoneNumber"
-            >
+              ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.India" [maxLength]="15"
+              [phoneValidation]="true" formControlName="phoneNumber">
             </ngx-intl-tel-input>
 
-            <small
-              class="text-danger"
-              *ngIf="
+            <small class="text-danger" *ngIf="
                 billingForm.get('phoneNumber')?.invalid &&
                 billingForm.get('phoneNumber')?.touched
-              "
-            >
+              ">
               Valid phone number is required
             </small>
           </div>
@@ -453,11 +392,7 @@
           Cancel
         </button>
 
-        <button
-          class="btn btn-primary"
-          [disabled]="billingForm.invalid"
-          (click)="confirmAndPay()"
-        >
+        <button class="btn btn-primary" [disabled]="billingForm.invalid" (click)="confirmAndPay()">
           Subscribe & Pay ${{ chargeAmount() }}
         </button>
       </div>
