@@ -8,7 +8,7 @@
       <!-- <div>
         <img src="assets/img/cti_black_logo1.png" alt="">
       </div> -->
-      <div class="et_reload_icon" routerLink="/main">
+      <div class="et_reload_icon" routerLink="/dashboard">
         <svg xmlns="http://www.w3.org/2000/svg" width="22px" height="22px" fill="currentColor" viewBox="0 0 256 256"
           role="presentation">
           <path
@@ -18,23 +18,18 @@
       </div>
       <div class="d-flex align-items-center gap-2">
         @for (item of designOrder; track item.designId; let i = $index) {
-          <button
-            class="ct_design_tab_btn design-tab"
-            [class.active]="item.designId === activeDesignId"
-          >
-            <span (click)="switchDesign(item.designId)">
-              Template {{ i + 1 }}
-            </span>
-      
-            <i
-              *ngIf="designOrder.length > 1"
-              class="fa-solid fa-xmark"
-              (click)="removeDesign(item)"
-            ></i>
-          </button>
+        <button class="ct_design_tab_btn design-tab" [class.active]="item.designId === activeDesignId">
+          <span (click)="switchDesign(item.designId)"
+            [ngStyle]="{ 'padding-right': designOrder.length > 1 ? '14px' : '0px' }">
+
+            Template {{ i + 1 }}
+          </span>
+
+          <i *ngIf="designOrder.length > 1" class="fa-solid fa-xmark" (click)="removeDesign(item)"></i>
+        </button>
         }
       </div>
-      
+
 
     </div>
     <div class="d-flex align-items-center gap-2">
@@ -250,7 +245,7 @@
         </button>
 
         <button class="ct_schedule_call_btn w-100 justify-content-center mt-auto" (click)="openModal()"
-          [ngClass]="isTyping ? 'ct_no_drop_btn' : ''" [disabled]="isTyping">
+          [ngClass]="isTyping ? 'ct_no_drop_btn' : ''" >
           Save
         </button>
       </div>
@@ -259,42 +254,85 @@
     <div class="ct_ai_project_preview_right">
       <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-          <div class="preview-wrapper" id="topScrollDiv " [ngClass]="previewShow ? 'd-block' : 'd-none'">
-            <iframe #previewFrame class="preview-iframe mx-auto d-block w-100" [style.maxWidth]="previewWidth + 'px'"
+          <div class="preview-wrapper" id="topScrollDiv ">
+            <iframe #previewFrame class="preview-iframe mx-auto w-100"
+               [style.maxWidth]="previewWidth + 'px'"
               [style.height.%]="100"></iframe>
-          </div>
-
-          <div class="ct_ai_thiking_loader2" [ngClass]="previewShow ? 'd-none' : 'd-flex'">
-            <div class="rgt_loader" id="rgt_loader">
-              <div class="rgt_loader-wrapper">
-                <span class="rgt_loader-letter">G</span>
-                <span class="rgt_loader-letter">e</span>
-                <span class="rgt_loader-letter">n</span>
-                <span class="rgt_loader-letter">e</span>
-                <span class="rgt_loader-letter">r</span>
-                <span class="rgt_loader-letter">a</span>
-                <span class="rgt_loader-letter">t</span>
-                <span class="rgt_loader-letter">i</span>
-                <span class="rgt_loader-letter">n</span>
-                <span class="rgt_loader-letter">g</span>
-                <span class="rgt_loader-letter">.</span>
-                <span class="rgt_loader-letter">.</span>
-                <span class="rgt_loader-letter">.</span>
-                <div class="rgt_loader-circle"></div>
+            <div class="ct_ai_thiking_loader2" [ngClass]="isReactBuilding ? 'd-flex' : 'd-none'">
+              <div class="rgt_loader" id="rgt_loader">
+                <div class="rgt_loader-wrapper">
+                  <span class="rgt_loader-letter">G</span>
+                  <span class="rgt_loader-letter">e</span>
+                  <span class="rgt_loader-letter">n</span>
+                  <span class="rgt_loader-letter">e</span>
+                  <span class="rgt_loader-letter">r</span>
+                  <span class="rgt_loader-letter">a</span>
+                  <span class="rgt_loader-letter">t</span>
+                  <span class="rgt_loader-letter">i</span>
+                  <span class="rgt_loader-letter">n</span>
+                  <span class="rgt_loader-letter">g</span>
+                  <span class="rgt_loader-letter">.</span>
+                  <span class="rgt_loader-letter">.</span>
+                  <span class="rgt_loader-letter">.</span>
+                  <div class="rgt_loader-circle"></div>
+                </div>
               </div>
-            </div>
 
-            <div class="mt-4 text-center">
-              <h4 class="ct_fs_24 ct_fw_600 mb-1">
-                I'm Generating the Preview.
-              </h4>
-              <p class="mb-0 ct_text_op_7">Hold on for a moment...</p>
+              <div class="mt-4 text-center">
+                <h4 class="ct_fs_24 ct_fw_600 mb-1">
+                  I'm Generating the Preview.
+                </h4>
+                
+              </div>
+              <!-- 🔥 ADD build progress here -->
+              <div class="build-progress mt-4 text-start">
+
+                <div class="build-step"
+                     [class.done]="buildStep > 1"
+                     [class.running]="buildStep === 1">
+              
+                  <span class="icon">
+                    {{ buildStep > 1 ? '✔' : buildStep === 1 ? '⏳' : '⬇' }}
+                  </span>
+              
+                  Installing dependencies
+                  <span *ngIf="buildStep === 1" class="typing-dots"></span>
+                </div>
+              
+                <div class="build-step"
+                     [class.done]="buildStep > 2"
+                     [class.running]="buildStep === 2">
+              
+                  <span class="icon">
+                    {{ buildStep > 2 ? '✔' : buildStep === 2 ? '⏳' : '⚙' }}
+                  </span>
+              
+                  Building React app
+                  <span *ngIf="buildStep === 2" class="typing-dots"></span>
+                </div>
+              
+                <div class="build-step"
+                     [class.done]="buildStep > 3"
+                     [class.running]="buildStep === 3">
+              
+                  <span class="icon">
+                    {{ buildStep > 3 ? '✔' : buildStep === 3 ? '⏳' : '🚀' }}
+                  </span>
+              
+                  Deploying preview
+                  <span *ngIf="buildStep === 3" class="typing-dots"></span>
+                </div>
+              
+              </div>
+              
+              
             </div>
           </div>
+
         </div>
 
-        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" >
-          <app-react-code-editor #codeEditor *ngIf="files.length >0"  [files]="files" (typingDone)="onCodeFinished()">
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+          <app-react-code-editor #codeEditor *ngIf="files.length >0" [files]="files" (typingDone)="onCodeFinished()">
           </app-react-code-editor>
 
         </div>

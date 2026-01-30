@@ -47,6 +47,7 @@ export class MainComponent {
     this.getProjects();
     sessionStorage.clear();
     this.apiservice._htmlCode.set(null);
+    this.getUserSubscriptionPlan();
     // this.socket = io(this.apiservice.apiUrl);
     let currentBotMsg = "";
     // listen for streaming tokens
@@ -181,6 +182,8 @@ export class MainComponent {
   }
 
   navigateTool(id: any) {
+
+
     this.router.navigate(['/bd_loader'], {
       queryParams: { id },
       skipLocationChange: true  // <-- URL won't change, user stays on original route
@@ -193,6 +196,22 @@ export class MainComponent {
     this.page = this.page;
     this.SearchInput.nativeElement.value = '';
     this.projectsData = [...this.orgProjectsData];
+  }
+
+  getUserSubscriptionPlan() {
+    this.apiservice.getApi<any>(`api/user/getMySubscription`)
+      .subscribe({
+        next: (res) => {
+          if (res.success == true) {
+      
+          } else {
+            // this.loading = false
+          }
+        },
+        error: err => {
+          // this.loading = false
+        }
+      });
   }
 
 }

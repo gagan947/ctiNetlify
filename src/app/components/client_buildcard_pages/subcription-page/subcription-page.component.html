@@ -6,7 +6,7 @@
   aria-hidden="true"
   *ngIf="subscriptionModalOpen"
 >
-  <div class="modal-dialog modal-dialog-centered" style="max-width: 990px">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 1250px">
     <div class="modal-content p-4 rounded-4 pt-3">
       <div class="modal-header pb-2 pt-0 border-0">
         <h5 class="modal-title ct_fw_600 ct_fs_22">Subcription</h5>
@@ -66,7 +66,69 @@
       </div>
 
       <div class="row mt-0 justify-content-center">
-        <div class="col-lg-6 col-xxl-4 mt-lg-3 mt-5">
+        <div class="col-lg-3 col-xxl-3 mt-lg-3 mt-5">
+          <div
+            class="ct_pricing_card"
+            [class.ct_active]="selectedPlan() === 'personal'"
+            (click)="selectPlan('personal')"
+          >
+            <div>
+              <h6>Free</h6>
+              <div class="ct_price mb-1">
+                $ {{ planPrices().personal
+                }}<span>per month billed {{ billingCycle() }}</span>
+              </div>
+              <p class="mb-2 ct_grey_text">
+                For light, exploratory, and personal use
+              </p>
+
+              <div class="ct_features_title">What`s included :</div>
+              <ul class="ct_features">
+                <li class="">
+                  <i class="fa-solid fa-circle-check"></i> Website
+                </li>
+                <li>
+                  <i class="fa-solid fa-circle-check"></i> 1 Project Build
+                </li>
+                <li>
+                  <i class="fa-solid fa-circle-check"></i> 5 Design Templates
+                </li>
+                <li>
+                  <i class="fa-solid fa-circle-check"></i> AI-assisted project
+                  creation
+                </li>
+                <li>
+                  <i class="fa-solid fa-circle-check"></i>Custom Domain Support
+                </li>
+                <li>
+                  <i class="fa-solid fa-circle-check"></i> Deploy to Your Own
+                  Server
+                </li>
+                <li>
+                  <i class="fa-solid fa-circle-check"></i> Production-ready Code
+                  Download
+                </li>
+                <li>
+                  <i class="fa-solid fa-circle-check"></i> Email & Chat Support
+                  (Standard SLA)
+                </li>
+                <li>
+                  <i class="fa-solid fa-circle-check"></i> Upgrade anytime as
+                  your needs grow
+                </li>
+              </ul>
+            </div>
+            <div class="mt-auto">
+              <button
+                class="ct_btn ct_btn_dark"
+                (click)="getStarted('personal')"
+              >
+                Get Started
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-xxl-3 mt-lg-3 mt-5">
           <div
             class="ct_pricing_card"
             [class.ct_active]="selectedPlan() === 'personal'"
@@ -130,7 +192,7 @@
         </div>
 
         <!-- Business -->
-        <div class="col-lg-6 col-xxl-4 mt-lg-3 mt-5">
+        <div class="col-lg-3 col-xxl-3 mt-lg-3 mt-5">
           <div
             class="ct_pricing_card"
             [class.ct_active]="selectedPlan() === 'creative'"
@@ -201,7 +263,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-6 col-xxl-4 mt-lg-3 mt-5">
+        <div class="col-lg-3 col-xxl-3 mt-lg-3 mt-5">
           <div
             class="ct_pricing_card"
             [class.ct_active]="selectedPlan() === 'booster'"
