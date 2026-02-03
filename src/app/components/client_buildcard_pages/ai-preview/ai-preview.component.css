@@ -688,3 +688,12 @@ li.ct_ai_project_right {
   background-color: #333;
   color: #fff;
 }
+.upgrade-btn{
+  color: #ffc300;
+  background: #313131;
+  padding-inline: 15px;
+  padding-block: 4px;
+  border-radius: 5px;
+  border: none;
+  font-size: 12px;
+}
