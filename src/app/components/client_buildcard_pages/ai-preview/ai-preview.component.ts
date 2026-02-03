@@ -1,30 +1,38 @@
-import { Component, ElementRef, NgZone, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, Renderer2, signal, ViewChild } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
+import { io } from 'socket.io-client';
 import { AiSocketService } from '../../../services/ai-socket.service';
 import { filter, Subject, take } from 'rxjs';
 import { Router, RouterLink } from '@angular/router';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
+import { PlanDeliveryComponent } from '../plan-delivery/plan-delivery.component';
 import { SubcriptionPageComponent } from "../subcription-page/subcription-page.component";
-import { FormBuilder, FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, Validators } from '@angular/forms';
 import { ReactCodeEditorComponent } from './react-code-editor/react-code-editor.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 interface DesignSnapshot {
-  id: string;                 // design-1, design-2
-  label: string;              // Design 1, Design 2
-  pages: any;                 // full pages object
-  loginRedirect?: string;
+  id: string;
+  label: string;
+  pages: any;
+  loginRedirect: any;
   createdAt: Date;
+
+  // NEW
+  previewType?: 'html' | 'react';
+  reactPreviewUrl?: any;
 }
+
 interface ReactFile {
   id: string;
   name: string;          // ProductListing.jsx
   language: 'javascript' | 'css';
   fullCode: string;
 }
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-ai-preview',
@@ -34,6 +42,7 @@ interface ReactFile {
   styleUrl: './ai-preview.component.css'
 })
 export class AiPreviewComponent {
+  
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
   @ViewChild('chatScroll') chatScroll!: ElementRef<HTMLDivElement>;
   @ViewChild('codeEditor') codeEditor!: ReactCodeEditorComponent;
@@ -87,7 +96,18 @@ export class AiPreviewComponent {
       icon: 'img/mobile_app_icon_svg.svg'
     }
   ];
+  baseURl :any;
+  previewUrl: any = null;
+  isReactBuilding = true;
+  buildStep = 0;
+  templateExists = false;
 
+  buildSteps = [
+    'Installing dependencies (npm install)',
+    'Building React application (npm run build)',
+    'Deploying preview'
+  ];
+  
 
   // Redirect page for login action
   constructor(
@@ -98,12 +118,28 @@ export class AiPreviewComponent {
     private aiService: AiSocketService,
     private router: Router, private ngZone: NgZone, private fb: FormBuilder,
     private toster: NzMessageService
-  ) { }
+  ) { 
+    this.baseURl = this.apiService.apiUrl;
+  }
 
-  ngOnInit() {
+  async ngOnInit() {
+    
+    const projectData = sessionStorage.getItem('projectData');
+    this.projectsData = JSON.parse(projectData!);
     this.blocks = [];
     window.addEventListener('message', this.previewListener);
+     // ✅ Load draft templates first
+  const templates = await this.getUserTemplates();
 
+  if (templates.length > 0) {
+    this.showDraftWelcomeMessages();
+    // 👉 map and render old drafts
+    await this.loadDraftTemplates(templates);
+
+    return; // ⛔ stop fresh generation flow
+  }
+
+    
     this.aiService.socketReady$
       .pipe(
         filter(id => !!id),
@@ -121,7 +157,8 @@ export class AiPreviewComponent {
 
           const last = blocks[blocks.length - 1];
           if (last?.id === 'status-code-running' && last?.done && this.files.length > 0) {
-
+            
+           
             this.showCodeButton = true;
             this.previewCodeShow = true;
             const el = document.getElementById('pills-profile-tab');
@@ -135,15 +172,13 @@ export class AiPreviewComponent {
 
             el.dispatchEvent(event);
 
-
-            // snapshot current build
             this.builds.push({
               buildId: this.currentBuildId,
               blocks: JSON.parse(JSON.stringify(this.blocks)),
               createdAt: new Date()
             });
           } else if (last?.id === 'paragraph-preview-ready' && last?.done) {
-            this.previewShow = true;
+          
             this.isTyping = false;
             const el = document.getElementById('pills-home-tab');
             if (!el) return;
@@ -165,12 +200,11 @@ export class AiPreviewComponent {
   ngAfterViewInit() {
     this.scrollToBottom(true);
   }
+  onUserScroll() {
+    this.userHasScrolled = true;
+  }
 
   startPreview(socket_id: string | null) {
-
-    const projectData = sessionStorage.getItem('projectData');
-    this.projectsData = JSON.parse(projectData!);
-
     const subFeatureIds: any[] = [];
     this.projectsData.selectdFeature.forEach((items: any) => {
       items.subFeatures.forEach((sub: any) => {
@@ -191,70 +225,48 @@ export class AiPreviewComponent {
     this.apiService
       .postAPI('api/user/generatePreview', payload)
       .subscribe((res: any) => {
-        this.handleGenerateResponse(res)
-        // this.pages = res.data.pages;
-        // this.loginRedirect = res.data.login_redirect;
+       // ✅ always map first
+       const designId = this.mapDesignFromResponse(res);
 
-        // const firstKey = Object.keys(this.pages)[0];
-        // if (firstKey) this.loadPage(firstKey);
+      // (optional) your JSX file logic
+      const { forgot_password } = res.data.react_files;
+      const react_files = { forgot_password };
+
+      this.files = [];
+
+      Object.entries(react_files).forEach(([page, data]: any) => {
+        this.files.push({
+          id: `${page}-jsx`,
+          name: `${page}.jsx`,
+          language: 'javascript',
+          fullCode: data.jsx
+        });
+      });
+      
+      // ✅ Now build React preview for THIS design
+      this.buildReactPreview(res.data.user_template_id, designId);
+     
       });
   }
 
-  /** ================= CLICK HANDLER (CORE) ================= */
-
-  // onPreviewClick(event: any) {
-  //   const el = event.target as HTMLElement;
-  //   if (!el) return;
-
-  //    /* LOGIN ACTION */
-  // const menuEl = el.closest('[data-menu-key]') as HTMLElement;
-  // const action = el.closest('[data-action]')?.getAttribute('data-action');
-  // if (action === 'login' && this.loginRedirect) {
-
-  //   this.loadPage(this.loginRedirect);
-  //   return;
-  // }
-
-  //   /* ---------------- FOLLOW TOGGLE ---------------- */
-  //   if (this.activeJsKeys.includes('FOLLOW_TOGGLE')) {
-  //     const followBtn = el.closest('[data-follow-toggle]') as HTMLElement;
-  //     if (followBtn) {
-  //       this.handleFollowToggle(followBtn);
-  //       return; // ⛔ stop here (do not trigger navigation)
-  //     }
-  //   }
-  //     // ACTIVE MENU
-  // const menuKey = menuEl?.getAttribute('data-menu-key');
-  // if (menuKey) {
-
-  //   this.activeMenuKey = menuKey;
-  //   this.updateActiveMenuUI();
-  // }
-
-  //   /* ---------------- NAVIGATION (YOUR EXISTING LOGIC) ---------------- */
-  //   const feature = el
-  //     .closest('[data-sub-feature]')
-  //     ?.getAttribute('data-sub-feature');
-
-  //   if (feature && this.pages[feature]) {
-  //     this.loadPage(feature);
-  //     return;
-  //   }
 
 
+  /** ================= CSS INJECTION ================= */
 
-  //   // For select dropdown navigation
-  //   if (!feature && (el as any).selectedOptions) {
-  //     const selected = (el as any).selectedOptions[0];
-  //     const subFeature = selected?.dataset?.subFeature;
-  //     if (subFeature && this.pages[subFeature]) {
-  //       this.loadPage(subFeature);
-  //     }
-  //   }
-  // }
+  injectCSS(css: string) {
+    if (this.styleTag) {
+      document.head.removeChild(this.styleTag);
+    }
+
+    this.styleTag = this.renderer.createElement('style');
+    this.styleTag.innerHTML = css;
+    document.head.appendChild(this.styleTag);
+  }
+
+ 
 
   onPreviewMessage(data: any, event: any) {
-
+   
     /* LOGIN ACTION */
     if (data.action === 'login' && this.loginRedirect) {
       this.loadPageFromDesign(this.activeDesignId, this.loginRedirect);
@@ -264,7 +276,7 @@ export class AiPreviewComponent {
     /* FOLLOW TOGGLE */
 
     if (data.followToggle && this.activeJsKeys.includes('FOLLOW_TOGGLE')) {
-      this.handleFollowToggle(data.followIndex);
+      this.handleFollowToggle();
       return;
     }
 
@@ -294,15 +306,12 @@ export class AiPreviewComponent {
 
   /** ================= FOLLOW / FOLLOWING ================= */
 
-  handleFollowToggle(followIndex: number) {
+  handleFollowToggle() {
     const iframe = this.previewFrame.nativeElement as HTMLIFrameElement;
-
     iframe.contentWindow?.postMessage(
-      {
-        type: 'toggle-follow',
-        followIndex
-      },
-      '*');
+      { type: 'toggle-follow' },
+      '*'
+    );
   }
 
 
@@ -322,96 +331,72 @@ export class AiPreviewComponent {
       .querySelectorAll(`.menu-item[data-menu-key="${this.activeMenuKey}"]`)
       .forEach(el => el.classList.add('active'));
   }
-
   async regenerate() {
+
     if (this.isTyping) return;
-
+  
     if (this.designOrder.length >= 5) {
-      this.toster.error('You have reached the maximum limit of 5 design variations. Please select from your existing versions.');
+      this.toster.error('You have reached the maximum limit of 5 design variations.');
       return;
-    };
-
-    this.previewShow = false;
-
-    this.clearFirstBlockMinHeight()
+    }
+  
+    this.setBuildStep(0);
+    this.startPreview(null);
+    this.isReactBuilding = true;
+  
+    this.clearFirstBlockMinHeight();
     this.isTyping = true;
-    // scroll to top using CDK
-
+  
     const jobId = ++this.frontendJobId;
     this.currentBuildId++;
-
+  
     const commands = this.aiService.getRegenCommands(this.currentBuildId);
-
-    /* ---------- INTRO PARAGRAPH ---------- */
-    setTimeout(() => {
-      this.scrollToBottom();
-    }, 0);
+  
+    setTimeout(() => this.scrollToBottom(), 0);
+  
+    /* ---------- INTRO ---------- */
+  
     await this.streamFrontendParagraph(
       `regen-intro-${this.currentBuildId}`,
       `Let’s redesign your application with a fresh visual direction.
-  I’ll rework the layout structure, refine spacing, and enhance the CSS
-  to deliver a cleaner, more modern user experience.`,
+  I’ll refine the layout, improve spacing, and enhance the styling for a cleaner experience.`,
       jobId, 1
     );
-
-    this.showLoader('Analyzing design direction…');
-    await this.delay(1200);
-    this.hideLoader();
-
-    /* ---------- CMD 1 ---------- */
-
-    await this.streamFrontendBlock(
-      `cmd-ui-${this.currentBuildId}-1`,
-      commands[0],
-      jobId
-    );
-
-    this.showLoader('Refining theme styles…');
+  
+    /* ---------- UI CHANGES ---------- */
+  
+    await this.streamFrontendBlock(`cmd-ui-${this.currentBuildId}-1`, commands[0], jobId);
+    await this.delay(600);
+  
+    await this.streamFrontendBlock(`cmd-ui-${this.currentBuildId}-2`, commands[1], jobId);
     await this.delay(700);
-    this.hideLoader();
-
-    /* ---------- CMD 2 ---------- */
-
-    await this.streamFrontendBlock(
-      `cmd-ui-${this.currentBuildId}-2`,
-      commands[1],
-      jobId
-    );
-
-    this.showLoader('Optimizing layout structure…');
+  
+    await this.streamFrontendBlock(`cmd-ui-${this.currentBuildId}-3`, commands[2], jobId);
     await this.delay(800);
-    this.hideLoader();
-
-    /* ---------- CMD 3 ---------- */
-
-    await this.streamFrontendBlock(
-      `cmd-ui-${this.currentBuildId}-3`,
-      commands[2],
-      jobId
-    );
-
-    this.showLoader('Finalizing visual polish…');
-    await this.delay(900);
-    this.hideLoader();
-
-    /* ---------- ENDING PARAGRAPH ---------- */
-
+  
+    /* ---------- NEW MESSAGE 1 ---------- */
+  
     await this.streamFrontendParagraph(
-      `regen-end-${this.currentBuildId}`,
-      `The redesigned structure is ready.
-  Your updated layout and styling provide better visual hierarchy,
-  improved readability, and a more engaging overall experience.
-  You can continue refining or generate another variation.`,
+      `regen-build-prep-${this.currentBuildId}`,
+      `The design updates are complete.
+  I'm now preparing the production-ready React build for deployment.`,
       jobId, 2
     );
-
+  
+    await this.delay(600);
+  
+    /* ---------- NEW MESSAGE 2 ---------- */
+  
+    await this.streamFrontendParagraph(
+      `regen-build-start-${this.currentBuildId}`,
+      `This may take a moment as dependencies are installed, the application is compiled,
+  and the preview is deployed securely.`,
+      jobId, 2
+    );
+  
     this.isTyping = false;
-
-    this.startPreview(null)
-    setTimeout(() => {
-      this.previewShow = true;
-    }, 5000)
   }
+  
 
   delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -497,6 +482,10 @@ export class AiPreviewComponent {
     this.blocks = this.blocks.filter(b => b.id !== 'status');
   }
 
+  saveDesign() {
+    this.router.navigate([`plan-delivery/${this.projectsData.clientEnquryId}`])
+  }
+
   ngOnDestroy() {
     this.blocks = [];
     this.aiService.stop();
@@ -518,68 +507,177 @@ export class AiPreviewComponent {
     });
   }
 
-  handleGenerateResponse(res: any) {
-    const user_template_id = res.data.user_template_id;
-    const { Forgot_password } = res.data.react_files;
-    const react_files = { Forgot_password };
+  // handleGenerateResponse(res: any): string {
 
-    this.files = [];
+  //   const user_template_id = res.data.user_template_id;
+  
+  //   this.designCount++;
+  
+  //   const designId = `design-${this.designCount}`;
+  
+  //   const snapshot: DesignSnapshot = {
+  //     id: designId,
+  //     label: `Template ${this.designCount}`,
+  //     pages: res.data.pages,
+  //     loginRedirect: res.data.login_redirect,
+  //     createdAt: new Date(),
+  //     previewType: 'html'
+  //   };
+  
+  //   this.designMap.set(designId, snapshot);
+  
+  //   this.designOrder.push({
+  //     designId,
+  //     user_template_id
+  //   });
+  
+  //   this.activeDesignId = designId;
+  
+  //   const firstKey = Object.keys(snapshot.pages)[0];
+  //   if (firstKey) {
+  //     this.loadPageFromDesign(designId, firstKey);
+  //   }
+  
+  //   return designId; // 🔥 IMPORTANT
+  // }
 
-    // Object.entries(res.data.react_files).forEach(([page, data]: any) => {
-    Object.entries(react_files).forEach(([page, data]: any) => {
-      this.files.push({
-        id: `${page}-jsx`,
-        name: `${page}.jsx`,
-        language: 'javascript',
-        fullCode: data.jsx
+  renderHtmlPreview(designId: string) {
+
+    const design = this.designMap.get(designId);
+    if (!design) return;
+  
+    const firstKey = Object.keys(design.pages)[0];
+    if (firstKey) {
+      this.loadPageFromDesign(designId, firstKey);
+    }
+  
+  }
+  
+  
+
+
+  buildReactPreview(templateId: number, designId: string) {
+
+    this.isReactBuilding = true;
+  
+   // start step 1 immediately
+   this.setBuildStep(1);
+
+   // step 2 after 1.5s
+   const step2Timer = setTimeout(() => {
+     this.setBuildStep(2);
+   }, 10000);
+ 
+   // step 3 after 3s
+   const step3Timer = setTimeout(() => {
+     this.setBuildStep(3);
+   }, 15000);
+ 
+    this.apiService
+      .postAPI('api/user/buildReactPreview', { templateId })
+      .subscribe({
+  
+        next: (res: any) => {
+  
+          this.isReactBuilding = false;
+  
+          if (res.success) {
+  
+            const fullUrl =
+              this.baseURl.replace(/\/$/, '') + '/' +
+              res.message.preview_url.replace(/^\//, '');
+  
+            const design = this.designMap.get(designId);
+            if (!design) return;
+  
+            design.previewType = 'react';
+            design.reactPreviewUrl = fullUrl;
+  
+            this.designMap.set(designId, design);
+  
+            this.loadReactPreview(fullUrl);
+  
+          } else {
+  
+            // ❌ React failed → fallback to HTML
+            this.renderHtmlPreview(designId);
+          }
+        },
+  
+        error: () => {
+          this.isReactBuilding = false;
+          // ❌ React error → fallback to HTML
+          this.renderHtmlPreview(designId);
+        }
       });
-    });
+  }
+  
 
-    // preview code starts from here 
-    this.designCount = this.designCount + 1;
+  mapDesignFromResponse(res: any): string {
+
+    const user_template_id = res.data.user_template_id;
+  
+    this.designCount++;
+  
     const designId = `design-${this.designCount}`;
+  
     const snapshot: DesignSnapshot = {
       id: designId,
       label: `Template ${this.designCount}`,
       pages: res.data.pages,
       loginRedirect: res.data.login_redirect,
-      createdAt: new Date()
+      createdAt: new Date(),
+      previewType: 'html'
     };
-
-    this.loginRedirect = res.data.login_redirect
-
-    // store
+  
     this.designMap.set(designId, snapshot);
+  
     this.designOrder.push({
-      designId: designId,
-      user_template_id: user_template_id
+      designId,
+      user_template_id
     });
-    // activate
+  
     this.activeDesignId = designId;
-
-    // load first page
-    const firstKey = Object.keys(snapshot.pages)[0];
-    if (firstKey) {
-      this.loadPageFromDesign(designId, firstKey);
-    }
+  
+    return designId;
   }
+  
+  
+
+  loadReactPreview(url: string) {
+    const iframe = this.previewFrame.nativeElement;
+    iframe.src = 'about:blank';
+    setTimeout(() => iframe.src = url + '?t=' + Date.now(), 30);
+  }
+  
+  
+  
+  
 
   switchDesign(designId: string) {
-    if (!this.designMap.has(designId)) return;
 
+    const design = this.designMap.get(designId);
+    
+    if (!design) return;
+  
     this.activeDesignId = designId;
-
-    const design = this.designMap.get(designId)!;
-
-    // reset menu / state
-    this.pages = design.pages;
-    this.loginRedirect = design.loginRedirect;
-
+  
+    // 👉 React preview
+    if (design.previewType === 'react' && design.reactPreviewUrl) {
+  
+      this.loadReactPreview(design.reactPreviewUrl);
+      return; // 🔥 important: stop here
+    }
+  
+    // 👉 HTML preview
     const firstKey = Object.keys(design.pages)[0];
     if (firstKey) {
       this.loadPageFromDesign(designId, firstKey);
     }
   }
+  
+  
+  
 
   loadPageFromDesign(designId: string, key: string) {
 
@@ -614,19 +712,19 @@ export class AiPreviewComponent {
           <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
             <!-- 🔥 FOLLOW TOGGLE HANDLER -->
-       <script>window.addEventListener('message', function (e) {
-          if (e.data?.type === 'toggle-follow') {
-          const buttons = document.querySelectorAll('[data-follow-toggle]');
-          const btn = buttons[e.data.followIndex];
-
+          <script>
+      window.addEventListener('message', function (e) {
+        if (e.data && e.data.type === 'toggle-follow') {
+          const btn = document.querySelector('[data-follow-toggle]');
           if (!btn) return;
 
           btn.classList.toggle('is-following');
           btn.textContent = btn.classList.contains('is-following')
             ? 'Following'
             : 'Follow';
-          }
-        });</script>
+        }
+      });
+          </script>
         </body>
       </html>
     `);
@@ -727,26 +825,14 @@ export class AiPreviewComponent {
 
   private iframeClickHandler = (e: MouseEvent) => {
     const el = e.target as HTMLElement;
-    const followBtn = el.closest('[data-follow-toggle]') as HTMLElement;
-
-    let followIndex = -1;
-
-    if (followBtn) {
-      const allFollowBtns = Array.from(
-        followBtn.ownerDocument.querySelectorAll('[data-follow-toggle]')
-      );
-      followIndex = allFollowBtns.indexOf(followBtn);
-    }
 
     window.postMessage(
       {
         type: 'preview-click',
-        followToggle: followIndex !== -1,
-        followIndex,
         menuKey: el.closest('[data-menu-key]')?.getAttribute('data-menu-key'),
         action: el.closest('[data-action]')?.getAttribute('data-action'),
         subFeature: el.closest('[data-sub-feature]')?.getAttribute('data-sub-feature'),
-        // followToggle: !!el.closest('[data-follow-toggle]')
+        followToggle: !!el.closest('[data-follow-toggle]')
       },
       '*'
     );
@@ -762,6 +848,9 @@ export class AiPreviewComponent {
     this.showModal = false;
   }
 
+  startTyping() {
+    // this.codeEditor.startTyping();
+  }
 
 
   onCodeFinished() {
@@ -769,7 +858,7 @@ export class AiPreviewComponent {
   }
 
   openFullPreview() {
-    if (!this.previewShow) return
+    if (this.isReactBuilding) return
     this.fullScreen = !this.fullScreen;
   }
 
@@ -836,7 +925,145 @@ export class AiPreviewComponent {
     });
   }
 
+  setBuildStep(step: number) {
+    this.buildStep = step;
+  }
 
+
+  getUserTemplates(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.apiService.postAPI(
+        'api/user/getUserTemplates',
+        { clientEnquryId: this.projectsData.clientEnquryId }
+      )
+      .subscribe({
+        next: (res: any) => {
+          if (res.success && res.templateExists) {
+            resolve(res.data);   // ✅ return templates
+          } else {
+            resolve([]);
+          }
+        },
+        error: err => reject(err)
+      });
+    });
+  }
+  
+
+  async loadDraftTemplates(templates: any[]) {
+    
+    const { forgot_password } = JSON.parse(templates[0].react_code_file);
+    const react_files = { forgot_password };
+
+    this.files = [];
+
+    Object.entries(react_files).forEach(([page, data]: any) => {
+      this.files.push({
+        id: `${page}-jsx`,
+        name: `${page}.jsx`,
+        language: 'javascript',
+        fullCode: data.jsx
+      });
+    });
+    for (const tpl of templates) {
+  
+      const previewData = JSON.parse(tpl.preview_html_css);
+  
+      const designId = this.mapDesignFromDraft({
+        templateId: tpl.template_id,
+        pages: previewData.pages,
+        loginRedirect: previewData.login_redirect,
+        reactBuildUrl: tpl.react_build_url,
+        reactBuildStatus: tpl.react_build_status
+      });
+   
+  
+      // Auto activate first template
+      if (this.designOrder.length === 1) {
+        this.activateDesign(designId);
+      }
+    }
+  }
+  
+
+  mapDesignFromDraft(data: any): string {
+
+    this.designCount++;
+  
+    const designId = `design-${this.designCount}`;
+  
+    const snapshot: DesignSnapshot = {
+      id: designId,
+      label: `Template ${this.designCount}`,
+      pages: data.pages,
+      loginRedirect: data.loginRedirect,
+      createdAt: new Date(),
+      previewType: data.reactBuildStatus === 1 ? 'react' : 'html',
+      reactPreviewUrl: data.reactBuildUrl
+        ? this.baseURl.replace(/\/$/, '') + '/' + data.reactBuildUrl.replace(/^\//, '')
+        : null
+    };
+  
+    this.designMap.set(designId, snapshot);
+  
+    this.designOrder.push({
+      designId,
+      user_template_id: data.templateId
+    });
+  
+    return designId;
+  }
+
+  activateDesign(designId: string) {
+
+    const design = this.designMap.get(designId);
+    if (!design) return;
+  
+    this.activeDesignId = designId;
+   
+    if (design.previewType === 'react' && design.reactPreviewUrl) {
+  
+      this.loadReactPreview(design.reactPreviewUrl);
+  
+    } else {
+  
+      this.renderHtmlPreview(designId);
+  
+    }
+    this.isReactBuilding = false;
+    this.isTyping = false;
+    this.showCodeButton = true;
+  }
+  
+  
+  
+  showDraftWelcomeMessages() {
+
+    const now = new Date();
+  
+    this.blocks = [
+      {
+        id: 'paragraph-1',
+        text: 'Hi! I’ve loaded your saved project templates for you 😊',
+        done: true,
+        timestamp: now
+      },
+      {
+        id: 'paragraph-2',
+        text: 'Feel free to generate more variations if you’d like to explore new layouts or flows.',
+        done: true,
+        timestamp: now
+      },
+      {
+        id: 'paragraph-3',
+        text: 'When everything looks good, click Continue & Deploy to proceed.',
+        done: true,
+        timestamp: now
+      }
+    ];
+  }
+  
+  
 
 }
 

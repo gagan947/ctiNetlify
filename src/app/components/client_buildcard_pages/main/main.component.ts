@@ -8,16 +8,18 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ChatbotComponent } from "../chatbot/chatbot.component";
 import { BdLoaderComponent } from "../../shared/bd-loader/bd-loader.component";
 import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { SubcriptionPageComponent } from '../subcription-page/subcription-page.component';
 declare var Calendly: any;
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule, ChatbotComponent, BdLoaderComponent, CalendlyDirective],
+  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule, ChatbotComponent, BdLoaderComponent, CalendlyDirective, SubcriptionPageComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
 export class MainComponent {
-
+  showModal = false;
   @ViewChild('anchor', { static: false }) anchor!: ElementRef;
 @ViewChild('SearchInput', { static: false }) SearchInput!: ElementRef;
   private observer!: IntersectionObserver;
@@ -34,11 +36,14 @@ export class MainComponent {
   loading: boolean = false;
   searchTerm: string = '';
   orgProjectsData: Project[] = [];
-  constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router) {
+  allowProjectCreate = false;
+  navigateMessage = ''
+  constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router,private message: NzMessageService,) {
     this.imageURL = this.apiservice.imageUrl;
   }
 
   ngOnInit(): void {
+    this.getUserSubscriptionPlan();
     const data: any = localStorage.getItem('userDetailCTI')
     if (data !== 'undefined') {
       const user = JSON.parse(data);
@@ -47,32 +52,9 @@ export class MainComponent {
     this.getProjects();
     sessionStorage.clear();
     this.apiservice._htmlCode.set(null);
+
     // this.socket = io(this.apiservice.apiUrl);
     let currentBotMsg = "";
-    // listen for streaming tokens
-    // this.socket.on('botReply', (msg: string) => {
-
-    //   if (msg === "[END]") {
-    //     console.log("✅ Stream finished");
-    //     return;
-    //   }
-    //   // Append stream to last bot message
-    //   if (
-    //     this.messages.length > 0 &&
-    //     this.messages[this.messages.length - 1].sender === "Bot"
-    //   ) {
-    //     this.messages[this.messages.length - 1].text += msg;
-    //   } else {
-    //     this.messages.push({ sender: "Bot", text: msg });
-    //   }
-    //   this.isLoading = false; // hide spinner after response
-    // });
-
-    // // when streaming ends
-    // this.socket.on('botDone', () => {
-    //   console.log("✅ Bot finished response");
-    //   currentBotMsg = "";
-    // });
   }
 
   receiveData(data: any) {
@@ -84,7 +66,7 @@ export class MainComponent {
       contain: item.contain ? item.contain.split(',') : []
     }));
     this.projectsData = [...mappedData];
-    console.log('Got from child:', this.projectsData);
+   
   }
 
   ngAfterViewInit() {
@@ -181,10 +163,19 @@ export class MainComponent {
   }
 
   navigateTool(id: any) {
-    this.router.navigate(['/bd_loader'], {
-      queryParams: { id },
-      skipLocationChange: true  // <-- URL won't change, user stays on original route
-    });
+   if(this.allowProjectCreate){
+     this.router.navigate(['/bd_loader'], {
+       queryParams: { id },
+       skipLocationChange: true  
+     });
+   }else{
+     this.showModal = true;
+     setTimeout(() => {
+      this.message.warning(this.navigateMessage);
+    }, 2000);
+    
+   }
+
   }
 
   clearSearch() {
@@ -193,6 +184,23 @@ export class MainComponent {
     this.page = this.page;
     this.SearchInput.nativeElement.value = '';
     this.projectsData = [...this.orgProjectsData];
+  }
+
+  getUserSubscriptionPlan() {
+    this.apiservice.getApi<any>(`api/user/getMySubscription`)
+      .subscribe({
+        next: (res) => {
+          this.allowProjectCreate = res.allowProjectCreate;
+          this.navigateMessage = res.message
+        },
+        error: err => {
+          // this.loading = false
+        }
+      });
+  }
+
+  closeModal() {
+    this.showModal = false;
   }
 
 }
