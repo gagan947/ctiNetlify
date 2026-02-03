@@ -42,7 +42,7 @@ declare var bootstrap: any;
   styleUrl: './ai-preview.component.css'
 })
 export class AiPreviewComponent {
-  
+
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
   @ViewChild('chatScroll') chatScroll!: ElementRef<HTMLDivElement>;
   @ViewChild('codeEditor') codeEditor!: ReactCodeEditorComponent;
@@ -96,18 +96,17 @@ export class AiPreviewComponent {
       icon: 'img/mobile_app_icon_svg.svg'
     }
   ];
-  baseURl :any;
+  baseURl: any;
   previewUrl: any = null;
   isReactBuilding = true;
   buildStep = 0;
   templateExists = false;
-
   buildSteps = [
     'Installing dependencies (npm install)',
     'Building React application (npm run build)',
     'Deploying preview'
   ];
-  
+
 
   // Redirect page for login action
   constructor(
@@ -118,28 +117,28 @@ export class AiPreviewComponent {
     private aiService: AiSocketService,
     private router: Router, private ngZone: NgZone, private fb: FormBuilder,
     private toster: NzMessageService
-  ) { 
+  ) {
     this.baseURl = this.apiService.apiUrl;
   }
 
   async ngOnInit() {
-    
+
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
     this.blocks = [];
     window.addEventListener('message', this.previewListener);
-     // ✅ Load draft templates first
-  const templates = await this.getUserTemplates();
+    // ✅ Load draft templates first
+    const templates = await this.getUserTemplates();
 
-  if (templates.length > 0) {
-    this.showDraftWelcomeMessages();
-    // 👉 map and render old drafts
-    await this.loadDraftTemplates(templates);
+    if (templates.length > 0) {
+      this.showDraftWelcomeMessages();
+      // 👉 map and render old drafts
+      await this.loadDraftTemplates(templates);
 
-    return; // ⛔ stop fresh generation flow
-  }
+      return; // ⛔ stop fresh generation flow
+    }
 
-    
+
     this.aiService.socketReady$
       .pipe(
         filter(id => !!id),
@@ -157,8 +156,8 @@ export class AiPreviewComponent {
 
           const last = blocks[blocks.length - 1];
           if (last?.id === 'status-code-running' && last?.done && this.files.length > 0) {
-            
-           
+
+
             this.showCodeButton = true;
             this.previewCodeShow = true;
             const el = document.getElementById('pills-profile-tab');
@@ -178,7 +177,7 @@ export class AiPreviewComponent {
               createdAt: new Date()
             });
           } else if (last?.id === 'paragraph-preview-ready' && last?.done) {
-          
+
             this.isTyping = false;
             const el = document.getElementById('pills-home-tab');
             if (!el) return;
@@ -225,27 +224,27 @@ export class AiPreviewComponent {
     this.apiService
       .postAPI('api/user/generatePreview', payload)
       .subscribe((res: any) => {
-       // ✅ always map first
-       const designId = this.mapDesignFromResponse(res);
+        // ✅ always map first
+        const designId = this.mapDesignFromResponse(res);
 
-      // (optional) your JSX file logic
-      const { forgot_password } = res.data.react_files;
-      const react_files = { forgot_password };
+        // (optional) your JSX file logic
+        const { forgot_password } = res.data.react_files;
+        const react_files = { forgot_password };
 
-      this.files = [];
+        this.files = [];
 
-      Object.entries(react_files).forEach(([page, data]: any) => {
-        this.files.push({
-          id: `${page}-jsx`,
-          name: `${page}.jsx`,
-          language: 'javascript',
-          fullCode: data.jsx
+        Object.entries(react_files).forEach(([page, data]: any) => {
+          this.files.push({
+            id: `${page}-jsx`,
+            name: `${page}.jsx`,
+            language: 'javascript',
+            fullCode: data.jsx
+          });
         });
-      });
-      
-      // ✅ Now build React preview for THIS design
-      this.buildReactPreview(res.data.user_template_id, designId);
-     
+
+        // ✅ Now build React preview for THIS design
+        this.buildReactPreview(res.data.user_template_id, designId);
+
       });
   }
 
@@ -263,10 +262,10 @@ export class AiPreviewComponent {
     document.head.appendChild(this.styleTag);
   }
 
- 
+
 
   onPreviewMessage(data: any, event: any) {
-   
+
     /* LOGIN ACTION */
     if (data.action === 'login' && this.loginRedirect) {
       this.loadPageFromDesign(this.activeDesignId, this.loginRedirect);
@@ -334,69 +333,69 @@ export class AiPreviewComponent {
   async regenerate() {
 
     if (this.isTyping) return;
-  
+
     if (this.designOrder.length >= 5) {
       this.toster.error('You have reached the maximum limit of 5 design variations.');
       return;
     }
-  
+
     this.setBuildStep(0);
     this.startPreview(null);
     this.isReactBuilding = true;
-  
+
     this.clearFirstBlockMinHeight();
     this.isTyping = true;
-  
+
     const jobId = ++this.frontendJobId;
     this.currentBuildId++;
-  
+
     const commands = this.aiService.getRegenCommands(this.currentBuildId);
-  
+
     setTimeout(() => this.scrollToBottom(), 0);
-  
+
     /* ---------- INTRO ---------- */
-  
+
     await this.streamFrontendParagraph(
       `regen-intro-${this.currentBuildId}`,
       `Let’s redesign your application with a fresh visual direction.
   I’ll refine the layout, improve spacing, and enhance the styling for a cleaner experience.`,
       jobId, 1
     );
-  
+
     /* ---------- UI CHANGES ---------- */
-  
+
     await this.streamFrontendBlock(`cmd-ui-${this.currentBuildId}-1`, commands[0], jobId);
     await this.delay(600);
-  
+
     await this.streamFrontendBlock(`cmd-ui-${this.currentBuildId}-2`, commands[1], jobId);
     await this.delay(700);
-  
+
     await this.streamFrontendBlock(`cmd-ui-${this.currentBuildId}-3`, commands[2], jobId);
     await this.delay(800);
-  
+
     /* ---------- NEW MESSAGE 1 ---------- */
-  
+
     await this.streamFrontendParagraph(
       `regen-build-prep-${this.currentBuildId}`,
       `The design updates are complete.
   I'm now preparing the production-ready React build for deployment.`,
       jobId, 2
     );
-  
+
     await this.delay(600);
-  
+
     /* ---------- NEW MESSAGE 2 ---------- */
-  
+
     await this.streamFrontendParagraph(
       `regen-build-start-${this.currentBuildId}`,
       `This may take a moment as dependencies are installed, the application is compiled,
   and the preview is deployed securely.`,
       jobId, 2
     );
-  
+
     this.isTyping = false;
   }
-  
+
 
   delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -510,11 +509,11 @@ export class AiPreviewComponent {
   // handleGenerateResponse(res: any): string {
 
   //   const user_template_id = res.data.user_template_id;
-  
+
   //   this.designCount++;
-  
+
   //   const designId = `design-${this.designCount}`;
-  
+
   //   const snapshot: DesignSnapshot = {
   //     id: designId,
   //     label: `Template ${this.designCount}`,
@@ -523,21 +522,21 @@ export class AiPreviewComponent {
   //     createdAt: new Date(),
   //     previewType: 'html'
   //   };
-  
+
   //   this.designMap.set(designId, snapshot);
-  
+
   //   this.designOrder.push({
   //     designId,
   //     user_template_id
   //   });
-  
+
   //   this.activeDesignId = designId;
-  
+
   //   const firstKey = Object.keys(snapshot.pages)[0];
   //   if (firstKey) {
   //     this.loadPageFromDesign(designId, firstKey);
   //   }
-  
+
   //   return designId; // 🔥 IMPORTANT
   // }
 
@@ -545,65 +544,65 @@ export class AiPreviewComponent {
 
     const design = this.designMap.get(designId);
     if (!design) return;
-  
+
     const firstKey = Object.keys(design.pages)[0];
     if (firstKey) {
       this.loadPageFromDesign(designId, firstKey);
     }
-  
+
   }
-  
-  
+
+
 
 
   buildReactPreview(templateId: number, designId: string) {
 
     this.isReactBuilding = true;
-  
-   // start step 1 immediately
-   this.setBuildStep(1);
 
-   // step 2 after 1.5s
-   const step2Timer = setTimeout(() => {
-     this.setBuildStep(2);
-   }, 10000);
- 
-   // step 3 after 3s
-   const step3Timer = setTimeout(() => {
-     this.setBuildStep(3);
-   }, 15000);
- 
+    // start step 1 immediately
+    this.setBuildStep(1);
+
+    // step 2 after 1.5s
+    const step2Timer = setTimeout(() => {
+      this.setBuildStep(2);
+    }, 10000);
+
+    // step 3 after 3s
+    const step3Timer = setTimeout(() => {
+      this.setBuildStep(3);
+    }, 15000);
+
     this.apiService
       .postAPI('api/user/buildReactPreview', { templateId })
       .subscribe({
-  
+
         next: (res: any) => {
-  
+
           this.isReactBuilding = false;
-  
+
           if (res.success) {
-  
+
             const fullUrl =
               this.baseURl.replace(/\/$/, '') + '/' +
               res.message.preview_url.replace(/^\//, '');
-  
+
             const design = this.designMap.get(designId);
             if (!design) return;
-  
+
             design.previewType = 'react';
             design.reactPreviewUrl = fullUrl;
-  
+
             this.designMap.set(designId, design);
-  
+
             this.loadReactPreview(fullUrl);
-  
+
           } else {
-  
+
             // ❌ React failed → fallback to HTML
             this.renderHtmlPreview(designId);
           }
         },
-  
+
         error: () => {
           this.isReactBuilding = false;
           // ❌ React error → fallback to HTML
@@ -611,16 +610,16 @@ export class AiPreviewComponent {
         }
       });
   }
-  
+
 
   mapDesignFromResponse(res: any): string {
 
     const user_template_id = res.data.user_template_id;
-  
+
     this.designCount++;
-  
+
     const designId = `design-${this.designCount}`;
-  
+
     const snapshot: DesignSnapshot = {
       id: designId,
       label: `Template ${this.designCount}`,
@@ -629,55 +628,55 @@ export class AiPreviewComponent {
       createdAt: new Date(),
       previewType: 'html'
     };
-  
+
     this.designMap.set(designId, snapshot);
-  
+
     this.designOrder.push({
       designId,
       user_template_id
     });
-  
+
     this.activeDesignId = designId;
-  
+
     return designId;
   }
-  
-  
+
+
 
   loadReactPreview(url: string) {
     const iframe = this.previewFrame.nativeElement;
     iframe.src = 'about:blank';
     setTimeout(() => iframe.src = url + '?t=' + Date.now(), 30);
   }
-  
-  
-  
-  
+
+
+
+
 
   switchDesign(designId: string) {
 
     const design = this.designMap.get(designId);
-    
+
     if (!design) return;
-  
+
     this.activeDesignId = designId;
-  
+
     // 👉 React preview
     if (design.previewType === 'react' && design.reactPreviewUrl) {
-  
+
       this.loadReactPreview(design.reactPreviewUrl);
       return; // 🔥 important: stop here
     }
-  
+
     // 👉 HTML preview
     const firstKey = Object.keys(design.pages)[0];
     if (firstKey) {
       this.loadPageFromDesign(designId, firstKey);
     }
   }
-  
-  
-  
+
+
+
 
   loadPageFromDesign(designId: string, key: string) {
 
@@ -936,22 +935,23 @@ export class AiPreviewComponent {
         'api/user/getUserTemplates',
         { clientEnquryId: this.projectsData.clientEnquryId }
       )
-      .subscribe({
-        next: (res: any) => {
-          if (res.success && res.templateExists) {
-            resolve(res.data);   // ✅ return templates
-          } else {
-            resolve([]);
-          }
-        },
-        error: err => reject(err)
-      });
+        .subscribe({
+          next: (res: any) => {
+            if (res.success && res.templateExists) {
+              this.templateExists = true;
+              resolve(res.data);   // ✅ return templates
+            } else {
+              resolve([]);
+            }
+          },
+          error: err => reject(err)
+        });
     });
   }
-  
+
 
   async loadDraftTemplates(templates: any[]) {
-    
+
     const { forgot_password } = JSON.parse(templates[0].react_code_file);
     const react_files = { forgot_password };
 
@@ -965,10 +965,11 @@ export class AiPreviewComponent {
         fullCode: data.jsx
       });
     });
+
     for (const tpl of templates) {
-  
+
       const previewData = JSON.parse(tpl.preview_html_css);
-  
+
       const designId = this.mapDesignFromDraft({
         templateId: tpl.template_id,
         pages: previewData.pages,
@@ -976,22 +977,22 @@ export class AiPreviewComponent {
         reactBuildUrl: tpl.react_build_url,
         reactBuildStatus: tpl.react_build_status
       });
-   
-  
+
+
       // Auto activate first template
       if (this.designOrder.length === 1) {
         this.activateDesign(designId);
       }
     }
   }
-  
+
 
   mapDesignFromDraft(data: any): string {
 
     this.designCount++;
-  
+
     const designId = `design-${this.designCount}`;
-  
+
     const snapshot: DesignSnapshot = {
       id: designId,
       label: `Template ${this.designCount}`,
@@ -1003,14 +1004,14 @@ export class AiPreviewComponent {
         ? this.baseURl.replace(/\/$/, '') + '/' + data.reactBuildUrl.replace(/^\//, '')
         : null
     };
-  
+
     this.designMap.set(designId, snapshot);
-  
+
     this.designOrder.push({
       designId,
       user_template_id: data.templateId
     });
-  
+
     return designId;
   }
 
@@ -1018,29 +1019,29 @@ export class AiPreviewComponent {
 
     const design = this.designMap.get(designId);
     if (!design) return;
-  
+
     this.activeDesignId = designId;
-   
+
     if (design.previewType === 'react' && design.reactPreviewUrl) {
-  
+
       this.loadReactPreview(design.reactPreviewUrl);
-  
+
     } else {
-  
+
       this.renderHtmlPreview(designId);
-  
+
     }
     this.isReactBuilding = false;
     this.isTyping = false;
     this.showCodeButton = true;
   }
-  
-  
-  
+
+
+
   showDraftWelcomeMessages() {
 
     const now = new Date();
-  
+
     this.blocks = [
       {
         id: 'paragraph-1',
@@ -1062,8 +1063,8 @@ export class AiPreviewComponent {
       }
     ];
   }
-  
-  
+
+
 
 }
 

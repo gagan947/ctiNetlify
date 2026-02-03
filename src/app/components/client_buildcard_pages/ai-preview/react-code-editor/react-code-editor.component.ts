@@ -26,6 +26,7 @@ interface ReactFile {
 export class ReactCodeEditorComponent {
   activeFile: any;
   @Input() files: ReactFile[] = [];
+  @Input() templateExists: boolean = false;
   generatedFiles: any = []
   editor: any;
   @Output() typingDone = new EventEmitter<void>();
@@ -62,7 +63,24 @@ export class ReactCodeEditorComponent {
     // grab editor ONCE
     if (!this.editor && e.editor) {
       this.editor = e.editor;
-      this.startTyping()
+      if (this.templateExists) {
+        if (!this.editor) return;
+        this.activeFile = this.files[0].name
+
+        const model = this.editor.getModel();
+        if (!model) return;
+
+        const monaco = (window as any).monaco;
+        if (monaco) {
+          monaco.editor.setModelLanguage(model, this.files[0].language);
+        }
+
+        model.setValue(this.files[0].fullCode);
+
+        this.editor.revealLine(1);
+      } else {
+        this.startTyping()
+      }
       const model = this.editor.getModel();
       // model?.setValue('');
     }
@@ -71,7 +89,7 @@ export class ReactCodeEditorComponent {
   /* ---------- PUBLIC API ---------- */
   /** Parent will call this explicitly */
   startTyping() {
-    
+
     if (!this.editor || !this.files.length) return;
 
     this.currentFileIndex = 0;
