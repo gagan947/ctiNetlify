@@ -76,7 +76,7 @@
         <span class="fw-bold">Free</span>
       </div>
       <div>
-        <button class="upgrade-btn">
+        <button class="upgrade-btn" (click)="openModal()">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"
             class="text-[#ffc300]">
             <path
@@ -232,16 +232,11 @@
                     Deploying preview
                     <span *ngIf="buildStep === 3" class="typing-dots"></span>
                   </div>
-
                 </div>
-
-
               </div>
             </div>
           </div>
-
         </div>
-
         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
           <app-react-code-editor #codeEditor *ngIf="files.length >0" [files]="files" [templateExists]="templateExists"
             (typingDone)="onCodeFinished()">
