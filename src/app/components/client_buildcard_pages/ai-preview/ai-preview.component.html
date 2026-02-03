@@ -16,21 +16,20 @@
           </path>
         </svg>
       </div>
+      <button class="ct_design_tab_btn fw-bold">
+        {{projectsData.project_name || 'Project Name'}}
+      </button>
       <div class="d-flex align-items-center gap-2">
         @for (item of designOrder; track item.designId; let i = $index) {
         <button class="ct_design_tab_btn design-tab" [class.active]="item.designId === activeDesignId">
           <span (click)="switchDesign(item.designId)"
             [ngStyle]="{ 'padding-right': designOrder.length > 1 ? '14px' : '0px' }">
-
             Template {{ i + 1 }}
           </span>
-
           <i *ngIf="designOrder.length > 1" class="fa-solid fa-xmark" (click)="removeDesign(item)"></i>
         </button>
         }
       </div>
-
-
     </div>
     <div class="d-flex align-items-center gap-2">
       <div *ngIf="!previewCodeShow">
@@ -55,7 +54,6 @@
       </ul>
       <ul class="mb-0">
         <li>
-     
           <div class="dropdown ct_dropdown_device_preview123">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
               data-bs-toggle="dropdown" aria-expanded="false" [innerHTML]="selectedDeviceType">
@@ -70,15 +68,21 @@
             </ul>
           </div>
         </li>
-
         <li>
-    
         </li>
       </ul>
-
+      <div class="ct_plan_div">
+        <p class="mb-0 text-white">Current Plan </p>
+        <span class="fw-bold">Free</span>
+      </div>
       <div>
         <button class="upgrade-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256" class="text-[#ffc300]"><path d="M248,80a28,28,0,1,0-51.12,15.77l-26.79,33L146,73.4a28,28,0,1,0-36.06,0L85.91,128.74l-26.79-33a28,28,0,1,0-26.6,12L47,194.63A16,16,0,0,0,62.78,208H193.22A16,16,0,0,0,209,194.63l14.47-86.85A28,28,0,0,0,248,80ZM128,40a12,12,0,1,1-12,12A12,12,0,0,1,128,40ZM24,80A12,12,0,1,1,36,92,12,12,0,0,1,24,80ZM193.22,192H62.78L48.86,108.52,81.79,149A8,8,0,0,0,88,152a7.83,7.83,0,0,0,1.08-.07,8,8,0,0,0,6.26-4.74l29.3-67.4a27,27,0,0,0,6.72,0l29.3,67.4a8,8,0,0,0,6.26,4.74A7.83,7.83,0,0,0,168,152a8,8,0,0,0,6.21-3l32.93-40.52ZM220,92a12,12,0,1,1,12-12A12,12,0,0,1,220,92Z"></path></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"
+            class="text-[#ffc300]">
+            <path
+              d="M248,80a28,28,0,1,0-51.12,15.77l-26.79,33L146,73.4a28,28,0,1,0-36.06,0L85.91,128.74l-26.79-33a28,28,0,1,0-26.6,12L47,194.63A16,16,0,0,0,62.78,208H193.22A16,16,0,0,0,209,194.63l14.47-86.85A28,28,0,0,0,248,80ZM128,40a12,12,0,1,1-12,12A12,12,0,0,1,128,40ZM24,80A12,12,0,1,1,36,92,12,12,0,0,1,24,80ZM193.22,192H62.78L48.86,108.52,81.79,149A8,8,0,0,0,88,152a7.83,7.83,0,0,0,1.08-.07,8,8,0,0,0,6.26-4.74l29.3-67.4a27,27,0,0,0,6.72,0l29.3,67.4a8,8,0,0,0,6.26,4.74A7.83,7.83,0,0,0,168,152a8,8,0,0,0,6.21-3l32.93-40.52ZM220,92a12,12,0,1,1,12-12A12,12,0,0,1,220,92Z">
+            </path>
+          </svg>
           Upgrade
         </button>
       </div>
@@ -166,11 +170,11 @@
     <div class="ct_ai_project_preview_right">
       <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-          <div class="preview-wrapper" id="topScrollDiv ">
+          <div class="preview-wrapper d-flex" id="topScrollDiv">
             <iframe #previewFrame class="preview-iframe mx-auto w-100" [style.maxWidth]="previewWidth + 'px'"
               [style.height.%]="100"></iframe>
             <div class="preview-overlay" [class.show]="isReactBuilding">
-              <div class="ct_ai_thiking_loader2 d-flex" >
+              <div class="ct_ai_thiking_loader2 d-flex">
                 <div class="rgt_loader" id="rgt_loader">
                   <div class="rgt_loader-wrapper">
                     <span class="rgt_loader-letter">G</span>
@@ -239,7 +243,8 @@
         </div>
 
         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-          <app-react-code-editor #codeEditor *ngIf="files.length >0" [files]="files" [templateExists]="templateExists" (typingDone)="onCodeFinished()">
+          <app-react-code-editor #codeEditor *ngIf="files.length >0" [files]="files" [templateExists]="templateExists"
+            (typingDone)="onCodeFinished()">
           </app-react-code-editor>
 
         </div>
