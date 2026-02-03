@@ -8,13 +8,13 @@ import { Meta, Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-iphone-app-builder',
   standalone: true,
- imports: [HeaderComponent, FooterComponent, RouterLink],
+  imports: [HeaderComponent, FooterComponent, RouterLink],
   templateUrl: './iphone-app-builder.component.html',
   styleUrl: './iphone-app-builder.component.css'
 })
 export class IphoneAppBuilderComponent {
   constructor(private meta: Meta, private title: Title) {
-    this.title.setTitle('AI iPhone App Builder | Create Next-Gen Web & Mobile Apps ');
-    this.meta.updateTag({ name: 'description', content: 'Use the Creative AI iPhone apps builder to create high-quality mobile and web solutions. Drive innovation, digital transformation, and long-term business success.' })
+    this.title.setTitle('Create an iPhone App Without Coding | Creative AI App Builder');
+    this.meta.updateTag({ name: 'description', content: 'Create an iPhone app without coding using Creative AI App Builder. Design, build, and launch fast, secure, and scalable iOS apps easily for businesses and startups.' })
   }
 }
