@@ -4,7 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { CommonModule } from '@angular/common';
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 type BillingCycle = 'monthly' | 'yearly';
-type PlanType = 'personal' | 'creative' | 'booster';
+type PlanType = 'free' |  'personal' | 'creative' | 'booster';
 declare var window: any;
 @Component({
   selector: 'app-subcription-page',
@@ -18,7 +18,9 @@ export class SubcriptionPageComponent {
   @Output() close = new EventEmitter<void>();
   billingSummaryModalOpen = false;
   billingCycle = signal<BillingCycle>('monthly');
+  projectsData:any;
   BASE_PRICES = {
+    free: 0,
     personal: 49,
     creative: 99,
     booster: 199
@@ -27,11 +29,13 @@ export class SubcriptionPageComponent {
 
   PLAN_PRICES = {
     monthly: {
+      free:0,
       personal: 49,
       creative: 99,
       booster: 199
     },
     yearly: {
+      free:0,
       personal: 39,
       creative: 89,
       booster: 179
@@ -47,7 +51,8 @@ export class SubcriptionPageComponent {
   CountryISO = CountryISO
   selectedPlan = signal<PlanType>('creative');
   constructor(private apiService: ApiService, private fb: FormBuilder) {
-
+    const projectData = sessionStorage.getItem('projectData');
+    this.projectsData = JSON.parse(projectData!);
   }
   billingForm = this.fb.nonNullable.group({
     name: ['', Validators.required],

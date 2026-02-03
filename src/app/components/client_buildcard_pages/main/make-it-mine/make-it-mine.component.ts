@@ -182,6 +182,7 @@ export class MakeItMineComponent {
         formData.append('projectId', this.id ? this.id : '0');
         formData.append('currentRoutes', this.router.url);
         formData.append('clientEnquryId', this.projectsData?.clientEnquryId ? this.projectsData.clientEnquryId : '');
+        formData.append('projectType' ,  this.projectType  ?  this.projectType  : '');
 
         this.apiService.postAPI('api/user/addProjectNameAndLogo', formData).subscribe({
             next: (res: any) => {

@@ -19,6 +19,31 @@
   position: relative;
 }
 
+
+.preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 5;
+}
+
+.preview-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Optional smooth iframe reveal */
+.preview-iframe {
+  transition: opacity .25s ease;
+}
+
+
 .preview-wrapper>div {
   max-width: 100% !important;
 }

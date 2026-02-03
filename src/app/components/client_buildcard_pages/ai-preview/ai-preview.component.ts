@@ -100,6 +100,7 @@ export class AiPreviewComponent {
   previewUrl: any = null;
   isReactBuilding = true;
   buildStep = 0;
+  templateExists = false;
 
   buildSteps = [
     'Installing dependencies (npm install)',
@@ -121,10 +122,24 @@ export class AiPreviewComponent {
     this.baseURl = this.apiService.apiUrl;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    
+    const projectData = sessionStorage.getItem('projectData');
+    this.projectsData = JSON.parse(projectData!);
     this.blocks = [];
     window.addEventListener('message', this.previewListener);
+     // ✅ Load draft templates first
+  const templates = await this.getUserTemplates();
 
+  if (templates.length > 0) {
+    this.showDraftWelcomeMessages();
+    // 👉 map and render old drafts
+    await this.loadDraftTemplates(templates);
+
+    return; // ⛔ stop fresh generation flow
+  }
+
+    
     this.aiService.socketReady$
       .pipe(
         filter(id => !!id),
@@ -157,8 +172,6 @@ export class AiPreviewComponent {
 
             el.dispatchEvent(event);
 
-
-            // snapshot current build
             this.builds.push({
               buildId: this.currentBuildId,
               blocks: JSON.parse(JSON.stringify(this.blocks)),
@@ -192,10 +205,6 @@ export class AiPreviewComponent {
   }
 
   startPreview(socket_id: string | null) {
-
-    const projectData = sessionStorage.getItem('projectData');
-    this.projectsData = JSON.parse(projectData!);
-
     const subFeatureIds: any[] = [];
     this.projectsData.selectdFeature.forEach((items: any) => {
       items.subFeatures.forEach((sub: any) => {
@@ -919,6 +928,141 @@ export class AiPreviewComponent {
   setBuildStep(step: number) {
     this.buildStep = step;
   }
+
+
+  getUserTemplates(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.apiService.postAPI(
+        'api/user/getUserTemplates',
+        { clientEnquryId: this.projectsData.clientEnquryId }
+      )
+      .subscribe({
+        next: (res: any) => {
+          if (res.success && res.templateExists) {
+            resolve(res.data);   // ✅ return templates
+          } else {
+            resolve([]);
+          }
+        },
+        error: err => reject(err)
+      });
+    });
+  }
+  
+
+  async loadDraftTemplates(templates: any[]) {
+    
+    const { forgot_password } = JSON.parse(templates[0].react_code_file);
+    const react_files = { forgot_password };
+
+    this.files = [];
+
+    Object.entries(react_files).forEach(([page, data]: any) => {
+      this.files.push({
+        id: `${page}-jsx`,
+        name: `${page}.jsx`,
+        language: 'javascript',
+        fullCode: data.jsx
+      });
+    });
+    for (const tpl of templates) {
+  
+      const previewData = JSON.parse(tpl.preview_html_css);
+  
+      const designId = this.mapDesignFromDraft({
+        templateId: tpl.template_id,
+        pages: previewData.pages,
+        loginRedirect: previewData.login_redirect,
+        reactBuildUrl: tpl.react_build_url,
+        reactBuildStatus: tpl.react_build_status
+      });
+   
+  
+      // Auto activate first template
+      if (this.designOrder.length === 1) {
+        this.activateDesign(designId);
+      }
+    }
+  }
+  
+
+  mapDesignFromDraft(data: any): string {
+
+    this.designCount++;
+  
+    const designId = `design-${this.designCount}`;
+  
+    const snapshot: DesignSnapshot = {
+      id: designId,
+      label: `Template ${this.designCount}`,
+      pages: data.pages,
+      loginRedirect: data.loginRedirect,
+      createdAt: new Date(),
+      previewType: data.reactBuildStatus === 1 ? 'react' : 'html',
+      reactPreviewUrl: data.reactBuildUrl
+        ? this.baseURl.replace(/\/$/, '') + '/' + data.reactBuildUrl.replace(/^\//, '')
+        : null
+    };
+  
+    this.designMap.set(designId, snapshot);
+  
+    this.designOrder.push({
+      designId,
+      user_template_id: data.templateId
+    });
+  
+    return designId;
+  }
+
+  activateDesign(designId: string) {
+
+    const design = this.designMap.get(designId);
+    if (!design) return;
+  
+    this.activeDesignId = designId;
+   
+    if (design.previewType === 'react' && design.reactPreviewUrl) {
+  
+      this.loadReactPreview(design.reactPreviewUrl);
+  
+    } else {
+  
+      this.renderHtmlPreview(designId);
+  
+    }
+    this.isReactBuilding = false;
+    this.isTyping = false;
+    this.showCodeButton = true;
+  }
+  
+  
+  
+  showDraftWelcomeMessages() {
+
+    const now = new Date();
+  
+    this.blocks = [
+      {
+        id: 'paragraph-1',
+        text: 'Hi! I’ve loaded your saved project templates for you 😊',
+        done: true,
+        timestamp: now
+      },
+      {
+        id: 'paragraph-2',
+        text: 'Feel free to generate more variations if you’d like to explore new layouts or flows.',
+        done: true,
+        timestamp: now
+      },
+      {
+        id: 'paragraph-3',
+        text: 'When everything looks good, click Continue & Deploy to proceed.',
+        done: true,
+        timestamp: now
+      }
+    ];
+  }
+  
   
 
 }
