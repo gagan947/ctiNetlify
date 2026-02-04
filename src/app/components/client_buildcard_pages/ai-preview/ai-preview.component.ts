@@ -72,7 +72,7 @@ export class AiPreviewComponent {
   files: ReactFile[] = [];
   activeFileIndex = 0;
   activeFile!: ReactFile;
-  fullScreen: boolean = false;;
+  fullScreen: boolean = false;
   showCodeButton = false;
   userHasScrolled = false;
   designCount = 0;

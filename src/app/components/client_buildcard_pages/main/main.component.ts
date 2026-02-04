@@ -21,7 +21,7 @@ declare var Calendly: any;
 export class MainComponent {
   showModal = false;
   @ViewChild('anchor', { static: false }) anchor!: ElementRef;
-@ViewChild('SearchInput', { static: false }) SearchInput!: ElementRef;
+  @ViewChild('SearchInput', { static: false }) SearchInput!: ElementRef;
   private observer!: IntersectionObserver;
   projectsData: Project[] = []
   projectId: any;
@@ -38,7 +38,7 @@ export class MainComponent {
   orgProjectsData: Project[] = [];
   allowProjectCreate = false;
   navigateMessage = ''
-  constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router,private message: NzMessageService,) {
+  constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router, private message: NzMessageService,) {
     this.imageURL = this.apiservice.imageUrl;
   }
 
@@ -66,7 +66,7 @@ export class MainComponent {
       contain: item.contain ? item.contain.split(',') : []
     }));
     this.projectsData = [...mappedData];
-   
+
   }
 
   ngAfterViewInit() {
@@ -163,18 +163,19 @@ export class MainComponent {
   }
 
   navigateTool(id: any) {
-   if(this.allowProjectCreate){
-     this.router.navigate(['/bd_loader'], {
-       queryParams: { id },
-       skipLocationChange: true  
-     });
-   }else{
-     this.showModal = true;
-     setTimeout(() => {
-      this.message.warning(this.navigateMessage);
-    }, 2000);
-    
-   }
+    if (this.allowProjectCreate) {
+      this.router.navigate(['/bd_loader'], {
+        queryParams: { id },
+        skipLocationChange: true
+      });
+    } else {
+      this.showModal = true;
+      setTimeout(() => {
+        debugger
+        this.message.warning(this.navigateMessage);
+      }, 2000);
+
+    }
 
   }
 
