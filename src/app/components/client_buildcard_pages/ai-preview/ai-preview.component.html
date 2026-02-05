@@ -232,16 +232,11 @@
                     Deploying preview
                     <span *ngIf="buildStep === 3" class="typing-dots"></span>
                   </div>
-
                 </div>
-
-
               </div>
             </div>
           </div>
-
         </div>
-
         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
           <app-react-code-editor #codeEditor *ngIf="files.length >0" [files]="files" [templateExists]="templateExists"
             (typingDone)="onCodeFinished()">

@@ -1,15 +1,13 @@
-import { Component, ElementRef, Input, NgZone, Renderer2, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, Renderer2, ViewChild } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
-import { io } from 'socket.io-client';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AiSocketService } from '../../../services/ai-socket.service';
 import { filter, Subject, take } from 'rxjs';
 import { Router, RouterLink } from '@angular/router';
-import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
-import { PlanDeliveryComponent } from '../plan-delivery/plan-delivery.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SubcriptionPageComponent } from "../subcription-page/subcription-page.component";
-import { FormBuilder, FormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule } from '@angular/forms';
 import { ReactCodeEditorComponent } from './react-code-editor/react-code-editor.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -74,10 +72,11 @@ export class AiPreviewComponent {
   files: ReactFile[] = [];
   activeFileIndex = 0;
   activeFile!: ReactFile;
-  fullScreen: boolean = false;;
+  fullScreen: boolean = false;
   showCodeButton = false;
   userHasScrolled = false;
   designCount = 0;
+  subscriptionPlan: any;
   selectedDeviceType: string = '<i class="fa-solid fa-display"></i>';
   languages = [
     {
@@ -122,7 +121,7 @@ export class AiPreviewComponent {
   }
 
   async ngOnInit() {
-
+    this.getUserSubscriptionPlan();
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
     this.blocks = [];
@@ -156,7 +155,6 @@ export class AiPreviewComponent {
 
           const last = blocks[blocks.length - 1];
           if (last?.id === 'status-code-running' && last?.done && this.files.length > 0) {
-
 
             this.showCodeButton = true;
             this.previewCodeShow = true;
@@ -837,6 +835,17 @@ export class AiPreviewComponent {
     );
   };
 
+  getUserSubscriptionPlan() {
+    this.apiService.getApi<any>(`api/user/getMySubscription`)
+      .subscribe({
+        next: (res) => {
+          this.subscriptionPlan = res.subscription;
+        },
+        error: err => {
+          // this.loading = false
+        }
+      });
+  }
 
   // open modal
   openModal() {
