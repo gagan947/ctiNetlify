@@ -8,11 +8,11 @@ import { Auth, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
   providedIn: 'root'
 })
 export class ApiService {
-  apiUrl = 'http://192.168.1.33:4500/'
+  // apiUrl = 'http://192.168.1.33:4500/'
   // imageUrl = 'http://192.168.29.241:4500/'
   // apiUrl = 'http://192.168.1.4:3000/prod/'
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
-  // apiUrl = 'https://api.creativethoughts.ai/';
+  apiUrl = 'https://api.creativethoughts.ai/';
   imageUrl = 'https://api.creativethoughts.ai';
   // apiUrl = 'http://localhost:4500/';
 

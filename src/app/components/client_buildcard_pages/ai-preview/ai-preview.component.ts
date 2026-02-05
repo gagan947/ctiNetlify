@@ -11,7 +11,7 @@ import { FormBuilder, FormsModule } from '@angular/forms';
 import { ReactCodeEditorComponent } from './react-code-editor/react-code-editor.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
-
+import { SubscriptionData, SubscriptionResponse } from '../../../models/subcription';
 interface DesignSnapshot {
   id: string;
   label: string;
@@ -76,7 +76,7 @@ export class AiPreviewComponent {
   showCodeButton = false;
   userHasScrolled = false;
   designCount = 0;
-  subscriptionPlan: any;
+  subscriptionPlan!: SubscriptionResponse;
   selectedDeviceType: string = '<i class="fa-solid fa-display"></i>';
   languages = [
     {
@@ -836,10 +836,11 @@ export class AiPreviewComponent {
   };
 
   getUserSubscriptionPlan() {
-    this.apiService.getApi<any>(`api/user/getMySubscription`)
+    this.apiService.getApi<SubscriptionResponse>(`api/user/getMySubscription`)
       .subscribe({
         next: (res) => {
-          this.subscriptionPlan = res.subscription;
+          console.log(res);
+          this.subscriptionPlan = res;
         },
         error: err => {
           // this.loading = false
@@ -855,6 +856,17 @@ export class AiPreviewComponent {
   closeModal() {
     this.showModal = false;
   }
+
+  openDeployModal(templateName: string) {
+    // this.selectedTemplateName = templateName;
+  
+    const modal = new bootstrap.Modal(
+      document.getElementById('deployConfirmModal')!
+    );
+    modal.show();
+  };
+
+  
 
   startTyping() {
     // this.codeEditor.startTyping();
@@ -1075,6 +1087,16 @@ export class AiPreviewComponent {
         timestamp: now
       }
     ];
+  }
+
+
+  checkNDeploy() {
+   if(this.subscriptionPlan.planType === 'free') {
+     this.openModal();
+   }else{
+
+   }
+   
   }
 
 

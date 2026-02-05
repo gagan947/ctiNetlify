@@ -170,14 +170,10 @@ export class MainComponent {
       });
     } else {
       this.showModal = true;
-      setTimeout(() => {
-        debugger
-        this.message.warning(this.navigateMessage);
-      }, 2000);
-
+      this.message.warning(this.navigateMessage); // instant
     }
-
   }
+  
 
   clearSearch() {
     this.isSuggested = false

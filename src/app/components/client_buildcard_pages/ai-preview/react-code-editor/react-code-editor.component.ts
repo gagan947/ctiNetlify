@@ -79,6 +79,7 @@ export class ReactCodeEditorComponent {
 
         this.editor.revealLine(1);
         this.filesReady = true;
+        this.generatedFiles = this.files;
       } else {
         this.startTyping()
       }

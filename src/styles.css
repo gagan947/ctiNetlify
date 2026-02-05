@@ -314,3 +314,8 @@ nz-input-otp.ant-otp {
       line-height: 25px !important;
       height: 25px !important;
 }
+
+.cdk-overlay-container {
+      z-index: 9999 !important;
+    }
+    
