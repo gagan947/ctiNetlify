@@ -41,9 +41,7 @@ export class DashboardComponent {
   }
 
   Navigate(data: any) {
-    console.log(data);
     
-  
             let projectData = {
               clientEnquryId: data.inquiryId,
               projectId: data.projectId,
@@ -53,14 +51,14 @@ export class DashboardComponent {
               final_cost_with_tax_discount: data.final_cost_with_tax_discount,
               platform: data.platforms,
               projectLogo: data.clientProjectLogo,
-              projectName: data.clientProjectName,
               selectdFeature: data.projectFeatures,
               speed: data.development_speed,
               total_cost_delivery: data.total_cost_delivery,
               paymentPlan: data.payment_plan == 'Installment' ? '2' : '1',
               installmentType: data.installment_type,
               features_cost: data.features_cost,
-              no_of_features: data.no_of_features
+              no_of_features: data.no_of_features,
+              projectName: data.projectName,
             };
 
             sessionStorage.setItem('htmlCode', data.html_pages);

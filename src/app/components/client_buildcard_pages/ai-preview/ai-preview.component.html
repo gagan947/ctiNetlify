@@ -17,7 +17,7 @@
         </svg>
       </div>
       <button class="ct_design_tab_btn fw-bold">
-        {{projectsData.project_name || 'Project Name'}}
+        {{projectsData.projectName || 'Project Name'}}
       </button>
       <div class="d-flex align-items-center gap-2">
         @for (item of designOrder; track item.designId; let i = $index) {
@@ -73,10 +73,10 @@
       </ul>
       <div class="ct_plan_div">
         <p class="mb-0 text-white">Current Plan </p>
-        <span class="fw-bold">Free</span>
+        <span >Free</span>
       </div>
       <div>
-        <button class="upgrade-btn">
+        <button class="upgrade-btn" (click)="openModal()">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"
             class="text-[#ffc300]">
             <path

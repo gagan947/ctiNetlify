@@ -334,8 +334,8 @@ export class AiPreviewComponent {
 
     if (this.isTyping) return;
 
-    if (this.designOrder.length >= 5) {
-      this.toster.error('You have reached the maximum limit of 5 design variations.');
+    if (this.designOrder.length >= 3) {
+      this.toster.error('You have reached the maximum limit of 3 templates.');
       return;
     }
 
@@ -952,8 +952,10 @@ export class AiPreviewComponent {
 
   async loadDraftTemplates(templates: any[]) {
 
-    const { forgot_password } = JSON.parse(templates[0].react_code_file);
-    const react_files = { forgot_password };
+    // const { forgot_password } = JSON.parse(templates[0].react_code_file);
+    // const react_files = { forgot_password };
+
+    const react_files = JSON.parse(templates[0].react_code_file);
 
     this.files = [];
 
@@ -965,6 +967,8 @@ export class AiPreviewComponent {
         fullCode: data.jsx
       });
     });
+
+    
 
     for (const tpl of templates) {
 

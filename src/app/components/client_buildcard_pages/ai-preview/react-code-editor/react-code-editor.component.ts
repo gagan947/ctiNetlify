@@ -53,7 +53,7 @@ export class ReactCodeEditorComponent {
     smoothScrolling: true
   };
 
-  constructor(private aiService: AiSocketService,) {
+  constructor(private aiService: AiSocketService) {
 
   }
 
@@ -78,6 +78,7 @@ export class ReactCodeEditorComponent {
         model.setValue(this.files[0].fullCode);
 
         this.editor.revealLine(1);
+        this.filesReady = true;
       } else {
         this.startTyping()
       }
