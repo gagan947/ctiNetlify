@@ -237,7 +237,7 @@ export class AiPreviewComponent {
             name: `${page}.jsx`,
             language: 'javascript',
             fullCode: data.jsx
-          });
+          })
         });
 
         // ✅ Now build React preview for THIS design
@@ -616,7 +616,7 @@ export class AiPreviewComponent {
 
     this.designCount++;
 
-    const designId = `design-${this.designCount}`;
+    const designId = `${this.designCount}`;
 
     const snapshot: DesignSnapshot = {
       id: designId,
@@ -701,6 +701,9 @@ export class AiPreviewComponent {
           <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
           <style>${page.css}</style>
+          <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+  
+      
         </head>
         <body>
           <div class="preview-wrapper">
@@ -1016,7 +1019,7 @@ export class AiPreviewComponent {
 
     this.designCount++;
 
-    const designId = `design-${this.designCount}`;
+    const designId = `${this.designCount}`;
 
     const snapshot: DesignSnapshot = {
       id: designId,

@@ -728,13 +728,19 @@ li.ct_ai_project_right {
   border: none;
   font-size: 12px;
 }
-
+.ct_plan_div{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 .ct_plan_div p {
   font-size: 12px;
   line-height: 1;
-  margin-top: 5px;
+
+  white-space: nowrap;
 }
 
 .ct_plan_div span {
   color: #ffc300;
+  font-size: 12px;
 }
