@@ -93,14 +93,14 @@ aside.ct_project_ai_chat_section ul {
   padding-block: 6px;
 }
 
-.ct_ai_project_lefr_btns {
+/* .ct_ai_project_lefr_btns {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 6px;
   justify-content: start;
   padding-left: 40px;
-}
+} */
 
 .ct_ai_project_lefr_btns p {
   font-size: 13px;
@@ -728,7 +728,8 @@ li.ct_ai_project_right {
   border: none;
   font-size: 12px;
 }
-.ct_plan_div{
+
+.ct_plan_div {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -743,4 +744,46 @@ li.ct_ai_project_right {
 .ct_plan_div span {
   color: #ffc300;
   font-size: 12px;
+}
+.ct_ai_credentials_box {
+  margin-top: 30px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  /* max-width: 260px; */
+  border-left: 7px solid;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
+
+/* Title */
+.ct_ai_credentials_box h6 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #111827;
+}
+
+/* Row layout */
+.ct_ai_credentials_box div {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #374151;
+}
+
+/* Label */
+.ct_ai_credentials_box strong {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+
+
+/* subtle premium feel */
+.ct_ai_credentials_box:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  border-color: #d1d5db;
 }

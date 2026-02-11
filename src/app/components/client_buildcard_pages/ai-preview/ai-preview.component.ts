@@ -391,6 +391,20 @@ export class AiPreviewComponent {
       jobId, 2
     );
 
+   const credentials = {
+      id: 'credentials',
+      text: {
+        label: 'Project Credentials',
+        email:'creative@infotech.com' ,
+        password: 'Test@123',
+        message: 'You can use these credentials to login to your project.'
+      },
+      done: true,
+      timestamp: new Date()
+    }
+
+    this.blocks.push(credentials);
+
     this.isTyping = false;
   }
 
@@ -1086,6 +1100,17 @@ export class AiPreviewComponent {
       {
         id: 'paragraph-3',
         text: 'When everything looks good, click Continue & Deploy to proceed.',
+        done: true,
+        timestamp: now
+      },
+      {
+        id: 'credentials',
+        text: {
+          label: 'Project Credentials',
+          email:'creative@infotech.com' ,
+          password: 'Test@123',
+          message: 'You can use these credentials to login to your project.'
+        },
         done: true,
         timestamp: now
       }

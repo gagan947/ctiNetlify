@@ -143,8 +143,24 @@
                 <li>{{ item }}</li>
                 }
               </ul>
+              }@else if (block.id.startsWith('credentials')) {
+                <p class="mb-0">{{ block.text.message }}</p>
+                <div class="ct_ai_credentials_box">
+                  <h6>{{ block.text.label }}</h6>
+                
+                  <div>
+                    <strong>Email:</strong>
+                    <span>{{ block.text.email }}</span>
+                  </div>
+                  
+                  <div>
+                    <strong>Password:</strong>
+                    <span>{{ block.text.password }}</span>
+                  </div>
+                  
+                </div>
               }@else {
-              <p class="mb-0">{{ block.text }}</p>
+                <p class="mb-0">{{ block.text }}</p>
               }
             </div>
             }
