@@ -597,6 +597,7 @@ export class AiPreviewComponent {
             const fullUrl =
               this.baseURl.replace(/\/$/, '') + '/' +
               res.message.preview_url.replace(/^\//, '');
+              this.setPreviewUrl(fullUrl);
 
             const design = this.designMap.get(designId);
             if (!design) return;
@@ -656,9 +657,12 @@ export class AiPreviewComponent {
 
 
   loadReactPreview(url: string) {
+ 
     const iframe = this.previewFrame.nativeElement;
     iframe.src = 'about:blank';
     setTimeout(() => iframe.src = url + '?t=' + Date.now(), 30);
+    this.setPreviewUrl(url);
+
   }
 
 
@@ -1126,6 +1130,13 @@ export class AiPreviewComponent {
    }
    
   }
+
+
+  
+setPreviewUrl(url: string) {
+  console.log('Preview URL:', url);
+  this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+}
 
 
 
