@@ -73,7 +73,7 @@
       </ul>
       <div class="ct_plan_div">
         <p class="mb-0 text-white">Current Plan </p>
-        <span >Free</span>
+        <span>Free</span>
       </div>
       <div>
         <button class="upgrade-btn" (click)="openModal()">
@@ -253,55 +253,33 @@
 
 <div class="modal fade" id="deployConfirmModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-      <!-- Header -->
-      <div class="modal-header border-0">
-        <h5 class="modal-title fw-bold">Confirm Deployment</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <!-- Body -->
-      <div class="modal-body text-center">
-
-        <div class="mb-3">
-          <i class="bi bi-cloud-upload fs-1 text-primary"></i>
+    <div class="modal-content" style="padding: 30px;">
+      <h2>Confirm Template Deployment</h2>
+      <p>You have selected the following template preview:</p>
+      <!-- Template Preview with Image -->
+      <div class="template-preview">
+        <div class="preview-image">
+          <iframe #previewFrame class="preview-iframe mx-auto w-100" [style.maxWidth]="previewWidth + 'px'"
+            [style.height.%]="100"></iframe>
         </div>
-
-        <p class="mb-2">
-          You have selected the template:
-        </p>
-
-        <h6 class="fw-bold text-primary">
-          Template {{activeDesignId  }}
-        </h6>
-
-        <p class="mt-3 text-danger small">
-          ⚠ Once deployed, you won’t be able to change this template for this project.
-        </p>
-
-        <p class="small text-muted">
-          This project allows only one template deployment.
-        </p>
-
+        <div class="preview-content">
+          <h3>Template {{activeDesignId}}</h3>
+          <span>Modern Business Landing Page Layout</span>
+        </div>
       </div>
-
-      <!-- Footer -->
-      <div class="modal-footer justify-content-center border-0">
-        <button 
-          class="btn btn-outline-secondary px-4"
-          data-bs-dismiss="modal">
-          Cancel
-        </button>
-
-        <button 
-          class="btn btn-primary px-4"  data-bs-dismiss="modal"
-           (click)="checkNDeploy()">
-          Yes, Deploy Now
-        </button>
-
+      <!-- Warning -->
+      <div class="info-box">
+        <div class="info-icon">⚠</div>
+        <div class="info-text">
+          You’re almost Ready! Keep in mind that once deployed, this template can’t be switched.<br>
+          <b>This project supports only one template deployment.</b>
+        </div>
       </div>
-
+      <!-- Buttons -->
+      <div class="actions">
+        <button class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn-confirm" (click)="checkNDeploy()">Deploy Template</button>
+      </div>
     </div>
   </div>
 </div>
