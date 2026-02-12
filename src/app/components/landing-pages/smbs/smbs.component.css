@@ -1,3 +1,8 @@
 .ct_inner_banner_main_cnt{
     padding-block: 70px;
 }
+
+.ct_img_h_400{
+    height: 400px;
+    object-fit: contain;
+}
