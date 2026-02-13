@@ -352,6 +352,52 @@
 </div>
 
 
+<!-- Info Modal -->
+<div class="modal fade" id="freePlanModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-modal">
+    
+          <div class="modal-header border-0">
+            <h5 class="modal-title">Free Plan Limit</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+    
+          <div class="modal-body text-center">
+    
+            <div class="info-icon mb-3">
+              ⚠️
+            </div>
+    
+            <p class="modal-text">
+              You are currently on the <b>Free Plan</b>.<br>
+              You can create only <b>one project</b>.
+              <br><br>
+              To create more projects, please upgrade your plan.
+            </p>
+    
+          </div>
+    
+          <div class="modal-footer border-0 justify-content-center">
+    
+            <button class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">
+              Cancel
+            </button>
+    
+            <button class="btn btn-upgrade"
+                    data-bs-toggle="modal"
+                    data-bs-target="#plansModal"
+                    data-bs-dismiss="modal">
+              Upgrade Now
+            </button>
+    
+          </div>
+    
+        </div>
+      </div>
+    </div>
+    
+    <app-subcription-page [subscriptionModalOpen]="showModal" (close)="closeModal()"></app-subcription-page>
+
 @if(loading){
 <app-bd-loader></app-bd-loader>
 }

@@ -42,7 +42,7 @@ export const LandingRoutes: Routes = [
             path: 'telecom', loadComponent: () => import('./telecom/telecom.component').then(c => c.TelecomComponent)
       },
       {
-            path: 'energy', loadComponent: () => import('./financial-services/financial-services.component').then(c => c.FinancialServicesComponent)
+            path: 'energy', loadComponent: () => import('./energy/energy.component').then(c => c.EnergyComponent)
       },
       {
             path: 'retail-ecommerce', loadComponent: () => import('./retail-ecommerce/retail-ecommerce.component').then(c => c.RetailEcommerceComponent)

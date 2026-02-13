@@ -13,7 +13,9 @@ import { Meta, Title } from '@angular/platform-browser';
 })
 export class AiAppGeneratorComponent {
   constructor(private meta: Meta, private title: Title) {
-    this.title.setTitle('Smart App Development with AI | Creative AI App Generator');
-    this.meta.updateTag({ name: 'description', content: 'Drive digital transformation with Creative AI. Our AI app generator empowers you to build smart, fast, and scalable web and mobile applications effortlessly.' })
+    this.title.setTitle('AI App Generator — Generate Android & iOS Apps Using AI');
+    this.meta.updateTag({
+      name: 'description', content: 'Generate Android and iOS apps instantly using AI. Describe your app idea, and Creative AI will automatically build the app structure. No coding required—start free today.'
+    })
   }
 }

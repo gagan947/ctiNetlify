@@ -1,26 +1,30 @@
 <div class="ai-code-wrapper">
   <div class="code-header" style="background-color: #414040 !important;">
-    <nz-select class="form-control  ct_currency_input ct_currency_input_select_22"
-    [(ngModel)]="selectFile"
-    nzPlaceHolder="Select Currency" 
-    [nzDropdownMatchSelectWidth]="false"
-    [ngModelOptions]="{standalone: true}">
-
-    @for (item of languages; track $index) {
-    <nz-option [nzValue]="item.value"
-          [nzLabel]="item.value"></nz-option>
-    }
-</nz-select>
+    <div class="dropdown ct_dropdown_device_preview123">
+      <button class="btn btn-secondary" type="button" id="dropdownMenuButton1"
+        data-bs-toggle="dropdown" aria-expanded="false"[disabled]="!filesReady">{{activeFile}} 
+       <i class="fa-solid fa-angle-down"></i>
+      </button>
+      <ul class="dropdown-menu mb-0" aria-labelledby="dropdownMenuButton1" >
+        @for (item of generatedFiles; track $index) {
+          <li >
+            <a class="dropdown-item"  href="javascript:void(0)"
+            (click)="fileChange(item)">/{{item.name}} </a>
+          </li>
+        }
+        
+      </ul>
+    </div>
 
   </div>
-  <div class="code-header">
-    <span class="file-name">src/{{language == 'javascript' ? 'pages' : 'css'}}/{{ fileName | lowercase }}</span>
-  </div>
+ 
 
   <nu-monaco-editor
-    class="monaco-editor"
-    [options]="options"
-    (event)="onEditorEvent($event)">
-  </nu-monaco-editor>
+  class="monaco-editor"
+  [model]="model"
+  [options]="options"
+  (event)="onEditorEvent($event)">
+</nu-monaco-editor>
+
 
 </div>

@@ -20,6 +20,7 @@ export class DashboardComponent {
   constructor(private apiService: ApiService, private message: NzMessageService, private router: Router) {
   }
   ngOnInit(): void {
+    sessionStorage.clear();
     this.getProjects();
   }
 
@@ -39,46 +40,31 @@ export class DashboardComponent {
 
   }
 
-  Navigate(item: any) {
-    const today = new Date();
-    this.estimatedDate = new Date(today);
-    this.apiService.getApi(`api/user/fetchClientInquries?inquiryId=${item.projectId}`).subscribe(
-      {
-        next: (res: any) => {
-          if (res.success) {
-            const data = res.data
+  Navigate(data: any) {
+    
             let projectData = {
-              clientEnquryId: item.projectId,
+              clientEnquryId: data.inquiryId,
+              projectId: data.projectId,
               phases_deliverables: data.phases_deliverables,
               bellingDetails: data.billing_details,
               estimated_time: data.durations,
               final_cost_with_tax_discount: data.final_cost_with_tax_discount,
               platform: data.platforms,
               projectLogo: data.clientProjectLogo,
-              projectName: data.clientProjectName,
               selectdFeature: data.projectFeatures,
               speed: data.development_speed,
               total_cost_delivery: data.total_cost_delivery,
               paymentPlan: data.payment_plan == 'Installment' ? '2' : '1',
               installmentType: data.installment_type,
               features_cost: data.features_cost,
-              estimatedDate: this.estimatedDate?.setDate(today.getDate() + data.durations * 7),
-              no_of_features: data.no_of_features
+              no_of_features: data.no_of_features,
+              projectName: data.projectName,
             };
 
             sessionStorage.setItem('htmlCode', data.html_pages);
             sessionStorage.setItem('projectData', JSON.stringify(projectData));
-            if (item.projectStatus == 1) {
-              this.router.navigate(['/payment-status'], {
-                queryParams: { order_id: item.order_id, status: 1 }
-              });
-            } else {
-              this.router.navigate([item.currentRoutes]);
-            }
-          }
-        }
-      }
-    )
+            this.router.navigate([data.currentRoutes]);
+         
   }
 
   discardProject(id: number) {

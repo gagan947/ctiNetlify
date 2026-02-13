@@ -38,7 +38,7 @@ export class MakeItMineComponent {
     loading: boolean = true;
     hasUnsavedChanges: boolean = true;
     previewProject: boolean = false;
-    projectType!:string;
+    projectType!: string;
 
     private modal = inject(ModalService);
     constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService,) {
@@ -182,6 +182,7 @@ export class MakeItMineComponent {
         formData.append('projectId', this.id ? this.id : '0');
         formData.append('currentRoutes', this.router.url);
         formData.append('clientEnquryId', this.projectsData?.clientEnquryId ? this.projectsData.clientEnquryId : '');
+        formData.append('projectType' ,  this.projectType  ?  this.projectType  : '');
 
         this.apiService.postAPI('api/user/addProjectNameAndLogo', formData).subscribe({
             next: (res: any) => {
@@ -191,8 +192,8 @@ export class MakeItMineComponent {
                         clientEnquryId: res.data,
                         projectName: this.projectName,
                         projectLogo: this.imagePreview ? this.imagePreview : this.apiService._imagePreview(),
-                        projectType : this.projectType,
-                        projectId : this.id ? this.id : '0'
+                        projectType: this.projectType,
+                        projectId: this.id ? this.id : '0'
                     }
 
                     sessionStorage.setItem('projectData', JSON.stringify(projectData))
