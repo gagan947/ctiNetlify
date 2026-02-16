@@ -138,7 +138,7 @@ export class SubcriptionPageComponent {
     }
 
     const cashfree = new (window as any).Cashfree({
-      mode: "sandbox",
+      mode: "production",
     });
 
     cashfree
