@@ -136,9 +136,9 @@ export class SubcriptionPageComponent {
       console.error("Missing subscription_session_id!");
       return;
     }
-
     const cashfree = new (window as any).Cashfree({
       mode: "production",
+      // mode: "sandbox",
     });
 
     cashfree
