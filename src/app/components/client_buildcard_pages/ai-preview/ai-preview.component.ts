@@ -391,11 +391,11 @@ export class AiPreviewComponent {
       jobId, 2
     );
 
-   const credentials = {
+    const credentials = {
       id: 'credentials',
       text: {
         label: 'Project Credentials',
-        email:'creative@infotech.com' ,
+        email: 'creative@infotech.com',
         password: 'Test@123',
         message: 'You can use these credentials to login to your project.'
       },
@@ -597,7 +597,7 @@ export class AiPreviewComponent {
             const fullUrl =
               this.baseURl.replace(/\/$/, '') + '/' +
               res.message.preview_url.replace(/^\//, '');
-              this.setPreviewUrl(fullUrl);
+            this.setPreviewUrl(fullUrl);
 
             const design = this.designMap.get(designId);
             if (!design) return;
@@ -657,7 +657,7 @@ export class AiPreviewComponent {
 
 
   loadReactPreview(url: string) {
- 
+
     const iframe = this.previewFrame.nativeElement;
     iframe.src = 'about:blank';
     setTimeout(() => iframe.src = url + '?t=' + Date.now(), 30);
@@ -880,14 +880,14 @@ export class AiPreviewComponent {
 
   openDeployModal(templateName: string) {
     // this.selectedTemplateName = templateName;
-  
+
     const modal = new bootstrap.Modal(
       document.getElementById('deployConfirmModal')!
     );
     modal.show();
   };
 
-  
+
 
   startTyping() {
     // this.codeEditor.startTyping();
@@ -935,7 +935,7 @@ export class AiPreviewComponent {
 
         // remove from map
         this.designMap.delete(item.designId);
-        this.designCount = this.designCount - 1;
+        // this.designCount = this.designCount - 1;
         // remove from order
         this.designOrder = this.designOrder.filter(
           d => d.designId !== item.designId
@@ -1010,7 +1010,7 @@ export class AiPreviewComponent {
       });
     });
 
-    
+
 
     for (const tpl of templates) {
 
@@ -1111,7 +1111,7 @@ export class AiPreviewComponent {
         id: 'credentials',
         text: {
           label: 'Project Credentials',
-          email:'creative@infotech.com' ,
+          email: 'creative@infotech.com',
           password: 'Test@123',
           message: 'You can use these credentials to login to your project.'
         },
@@ -1123,22 +1123,16 @@ export class AiPreviewComponent {
 
 
   checkNDeploy() {
-   if(this.subscriptionPlan.planType === 'free') {
-     this.openModal();
-   }else{
+    if (this.subscriptionPlan.planType === 'free') {
+      this.openModal();
+    } else {
 
-   }
-   
+    }
   }
 
-
-  
-setPreviewUrl(url: string) {
-  console.log('Preview URL:', url);
-  this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-}
-
-
-
+  setPreviewUrl(url: string) {
+    console.log('Preview URL:', url);
+    this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
 }
 
