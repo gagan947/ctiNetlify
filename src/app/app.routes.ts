@@ -63,6 +63,9 @@ export const routes: Routes = [
             path: 'payment-success', loadComponent: () => import('./components/payment-sucessfull/payment-sucessfull.component').then(c => c.PaymentSucessfullComponent)
       },
       {
+            path: 'my-plan', loadComponent: () => import('./components/client_buildcard_pages/user-plans/user-plans.component').then(c => c.UserPlansComponent), canActivate: [authGuard]
+      },
+      {
             path: 'bd_loader', loadComponent: () => import('./components/client_buildcard_pages/builder-loader/builder-loader.component').then(c => c.BuilderLoaderComponent)
       },
       {
