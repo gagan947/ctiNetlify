@@ -43,6 +43,7 @@ export class MainComponent {
   }
 
   ngOnInit(): void {
+    
     this.getUserSubscriptionPlan();
     const data: any = localStorage.getItem('userDetailCTI')
     if (data !== 'undefined') {

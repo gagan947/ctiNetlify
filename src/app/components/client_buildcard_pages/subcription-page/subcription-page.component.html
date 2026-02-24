@@ -275,7 +275,7 @@
             </div>
 
             <div class="mt-auto">
-              <button class="ct_btn ct_btn_dark" (click)="getStarted('booster')">
+              <button class="ct_btn ct_btn_dark"  (click)="openCalednlyModal()" >
                Book a demo
               </button>
             </div>
@@ -380,4 +380,22 @@
       </div>
     </div>
   </div>
+</div>
+
+
+<div class="modal fade modal-xl show d-block" id="calendlyModal" tabindex="-1" aria-labelledby="calendlyModalLabel"
+      aria-hidden="true" *ngIf="showCalendly">
+      <div class="modal-dialog">
+            <div class="modal-content">
+                  <div class="modal-header">
+                        <h5 class="modal-title" id="calendlyModalLabel">Schedule a Call</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
+                  </div>
+                  <div class="modal-body">
+                        <div appCalendlyWidget [calendlyUrl]="'https://calendly.com/creativethoughts/30min'"
+                              style="min-width:320px; height:630px;">
+                        </div>
+                  </div>
+            </div>
+      </div>
 </div>

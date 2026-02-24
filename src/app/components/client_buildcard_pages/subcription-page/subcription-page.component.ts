@@ -3,13 +3,15 @@ import { ApiService } from '../../../services/api.service';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
+import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
+import { SubcriptionService } from '../../../services/subcription.service';
 type BillingCycle = 'monthly' | 'yearly';
 type PlanType = 'free' |  'personal' | 'creative' | 'booster';
 declare var window: any;
 @Component({
   selector: 'app-subcription-page',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxIntlTelInputModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxIntlTelInputModule,CalendlyDirective ],
   templateUrl: './subcription-page.component.html',
   styleUrl: './subcription-page.component.css'
 })
@@ -17,6 +19,7 @@ export class SubcriptionPageComponent {
   @Input() subscriptionModalOpen = false;
   @Output() close = new EventEmitter<void>();
   billingSummaryModalOpen = false;
+  showCalendly = false;
   billingCycle = signal<BillingCycle>('monthly');
   projectsData:any;
   BASE_PRICES = {
@@ -50,7 +53,7 @@ export class SubcriptionPageComponent {
   SearchCountryField = SearchCountryField
   CountryISO = CountryISO
   selectedPlan = signal<PlanType>('creative');
-  constructor(private apiService: ApiService, private fb: FormBuilder) {
+  constructor(private apiService: ApiService, private fb: FormBuilder, private subscriptionService: SubcriptionService) {
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
   }
@@ -163,5 +166,24 @@ export class SubcriptionPageComponent {
     this.close.emit();
     this.subscriptionModalOpen = false;
     this.billingSummaryModalOpen = false;
+    this.showCalendly = false;
   }
+
+
+  openCalednlyModal() {
+    this.subscriptionModalOpen = false;
+    this.billingSummaryModalOpen = false;
+    this.showCalendly = true;
+  }
+  getUserSubscriptionPlan() {
+    this.subscriptionService.subscription$.subscribe({
+        next: (res) => {
+          
+        },
+        error: err => {
+          // this.loading = false
+        }
+      });
+  }
+  
 }

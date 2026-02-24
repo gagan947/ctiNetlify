@@ -54,6 +54,7 @@ export class ApiService {
         currency_code: base,
         date: today
       };
+      return
 
       this.getApi(`api/user/getCurrencyRate?${new URLSearchParams(params).toString()}`).subscribe({
         next: (res: any) => {

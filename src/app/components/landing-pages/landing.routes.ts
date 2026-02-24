@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const LandingRoutes: Routes = [
       {
             path: '', loadComponent: () => import('./home/home.component').then(c => c.HomeComponent),
-            // data: { preload: true }
+            data: { preload: true }
       },
       {
             path: 'ai-app-builder', loadComponent: () => import('./home/home.component').then(c => c.HomeComponent)

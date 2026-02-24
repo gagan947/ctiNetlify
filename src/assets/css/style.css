@@ -4310,7 +4310,8 @@ table.table.ct_compare_table {
 }
 
 .ct_profile_width_small {
-  width: 300px !important;
+  width: 152px !important;
+  padding-block: 10px !important;
 }
 
 .ct_profile_user {

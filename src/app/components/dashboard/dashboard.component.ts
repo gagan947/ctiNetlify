@@ -16,12 +16,14 @@ export class DashboardComponent {
   allProjectsList: any[] = []
   orgProjectList: any[] = []
   estimatedDate: Date | undefined;
-  status: number | null = null
+  status: number | null = null;
+  activePlan = '';
   constructor(private apiService: ApiService, private message: NzMessageService, private router: Router) {
   }
   ngOnInit(): void {
     sessionStorage.clear();
     this.getProjects();
+    this.getUserSubscriptionPlan();
   }
 
   getProjects() {
@@ -38,6 +40,19 @@ export class DashboardComponent {
       }
     );
 
+  }
+
+  getUserSubscriptionPlan() {
+    this.apiService.getApi<any>(`api/user/getMySubscription`)
+      .subscribe({
+        next: (res) => {
+          this.activePlan = res.planType
+    
+        },
+        error: err => {
+          // this.loading = false
+        }
+      });
   }
 
   Navigate(data: any) {
