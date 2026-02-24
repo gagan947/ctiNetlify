@@ -10,6 +10,7 @@ import { BdLoaderComponent } from "../../shared/bd-loader/bd-loader.component";
 import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SubcriptionPageComponent } from '../subcription-page/subcription-page.component';
+import { SubcriptionService } from '../../../services/subcription.service';
 declare var Calendly: any;
 @Component({
   selector: 'app-main',
@@ -38,13 +39,12 @@ export class MainComponent {
   orgProjectsData: Project[] = [];
   allowProjectCreate = false;
   navigateMessage = ''
-  constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router, private message: NzMessageService,) {
+  constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router, private message: NzMessageService, private subscriptionService: SubcriptionService) {
     this.imageURL = this.apiservice.imageUrl;
   }
 
   ngOnInit(): void {
-    
-    this.getUserSubscriptionPlan();
+    this.subscriptionService.loadSubscription();
     const data: any = localStorage.getItem('userDetailCTI')
     if (data !== 'undefined') {
       const user = JSON.parse(data);
@@ -54,6 +54,7 @@ export class MainComponent {
     sessionStorage.clear();
     this.apiservice._htmlCode.set(null);
 
+    this.getUserSubscriptionPlan();
     // this.socket = io(this.apiservice.apiUrl);
     let currentBotMsg = "";
   }
@@ -174,7 +175,7 @@ export class MainComponent {
       this.message.warning(this.navigateMessage); // instant
     }
   }
-  
+
 
   clearSearch() {
     this.isSuggested = false
@@ -185,16 +186,15 @@ export class MainComponent {
   }
 
   getUserSubscriptionPlan() {
-    this.apiservice.getApi<any>(`api/user/getMySubscription`)
-      .subscribe({
-        next: (res) => {
-          this.allowProjectCreate = res.allowProjectCreate;
-          this.navigateMessage = res.message
-        },
-        error: err => {
-          // this.loading = false
-        }
-      });
+    this.subscriptionService.subscription$.subscribe({
+      next: (res) => {
+        this.allowProjectCreate = res.allowProjectCreate;
+        this.navigateMessage = res.message
+      },
+      error: err => {
+        this.loading = false
+      }
+    });
   }
 
   closeModal() {
