@@ -182,14 +182,15 @@ export class SubcriptionPageComponent {
     this.showCalendly = true;
   }
   getUserSubscriptionPlan() {
-    this.subscriptionService.subscription$.subscribe({
-      next: (res) => {
-        this.subscriptionPlan = res;
-      },
-      error: err => {
-        // this.loading = false
-      }
-    });
+    this.apiService.getApi(`api/user/getMySubscription`)
+      .subscribe({
+        next: (res) => {
+          this.subscriptionPlan = res;
+        },
+        error: err => {
+          // this.loading = false
+        }
+      });
   }
 
 }

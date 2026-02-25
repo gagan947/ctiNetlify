@@ -4,7 +4,7 @@ export interface SubscriptionResponse {
     message: string;
   
     planType: string;           // "free" | "personal_monthly" | "creative_yearly" etc
-  
+    planName: string;
     projectCount: number;
     projectLimit: number;
   
@@ -18,7 +18,7 @@ export interface SubscriptionResponse {
     subscription_id: string;
     plan_key: string;
     status: 'ACTIVE' | 'PENDING' | 'CANCELLED';
-  
+
     start_date: string;
     next_charge_date: string;
   

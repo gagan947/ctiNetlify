@@ -105,7 +105,7 @@ export class AiPreviewComponent {
     'Building React application (npm run build)',
     'Deploying preview'
   ];
-
+  planName = 'Free Plan';
 
   // Redirect page for login action
   constructor(
@@ -862,6 +862,7 @@ export class AiPreviewComponent {
         next: (res) => {
           console.log(res);
           this.subscriptionPlan = res;
+          this.planName = res.planName
         },
         error: err => {
           // this.loading = false

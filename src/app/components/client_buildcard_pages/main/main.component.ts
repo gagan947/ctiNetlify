@@ -11,6 +11,7 @@ import { CalendlyDirective } from '../../../helper/directives/calendly.directive
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SubcriptionPageComponent } from '../subcription-page/subcription-page.component';
 import { SubcriptionService } from '../../../services/subcription.service';
+import { SubscriptionResponse } from '../../../models/subcription';
 declare var Calendly: any;
 @Component({
   selector: 'app-main',
@@ -185,16 +186,29 @@ export class MainComponent {
     this.projectsData = [...this.orgProjectsData];
   }
 
+  // getUserSubscriptionPlan() {
+  //   this.subscriptionService.subscription$.subscribe({
+  //     next: (res) => {
+  //       this.allowProjectCreate = res.allowProjectCreate;
+  //       this.navigateMessage = res.message
+  //     },
+  //     error: err => {
+  //       this.loading = false
+  //     }
+  //   });
+  // }
+
   getUserSubscriptionPlan() {
-    this.subscriptionService.subscription$.subscribe({
-      next: (res) => {
-        this.allowProjectCreate = res.allowProjectCreate;
+    this.apiservice.getApi<SubscriptionResponse>(`api/user/getMySubscription`)
+      .subscribe({
+        next: (res) => {
+          this.allowProjectCreate = res.allowProjectCreate;
         this.navigateMessage = res.message
-      },
-      error: err => {
-        this.loading = false
-      }
-    });
+        },
+        error: err => {
+          // this.loading = false
+        }
+      });
   }
 
   closeModal() {

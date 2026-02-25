@@ -93,8 +93,8 @@
 
             <div class="ct_pricing_card" [class.ct_active]="selectedPlan() === 'personal'"
               (click)="selectPlan('personal')">
-              @if(subscriptionPlan.planType.includes('personal_monthly') && billingCycle() === 'monthly' ||
-              subscriptionPlan.planType.includes('personal_yearly') && billingCycle() === 'yearly'){
+              @if(subscriptionPlan?.planType.includes('personal_monthly') && billingCycle() === 'monthly' ||
+              subscriptionPlan?.planType.includes('personal_yearly') && billingCycle() === 'yearly'){
               <div class="active-badge">Active</div>
               }
               <div>
@@ -140,8 +140,8 @@
                 </ul>
               </div>
               <div class="mt-auto">
-                @if(!subscriptionPlan.planType.includes('personal_monthly') && billingCycle() === 'monthly' ||
-                !subscriptionPlan.planType.includes('personal_yearly') && billingCycle() === 'yearly'){
+                @if(!subscriptionPlan?.planType.includes('personal_monthly') && billingCycle() === 'monthly' ||
+                !subscriptionPlan?.planType.includes('personal_yearly') && billingCycle() === 'yearly'){
                 <button class="ct_btn ct_btn_dark" (click)="getStarted('personal')">
                   Get Started
                 </button>
@@ -157,8 +157,8 @@
             <span class="ct_badge">Most popular</span>
             <div class="ct_pricing_card" [class.ct_active]="selectedPlan() === 'creative'"
               (click)="selectPlan('creative')">
-              @if(subscriptionPlan.planType.includes('creative_monthly') && billingCycle() === 'monthly' ||
-              subscriptionPlan.planType.includes('creative_yearly') && billingCycle() === 'yearly'){
+              @if(subscriptionPlan?.planType.includes('creative_monthly') && billingCycle() === 'monthly' ||
+              subscriptionPlan?.planType.includes('creative_yearly') && billingCycle() === 'yearly'){
               <div class="active-badge">Active</div>
               }
               <div>
@@ -217,8 +217,8 @@
               </div>
 
               <div class="mt-auto">
-                @if(!subscriptionPlan.planType.includes('creative_monthly') &&
-                !subscriptionPlan.planType.includes('creative_yearly')){
+                @if(!subscriptionPlan?.planType.includes('creative_monthly') &&
+                !subscriptionPlan?.planType.includes('creative_yearly')){
                 <button class="ct_btn ct_btn_dark" (click)="getStarted('creative')">
                   Get Started
                 </button>
@@ -322,6 +322,10 @@
 
           <div class="d-flex justify-content-between mb-2">
             <span>Price</span>
+            <strong> ${{ displayPrice() }} / month </strong>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Charged as</span>
             <strong> ${{ displayPrice() }} / month </strong>
           </div>
 
