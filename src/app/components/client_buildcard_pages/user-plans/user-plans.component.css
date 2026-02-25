@@ -1,0 +1,200 @@
+
+ 
+    /* Main Section Card */
+ 
+ 
+    /* Membership Plan Header */
+    .plan-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+ 
+    
+ 
+    .status-badge {
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 6px 15px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+
+
+ 
+    /* Plan Details Grid */
+    .plan-details {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+ 
+    .detail-box {
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+    }
+ 
+    .detail-box span {
+      font-size: 13px;
+      color: #64748b;
+    }
+ 
+    .detail-box strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+ 
+    /* Payment Cards */
+    .cards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 18px;
+    }
+ 
+    .payment-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid #e6e6e6;
+      background: #f8fafc;
+      transition: 0.2s;
+      gap: 15px;
+    }
+ 
+    .payment-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 18px rgba(37, 99, 235, 0.12);
+    }
+ 
+    /* Primary Card Style */
+    .payment-card.primary {
+         border: 2px solid #2393d6;
+    background: #dbeafe52;
+    }
+ 
+    .card-info strong {
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+ 
+    .card-info span {
+      font-size: 13px;
+      color:#666;
+    }
+ 
+    /* Primary Badge */
+    .primary-badge {
+      background: #2563eb;
+      color: white !important;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+ 
+    /* Buttons */
+    .card-actions {
+      display: flex;
+      gap: 10px;
+    }
+ 
+ 
+ 
+    .remove-btn {
+      background: #ef4444;
+      color: white;
+      border-color: #ef4444;
+    }
+ 
+    .remove-btn:hover {
+      background: transparent;
+      color:#ef4444 ;
+    }
+ 
+ 
+    /* Add New Card Button */
+   
+   
+ 
+    /* Renewal Box */
+
+ 
+
+ 
+    .renewal-dates {
+      margin-top: 18px;
+      display: flex;
+      gap: 15px;
+    }
+ 
+    .date-box {
+      flex: 1;
+      background: white;
+      padding: 15px;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+    }
+ 
+    .date-box span {
+      font-size: 13px;
+      color: #64748b;
+    }
+ 
+    .date-box strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+
+
+
+    .ct_ecommerse_web_card{
+    position: relative;
+    overflow: hidden;
+}
+
+    .status-badge{
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 6px 15px;
+    /* border-radius: 999px; */
+    font-size: 13px;
+    position: absolute;
+    top: 17px;
+    right: -45px;
+    transform: rotate(45deg);
+    width: 141px;
+    text-align: center;
+}
+
+
+@media screen and (max-width:991px){
+       .plan-details{
+        grid-template-columns: repeat(2,1fr);
+       }
+}
+@media screen and (max-width:767px){
+      .payment-card{
+        flex-direction: column;
+        align-items: flex-start !important;
+      }
+}
+@media screen and (max-width:575px){
+       .plan-details{
+        grid-template-columns: repeat(1,1fr);
+       }
+}

@@ -180,6 +180,15 @@ body {
   color: #64748b;
 }
 
+a.ct_filter_icon_new {
+    position: absolute;
+    right: 10px;
+    transform: translateY(-50%);
+    top: 50%;
+    color: #222;
+}
+
+
 .chat-input button {
   height: 44px;
   min-width: 56px;
