@@ -87,6 +87,8 @@
   display: grid;
   border: 2px solid #0064ff00;
   position: relative;
+  overflow: hidden;
+  height: 100%;
 }
 
 .ct_pricing_card h6 {
@@ -179,7 +181,7 @@
 
 .ct_badge {
   position: absolute;
-  top: -21px;
+  top: -15px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--dark_blue);
@@ -188,6 +190,7 @@
   padding: 6px 10px;
   border-radius: 20px;
   font-weight: 600;
+  z-index: 99;
 }
 
 .ct_custom_tab {
@@ -322,4 +325,20 @@
 
 .modal.fade.modal-xl.show.d-block {
   background: rgba(0, 0, 0, 0.5);
+}
+
+.active-badge {
+  position: absolute;
+  top: 18px;
+  right: -60px;
+  background: #ff3e28;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  font-size: 12px;
+  border-radius: 5px;
+  transform: rotate(45deg);
+  width: 200px;
+  text-align: center;
+
 }

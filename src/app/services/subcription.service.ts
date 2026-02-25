@@ -9,13 +9,13 @@ export class SubcriptionService {
   private subscriptionSubject = new BehaviorSubject<any>(null);
   subscription$ = this.subscriptionSubject.asObservable();
 
-  constructor(private appService: ApiService) {}
+  constructor(private appService: ApiService) { }
 
   loadSubscription() {
     return this.appService.getApi('api/user/getMySubscription')
       .subscribe((res: any) => {
         if (res.success) {
-          this.subscriptionSubject.next(res.data);
+          this.subscriptionSubject.next(res);
         }
       });
   }

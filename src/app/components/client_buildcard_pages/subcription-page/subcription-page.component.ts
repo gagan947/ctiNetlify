@@ -6,12 +6,12 @@ import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-
 import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
 import { SubcriptionService } from '../../../services/subcription.service';
 type BillingCycle = 'monthly' | 'yearly';
-type PlanType = 'free' |  'personal' | 'creative' | 'booster';
+type PlanType = 'free' | 'personal' | 'creative' | 'booster';
 declare var window: any;
 @Component({
   selector: 'app-subcription-page',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxIntlTelInputModule,CalendlyDirective ],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxIntlTelInputModule, CalendlyDirective],
   templateUrl: './subcription-page.component.html',
   styleUrl: './subcription-page.component.css'
 })
@@ -21,7 +21,7 @@ export class SubcriptionPageComponent {
   billingSummaryModalOpen = false;
   showCalendly = false;
   billingCycle = signal<BillingCycle>('monthly');
-  projectsData:any;
+  projectsData: any;
   BASE_PRICES = {
     free: 0,
     personal: 49,
@@ -32,13 +32,13 @@ export class SubcriptionPageComponent {
 
   PLAN_PRICES = {
     monthly: {
-      free:0,
+      free: 0,
       personal: 49,
       creative: 99,
       booster: 199
     },
     yearly: {
-      free:0,
+      free: 0,
       personal: 39,
       creative: 89,
       booster: 179
@@ -53,10 +53,16 @@ export class SubcriptionPageComponent {
   SearchCountryField = SearchCountryField
   CountryISO = CountryISO
   selectedPlan = signal<PlanType>('creative');
+  subscriptionPlan: any;
   constructor(private apiService: ApiService, private fb: FormBuilder, private subscriptionService: SubcriptionService) {
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
   }
+
+  ngOnInit(): void {
+    this.getUserSubscriptionPlan();
+  }
+
   billingForm = this.fb.nonNullable.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
@@ -177,13 +183,13 @@ export class SubcriptionPageComponent {
   }
   getUserSubscriptionPlan() {
     this.subscriptionService.subscription$.subscribe({
-        next: (res) => {
-          
-        },
-        error: err => {
-          // this.loading = false
-        }
-      });
+      next: (res) => {
+        this.subscriptionPlan = res;
+      },
+      error: err => {
+        // this.loading = false
+      }
+    });
   }
-  
+
 }
