@@ -331,9 +331,8 @@ export class AiPreviewComponent {
   async regenerate() {
 
     if (this.isTyping) return;
-
-    if (this.designOrder.length >= 3) {
-      this.toster.error('You have reached the maximum limit of 3 templates.');
+    if (this.designOrder.length >= this.subscriptionPlan.template_limit) {
+      this.toster.error(`You have reached the maximum limit of ${this.subscriptionPlan.template_limit} templates.`);
       return;
     }
 
