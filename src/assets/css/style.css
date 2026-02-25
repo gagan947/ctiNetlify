@@ -3471,7 +3471,7 @@ table.table.ct_compare_table {
   position: relative;
 }
 
-.ct_dash_nav li:hover a {
+.ct_dash_nav li:hover a ,.ct_dash_nav li.active a {
   background: #fff;
 }
 
