@@ -71,7 +71,7 @@ export class SubcriptionPageComponent {
 
 
   planKey = computed(() => {
-    return `${this.selectedPlan()}_${this.billingCycle()}`;
+    return `${this.selectedPlan()}_${this.billingCycle() == 'MONTH' ? 'monthly' : 'yearly'}`;
   });
 
   initiateSubscriptionCheckout(billingDetails: any) {
@@ -113,8 +113,8 @@ export class SubcriptionPageComponent {
       return;
     }
     const cashfree = new (window as any).Cashfree({
-      mode: "production",
-      // mode: "sandbox",
+      // mode: "production",
+      mode: "sandbox",
     });
 
     cashfree

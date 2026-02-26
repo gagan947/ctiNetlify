@@ -60,52 +60,27 @@
 
           <!-- Payment Methods Section -->
           <div class="ct_white_bg ct_ecommerse_web_card mb-4 p-3">
-            <h5 class="ct_fs_18 ct_fw_600">Saved Payment Methods</h5>
+            <h5 class="ct_fs_18 ct_fw_600">Active Payment Methods</h5>
 
             <div class="cards-list">
               <!-- Primary Card -->
               <div class="payment-card primary">
+               @if (subscriptionPlan.activePaymentMethod) {}
                 <div class="card-info">
                   <h6 class="d-flex align-items-center gap-2 flex-wrap">
                     Visa ending in 4582
-                    <span class="primary-badge">Primary</span>
                   </h6>
                   <span>Expires 08/28</span>
                 </div>
 
                 <div class="card-actions">
-                  <button class="remove-btn ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2 ">Remove</button>
-                </div>
-              </div>
-
-              <!-- Card 2 -->
-              <div class="payment-card">
-                <div class="card-info">
-                  <h6>Mastercard ending in 7821</h6>
-                  <span>Expires 04/27</span>
-                </div>
-
-                <div class="card-actions">
-                  <button class="ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2">Set Primary</button>
-                  <button class="remove-btn ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2 ">Remove</button>
-                </div>
-              </div>
-
-              <!-- Card 3 -->
-              <div class="payment-card">
-                <div class="card-info">
-                  <h6>Amex ending in 9903</h6>
-                  <span>Expires 11/29</span>
-                </div>
-
-                <div class="card-actions">
-                  <button class="ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2">Set Primary</button>
-                  <button class="remove-btn ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2 ">Remove</button>
+                  <button class="ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2">Update </button>
+                  <button class="remove-btn ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2 " (click)="cancelSubcription()">Cancel Subcription</button>
                 </div>
               </div>
             </div>
 
-            <button class="ct_schedule_call_btn ct_white_nowrape_1 px-3 w-auto mt-4">+ Add New Card</button>
+            <!-- <button class="ct_schedule_call_btn ct_white_nowrape_1 px-3 w-auto mt-4">+ Add New Card</button> -->
           </div>
 
           <!-- Renewal Details Section -->

@@ -9,6 +9,7 @@ export interface SubscriptionResponse {
   projectLimit: number;
   template_limit: number;
   subscription: SubscriptionData | null;
+  activePaymentMethod: paymentMethod | null;
 }
 
 
@@ -26,4 +27,12 @@ export interface SubscriptionData {
 
   created_at: string;
   updated_at: string;
+}
+export interface paymentMethod {
+type : string;
+card : string;
+bank : string;
+card_number: string;
+country: string;
+
 }

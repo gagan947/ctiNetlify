@@ -40,7 +40,7 @@ export class UserPlansComponent {
     this.apiService.getApi<SubscriptionResponse>(`api/user/getMySubscription`)
       .subscribe({
         next: (res) => {
-          console.log(res);
+         
           this.subscriptionPlan = res;
           this.planName = res.planName
         },
@@ -48,5 +48,20 @@ export class UserPlansComponent {
           // this.loading = false
         }
       });
+  };
+
+  cancelSubcription(){
+    this.apiService.getApi(`api/user/cancelSubscription`)
+    .subscribe({
+      next: (res:any) => {
+        console.log(res);
+        this.toster.success(res.message); // instant
+
+      
+      },
+      error: err => {
+        // this.loading = false
+      }
+    });
   }
 }
