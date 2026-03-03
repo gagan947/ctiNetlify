@@ -57,7 +57,7 @@
 
               <div class="detail-box">
                 <span>Next Billing Date</span>
-                <strong>{{subscriptionPlan.next_charge_date ? subscriptionPlan.next_charge_date : 'Not Available'}}</strong>
+                <strong>{{subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date) : 'Not Available'}}</strong>
               </div>
             </div>
           </div>
@@ -72,10 +72,16 @@
                 <div class="payment-card primary">
                 
                   <div class="card-info">
-                    <h6 class="d-flex align-items-center gap-2 flex-wrap">
-                      Visa ending in 4582
-                    </h6>
-                    <span>Expires 08/28</span>
+                    @if (subscriptionPlan.activePaymentMethod.type == 'card') {
+                      <h6 class="d-flex align-items-center gap-2 flex-wrap">
+                        {{subscriptionPlan.activePaymentMethod.network}} ending in {{subscriptionPlan.activePaymentMethod.card_number}}
+                      </h6>
+                    }@else {
+                      <h6 class="d-flex align-items-center gap-2 flex-wrap">
+                        {{subscriptionPlan.activePaymentMethod.network}} ending in {{subscriptionPlan.activePaymentMethod.card_number}}
+                      </h6>
+                    }
+                    <!-- <span>Expires 08/28</span> -->
                   </div>
   
                   <div class="card-actions">
@@ -99,12 +105,12 @@
               <div class="renewal-dates">
                 <div class="date-box">
                   <span>Plan Start Date</span>
-                  <strong>10 Feb 2026</strong>
+                  <strong>{{subscriptionPlan.start_date ? (subscriptionPlan.start_date | date) : 'Not Available'}}</strong>
                 </div>
   
                 <div class="date-box">
                   <span>Renewal Date</span>
-                  <strong>10 Mar 2026</strong>
+                  <strong>{{subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date) : 'Not Available'}}</strong>
                 </div>
               </div>
             </div>

@@ -101,7 +101,7 @@
                 <h6>Personal</h6>
                 <div class="ct_price mb-1">
                   ${{ allPlans[0].display_amount
-                  }}<span>per month billed {{ billingCycle() }}</span>
+                  }}<span> per month billed {{ billingCycle() == 'MONTH' ? 'monthly' : 'yearly' }}</span>
                 </div>
                 <p class="mb-2 ct_grey_text">
                   Perfect for individuals to build, launch, and manage a single project with essential tools.
@@ -165,7 +165,7 @@
                 <h6>Creative</h6>
                 <div class="ct_price mb-1">
                   ${{ allPlans[1].display_amount
-                  }}<span>per month billed {{ billingCycle() }} </span>
+                  }}<span> per month billed {{ billingCycle() == 'MONTH' ? 'monthly' : 'yearly' }} </span>
                 </div>
                 <p class="mb-2 ct_grey_text">
                   Built for creators and teams to design, customize, and scale high-impact projects.

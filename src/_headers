@@ -1,20 +1,18 @@
 /*
   Cache-Control: public, max-age=0, must-revalidate
-  Content-Security-Policy: default-src 'self';
-    script-src 'self' https://assets.calendly.com 'unsafe-inline';
+  Content-Security-Policy:
+    default-src 'self';
+    script-src 'self' 'unsafe-inline'
+      https://assets.calendly.com
+      https://cdn.jsdelivr.net
+      https://cdnjs.cloudflare.com;
     frame-src https://calendly.com;
-    connect-src 'self' https://calendly.com https://assets.calendly.com;
-    style-src 'self' 'unsafe-inline' https://assets.calendly.com;
-    img-src 'self' data: https://assets.calendly.com;
-
-/static/*
-  Cache-Control: public, max-age=31536000, immutable
-
-/*.js
-  Cache-Control: public, max-age=31536000, immutable
-
-/*.css
-  Cache-Control: public, max-age=31536000, immutable
-
-/assets/*
-  Cache-Control: public, max-age=31536000, immutable
+    connect-src 'self'
+      https://calendly.com
+      https://assets.calendly.com;
+    style-src 'self' 'unsafe-inline'
+      https://assets.calendly.com
+      https://cdn.jsdelivr.net
+      https://cdnjs.cloudflare.com;
+    img-src 'self' data:
+      https://assets.calendly.com;

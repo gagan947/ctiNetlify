@@ -7,11 +7,12 @@ import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { AiSocketService } from '../../../services/ai-socket.service';
 import { ApiService } from '../../../services/api.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-user-plans',
   standalone: true,
-  imports: [SidebarComponent],
+  imports: [SidebarComponent, CommonModule],
   templateUrl: './user-plans.component.html',
   styleUrl: './user-plans.component.css'
 })

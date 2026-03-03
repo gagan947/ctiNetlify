@@ -12,6 +12,7 @@ export interface SubscriptionResponse {
   billingInterval: string;
   pricingPlan: string;
   next_charge_date : string;
+  start_date : string;
 
 }
 
@@ -34,5 +35,6 @@ card : string;
 bank : string;
 card_number: string;
 country: string;
+network: string;
 
 }
