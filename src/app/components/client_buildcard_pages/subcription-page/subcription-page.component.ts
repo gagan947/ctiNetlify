@@ -100,7 +100,7 @@ export class SubcriptionPageComponent {
     const billingDetails = {
       name: raw.name,
       email: raw.email,
-      phoneNumber: raw.phoneNumber.e164Number, // ✅ USE THIS
+      phoneNumber: raw.phoneNumber.e164Number, 
       countryCode: raw.phoneNumber.countryCode
     };
 
@@ -113,8 +113,8 @@ export class SubcriptionPageComponent {
       return;
     }
     const cashfree = new (window as any).Cashfree({
-      // mode: "production",
-      mode: "sandbox",
+      mode: "production",
+      // mode: "sandbox",
     });
 
     cashfree
