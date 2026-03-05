@@ -1126,13 +1126,23 @@ export class AiPreviewComponent {
     if (this.subscriptionPlan.planType === 'free') {
       this.openModal();
     } else {
+// this.deployProject(this.sele)
 
     }
   }
 
   setPreviewUrl(url: string) {
-    console.log('Preview URL:', url);
     this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  deployProject(item: any) {
+    this.apiService
+      .postAPI('api/user/tempalteDeployed', {
+        template_id: item.user_template_id,
+        clientEnquryId: this.projectsData.clientEnquryId
+      })
+      .subscribe(() => {
+      });
   }
 }
 

@@ -8,17 +8,19 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { AiSocketService } from '../../../services/ai-socket.service';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
+import { SubcriptionPageComponent } from '../subcription-page/subcription-page.component';
 
 @Component({
   selector: 'app-user-plans',
   standalone: true,
-  imports: [SidebarComponent, CommonModule],
+  imports: [SidebarComponent, CommonModule, SubcriptionPageComponent],
   templateUrl: './user-plans.component.html',
   styleUrl: './user-plans.component.css'
 })
 export class UserPlansComponent {
   planName = 'Free Plan';
-  subscriptionPlan! :SubscriptionResponse
+  subscriptionPlan! :SubscriptionResponse;
+  showModal = false;
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
@@ -64,5 +66,10 @@ export class UserPlansComponent {
         // this.loading = false
       }
     });
+  }
+
+
+  closeModal() {
+    this.showModal = false;
   }
 }

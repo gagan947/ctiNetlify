@@ -5,13 +5,15 @@ import { CommonModule } from '@angular/common';
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
 import { SubcriptionService } from '../../../services/subcription.service';
+import { SubscriptionResponse } from '../../../models/subcription';
+import { RouterLink } from '@angular/router';
 type BillingCycle = 'MONTH' | 'YEAR';
 type PlanType = 'free' | 'personal' | 'creative' | 'booster';
 declare var window: any;
 @Component({
   selector: 'app-subcription-page',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxIntlTelInputModule, CalendlyDirective],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxIntlTelInputModule, CalendlyDirective, RouterLink],
   templateUrl: './subcription-page.component.html',
   styleUrl: './subcription-page.component.css'
 })
@@ -30,7 +32,7 @@ export class SubcriptionPageComponent {
   SearchCountryField = SearchCountryField
   CountryISO = CountryISO
   selectedPlan = signal<PlanType>('creative');
-  subscriptionPlan: any;
+  subscriptionPlan!: SubscriptionResponse;
   allPlans: any;
   orginalPlans: any
   selectedPlanData: any;
@@ -149,7 +151,7 @@ export class SubcriptionPageComponent {
     this.showCalendly = true;
   }
   getUserSubscriptionPlan() {
-    this.apiService.getApi(`api/user/getMySubscription`)
+    this.apiService.getApi<SubscriptionResponse>(`api/user/getMySubscription`)
       .subscribe({
         next: (res) => {
           this.subscriptionPlan = res;
@@ -171,6 +173,37 @@ export class SubcriptionPageComponent {
           // this.loading = false
         }
       });
+  }
+
+  formatMessageWithLocalDate(message: string): string {
+
+    if (!message) return '';
+  
+    if (message.includes('until')) {
+  
+      const parts = message.split('until');
+  
+      const before = parts[0];
+      const datePart = parts[1]?.trim();
+  
+      if (datePart) {
+  
+        const parsedDate = new Date(datePart);
+  
+        if (!isNaN(parsedDate.getTime())) {
+  
+          const formattedDate = parsedDate.toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          });
+  
+          return `${before}until ${formattedDate}`;
+        }
+      }
+    }
+  
+    return message;
   }
 
 }

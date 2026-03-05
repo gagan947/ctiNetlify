@@ -203,7 +203,7 @@ export class MainComponent {
       .subscribe({
         next: (res) => {
           this.allowProjectCreate = res.allowProjectCreate;
-        this.navigateMessage = res.message
+        // this.navigateMessage = res.message
         },
         error: err => {
           // this.loading = false

@@ -95,7 +95,7 @@
                                                                               [maxLength]="15" [phoneValidation]="true"
                                                                               [disabled]="user.is_phone_verified ===1">
                                                                         </ngx-intl-tel-input>
-                                                                        @if(user.is_phone_verified){
+                                                                        <!-- @if(user.is_phone_verified){
                                                                         <svg width="24" height="24" class="ct_eye_show"
                                                                               viewBox="0 0 24 24" fill="none"
                                                                               xmlns="http://www.w3.org/2000/svg">
@@ -113,7 +113,7 @@
                                                                               {{ isLoading2 ? '' : 'Verify' }}
                                                                         </button>
 
-                                                                        }
+                                                                        } -->
                                                                   </div>
                                                                   <div *ngIf="profilePhoneForm.submitted && phoneInput.invalid || submitted"
                                                                         class="text-danger">

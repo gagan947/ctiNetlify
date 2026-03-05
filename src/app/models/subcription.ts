@@ -13,6 +13,7 @@ export interface SubscriptionResponse {
   pricingPlan: string;
   next_charge_date : string;
   start_date : string;
+  subscriptionStatus : string;
 
 }
 
@@ -36,5 +37,6 @@ bank : string;
 card_number: string;
 country: string;
 network: string;
+upi_id: string;
 
 }
