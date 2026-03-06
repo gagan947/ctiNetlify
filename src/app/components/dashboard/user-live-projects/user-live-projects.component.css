@@ -1,0 +1,68 @@
+body{
+    background:#f6f8fb;
+    font-family:'Inter',sans-serif;
+    padding:40px;
+    }
+    
+    .project-card{
+    border-radius:14px;
+    border:1px solid #e6e8ec;
+    box-shadow:0 4px 12px rgba(0,0,0,0.03);
+    }
+    
+    .project-thumb{
+    width:180px;
+    height:130px;
+    background:#e9eef5;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:600;
+    color:#6b7280;
+    }
+    
+    .feature-badge{
+    background:#f1f5f9;
+    padding:8px 12px;
+    border-radius:8px;
+    font-size:13px;
+    margin:4px;
+    display:inline-block;
+    }
+    
+    .tech-pill{
+    background:#eef2ff;
+    color:#4f46e5;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:13px;
+    margin:4px;
+    display:inline-block;
+    }
+    
+    .timeline{
+    border-left:2px solid #e5e7eb;
+    padding-left:20px;
+    }
+    
+    .timeline-item{
+    position:relative;
+    margin-bottom:18px;
+    }
+    
+    .timeline-item::before{
+    content:'';
+    width:10px;
+    height:10px;
+    background:#6366f1;
+    border-radius:50%;
+    position:absolute;
+    left:-26px;
+    top:6px;
+    }
+    
+    .meta small{
+    color:#6b7280;
+    }
+    

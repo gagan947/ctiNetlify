@@ -3,7 +3,7 @@ import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AiSocketService } from '../../../services/ai-socket.service';
-import { filter, Subject, take } from 'rxjs';
+import { filter, firstValueFrom, Subject, take } from 'rxjs';
 import { Router, RouterLink } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SubcriptionPageComponent } from "../subcription-page/subcription-page.component";
@@ -12,6 +12,8 @@ import { ReactCodeEditorComponent } from './react-code-editor/react-code-editor.
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SubscriptionData, SubscriptionResponse } from '../../../models/subcription';
+import { GetUserTemplatesResponse, UserTemplate } from '../../../models/userTemplate';
+import { GenerateTemplateResponse } from '../../../models/generatePreview';
 interface DesignSnapshot {
   id: string;
   label: string;
@@ -22,6 +24,14 @@ interface DesignSnapshot {
   // NEW
   previewType?: 'html' | 'react';
   reactPreviewUrl?: any;
+}
+
+export interface DraftTemplateMapData {
+  templateId: string;
+  pages: any; // agar pages ka structure pata ho to aur specific kar sakte ho
+  loginRedirect: string | null;
+  reactBuildUrl: string | null;
+  reactBuildStatus: number;
 }
 
 interface ReactFile {
@@ -220,8 +230,8 @@ export class AiPreviewComponent {
     };
 
     this.apiService
-      .postAPI('api/user/generatePreview', payload)
-      .subscribe((res: any) => {
+      .postAPI<GenerateTemplateResponse , any>('api/user/generatePreview', payload)
+      .subscribe((res: GenerateTemplateResponse) => {
         // ✅ always map first
         const designId = this.mapDesignFromResponse(res);
 
@@ -566,7 +576,7 @@ export class AiPreviewComponent {
 
 
 
-  buildReactPreview(templateId: number, designId: string) {
+  buildReactPreview(templateId: string, designId: string) {
 
     this.isReactBuilding = true;
 
@@ -624,7 +634,7 @@ export class AiPreviewComponent {
   }
 
 
-  mapDesignFromResponse(res: any): string {
+  mapDesignFromResponse(res: GenerateTemplateResponse): string {
 
     const user_template_id = res.data.user_template_id;
 
@@ -971,28 +981,25 @@ export class AiPreviewComponent {
   }
 
 
-  getUserTemplates(): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.apiService.postAPI(
+  async getUserTemplates(): Promise<UserTemplate[]> {
+
+    const res = await firstValueFrom(
+      this.apiService.postAPI<GetUserTemplatesResponse,any>(
         'api/user/getUserTemplates',
         { clientEnquryId: this.projectsData.clientEnquryId }
       )
-        .subscribe({
-          next: (res: any) => {
-            if (res.success && res.templateExists) {
-              this.templateExists = true;
-              resolve(res.data);   // ✅ return templates
-            } else {
-              resolve([]);
-            }
-          },
-          error: err => reject(err)
-        });
-    });
+    );
+  
+    if (res.success && res.templateExists) {
+      this.templateExists = true;
+      return res.data;
+    }
+  
+    return [];
   }
 
 
-  async loadDraftTemplates(templates: any[]) {
+  async loadDraftTemplates(templates: UserTemplate[]) {
 
     // const { forgot_password } = JSON.parse(templates[0].react_code_file);
     // const react_files = { forgot_password };
@@ -1017,7 +1024,7 @@ export class AiPreviewComponent {
       const previewData = JSON.parse(tpl.preview_html_css);
 
       const designId = this.mapDesignFromDraft({
-        templateId: tpl.template_id,
+        templateId: tpl.public_template_id,
         pages: previewData.pages,
         loginRedirect: previewData.login_redirect,
         reactBuildUrl: tpl.react_build_url,
@@ -1033,7 +1040,7 @@ export class AiPreviewComponent {
   }
 
 
-  mapDesignFromDraft(data: any): string {
+  mapDesignFromDraft(data: DraftTemplateMapData ): string {
 
     this.designCount++;
 
@@ -1123,23 +1130,37 @@ export class AiPreviewComponent {
 
 
   checkNDeploy() {
+
     if (this.subscriptionPlan.planType === 'free') {
       this.openModal();
-    } else {
-// this.deployProject(this.sele)
-
+      return;
     }
+    console.log(this.designOrder);
+  
+    const activeDesign = this.designOrder.find(
+      d => d.designId === this.activeDesignId
+    );
+  
+    if (!activeDesign) {
+      console.error("No active design found");
+      return;
+    }
+  
+    const selected_template_id = activeDesign.user_template_id;
+  
+    this.deployProject(selected_template_id)
+  
   }
 
   setPreviewUrl(url: string) {
     this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
-  deployProject(item: any) {
+  deployProject(selected_template_id: string) {
     this.apiService
       .postAPI('api/user/tempalteDeployed', {
-        template_id: item.user_template_id,
-        clientEnquryId: this.projectsData.clientEnquryId
+        publicTemplateId:selected_template_id ,
+        publicInquiryId: this.projectsData.clientEnquryId
       })
       .subscribe(() => {
       });

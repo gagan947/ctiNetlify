@@ -18,6 +18,9 @@ export const routes: Routes = [
             path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(c => c.DashboardComponent), canActivate: [authGuard]
       },
       {
+            path: 'user-live-projects/:id', loadComponent: () => import('./components/dashboard/user-live-projects/user-live-projects.component').then(c => c.UserLiveProjectsComponent), canActivate: [authGuard]
+      },
+      {
             path: 'free-demo', loadComponent: () => import('./components/free-demo/free-demo.component').then(c => c.FreeDemoComponent), canActivate: [authGuard]
       },
       {

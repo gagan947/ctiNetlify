@@ -11,13 +11,13 @@
                                     <h3 class="ct_fs_26 ct_fw_700">My Creative Projects</h3><span class="ct_fs_16">
                                           Active plan :
                                           {{
-                                            activePlan === 'free'
-                                              ? 'Free'
-                                              : activePlan.includes('personal')
-                                                ? 'Personal'
-                                                : 'Creative' 
+                                          activePlan === 'free'
+                                          ? 'Free'
+                                          : activePlan.includes('personal')
+                                          ? 'Personal'
+                                          : 'Creative'
                                           }} plan
-                                        </span>
+                                    </span>
                                     <div class="pt-5">
                                           <ul class="nav nav-pills mb-3 ct_dash_board_tab" id="pills-tab"
                                                 role="tablist">
@@ -59,19 +59,19 @@
                                                                                                 {{item.projectName}}
                                                                                           </h6>
                                                                                     </div>
-                                                                                    @if(item.projectStatus == 0){
-                                                                                          <div class="dropdown" >
-                                                                                                <i class="fa-solid fa-ellipsis-vertical"
-                                                                                                      id="dropdownMenuButton1"
-                                                                                                      data-bs-toggle="dropdown"
-                                                                                                      aria-expanded="false"></i>
-                                                                                                <ul class="dropdown-menu"
-                                                                                                      aria-labelledby="dropdownMenuButton1">
-                                                                                                      <li><a (click)="discardProject(item.inquiryId)"
-                                                                                                                  class="dropdown-item">Remove</a>
-                                                                                                      </li>
-                                                                                                </ul>
-                                                                                          </div>
+                                                                                    @if(item.project_deployed == 0){
+                                                                                    <div class="dropdown">
+                                                                                          <i class="fa-solid fa-ellipsis-vertical"
+                                                                                                id="dropdownMenuButton1"
+                                                                                                data-bs-toggle="dropdown"
+                                                                                                aria-expanded="false"></i>
+                                                                                          <ul class="dropdown-menu"
+                                                                                                aria-labelledby="dropdownMenuButton1">
+                                                                                                <li><a (click)="discardProject(item.inquiryId)"
+                                                                                                            class="dropdown-item">Remove</a>
+                                                                                                </li>
+                                                                                          </ul>
+                                                                                    </div>
 
                                                                                     }
                                                                               </div>
@@ -91,7 +91,8 @@
                                                                                           </svg>
                                                                                           <p
                                                                                                 class="mb-0 text-capitalize">
-                                                                                                {{item.currentRoutes?.split('/')[1]?.replace('-', ' ')}}
+                                                                                                {{item.currentRoutes?.split('/')[1]?.replace('-',
+                                                                                                ' ')}}
                                                                                           </p>
                                                                                     </div>
                                                                                     <div>
@@ -100,38 +101,59 @@
                                                                                     </div>
                                                                               </div>
 
-                                                                              <div class="ct_creative_task_list_122">
-                                                                                    <ul>
-                                                                                          <li *ngFor="let step of steps; let i = index"
-                                                                                                [ngClass]="{ 'active': i <= item.activeIndex }">
-                                                                                                <p>{{ step.icon }}</p>
-                                                                                          </li>
-                                                                                    </ul>
-
-                                                                              </div>
+                                                                            
                                                                         </div>
                                                                         <div class="ct_creative_card_body">
                                                                               <div
-                                                                                    class="d-flex align-items-center justify-content-between mt-4">
+                                                                                    class="all-feature-box">
                                                                                     <div>
-                                                                                          <h4 class="ct_fs_14">FEATURES
+                                                                                          <h4 class=" head">FEATURES
                                                                                           </h4>
-                                                                                          <p class="mb-0">
-                                                                                                {{item.allFeatureCount ? item.allFeatureCount : '-'}}
+                                                                                          <p class="mb-0 desc">
+                                                                                                {{item.allFeatureCount ?
+                                                                                                item.allFeatureCount :
+                                                                                                '-'}}
                                                                                           </p>
                                                                                     </div>
                                                                                     <div>
-                                                                                          <h4 class="ct_fs_14">DURATION
+                                                                                          <h4 class=" head">DURATION
                                                                                           </h4>
-                                                                                          <p class="mb-0">
-                                                                                                {{item.durations ? item.durations + ' Weeks' : '-'}}
+                                                                                          <p class="mb-0 desc">
+                                                                                                {{item.durations ?
+                                                                                                item.durations + '
+                                                                                                Weeks' : '-'}}
                                                                                           </p>
                                                                                     </div>
+                                                                                    
+
+
+                                                                                
+                                                                          @if(item.project_deployed == 1){
+                                                                                <div>
+                                                                                      <h4 class="head">Created
+                                                                                      </h4>
+                                                                                      <p class="mb-0 desc">
+                                                                                            12 feb 2026
+  
+                                                                                      </p>
+                                                                                </div>
+  
+                                                                                <div>
+                                                                                      <h4 class="head">Deployed
+                                                                                      </h4>
+                                                                                      <p class="desc">
+                                                                                            {{baseURl + item.deployed_url}}
+                                                                                      </p>
+                                                                                </div>
+                                                                              
+                                                                          }
                                                                               </div>
 
-                                                                              <div class="mt-5 border-5">
+                                                                              <div class="mt-4 border-5">
                                                                                     <a (click)="Navigate(item)"
-                                                                                          class="ct_schedule_call_btn w-100 justify-content-center">{{item.projectStatus == 1 ? 'Check Status' : 'Continue Building'}}</a>
+                                                                                          class="ct_schedule_call_btn w-100 justify-content-center">{{item.project_deployed
+                                                                                          == 1 ? 'View Details' :
+                                                                                          'Continue Building'}}</a>
                                                                               </div>
                                                                         </div>
                                                                   </div>

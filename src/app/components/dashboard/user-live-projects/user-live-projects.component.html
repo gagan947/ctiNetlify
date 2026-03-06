@@ -1,0 +1,136 @@
+<section class="ct_dash_board_main">
+    <app-sidebar></app-sidebar>
+    <div class="ct_dash_right_content ct_white_bg_page ">
+        <div class="ct_dash_toggle_bar">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+        <div class="container">
+            <!-- HEADER -->
+            <div class="card project-card mb-4">
+                <div class="card-body">
+
+                    <div class="row align-items-center">
+
+                        <div class="col-md-auto">
+                            <div class="project-thumb">
+                                Thumbnail
+                            </div>
+                        </div>
+
+                        <div class="col">
+
+                            <h4 class="fw-semibold mb-2">
+                                {{projectData.clientProjectName}}
+                            </h4>
+
+                            <div class="meta d-flex flex-wrap gap-4 mb-3">
+
+                                <small>Client: <strong>Kiara Ltd</strong></small>
+                                <small>Created: {{projectData.createdAt | date : "MMM d, y, h:mm a"}}</small>
+
+                                <span class="badge bg-success-subtle text-success">
+                                    Active
+                                </span>
+
+                            </div>
+
+                            <div>
+
+                                <a [href]="baseUrl + projectData.deployed_url" class="btn btn-primary btn-sm me-2">
+                                    View Live
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- FEATURES -->
+            <div class="card project-card mb-4">
+                <div class="card-body">
+
+                    <h6 class="fw-semibold mb-3">Main Features</h6>
+
+                    <div>
+                        <span class="feature-badge">User Login</span>
+                        <span class="feature-badge">Product Listing</span>
+                        <span class="feature-badge">Shopping Cart</span>
+                        <span class="feature-badge">Payment Gateway</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ADDITIONAL FEATURES -->
+            <div class="card project-card mb-4">
+                <div class="card-body">
+
+                    <h6 class="fw-semibold mb-3">Additional Features</h6>
+
+                    <div>
+                        <span class="feature-badge">AI Recommendations</span>
+                        <span class="feature-badge">Push Notifications</span>
+                        <span class="feature-badge">Loyalty Points</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TECH STACK -->
+            <div class="card project-card mb-4">
+                <div class="card-body">
+
+                    <h6 class="fw-semibold mb-3">Tech Stack</h6>
+
+                    <div>
+
+                        <span class="tech-pill">React JS</span>
+                        <span class="tech-pill">Node JS</span>
+                        <span class="tech-pill">MYSQL</span>
+                        <span class="tech-pill">AWS</span>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TIMELINE -->
+            <!-- <div class="card project-card">
+                <div class="card-body">
+
+                    <h6 class="fw-semibold mb-3">
+                        Project Activity Timeline
+                    </h6>
+
+                    <div class="timeline">
+
+                        <div class="timeline-item">
+                            <strong>Project Created</strong><br>
+                            <small>12 Jan 2026</small>
+                        </div>
+
+                        <div class="timeline-item">
+                            <strong>UI Approved</strong><br>
+                            <small>25 Jan 2026</small>
+                        </div>
+
+                        <div class="timeline-item">
+                            <strong>Beta Version Released</strong><br>
+                            <small>20 Feb 2026</small>
+                        </div>
+
+                        <div class="timeline-item">
+                            <strong>Deployment Scheduled</strong><br>
+                            <small>15 March 2026</small>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div> -->
+        </div>
+    </div>
+</section>

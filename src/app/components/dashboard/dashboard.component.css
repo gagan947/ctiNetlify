@@ -38,3 +38,23 @@
       color: #6b6f85;
       max-width: 420px;
 }
+
+.all-feature-box{
+      display: grid;
+      grid-template-columns: 2fr 2fr;
+      gap: 20px;
+      margin-top: 15px;
+  
+}
+
+.all-feature-box .head{
+font-size: 14px;
+font-weight: 600;
+margin-bottom: 5px;
+}
+.all-feature-box .desc{
+      font-size: 14px;
+      font-weight: 400;
+      color: #2a2e45;
+
+}

@@ -18,6 +18,7 @@ export class DashboardComponent {
   estimatedDate: Date | undefined;
   status: number | null = null;
   activePlan = '';
+  baseURl = this.apiService.reactBuildURl;
   constructor(private apiService: ApiService, private message: NzMessageService, private router: Router) {
   }
   ngOnInit(): void {
@@ -56,29 +57,33 @@ export class DashboardComponent {
   }
 
   Navigate(data: any) {
-    
-            let projectData = {
-              clientEnquryId: data.inquiryId,
-              projectId: data.projectId,
-              phases_deliverables: data.phases_deliverables,
-              bellingDetails: data.billing_details,
-              estimated_time: data.durations,
-              final_cost_with_tax_discount: data.final_cost_with_tax_discount,
-              platform: data.platforms,
-              projectLogo: data.clientProjectLogo,
-              selectdFeature: data.projectFeatures,
-              speed: data.development_speed,
-              total_cost_delivery: data.total_cost_delivery,
-              paymentPlan: data.payment_plan == 'Installment' ? '2' : '1',
-              installmentType: data.installment_type,
-              features_cost: data.features_cost,
-              no_of_features: data.no_of_features,
-              projectName: data.projectName,
-            };
+       if(data.project_deployed){
+        this.router.navigate([`user-live-projects/${data.inquiryId}`]);
+       }else{
+         let projectData = {
+           clientEnquryId: data.inquiryId,
+           projectId: data.projectId,
+           phases_deliverables: data.phases_deliverables,
+           bellingDetails: data.billing_details,
+           estimated_time: data.durations,
+           final_cost_with_tax_discount: data.final_cost_with_tax_discount,
+           platform: data.platforms,
+           projectLogo: data.clientProjectLogo,
+           selectdFeature: data.projectFeatures,
+           speed: data.development_speed,
+           total_cost_delivery: data.total_cost_delivery,
+           paymentPlan: data.payment_plan == 'Installment' ? '2' : '1',
+           installmentType: data.installment_type,
+           features_cost: data.features_cost,
+           no_of_features: data.no_of_features,
+           projectName: data.projectName
+         };
 
-            sessionStorage.setItem('htmlCode', data.html_pages);
-            sessionStorage.setItem('projectData', JSON.stringify(projectData));
-            this.router.navigate([data.currentRoutes]);
+         sessionStorage.setItem('htmlCode', data.html_pages);
+         sessionStorage.setItem('projectData', JSON.stringify(projectData));
+         this.router.navigate([data.currentRoutes]);
+
+       }
          
   }
 
