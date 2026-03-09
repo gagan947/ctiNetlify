@@ -21,6 +21,7 @@ export class UserPlansComponent {
   planName = 'Free Plan';
   subscriptionPlan! :SubscriptionResponse;
   showModal = false;
+  isCanceling = false
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
@@ -54,15 +55,26 @@ export class UserPlansComponent {
   };
 
   cancelSubcription(){
+    this.isCanceling = true
     this.apiService.getApi(`api/user/cancelSubscription`)
     .subscribe({
       next: (res:any) => {
-        console.log(res);
+
+        setTimeout(() => {
+          this.isCanceling = false;
+          this.getUserSubscriptionPlan();
+        }, 5000);
+     
         this.toster.success(res.message); // instant
 
       
       },
       error: err => {
+
+         setTimeout(() => {
+          this.isCanceling = false;
+         
+        }, 2000);
         // this.loading = false
       }
     });

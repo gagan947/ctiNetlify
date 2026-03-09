@@ -97,7 +97,7 @@
                                                                                     </div>
                                                                                     <div>
                                                                                           <span class="badge"
-                                                                                                [ngClass]="getStatusClass(item.projectStatus)">{{checkStatus(item.projectStatus)}}</span>
+                                                                                                [ngClass]="getStatusClass(item.project_deployed)">{{checkStatus(item.project_deployed)}}</span>
                                                                                     </div>
                                                                               </div>
 
@@ -132,8 +132,8 @@
                                                                                 <div>
                                                                                       <h4 class="head">Created
                                                                                       </h4>
-                                                                                      <p class="mb-0 desc">
-                                                                                            12 feb 2026
+                                                                                      <p class="desc">
+                                                                                          <small>Created: {{item.createdAt | date}}</small>
   
                                                                                       </p>
                                                                                 </div>

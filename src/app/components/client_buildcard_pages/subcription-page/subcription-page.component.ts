@@ -19,6 +19,9 @@ declare var window: any;
 })
 export class SubcriptionPageComponent {
   @Input() subscriptionModalOpen = false;
+  @Input() selectedTemplateId = '';
+  
+
   @Output() close = new EventEmitter<void>();
   billingSummaryModalOpen = false;
   showCalendly = false;
@@ -39,6 +42,7 @@ export class SubcriptionPageComponent {
   constructor(private apiService: ApiService, private fb: FormBuilder, private subscriptionService: SubcriptionService) {
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
+    console.log(this.selectedTemplateId);
   }
 
   ngOnInit(): void {
@@ -79,7 +83,9 @@ export class SubcriptionPageComponent {
   initiateSubscriptionCheckout(billingDetails: any) {
     this.apiService.postAPI('api/payment/create-subscription', {
       planKey: this.planKey(),
-      user: billingDetails
+      user: billingDetails,
+      publicTemplateId : this.selectedTemplateId,
+      inquiryId : this.projectsData.clientEnquryId || null
     }).subscribe((res: any) => {
       // ⬇️ THIS IS THE KEY
       this.openCashfreeSubscriptionCheckout(res.subscription_session_id);

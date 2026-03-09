@@ -9,7 +9,11 @@ body{
     border:1px solid #e6e8ec;
     box-shadow:0 4px 12px rgba(0,0,0,0.03);
     }
-    
+    .ct_img_80{
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+    }
     .project-thumb{
     width:180px;
     height:130px;
@@ -66,3 +70,25 @@ body{
     color:#6b7280;
     }
     
+    .main-feature-list {
+      
+        font-size: 16px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+
+    }
+    .main-feature-list li+li{
+        margin-top: 5px;
+    }
+    .main-feature-head{
+        font-size: 13px;
+        margin-bottom:10px;
+        font-weight: 500;
+    }
+    .main-feature-content{
+        max-height:400px;
+        overflow-y: auto;
+
+    }

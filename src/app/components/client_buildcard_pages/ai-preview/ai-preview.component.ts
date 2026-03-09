@@ -86,6 +86,7 @@ export class AiPreviewComponent {
   showCodeButton = false;
   userHasScrolled = false;
   designCount = 0;
+  selected_template_id = '';
   subscriptionPlan!: SubscriptionResponse;
   selectedDeviceType: string = '<i class="fa-solid fa-display"></i>';
   languages = [
@@ -575,7 +576,6 @@ export class AiPreviewComponent {
 
 
 
-
   buildReactPreview(templateId: string, designId: string) {
 
     this.isReactBuilding = true;
@@ -659,6 +659,15 @@ export class AiPreviewComponent {
     });
 
     this.activeDesignId = designId;
+    const activeDesign = this.designOrder.find(
+      d => d.designId === this.activeDesignId
+    );
+  
+    if (!activeDesign) {
+      console.error("No active design found");
+    }
+  
+    this.selected_template_id = activeDesign.user_template_id;
 
     return designId;
   }
@@ -675,9 +684,6 @@ export class AiPreviewComponent {
   }
 
 
-
-
-
   switchDesign(designId: string) {
 
     const design = this.designMap.get(designId);
@@ -685,6 +691,17 @@ export class AiPreviewComponent {
     if (!design) return;
 
     this.activeDesignId = designId;
+
+    const activeDesign = this.designOrder.find(
+      d => d.designId === this.activeDesignId
+    );
+  
+    if (!activeDesign) {
+      console.error("No active design found");
+      return;
+    }
+  
+    this.selected_template_id = activeDesign.user_template_id;
 
     // 👉 React preview
     if (design.previewType === 'react' && design.reactPreviewUrl) {
@@ -881,6 +898,9 @@ export class AiPreviewComponent {
 
   // open modal
   openModal() {
+
+    console.log(this.selected_template_id);
+  
     this.showModal = true;
   }
 
@@ -957,6 +977,16 @@ export class AiPreviewComponent {
         // handle active design safely
         if (!this.designMap.has(this.activeDesignId)) {
           this.activeDesignId = this.designOrder[0]?.designId || null;
+          const activeDesign = this.designOrder.find(
+            d => d.designId === this.activeDesignId
+          );
+        
+          if (!activeDesign) {
+            console.error("No active design found");
+            return;
+          }
+        
+          this.selected_template_id = activeDesign.user_template_id;
 
           if (this.activeDesignId) {
             this.switchDesign(this.activeDesignId);
@@ -1074,6 +1104,16 @@ export class AiPreviewComponent {
     if (!design) return;
 
     this.activeDesignId = designId;
+    const activeDesign = this.designOrder.find(
+      d => d.designId === this.activeDesignId
+    );
+  
+    if (!activeDesign) {
+      console.error("No active design found");
+      return;
+    }
+  
+    this.selected_template_id = activeDesign.user_template_id;
 
     if (design.previewType === 'react' && design.reactPreviewUrl) {
 
@@ -1146,9 +1186,9 @@ export class AiPreviewComponent {
       return;
     }
   
-    const selected_template_id = activeDesign.user_template_id;
+    this.selected_template_id = activeDesign.user_template_id;
   
-    this.deployProject(selected_template_id)
+    this.deployProject(this.selected_template_id)
   
   }
 
@@ -1159,11 +1199,16 @@ export class AiPreviewComponent {
   deployProject(selected_template_id: string) {
     this.apiService
       .postAPI('api/user/tempalteDeployed', {
-        publicTemplateId:selected_template_id ,
+        publicTemplateId: selected_template_id,
         publicInquiryId: this.projectsData.clientEnquryId
       })
-      .subscribe(() => {
+      .subscribe((res:any) => {
+        if (res.success) {
+          this.router.navigate([`/dashboard`]);
+        }
       });
-  }
+}
+
+
 }
 

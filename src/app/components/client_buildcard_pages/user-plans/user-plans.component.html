@@ -1,8 +1,6 @@
 <section class="ct_dash_board_main" style="display: block !important">
   <app-sidebar></app-sidebar>
-  <div
-    class="ct_dash_right_content pt-5"
-    style="
+  <div class="ct_dash_right_content pt-5" style="
       background: linear-gradient(
         90deg,
         rgb(250 218 188 / 44%),
@@ -11,227 +9,228 @@
       );
       height: auto;
       min-height: 100vh;
-    "
-  >
+    ">
     <div class="ct_dash_toggle_bar">
       <i class="fa-solid fa-bars"></i>
     </div>
-
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="mb-4 d-flex align-items-start justify-content-between gap-3 flex-wrap">
-            <div>
-              <h1 class="ct_fs_18 ct_fw_600 mb-0">Subcription & Billing</h1>
+@if (subscriptionPlan) {
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="mb-4 d-flex align-items-start justify-content-between gap-3 flex-wrap">
+          <div>
+            <h1 class="ct_fs_18 ct_fw_600 mb-0">Subcription & Billing</h1>
             <p class="mb-0">
               View your subcription plan, manage saved cards, and check renewal
               information.
             </p>
-            </div>
-              <button class="ct_upgrade_btn" (click)="showModal = true"><i class="fa-solid fa-bolt"></i> Upgrade</button>
           </div>
-
-          <!-- Membership Plan Section -->
-          <div class="ct_white_bg ct_ecommerse_web_card mb-4 p-3">
-            <div class="plan-header">
-              <h5 class="ct_fs_18 ct_fw_600">
-                {{ subscriptionPlan?.planName }} Plan
-              </h5>
-            
-         
-            </div>
-
-            <div class="plan-details">
-
-              <!-- Template Limit -->
-              <div class="detail-box">
-                <span>Template Limit</span>
-                <strong>
-                  {{ subscriptionPlan?.planName == 'Free'
-                    ? 'Not Available'
-                    : subscriptionPlan.template_limit }}
-                </strong>
-              </div>
-            
-              <!-- Price -->
-              <div class="detail-box">
-                <span>
-                  {{ subscriptionPlan.billingInterval == 'YEAR'
-                    ? 'Yearly'
-                    : 'Monthly' }} Price
-                </span>
-            
-                @if (subscriptionPlan.pricingPlan) {
-                  <strong>
-                    $ {{ subscriptionPlan.pricingPlan }}
-                    / {{ subscriptionPlan.billingInterval == 'YEAR' ? 'year' : 'month' }}
-                  </strong>
-                } @else {
-                  <strong>Free</strong>
-                }
-              </div>
-            
-              <!-- Status -->
-              <div class="detail-box">
-                <span>Status</span>
-              
-                <strong
-                  class="status-pill"
-                  [ngClass]="{
-                    'status-active': subscriptionPlan.subscriptionStatus === 'ACTIVE',
-                    'status-cancelled': subscriptionPlan.subscriptionStatus === 'CANCELLED',
-                    'status-free': !subscriptionPlan.subscriptionStatus
-                  }"
-                >
-              
-                  @if (subscriptionPlan.subscriptionStatus === 'ACTIVE') {
-                    Active
-                  }
-              
-                  @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
-                    Cancelled (Access until {{ subscriptionPlan.next_charge_date | date }})
-                  }
-              
-                  @if (!subscriptionPlan.subscriptionStatus) {
-                    Free Plan
-                  }
-              
-                </strong>
-              </div>
-            
-              <!-- Billing / Access -->
-              <div class="detail-box">
-            
-                <span>
-            
-                  @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
-                    Access Until
-                  } @else {
-                    Next Billing Date
-                  }
-            
-                </span>
-            
-                <strong>
-                  {{ subscriptionPlan.next_charge_date
-                    ? (subscriptionPlan.next_charge_date | date)
-                    : 'Not Available' }}
-                </strong>
-            
-              </div>
-            
-            </div>
-          </div>
-
-          <!-- Payment Methods Section -->
-          @if (subscriptionPlan.activePaymentMethod) {
-            <div class="ct_white_bg ct_ecommerse_web_card mb-4 p-3">
-              <h5 class="ct_fs_18 ct_fw_600">Active Payment Methods</h5>
-  
-              <div class="cards-list">
-                <!-- Primary Card -->
-                <div class="payment-card primary">
-                
-                  <div class="card-info">
-                    @if (subscriptionPlan.activePaymentMethod.type == 'card') {
-                      <h6 class="d-flex align-items-center gap-2 flex-wrap">
-                        {{subscriptionPlan.activePaymentMethod.network}} ending in {{subscriptionPlan.activePaymentMethod.card_number}}
-                      </h6>
-                    }@else {
-                        <h6 class="d-flex align-items-center gap-2 flex-wrap">
-                          <i class="pi pi-wallet text-success"></i>
-                          <span class="fw-semibold">UPI ID:</span>
-                          <span class="text-muted">
-                            {{ subscriptionPlan.activePaymentMethod.upi_id }}
-                          </span>
-                        </h6>
-                        }
-                    <!-- <span>Expires 08/28</span> -->
-                  </div>
-  
-                  <div class="card-actions">
-                    <!-- <button class="ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2">Update </button> -->
-                    <button class="remove-btn ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2 " (click)="cancelSubcription()" *ngIf="subscriptionPlan.subscriptionStatus === 'ACTIVE'">Cancel Subcription</button>
-                  </div>
-                </div>
-              </div>
-  
-              <!-- <button class="ct_schedule_call_btn ct_white_nowrape_1 px-3 w-auto mt-4">+ Add New Card</button> -->
-            </div>
-  
-            <!-- Renewal Details Section -->
-           <!-- Renewal Details Section -->
-<div class="ct_white_bg ct_ecommerse_web_card mb-4 p-3 renewal-box">
-
-  <h2 class="ct_fs_18 ct_fw_600 mb-0">
-    {{ subscriptionPlan.subscriptionStatus === 'CANCELLED'
-      ? 'Membership Ends'
-      : 'Membership Renewal'
-    }}
-  </h2>
-
-  <p>
-    @if (subscriptionPlan.subscriptionStatus === 'ACTIVE') {
-      Your membership will renew automatically on the next billing date unless cancelled before that.
-    }
-
-    @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
-      Your subscription has been cancelled. You will continue to have access until the date below.
-    }
-
-    @if (!subscriptionPlan.subscriptionStatus) {
-      You are currently on the free plan.
-    }
-  </p>
-
-  <div class="renewal-dates">
-
-    <!-- Start Date -->
-    <div class="date-box">
-      <span>Plan Start Date</span>
-      <strong>
-        {{ subscriptionPlan.start_date
-          ? (subscriptionPlan.start_date | date)
-          : 'Not Available'
-        }}
-      </strong>
-    </div>
-
-    <!-- Renewal / End Date -->
-    <div class="date-box">
-
-      <span>
-
-        @if (subscriptionPlan.subscriptionStatus === 'ACTIVE') {
-          Next Billing Date
-        }
-
-        @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
-          Access Until
-        }
-
-        @if (!subscriptionPlan.subscriptionStatus) {
-          Upgrade Anytime
-        }
-
-      </span>
-
-      <strong>
-        {{ subscriptionPlan.next_charge_date
-          ? (subscriptionPlan.next_charge_date | date)
-          : 'Not Available'
-        }}
-      </strong>
-
-    </div>
-
-  </div>
-</div>
-                
-          }
+          <button class="ct_upgrade_btn" (click)="showModal = true"><i class="fa-solid fa-bolt"></i> Upgrade</button>
         </div>
+
+        <!-- Membership Plan Section -->
+        <div class="ct_white_bg ct_ecommerse_web_card mb-4 p-3">
+          <div class="plan-header">
+            <h5 class="ct_fs_18 ct_fw_600">
+              {{ subscriptionPlan.planName }} Plan
+            </h5>
+
+
+          </div>
+
+          <div class="plan-details">
+
+            <!-- Template Limit -->
+            <div class="detail-box">
+              <span>Template Limit</span>
+              <strong>
+                {{ subscriptionPlan.planName == 'Free'
+                ? 'Not Available'
+                : subscriptionPlan.template_limit }}
+              </strong>
+            </div>
+
+            <!-- Price -->
+            <div class="detail-box">
+              <span>
+                {{ subscriptionPlan.billingInterval == 'YEAR'
+                ? 'Yearly'
+                : 'Monthly' }} Price
+              </span>
+
+              @if (subscriptionPlan.pricingPlan) {
+              <strong>
+                $ {{ subscriptionPlan.pricingPlan }}
+                / {{ subscriptionPlan.billingInterval == 'YEAR' ? 'year' : 'month' }}
+              </strong>
+              } @else {
+              <strong>Free</strong>
+              }
+            </div>
+
+            <!-- Status -->
+            <div class="detail-box">
+              <span>Status</span>
+
+              <strong class="status-pill" [ngClass]="{
+                  'status-active': subscriptionPlan.subscriptionStatus === 'ACTIVE',
+                  'status-cancelled': subscriptionPlan.subscriptionStatus === 'CANCELLED',
+                  'status-free': !subscriptionPlan.subscriptionStatus
+                }">
+
+                @if (subscriptionPlan.subscriptionStatus === 'ACTIVE') {
+                Active
+                }
+
+                @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
+                Cancelled (Access until {{ subscriptionPlan.next_charge_date | date }})
+                }
+
+                @if (!subscriptionPlan.subscriptionStatus) {
+                Free Plan
+                }
+
+              </strong>
+            </div>
+
+            <!-- Billing / Access -->
+            <div class="detail-box">
+
+              <span>
+
+                @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
+                Access Until
+                } @else {
+                Next Billing Date
+                }
+
+              </span>
+
+              <strong>
+                {{ subscriptionPlan.next_charge_date
+                ? (subscriptionPlan.next_charge_date | date)
+                : 'Not Available' }}
+              </strong>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Payment Methods Section -->
+        @if (subscriptionPlan.activePaymentMethod) {
+        <div class="ct_white_bg ct_ecommerse_web_card mb-4 p-3">
+          <h5 class="ct_fs_18 ct_fw_600">Active Payment Methods</h5>
+
+          <div class="cards-list">
+            <!-- Primary Card -->
+            <div class="payment-card primary">
+
+              <div class="card-info">
+                @if (subscriptionPlan.activePaymentMethod.type == 'card') {
+                <h6 class="d-flex align-items-center gap-2 flex-wrap">
+                  {{subscriptionPlan.activePaymentMethod.network}} ending in
+                  {{subscriptionPlan.activePaymentMethod.card_number}}
+                </h6>
+                }@else {
+                <h6 class="d-flex align-items-center gap-2 flex-wrap">
+                  <i class="pi pi-wallet text-success"></i>
+                  <span class="fw-semibold">UPI ID:</span>
+                  <span class="text-muted">
+                    {{ subscriptionPlan.activePaymentMethod.upi_id }}
+                  </span>
+                </h6>
+                }
+                <!-- <span>Expires 08/28</span> -->
+              </div>
+
+              <div class="card-actions">
+                <!-- <button class="ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2">Update </button> -->
+                <button
+                  class="remove-btn ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2 " [disabled]="isCanceling"
+                  (click)="cancelSubcription()" *ngIf="subscriptionPlan.subscriptionStatus === 'ACTIVE'">{{isCanceling ? 'Canceling...' : 'Cancel Subscription'}}</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- <button class="ct_schedule_call_btn ct_white_nowrape_1 px-3 w-auto mt-4">+ Add New Card</button> -->
+        </div>
+
+        <!-- Renewal Details Section -->
+        <!-- Renewal Details Section -->
+        <div class="ct_white_bg ct_ecommerse_web_card mb-4 p-3 renewal-box">
+
+          <h2 class="ct_fs_18 ct_fw_600 mb-0">
+            {{ subscriptionPlan.subscriptionStatus === 'CANCELLED'
+            ? 'Membership Ends'
+            : 'Membership Renewal'
+            }}
+          </h2>
+
+          <p>
+            @if (subscriptionPlan.subscriptionStatus === 'ACTIVE') {
+            Your membership will renew automatically on the next billing date unless cancelled before that.
+            }
+
+            @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
+            Your subscription has been cancelled. You will continue to have access until the date below.
+            }
+
+            @if (!subscriptionPlan.subscriptionStatus) {
+            You are currently on the free plan.
+            }
+          </p>
+
+          <div class="renewal-dates">
+
+            <!-- Start Date -->
+            <div class="date-box">
+              <span>Plan Start Date</span>
+              <strong>
+                {{ subscriptionPlan.start_date
+                ? (subscriptionPlan.start_date | date)
+                : 'Not Available'
+                }}
+              </strong>
+            </div>
+
+            <!-- Renewal / End Date -->
+            <div class="date-box">
+
+              <span>
+
+                @if (subscriptionPlan.subscriptionStatus === 'ACTIVE') {
+                Next Billing Date
+                }
+
+                @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
+                Access Until
+                }
+
+                @if (!subscriptionPlan.subscriptionStatus) {
+                Upgrade Anytime
+                }
+
+              </span>
+
+              <strong>
+                {{ subscriptionPlan.next_charge_date
+                ? (subscriptionPlan.next_charge_date | date)
+                : 'Not Available'
+                }}
+              </strong>
+
+            </div>
+
+          </div>
+        </div>
+
+        }
       </div>
     </div>
+  </div>
+
+}
   </div>
 </section>
 

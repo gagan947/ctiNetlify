@@ -16,6 +16,9 @@ export class UserLiveProjectsComponent {
   @Input() id: any
   projectData: any;
   baseUrl = this.apiService.reactBuildURl;
+  imagebaseUrl = this.apiService.imageUrl;
+  projectFeatures: any = [];
+  addedFeatures: any = [];
   constructor(private apiService: ApiService, private message: NzMessageService, private router: Router) {
   }
   ngOnInit(): void {
@@ -29,6 +32,10 @@ export class UserLiveProjectsComponent {
       (res: any) => {
         if (res.success) {
           this.projectData = res.data[0];
+          this.projectFeatures = JSON.parse(res.data[0].projectFeatures);
+          this.addedFeatures = JSON.parse(res.data[0].additionalFeatures);
+          
+
           // sessionStorage.setItem('projectData', JSON.stringify(res.data));
         } else {
           this.router.navigate(['/dashboard']);

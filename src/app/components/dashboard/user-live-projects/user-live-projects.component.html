@@ -4,133 +4,168 @@
         <div class="ct_dash_toggle_bar">
             <i class="fa-solid fa-bars"></i>
         </div>
-        <div class="container">
-            <!-- HEADER -->
-            <div class="card project-card mb-4">
-                <div class="card-body">
-
-                    <div class="row align-items-center">
-
-                        <div class="col-md-auto">
-                            <div class="project-thumb">
-                                Thumbnail
+        @if(projectData){
+            <div class="container">
+                <!-- HEADER -->
+                <div class="card project-card mb-4">
+                    <div class="card-body">
+    
+                        <div class="row align-items-center">
+    
+                            <div class="col-md-auto">
+                                <div class="project-thumb">
+                                    <img loading="lazy" [src]="imagebaseUrl + projectData.clientProjectLogo" alt="AI-powered app and web development" class="w-auto mx-auto d-block ct_img_80 " >
+                                </div>
                             </div>
+    
+                            <div class="col">
+    
+                                <h4 class="fw-semibold mb-2">
+                                    {{projectData.clientProjectName}}
+                                </h4>
+    
+                                <div class="meta d-flex flex-wrap gap-4 mb-3">
+    
+                                    <small>Client: <strong>{{projectData.clientName}}</strong></small>
+                                    <small>Created: {{projectData.createdAt | date : "MMM d, y, h:mm a"}}</small>
+    
+                                    <span class="badge bg-success-subtle text-success">
+                                        Active
+                                    </span>
+    
+                                </div>
+    
+                                <div>
+    
+                                    <a [href]="baseUrl + projectData.deployed_url" target="_blank" class="btn btn-primary btn-sm me-2">
+                                        View Live
+                                    </a>
+                                </div>
+    
+                            </div>
+    
                         </div>
-
-                        <div class="col">
-
-                            <h4 class="fw-semibold mb-2">
-                                {{projectData.clientProjectName}}
-                            </h4>
-
-                            <div class="meta d-flex flex-wrap gap-4 mb-3">
-
-                                <small>Client: <strong>Kiara Ltd</strong></small>
-                                <small>Created: {{projectData.createdAt | date : "MMM d, y, h:mm a"}}</small>
-
-                                <span class="badge bg-success-subtle text-success">
-                                    Active
-                                </span>
-
-                            </div>
-
+    
+                    </div>
+                </div>
+    
+                <!-- FEATURES -->
+                <div class="card project-card mb-4">
+                    <div class="card-body">
+    
+                        <h6 class="fw-semibold mb-3">Main Features</h6>
+    
+                        <div class="main-feature-content">
+                            @for (item of projectFeatures; track $index) {
                             <div>
-
-                                <a [href]="baseUrl + projectData.deployed_url" class="btn btn-primary btn-sm me-2">
-                                    View Live
-                                </a>
+                                <h5 class="main-feature-head">{{item.featureName}}</h5>
+                                <ul class="main-feature-list">
+                                    @for (sub_item of item.subFeatures; track $index) {
+                                    <li class="feature-badge">{{sub_item.subFeatureName}}</li>
+                                }
+                            </ul>
                             </div>
-
+    
+                            }
+                        
+    
                         </div>
-
+    
                     </div>
-
                 </div>
+    
+                @if (addedFeatures.length) {
+                    <div class="card project-card mb-4">
+                        <div class="card-body">
+        
+                            <h6 class="fw-semibold mb-3">Additional Features</h6>
+        
+                            <div class="main-feature-content">
+                                @for (item of addedFeatures; track $index) {
+                                <div>
+                                    <h5 class="main-feature-head">{{item.featureName}}</h5>
+                                    <ul class="main-feature-list">
+                                        @for (sub_item of item.subFeatures; track $index) {
+                                        <li class="feature-badge">{{sub_item.subFeatureName}}</li>
+                                        }
+        
+        
+                                    </ul>
+        
+                                </div>
+        
+                                }
+                                <div>
+                                    <h5 class="main-feature-head">Product Listing</h5>
+                                    <ul class="main-feature-list">
+                                        <li class="feature-badge">Select</li>
+                                        <li class="feature-badge">Select</li>
+                                    </ul>
+                                </div>
+        
+                            </div>
+        
+                        </div>
+                    </div>
+    
+                }
+    
+    
+    
+                <!-- TECH STACK -->
+                <div class="card project-card mb-4">
+                    <div class="card-body">
+    
+                        <h6 class="fw-semibold mb-3">Tech Stack</h6>
+    
+                        <div>
+    
+                            <span class="tech-pill">React JS</span>
+                            <span class="tech-pill">Node JS</span>
+                            <span class="tech-pill">MYSQL</span>
+                            <span class="tech-pill">AWS</span>
+    
+                        </div>
+    
+                    </div>
+                </div>
+    
+                <!-- TIMELINE -->
+                <!-- <div class="card project-card">
+                    <div class="card-body">
+    
+                        <h6 class="fw-semibold mb-3">
+                            Project Activity Timeline
+                        </h6>
+    
+                        <div class="timeline">
+    
+                            <div class="timeline-item">
+                                <strong>Project Created</strong><br>
+                                <small>12 Jan 2026</small>
+                            </div>
+    
+                            <div class="timeline-item">
+                                <strong>UI Approved</strong><br>
+                                <small>25 Jan 2026</small>
+                            </div>
+    
+                            <div class="timeline-item">
+                                <strong>Beta Version Released</strong><br>
+                                <small>20 Feb 2026</small>
+                            </div>
+    
+                            <div class="timeline-item">
+                                <strong>Deployment Scheduled</strong><br>
+                                <small>15 March 2026</small>
+                            </div>
+    
+                        </div>
+    
+                    </div>
+                </div> -->
             </div>
 
-            <!-- FEATURES -->
-            <div class="card project-card mb-4">
-                <div class="card-body">
-
-                    <h6 class="fw-semibold mb-3">Main Features</h6>
-
-                    <div>
-                        <span class="feature-badge">User Login</span>
-                        <span class="feature-badge">Product Listing</span>
-                        <span class="feature-badge">Shopping Cart</span>
-                        <span class="feature-badge">Payment Gateway</span>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- ADDITIONAL FEATURES -->
-            <div class="card project-card mb-4">
-                <div class="card-body">
-
-                    <h6 class="fw-semibold mb-3">Additional Features</h6>
-
-                    <div>
-                        <span class="feature-badge">AI Recommendations</span>
-                        <span class="feature-badge">Push Notifications</span>
-                        <span class="feature-badge">Loyalty Points</span>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- TECH STACK -->
-            <div class="card project-card mb-4">
-                <div class="card-body">
-
-                    <h6 class="fw-semibold mb-3">Tech Stack</h6>
-
-                    <div>
-
-                        <span class="tech-pill">React JS</span>
-                        <span class="tech-pill">Node JS</span>
-                        <span class="tech-pill">MYSQL</span>
-                        <span class="tech-pill">AWS</span>
-
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- TIMELINE -->
-            <!-- <div class="card project-card">
-                <div class="card-body">
-
-                    <h6 class="fw-semibold mb-3">
-                        Project Activity Timeline
-                    </h6>
-
-                    <div class="timeline">
-
-                        <div class="timeline-item">
-                            <strong>Project Created</strong><br>
-                            <small>12 Jan 2026</small>
-                        </div>
-
-                        <div class="timeline-item">
-                            <strong>UI Approved</strong><br>
-                            <small>25 Jan 2026</small>
-                        </div>
-
-                        <div class="timeline-item">
-                            <strong>Beta Version Released</strong><br>
-                            <small>20 Feb 2026</small>
-                        </div>
-
-                        <div class="timeline-item">
-                            <strong>Deployment Scheduled</strong><br>
-                            <small>15 March 2026</small>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div> -->
-        </div>
+        }
     </div>
 </section>

@@ -15,7 +15,8 @@ export class ApiService {
   // apiUrl = 'https://api.creativethoughts.ai/';
   imageUrl = 'https://api.creativethoughts.ai';
   apiUrl = 'http://localhost:4500/';
-  reactBuildURl = 'http://localhost:4500';
+  // reactBuildURl = 'http://localhost:4500';
+  reactBuildURl = 'https://api.creativethoughts.ai';
 
 
   private clearInputSubject = new Subject<void>();
