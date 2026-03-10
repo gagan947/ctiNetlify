@@ -3,6 +3,7 @@ import { FooterComponent } from '../../shared/footer/footer.component';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { RouterLink } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
+import { CanonicalService } from '../../../services/canonical.service';
 
 @Component({
   selector: 'app-ai-app-generator',
@@ -12,10 +13,11 @@ import { Meta, Title } from '@angular/platform-browser';
   styleUrl: './ai-app-generator.component.css'
 })
 export class AiAppGeneratorComponent {
-  constructor(private meta: Meta, private title: Title) {
+  constructor(private meta: Meta, private title: Title, private canonicalService: CanonicalService) {
     this.title.setTitle('AI App Generator — Generate Android & iOS Apps Using AI');
     this.meta.updateTag({
       name: 'description', content: 'Generate Android and iOS apps instantly using AI. Describe your app idea, and Creative AI will automatically build the app structure. No coding required—start free today.'
-    })
+    });
+    this.canonicalService.setCanonicalURL('https://creativethoughts.ai/ai-app-generator');
   }
 }
