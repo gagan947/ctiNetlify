@@ -104,7 +104,7 @@ export class DashboardComponent {
       case 0:
         return 'Draft';
       case 1:
-        return 'Paid';
+        return 'Live';
       case 2:
         return 'Running';
       case 3:
