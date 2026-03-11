@@ -81,11 +81,12 @@ export class SubcriptionPageComponent {
   });
 
   initiateSubscriptionCheckout(billingDetails: any) {
+    const inquiryId = this.projectsData?.clientEnquryId ?? null;
     this.apiService.postAPI('api/payment/create-subscription', {
       planKey: this.planKey(),
       user: billingDetails,
       publicTemplateId : this.selectedTemplateId,
-      inquiryId : this.projectsData.clientEnquryId || null
+      inquiryId
     }).subscribe((res: any) => {
       // ⬇️ THIS IS THE KEY
       this.openCashfreeSubscriptionCheckout(res.subscription_session_id);

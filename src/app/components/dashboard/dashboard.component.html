@@ -133,7 +133,7 @@
                                                                                       <h4 class="head">Created
                                                                                       </h4>
                                                                                       <p class="desc">
-                                                                                          <small>Created: {{item.createdAt | date}}</small>
+                                                                                          <small>{{item.createdAt | date}}</small>
   
                                                                                       </p>
                                                                                 </div>
@@ -141,9 +141,9 @@
                                                                                 <div>
                                                                                       <h4 class="head">Deployed
                                                                                       </h4>
-                                                                                      <p class="desc">
+                                                                                      <a class="desc link-primary" [href]="baseURl + item.deployed_url" target="_blank">
                                                                                             {{baseURl + item.deployed_url}}
-                                                                                      </p>
+                                                                                      </a>
                                                                                 </div>
                                                                               
                                                                           }
