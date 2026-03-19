@@ -322,3 +322,8 @@ nz-input-otp.ant-otp {
       z-index: 9999 !important;
     }
     
+
+
+    aside.ct_project_ai_chat_section{
+    overflow-y: auto !important;
+}

@@ -1,0 +1,165 @@
+
+  .terminal .line {
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .terminal .command ,.ct_filte_text_clr {
+    color: #a78bfa;
+  }
+
+  .terminal .output {
+    color: #9ca3af;
+  }
+
+  .terminal .muted {
+    color: #6b7280;
+    font-size: 13px;
+  }
+
+
+
+   .code-container {
+      background: #1e1e1e;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .code-container .code-header {
+      background: #2d2d2d;
+      padding: 10px 15px;
+      font-size: 14px;
+      color: #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+   .code-container .code-body {
+      padding: 20px;
+      background: linear-gradient(90deg, rgba(50,80,60,0.4), rgba(30,30,30,1));
+    }
+
+   .code-container .line {
+      display: flex;
+      gap: 15px;
+      word-break: break-word;
+    }
+
+   .code-container .line-number {
+      width: 30px;
+      color: #888;
+      text-align: right;
+    }
+
+  .code-container  .line-content {
+      white-space: normal;
+    }
+
+   .code-container .comment {
+      color: #6a9955;
+    }
+
+ .code-container   .heading {
+      color: #ff6b6b;
+      font-weight: bold;
+    }
+
+
+
+      .card-dark {
+    background: #111317;
+    border-radius: 10px;
+    max-width: 900px;
+    margin: 40px auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  }
+
+  .top-line {
+    text-align: center;
+    font-size: 13px;
+    color: #9ca3af;
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .top-line::before,
+  .top-line::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #2d2f36;
+    transform: translateY(-50%);
+  }
+
+  .top-line::before {
+    left: 0;
+  }
+
+  .top-line::after {
+    right: 0;
+  }
+.card-dark p{
+    font-size: 14px;
+}
+  .highlight {
+    color: #3b82f6;
+    cursor: pointer;
+  }
+
+  .pill {
+    background: #1f2937;
+    padding: 6px 8px;
+    border-radius: 20px;
+    font-size: 12px;
+    display: inline-block;
+    margin: 0px 6px 4px 0;
+  }
+
+  .bullet {
+    margin-bottom: 10px;
+  }
+
+  .arrow-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1f2937;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px auto 0;
+    cursor: pointer;
+  }
+
+  .arrow-circle i {
+    color: #9ca3af;
+  }
+  aside.ct_project_ai_chat_section{
+    overflow-y: auto;
+  }
+
+  .top-line span {
+    background-color: #1d1d1d;
+    z-index: 999;
+    position: relative;
+    padding-inline: 17px;
+}
+
+.ct_bullet_dot_outline{
+    width: 5px;
+    height: 5px;
+    border: 1px solid #aaa;
+    border-radius: 100px;
+    display: inline-block;
+}
+
+.ct_listed_pointed li{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
