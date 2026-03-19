@@ -14,6 +14,7 @@ import { AiSocketService } from '../../../../services/ai-socket.service';
 import { ApiService } from '../../../../services/api.service';
 import { SubcriptionPageComponent } from '../../subcription-page/subcription-page.component';
 import { ReactCodeEditorComponent } from '../react-code-editor/react-code-editor.component';
+import { AiDevRendererComponent } from '../ai-dev-renderer/ai-dev-renderer.component';
 
 
 interface DesignSnapshot {
@@ -46,7 +47,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-react-build-preview',
   standalone: true,
-  imports: [CommonModule, ScrollingModule, SubcriptionPageComponent, ReactCodeEditorComponent, NzSelectModule, FormsModule, RouterLink],
+  imports: [CommonModule, ScrollingModule, SubcriptionPageComponent, ReactCodeEditorComponent, NzSelectModule, FormsModule, RouterLink, AiDevRendererComponent],
   templateUrl: './react-build-preview.component.html',
   styleUrl: './react-build-preview.component.css'
 })
@@ -540,19 +541,6 @@ export class ReactBuildPreviewComponent {
 
 
 
-
-
-
-
-  loadReactPreview(url: string) {
-
-    const iframe = this.previewFrame.nativeElement;
-    iframe.src = 'about:blank';
-    setTimeout(() => iframe.src = url + '?t=' + Date.now(), 30);
-    this.setPreviewUrl(url);
-
-  }
-
   clearFirstBlockMinHeight() {
     const first = this.blocks.find(b => b.isFirstOfRegenerate);
     if (!first || !this.chatScroll) return;
@@ -619,9 +607,7 @@ export class ReactBuildPreviewComponent {
   }
 
 
-  onCodeFinished() {
 
-  }
 
   openFullPreview() {
     if (this.isReactBuilding) return
@@ -649,46 +635,6 @@ export class ReactBuildPreviewComponent {
         break;
     }
   }
-
-  // removeDesign(item: any) {
-  //   this.apiService
-  //     .postAPI('api/user/deleteUserTemplate', {
-  //       template_id: item.user_template_id,
-  //       clientEnquryId: this.projectsData.clientEnquryId
-  //     })
-  //     .subscribe(() => {
-
-  //       // remove from map
-  //       this.designMap.delete(item.designId);
-  //       // this.designCount = this.designCount - 1;
-  //       // remove from order
-  //       this.designOrder = this.designOrder.filter(
-  //         d => d.designId !== item.designId
-  //       );
-
-  //       // 🔥 reorder labels
-  //       this.reorderTemplates();
-
-  //       // handle active design safely
-  //       if (!this.designMap.has(this.activeDesignId)) {
-  //         this.activeDesignId = this.designOrder[0]?.designId || null;
-  //         const activeDesign = this.designOrder.find(
-  //           d => d.designId === this.activeDesignId
-  //         );
-
-  //         if (!activeDesign) {
-  //           console.error("No active design found");
-  //           return;
-  //         }
-
-  //         this.selected_template_id = activeDesign.user_template_id;
-
-  //         if (this.activeDesignId) {
-  //           this.switchDesign(this.activeDesignId);
-  //         }
-  //       }
-  //     });
-  // }
 
 
 
@@ -763,34 +709,7 @@ export class ReactBuildPreviewComponent {
   }
 
 
-  activateDesign(designId: string) {
 
-    const design = this.designMap.get(designId);
-    if (!design) return;
-
-    this.activeDesignId = designId;
-    const activeDesign = this.designOrder.find(
-      d => d.designId === this.activeDesignId
-    );
-
-    if (!activeDesign) {
-      console.error("No active design found");
-      return;
-    }
-
-    this.selected_template_id = activeDesign.user_template_id;
-
-    if (design.previewType === 'react' && design.reactPreviewUrl) {
-
-      this.loadReactPreview(design.reactPreviewUrl);
-
-    } else {
-
-    }
-    this.isReactBuilding = false;
-    this.isTyping = false;
-    this.showCodeButton = true;
-  }
 
 
 

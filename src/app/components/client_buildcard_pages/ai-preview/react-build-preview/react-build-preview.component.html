@@ -92,11 +92,11 @@
     </div>
     <section class="ct_project_ai_preview_main">
         <aside class="ct_project_ai_chat_section pe-0" [ngClass]="!fullScreen ? 'd-block' : 'd-none'">
-            <div #chatScroll>
+            <!-- <div #chatScroll>
                 <ul class="pe-3">
                     @for (block of blocks; track $index) {
                     <li class="ct_ai_project_lefr">
-                        <!-- AI BRAND HEADER -->
+                       
                         <div class="ct_chat_ai_brand_logo">
                             <img src="assets/img/c.png" alt="" />
                             <p class="mb-0">Creative</p>
@@ -105,7 +105,7 @@
                             </small>
                         </div>
 
-                        <!-- ================= STATUS / LOADER BLOCK ================= -->
+                  
                         @if (block.id.startsWith('status')) {
                         <div class="ct_ai_thiking_loader">
                             <svg class="ct_ai_thiking_icon" viewBox="0 0 256 256">
@@ -138,7 +138,7 @@
                 'block-list': block.id.startsWith('list'),
                 'block-intent': block.id.startsWith('intent')
               }">
-                            <!-- 🔹 LIST BLOCK -->
+                         
                             @if (isArray(block.text)) {
                             <ul class="ct_ai_feature_list">
                                 @for (item of block.text; track $index) {
@@ -169,8 +169,9 @@
                     </li>
                     }
                 </ul>
-            </div>
+            </div> -->
 
+            <app-ai-dev-renderer ></app-ai-dev-renderer>
             <!-- ================= BOTTOM ACTION BUTTONS ================= -->
             <div class="ct_project_ai_btm_action_btns pe-3">
                 <button class="ct_blue_outline_btn w-100" (click)="regenerate()" [disabled]="isTyping"
@@ -274,7 +275,7 @@
                 </div>
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                     <app-react-code-editor #codeEditor *ngIf="files.length >0" [files]="files"
-                        [templateExists]="templateExists" (typingDone)="onCodeFinished()">
+                        [templateExists]="templateExists">
                     </app-react-code-editor>
 
                 </div>

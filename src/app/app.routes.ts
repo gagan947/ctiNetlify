@@ -36,9 +36,6 @@ export const routes: Routes = [
             path: 'chatbot', loadComponent: () => import('./components/client_buildcard_pages/chatbot/chatbot.component').then(c => c.ChatbotComponent), canActivate: [authGuard]
       },
       {
-            path: 'ai-preview/:id', loadComponent: () => import('./components/client_buildcard_pages/ai-preview/ai-preview.component').then(c => c.AiPreviewComponent), canActivate: [authGuard]
-      },
-      {
             path: 'code-generator/:id', loadComponent: () => import('./components/client_buildcard_pages/ai-preview/react-build-preview/react-build-preview.component').then(c => c.ReactBuildPreviewComponent), canActivate: [authGuard]
       },
       {
