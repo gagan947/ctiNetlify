@@ -106,7 +106,7 @@ export class DashboardComponent {
       case 1:
         return 'Live';
       case 2:
-        return 'Running';
+        return 'Expired';
       case 3:
         return 'Completed';
       default:

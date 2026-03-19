@@ -1,0 +1,311 @@
+<!-- <div class="preview-wrapper" (click)="onPreviewClick($event)" id="topScrollDiv">
+  <div [innerHTML]="currentHTML"></div>
+</div> -->
+
+<div class="ct_aappp">
+    <div class="ct_ai_prjct_prev_header">
+        <div class="d-flex align-items-center gap-2">
+            <!-- <div>
+        <img src="assets/img/cti_black_logo1.png" alt="">
+      </div> -->
+            <div class="et_reload_icon" routerLink="/dashboard">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22px" height="22px" fill="currentColor"
+                    viewBox="0 0 256 256" role="presentation">
+                    <path
+                        d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z">
+                    </path>
+                </svg>
+            </div>
+            <button class="ct_design_tab_btn fw-bold">
+                {{projectsData.projectName || 'Project Name'}}
+            </button>
+            <div class="d-flex align-items-center gap-2">
+                @for (item of designOrder; track item.designId; let i = $index) {
+                <button class="ct_design_tab_btn design-tab" [class.active]="item.designId === activeDesignId">
+                    <span (click)="switchDesign(item.designId)"
+                        [ngStyle]="{ 'padding-right': designOrder.length > 1 ? '14px' : '0px' }">
+                        Template {{ i + 1 }}
+                    </span>
+                    <i *ngIf="designOrder.length > 1" class="fa-solid fa-xmark" (click)="removeDesign(item)"></i>
+                </button>
+                }
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <div *ngIf="!previewCodeShow">
+                <div class="et_reload_icon" (click)="openFullPreview()">
+                    <i class="fa-solid" [ngClass]="fullScreen ? 'fa-minimize' : 'fa-expand'"></i>
+                </div>
+            </div>
+            <ul class="ct_preview_tabs gap-0 mb-0 d-flex align-items-center" id="pills-tab" role="tablist"
+                style="background-color: #333; border-radius: 5px; padding: 2px">
+                <li role="presentation">
+                    <button class="active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+                        type="button" role="tab" aria-controls="pills-home" aria-selected="true"
+                        (click)="previewCodeShow = false">
+                        Preview
+                    </button>
+                </li>
+                <li role="presentation" [hidden]="!showCodeButton">
+                    <button id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button"
+                        role="tab" aria-controls="pills-profile" aria-selected="false" (click)="previewCodeShow = true"
+                        class="me-0">
+                        Code
+                    </button>
+                </li>
+            </ul>
+            <ul class="mb-0">
+                <li>
+                    <div class="dropdown ct_dropdown_device_preview123">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false" [innerHTML]="selectedDeviceType">
+                        </button>
+                        <ul class="dropdown-menu mb-0" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" (click)="onDeviceTypeChange('desktop')"> <i
+                                        class="fa-solid fa-display"></i></a></li>
+                            <li><a class="dropdown-item" (click)="onDeviceTypeChange('tablet')"> <i
+                                        class="fa-solid fa-tablet-screen-button"></i></a></li>
+                            <li><a class="dropdown-item" (click)="onDeviceTypeChange('mobile')"> <i
+                                        class="fa-solid fa-mobile-screen"></i></a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                </li>
+            </ul>
+            <div class="ct_plan_div">
+                <p class="mb-0 text-white mt-0">Current plan </p>
+                <span>{{planName}}</span>
+            </div>
+            <div>
+                <button class="upgrade-btn" (click)="openModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                        viewBox="0 0 256 256" class="text-[#ffc300]">
+                        <path
+                            d="M248,80a28,28,0,1,0-51.12,15.77l-26.79,33L146,73.4a28,28,0,1,0-36.06,0L85.91,128.74l-26.79-33a28,28,0,1,0-26.6,12L47,194.63A16,16,0,0,0,62.78,208H193.22A16,16,0,0,0,209,194.63l14.47-86.85A28,28,0,0,0,248,80ZM128,40a12,12,0,1,1-12,12A12,12,0,0,1,128,40ZM24,80A12,12,0,1,1,36,92,12,12,0,0,1,24,80ZM193.22,192H62.78L48.86,108.52,81.79,149A8,8,0,0,0,88,152a7.83,7.83,0,0,0,1.08-.07,8,8,0,0,0,6.26-4.74l29.3-67.4a27,27,0,0,0,6.72,0l29.3,67.4a8,8,0,0,0,6.26,4.74A7.83,7.83,0,0,0,168,152a8,8,0,0,0,6.21-3l32.93-40.52ZM220,92a12,12,0,1,1,12-12A12,12,0,0,1,220,92Z">
+                        </path>
+                    </svg>
+                    Upgrade
+                </button>
+            </div>
+        </div>
+    </div>
+    <section class="ct_project_ai_preview_main">
+        <aside class="ct_project_ai_chat_section pe-0" [ngClass]="!fullScreen ? 'd-block' : 'd-none'">
+            <div #chatScroll>
+                <ul class="pe-3">
+                    @for (block of blocks; track $index) {
+                    <li class="ct_ai_project_lefr">
+                        <!-- AI BRAND HEADER -->
+                        <div class="ct_chat_ai_brand_logo">
+                            <img src="assets/img/c.png" alt="" />
+                            <p class="mb-0">Creative</p>
+                            <small class="ct_text_op_7">
+                                {{ block.timestamp | date : "MMM d, y, h:mm a" }}
+                            </small>
+                        </div>
+
+                        <!-- ================= STATUS / LOADER BLOCK ================= -->
+                        @if (block.id.startsWith('status')) {
+                        <div class="ct_ai_thiking_loader">
+                            <svg class="ct_ai_thiking_icon" viewBox="0 0 256 256">
+                                <line x1="128" y1="32" x2="128" y2="64" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="24"></line>
+                                <line x1="195.9" y1="60.1" x2="173.3" y2="82.7" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="24"></line>
+                                <line x1="224" y1="128" x2="192" y2="128" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="24"></line>
+                                <line x1="195.9" y1="195.9" x2="173.3" y2="173.3" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="24"></line>
+                                <line x1="128" y1="224" x2="128" y2="192" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="24"></line>
+                                <line x1="60.1" y1="195.9" x2="82.7" y2="173.3" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="24"></line>
+                                <line x1="32" y1="128" x2="64" y2="128" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="24"></line>
+                                <line x1="60.1" y1="60.1" x2="82.7" y2="82.7" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="24"></line>
+                            </svg>
+
+                            <span class="ct_ai_thiking_loading-text">
+                                {{ block.text }}
+                            </span>
+                        </div>
+                        }@else {
+                        <div class="ct_ai_project_lefr_btns" [ngClass]="{
+                'block-cmd': block.id.startsWith('cmd'),
+                'block-paragraph': block.id.startsWith('paragraph'),
+                'block-list': block.id.startsWith('list'),
+                'block-intent': block.id.startsWith('intent')
+              }">
+                            <!-- 🔹 LIST BLOCK -->
+                            @if (isArray(block.text)) {
+                            <ul class="ct_ai_feature_list">
+                                @for (item of block.text; track $index) {
+                                <li>{{ item }}</li>
+                                }
+                            </ul>
+                            }@else if (block.id.startsWith('credentials')) {
+                            <p class="mb-0">{{ block.text.message }}</p>
+                            <div class="ct_ai_credentials_box">
+                                <h6>{{ block.text.label }}</h6>
+
+                                <div>
+                                    <strong>Email:</strong>
+                                    <span>{{ block.text.email }}</span>
+                                </div>
+
+                                <div>
+                                    <strong>Password:</strong>
+                                    <span>{{ block.text.password }}</span>
+                                </div>
+
+                            </div>
+                            }@else {
+                            <p class="mb-0">{{ block.text }}</p>
+                            }
+                        </div>
+                        }
+                    </li>
+                    }
+                </ul>
+            </div>
+
+            <!-- ================= BOTTOM ACTION BUTTONS ================= -->
+            <div class="ct_project_ai_btm_action_btns pe-3">
+                <button class="ct_blue_outline_btn w-100" (click)="regenerate()" [disabled]="isTyping"
+                    [ngClass]="isTyping ? 'ct_no_drop_btn' : ''">
+                    Regenerate
+                </button>
+
+                <button class="ct_schedule_call_btn w-100 justify-content-center mt-auto ct_white_nowrape_1"
+                    (click)="openDeployModal('1')" [ngClass]="isTyping ? 'ct_no_drop_btn' : ''">
+                    Deploy Now
+                </button>
+            </div>
+        </aside>
+
+        <div class="ct_ai_project_preview_right">
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <div class="preview-wrapper d-flex" id="topScrollDiv">
+                        <iframe #previewFrame class="preview-iframe mx-auto w-100"
+                            [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100" [src]="safePreviewUrl">
+                        </iframe>
+                        <div class="preview-overlay" [class.show]="isReactBuilding">
+                            <div class="ct_ai_thiking_loader2 d-flex">
+                                <div class="rgt_loader" id="rgt_loader">
+                                    <div class="rgt_loader-wrapper">
+                                        <span class="rgt_loader-letter">G</span>
+                                        <span class="rgt_loader-letter">e</span>
+                                        <span class="rgt_loader-letter">n</span>
+                                        <span class="rgt_loader-letter">e</span>
+                                        <span class="rgt_loader-letter">r</span>
+                                        <span class="rgt_loader-letter">a</span>
+                                        <span class="rgt_loader-letter">t</span>
+                                        <span class="rgt_loader-letter">i</span>
+                                        <span class="rgt_loader-letter">n</span>
+                                        <span class="rgt_loader-letter">g</span>
+                                        <span class="rgt_loader-letter">.</span>
+                                        <span class="rgt_loader-letter">.</span>
+                                        <span class="rgt_loader-letter">.</span>
+                                        <div class="rgt_loader-circle"></div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 text-center">
+                                    <h4 class="ct_fs_24 ct_fw_600 mb-1">
+                                        I'm Generating the Preview.
+                                    </h4>
+
+                                </div>
+                                <!-- 🔥 ADD build progress here -->
+                                <div class="build-progress mt-4 text-start">
+
+                                    <div class="build-step" [class.done]="buildStep > 1"
+                                        [class.running]="buildStep === 1">
+
+                                        <span class="icon">
+                                            {{ buildStep > 1 ? '✔' : buildStep === 1 ? '⏳' : '⬇' }}
+                                        </span>
+
+                                        Installing dependencies
+                                        <span *ngIf="buildStep === 1" class="typing-dots"></span>
+                                    </div>
+
+                                    <div class="build-step" [class.done]="buildStep > 2"
+                                        [class.running]="buildStep === 2">
+
+                                        <span class="icon">
+                                            {{ buildStep > 2 ? '✔' : buildStep === 2 ? '⏳' : '⚙' }}
+                                        </span>
+
+                                        Building React app
+                                        <span *ngIf="buildStep === 2" class="typing-dots"></span>
+                                    </div>
+
+                                    <div class="build-step" [class.done]="buildStep > 3"
+                                        [class.running]="buildStep === 3">
+
+                                        <span class="icon">
+                                            {{ buildStep > 3 ? '✔' : buildStep === 3 ? '⏳' : '🚀' }}
+                                        </span>
+
+                                        Deploying preview
+                                        <span *ngIf="buildStep === 3" class="typing-dots"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                    <app-react-code-editor #codeEditor *ngIf="files.length >0" [files]="files"
+                        [templateExists]="templateExists" (typingDone)="onCodeFinished()">
+                    </app-react-code-editor>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <app-subcription-page [subscriptionModalOpen]="showModal" [selectedTemplateId]="selected_template_id"
+        (close)="closeModal()"></app-subcription-page>
+</div>
+
+
+<div class="modal fade" id="deployConfirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="padding: 30px;">
+            <h2>Confirm Template Deployment</h2>
+            <p>You have selected the following template preview:</p>
+            <!-- Template Preview with Image -->
+            <div class="template-preview">
+                <div class="preview-image">
+                    <iframe [src]="previewUrl" class="preview-iframe mx-auto w-100"
+                        [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100">
+                    </iframe>
+
+                </div>
+                <div class="preview-content">
+                    <h3>Template {{activeDesignId}}</h3>
+                    <span>Modern Business Landing Page Layout</span>
+                </div>
+            </div>
+            <!-- Warning -->
+            <div class="info-box">
+                <div class="info-icon">⚠</div>
+                <div class="info-text">
+                    You’re almost Ready! Keep in mind that once deployed, this template can’t be switched.<br>
+                    <b>This project supports only one template deployment.</b>
+                </div>
+            </div>
+            <!-- Buttons -->
+            <div class="actions">
+                <button class="btn-cancel button-deploy" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn-confirm button-deploy" (click)="checkNDeploy()" data-bs-dismiss="modal">Deploy
+                    Template</button>
+            </div>
+        </div>
+    </div>
+</div>
