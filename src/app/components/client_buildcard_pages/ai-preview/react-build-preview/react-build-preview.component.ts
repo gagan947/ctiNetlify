@@ -141,15 +141,15 @@ export class ReactBuildPreviewComponent {
     this.blocks = [];
 
     // ✅ Load draft templates first
-    // const templates = await this.getUserTemplates();
+    const templates = await this.getUserTemplates();
 
-    // if (templates.length > 0) {
-    //   this.showDraftWelcomeMessages();
-    //   // 👉 map and render old drafts
-    //   await this.loadDraftTemplates(templates);
+    if (templates.length > 0) {
+      this.showDraftWelcomeMessages();
+      // 👉 map and render old drafts
+      await this.loadDraftTemplates(templates);
 
-    //   return; // ⛔ stop fresh generation flow
-    // }
+      return; // ⛔ stop fresh generation flow
+    }
 
 
     this.aiService.socketReady$
