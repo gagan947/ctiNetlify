@@ -39,7 +39,7 @@ export const routes: Routes = [
             path: 'ai-preview/:id', loadComponent: () => import('./components/client_buildcard_pages/ai-preview/ai-preview.component').then(c => c.AiPreviewComponent), canActivate: [authGuard]
       },
       {
-            path: 'code-genrator/:id', loadComponent: () => import('./components/client_buildcard_pages/ai-preview/react-build-preview/react-build-preview.component').then(c => c.ReactBuildPreviewComponent), canActivate: [authGuard]
+            path: 'code-generator/:id', loadComponent: () => import('./components/client_buildcard_pages/ai-preview/react-build-preview/react-build-preview.component').then(c => c.ReactBuildPreviewComponent), canActivate: [authGuard]
       },
       {
             path: 'schedule-a-call', loadComponent: () => import('./components/schedule-a-call/schedule-a-call.component').then(c => c.ScheduleACallComponent)

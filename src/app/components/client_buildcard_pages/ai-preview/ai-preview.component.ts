@@ -405,7 +405,7 @@ export class AiPreviewComponent {
       id: 'credentials',
       text: {
         label: 'Project Credentials',
-        email: 'creative@infotech.com',
+        email: 'creative@gmail.com',
         password: 'Test@123',
         message: 'You can use these credentials to login to your project.'
       },

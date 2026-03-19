@@ -90,6 +90,7 @@ export class ReactBuildPreviewComponent {
   designCount = 0;
   selected_template_id = '';
   subscriptionPlan!: SubscriptionResponse;
+  isIframeLoading = true;
   selectedDeviceType: string = '<i class="fa-solid fa-display"></i>';
   languages = [
     {
@@ -120,6 +121,7 @@ export class ReactBuildPreviewComponent {
   ];
   planName = 'Free Plan';
   usedVariations: any[] = [];
+  pendingPreviewUrl: string | null = null;
 
   // Redirect page for login action
   constructor(
@@ -136,21 +138,30 @@ export class ReactBuildPreviewComponent {
 
   async ngOnInit() {
     this.getUserSubscriptionPlan();
+
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
+
     this.blocks = [];
 
-    // ✅ Load draft templates first
+    // 🔹 Store preview temporarily (IMPORTANT)
+    this.pendingPreviewUrl = null;
+
+    // ============================================
+    // ✅ 1. LOAD DRAFT TEMPLATES FIRST
+    // ============================================
+
     const templates = await this.getUserTemplates();
 
     if (templates.length > 0) {
       this.showDraftWelcomeMessages();
-      // 👉 map and render old drafts
       await this.loadDraftTemplates(templates);
-
-      return; // ⛔ stop fresh generation flow
+      return; // ⛔ stop fresh flow
     }
 
+    // ============================================
+    // ✅ 2. SOCKET READY → START AI FLOW
+    // ============================================
 
     this.aiService.socketReady$
       .pipe(
@@ -159,54 +170,94 @@ export class ReactBuildPreviewComponent {
       )
       .subscribe(socket_id => {
 
+        // 🔹 Listen AI stream blocks
         this.aiService.listen((blocks) => {
-
           this.blocks = blocks;
-          setTimeout(() => {
-            this.scrollToBottom();
-          }, 0);
 
+          setTimeout(() => this.scrollToBottom(), 0);
 
           const last = blocks[blocks.length - 1];
-          if (last?.id === 'status-code-running' && last?.done && this.files.length > 0) {
 
+          // ============================================
+          // ✅ CODE TAB SWITCH
+          // ============================================
+          if (
+            last?.id === 'status-code-running' &&
+            last?.done &&
+            this.files.length > 0
+          ) {
             this.showCodeButton = true;
             this.previewCodeShow = true;
+
             const el = document.getElementById('pills-profile-tab');
-            if (!el) return;
-
-            const event = new MouseEvent('click', {
-              bubbles: true,
-              cancelable: true,
-              view: window
-            });
-
-            el.dispatchEvent(event);
+            if (el) {
+              el.dispatchEvent(new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+              }));
+            }
 
             this.builds.push({
               buildId: this.currentBuildId,
               blocks: JSON.parse(JSON.stringify(this.blocks)),
               createdAt: new Date()
             });
-          } else if (last?.id === 'paragraph-preview-ready' && last?.done) {
-
-            this.isTyping = false;
-            const el = document.getElementById('pills-home-tab');
-            if (!el) return;
-
-            const event = new MouseEvent('click', {
-              bubbles: true,
-              cancelable: true,
-              view: window
-            });
-
-            el.dispatchEvent(event);
           }
         });
 
-        // 🔥 CALL API ONCE
+        // ============================================
+        // ✅ FINAL EVENT → LOAD IFRAME ONLY HERE
+        // ============================================
+        this.aiService.socket.on('ai:done', () => {
+
+          this.isTyping = false;
+
+          if (this.pendingPreviewUrl) {
+            this.safePreviewUrl =
+              this.sanitizer.bypassSecurityTrustResourceUrl(this.pendingPreviewUrl);
+
+            this.pendingPreviewUrl = null;
+          }
+
+          this.isReactBuilding = false;
+          this.isIframeLoading = false;
+
+          // 🔁 Switch to preview tab AFTER iframe ready
+          setTimeout(() => {
+            const el = document.getElementById('pills-home-tab');
+            if (el) {
+              el.dispatchEvent(new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+              }));
+            }
+          }, 200);
+        });
+
+        // ============================================
+        // 🔥 START PREVIEW (API CALL)
+        // ============================================
         this.startPreview(socket_id!);
       });
+  }
+
+  async getUserTemplates(): Promise<UserTemplate[]> {
+
+    const res = await firstValueFrom(
+      this.apiService.postAPI<GetUserTemplatesResponse, any>(
+        'api/user/getUserTemplates',
+        { clientEnquryId: this.projectsData.clientEnquryId }
+      )
+    );
+
+    if (res.success && res.templateExists) {
+      this.templateExists = true;
+      return res.data;
+    }
+
+    return [];
   }
   ngAfterViewInit() {
     this.scrollToBottom(true);
@@ -216,17 +267,9 @@ export class ReactBuildPreviewComponent {
   }
 
   startPreview(socket_id: string | null) {
-    const subFeatureIds: any[] = [];
-    this.projectsData.selectdFeature.forEach((items: any) => {
-      items.subFeatures.forEach((sub: any) => {
-        subFeatureIds.push(sub.id);
-      });
-    });
-
     const payload = {
       project_id: this.projectsData.projectId,
       project_description: this.projectsData.projectDescription,
-      sub_features: subFeatureIds,
       project_type: this.projectsData.projectType,
       clientEnquryId: this.projectsData.clientEnquryId,
       socket_id,
@@ -240,24 +283,17 @@ export class ReactBuildPreviewComponent {
 
         this.isReactBuilding = true;
 
-        // start step 1 immediately
         this.setBuildStep(1);
 
-        // step 2 after 1.5s
-        const step2Timer = setTimeout(() => {
-          this.setBuildStep(2);
-        }, 10000);
-
-        // step 3 after 3s
-        const step3Timer = setTimeout(() => {
-          this.setBuildStep(3);
-        }, 15000);
-
-        this.isReactBuilding = false;
+        setTimeout(() => this.setBuildStep(2), 10000);
+        setTimeout(() => this.setBuildStep(3), 15000);
 
         const url = res.data.buildUrl;
 
-        this.usedVariations.push(res.data.variation);
+        // 🔹 track variation
+        if (res.data.variation) {
+          this.usedVariations.push(res.data.variation);
+        }
 
         this.designCount++;
 
@@ -274,21 +310,31 @@ export class ReactBuildPreviewComponent {
 
         this.designMap.set(designId, snapshot);
 
-        // ✅ store URL here
+        // ✅ store everything
         this.designOrder.push({
           designId,
-          url
+          url,
+          user_template_id: res.data.templateId || null, // depends on backend
+          variation_no: res.data.variation
         });
 
         this.activeDesignId = designId;
 
-        // ✅ bind iframe immediately
-        this.safePreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+        if (socket_id) {
+          this.pendingPreviewUrl = url;   // ✅ only store
+          this.isIframeLoading = true;
+        } else {
+          this.isIframeLoading = true;
+          // ✅ SAFE iframe binding
+          this.safePreviewUrl =
+            this.sanitizer.bypassSecurityTrustResourceUrl(url);
+        }
+
+
+        this.isReactBuilding = false;
+        this.isTyping = false;
       });
   }
-
-
-
 
 
   async regenerate() {
@@ -300,7 +346,6 @@ export class ReactBuildPreviewComponent {
     }
 
     this.setBuildStep(0);
-    this.startPreview(null);
     this.isReactBuilding = true;
 
     this.clearFirstBlockMinHeight();
@@ -344,6 +389,9 @@ export class ReactBuildPreviewComponent {
 
     await this.delay(600);
 
+    this.setBuildStep(1);
+    await this.delay(3000);
+
     /* ---------- NEW MESSAGE 2 ---------- */
 
     await this.streamFrontendParagraph(
@@ -352,12 +400,17 @@ export class ReactBuildPreviewComponent {
     and the preview is deployed securely.`,
       jobId, 2
     );
+    setTimeout(() => this.setBuildStep(2), 1000);
+    await this.delay(10000);
+
+    setTimeout(() => this.setBuildStep(3), 1000);
+    await this.delay(10000);
 
     const credentials = {
       id: 'credentials',
       text: {
         label: 'Project Credentials',
-        email: 'creative@infotech.com',
+        email: 'creative@gmail.com',
         password: 'Test@123',
         message: 'You can use these credentials to login to your project.'
       },
@@ -368,6 +421,11 @@ export class ReactBuildPreviewComponent {
     this.blocks.push(credentials);
 
     this.isTyping = false;
+    this.startPreview(null);
+
+
+
+
   }
 
 
@@ -485,45 +543,6 @@ export class ReactBuildPreviewComponent {
 
 
 
-  mapDesignFromResponse(res: GenerateTemplateResponse): string {
-
-    const user_template_id = res.data.user_template_id;
-
-    this.designCount++;
-
-    const designId = `${this.designCount}`;
-
-    const snapshot: DesignSnapshot = {
-      id: designId,
-      label: `Template ${this.designCount}`,
-      pages: res.data.pages,
-      loginRedirect: res.data.login_redirect,
-      createdAt: new Date(),
-      previewType: 'html'
-    };
-
-    this.designMap.set(designId, snapshot);
-
-    this.designOrder.push({
-      designId,
-      user_template_id
-    });
-
-    this.activeDesignId = designId;
-    const activeDesign = this.designOrder.find(
-      d => d.designId === this.activeDesignId
-    );
-
-    if (!activeDesign) {
-      console.error("No active design found");
-    }
-
-    this.selected_template_id = activeDesign.user_template_id;
-
-    return designId;
-  }
-
-
 
   loadReactPreview(url: string) {
 
@@ -553,7 +572,9 @@ export class ReactBuildPreviewComponent {
   }
 
 
-
+  onIframeLoad() {
+    this.isIframeLoading = false;
+  }
 
 
   getUserSubscriptionPlan() {
@@ -685,92 +706,62 @@ export class ReactBuildPreviewComponent {
   }
 
 
-  async getUserTemplates(): Promise<UserTemplate[]> {
-
-    const res = await firstValueFrom(
-      this.apiService.postAPI<GetUserTemplatesResponse, any>(
-        'api/user/getUserTemplates',
-        { clientEnquryId: this.projectsData.clientEnquryId }
-      )
-    );
-
-    if (res.success && res.templateExists) {
-      this.templateExists = true;
-      return res.data;
-    }
-
-    return [];
-  }
-
-
-  async loadDraftTemplates(templates: UserTemplate[]) {
-
-    // const { forgot_password } = JSON.parse(templates[0].react_code_file);
-    // const react_files = { forgot_password };
-
-    const react_files = JSON.parse(templates[0].react_code_file);
-
-    this.files = [];
-
-    Object.entries(react_files).forEach(([page, data]: any) => {
-      this.files.push({
-        id: `${page}-jsx`,
-        name: `${page}.jsx`,
-        language: 'javascript',
-        fullCode: data.jsx
-      });
-    });
 
 
 
-    for (const tpl of templates) {
+  async loadDraftTemplates(templates: any[]) {
+    if (!templates || templates.length === 0) return;
 
-      const previewData = JSON.parse(tpl.preview_html_css);
+    this.designOrder = [];
+    this.designMap.clear();
+    this.usedVariations = [];
+    this.designCount = 0;
 
-      const designId = this.mapDesignFromDraft({
-        templateId: tpl.public_template_id,
-        pages: previewData.pages,
-        loginRedirect: previewData.login_redirect,
-        reactBuildUrl: tpl.react_build_url,
-        reactBuildStatus: tpl.react_build_status
-      });
+    templates.forEach((tpl, index) => {
+      const designId = `design-${index + 1}`;
 
-
-      // Auto activate first template
-      if (this.designOrder.length === 1) {
-        this.activateDesign(designId);
+      // 🔹 Track variation
+      if (tpl.variation_no) {
+        this.usedVariations.push(tpl.variation_no);
       }
-    }
-  }
 
+      const snapshot: DesignSnapshot = {
+        id: designId,
+        label: `Template ${index + 1}`,
+        pages: [],
+        loginRedirect: null,
+        createdAt: new Date(),
+        previewType: 'html'
+      };
 
-  mapDesignFromDraft(data: DraftTemplateMapData): string {
+      this.designMap.set(designId, snapshot);
 
-    this.designCount++;
+      // ✅ IMPORTANT: store template_id + variation
+      this.designOrder.push({
+        designId,
+        url: tpl.react_build_url,
+        user_template_id: tpl.public_template_id,
+        variation_no: tpl.variation_no
+      });
 
-    const designId = `${this.designCount}`;
-
-    const snapshot: DesignSnapshot = {
-      id: designId,
-      label: `Template ${this.designCount}`,
-      pages: data.pages,
-      loginRedirect: data.loginRedirect,
-      createdAt: new Date(),
-      previewType: data.reactBuildStatus === 1 ? 'react' : 'html',
-      reactPreviewUrl: data.reactBuildUrl
-        ? this.baseURl.replace(/\/$/, '') + '/' + data.reactBuildUrl.replace(/^\//, '')
-        : null
-    };
-
-    this.designMap.set(designId, snapshot);
-
-    this.designOrder.push({
-      designId,
-      user_template_id: data.templateId
+      this.designCount++;
     });
 
-    return designId;
+    // ✅ Set first template active
+    const firstDesign = this.designOrder[0];
+
+    if (firstDesign?.url) {
+      this.activeDesignId = firstDesign.designId;
+      this.isIframeLoading = true;
+
+      this.safePreviewUrl =
+        this.sanitizer.bypassSecurityTrustResourceUrl(firstDesign.url);
+    }
+
+    this.isReactBuilding = false;
+    this.isTyping = false;
   }
+
 
   activateDesign(designId: string) {
 
@@ -830,7 +821,7 @@ export class ReactBuildPreviewComponent {
         id: 'credentials',
         text: {
           label: 'Project Credentials',
-          email: 'creative@infotech.com',
+          email: 'creative@gmail.com',
           password: 'Test@123',
           message: 'You can use these credentials to login to your project.'
         },
@@ -887,26 +878,59 @@ export class ReactBuildPreviewComponent {
     const design = this.designOrder.find(d => d.designId === designId);
 
     if (design?.url) {
+      this.isIframeLoading = true;
+
       this.safePreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(design.url);
     }
   }
 
   removeDesign(item: any) {
     const index = this.designOrder.findIndex(d => d.designId === item.designId);
+    if (index === -1) return;
 
-    if (index > -1) {
-      this.designOrder.splice(index, 1);
-      this.designMap.delete(item.designId);
+    // 🔹 Optional confirm
+    const confirmDelete = confirm('Are you sure you want to delete this template?');
+    if (!confirmDelete) return;
 
-      // 🔁 switch to another tab
-      if (this.designOrder.length > 0) {
-        const newActive = this.designOrder[0];
-        this.activeDesignId = newActive.designId;
-        this.safePreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(newActive.url);
-      } else {
-        this.safePreviewUrl = null;
-      }
-    }
+    // 🔹 Call delete API
+    this.apiService
+      .postAPI('api/user/deleteUserTemplate', {
+        template_id: item.user_template_id,
+        clientEnquryId: this.projectsData.clientEnquryId
+      })
+      .subscribe({
+        next: () => {
+
+          // ✅ Remove variation also
+          if (item.variation_no) {
+            this.usedVariations = this.usedVariations.filter(
+              v => v !== item.variation_no
+            );
+          }
+
+          // ✅ Remove from UI
+          this.designOrder.splice(index, 1);
+          this.designMap.delete(item.designId);
+
+          // 🔁 Switch tab
+          if (this.designOrder.length > 0) {
+            const newActive = this.designOrder[0];
+
+            this.activeDesignId = newActive.designId;
+
+            this.safePreviewUrl =
+              this.sanitizer.bypassSecurityTrustResourceUrl(newActive.url);
+          } else {
+            this.activeDesignId = '';
+            this.safePreviewUrl = null;
+          }
+        },
+
+        error: (err) => {
+          console.error('❌ Delete failed:', err);
+          this.toster.error('Failed to delete template');
+        }
+      });
   }
 
 }
