@@ -170,19 +170,8 @@
                     }
                 </ul>
             </div> -->
-
-            <app-ai-dev-renderer [blocks]="blocks"></app-ai-dev-renderer>
-            <!-- ================= BOTTOM ACTION BUTTONS ================= -->
-            <div class="ct_project_ai_btm_action_btns pe-3">
-                <button class="ct_blue_outline_btn w-100" (click)="regenerate()" [disabled]="isTyping"
-                    [ngClass]="isTyping ? 'ct_no_drop_btn' : ''">
-                    Regenerate
-                </button>
-
-                <button class="ct_schedule_call_btn w-100 justify-content-center mt-auto ct_white_nowrape_1"
-                    (click)="openDeployModal('1')" [ngClass]="isTyping ? 'ct_no_drop_btn' : ''">
-                    Deploy Now
-                </button>
+            <div #chatScroll class="ct_chat_scroll_wrap" (scroll)="onUserScroll()">
+                <app-ai-dev-renderer [blocks]="blocks" (actionSelected)="handleChatAction($event)"></app-ai-dev-renderer>
             </div>
         </aside>
 
@@ -195,7 +184,7 @@
 
     <iframe
       #previewFrame
-      class="preview-iframe mx-auto w-100"
+      class="preview-iframe mx-auto w-100 "
       [style.maxWidth]="previewWidth + 'px'"
       [style.height.%]="100"
       [src]="safePreviewUrl"
@@ -290,13 +279,13 @@
 
 <div class="modal fade" id="deployConfirmModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="padding: 30px;">
+        <div class="modal-content mb-2" style="padding: 30px;">
             <h2>Confirm Template Deployment</h2>
-            <p>You have selected the following template preview:</p>
+            <p class="mb-0">You have selected the following template preview:</p>
             <!-- Template Preview with Image -->
-            <div class="template-preview">
+            <div class="template-preview mb-0">
                 <div class="preview-image">
-                    <iframe [src]="safePreviewUrl" class="preview-iframe mx-auto w-100"
+                    <iframe [src]="safePreviewUrl" class="preview-iframe mx-auto w-100" style="aspect-ratio: 4/4;"
                         [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100">
                     </iframe>
 
@@ -307,7 +296,7 @@
                 </div>
             </div>
             <!-- Warning -->
-            <div class="info-box">
+            <div class="info-box mb-0">
                 <div class="info-icon">⚠</div>
                 <div class="info-text">
                     You’re almost Ready! Keep in mind that once deployed, this template can’t be switched.<br>

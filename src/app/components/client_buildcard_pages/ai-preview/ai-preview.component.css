@@ -472,11 +472,10 @@ li.ct_ai_project_right {
 }
 
 .ct_ai_thiking_loading-text {
-  font-size: 14px;
-  line-height: 1rem;
-  font-weight: 500;
-  margin-left: 5px;
-  color: rgba(107, 114, 128, 1);
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #0f172a;
 }
 
 @keyframes spin {
