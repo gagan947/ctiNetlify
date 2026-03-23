@@ -138,6 +138,7 @@ export class ReactBuildPreviewComponent {
   }
 
   async ngOnInit() {
+    this.startFlow();
     this.getUserSubscriptionPlan();
 
     const projectData = sessionStorage.getItem('projectData');
@@ -569,9 +570,8 @@ export class ReactBuildPreviewComponent {
     this.apiService.getApi<SubscriptionResponse>(`api/user/getMySubscription`)
       .subscribe({
         next: (res) => {
-          console.log(res);
           this.subscriptionPlan = res;
-          this.planName = res.planName
+          this.planName = res.planName;
         },
         error: err => {
           // this.loading = false
@@ -851,5 +851,196 @@ export class ReactBuildPreviewComponent {
         }
       });
   }
+
+
+async startFlow() {
+  this.blocks = [];
+
+  // 🔹 Terminal intro
+  await this.addTerminal([
+    "Initializing React project...",
+    "Scaffolding folder structure...",
+    "Creating base files..."
+  ]);
+
+  // 🔥 MULTIPLE FILES
+  await this.addCodeBlock(this.getAppJs());
+  await this.addCodeBlock(this.getHomePage());
+  await this.addCodeBlock(this.getLoginPage());
+  await this.addCodeBlock(this.getSignupPage());
+  await this.addCodeBlock(this.getHeaderComponent());
+  await this.addCodeBlock(this.getHomeCSS());
+
+  // 🔹 Summary
+  await this.addSummary({
+    time: '3m 16s',
+    description: 'Generated complete React frontend with routing, pages and styling',
+    highlights: ['App.js', 'home.jsx', 'login.jsx', 'home.css']
+  });
+}
+
+getAppJs() {
+  return {
+    file: 'src/App.js',
+    added: 35,
+    removed: 0,
+    content: [
+      { line: 1, text: 'import { Routes, Route } from "react-router-dom";' },
+      { line: 2, text: 'import Home from "./pages/home";' },
+      { line: 3, text: 'import Login from "./pages/login";' },
+      { line: 4, text: 'import Signup from "./pages/signup";' },
+      { line: 6, text: 'function App() {' },
+      { line: 7, text: '  return (' },
+      { line: 8, text: '    <Routes>' },
+      { line: 9, text: '      <Route path="/" element={<Home />} />' },
+      { line: 10, text: '      <Route path="/login" element={<Login />} />' },
+      { line: 11, text: '      <Route path="/signup" element={<Signup />} />' },
+      { line: 12, text: '    </Routes>' },
+      { line: 13, text: '  );' },
+      { line: 14, text: '}' },
+      { line: 16, text: 'export default App;' }
+    ]
+  };
+}
+
+getHomePage() {
+  return {
+    file: 'src/pages/home.jsx',
+    added: 40,
+    removed: 0,
+    content: [
+      { line: 1, text: 'import "../styles/home.css";' },
+      { line: 3, text: 'export default function Home() {' },
+      { line: 4, text: '  return (' },
+      { line: 5, text: '    <div className="home">' },
+      { line: 6, text: '      <h1>Welcome to Store</h1>' },
+      { line: 7, text: '      <p>Browse amazing products</p>' },
+      { line: 8, text: '    </div>' },
+      { line: 9, text: '  );' },
+      { line: 10, text: '}' }
+    ]
+  };
+}
+
+getLoginPage() {
+  return {
+    file: 'src/pages/login.jsx',
+    added: 45,
+    removed: 0,
+    content: [
+      { line: 1, text: 'export default function Login() {' },
+      { line: 2, text: '  return (' },
+      { line: 3, text: '    <div>' },
+      { line: 4, text: '      <h2>Login</h2>' },
+      { line: 5, text: '      <input placeholder="Email" />' },
+      { line: 6, text: '      <input placeholder="Password" />' },
+      { line: 7, text: '      <button>Login</button>' },
+      { line: 8, text: '    </div>' },
+      { line: 9, text: '  );' },
+      { line: 10, text: '}' }
+    ]
+  };
+}
+
+getSignupPage() {
+  return {
+    file: 'src/pages/signup.jsx',
+    added: 50,
+    removed: 0,
+    content: [
+      { line: 1, text: 'export default function Signup() {' },
+      { line: 2, text: '  return (' },
+      { line: 3, text: '    <div>' },
+      { line: 4, text: '      <h2>Signup</h2>' },
+      { line: 5, text: '      <input placeholder="Name" />' },
+      { line: 6, text: '      <input placeholder="Email" />' },
+      { line: 7, text: '      <button>Create Account</button>' },
+      { line: 8, text: '    </div>' },
+      { line: 9, text: '  );' },
+      { line: 10, text: '}' }
+    ]
+  };
+}
+
+getHeaderComponent() {
+  return {
+    file: 'src/components/header.jsx',
+    added: 30,
+    removed: 0,
+    content: [
+      { line: 1, text: 'export default function Header() {' },
+      { line: 2, text: '  return (' },
+      { line: 3, text: '    <header>' },
+      { line: 4, text: '      <h1>My Store</h1>' },
+      { line: 5, text: '    </header>' },
+      { line: 6, text: '  );' },
+      { line: 7, text: '}' }
+    ]
+  };
+}
+
+getHomeCSS() {
+  return {
+    file: 'src/styles/home.css',
+    added: 25,
+    removed: 0,
+    content: [
+      { line: 1, text: '.home {' },
+      { line: 2, text: '  padding: 20px;' },
+      { line: 3, text: '}' },
+      { line: 5, text: 'h1 {' },
+      { line: 6, text: '  font-size: 24px;' },
+      { line: 7, text: '}' }
+    ]
+  };
+}
+
+async addTerminal(lines: string[]) {
+ const terminalBlock = {
+  type: 'terminal',
+  data: {
+    lines: [] as string[]
+  }
+};
+
+  this.blocks.push(terminalBlock);
+
+  for (let line of lines) {
+    terminalBlock.data.lines.push(line);
+    await this.delay(400);
+  }
+}
+
+async addCodeBlock(fileData: any) {
+  const block = {
+    type: 'code',
+    data: {
+      file: fileData.file,
+      added: fileData.added,
+      removed: fileData.removed,
+      content: [] as any[]
+    }
+  };
+
+  this.blocks.push(block);
+
+  await this.delay(500);
+
+  for (let row of fileData.content) {
+    block.data.content.push(row);
+    await this.delay(120);
+  }
+}
+
+async addSummary(data: any) {
+  await this.delay(600);
+
+  this.blocks.push({
+    type: 'summary',
+    data
+  });
+}
+
+
 
 }

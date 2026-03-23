@@ -171,7 +171,7 @@
                 </ul>
             </div> -->
 
-            <app-ai-dev-renderer ></app-ai-dev-renderer>
+            <app-ai-dev-renderer [blocks]="blocks"></app-ai-dev-renderer>
             <!-- ================= BOTTOM ACTION BUTTONS ================= -->
             <div class="ct_project_ai_btm_action_btns pe-3">
                 <button class="ct_blue_outline_btn w-100" (click)="regenerate()" [disabled]="isTyping"
