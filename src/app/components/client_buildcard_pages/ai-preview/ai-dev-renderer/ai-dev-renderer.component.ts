@@ -20,6 +20,7 @@ private readonly codeTokenRegex =
 
 @Input() blocks: any[] = [];
 @Output() actionSelected = new EventEmitter<string>();
+@Output() promptSubmitted = new EventEmitter<{ blockId: string; value: string }>();
 
 trackByIndex(index: number) {
   return index;
@@ -45,6 +46,34 @@ isActionBlock(block: any): boolean {
   return typeof block?.id === 'string'
     && block.id.startsWith('action-prompt')
     && Array.isArray(block?.text?.options);
+}
+
+isInlineCtaBlock(block: any): boolean {
+  return typeof block?.id === 'string'
+    && block.id.startsWith('inline-cta')
+    && typeof block?.text === 'object';
+}
+
+isUserMessageBlock(block: any): boolean {
+  return typeof block?.id === 'string'
+    && block.id.startsWith('user-message')
+    && typeof block?.text === 'string';
+}
+
+isInputBlock(block: any): boolean {
+  return typeof block?.id === 'string'
+    && block.id.startsWith('input-prompt')
+    && typeof block?.text === 'object';
+}
+
+submitPrompt(block: any, value: string) {
+  const trimmedValue = value.trim();
+  if (!trimmedValue) return;
+
+  this.promptSubmitted.emit({
+    blockId: block?.id ?? '',
+    value: trimmedValue
+  });
 }
 
 trackByLine(_: number, row: { line?: number }) {

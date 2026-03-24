@@ -6,7 +6,7 @@
     </div>
 
     <div *ngIf="!isStatusBlock(block)" class="ct_legacy_block">
-      <p *ngIf="!isArray(block?.text) && !isCredentialsBlock(block) && !isActionBlock(block)" class="mb-0 ct_legacy_text">
+      <p *ngIf="!isArray(block?.text) && !isCredentialsBlock(block) && !isActionBlock(block) && !isInputBlock(block) && !isInlineCtaBlock(block) && !isUserMessageBlock(block)" class="mb-0 ct_legacy_text">
         {{ block?.text }}
       </p>
 
@@ -36,6 +36,42 @@
             <span class="ct_ai_action_title">{{ option?.title }}</span>
             <span class="ct_ai_action_desc">{{ option?.description }}</span>
           </button>
+        </div>
+      </div>
+
+      <div *ngIf="isInputBlock(block)" class="ct_ai_input_box">
+        <p class="mb-2 ct_legacy_text">{{ block?.text?.message }}</p>
+        <div class="ct_ai_input_shell">
+          <textarea
+            #customizeInput
+            class="ct_ai_textarea"
+            rows="3"
+            [placeholder]="block?.text?.placeholder || 'Share your changes here'"
+          ></textarea>
+          <button
+            type="button"
+            class="ct_ai_input_submit"
+            (click)="submitPrompt(block, customizeInput.value); customizeInput.value = ''"
+          >
+            <i class="fa-solid fa-arrow-up"></i>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="isInlineCtaBlock(block)" class="ct_inline_cta_strip">
+        <span class="ct_inline_cta_text">{{ block?.text?.message }}</span>
+        <button
+          type="button"
+          class="ct_inline_cta_btn"
+          (click)="actionSelected.emit(block?.text?.actionId)"
+        >
+          {{ block?.text?.buttonLabel }}
+        </button>
+      </div>
+
+      <div *ngIf="isUserMessageBlock(block)" class="ct_user_message_row">
+        <div class="ct_user_message_card">
+          {{ block?.text }}
         </div>
       </div>
     </div>

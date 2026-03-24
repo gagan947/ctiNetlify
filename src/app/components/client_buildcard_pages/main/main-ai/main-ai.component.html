@@ -1,0 +1,45 @@
+<section class="ct_dash_board_main main-ai-page" style="display: block !important">
+  <app-sidebar></app-sidebar>
+
+  <div class="ct_dash_right_content main-ai-theme-shell"
+    style="background: linear-gradient(90deg, rgb(250 218 188 / 44%), rgb(234 170 213 / 36%), rgb(220 229 244 / 69%)); height: auto; min-height: 100vh;">
+    <div class="ct_dash_toggle_bar">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+
+    <div class="main-ai-wrap">
+      <div class="main-ai-stage">
+        <a class="main-ai-badge" href="javascript:void(0)">
+          <span class="main-ai-badge-pill">New</span>
+          <span>Building beyond apps</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+        <h1 class="main-ai-heading">Ready to build, Mohd?</h1>
+
+        <div class="main-ai-composer">
+          <textarea #promptInput class="main-ai-prompt-input" rows="4"
+            [attr.placeholder]="activePlaceholder"></textarea>
+
+          <div class="main-ai-composer-footer">
+            <button type="button" class="main-ai-icon-btn main-ai-plus-btn" aria-label="Add context">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+
+            <div class="main-ai-right-actions">
+              <button type="button" class="main-ai-icon-btn" aria-label="Open chat options">
+                <i class="fa-regular fa-message"></i>
+              </button>
+              <button type="button" class="main-ai-icon-btn" aria-label="Voice input">
+                <i class="fa-solid fa-microphone"></i>
+              </button>
+              <button type="button" class="main-ai-submit-btn" aria-label="Continue">
+                <i class="fa-solid fa-arrow-up"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

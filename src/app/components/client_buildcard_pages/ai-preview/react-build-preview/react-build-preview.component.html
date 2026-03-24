@@ -171,7 +171,11 @@
                 </ul>
             </div> -->
             <div #chatScroll class="ct_chat_scroll_wrap" (scroll)="onUserScroll()">
-                <app-ai-dev-renderer [blocks]="blocks" (actionSelected)="handleChatAction($event)"></app-ai-dev-renderer>
+                <app-ai-dev-renderer
+                    [blocks]="blocks"
+                    (actionSelected)="handleChatAction($event)"
+                    (promptSubmitted)="handlePromptSubmitted($event)">
+                </app-ai-dev-renderer>
             </div>
         </aside>
 
@@ -180,7 +184,12 @@
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                     <div class="preview-wrapper d-flex" id="topScrollDiv">
                           <!-- 🔥 FADE CONTAINER -->
-  <div class="iframe-container d-flex align-items-center justify-content-center" [class.loading]="isIframeLoading">
+  <div
+    class="iframe-container d-flex align-items-center justify-content-center preview-guard"
+    [class.loading]="isIframeLoading"
+    (contextmenu)="blockPreviewInteraction($event)"
+    (dragstart)="blockPreviewInteraction($event)"
+    (selectstart)="blockPreviewInteraction($event)">
 
     <iframe
       #previewFrame
@@ -188,6 +197,8 @@
       [style.maxWidth]="previewWidth + 'px'"
       [style.height.%]="100"
       [src]="safePreviewUrl"
+      sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-downloads"
+      referrerpolicy="no-referrer"
       (load)="onIframeLoad()">
     </iframe>
 
@@ -222,40 +233,20 @@
                                     </h4>
 
                                 </div>
-                                <!-- 🔥 ADD build progress here -->
+                                <!-- Build progress -->
                                 <div class="build-progress mt-4 text-start">
-
-                                    <div class="build-step" [class.done]="buildStep > 1"
-                                        [class.running]="buildStep === 1">
-
-                                        <span class="icon">
-                                            {{ buildStep > 1 ? '✔' : buildStep === 1 ? '⏳' : '⬇' }}
-                                        </span>
-
-                                        Installing dependencies
-                                        <span *ngIf="buildStep === 1" class="typing-dots"></span>
-                                    </div>
-
-                                    <div class="build-step" [class.done]="buildStep > 2"
-                                        [class.running]="buildStep === 2">
+                                    <div class="build-step" *ngFor="let step of buildSteps; let i = index"
+                                        [class.done]="buildStep > i + 1"
+                                        [class.running]="buildStep === i + 1">
 
                                         <span class="icon">
-                                            {{ buildStep > 2 ? '✔' : buildStep === 2 ? '⏳' : '⚙' }}
+                                            <i *ngIf="buildStep > i + 1" class="fa-solid fa-check"></i>
+                                            <i *ngIf="buildStep === i + 1" class="fa-solid fa-spinner fa-spin"></i>
+                                            <i *ngIf="buildStep < i + 1" [class]="step.pendingIconClass"></i>
                                         </span>
 
-                                        Building React app
-                                        <span *ngIf="buildStep === 2" class="typing-dots"></span>
-                                    </div>
-
-                                    <div class="build-step" [class.done]="buildStep > 3"
-                                        [class.running]="buildStep === 3">
-
-                                        <span class="icon">
-                                            {{ buildStep > 3 ? '✔' : buildStep === 3 ? '⏳' : '🚀' }}
-                                        </span>
-
-                                        Deploying preview
-                                        <span *ngIf="buildStep === 3" class="typing-dots"></span>
+                                        {{ step.label }}
+                                        <span *ngIf="buildStep === i + 1" class="typing-dots"></span>
                                     </div>
                                 </div>
                             </div>
@@ -312,3 +303,4 @@
         </div>
     </div>
 </div>
+

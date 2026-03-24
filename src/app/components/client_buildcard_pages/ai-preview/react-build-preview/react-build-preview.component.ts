@@ -43,6 +43,14 @@ interface ReactFile {
   language: 'javascript' | 'css';
   fullCode: string;
 }
+
+type BuildFlowType = 'initial' | 'restore' | 'regenerate' | 'switch';
+
+interface BuildProgressStep {
+  pendingIconClass: string;
+  label: string;
+}
+
 declare var bootstrap: any;
 @Component({
   selector: 'app-react-build-preview',
@@ -77,6 +85,7 @@ export class ReactBuildPreviewComponent {
   private destroy$ = new Subject<void>();
   isTyping = true;
   private frontendJobId = 0;
+  private buildStepTimeouts: ReturnType<typeof setTimeout>[] = [];
   designMap = new Map<string, DesignSnapshot>();
   designOrder: any[] = [];   // keeps tab order
   activeDesignId!: string;
@@ -115,10 +124,11 @@ export class ReactBuildPreviewComponent {
   isReactBuilding = true;
   buildStep = 0;
   templateExists = false;
-  buildSteps = [
-    'Installing dependencies (npm install)',
-    'Building React application (npm run build)',
-    'Deploying preview'
+  buildFlowType: BuildFlowType = 'initial';
+  buildSteps: BuildProgressStep[] = [
+    { pendingIconClass: 'fa-solid fa-download', label: 'Installing dependencies' },
+    { pendingIconClass: 'fa-solid fa-gear', label: 'Building React app' },
+    { pendingIconClass: 'fa-solid fa-rocket', label: 'Deploying preview' }
   ];
   planName = 'Free Plan';
   usedVariations: any[] = [];
@@ -161,90 +171,6 @@ export class ReactBuildPreviewComponent {
       return; // ⛔ stop fresh flow
     }
     await this.startFlow();
-
-
-    // ============================================
-    // ✅ 2. SOCKET READY → START AI FLOW
-    // ============================================
-
-    this.aiService.socketReady$
-      .pipe(
-        filter(id => !!id),
-        take(1)
-      )
-      .subscribe(socket_id => {
-
-        // 🔹 Listen AI stream blocks
-        this.aiService.listen((blocks) => {
-          this.blocks = blocks;
-
-          setTimeout(() => this.scrollToBottom(), 0);
-
-          const last = blocks[blocks.length - 1];
-
-          // ============================================
-          // ✅ CODE TAB SWITCH
-          // ============================================
-          if (
-            last?.id === 'status-code-running' &&
-            last?.done &&
-            this.files.length > 0
-          ) {
-            this.showCodeButton = true;
-            this.previewCodeShow = true;
-
-            const el = document.getElementById('pills-profile-tab');
-            if (el) {
-              el.dispatchEvent(new MouseEvent('click', {
-                bubbles: true,
-                cancelable: true,
-                view: window
-              }));
-            }
-
-            this.builds.push({
-              buildId: this.currentBuildId,
-              blocks: JSON.parse(JSON.stringify(this.blocks)),
-              createdAt: new Date()
-            });
-          }
-        });
-
-        // ============================================
-        // ✅ FINAL EVENT → LOAD IFRAME ONLY HERE
-        // ============================================
-        this.aiService.socket.on('ai:done', () => {
-
-          this.isTyping = false;
-
-          if (this.pendingPreviewUrl) {
-            this.safePreviewUrl =
-              this.sanitizer.bypassSecurityTrustResourceUrl(this.pendingPreviewUrl);
-
-            this.pendingPreviewUrl = null;
-          }
-
-          this.isReactBuilding = false;
-          this.isIframeLoading = false;
-
-          // 🔁 Switch to preview tab AFTER iframe ready
-          setTimeout(() => {
-            const el = document.getElementById('pills-home-tab');
-            if (el) {
-              el.dispatchEvent(new MouseEvent('click', {
-                bubbles: true,
-                cancelable: true,
-                view: window
-              }));
-            }
-          }, 200);
-        });
-
-        // ============================================
-        // 🔥 START PREVIEW (API CALL)
-        // ============================================
-        this.startPreview(socket_id!);
-      });
   }
 
   async getUserTemplates(): Promise<UserTemplate[]> {
@@ -271,6 +197,11 @@ export class ReactBuildPreviewComponent {
   }
 
   startPreview(socket_id: string | null) {
+    if (socket_id) {
+      this.setBuildFlow('initial');
+      this.startBuildProgressTimers();
+    }
+
     const payload = {
       project_id: this.projectsData.projectId,
       project_description: this.projectsData.projectDescription,
@@ -287,12 +218,8 @@ export class ReactBuildPreviewComponent {
 
         this.isReactBuilding = true;
 
-        this.setBuildStep(1);
-
-        setTimeout(() => this.setBuildStep(2), 10000);
-        setTimeout(() => this.setBuildStep(3), 15000);
-
-        const url = res.data.buildUrl;
+        const templateId = res.data.templateId;
+        const proxyUrl = this.getPreviewProxyUrl(templateId);
 
         // 🔹 track variation
         if (res.data.variation) {
@@ -317,7 +244,7 @@ export class ReactBuildPreviewComponent {
         // ✅ store everything
         this.designOrder.push({
           designId,
-          url,
+          url: proxyUrl, // ✅ store proxy instead of real URL
           user_template_id: res.data.templateId || null, // depends on backend
           variation_no: res.data.variation
         });
@@ -325,13 +252,12 @@ export class ReactBuildPreviewComponent {
         this.activeDesignId = designId;
 
         if (socket_id) {
-          this.pendingPreviewUrl = url;   // ✅ only store
+          this.pendingPreviewUrl = proxyUrl;
           this.isIframeLoading = true;
         } else {
           this.isIframeLoading = true;
-          // ✅ SAFE iframe binding
           this.safePreviewUrl =
-            this.sanitizer.bypassSecurityTrustResourceUrl(url);
+            this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
         }
 
 
@@ -349,6 +275,7 @@ export class ReactBuildPreviewComponent {
       return;
     }
 
+    this.setBuildFlow('regenerate');
     this.setBuildStep(0);
     this.isReactBuilding = true;
 
@@ -475,6 +402,27 @@ export class ReactBuildPreviewComponent {
     this.blocks = this.blocks.filter(b => b.id !== 'status');
   }
 
+  async playStatusSequence(lines: string[], lineDelay = 700, finishDelay = 500) {
+    if (!lines.length) return;
+
+    this.showLoader(lines[0]);
+    setTimeout(() => this.scrollToBottom(true), 0);
+    await this.delay(lineDelay);
+
+    for (let index = 1; index < lines.length; index++) {
+      const loaderBlock = this.blocks.find(block => block.id === 'status');
+      if (!loaderBlock) break;
+
+      loaderBlock.text = lines[index];
+      setTimeout(() => this.scrollToBottom(true), 0);
+      await this.delay(lineDelay);
+    }
+
+    await this.delay(finishDelay);
+    this.hideLoader();
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
   saveDesign() {
     this.router.navigate([`plan-delivery/${this.projectsData.clientEnquryId}`])
   }
@@ -522,7 +470,13 @@ export class ReactBuildPreviewComponent {
 
 
   onIframeLoad() {
+    this.clearBuildStepTimers();
     this.isIframeLoading = false;
+  }
+
+  blockPreviewInteraction(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
   }
 
 
@@ -611,6 +565,61 @@ export class ReactBuildPreviewComponent {
     this.buildStep = step;
   }
 
+  setBuildFlow(flowType: BuildFlowType) {
+    this.buildFlowType = flowType;
+    this.buildSteps = this.getBuildSteps(flowType);
+  }
+
+  getBuildSteps(flowType: BuildFlowType): BuildProgressStep[] {
+    switch (flowType) {
+      case 'restore':
+        return [
+          { pendingIconClass: 'fa-regular fa-folder-open', label: 'Fetching saved templates' },
+          { pendingIconClass: 'fa-regular fa-image', label: 'Loading draft preview' },
+          { pendingIconClass: 'fa-solid fa-arrow-up-right-from-square', label: 'Opening selected template' }
+        ];
+      case 'switch':
+        return [
+          { pendingIconClass: 'fa-regular fa-hand-pointer', label: 'Switching to selected template' },
+          { pendingIconClass: 'fa-regular fa-image', label: 'Loading preview frame' },
+          { pendingIconClass: 'fa-solid fa-arrow-up-right-from-square', label: 'Opening selected preview' }
+        ];
+      case 'regenerate':
+        return [
+          { pendingIconClass: 'fa-solid fa-wand-magic-sparkles', label: 'Preparing new template variation' },
+          { pendingIconClass: 'fa-solid fa-gear', label: 'Building refreshed React app' },
+          { pendingIconClass: 'fa-solid fa-rocket', label: 'Deploying updated preview' }
+        ];
+      case 'initial':
+      default:
+        return [
+          { pendingIconClass: 'fa-solid fa-download', label: 'Installing dependencies' },
+          { pendingIconClass: 'fa-solid fa-gear', label: 'Building React app' },
+          { pendingIconClass: 'fa-solid fa-rocket', label: 'Deploying preview' }
+        ];
+    }
+  }
+
+  startBuildProgressTimers() {
+    this.clearBuildStepTimers();
+    this.setBuildStep(1);
+    this.buildStepTimeouts.push(setTimeout(() => this.setBuildStep(2), 10000));
+    this.buildStepTimeouts.push(setTimeout(() => this.setBuildStep(3), 15000));
+  }
+
+  startQuickBuildProgress(flowType: BuildFlowType, secondStepDelay = 350, thirdStepDelay = 900) {
+    this.clearBuildStepTimers();
+    this.setBuildFlow(flowType);
+    this.setBuildStep(1);
+    this.buildStepTimeouts.push(setTimeout(() => this.setBuildStep(2), secondStepDelay));
+    this.buildStepTimeouts.push(setTimeout(() => this.setBuildStep(3), thirdStepDelay));
+  }
+
+  clearBuildStepTimers() {
+    this.buildStepTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
+    this.buildStepTimeouts = [];
+  }
+
 
 
 
@@ -645,7 +654,7 @@ export class ReactBuildPreviewComponent {
       // ✅ IMPORTANT: store template_id + variation
       this.designOrder.push({
         designId,
-        url: tpl.react_build_url,
+        url: this.getPreviewProxyUrl(tpl.public_template_id),
         user_template_id: tpl.public_template_id,
         variation_no: tpl.variation_no
       });
@@ -678,6 +687,9 @@ export class ReactBuildPreviewComponent {
     const now = new Date();
 
     this.blocks = [];
+    this.isReactBuilding = true;
+    this.setBuildFlow('restore');
+    this.setBuildStep(1);
 
     await this.addParagraphBlock(
       `I found previously generated templates for this project, and I'm restoring them into the workspace so you can continue review without starting over.`,
@@ -688,13 +700,29 @@ export class ReactBuildPreviewComponent {
       'Fetching saved templates'
     ], 1300, 1500);
 
+    this.setBuildStep(2);
     await this.addTerminal([
       'Loading draft previews'
     ], 1300, 1500);
 
+    this.setBuildStep(3);
     await this.addTerminal([
       'Restoring template tabs in the workspace'
     ], 1300, 1600);
+
+    await this.addCodeBlock({
+      file: 'workspace/template-session.json',
+      added: 12,
+      removed: 0,
+      content: [
+        { line: 1, text: '{' },
+        { line: 2, text: '  "status": "restored",' },
+        { line: 3, text: '  "templates": ["Template 1", "Template 2"],' },
+        { line: 4, text: '  "activePreview": "Template 1",' },
+        { line: 5, text: '  "deploymentState": "ready"' },
+        { line: 6, text: '}' }
+      ]
+    });
 
     await this.addParagraphBlock(
       `Your saved variations are now ready. You can review each template, request a fresh variation, customize the current direction, or move ahead when you're ready to deploy.`,
@@ -721,39 +749,8 @@ export class ReactBuildPreviewComponent {
 
     this.appendBuildActionPrompt();
     setTimeout(() => this.scrollToBottom(true), 0);
+    this.isReactBuilding = false;
     return;
-
-    this.blocks = [
-      {
-        id: 'paragraph-1',
-        text: 'Hi! I’ve loaded your saved project templates for you 😊',
-        done: true,
-        timestamp: now
-      },
-      {
-        id: 'paragraph-2',
-        text: 'Feel free to generate more variations if you’d like to explore new layouts or flows.',
-        done: true,
-        timestamp: now
-      },
-      {
-        id: 'paragraph-3',
-        text: 'When everything looks good, click Continue & Deploy to proceed.',
-        done: true,
-        timestamp: now
-      },
-      {
-        id: 'credentials',
-        text: {
-          label: 'Project Credentials',
-          email: 'creative@gmail.com',
-          password: 'Test@123',
-          message: 'You can use these credentials to login to your project.'
-        },
-        done: true,
-        timestamp: now
-      }
-    ];
   }
 
   appendBuildActionPrompt() {
@@ -799,9 +796,14 @@ export class ReactBuildPreviewComponent {
     }
 
     if (actionId === 'customize_template') {
+      this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
+
       this.blocks.push({
-        id: `paragraph-customize-${Date.now()}`,
-        text: 'Share the changes you want in this template, and I will tailor this version around your needs.',
+        id: `input-prompt-customize-${Date.now()}`,
+        text: {
+          message: 'Share the changes you want in this template, and I will tailor this version around your needs.',
+          placeholder: 'Describe the changes you want in this template',
+        },
         done: true,
         timestamp: new Date()
       });
@@ -814,6 +816,39 @@ export class ReactBuildPreviewComponent {
       this.openDeployModal('1');
       return;
     }
+
+    if (actionId === 'upgrade_plan') {
+      this.openModal();
+      return;
+    }
+  }
+
+  handlePromptSubmitted(event: Event | { blockId: string; value: string }) {
+    const promptEvent = event as { blockId?: string; value?: string };
+
+    if (!promptEvent?.value?.trim()) return;
+
+    this.blocks = this.blocks.filter(block => block?.id !== promptEvent.blockId);
+
+    this.blocks.push({
+      id: `user-message-customize-${Date.now()}`,
+      text: promptEvent.value,
+      done: true,
+      timestamp: new Date()
+    });
+
+    this.blocks.push({
+      id: `inline-cta-customize-${Date.now()}`,
+      text: {
+        message: 'Your current plan does not include direct template customization requests. Upgrade your plan to continue with guided revisions for this template.',
+        buttonLabel: 'Upgrade Plan',
+        actionId: 'upgrade_plan'
+      },
+      done: true,
+      timestamp: new Date()
+    });
+
+    setTimeout(() => this.scrollToBottom(true), 0);
   }
 
 
@@ -844,6 +879,11 @@ export class ReactBuildPreviewComponent {
     this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
+  getPreviewProxyUrl(templateId: string) {
+    const apiBaseUrl = this.apiService.apiUrl.replace(/\/$/, '');
+    return `${apiBaseUrl}/api/user/generate/${templateId}`;
+  }
+
   deployProject(selected_template_id: string) {
     this.apiService
       .postAPI('api/user/tempalteDeployed', {
@@ -858,11 +898,14 @@ export class ReactBuildPreviewComponent {
   }
 
   switchDesign(designId: string) {
+    if (this.activeDesignId === designId) return;
+
     this.activeDesignId = designId;
 
     const design = this.designOrder.find(d => d.designId === designId);
 
     if (design?.url) {
+      this.startQuickBuildProgress('switch');
       this.isIframeLoading = true;
 
       this.safePreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(design.url);
@@ -923,16 +966,16 @@ export class ReactBuildPreviewComponent {
     this.blocks = [];
 
     // 🔹 Connection / Init
-    await this.addTerminal([
+    await this.playStatusSequence([
       'Reconnecting... 1/5',
       'Reconnecting... 2/5',
       'Reconnecting... 3/5',
       'Reconnecting... 4/5',
       'Reconnecting... 5/5'
-    ], 900, 1100);
+    ], 950, 1200);
 
     await this.addParagraphBlock(
-      `I’m going to scaffold a React e-commerce app in this workspace. First, I’ll inspect the current directory to understand whether there’s an existing project structure I should extend or if I need to build everything from scratch.`,
+      `Connection is stable again, so I'm starting the first build pass now. I'll quickly inspect the workspace to see whether there's an existing React structure I should continue from, or whether I should set up the project from scratch.`,
       2600
     );
 
@@ -1093,6 +1136,32 @@ export class ReactBuildPreviewComponent {
       2600
     );
 
+    await this.addParagraphBlock(
+      `The foundation is ready. I'm building the first preview now so you can review the generated template in the workspace.`,
+      1800
+    );
+
+    this.setBuildFlow('initial');
+    this.setBuildStep(1);
+    await this.addTerminal([
+      'Installing dependencies',
+      'Preparing preview build'
+    ], 1200, 1300);
+
+ 
+
+    this.setBuildStep(2);
+    await this.addTerminal([
+      'Building React application',
+      'Bundling generated UI assets'
+    ], 1200, 1300);
+
+    this.setBuildStep(3);
+    await this.addTerminal([
+      'Deploying preview',
+      'Opening first template tab'
+    ], 1200, 1500);
+
     // 🔹 SUMMARY
     await this.addSummary({
       time: '2m 42s',
@@ -1104,6 +1173,9 @@ export class ReactBuildPreviewComponent {
         'Base CSS styling'
       ]
     });
+
+
+     this.startPreview(null);
 
     this.appendBuildActionPrompt();
   }
@@ -1327,3 +1399,6 @@ export class ReactBuildPreviewComponent {
 
 
 }
+
+
+
