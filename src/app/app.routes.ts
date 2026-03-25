@@ -23,11 +23,11 @@ export const routes: Routes = [
       {
             path: 'free-demo', loadComponent: () => import('./components/free-demo/free-demo.component').then(c => c.FreeDemoComponent), canActivate: [authGuard]
       },
-      // {
-      //       path: 'main', loadComponent: () => import('./components/client_buildcard_pages/main/main.component').then(c => c.MainComponent), canActivate: [authGuard]
-      // },
       {
-            path: 'main', loadComponent: () => import('./components/client_buildcard_pages/main/main-ai/main-ai.component').then(c => c.MainAiComponent), canActivate: [authGuard]
+            path: 'main', loadComponent: () => import('./components/client_buildcard_pages/main/main.component').then(c => c.MainComponent), canActivate: [authGuard]
+      },
+      {
+            path: 'main-ai', loadComponent: () => import('./components/client_buildcard_pages/main/main-ai/main-ai.component').then(c => c.MainAiComponent), canActivate: [authGuard]
       },
       {
             path: 'make-it-mine', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent), canActivate: [authGuard]

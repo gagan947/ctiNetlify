@@ -16,10 +16,21 @@
         </a>
 
         <h1 class="main-ai-heading">Ready to build, Mohd?</h1>
+        <p class="main-ai-subheading">Describe the product idea once. Submit will call the backend and show the result in a clean full-screen overlay.</p>
 
         <div class="main-ai-composer">
+          <div class="main-ai-chip-row">
+            @for (idea of promptIdeas; track idea) {
+            <button type="button" class="main-ai-chip" (click)="promptText = idea">
+              {{ idea }}
+            </button>
+            }
+          </div>
+
           <textarea #promptInput class="main-ai-prompt-input" rows="4"
-            [attr.placeholder]="activePlaceholder"></textarea>
+            [attr.placeholder]="activePlaceholder"
+            [(ngModel)]="promptText"
+            (keydown)="handlePromptKeydown($event)"></textarea>
 
           <div class="main-ai-composer-footer">
             <button type="button" class="main-ai-icon-btn main-ai-plus-btn" aria-label="Add context">
@@ -33,7 +44,7 @@
               <button type="button" class="main-ai-icon-btn" aria-label="Voice input">
                 <i class="fa-solid fa-microphone"></i>
               </button>
-              <button type="button" class="main-ai-submit-btn" aria-label="Continue">
+              <button type="button" class="main-ai-submit-btn" aria-label="Continue" [disabled]="isSubmitting" (click)="submitPrompt()">
                 <i class="fa-solid fa-arrow-up"></i>
               </button>
             </div>
@@ -43,3 +54,57 @@
     </div>
   </div>
 </section>
+
+@if(isOverlayOpen){
+<div class="main-ai-overlay" [class.is-loading]="overlayState === 'loading'" (click)="closeOverlay()">
+  <div class="main-ai-overlay-layer" (click)="$event.stopPropagation()">
+    @if(overlayState !== 'loading'){
+    <button type="button" class="main-ai-close-btn" aria-label="Close overlay" (click)="closeOverlay()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    }
+
+    <div class="main-ai-overlay-content">
+      <div class="main-ai-overlay-head">
+        <div>
+          <span class="main-ai-overlay-kicker">AI Build Review</span>
+          <h2>Prompt understanding</h2>
+        </div>
+      </div>
+
+      <div class="main-ai-overlay-thread">
+        <div class="main-ai-thread-row is-user">
+          <div class="main-ai-thread-meta">You</div>
+          <p class="main-ai-thread-text">{{ submittedPrompt }}</p>
+        </div>
+
+        <div class="main-ai-thread-row is-ai">
+          <div class="main-ai-thread-meta">AI</div>
+          @if(overlayState === 'loading'){
+          <div class="main-ai-thread-loader">
+            <div class="main-ai-loading-orb"></div>
+            <div class="main-ai-loader-copy">
+              <strong>{{ currentLoaderText }}</strong>
+              <div class="main-ai-typing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+            <div class="main-ai-loading-bar"></div>
+          </div>
+          } @else {
+          <p class="main-ai-thread-text main-ai-ai-message" [class.is-error]="overlayState === 'error'">{{ aiResponseMessage }}</p>
+          }
+        </div>
+      </div>
+
+      @if(overlayState === 'error'){
+      <div class="main-ai-overlay-actions">
+        <button type="button" class="main-ai-secondary-btn" (click)="focusPrompt()">Edit prompt</button>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+}
