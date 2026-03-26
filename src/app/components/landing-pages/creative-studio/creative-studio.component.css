@@ -63,18 +63,10 @@ color: #fff!important;
     position: relative;
 }
 
-/* .ct_steps_tabs_nav div#nav-tab:before{
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    height: 2px;
-    background-color: #e6e6e6;
-    left: 0;
-    transform: translateY(-50%);
 
-} */
-
+.ct_how_works_12_w img{
+    height: auto;
+}
 .ct_step_badge_gradient {
     background: #0060f67d;
     width: fit-content;

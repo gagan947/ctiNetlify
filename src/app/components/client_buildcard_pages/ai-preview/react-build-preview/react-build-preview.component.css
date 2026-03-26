@@ -58,20 +58,20 @@ section.ct_project_ai_preview_main {
   height: calc(100vh - 38px);
   flex: 1;
   word-break: break-word;
-  padding-inline: 12px;
+  /* padding-inline: 12px; */
 }
 
 aside.ct_project_ai_chat_section {
   /* height: 100vh; */
   width: 100%;
-  max-width: 25vw;
-  background-color: #f7f7f7;
+  max-width: 30vw;
+  background-color: #202020;
   padding: 20px;
-  border-right: 1px solid #e6e6e6;
   position: sticky;
   top: 0px;
   display: grid;
   flex: 0 0 auto;
+  color: #fff;
 
 }
 
@@ -80,8 +80,33 @@ aside.ct_project_ai_chat_section>div:first-child {
   overflow-y: auto;
 }
 
+.ct_chat_scroll_wrap {
+  height: calc(100vh - 126px);
+  overflow-y: auto;
+  min-height: 0;
+}
+/* width */
+.ct_chat_scroll_wrap::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+.ct_chat_scroll_wrap::-webkit-scrollbar-track {
+  background: #000; 
+}
+ 
+/* Handle */
+.ct_chat_scroll_wrap::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+.ct_chat_scroll_wrap::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
 .preview-wrapper iframe.preview-iframe {
-  height: calc(100vh - 44px) !important;
+  height: calc(100vh - 38px) !important;
 }
 
 aside.ct_project_ai_chat_section ul {
@@ -285,6 +310,9 @@ li.ct_ai_project_right {
   animation: rgt_loader-rotate 2.3s linear infinite;
   z-index: 0;
 }
+.preview-image {
+    height: calc(100vh - 20px);
+}
 
 @keyframes rgt_loader-rotate {
   0% {
@@ -314,6 +342,7 @@ li.ct_ai_project_right {
   z-index: 1;
   border-radius: 50ch;
   border: none;
+  color: #fff;
 }
 
 .rgt_loader-letter:nth-child(1) {
@@ -448,19 +477,23 @@ li.ct_ai_project_right {
 
 
 .ct_ai_thiking_loader2 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-left: 40px;
-  justify-content: center;
-  height: calc(100vh - 50px);
-  z-index: 9999;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #ffffff;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 40px;
+    justify-content: center;
+    height: calc(100vh - 38px);
+    z-index: 9999;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #151515;
+    width: 100%;
+    color: #fff;
+}
+.ct_ai_thiking_loader2 h4{
+  color: #fff;
 }
 
 .ct_ai_thiking_icon {
@@ -577,7 +610,11 @@ li.ct_ai_project_right {
 
 .build-step .icon {
   width: 20px;
+  min-width: 20px;
   text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes pulse {
@@ -921,4 +958,96 @@ p {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+
+.iframe-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.preview-guard {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* iframe fade effect */
+.preview-iframe {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* while loading */
+.iframe-container.loading .preview-iframe {
+  opacity: 0;
+  transform: scale(0.98); /* subtle zoom-out */
+}
+
+/* overlay smooth fade */
+.preview-overlay {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.preview-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+@media screen and (max-width:991px){
+  aside.ct_project_ai_chat_section{
+max-width: 100%;
+  }
+  .ct_ai_project_preview_right {
+    display: none;
+}
+#ai_full_preview_modal .modal-dialog {
+    max-width: 100%;
+    height: 100vh;
+    position: absolute;
+    width: calc(100% - 20px);
+    top: 0px;
+    margin: 0px;
+    display: flex;
+    justify-content: end;
+    left: 0px;
+        right: 0px;
+        margin: auto;
+
+}
+#ai_full_preview_modal .modal-dialog .modal-content {
+  background-color: #0f0f10;
+        justify-content: end;
+        padding: 0px !important;
+        border: 1px solid #595959;
+        height: calc(100vh - 66px);
+        margin-top: auto;
+        border-radius: 22px;
+        overflow: hidden;
+}
+#ai_full_preview_modal .modal-dialog .modal-content .preview-iframe{
+  max-width: 100% !important;
+  height: calc(100vh - 44px);
+  background-color: #0f0f10;
+}
+#ai_full_preview_modal .modal-dialog .modal-content .template-preview{
+  margin: 0px;
+  border: 0px;
+  border-radius: 0px;
+}
+.ct_ai_modal_header_new{
+  padding: 10px;
+}
+div#ai_full_preview_modal {
+    transform: translateY(100%);
+    transition: 0.6s ease all;
+}
+div#ai_full_preview_modal.show {
+    transform: translateY(0);
+}
 }

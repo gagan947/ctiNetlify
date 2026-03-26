@@ -1,0 +1,164 @@
+<ng-container *ngFor="let block of blocks; let i = index; trackBy: trackByIndex">
+  <div *ngIf="isLegacyBlock(block)" class="pe-3 mb-3">
+    <div *ngIf="isStatusBlock(block)" class="ct_codex_thinking_loader">
+      <span class="ct_codex_thinking_orb"></span>
+      <span class="ct_codex_thinking_text">{{ block?.text || 'Thinking' }}</span>
+    </div>
+
+    <div *ngIf="!isStatusBlock(block)" class="ct_legacy_block">
+      <p *ngIf="!isArray(block?.text) && !isCredentialsBlock(block) && !isActionBlock(block) && !isInputBlock(block) && !isInlineCtaBlock(block) && !isUserMessageBlock(block)" class="mb-0 ct_legacy_text">
+        {{ block?.text }}
+      </p>
+
+      <ul *ngIf="isArray(block?.text)" class="ct_listed_pointed">
+        <li *ngFor="let item of block?.text; trackBy: trackByIndex" class="bullet">
+          <span class="ct_bullet_dot_outline"></span>
+          <span class="pill">{{ item }}</span>
+        </li>
+      </ul>
+
+      <div *ngIf="isCredentialsBlock(block)" class="ct_ai_credentials_box">
+        <p class="mb-2 ct_legacy_text">{{ block?.text?.message }}</p>
+        <h6>{{ block?.text?.label }}</h6>
+        <div><strong>Email:</strong> <span>{{ block?.text?.email }}</span></div>
+        <div><strong>Password:</strong> <span>{{ block?.text?.password }}</span></div>
+      </div>
+
+      <div *ngIf="isActionBlock(block)" class="ct_ai_action_box">
+        <p class="mb-2 ct_legacy_text">{{ block?.text?.message }}</p>
+        <div class="ct_ai_action_list">
+          <button
+            *ngFor="let option of block?.text?.options; trackBy: trackByIndex"
+            type="button"
+            class="ct_ai_action_btn"
+            (click)="actionSelected.emit(option?.id)"
+          >
+            <span class="ct_ai_action_title">{{ option?.title }}</span>
+            <span class="ct_ai_action_desc">{{ option?.description }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="isInputBlock(block)" class="ct_ai_input_box">
+        <p class="mb-2 ct_legacy_text">{{ block?.text?.message }}</p>
+        <div class="ct_ai_input_shell">
+          <textarea
+            #customizeInput
+            class="ct_ai_textarea"
+            rows="3"
+            [placeholder]="block?.text?.placeholder || 'Share your changes here'"
+          ></textarea>
+          <button
+            type="button"
+            class="ct_ai_input_submit"
+            (click)="submitPrompt(block, customizeInput.value); customizeInput.value = ''"
+          >
+            <i class="fa-solid fa-arrow-up"></i>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="isInlineCtaBlock(block)" class="ct_inline_cta_strip">
+        <span class="ct_inline_cta_text">{{ block?.text?.message }}</span>
+        <button
+          type="button"
+          class="ct_inline_cta_btn"
+          (click)="actionSelected.emit(block?.text?.actionId)"
+        >
+          {{ block?.text?.buttonLabel }}
+        </button>
+      </div>
+
+      <div *ngIf="isUserMessageBlock(block)" class="ct_user_message_row">
+        <div class="ct_user_message_card">
+          {{ block?.text }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="block?.type === 'terminal' && block?.data?.done !== false" class="terminal">
+    <div
+      *ngFor="let line of getTerminalLines(block); let lineIndex = index; trackBy: trackByIndex"
+      class="line pe-3"
+      [class.muted]="lineIndex > 0"
+      [innerHTML]="formatTerminalLine(line)"
+    >
+    </div>
+  </div>
+
+  <a
+    *ngIf="block?.type === 'terminal' && block?.data?.done === false"
+    href="javascript:void(0)"
+    class="btn-shine px-3 ct_terminal_thinking"
+  >
+    Thinking
+  </a>
+
+  <div *ngIf="block?.type === 'code'" class="code-container mb-3 pe-3">
+    <span
+      class="muted mb-1 d-block"
+      data-bs-toggle="collapse"
+      [attr.data-bs-target]="'#codeCollapse' + i"
+    >
+      Created file
+      <span class="ct_fs_12">
+        <span class="ct_filte_text_clr">{{ block?.data?.file }}</span>
+        <span class="text-success">+{{ block?.data?.added ?? 0 }}</span>
+        -
+        <span class="text-danger">{{ block?.data?.removed ?? 0 }}</span>
+      </span>
+      <i class="ms-2 fa-solid fa-angle-down"></i>
+    </span>
+
+    <div class="collapse mt-2 show" [id]="'codeCollapse' + i">
+      <div class="code-header d-flex justify-content-between align-items-center">
+        <span>{{ block?.data?.file }} +{{ block?.data?.added ?? 0 }} -{{ block?.data?.removed ?? 0 }}</span>
+        <i
+          class="fa-regular fa-copy"
+          style="cursor:pointer;"
+          (click)="copyCode(block?.data?.content || [])"
+        ></i>
+      </div>
+
+      <div class="code-body">
+        <div
+          *ngFor="let row of block?.data?.content || []; trackBy: trackByLine"
+          class="line"
+        >
+          <div class="line-number">{{ row?.line }}</div>
+          <div
+            class="line-content"
+            [class.heading]="isHeading(row?.text)"
+            [innerHTML]="formatCodeLine(row?.text)"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="block?.type === 'summary'" class="card-dark pe-3">
+    <div class="top-line">
+      <span>Worked for {{ block?.data?.time }}</span>
+    </div>
+
+    <p>{{ block?.data?.description }}</p>
+
+    <p *ngIf="(block?.data?.highlights?.length || 0) > 0">
+      Key updates include improvements in
+      <span
+        *ngFor="let item of block?.data?.highlights; let last = last"
+        class="highlight"
+      >
+        {{ item }}<span *ngIf="!last">, </span>
+      </span>.
+    </p>
+
+    <ul *ngIf="(block?.data?.highlights?.length || 0) > 0" class="ct_listed_pointed">
+      <li *ngFor="let item of block?.data?.highlights; trackBy: trackByIndex" class="bullet">
+        <span class="ct_bullet_dot_outline"></span>
+        <span class="pill">{{ item }}</span>
+      </li>
+    </ul>
+  </div>
+</ng-container>

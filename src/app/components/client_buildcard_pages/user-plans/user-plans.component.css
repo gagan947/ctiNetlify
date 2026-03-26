@@ -255,18 +255,16 @@
 
 /* ACTIVE */
 .status-active{
-  background:#e6f9ef;
   color:#1e8e3e;
 }
 
 /* CANCELLED BUT ACTIVE TILL DATE */
 .status-cancelled{
-  background:#fff4e5;
   color:#d9822b;
 }
 
 /* FREE PLAN */
 .status-free{
-  background:#f1f3f5;
   color:#6c757d;
+
 }

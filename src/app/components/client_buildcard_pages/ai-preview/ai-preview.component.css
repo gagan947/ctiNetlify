@@ -63,8 +63,9 @@ section.ct_project_ai_preview_main {
 
 aside.ct_project_ai_chat_section {
   /* height: 100vh; */
-  width: 100%;
-  max-width: 25vw;
+  /* width: 100%; */
+  width: 25vw;
+  min-width: 25vw;
   background-color: #f7f7f7;
   padding: 20px;
   border-right: 1px solid #e6e6e6;
@@ -471,11 +472,10 @@ li.ct_ai_project_right {
 }
 
 .ct_ai_thiking_loading-text {
-  font-size: 14px;
-  line-height: 1rem;
-  font-weight: 500;
-  margin-left: 5px;
-  color: rgba(107, 114, 128, 1);
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #0f172a;
 }
 
 @keyframes spin {

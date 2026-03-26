@@ -3,7 +3,7 @@
 </div> -->
 
 <div class="ct_aappp">
-    <div class="ct_ai_prjct_prev_header">
+    <div class="ct_ai_prjct_prev_header px-2">
         <div class="d-flex align-items-center gap-2">
             <!-- <div>
         <img src="assets/img/cti_black_logo1.png" alt="">
@@ -16,7 +16,7 @@
                     </path>
                 </svg>
             </div>
-            <button class="ct_design_tab_btn fw-bold">
+            <button class="ct_design_tab_btn fw-bold d-none d-lg-block">
                 {{projectsData.projectName || 'Project Name'}}
             </button>
             <div class="d-flex align-items-center gap-2">
@@ -32,16 +32,15 @@
             </div>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <div *ngIf="!previewCodeShow">
+            <div *ngIf="!previewCodeShow" class="d-none d-lg-block">
                 <div class="et_reload_icon" (click)="openFullPreview()">
                     <i class="fa-solid" [ngClass]="fullScreen ? 'fa-minimize' : 'fa-expand'"></i>
                 </div>
             </div>
             <ul class="ct_preview_tabs gap-0 mb-0 d-flex align-items-center" id="pills-tab" role="tablist"
                 style="background-color: #333; border-radius: 5px; padding: 2px">
-                <li role="presentation">
-                    <button class="active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
-                        type="button" role="tab" aria-controls="pills-home" aria-selected="true"
+                <li role="presentation" class="d-lg-none d-block">
+                    <button class="active" data-bs-target="#ai_full_preview_modal" data-bs-toggle="modal"
                         (click)="previewCodeShow = false">
                         Preview
                     </button>
@@ -54,7 +53,7 @@
                     </button>
                 </li>
             </ul>
-            <ul class="mb-0">
+            <ul class="mb-0 d-none d-lg-block">
                 <li>
                     <div class="dropdown ct_dropdown_device_preview123">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
@@ -73,7 +72,7 @@
                 <li>
                 </li>
             </ul>
-            <div class="ct_plan_div">
+            <div class="ct_plan_div d-none d-lg-flex">
                 <p class="mb-0 text-white mt-0">Current plan </p>
                 <span>{{planName}}</span>
             </div>
@@ -91,12 +90,12 @@
         </div>
     </div>
     <section class="ct_project_ai_preview_main">
-        <aside class="ct_project_ai_chat_section pe-0" [ngClass]="!fullScreen ? 'd-block' : 'd-none'">
-            <div #chatScroll>
+        <aside class="ct_project_ai_chat_section pe-0" style="height: calc(100vh - 38px);" [ngClass]="!fullScreen ? 'd-block' : 'd-none'">
+            <!-- <div #chatScroll>
                 <ul class="pe-3">
                     @for (block of blocks; track $index) {
                     <li class="ct_ai_project_lefr">
-                        <!-- AI BRAND HEADER -->
+                       
                         <div class="ct_chat_ai_brand_logo">
                             <img src="assets/img/c.png" alt="" />
                             <p class="mb-0">Creative</p>
@@ -105,7 +104,7 @@
                             </small>
                         </div>
 
-                        <!-- ================= STATUS / LOADER BLOCK ================= -->
+                  
                         @if (block.id.startsWith('status')) {
                         <div class="ct_ai_thiking_loader">
                             <svg class="ct_ai_thiking_icon" viewBox="0 0 256 256">
@@ -138,7 +137,7 @@
                 'block-list': block.id.startsWith('list'),
                 'block-intent': block.id.startsWith('intent')
               }">
-                            <!-- 🔹 LIST BLOCK -->
+                         
                             @if (isArray(block.text)) {
                             <ul class="ct_ai_feature_list">
                                 @for (item of block.text; track $index) {
@@ -169,19 +168,13 @@
                     </li>
                     }
                 </ul>
-            </div>
-
-            <!-- ================= BOTTOM ACTION BUTTONS ================= -->
-            <div class="ct_project_ai_btm_action_btns pe-3">
-                <button class="ct_blue_outline_btn w-100" (click)="regenerate()" [disabled]="isTyping"
-                    [ngClass]="isTyping ? 'ct_no_drop_btn' : ''">
-                    Regenerate
-                </button>
-
-                <button class="ct_schedule_call_btn w-100 justify-content-center mt-auto ct_white_nowrape_1"
-                    (click)="openDeployModal('1')" [ngClass]="isTyping ? 'ct_no_drop_btn' : ''">
-                    Deploy Now
-                </button>
+            </div> -->
+            <div #chatScroll class="ct_chat_scroll_wrap" (scroll)="onUserScroll()">
+                <app-ai-dev-renderer
+                    [blocks]="blocks"
+                    (actionSelected)="handleChatAction($event)"
+                    (promptSubmitted)="handlePromptSubmitted($event)">
+                </app-ai-dev-renderer>
             </div>
         </aside>
 
@@ -189,10 +182,30 @@
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                     <div class="preview-wrapper d-flex" id="topScrollDiv">
-                        <iframe #previewFrame class="preview-iframe mx-auto w-100"
-                            [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100" [src]="safePreviewUrl">
-                        </iframe>
-                        <div class="preview-overlay" [class.show]="isReactBuilding">
+                          <!-- 🔥 FADE CONTAINER -->
+  <div
+    class="iframe-container d-flex align-items-center justify-content-center preview-guard"
+    [class.loading]="isIframeLoading"
+    (contextmenu)="blockPreviewInteraction($event)"
+    (dragstart)="blockPreviewInteraction($event)"
+    (selectstart)="blockPreviewInteraction($event)">
+
+    <iframe
+      #previewFrame
+      class="preview-iframe mx-auto w-100 "
+      [style.maxWidth]="previewWidth + 'px'"
+      [style.height.%]="100"
+      [src]="safePreviewUrl"
+      sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-downloads"
+      referrerpolicy="no-referrer"
+      (load)="onIframeLoad()">
+    </iframe>
+
+  </div>
+                        <!-- <iframe #previewFrame class="preview-iframe mx-auto w-100"
+                            [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100" [src]="safePreviewUrl"  (load)="onIframeLoad()">
+                        </iframe> -->
+                        <div class="preview-overlay" [class.show]="isReactBuilding || isIframeLoading">
                             <div class="ct_ai_thiking_loader2 d-flex">
                                 <div class="rgt_loader" id="rgt_loader">
                                     <div class="rgt_loader-wrapper">
@@ -219,40 +232,20 @@
                                     </h4>
 
                                 </div>
-                                <!-- 🔥 ADD build progress here -->
+                                <!-- Build progress -->
                                 <div class="build-progress mt-4 text-start">
-
-                                    <div class="build-step" [class.done]="buildStep > 1"
-                                        [class.running]="buildStep === 1">
-
-                                        <span class="icon">
-                                            {{ buildStep > 1 ? '✔' : buildStep === 1 ? '⏳' : '⬇' }}
-                                        </span>
-
-                                        Installing dependencies
-                                        <span *ngIf="buildStep === 1" class="typing-dots"></span>
-                                    </div>
-
-                                    <div class="build-step" [class.done]="buildStep > 2"
-                                        [class.running]="buildStep === 2">
+                                    <div class="build-step" *ngFor="let step of buildSteps; let i = index"
+                                        [class.done]="buildStep > i + 1"
+                                        [class.running]="buildStep === i + 1">
 
                                         <span class="icon">
-                                            {{ buildStep > 2 ? '✔' : buildStep === 2 ? '⏳' : '⚙' }}
+                                            <i *ngIf="buildStep > i + 1" class="fa-solid fa-check"></i>
+                                            <i *ngIf="buildStep === i + 1" class="fa-solid fa-spinner fa-spin"></i>
+                                            <i *ngIf="buildStep < i + 1" [class]="step.pendingIconClass"></i>
                                         </span>
 
-                                        Building React app
-                                        <span *ngIf="buildStep === 2" class="typing-dots"></span>
-                                    </div>
-
-                                    <div class="build-step" [class.done]="buildStep > 3"
-                                        [class.running]="buildStep === 3">
-
-                                        <span class="icon">
-                                            {{ buildStep > 3 ? '✔' : buildStep === 3 ? '⏳' : '🚀' }}
-                                        </span>
-
-                                        Deploying preview
-                                        <span *ngIf="buildStep === 3" class="typing-dots"></span>
+                                        {{ step.label }}
+                                        <span *ngIf="buildStep === i + 1" class="typing-dots"></span>
                                     </div>
                                 </div>
                             </div>
@@ -261,7 +254,7 @@
                 </div>
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                     <app-react-code-editor #codeEditor *ngIf="files.length >0" [files]="files"
-                        [templateExists]="templateExists" (typingDone)="onCodeFinished()">
+                        [templateExists]="templateExists">
                     </app-react-code-editor>
 
                 </div>
@@ -276,13 +269,13 @@
 
 <div class="modal fade" id="deployConfirmModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="padding: 30px;">
+        <div class="modal-content mb-2" style="padding: 30px;">
             <h2>Confirm Template Deployment</h2>
-            <p>You have selected the following template preview:</p>
+            <p class="mb-0">You have selected the following template preview:</p>
             <!-- Template Preview with Image -->
-            <div class="template-preview">
+            <div class="template-preview mb-0">
                 <div class="preview-image">
-                    <iframe [src]="previewUrl" class="preview-iframe mx-auto w-100"
+                    <iframe [src]="safePreviewUrl" class="preview-iframe mx-auto w-100" style="aspect-ratio: 4/4;"
                         [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100">
                     </iframe>
 
@@ -293,7 +286,7 @@
                 </div>
             </div>
             <!-- Warning -->
-            <div class="info-box">
+            <div class="info-box mb-0">
                 <div class="info-icon">⚠</div>
                 <div class="info-text">
                     You’re almost Ready! Keep in mind that once deployed, this template can’t be switched.<br>
@@ -309,3 +302,29 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="ai_full_preview_modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content mb-2" style="padding: 30px;">
+            <div class="d-flex align-items-center justify-content-between gap-2 ct_ai_modal_header_new">
+                <button class="et_reload_icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 20 20" fill="#fff" class="" aria-label="Refresh icon" focusable="false"><path d="M10.0418 16.6667C8.18072 16.6667 6.59738 16.0209 5.29183 14.7292C3.98627 13.4375 3.3335 11.8612 3.3335 10V9.85421L2.00016 11.1875L0.833496 10.0209L4.16683 6.68754L7.50016 10.0209L6.3335 11.1875L5.00016 9.85421V10C5.00016 11.3889 5.48975 12.5695 6.46891 13.5417C7.44808 14.5139 8.63905 15 10.0418 15C10.4029 15 10.7571 14.9584 11.1043 14.875C11.4516 14.7917 11.7918 14.6667 12.1252 14.5L13.3752 15.75C12.8474 16.0556 12.3057 16.2848 11.7502 16.4375C11.1946 16.5903 10.6252 16.6667 10.0418 16.6667ZM15.8335 13.3125L12.5002 9.97921L13.6668 8.81254L15.0002 10.1459V10C15.0002 8.61115 14.5106 7.4306 13.5314 6.45837C12.5522 5.48615 11.3613 5.00004 9.9585 5.00004C9.59738 5.00004 9.24322 5.04171 8.896 5.12504C8.54877 5.20837 8.2085 5.33337 7.87516 5.50004L6.62516 4.25004C7.15294 3.94449 7.69461 3.71532 8.25016 3.56254C8.80572 3.40976 9.37516 3.33337 9.9585 3.33337C11.8196 3.33337 13.4029 3.97921 14.7085 5.27087C16.014 6.56254 16.6668 8.13893 16.6668 10V10.1459L18.0002 8.81254L19.1668 9.97921L15.8335 13.3125Z" fill="#fff" style="transition: fill 0.2s;"></path></svg></button>
+                <h4 class="mb-0 ct_fs_18 text-white">Preview</h4>
+                <button class="et_reload_icon" data-bs-dismiss="modal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+
+            </div>
+            <!-- Template Preview with Image -->
+            <div class="template-preview mb-0">
+                <div class="preview-image">
+                    <iframe [src]="safePreviewUrl" class="preview-iframe mx-auto w-100" 
+                        [style.maxWidth]="previewWidth + 'px'">
+                    </iframe>
+
+                </div>
+              
+            </div>
+           
+        </div>
+    </div>
+</div>
+

@@ -27,6 +27,9 @@ export const routes: Routes = [
             path: 'main', loadComponent: () => import('./components/client_buildcard_pages/main/main.component').then(c => c.MainComponent), canActivate: [authGuard]
       },
       {
+            path: 'main-ai', loadComponent: () => import('./components/client_buildcard_pages/main/main-ai/main-ai.component').then(c => c.MainAiComponent), canActivate: [authGuard]
+      },
+      {
             path: 'make-it-mine', loadComponent: () => import('./components/client_buildcard_pages/main/make-it-mine/make-it-mine.component').then(c => c.MakeItMineComponent), canActivate: [authGuard]
       },
       {
@@ -36,10 +39,7 @@ export const routes: Routes = [
             path: 'chatbot', loadComponent: () => import('./components/client_buildcard_pages/chatbot/chatbot.component').then(c => c.ChatbotComponent), canActivate: [authGuard]
       },
       {
-            path: 'ai-preview/:id', loadComponent: () => import('./components/client_buildcard_pages/ai-preview/ai-preview.component').then(c => c.AiPreviewComponent), canActivate: [authGuard]
-      },
-      {
-            path: 'code-genrator/:id', loadComponent: () => import('./components/client_buildcard_pages/ai-preview/react-build-preview/react-build-preview.component').then(c => c.ReactBuildPreviewComponent), canActivate: [authGuard]
+            path: 'code-generator/:id', loadComponent: () => import('./components/client_buildcard_pages/ai-preview/react-build-preview/react-build-preview.component').then(c => c.ReactBuildPreviewComponent), canActivate: [authGuard]
       },
       {
             path: 'schedule-a-call', loadComponent: () => import('./components/schedule-a-call/schedule-a-call.component').then(c => c.ScheduleACallComponent)
