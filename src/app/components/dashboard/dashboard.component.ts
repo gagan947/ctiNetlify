@@ -81,7 +81,7 @@ export class DashboardComponent {
 
          sessionStorage.setItem('htmlCode', data.html_pages);
          sessionStorage.setItem('projectData', JSON.stringify(projectData));
-         this.router.navigate([data.currentRoutes]);
+         this.router.navigate(['/code-generator/', data.inquiryId], { state: { projectData } });
 
        }
          

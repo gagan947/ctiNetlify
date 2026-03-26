@@ -20,13 +20,7 @@
         <p class="main-ai-subheading">Describe the product idea once. After submit, this screen becomes a live AI requirement chat.</p>
 
         <div class="main-ai-composer">
-          <div class="main-ai-chip-row">
-            @for (idea of promptIdeas; track idea) {
-            <button type="button" class="main-ai-chip" (click)="usePromptIdea(idea)">
-              {{ idea }}
-            </button>
-            }
-          </div>
+         
 
           <textarea #promptInput class="main-ai-prompt-input" rows="4"
             [attr.placeholder]="activePlaceholder"

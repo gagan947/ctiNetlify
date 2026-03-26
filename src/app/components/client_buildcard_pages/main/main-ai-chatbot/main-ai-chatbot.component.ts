@@ -11,6 +11,29 @@ interface ChatMessage {
   variant: 'default' | 'error';
 }
 
+interface FormattedMessageLine {
+  type: 'text' | 'bullet';
+  text: string;
+}
+
+interface ProjectMatchPayload {
+  match?: boolean;
+  score?: number;
+  project?: {
+    _id?: string;
+    id?: string;
+    projectName?: string;
+    name?: string;
+  };
+}
+
+interface GenerateInquiryResponse {
+  success?: boolean;
+  data?: {
+    public_id?: string;
+  };
+}
+
 @Component({
   selector: 'app-main-ai-chatbot',
   standalone: true,
@@ -26,9 +49,15 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   socket: any;
   promptText = '';
   isSubmitting = false;
+  isBuildActionLoading = false;
   chatMessages: ChatMessage[] = [];
   currentLoaderText = '';
   followUpLoaderText = '';
+  showBuildProjectButton = false;
+  matchedProjectId = '';
+  matchedProjectName = 'My Creative Project';
+  lastUserPrompt = '';
+  private buildButtonRequested = false;
 
   constructor(
     private apiService: ApiService,
@@ -71,6 +100,9 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       ...this.chatMessages,
       { sender: 'user', text: prompt, variant: 'default' }
     ];
+    this.lastUserPrompt = prompt;
+    this.showBuildProjectButton = false;
+    this.buildButtonRequested = false;
     this.promptText = '';
     this.scrollChatToBottom();
 
@@ -102,16 +134,79 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.socket.on('projectMatch', (payload: ProjectMatchPayload) => {
+      const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
+      const project = data?.project;
+
+      this.matchedProjectId = String(project?._id ?? project?.id ?? '');
+      this.matchedProjectName = project?.projectName ?? project?.name ?? 'My Creative Project';
+      this.showBuildProjectButton = this.buildButtonRequested && !!this.matchedProjectId;
+    });
+
     this.socket.on('showBuildButton', (show: boolean) => {
-      this.followUpLoaderText = show ? 'Ready to build your project' : '';
+      this.buildButtonRequested = !!show;
+      this.showBuildProjectButton = this.buildButtonRequested && !!this.matchedProjectId;
+      this.followUpLoaderText = show ? 'Your project is ready to build.' : '';
       this.scrollChatToBottom();
     });
   }
 
+  buildMatchedProject(): void {
+    if (!this.matchedProjectId || this.isBuildActionLoading) {
+      return;
+    }
+
+    this.isBuildActionLoading = true;
+
+    this.apiService.postAPI<GenerateInquiryResponse, { sd: string; user_prompt: string }>('api/user/generateInquiry', {
+      sd: this.matchedProjectId,
+      user_prompt: this.lastUserPrompt
+    }).subscribe({
+      next: (response) => {
+        const publicId = response?.data?.public_id;
+
+        if (!publicId) {
+          this.isBuildActionLoading = false;
+          return;
+        }
+
+        const projectData = {
+          clientEnquryId: publicId,
+          projectName: this.matchedProjectName,
+          projectId: this.matchedProjectId
+        };
+
+        sessionStorage.setItem('projectData', JSON.stringify(projectData));
+
+        this.router.navigate(['/bd_loader'], {
+          queryParams: {
+            id: this.matchedProjectId,
+            publicEnquiryId: publicId
+          },
+          skipLocationChange: true
+        });
+      },
+      error: () => {
+        this.isBuildActionLoading = false;
+      }
+    });
+  }
+
   private pushAiMessage(text: string, variant: 'default' | 'error' = 'default'): void {
+    const normalizedText = text.trim();
+    const lastMessage = this.chatMessages[this.chatMessages.length - 1];
+
+    if (
+      lastMessage?.sender === 'ai' &&
+      lastMessage.variant === variant &&
+      lastMessage.text.trim() === normalizedText
+    ) {
+      return;
+    }
+
     this.chatMessages = [
       ...this.chatMessages,
-      { sender: 'ai', text, variant }
+      { sender: 'ai', text: normalizedText, variant }
     ];
     this.scrollChatToBottom();
   }
@@ -132,5 +227,19 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
 
   private focusInput(): void {
     setTimeout(() => this.chatPromptInput?.nativeElement.focus(), 0);
+  }
+
+  formatMessage(text: string): FormattedMessageLine[] {
+    return text
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
+      .map((line) => {
+        if (line.startsWith('-')) {
+          return { type: 'bullet', text: line.slice(1).trim() };
+        }
+
+        return { type: 'text', text: line };
+      });
   }
 }
