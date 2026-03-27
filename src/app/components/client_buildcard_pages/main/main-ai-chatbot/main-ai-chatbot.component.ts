@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../../services/api.service';
@@ -9,6 +9,7 @@ interface ChatMessage {
   sender: 'user' | 'ai';
   text: string;
   variant: 'default' | 'error';
+  streamBlockId?: string;
 }
 
 interface FormattedMessageLine {
@@ -34,6 +35,12 @@ interface GenerateInquiryResponse {
   };
 }
 
+interface AiStreamPayload {
+  blockId?: string;
+  content?: string;
+  done?: boolean;
+}
+
 @Component({
   selector: 'app-main-ai-chatbot',
   standalone: true,
@@ -47,12 +54,12 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   @ViewChild('chatPromptInput') chatPromptInput?: ElementRef<HTMLTextAreaElement>;
 
   socket: any;
+  readonly placeholderText = 'Describe the project you want to build';
   promptText = '';
   isSubmitting = false;
   isBuildActionLoading = false;
   chatMessages: ChatMessage[] = [];
   currentLoaderText = '';
-  followUpLoaderText = '';
   showBuildProjectButton = false;
   matchedProjectId = '';
   matchedProjectName = 'My Creative Project';
@@ -61,7 +68,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
 
   constructor(
     private apiService: ApiService,
-    private router: Router
+    private router: Router,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
@@ -94,8 +102,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     }
 
     this.isSubmitting = true;
-    this.currentLoaderText = 'Thinking...';
-    this.followUpLoaderText = '';
+    this.currentLoaderText = '';
     this.chatMessages = [
       ...this.chatMessages,
       { sender: 'user', text: prompt, variant: 'default' }
@@ -110,45 +117,143 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   }
 
   private registerSocketHandlers(): void {
+    this.socket.on('ai:stream', (payload: AiStreamPayload) => {
+      this.ngZone.run(() => {
+        this.handleAiStream(payload);
+      });
+    });
+
     this.socket.on('loader_message', (message: string) => {
-      this.currentLoaderText = message || 'Thinking...';
-      this.scrollChatToBottom();
+      this.ngZone.run(() => {
+        this.currentLoaderText = message || '';
+        this.scrollChatToBottom();
+      });
     });
 
     this.socket.on('botReply', (message: string) => {
-      this.isSubmitting = false;
-      this.currentLoaderText = '';
-      this.followUpLoaderText = '';
-      this.pushAiMessage(message);
-      this.focusInput();
+      this.ngZone.run(() => {
+        this.isSubmitting = false;
+        this.currentLoaderText = '';
+        this.pushAiMessage(message);
+        this.focusInput();
+        this.scrollChatToBottom();
+      });
     });
 
     this.socket.on('navigateToBuilder', (payload: any) => {
-      const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
+      this.ngZone.run(() => {
+        const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
 
-      if (data?.projectId) {
-        this.router.navigate(['/bd_loader'], {
-          queryParams: { id: data.projectId },
-          skipLocationChange: true
-        });
-      }
+        if (data?.projectId) {
+          this.router.navigate(['/bd_loader'], {
+            queryParams: { id: data.projectId },
+            skipLocationChange: true
+          });
+        }
+      });
     });
 
     this.socket.on('projectMatch', (payload: ProjectMatchPayload) => {
-      const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
-      const project = data?.project;
+      this.ngZone.run(() => {
+        const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
+        const project = data?.project;
 
-      this.matchedProjectId = String(project?._id ?? project?.id ?? '');
-      this.matchedProjectName = project?.projectName ?? project?.name ?? 'My Creative Project';
-      this.showBuildProjectButton = this.buildButtonRequested && !!this.matchedProjectId;
+        this.matchedProjectId = String(project?._id ?? project?.id ?? '');
+        this.matchedProjectName = project?.projectName ?? project?.name ?? 'My Creative Project';
+        this.showBuildProjectButton = this.buildButtonRequested && !!this.matchedProjectId;
+      });
     });
 
     this.socket.on('showBuildButton', (show: boolean) => {
-      this.buildButtonRequested = !!show;
-      this.showBuildProjectButton = this.buildButtonRequested && !!this.matchedProjectId;
-      this.followUpLoaderText = show ? 'Your project is ready to build.' : '';
-      this.scrollChatToBottom();
+      this.ngZone.run(() => {
+        this.buildButtonRequested = !!show;
+        this.showBuildProjectButton = this.buildButtonRequested && !!this.matchedProjectId;
+        this.completeLoadingState();
+      });
     });
+
+    this.socket.on('botDone', () => {
+      this.ngZone.run(() => {
+        this.completeLoadingState();
+      });
+    });
+
+    this.socket.on('loader_done', () => {
+      this.ngZone.run(() => {
+        this.completeLoadingState();
+      });
+    });
+
+    this.socket.on('chat_complete', () => {
+      this.ngZone.run(() => {
+        this.completeLoadingState();
+      });
+    });
+  }
+
+  private completeLoadingState(): void {
+    this.isSubmitting = false;
+    this.currentLoaderText = '';
+    this.scrollChatToBottom();
+  }
+
+  private handleAiStream(payload: AiStreamPayload): void {
+    const blockId = payload?.blockId?.trim();
+    const content = payload?.content ?? '';
+
+    this.isSubmitting = false;
+    this.currentLoaderText = '';
+
+    if (!blockId) {
+      if (content) {
+        this.pushAiMessage(content);
+      }
+      return;
+    }
+
+    let targetMessageIndex = this.chatMessages.findIndex(
+      (message) => message.sender === 'ai' && message.streamBlockId === blockId
+    );
+
+    if (targetMessageIndex === -1) {
+      if (!content) {
+        return;
+      }
+
+      this.chatMessages = [
+        ...this.chatMessages,
+        { sender: 'ai', text: content, variant: 'default', streamBlockId: blockId }
+      ];
+      targetMessageIndex = this.chatMessages.length - 1;
+    } else if (content) {
+      this.chatMessages = this.chatMessages.map((message, index) =>
+        index === targetMessageIndex
+          ? { ...message, text: content }
+          : message
+      );
+    }
+
+    if (payload?.done && targetMessageIndex !== -1) {
+      this.chatMessages = this.chatMessages.map((message, index) =>
+        index === targetMessageIndex
+          ? { ...message, streamBlockId: undefined }
+          : message
+      );
+    }
+
+    this.focusInput();
+    this.scrollChatToBottom();
+  }
+
+  skipBuildProject(): void {
+    this.showBuildProjectButton = false;
+    this.buildButtonRequested = false;
+
+    this.pushAiMessage(
+      `No problem. We can keep refining ${this.matchedProjectName} here until it feels right. ` +
+      `Share any changes you want in features, flow, design style, or target users, and I will help shape it further.`
+    );
+    this.focusInput();
   }
 
   buildMatchedProject(): void {

@@ -10,7 +10,7 @@
           <div class="main-ai-thread-content">
             @for(line of formatMessage(message.text); track $index) {
               @if(line.type === 'text') {
-                <p class="text-line">{{ line.text }}</p>
+                <p class="text-line ct_fs_14">{{ line.text }}</p>
               }
 
               @if(line.type === 'bullet') {
@@ -22,7 +22,7 @@
       </div>
       }
 
-      @if(isSubmitting && currentLoaderText){
+      @if(currentLoaderText){
       <div class="main-ai-thread-row is-ai">
         <div class="main-ai-thread-meta">AI</div>
         <div class="main-ai-thread-loader">
@@ -32,21 +32,9 @@
               <span></span>
               <span></span>
             </div>
-            <span class="main-ai-loader-status">{{ currentLoaderText }}</span>
-          </div>
-        </div>
-      </div>
-      }
-
-      @if(followUpLoaderText){
-      <div class="main-ai-thread-row is-ai">
-        <div class="main-ai-thread-meta">Builder</div>
-        <div class="main-ai-followup-loader">
-          <span>{{ followUpLoaderText }}</span>
-          <div class="main-ai-typing-dots">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span class="main-ai-loader-status ct_fs_12" [class.is-visible]="!!currentLoaderText">
+              {{ currentLoaderText }}
+            </span>
           </div>
         </div>
       </div>
@@ -60,6 +48,10 @@
             (click)="buildMatchedProject()">
             {{ isBuildActionLoading ? 'Preparing your project...' : 'Build My Project -->' }}
           </button>
+          <button type="button" class="main-ai-skip-btn" [disabled]="isBuildActionLoading"
+            (click)="skipBuildProject()">
+            Skip for now
+          </button>
         </div>
       </div>
       }
@@ -68,7 +60,7 @@
     <div class="main-ai-chat-composer">
       <div class="main-ai-composer main-ai-chat-composer-box">
         <textarea #chatPromptInput class="main-ai-prompt-input main-ai-chat-input" rows="2"
-          placeholder="Reply with more requirement details..." [(ngModel)]="promptText"
+          [attr.placeholder]="placeholderText" [(ngModel)]="promptText"
           (keydown)="handlePromptKeydown($event)"></textarea>
 
         <div class="main-ai-composer-footer">
