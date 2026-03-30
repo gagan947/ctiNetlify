@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
+import { Subscription, filter } from 'rxjs';
 import { ApiService } from '../../../../services/api.service';
 import { io } from 'socket.io-client';
 
@@ -65,6 +66,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   matchedProjectName = 'My Creative Project';
   lastUserPrompt = '';
   private buildButtonRequested = false;
+  private navigationSubscription?: Subscription;
 
   constructor(
     private apiService: ApiService,
@@ -75,6 +77,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.socket = io(this.apiService.apiUrl);
     this.registerSocketHandlers();
+    this.watchPageChange();
 
     if (this.initialPrompt.trim()) {
       this.submitPrompt(this.initialPrompt);
@@ -85,7 +88,13 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.socket?.disconnect();
+    this.navigationSubscription?.unsubscribe();
+    this.disconnectSocket();
+  }
+
+  @HostListener('window:beforeunload')
+  handleWindowUnload(): void {
+    this.disconnectSocket();
   }
 
   handlePromptKeydown(event: KeyboardEvent): void {
@@ -191,6 +200,24 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     });
   }
 
+  private watchPageChange(): void {
+    this.navigationSubscription = this.router.events
+      .pipe(filter((event): event is NavigationStart => event instanceof NavigationStart))
+      .subscribe(() => {
+        this.disconnectSocket();
+      });
+  }
+
+  private disconnectSocket(): void {
+    if (!this.socket) {
+      return;
+    }
+
+    this.socket.removeAllListeners();
+    this.socket.disconnect();
+    this.socket = null;
+  }
+
   private completeLoadingState(): void {
     this.isSubmitting = false;
     this.currentLoaderText = '';
@@ -246,14 +273,16 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   }
 
   skipBuildProject(): void {
+    if (!this.socket || this.isSubmitting) {
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.currentLoaderText = 'Refining your project direction...';
     this.showBuildProjectButton = false;
     this.buildButtonRequested = false;
-
-    this.pushAiMessage(
-      `No problem. We can keep refining ${this.matchedProjectName} here until it feels right. ` +
-      `Share any changes you want in features, flow, design style, or target users, and I will help shape it further.`
-    );
-    this.focusInput();
+    this.scrollChatToBottom();
+    this.socket.emit('skipBuild');
   }
 
   buildMatchedProject(): void {
