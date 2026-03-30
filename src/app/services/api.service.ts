@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
-import { Auth, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +22,7 @@ export class ApiService {
   _rate = signal<any>(null);
   _imagePreview = signal<any>(null);
   _htmlCode = signal<any>(null);
-  constructor(private http: HttpClient, private route: Router, private auth: Auth) {
+  constructor(private http: HttpClient, private route: Router) {
     const data: any = localStorage.getItem('userDetailCTI')
     if (data !== 'undefined') {
       const user = JSON.parse(data);
@@ -137,10 +136,5 @@ export class ApiService {
 
   updateUserDetail(userDetails: any) {
     this.userDataSubject.next(userDetails)
-  }
-
-  async googleLogin() {
-    const provider = new GoogleAuthProvider();
-    return await signInWithPopup(this.auth, provider);
   }
 }

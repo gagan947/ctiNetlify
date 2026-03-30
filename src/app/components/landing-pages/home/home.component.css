@@ -24,6 +24,9 @@ section{
 .ct_testimonial_section {
   padding: 72px 0;
 }
+.ct_prompt_hero {
+  min-height: 520px;
+}
 
 .ct_section_heading {
     margin: 0 auto 50px;
@@ -692,6 +695,7 @@ display: block;
     padding: 56px 0;
   }
   .ct_prompt_hero{
+    min-height: auto;
     padding-inline: 96px;
   }
   .ct_launch_journey_intro{

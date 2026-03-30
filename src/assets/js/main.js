@@ -6,6 +6,35 @@ $(document).ready(function () {
     $(".ct_middle_navbar ul:not(.ct_dropdown_items ol) ").removeClass("show");
   });
 
+  function applyOwlAriaLabels($carousel) {
+    const $prev = $carousel.find(".owl-nav .owl-prev");
+    const $next = $carousel.find(".owl-nav .owl-next");
+
+    if ($prev.length) {
+      $prev.attr("aria-label", "Previous slide");
+    }
+    if ($next.length) {
+      $next.attr("aria-label", "Next slide");
+    }
+
+    const $dots = $carousel.find(".owl-dots .owl-dot");
+    if ($dots.length) {
+      $dots.each(function (index) {
+        $(this).attr("aria-label", "Go to slide " + (index + 1));
+      });
+      $dots.removeAttr("aria-current");
+      $dots.filter(".active").attr("aria-current", "true");
+    }
+  }
+
+  $(document).on(
+    "initialized.owl.carousel changed.owl.carousel refreshed.owl.carousel",
+    ".owl-carousel",
+    function () {
+      applyOwlAriaLabels($(this));
+    },
+  );
+
   $(".et_toggle_bar").click(function () {
     $(".et_dashbaord_main").toggleClass("et_dash_show");
   });
@@ -313,34 +342,34 @@ $(document).ready(function () {
   //   },
   // });
 
-  // Main Slider
-  const mainSwiper = new Swiper(".ct_home_slider_main", {
-    loop: true,
-    speed: 1000,
-    autoplay: false,
+  function initSwipers() {
+    new Swiper(".ct_home_slider_main", {
+      loop: true,
+      speed: 1000,
+      autoplay: false,
 
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
 
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
-    },
-  });
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+    });
 
-  // Inner Slider
-  const innerSwiper = new Swiper(".ct_home_slider_inner", {
-    loop: true,
-    slidesPerView: "auto",
-    spaceBetween: 10,
-    autoplay: {
-      delay: 0,
-    },
-    speed: 4000,
-    freeMode: true,
-  });
+    new Swiper(".ct_home_slider_inner", {
+      loop: true,
+      slidesPerView: "auto",
+      spaceBetween: 10,
+      autoplay: {
+        delay: 0,
+      },
+      speed: 4000,
+      freeMode: true,
+    });
+  }
   // $(".ct_home_slider_main").owlCarousel({
   //   loop: true,
   //   margin: 20,
@@ -388,8 +417,13 @@ $(document).ready(function () {
   //   },
   // });
   // Trusted Brand Slider E
-  AOS.init();
   $(window).on("load", function () {
+    if (window.requestAnimationFrame) {
+      window.requestAnimationFrame(initSwipers);
+    } else {
+      setTimeout(initSwipers, 0);
+    }
+    AOS.init();
     $(".ct_loader_main").fadeOut("slow");
   });
 

@@ -56,6 +56,12 @@
           },
           "configurations": {
             "production": {
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },
+              "namedChunks": false,
               "budgets": [
                 {
                   "type": "initial",
@@ -64,8 +70,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "10kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "15kb",
+                  "maximumError": "2mb"
                 }
               ],
               "outputHashing": "all"

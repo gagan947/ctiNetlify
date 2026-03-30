@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap');
 
 * {
@@ -14,8 +13,9 @@ h1 {
   font-family: "Figtree", sans-serif;
 
 }
-.ct_ff_figtree{
-   font-family: "Figtree", sans-serif;
+
+.ct_ff_figtree {
+  font-family: "Figtree", sans-serif;
 }
 
 p {
@@ -460,6 +460,7 @@ header {
 }
 
 .ct_middle_navbar ul li a,
+.ct_middle_navbar ul li span,
 .ct_right_menu ul li a {
   font-size: 16px;
   font-weight: 600;
@@ -543,11 +544,13 @@ header {
   margin-top: 13px;
 }
 
-.ct_dropdown_items li a {
+.ct_dropdown_items li a,
+.ct_dropdown_items li span {
   transition: 0.4s ease all;
 }
 
-.ct_dropdown_items li a:hover {
+.ct_dropdown_items li a:hover,
+.ct_dropdown_items li span:hover {
   color: var(--orange);
 }
 
@@ -1312,7 +1315,7 @@ footer {
   padding-top: 74px;
   padding-bottom: 30px;
   background: #000125
-  /* background: linear-gradient(184.37deg, rgb(9 76 255 / 16%) 7.69% 7.69%, rgb(9 76 255 / 43%) 51.48%, hsl(202.36deg 69.1% 54.31% / 73%) 95.27%); */
+    /* background: linear-gradient(184.37deg, rgb(9 76 255 / 16%) 7.69% 7.69%, rgb(9 76 255 / 43%) 51.48%, hsl(202.36deg 69.1% 54.31% / 73%) 95.27%); */
 }
 
 .ct_footer_logo img {
@@ -2537,9 +2540,9 @@ table.table.ct_compare_table {
 }
 
 .ct_creative_single_img img {
-    width: 100% !important;
-    height: 400px;
-    object-fit: contain;
+  width: 100% !important;
+  height: 400px;
+  object-fit: contain;
 }
 
 .ct_ceo_single_img img {
@@ -3440,7 +3443,8 @@ table.table.ct_compare_table {
   position: relative;
 }
 
-.ct_dash_nav li:hover a ,.ct_dash_nav li.active a {
+.ct_dash_nav li:hover a,
+.ct_dash_nav li.active a {
   background: #fff;
 }
 
@@ -3994,7 +3998,7 @@ table.table.ct_compare_table {
   left: 18px;
   transform: translateY(0%);
   text-align: center;
- 
+
   position: absolute;
   top: 21px;
   left: 0;
@@ -4898,16 +4902,18 @@ ul.floatingBoxes li:nth-child(10) {
   display: flex;
 }
 
-.financial-solution-img{
+.financial-solution-img {
   height: 400px;
 }
-.financial-solution-img img{
+
+.financial-solution-img img {
   height: 100%;
 }
-.ct_border_radius_10{
+
+.ct_border_radius_10 {
   border-radius: 10px;
 }
 
-.ct_object_cover{
+.ct_object_cover {
   object-fit: cover !important;
 }
