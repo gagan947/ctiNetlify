@@ -14,6 +14,9 @@ h1 {
   font-family: "Figtree", sans-serif;
 
 }
+.ct_ff_figtree{
+   font-family: "Figtree", sans-serif;
+}
 
 p {
   font-size: 16px;
@@ -1308,10 +1311,7 @@ header {
 footer {
   padding-top: 74px;
   padding-bottom: 30px;
-  background: linear-gradient(184.37deg,
-      rgba(9, 76, 255, 0.3) 7.69%,
-      rgba(9, 76, 255, 0.6) 51.48%,
-      hsl(202.36deg 69.1% 44.31% / 0.85) 95.27%);
+  background: #000125
   /* background: linear-gradient(184.37deg, rgb(9 76 255 / 16%) 7.69% 7.69%, rgb(9 76 255 / 43%) 51.48%, hsl(202.36deg 69.1% 54.31% / 73%) 95.27%); */
 }
 
