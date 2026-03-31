@@ -14,9 +14,9 @@ import { CanonicalService } from '../../../services/canonical.service';
 })
 export class AiAppGeneratorComponent {
   constructor(private meta: Meta, private title: Title, private canonicalService: CanonicalService) {
-    this.title.setTitle('AI App Generator — Generate Android & iOS Apps Using AI');
+    this.title.setTitle('AI App Generator – Create Android & iOS Apps in Minutes');
     this.meta.updateTag({
-      name: 'description', content: 'Generate Android and iOS apps instantly using AI. Describe your app idea, and Creative AI will automatically build the app structure. No coding required—start free today.'
+      name: 'description', content: 'Create Android and iOS apps in minutes with our AI App Generator. Share your idea, customize features, and launch powerful mobile apps without coding.'
     });
     this.canonicalService.setCanonicalURL('https://creativethoughts.ai/ai-app-generator');
   }

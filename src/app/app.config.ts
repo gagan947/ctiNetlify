@@ -5,8 +5,6 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 import { AuthInterceptor } from './interceptor/auth.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { getAuth, provideAuth } from '@angular/fire/auth';
 import { SelectivePreloadingStrategy } from './helper/selective-preloading.strategy';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
@@ -28,8 +26,7 @@ const firebaseConfig = {
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(MonacoEditorModule.forRoot()),
-    provideFirebaseApp(() => initializeApp(firebaseConfig)),
-    provideAuth(() => getAuth()),
+
     provideAnimations(),
     importProvidersFrom(DragDropModule),
     provideHttpClient(

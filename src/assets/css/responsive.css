@@ -337,10 +337,29 @@
     margin-inline: auto;
     width: 100%;
   }
+    .ct_testimonial_slider .owl-nav {
+
+    position: relative;
+    top: 0%;
+    transform: translateY(0%);
+    width: auto;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .ct_testimonial_slider .owl-nav button.owl-prev {
+    left: 0px;
+  }
+
+  .ct_testimonial_slider .owl-nav button.owl-next {
+    right: 0px;
+  }
 }
 
 @media screen and (max-width: 767px) {
-
+.ct_testimonial_slider{
+  max-width: 100% !important;
+}
   header,
   .ct_px_80 {
     padding-inline: 30px;
@@ -399,9 +418,9 @@
     gap: 15px;
   }
 
-  .ct_testimonial_tabs .nav-tabs .nav-link {
-    font-size: 20px;
-  }
+     .ct_testimonial_tabs .nav-tabs .nav-link {
+        font-size: 16px;
+    }
 
   .ct_footer_brand_img img {
     max-width: 71px;
@@ -526,23 +545,7 @@
     padding: 30px 15px;
   }
 
-  .ct_testimonial_slider .owl-nav {
 
-    position: relative;
-    top: 0%;
-    transform: translateY(0%);
-    width: auto;
-    justify-content: center;
-    margin-top: 20px;
-  }
-
-  .ct_testimonial_slider .owl-nav button.owl-prev {
-    left: 0px;
-  }
-
-  .ct_testimonial_slider .owl-nav button.owl-next {
-    right: 0px;
-  }
 
   .ct_login_bg {
     max-width: calc(100% - 30px);
@@ -556,12 +559,20 @@
   .ct_login_left_bg {
     max-width: 90%;
   }
-
+.ct_white_bg {
+    padding: 20px;
+}
+.ct_fs_24 {
+    font-size: 20px;
+    line-height: 25.4px;
+}
 
 }
 
 @media screen and (max-width: 575px) {
-
+.ct_w_100_575{
+  width: 100%;
+}
   header,
   .ct_px_80 {
     padding-inline: 15px;
@@ -607,10 +618,10 @@
     width: 100%;
   }
 
-  .ct_fs_44 {
-    font-size: 30px;
-    line-height: 42px;
-  }
+     .ct_fs_44 {
+        font-size: 26px;
+        line-height: 34px;
+    }
 
   .ct_fs_28 {
     font-size: 20px;
@@ -690,11 +701,11 @@
 
 
 @media screen and (max-width:550px) {
-  .ct_mobile_section_main {
+  /* .ct_mobile_section_main {
     display: block;
-  }
+  } */
 
-  .ct_dash_board_main {
+  /* .ct_dash_board_main {
     display: none;
-  }
+  } */
 }
