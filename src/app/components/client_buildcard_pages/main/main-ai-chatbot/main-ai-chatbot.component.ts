@@ -23,10 +23,28 @@ interface ProjectMatchPayload {
   score?: number;
   project?: {
     _id?: string;
-    id?: string;
+    id?: string | number;
     projectName?: string;
     name?: string;
+    description?: string;
+    projectDescription?: string;
+    descriptions?: string;
+    type?: string;
+    projectType?: string;
+    tags?: string[];
+    features?: any[];
+    contain?: any[];
+    projectImage?: string;
   };
+}
+
+interface TriggerBuildProjectPayload {
+  finalIdea?: string;
+  features?: any[];
+  ideaType?: string;
+  category?: string;
+  description?: string;
+  projectMatch?: ProjectMatchPayload;
 }
 
 interface GenerateInquiryResponse {
@@ -65,6 +83,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   matchedProjectId = '';
   matchedProjectName = 'My Creative Project';
   lastUserPrompt = '';
+  matchedProject: ProjectMatchPayload['project'] | null = null;
+  matchedProjectScore: number | null = null;
   private buildButtonRequested = false;
   private navigationSubscription?: Subscription;
 
@@ -119,6 +139,11 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.lastUserPrompt = prompt;
     this.showBuildProjectButton = false;
     this.buildButtonRequested = false;
+    this.matchedProjectId = '';
+    this.matchedProjectName = 'My Creative Project';
+    this.matchedProject = null;
+    this.matchedProjectScore = null;
+    sessionStorage.removeItem('publicEnquiryId');
     this.promptText = '';
     this.scrollChatToBottom();
 
@@ -152,10 +177,22 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.socket.on('navigateToBuilder', (payload: any) => {
       this.ngZone.run(() => {
         const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
+        const projectId = String(data?.projectId ?? this.matchedProjectId ?? '');
+        const publicEnquiryId = String(
+          data?.publicEnquiryId ??
+          data?.clientEnquryId ??
+          data?.clientInquiryId ??
+          data?.public_id ??
+          ''
+        );
 
-        if (data?.projectId) {
+        if (projectId) {
+          this.persistMatchedProjectData(projectId, publicEnquiryId);
           this.router.navigate(['/bd_loader'], {
-            queryParams: { id: data.projectId },
+            queryParams: {
+              id: projectId,
+              ...(publicEnquiryId ? { publicEnquiryId } : {})
+            },
             skipLocationChange: true
           });
         }
@@ -165,11 +202,32 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.socket.on('projectMatch', (payload: ProjectMatchPayload) => {
       this.ngZone.run(() => {
         const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
-        const project = data?.project;
-
-        this.matchedProjectId = String(project?._id ?? project?.id ?? '');
-        this.matchedProjectName = project?.projectName ?? project?.name ?? 'My Creative Project';
+        this.applyProjectMatch(data);
         this.showBuildProjectButton = this.buildButtonRequested && !!this.matchedProjectId;
+      });
+    });
+
+    this.socket.on('triggerBuildProject', (payload: TriggerBuildProjectPayload) => {
+      this.ngZone.run(() => {
+        const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
+
+        if (data?.projectMatch) {
+          this.applyProjectMatch(data.projectMatch);
+        }
+
+        this.lastUserPrompt =
+          data?.description?.trim() ||
+          data?.finalIdea?.trim() ||
+          this.lastUserPrompt;
+
+        this.showBuildProjectButton = false;
+        this.buildButtonRequested = false;
+        this.currentLoaderText = 'Starting your project build...';
+        this.scrollChatToBottom();
+
+        if (this.matchedProjectId && !this.isBuildActionLoading) {
+          this.buildMatchedProject();
+        }
       });
     });
 
@@ -305,9 +363,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
         }
 
         const projectData = {
-          clientEnquryId: publicId,
-          projectName: this.matchedProjectName,
-          projectId: this.matchedProjectId
+          ...this.buildProjectData(this.matchedProjectId, publicId)
         };
 
         sessionStorage.setItem('projectData', JSON.stringify(projectData));
@@ -324,6 +380,54 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
         this.isBuildActionLoading = false;
       }
     });
+  }
+
+  private persistMatchedProjectData(projectId: string, publicEnquiryId?: string): void {
+    sessionStorage.setItem(
+      'projectData',
+      JSON.stringify(this.buildProjectData(projectId, publicEnquiryId))
+    );
+  }
+
+  private buildProjectData(projectId: string, publicEnquiryId?: string) {
+    const project = this.matchedProject ?? {};
+    const projectDescription =
+      project.projectDescription ??
+      project.description ??
+      project.descriptions ??
+      '';
+    const projectType = project.projectType ?? project.type ?? '';
+    const selectedFeatures = Array.isArray(project.features)
+      ? project.features
+      : Array.isArray(project.contain)
+        ? project.contain
+        : [];
+
+    return {
+      clientEnquryId: publicEnquiryId || sessionStorage.getItem('publicEnquiryId') || '',
+      projectId,
+      projectName: project.projectName ?? project.name ?? this.matchedProjectName,
+      projectDescription,
+      description: projectDescription,
+      projectType,
+      type: projectType,
+      projectLogo: project.projectImage ?? null,
+      selectdFeature: selectedFeatures,
+      features: selectedFeatures,
+      no_of_features: selectedFeatures.length,
+      matchedTags: Array.isArray(project.tags) ? project.tags : [],
+      projectMatchScore: this.matchedProjectScore,
+      matchedProject: project
+    };
+  }
+
+  private applyProjectMatch(payload?: ProjectMatchPayload | null): void {
+    const project = payload?.project;
+
+    this.matchedProjectId = String(project?._id ?? project?.id ?? '');
+    this.matchedProjectName = project?.projectName ?? project?.name ?? 'My Creative Project';
+    this.matchedProject = project ?? null;
+    this.matchedProjectScore = typeof payload?.score === 'number' ? payload.score : null;
   }
 
   private pushAiMessage(text: string, variant: 'default' | 'error' = 'default'): void {
