@@ -113,6 +113,15 @@ section{
   font-weight: 800;
 }
 
+.google-btn {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .ct_prompt_terms {
   margin: 18px auto 0;
   max-width: 300px;
@@ -384,6 +393,12 @@ border: 5px solid #FFFFFF;
   box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
 }
 
+.ct_pricing_grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
 
 
 .ct_price_card {
@@ -449,6 +464,14 @@ border: 5px solid #FFFFFF;
   text-decoration: none;
   font-size: 15px;
   font-weight: 700;
+}
+
+.ct_price_offer {
+  margin-bottom: 16px;
+  text-align: center;
+  color: #0064FF;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .ct_price_card h5 {

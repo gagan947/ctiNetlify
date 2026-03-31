@@ -4,15 +4,15 @@
             <h4 class=" ct_fw_600 mb-0 ct_fs_35 text-center">Create your Account</h4>
             <p class="mb-0 mt-3 text-center">Already have an account? <a routerLink="/login"
                     class="ct_forgot_link d-inline-block">Log In</a></p>
-                    <div class=" ct_mt_18">
-                        <a id="googleSignInDiv" class=" position-relative">
-                             
-                        </a>
-                  </div>
+            <div class=" ct_mt_18">
+                <a id="googleSignInDiv" class="position-relative">
+
+                </a>
+            </div>
             <div class="ct_sign_in_text mt-4">
                 <p class="mb-0">Or Sign Up With</p>
             </div>
-           
+
             <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="ct_mt_18">
                 <div class="row">
                     @if(!otpVisible){
@@ -189,8 +189,8 @@
                         [class]="'ct_blue_btn_fill py-3 w-100'"></app-submit-button>
                 </div>
                 <div class="d-flex  align-items-center justify-content-center gap-2 mt-3">
-                    <a class="ct_forgot_link ct_fs_16"
-                        (click)="toggleOTPLogin()">{{isPhone ? 'Signup with email' : 'Signup with phone number'}}</a>
+                    <a class="ct_forgot_link ct_fs_16" (click)="toggleOTPLogin()">{{isPhone ? 'Signup with email' :
+                        'Signup with phone number'}}</a>
                 </div>
                 }@else {
                 <div class="mt-0">

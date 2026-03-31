@@ -442,7 +442,7 @@ $(document).ready(function () {
           },
 
           {
-            duration: 2000,
+            duration: 200,
             easing: "swing",
             step: function () {
               $this.text(Math.floor(this.countNum));
