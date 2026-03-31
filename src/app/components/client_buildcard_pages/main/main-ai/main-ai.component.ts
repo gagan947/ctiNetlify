@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MainAiChatbotComponent } from '../main-ai-chatbot/main-ai-chatbot.component';
 import { SidebarComponent } from "../../sidebar/sidebar.component";
 import { ApiService } from '../../../../services/api.service';
@@ -62,7 +62,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   private placeholderTimer: ReturnType<typeof setTimeout> | null = null;
   private activePlaceholderIndex = 0;
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService,private router: Router) { }
 
   ngOnInit(): void {
     this.loadUserSummary();
@@ -211,5 +211,10 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     );
+  }
+
+   LogOut() {
+    localStorage.clear()
+    this.router.navigate(['/'])
   }
 }
