@@ -12,6 +12,7 @@ import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
 import { ModalService } from '../../../services/modal.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { WorkspaceHeaderComponent } from "../workspace-header/workspace-header.component";
 declare var Razorpay: any;
 declare var Calendly: any;
 declare var cashfree: any;
@@ -19,7 +20,7 @@ declare var window: any;
 @Component({
   selector: 'app-payment-detail',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, MobileViewComponent, ExchangeRatePipe, CalendlyDirective],
+  imports: [RouterLink, CommonModule, SidebarComponent, MobileViewComponent, ExchangeRatePipe, CalendlyDirective, WorkspaceHeaderComponent],
   templateUrl: './payment-detail.component.html',
   styleUrl: './payment-detail.component.css'
 })
@@ -125,7 +126,7 @@ export class PaymentDetailComponent {
     })
   }
 
- 
+
 
 
   openCalendly() {
@@ -189,7 +190,7 @@ export class PaymentDetailComponent {
   //   }
   // }
 
-  
+
   async verifyPayment(orderId: string) {
     try {
       const verificationResponse: any = await this.http.post('/verify-payment', {
@@ -209,7 +210,7 @@ export class PaymentDetailComponent {
       console.error('Verification error:', error);
     }
   }
-// One time payment code starts from here 
+  // One time payment code starts from here 
   initiateCheckout() {
     const user = {
       name: this.billingDetails.name,
@@ -221,7 +222,7 @@ export class PaymentDetailComponent {
       state: this.billingDetails.state,
       pincode: this.billingDetails.postal_code,
     }
-   
+
     this.http
       .post(this.apiService.apiUrl + 'api/payment/create-order', {
         // amount: this.orderAmount,
@@ -242,7 +243,7 @@ export class PaymentDetailComponent {
           const cashfree = new window.Cashfree({
             paymentSessionId: paymentSessionId,
             mode: 'sandbox',
-           
+
           });
           cashfree.checkout(checkoutOptions).then((result: any) => {
             if (result.error) {

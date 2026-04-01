@@ -10,12 +10,13 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ExchangeRatePipe } from "../../../helper/exchange-rate.pipe";
 import { MobileViewComponent } from '../main/mobile-view/mobile-view.component';
 import { ModalService } from '../../../services/modal.service';
+import { WorkspaceHeaderComponent } from "../workspace-header/workspace-header.component";
 type BillingCycle = 'monthly' | 'yearly';
 type PlanType = 'personal' | 'creative' | 'booster';
 @Component({
   selector: 'app-plan-delivery',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule, SidebarComponent, ExchangeRatePipe, MobileViewComponent],
+  imports: [RouterLink, CommonModule, FormsModule, SidebarComponent, ExchangeRatePipe, MobileViewComponent, WorkspaceHeaderComponent],
   templateUrl: './plan-delivery.component.html',
   styleUrl: './plan-delivery.component.css'
 })
@@ -76,13 +77,13 @@ export class PlanDeliveryComponent {
       booster: 179
     }
   };
-  
- 
-
-selectedPlan = signal<PlanType>('personal');
 
 
-  
+
+  selectedPlan = signal<PlanType>('personal');
+
+
+
 
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService) {
     effect(() => {
@@ -265,18 +266,18 @@ selectedPlan = signal<PlanType>('personal');
   planPrices = computed(() => {
     return this.PLAN_PRICES[this.billingCycle()];
   });
-  
+
 
   selectPlan(plan: PlanType) {
     this.selectedPlan.set(plan);
   }
-  
+
 
   selectedSubscriptionCost = computed(() => {
     return this.planPrices()[this.selectedPlan()];
   });
-  
-  
+
+
 
   canDeactivate(): Promise<boolean> | boolean {
     this.modal.inquiryProjectID.set(this.projectsData.clientEnquryId);

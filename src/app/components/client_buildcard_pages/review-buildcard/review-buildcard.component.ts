@@ -8,11 +8,12 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ExchangeRatePipe } from "../../../helper/exchange-rate.pipe";
 import { MobileViewComponent } from '../main/mobile-view/mobile-view.component';
 import { ModalService } from '../../../services/modal.service';
+import { WorkspaceHeaderComponent } from "../workspace-header/workspace-header.component";
 
 @Component({
   selector: 'app-review-buildcard',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe, MobileViewComponent],
+  imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe, MobileViewComponent, WorkspaceHeaderComponent],
   templateUrl: './review-buildcard.component.html',
   styleUrl: './review-buildcard.component.css'
 })

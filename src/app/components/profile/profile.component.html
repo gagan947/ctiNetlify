@@ -1,5 +1,5 @@
 <section class="ct_dash_board_main d-block">
-      <app-sidebar></app-sidebar>
+      <app-workspace-header></app-workspace-header>
       <div class="ct_dash_right_content ct_white_bg_page pt-5 h-auto">
             <div class="ct_dash_toggle_bar">
                   <i class="fa-solid fa-bars"></i>
@@ -95,7 +95,7 @@
                                                                               [maxLength]="15" [phoneValidation]="true"
                                                                               [disabled]="user.is_phone_verified ===1">
                                                                         </ngx-intl-tel-input>
-                                                                       
+
                                                                   </div>
                                                                   <div *ngIf="profilePhoneForm.submitted && phoneInput.invalid || submitted"
                                                                         class="text-danger">

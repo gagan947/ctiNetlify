@@ -12,11 +12,12 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { SubcriptionPageComponent } from '../subcription-page/subcription-page.component';
 import { SubcriptionService } from '../../../services/subcription.service';
 import { SubscriptionResponse } from '../../../models/subcription';
+import { WorkspaceHeaderComponent } from "../workspace-header/workspace-header.component";
 declare var Calendly: any;
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule, ChatbotComponent, BdLoaderComponent, CalendlyDirective, SubcriptionPageComponent],
+  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule, ChatbotComponent, BdLoaderComponent, CalendlyDirective, SubcriptionPageComponent, WorkspaceHeaderComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
@@ -203,7 +204,7 @@ export class MainComponent {
       .subscribe({
         next: (res) => {
           this.allowProjectCreate = res.allowProjectCreate;
-        this.navigateMessage = res.message
+          this.navigateMessage = res.message
         },
         error: err => {
           // this.loading = false

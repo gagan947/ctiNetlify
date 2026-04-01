@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
+import { WorkspaceHeaderComponent } from "../../client_buildcard_pages/workspace-header/workspace-header.component";
 
 @Component({
   selector: 'app-user-live-projects',
   standalone: true,
-  imports: [SidebarComponent, CommonModule],
+  imports: [SidebarComponent, CommonModule, WorkspaceHeaderComponent],
   templateUrl: './user-live-projects.component.html',
   styleUrl: './user-live-projects.component.css'
 })
@@ -34,7 +35,7 @@ export class UserLiveProjectsComponent {
           this.projectData = res.data[0];
           this.projectFeatures = JSON.parse(res.data[0].projectFeatures);
           this.addedFeatures = JSON.parse(res.data[0].additionalFeatures);
-          
+
 
           // sessionStorage.setItem('projectData', JSON.stringify(res.data));
         } else {

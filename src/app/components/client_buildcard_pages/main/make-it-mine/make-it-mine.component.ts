@@ -11,12 +11,13 @@ import { ModalService } from '../../../../services/modal.service';
 import { ImageCropperComponent, ImageCroppedEvent } from 'ngx-image-cropper';
 import { CustomColorPickerComponent } from '../custom-color-picker/custom-color-picker.component';
 import { MobileViewComponent } from '../mobile-view/mobile-view.component';
+import { WorkspaceHeaderComponent } from "../../workspace-header/workspace-header.component";
 declare var bootstrap: any;
 
 @Component({
     selector: 'app-make-it-mine',
     standalone: true,
-    imports: [RouterLink, FormsModule, CommonModule, ColorPickerModule, SidebarComponent, ImageCropperComponent, CustomColorPickerComponent, MobileViewComponent],
+    imports: [RouterLink, FormsModule, CommonModule, ColorPickerModule, SidebarComponent, ImageCropperComponent, CustomColorPickerComponent, MobileViewComponent, WorkspaceHeaderComponent],
     templateUrl: './make-it-mine.component.html',
     styleUrl: './make-it-mine.component.css'
 })
@@ -182,7 +183,7 @@ export class MakeItMineComponent {
         formData.append('projectId', this.id ? this.id : '0');
         formData.append('currentRoutes', this.router.url);
         formData.append('clientEnquryId', this.projectsData?.clientEnquryId ? this.projectsData.clientEnquryId : '');
-        formData.append('projectType' ,  this.projectType  ?  this.projectType  : '');
+        formData.append('projectType', this.projectType ? this.projectType : '');
 
         this.apiService.postAPI('api/user/addProjectNameAndLogo', formData).subscribe({
             next: (res: any) => {

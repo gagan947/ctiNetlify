@@ -3572,8 +3572,8 @@ table.table.ct_compare_table {
 .ct_dash_right_content {
   position: relative;
   height: 100vh;
-  width: calc(100% - 100px);
-  margin-left: 100px;
+  /* width: calc(100% - 100px); */
+  /* margin-left: 100px; */
   padding: 40px 80px;
 }
 
@@ -4916,4 +4916,8 @@ ul.floatingBoxes li:nth-child(10) {
 
 .ct_object_cover {
   object-fit: cover !important;
+}
+
+section.ct_dash_board_main {
+  overflow: clip;
 }

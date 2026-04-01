@@ -4,11 +4,12 @@ import { ApiService } from '../../services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from "../client_buildcard_pages/sidebar/sidebar.component";
+import { WorkspaceHeaderComponent } from "../client_buildcard_pages/workspace-header/workspace-header.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent],
+  imports: [RouterLink, CommonModule, SidebarComponent, WorkspaceHeaderComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -48,7 +49,6 @@ export class DashboardComponent {
       .subscribe({
         next: (res) => {
           this.activePlan = res.planType
-    
         },
         error: err => {
           // this.loading = false
@@ -57,34 +57,34 @@ export class DashboardComponent {
   }
 
   Navigate(data: any) {
-       if(data.project_deployed){
-        this.router.navigate([`user-live-projects/${data.inquiryId}`]);
-       }else{
-         let projectData = {
-           clientEnquryId: data.inquiryId,
-           projectId: data.projectId,
-           phases_deliverables: data.phases_deliverables,
-           bellingDetails: data.billing_details,
-           estimated_time: data.durations,
-           final_cost_with_tax_discount: data.final_cost_with_tax_discount,
-           platform: data.platforms,
-           projectLogo: data.clientProjectLogo,
-           selectdFeature: data.projectFeatures,
-           speed: data.development_speed,
-           total_cost_delivery: data.total_cost_delivery,
-           paymentPlan: data.payment_plan == 'Installment' ? '2' : '1',
-           installmentType: data.installment_type,
-           features_cost: data.features_cost,
-           no_of_features: data.no_of_features,
-           projectName: data.projectName
-         };
+    if (data.project_deployed) {
+      this.router.navigate([`user-live-projects/${data.inquiryId}`]);
+    } else {
+      let projectData = {
+        clientEnquryId: data.inquiryId,
+        projectId: data.projectId,
+        phases_deliverables: data.phases_deliverables,
+        bellingDetails: data.billing_details,
+        estimated_time: data.durations,
+        final_cost_with_tax_discount: data.final_cost_with_tax_discount,
+        platform: data.platforms,
+        projectLogo: data.clientProjectLogo,
+        selectdFeature: data.projectFeatures,
+        speed: data.development_speed,
+        total_cost_delivery: data.total_cost_delivery,
+        paymentPlan: data.payment_plan == 'Installment' ? '2' : '1',
+        installmentType: data.installment_type,
+        features_cost: data.features_cost,
+        no_of_features: data.no_of_features,
+        projectName: data.projectName
+      };
 
-         sessionStorage.setItem('htmlCode', data.html_pages);
-         sessionStorage.setItem('projectData', JSON.stringify(projectData));
-         this.router.navigate(['/code-generator/', data.inquiryId], { state: { projectData } });
+      sessionStorage.setItem('htmlCode', data.html_pages);
+      sessionStorage.setItem('projectData', JSON.stringify(projectData));
+      this.router.navigate(['/code-generator/', data.inquiryId], { state: { projectData } });
 
-       }
-         
+    }
+
   }
 
   discardProject(id: number) {

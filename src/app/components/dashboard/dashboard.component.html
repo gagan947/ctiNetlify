@@ -1,5 +1,5 @@
 <section class="ct_dash_board_main">
-      <app-sidebar></app-sidebar>
+      <app-workspace-header></app-workspace-header>
       <div class="ct_dash_right_content ct_white_bg_page ">
             <div class="ct_dash_toggle_bar">
                   <i class="fa-solid fa-bars"></i>
@@ -9,16 +9,17 @@
                         <div class="col-md-12">
                               <div>
                                     <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
-                                          <h3 class="ct_fs_26 ct_fw_700 mb-0">My Creative Projects</h3><span class="ct_fs_16">
-                                          Active plan :
-                                         <span class="ct_custom_badge"> {{
-                                          activePlan === 'free'
-                                          ? 'Free'
-                                          : activePlan.includes('personal')
-                                          ? 'Personal'
-                                          : 'Creative'
-                                          }} plan</span>
-                                    </span>
+                                          <h3 class="ct_fs_26 ct_fw_700 mb-0">My Creative Projects</h3><span
+                                                class="ct_fs_16">
+                                                Active plan :
+                                                <span class="ct_custom_badge"> {{
+                                                      activePlan === 'FREE'
+                                                      ? 'Free'
+                                                      : activePlan.includes('personal')
+                                                      ? 'Personal'
+                                                      : 'Creative'
+                                                      }} plan</span>
+                                          </span>
                                     </div>
                                     <div class="pt-4">
                                           <ul class="nav nav-pills mb-3 ct_dash_board_tab" id="pills-tab"
@@ -39,7 +40,7 @@
                                                       <button class="nav-link" [ngClass]="{ 'active': status === 2 }"
                                                             (click)="filterByStatus(2)">Expired</button>
                                                 </li>
-                                              
+
                                           </ul>
                                           <div class="tab-content mt-4 pt-2" id="pills-tabContent">
                                                 <div class="tab-pane fade show active" id="pills-all" role="tabpanel"
@@ -58,7 +59,7 @@
                                                                                                 {{item.projectName}}
                                                                                           </h6>
                                                                                     </div>
-                                                                                    @if(item.projectStatus != 1){
+                                                                                    @if(activePlan !== 'FREE'){
                                                                                     <div class="dropdown">
                                                                                           <i class="fa-solid fa-ellipsis-vertical"
                                                                                                 id="dropdownMenuButton1"
@@ -71,7 +72,6 @@
                                                                                                 </li>
                                                                                           </ul>
                                                                                     </div>
-
                                                                                     }
                                                                               </div>
                                                                               <div
@@ -100,11 +100,10 @@
                                                                                     </div>
                                                                               </div>
 
-                                                                            
+
                                                                         </div>
                                                                         <div class="ct_creative_card_body">
-                                                                              <div
-                                                                                    class="all-feature-box">
+                                                                              <div class="all-feature-box">
                                                                                     <div>
                                                                                           <h4 class=" head">FEATURES
                                                                                           </h4>
@@ -123,29 +122,33 @@
                                                                                                 Weeks' : '-'}}
                                                                                           </p>
                                                                                     </div>
-                                                                                    
 
 
-                                                                                
-                                                                          @if(item.project_deployed == 1){
-                                                                                <div>
-                                                                                      <h4 class="head">Created
-                                                                                      </h4>
-                                                                                      <p class="desc">
-                                                                                          <small>{{item.createdAt | date}}</small>
-  
-                                                                                      </p>
-                                                                                </div>
-  
-                                                                                <div>
-                                                                                      <h4 class="head">Deployed
-                                                                                      </h4>
-                                                                                      <a class="desc link-primary" [href]="baseURl + item.deployed_url" target="_blank">
-                                                                                            {{baseURl + item.deployed_url}}
-                                                                                      </a>
-                                                                                </div>
-                                                                              
-                                                                          }
+
+
+                                                                                    @if(item.project_deployed == 1){
+                                                                                    <div>
+                                                                                          <h4 class="head">Created
+                                                                                          </h4>
+                                                                                          <p class="desc">
+                                                                                                <small>{{item.createdAt
+                                                                                                      | date}}</small>
+
+                                                                                          </p>
+                                                                                    </div>
+
+                                                                                    <div>
+                                                                                          <h4 class="head">Deployed
+                                                                                          </h4>
+                                                                                          <a class="desc link-primary"
+                                                                                                [href]="baseURl + item.deployed_url"
+                                                                                                target="_blank">
+                                                                                                {{baseURl +
+                                                                                                item.deployed_url}}
+                                                                                          </a>
+                                                                                    </div>
+
+                                                                                    }
                                                                               </div>
 
                                                                               <div class="mt-4 border-5">

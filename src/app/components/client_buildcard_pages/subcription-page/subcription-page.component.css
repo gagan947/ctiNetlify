@@ -60,6 +60,14 @@
   cursor: pointer;
 }
 
+.ct_price_offer {
+  margin-bottom: 16px;
+  text-align: center;
+  color: #0064FF;
+  font-size: 15px;
+  font-weight: 600;
+}
+
 .ct_multiple_img_div {
   display: flex;
   align-items: center;
@@ -417,7 +425,7 @@
   font-weight: 600;
 }
 
-.ct_price_card > p {
+.ct_price_card>p {
   min-height: 74px;
   margin-bottom: 10px;
   color: #687086;
@@ -425,7 +433,7 @@
   line-height: 1.7;
 }
 
-.ct_price_card > a {
+.ct_price_card>a {
   display: inline-flex;
   align-items: center;
   justify-content: center;

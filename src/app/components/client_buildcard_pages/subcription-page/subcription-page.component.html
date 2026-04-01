@@ -35,7 +35,7 @@
             <span class="ct_price_badge">{{ badgeLabel(plan) }}</span>
             <h3>{{ formatPrice(plan) }}<span>{{ priceSubLabel(plan) }}</span></h3>
             <p>{{ planDescription(plan) }}</p>
-            <!-- <div class="ct_price_offer" *ngIf="showIntroOffer(plan)">{{ introOfferLabel(plan) }}</div> -->
+            <div class="ct_price_offer" *ngIf="showIntroOffer(plan)">{{ introOfferLabel(plan) }}</div>
             <a (click)="getStarted(plan)">Get Started</a>
             <h4>Features you will get:</h4>
             <ul>

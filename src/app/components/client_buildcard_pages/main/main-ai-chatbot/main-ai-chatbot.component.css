@@ -190,6 +190,10 @@
   color: #d24d5e;
 }
 
+.is-ai .main-ai-thread-content {
+  max-width: 80%;
+}
+
 .main-ai-message-footer {
   display: flex;
   align-items: center;
@@ -412,7 +416,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-top: 12px;
+  margin-top: 5px;
 }
 
 .main-ai-left-actions,

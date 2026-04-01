@@ -1,5 +1,5 @@
 <section class="ct_dash_board_main">
-      <app-sidebar></app-sidebar>
+      <app-workspace-header></app-workspace-header>
 
       <div class="ct_dash_right_content ct_white_bg_page pt-5 ">
             <div class="ct_dash_toggle_bar">
@@ -87,8 +87,7 @@
                                                                   <h6
                                                                         class="ct_fs_14 mb-0 text-white ct_white_nowrape_1">
                                                                         PLATFORMS</h6>
-                                                                  <h5
-                                                                        class="ct_fs_18 ct_fw_700 text-white mb-0 ">
+                                                                  <h5 class="ct_fs_18 ct_fw_700 text-white mb-0 ">
                                                                         {{ projectsData.platform }}
                                                                   </h5>
                                                             </li>
@@ -103,7 +102,9 @@
                                                                   </h5>
                                                             </li>
                                                             <li>
-                                                                  <h6 class="ct_fs_14 mb-0 text-white ct_white_nowrape_1">FEATURES</h6>
+                                                                  <h6
+                                                                        class="ct_fs_14 mb-0 text-white ct_white_nowrape_1">
+                                                                        FEATURES</h6>
                                                                   <h5 class="ct_fs_18 ct_fw_700 text-white mb-0">
                                                                         {{totalSubFeatures}}
                                                                   </h5>
@@ -111,7 +112,7 @@
                                                             <li>
                                                                   <h6
                                                                         class="ct_fs_14 mb-0 text-white ct_white_nowrape_1">
-                                                                        
+
                                                                         DELIVERY DATE
                                                                   </h6>
                                                                   <h5 class="ct_fs_18 ct_fw_700 text-white mb-0">
@@ -190,7 +191,8 @@
                                                                         <td><span class="ct_fw_600">{{item.featureTime}}
                                                                                     HRS</span>
                                                                         </td>
-                                                                        <td><span class="ct_fw_600">{{(item.featureTime * 1750)
+                                                                        <td><span class="ct_fw_600">{{(item.featureTime
+                                                                                    * 1750)
                                                                                     | convertCurrency:rate}}</span>
                                                                         </td>
                                                                   </tr>
@@ -210,8 +212,9 @@
                                                                         <td><span class="">{{item2.estimated_time}}
                                                                                     HRS</span>
                                                                         </td>
-                                                                        <td><span class="">{{(item2.estimated_time * 1750)
-                                                                              |convertCurrency:rate}}</span>
+                                                                        <td><span class="">{{(item2.estimated_time *
+                                                                                    1750)
+                                                                                    |convertCurrency:rate}}</span>
                                                                         </td>
                                                                   </tr>
                                                                   }
@@ -277,7 +280,9 @@
                                                                   $index) {
                                                                   <tr>
                                                                         <td>
-                                                                              <span class=" mb-0">{{item.design ? 'Design' + ' (' + item.design + ')' : item}}
+                                                                              <span class=" mb-0">{{item.design ?
+                                                                                    'Design' + ' (' + item.design + ')'
+                                                                                    : item}}
                                                                               </span>
                                                                         </td>
                                                                   </tr>

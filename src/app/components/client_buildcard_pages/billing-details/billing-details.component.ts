@@ -11,11 +11,12 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
 import { MobileViewComponent } from "../main/mobile-view/mobile-view.component";
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 import { ModalService } from '../../../services/modal.service';
+import { WorkspaceHeaderComponent } from "../workspace-header/workspace-header.component";
 
 @Component({
   selector: 'app-billing-details',
   standalone: true,
-  imports: [NgxIntlTelInputModule, CommonModule, FormsModule, ReactiveFormsModule, RouterLink, SidebarComponent, MobileViewComponent, ExchangeRatePipe],
+  imports: [NgxIntlTelInputModule, CommonModule, FormsModule, ReactiveFormsModule, RouterLink, SidebarComponent, MobileViewComponent, ExchangeRatePipe, WorkspaceHeaderComponent],
   templateUrl: './billing-details.component.html',
   styleUrl: './billing-details.component.css'
 })

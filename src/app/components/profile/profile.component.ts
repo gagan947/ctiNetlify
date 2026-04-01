@@ -12,11 +12,12 @@ import { NzFlexDirective } from 'ng-zorro-antd/flex';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router, RouterLink } from '@angular/router';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
+import { WorkspaceHeaderComponent } from "../client_buildcard_pages/workspace-header/workspace-header.component";
 declare var bootstrap: any;
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [SidebarComponent, CommonModule, FormsModule, NzSelectModule, NgxIntlTelInputModule, NzInputOtpComponent, NzFlexDirective, RouterLink, ImageCropperComponent],
+  imports: [SidebarComponent, CommonModule, FormsModule, NzSelectModule, NgxIntlTelInputModule, NzInputOtpComponent, NzFlexDirective, RouterLink, ImageCropperComponent, WorkspaceHeaderComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })

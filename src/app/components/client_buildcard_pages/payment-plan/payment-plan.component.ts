@@ -11,13 +11,14 @@ import { MobileViewComponent } from "../main/mobile-view/mobile-view.component";
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 import { ModalService } from '../../../services/modal.service';
 import { HttpClient } from '@angular/common/http';
+import { WorkspaceHeaderComponent } from "../workspace-header/workspace-header.component";
 declare var bootstrap: any;
 declare var Calendly: any;
 declare var window: any;
 @Component({
   selector: 'app-payment-plan',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule, SidebarComponent, MobileViewComponent, ExchangeRatePipe],
+  imports: [RouterLink, CommonModule, FormsModule, SidebarComponent, MobileViewComponent, ExchangeRatePipe, WorkspaceHeaderComponent],
   templateUrl: './payment-plan.component.html',
   styleUrl: './payment-plan.component.css'
 })
@@ -39,7 +40,7 @@ export class PaymentPlanComponent {
   userData: any;
   currencyCode = 'INR';
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private http: HttpClient) {
-   
+
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
     this.total_cost_delivery = this.projectsData.total_cost_delivery;
@@ -56,12 +57,12 @@ export class PaymentPlanComponent {
     this.userData = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
     this.currencyCode = this.userData.currency;
     this.getRates(this.currencyCode);
- 
+
   };
 
   ngOnInit(): void {
     this.getBillingDetails();
-    
+
   }
 
   onPaymentChange(id: any) {
@@ -122,12 +123,12 @@ export class PaymentPlanComponent {
   }
 
   openCalendly() {
- 
+
     Calendly.initPopupWidget({ url: 'https://calendly.com/mohdfaraz-ctinfotech/30min' });
   };
 
   ngAfterViewInit() {
-    
+
     const calendlyContainer = document.getElementById('calendly-inline-widget');
     if (calendlyContainer) {
       Calendly.initInlineWidget({
@@ -178,49 +179,49 @@ export class PaymentPlanComponent {
       pincode: this.billingDetails.postal_code,
     }
 
-  
+
     this.http.post(this.apiService.apiUrl + 'api/payment/create-order', {
-        amount: Math.floor(this.securityDeposit * this.rate),
-        user,
-        currency: this.currencyCode,
-        clientEnquryId: this.projectsData.clientEnquryId,
-        currentRoutes: this.router.url,
+      amount: Math.floor(this.securityDeposit * this.rate),
+      user,
+      currency: this.currencyCode,
+      clientEnquryId: this.projectsData.clientEnquryId,
+      currentRoutes: this.router.url,
     })
-    .subscribe(
-      (response: any) => {
-  console.log(response.data);
-  console.log(response.data.cf_offer_id);
-  
-        const paymentSessionId = response?.data?.payment_session_id;
-        const cf_offer_id = response?.data?.cf_offer_id;
-  
-        if (!paymentSessionId) {
-          alert("Payment session missing");
-          return;
-        }
-  
-        // ✔ Correct initialization (no session here)
-        const cashfree = new window.Cashfree({ mode: "production" });
-  
-        // ✔ Correct checkout call
-        cashfree.checkout({
-          paymentSessionId: paymentSessionId, // EXACT KEY
-          redirectTarget: "_self"
-        })
-        .then((result: any) => {
-          if (result.error) {
-            console.error(result.error);
-            alert(result.error.message);
+      .subscribe(
+        (response: any) => {
+          console.log(response.data);
+          console.log(response.data.cf_offer_id);
+
+          const paymentSessionId = response?.data?.payment_session_id;
+          const cf_offer_id = response?.data?.cf_offer_id;
+
+          if (!paymentSessionId) {
+            alert("Payment session missing");
+            return;
           }
-        });
-  
-      },
-      (error) => {
-        console.error('Error initiating checkout:', error);
-      }
-    );
+
+          // ✔ Correct initialization (no session here)
+          const cashfree = new window.Cashfree({ mode: "production" });
+
+          // ✔ Correct checkout call
+          cashfree.checkout({
+            paymentSessionId: paymentSessionId, // EXACT KEY
+            redirectTarget: "_self"
+          })
+            .then((result: any) => {
+              if (result.error) {
+                console.error(result.error);
+                alert(result.error.message);
+              }
+            });
+
+        },
+        (error) => {
+          console.error('Error initiating checkout:', error);
+        }
+      );
   }
-  
+
   getBillingDetails(): void {
     this.apiService.getApi(`api/user/getBillingDetails?id=${this.projectsData.clientEnquryId}`)
       .subscribe({

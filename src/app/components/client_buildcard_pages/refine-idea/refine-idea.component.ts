@@ -13,11 +13,12 @@ import { BdLoaderComponent } from '../../shared/bd-loader/bd-loader.component';
 import { ModalService } from '../../../services/modal.service';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SubmitButtonComponent } from '../../shared/submit-button/submit-button.component';
+import { WorkspaceHeaderComponent } from "../workspace-header/workspace-header.component";
 
 @Component({
   selector: 'app-refine-idea',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe, BdLoaderComponent, ScrollingModule, SubmitButtonComponent],
+  imports: [RouterLink, CommonModule, SidebarComponent, ExchangeRatePipe, BdLoaderComponent, ScrollingModule, SubmitButtonComponent, WorkspaceHeaderComponent],
   templateUrl: './refine-idea.component.html',
   styleUrl: './refine-idea.component.css',
 })

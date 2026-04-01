@@ -1,5 +1,5 @@
 <section class="ct_dash_board_main">
-      <app-sidebar></app-sidebar>
+      <app-workspace-header></app-workspace-header>
       <div class="ct_dash_right_content ct_white_bg_page pt-5">
             <div class="ct_dash_toggle_bar">
                   <i class="fa-solid fa-bars"></i>
@@ -314,8 +314,10 @@
                                                       class="d-flex align-items-center justify-content-between gap-3  mb-3">
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">Total Cost</p>
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">
-                                                            {{ actualCost  ?  (actualCost | convertCurrency:rate) : (total_cost_delivery + (total_cost_delivery * 18)/100) -
-                                                      (((total_cost_delivery - (total_cost_delivery * 18)/100) * 10) / 100) | convertCurrency:rate }}
+                                                            {{ actualCost ? (actualCost | convertCurrency:rate) :
+                                                            (total_cost_delivery + (total_cost_delivery * 18)/100) -
+                                                            (((total_cost_delivery - (total_cost_delivery * 18)/100) *
+                                                            10) / 100) | convertCurrency:rate }}
                                                       </p>
                                                 </div>
                                           </div>
@@ -350,8 +352,10 @@
                                                       }@else {
                                                       <p class="mb-0 ct_fw_700 ct_fs_18">
 
-                                                            {{ actualCost  ?  (actualCost | convertCurrency:rate) : (total_cost_delivery + (total_cost_delivery * 18)/100) -
-                                                            (((total_cost_delivery + (total_cost_delivery * 18)/100) * 10) / 100) | convertCurrency:rate }}
+                                                            {{ actualCost ? (actualCost | convertCurrency:rate) :
+                                                            (total_cost_delivery + (total_cost_delivery * 18)/100) -
+                                                            (((total_cost_delivery + (total_cost_delivery * 18)/100) *
+                                                            10) / 100) | convertCurrency:rate }}
                                                       </p>
                                                       }
                                                 </div>

@@ -164,14 +164,33 @@ export class SubcriptionPageComponent {
     this.initiateSubscriptionCheckout(billingDetails)
   }
 
+  showIntroOffer(plan: Plan): boolean {
+    return !!plan.has_intro_offer && Number(plan.intro_amount) > 0;
+  }
+
+  introOfferLabel(plan: Plan): string {
+    return `Intro offer ${this.formatCurrency(plan.intro_amount, plan.currency)}`;
+  }
+
+  formatCurrency(amount: string | number, currency?: string): string {
+    const currencyCode = currency || 'INR';
+    const symbol = this.currencySymbolMap[currencyCode] || `${currencyCode} `;
+    const value = Number(amount ?? 0);
+    const formatted = value.toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    return `${symbol}${formatted}`;
+  }
+
   openCashfreeSubscriptionCheckout(subscriptionSessionId: string) {
     if (!subscriptionSessionId) {
       console.error("Missing subscription_session_id!");
       return;
     }
     const cashfree = new (window as any).Cashfree({
-      mode: "production",
-      // mode: "sandbox",
+      // mode: "production",
+      mode: "sandbox",
     });
 
     cashfree
