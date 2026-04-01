@@ -11,6 +11,7 @@ interface ChatMessage {
   text: string;
   variant: 'default' | 'error';
   streamBlockId?: string;
+  createdAt: number;
 }
 
 interface FormattedMessageLine {
@@ -73,7 +74,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   @ViewChild('chatPromptInput') chatPromptInput?: ElementRef<HTMLTextAreaElement>;
 
   socket: any;
-  readonly placeholderText = 'Describe the project you want to build';
+  readonly placeholderText = "Type your idea... we'll build it for you";
   promptText = '';
   isSubmitting = false;
   isBuildActionLoading = false;
@@ -134,7 +135,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.currentLoaderText = '';
     this.chatMessages = [
       ...this.chatMessages,
-      { sender: 'user', text: prompt, variant: 'default' }
+      { sender: 'user', text: prompt, variant: 'default', createdAt: Date.now() }
     ];
     this.lastUserPrompt = prompt;
     this.showBuildProjectButton = false;
@@ -307,7 +308,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
 
       this.chatMessages = [
         ...this.chatMessages,
-        { sender: 'ai', text: content, variant: 'default', streamBlockId: blockId }
+        { sender: 'ai', text: content, variant: 'default', streamBlockId: blockId, createdAt: Date.now() }
       ];
       targetMessageIndex = this.chatMessages.length - 1;
     } else if (content) {
@@ -444,7 +445,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
 
     this.chatMessages = [
       ...this.chatMessages,
-      { sender: 'ai', text: normalizedText, variant }
+      { sender: 'ai', text: normalizedText, variant, createdAt: Date.now() }
     ];
     this.scrollChatToBottom();
   }
@@ -479,5 +480,12 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
 
         return { type: 'text', text: line };
       });
+  }
+
+  formatMessageTime(timestamp: number): string {
+    return new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: '2-digit'
+    }).format(timestamp);
   }
 }

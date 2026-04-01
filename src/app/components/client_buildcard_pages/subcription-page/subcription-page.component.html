@@ -16,286 +16,60 @@
           </p>
         </div>
       </div> -->
-      <div class="d-flex align-items-center justify-content-between gap-3 ct_flex_col_575">
-       <div>
-        <h5 class="modal-title ct_fw_600 ct_fs_22">Subcription</h5>
-        <p class="mb-0 ct_fs_14 text-danger mt-2" *ngIf="subscriptionPlan.projectCount >= subscriptionPlan.projectLimit"><i class="fa-solid fa-circle-info me-1"></i>Project Limit reached for {{subscriptionPlan.planName}} plan. Please upgrade your plan</p>
-       </div>
-        <div class="d-flex justify-content-between ">
-          <div>
-            <ul class="nav nav-pills mb-0 ct_custom_tab mt-0 flex-nowrap" id="pills-tab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home-1"
-                  type="button" role="tab" aria-controls="pills-home-1" aria-selected="true"
-                  (click)="setBilling('MONTH')">
-                  Monthly
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile-1"
-                  type="button" role="tab" aria-controls="pills-profile-1" aria-selected="false"
-                  (click)="setBilling('YEAR')">
-                  Yearly
-                </button>
+      <div class="container">
+        <div class="ct_section_heading text-center">
+          <div class="ct_pricing_toggle">
+            <button type="button" [class.active]="billingCycle() === 'MONTH'"
+              (click)="setBillingCycle('MONTH')">Monthly</button>
+            <button type="button" [class.active]="billingCycle() === 'YEAR'"
+              (click)="setBillingCycle('YEAR')">Annually</button>
+          </div>
+        </div>
+
+        <div class="ct_pricing_grid mt-5 pt-5">
+          <div class="ct_price_card" *ngFor="let plan of visiblePlans"
+            [class.ct_price_card_featured]="isFeaturedPlan(plan)">
+            <div class="ribbon" *ngIf="isFeaturedPlan(plan)">
+              <img src="assets/img/ribbin_price.png" alt="">
+            </div>
+            <span class="ct_price_badge">{{ badgeLabel(plan) }}</span>
+            <h3>{{ formatPrice(plan) }}<span>{{ priceSubLabel(plan) }}</span></h3>
+            <p>{{ planDescription(plan) }}</p>
+            <!-- <div class="ct_price_offer" *ngIf="showIntroOffer(plan)">{{ introOfferLabel(plan) }}</div> -->
+            <a (click)="getStarted(plan)">Get Started</a>
+            <h4>Features you will get:</h4>
+            <ul>
+              <li *ngFor="let feature of planFeatures(plan)">
+                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_222_5114)">
+                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
+                      width="20" height="20">
+                      <path
+                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
+                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    </mask>
+                    <g mask="url(#mask0_222_5114)">
+                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
+                    </g>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_222_5114">
+                      <rect width="20" height="20" fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
+                {{ feature }}
               </li>
             </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="row mt-4">
-        <div class="col-lg-4 col-xxl-4">
-          <div class="ct_free_plan ct_pricing_card p-3">
-
-            <h4 class="ct_fs_18 ct_fw_600 mb-1">You're on <span class="text-capitalize">{{ subscriptionPlan.planName
-                }}</span> Plan </h4>
-            <p class="mb-0 ct_fs_14">Upgrade anytime <small  *ngIf="subscriptionPlan.next_charge_date" class="ct_grey_text ct_fs_14">valid until {{subscriptionPlan.next_charge_date | date}}</small>  </p>
-            <button class="ct_btn_dark mt-3 ct_border_radius_10 py-2" routerLink="/my-plan">Manage</button>
-          </div>
-        </div>
-      </div>
-      <div class="row mt-0 justify-content-center">
-        <!-- <div class="col-lg-3 col-xxl-3 mt-lg-3 mt-5">
-          <div
-            class="ct_pricing_card"
-            [class.ct_active]="selectedPlan() === 'free'"
-            (click)="selectPlan('free')"
-          >
-            <div>
-              <h6>Free</h6>
-              <div class="ct_price mb-1">
-                $ 0
-              </div>
-              <p class="mb-2 ct_grey_text">
-                For basic usage and getting started
-              </p>
-
-              <div class="ct_features_title">What`s included :</div>
-              <ul class="ct_features">
-                <li class="">
-                  <i class="fa-solid fa-circle-check"></i> Website
-                </li>
-                <li>
-                  <i class="fa-solid fa-circle-check"></i> 1 Project Build
-                </li>
-                <li>
-                  <i class="fa-solid fa-circle-check"></i> 3 Design Templates
-                </li>
-                <li>
-                  <i class="fa-solid fa-circle-check"></i> AI-assisted project
-                  creation
-                </li>
-              </ul>
-            </div>
-            <div class="mt-auto">
-            </div>
-          </div>
-        </div> -->
-        <div class="col-lg-4 col-xxl-4 mt-lg-3 mt-4">
-          <div class="position-relative h-100">
-
-            <div class="ct_pricing_card" [class.ct_active]="selectedPlan() === 'personal'"
-              (click)="selectPlan('personal')">
-              @if(subscriptionPlan.planType.includes('personal_monthly') && billingCycle() === 'MONTH' ||
-              subscriptionPlan.planType.includes('personal_yearly') && billingCycle() === 'YEAR'){
-              <div class="active-badge">Active</div>
-              }
-              <div>
-                <h6>Personal</h6>
-                <div class="ct_price mb-1">
-                  ${{ allPlans[0].display_amount
-                  }}<span> per month billed {{ billingCycle() == 'MONTH' ? 'monthly' : 'yearly' }}</span>
-                </div>
-                <p class="mb-2 ct_grey_text">
-                  Perfect for individuals to build, launch, and manage a single project with essential tools.
-                </p>
-
-
-                <div class="ct_features_title">What`s included :</div>
-                <ul class="ct_features">
-                  <li class="">
-                    <i class="fa-solid fa-circle-check"></i> Website
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> 1 Project Build
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> 5 Design Templates
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> AI-assisted project
-                    creation
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i>Custom Domain Support
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> Deploy to Creative AI server
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> Email & Chat Support
-                    (Standard SLA)
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> Upgrade anytime as
-                    your needs grow
-                  </li>
-                </ul>
-              </div>
-              <div class="mt-auto">
-                @if(!subscriptionPlan.planType.includes('personal_monthly') && billingCycle() === 'MONTH' ||
-                !subscriptionPlan.planType.includes('personal_yearly') && billingCycle() === 'YEAR'){
-                <button class="ct_btn ct_btn_dark" (click)="getStarted('personal', allPlans[0])">
-                  Get Started
-                </button>
-                }
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Business -->
-        <div class="col-lg-4 col-xxl-4 mt-lg-3 mt-5">
-          <div class="position-relative h-100">
-            <span class="ct_badge">Most popular</span>
-            <div class="ct_pricing_card" [class.ct_active]="selectedPlan() === 'creative'"
-              (click)="selectPlan('creative')">
-              @if(subscriptionPlan.planType.includes('creative_monthly') && billingCycle() === 'MONTH' ||
-              subscriptionPlan.planType.includes('creative_yearly') && billingCycle() === 'YEAR'){
-              <div class="active-badge">Active</div>
-              }
-              <div>
-                <h6>Creative</h6>
-                <div class="ct_price mb-1">
-                  ${{ allPlans[1].display_amount
-                  }}<span> per month billed {{ billingCycle() == 'MONTH' ? 'monthly' : 'yearly' }} </span>
-                </div>
-                <p class="mb-2 ct_grey_text">
-                  Built for creators and teams to design, customize, and scale high-impact projects.
-                </p>
-
-
-                <div class="ct_features_title">What`s included :</div>
-                <ul class="ct_features">
-                  <li class="">
-                    <i class="fa-solid fa-circle-check"></i>Website, Android App, and iOS App development
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i>2 Project Builds
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i>10 Design
-                    Templates
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> AI-Assisted Project
-                    Creation
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i>Private Projects
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i>Custom Domain Support
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> Deploy to Your Own
-                    Server
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> Production-ready Code
-                    Download
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> 24×7 Call Support
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> 2 Additional
-                    Customized Features per Month
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> Upgrade anytime as
-                    your needs grow
-                  </li>
-                </ul>
-              </div>
-
-              <div class="mt-auto">
-                @if(!subscriptionPlan.planType.includes('creative_monthly') &&
-                !subscriptionPlan.planType.includes('creative_yearly')){
-                <button class="ct_btn ct_btn_dark" (click)="getStarted('creative', allPlans[1])">
-                  Get Started
-                </button>
-                }
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-xxl-4 mt-lg-3 mt-5">
-          <div class="position-relative h-100">
-            <div class="ct_pricing_card" [class.ct_active]="selectedPlan() === 'booster'"
-              (click)="selectPlan('booster')">
-              <div>
-                <h6>Enterprise</h6>
-                <div class="ct_price mb-1">
-                  Custom
-                  <span></span>
-                </div>
-                <p class="mb-2 ct_grey_text">
-                  Built for enterprise scale with flexible pricing, advanced customization, and long-term growth in
-                  mind.
-                </p>
-                <div class="ct_features_title">What`s included :</div>
-                <ul class="ct_features">
-                  <li class="">
-                    <i class="fa-solid fa-circle-check"></i>Website, Android App, and iOS App development
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i>Unlimited scalable projects across teams
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i>Advanced customization & enterprise-grade architecture
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i>Centralized design systems & brand consistency
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i>Private & secure projects
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i>Custom domain & enterprise hosting support
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> Deploy to your own infrastructure or cloud
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> Production-ready, maintainable codebase
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> 24×7 priority call & SLA-based support
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> 2 Additional
-                    Customized Features per Month
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-circle-check"></i> Flexible upgrades as your organization grows
-                  </li>
-                </ul>
-              </div>
-
-              <div class="mt-auto">
-                <button class="ct_btn ct_btn_dark" (click)="openCalednlyModal()">
-                  Book a demo
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 <!-- MODAL -->
 <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5)"
   *ngIf="billingSummaryModalOpen">

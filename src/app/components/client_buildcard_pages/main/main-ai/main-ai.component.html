@@ -7,9 +7,7 @@
       </a>
 
       @for (project of allProjectsList; track project.inquiryId) {
-      <button
-        type="button"
-        class="main-ai-topbar__tab"
+      <button type="button" class="main-ai-topbar__tab"
         [class.main-ai-topbar__tab--active]="project.inquiryId === selectedProjectId"
         (click)="selectProjectTab(project)">
         @if(project.inquiryId === selectedProjectId) {
@@ -30,7 +28,7 @@
     </div>
 
     <div class="main-ai-topbar__right" style="padding-bottom: 6px;">
-      <button type="button" class="main-ai-topbar__credits">Upgrade</button>
+      <button type="button" class="main-ai-topbar__credits" (click)="showModal = true">Upgrade</button>
 
       <div class="main-ai-topbar__utility-group" #profileMenu>
         <!-- <button type="button" class="main-ai-topbar__icon" aria-label="Notifications">
@@ -39,12 +37,8 @@
         <button type="button" class="main-ai-topbar__icon" aria-label="Workspace">
           <i class="fa-solid fa-gift"></i>
         </button> -->
-        <button
-          type="button"
-          class="main-ai-topbar__avatar"
-          aria-label="Open profile menu"
-          [class.main-ai-topbar__avatar--active]="isProfileMenuOpen"
-          (click)="toggleProfileMenu($event)">
+        <button type="button" class="main-ai-topbar__avatar" aria-label="Open profile menu"
+          [class.main-ai-topbar__avatar--active]="isProfileMenuOpen" (click)="toggleProfileMenu($event)">
           @if (profileImageUrl) {
           <img [src]="profileImageUrl" [alt]="userName">
           } @else {
@@ -76,19 +70,20 @@
           </div>
 
           <div class="main-ai-profile-menu__credits-card">
-            <div class="main-ai-profile-menu__credits-row">
+            <!-- <div class="main-ai-profile-menu__credits-row">
               <span>Credits <i class="fa-regular fa-circle-question"></i></span>
               <strong><i class="fa-solid fa-circle-chevron-right"></i> -1.40</strong>
-            </div>
-            <button type="button" class="main-ai-profile-menu__upgrade">Upgrade <span>✦</span></button>
+            </div> -->
+            <button type="button" class="main-ai-profile-menu__upgrade" (click)="showModal = true">Upgrade
+              <span>✦</span></button>
           </div>
 
           <div class="main-ai-profile-menu__actions">
-            <button type="button" class="main-ai-profile-menu__action">
+            <button type="button" class="main-ai-profile-menu__action" routerLink="/dashboard">
               <i class="fa-regular fa-user"></i>
               <span class="ct_fs_14">Account Projects</span>
             </button>
-            <button type="button" class="main-ai-profile-menu__action">
+            <button type="button" class="main-ai-profile-menu__action" routerLink="/my-plan">
               <i class="fa-solid fa-globe"></i>
               <span class="ct_fs_14">My Plans</span>
             </button>
@@ -102,7 +97,7 @@
               <span>Community</span>
               <i class="fa-solid fa-arrow-up-right-from-square"></i>
             </button> -->
-            <button type="button" class="main-ai-profile-menu__action">
+            <button type="button" class="main-ai-profile-menu__action" routerLink="/profile">
               <i class="fa-regular fa-user"></i>
               <span class="ct_fs_14">My Profile</span>
               <i class="fa-solid fa-arrow-up-right-from-square"></i>
@@ -115,7 +110,7 @@
               <span class="ct_fs_14">Logout</span>
             </button>
 
-         
+
           </div>
         </div>
         }
@@ -123,9 +118,8 @@
     </div>
   </div>
 
-  <div class="main-ai-theme-shell py-0 d-flex align-items-center justify-content-center"
-    style="height: auto; ">
-    
+  <div class="main-ai-theme-shell py-0" style="height: auto; ">
+
     <div class="ct_dash_toggle_bar">
       <i class="fa-solid fa-bars"></i>
     </div>
@@ -136,15 +130,13 @@
         <h1 class="main-ai-heading">What do you want to build today?</h1>
         <p class="main-ai-subheading">Describe your idea and let AI turn it into a real product in seconds.</p>
 
-      
+
         <div class="main-ai-composer">
-          <textarea #promptInput class="main-ai-prompt-input" rows="5"
-            [attr.placeholder]="activePlaceholder"
-            [(ngModel)]="promptText"
-            (keydown)="handlePromptKeydown($event)"></textarea>
+          <textarea #promptInput class="main-ai-prompt-input" rows="5" [attr.placeholder]="activePlaceholder"
+            [(ngModel)]="promptText" (keydown)="handlePromptKeydown($event)"></textarea>
 
           <div class="main-ai-composer-footer">
-            <div class="main-ai-platform-switch">
+            <!-- <div class="main-ai-platform-switch">
               <button type="button" class="main-ai-platform-pill main-ai-platform-pill--active">
                 <i class="fa-solid fa-mobile-screen-button"></i>
                 <span>App</span>
@@ -153,7 +145,7 @@
                 <i class="fa-solid fa-desktop"></i>
                 <span>Web</span>
               </button>
-            </div>
+            </div> -->
 
             <div class="main-ai-right-actions">
               <button type="button" class="main-ai-submit-btn" aria-label="Continue" (click)="submitPrompt()">
@@ -169,3 +161,5 @@
     }
   </div>
 </div>
+
+<app-subcription-page [subscriptionModalOpen]="showModal" (close)="closeModal()"></app-subcription-page>

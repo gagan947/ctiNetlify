@@ -3,8 +3,8 @@ import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, 
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MainAiChatbotComponent } from '../main-ai-chatbot/main-ai-chatbot.component';
-import { SidebarComponent } from "../../sidebar/sidebar.component";
 import { ApiService } from '../../../../services/api.service';
+import { SubcriptionPageComponent } from "../../subcription-page/subcription-page.component";
 
 interface UserProjectTab {
   inquiryId: string;
@@ -26,7 +26,7 @@ interface UserProfileSummary {
 @Component({
   selector: 'app-main-ai',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, MainAiChatbotComponent],
+  imports: [CommonModule, FormsModule, RouterLink, MainAiChatbotComponent, SubcriptionPageComponent],
   templateUrl: './main-ai.component.html',
   styleUrl: './main-ai.component.css'
 })
@@ -61,8 +61,8 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   profileImage = '';
   private placeholderTimer: ReturnType<typeof setTimeout> | null = null;
   private activePlaceholderIndex = 0;
-
-  constructor(private apiService: ApiService,private router: Router) { }
+  showModal: boolean = false;
+  constructor(private apiService: ApiService, private router: Router) { }
 
   ngOnInit(): void {
     this.loadUserSummary();
@@ -213,7 +213,11 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-   LogOut() {
+  closeModal() {
+    this.showModal = false;
+  }
+
+  LogOut() {
     localStorage.clear()
     this.router.navigate(['/'])
   }

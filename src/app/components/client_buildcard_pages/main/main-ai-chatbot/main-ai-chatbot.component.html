@@ -1,40 +1,72 @@
-<div class="main-ai-chat-shell container-fluid d-flex justify-content-center align-items-start">
+<div class="main-ai-chat-shell ">
   <div class="main-ai-chat-card w-100">
     <div #chatScroll class="main-ai-chat-scroll">
       @for(message of chatMessages; track $index){
       <div class="main-ai-thread-row" [class.is-user]="message.sender === 'user'"
         [class.is-ai]="message.sender === 'ai'">
-        <div class="main-ai-thread-meta">{{ message.sender === 'user' ? 'You' : 'AI' }}</div>
-        <div class="main-ai-thread-text" [class.main-ai-ai-message]="message.sender === 'ai'"
-          [class.is-error]="message.variant === 'error'">
-          <div class="main-ai-thread-content">
-            @for(line of formatMessage(message.text); track $index) {
+        @if(message.sender === 'ai') {
+        <div class="main-ai-thread-avatar" aria-hidden="true">
+          <span></span>
+        </div>
+        }
+
+        <div class="main-ai-thread-stack">
+          <!-- @if(message.sender === 'user') {
+          <div class="main-ai-thread-meta">You</div>
+          } -->
+
+          <div class="main-ai-thread-text" [class.main-ai-ai-message]="message.sender === 'ai'"
+            [class.is-error]="message.variant === 'error'">
+            <div class="main-ai-thread-content">
+              @for(line of formatMessage(message.text); track $index) {
               @if(line.type === 'text') {
-                <p class="text-line ct_fs_14">{{ line.text }}</p>
+              <p class="text-line ct_fs_14">{{ line.text }}</p>
               }
 
               @if(line.type === 'bullet') {
-                <div class="bullet-line">{{ line.text }}</div>
+              <div class="bullet-line">{{ line.text }}</div>
               }
-            }
+              }
+            </div>
           </div>
+
+          @if(message.sender === 'ai') {
+          <div class="main-ai-message-footer">
+            <!-- <div class="main-ai-message-actions">
+              <button type="button" class="main-ai-message-action" aria-label="Regenerate response">
+                <i class="fa-solid fa-rotate-right"></i>
+              </button>
+              <button type="button" class="main-ai-message-action" aria-label="Like response">
+                <i class="fa-regular fa-thumbs-up"></i>
+              </button>
+              <button type="button" class="main-ai-message-action" aria-label="Dislike response">
+                <i class="fa-regular fa-thumbs-down"></i>
+              </button>
+            </div>
+            <span class="main-ai-message-time">{{ formatMessageTime(message.createdAt) }}</span> -->
+          </div>
+          }
         </div>
       </div>
       }
 
       @if(currentLoaderText){
       <div class="main-ai-thread-row is-ai">
-        <div class="main-ai-thread-meta">AI</div>
-        <div class="main-ai-thread-loader">
-          <div class="main-ai-loader-copy">
-            <div class="main-ai-typing-dots">
-              <span></span>
-              <span></span>
-              <span></span>
+        <div class="main-ai-thread-avatar" aria-hidden="true">
+          <span></span>
+        </div>
+        <div class="main-ai-thread-stack">
+          <div class="main-ai-thread-loader">
+            <div class="main-ai-loader-copy">
+              <div class="main-ai-typing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <span class="main-ai-loader-status ct_fs_12" [class.is-visible]="!!currentLoaderText">
+                {{ currentLoaderText }}
+              </span>
             </div>
-            <span class="main-ai-loader-status ct_fs_12" [class.is-visible]="!!currentLoaderText">
-              {{ currentLoaderText }}
-            </span>
           </div>
         </div>
       </div>
@@ -42,16 +74,20 @@
 
       @if(showBuildProjectButton){
       <div class="main-ai-thread-row is-ai">
-        <div class="main-ai-thread-meta">Builder</div>
-        <div class="main-ai-build-cta">
-          <button type="button" class="main-ai-build-btn" [disabled]="isBuildActionLoading"
-            (click)="buildMatchedProject()">
-            {{ isBuildActionLoading ? 'Preparing your project...' : 'Build My Project' }}
-          </button>
-          <button type="button" class="main-ai-skip-btn" [disabled]="isBuildActionLoading"
-            (click)="skipBuildProject()">
-            Skip for now
-          </button>
+        <div class="main-ai-thread-avatar" aria-hidden="true">
+          <span></span>
+        </div>
+        <div class="main-ai-thread-stack">
+          <div class="main-ai-build-cta">
+            <button type="button" class="main-ai-build-btn" [disabled]="isBuildActionLoading"
+              (click)="buildMatchedProject()">
+              {{ isBuildActionLoading ? 'Preparing your project...' : 'Build My Project' }}
+            </button>
+            <button type="button" class="main-ai-skip-btn" [disabled]="isBuildActionLoading"
+              (click)="skipBuildProject()">
+              Skip for now
+            </button>
+          </div>
         </div>
       </div>
       }
@@ -59,12 +95,29 @@
 
     <div class="main-ai-chat-composer">
       <div class="main-ai-composer main-ai-chat-composer-box">
+
         <textarea #chatPromptInput class="main-ai-prompt-input main-ai-chat-input" rows="2"
           [attr.placeholder]="placeholderText" [(ngModel)]="promptText"
           (keydown)="handlePromptKeydown($event)"></textarea>
 
         <div class="main-ai-composer-footer">
+          <div class="main-ai-left-actions">
+            <button type="button" class="main-ai-chip-btn" aria-label="Attach files">
+              <i class="fa-solid fa-paperclip"></i>
+            </button>
+            <button type="button" class="main-ai-chip-btn main-ai-chip-btn-label" aria-label="GitHub integration">
+              <i class="fa-brands fa-github"></i>
+              <span>Github</span>
+            </button>
+          </div>
+
           <div class="main-ai-right-actions">
+            <button type="button" class="main-ai-voice-btn" aria-label="Voice input">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
             <button type="button" class="main-ai-submit-btn" aria-label="Send message" [disabled]="isSubmitting"
               (click)="submitPrompt()">
               <i class="fa-solid fa-arrow-up"></i>
