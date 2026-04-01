@@ -342,34 +342,6 @@ $(document).ready(function () {
   //   },
   // });
 
-  function initSwipers() {
-    new Swiper(".ct_home_slider_main", {
-      loop: true,
-      speed: 1000,
-      autoplay: false,
-
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-    });
-
-    new Swiper(".ct_home_slider_inner", {
-      loop: true,
-      slidesPerView: "auto",
-      spaceBetween: 10,
-      autoplay: {
-        delay: 0,
-      },
-      speed: 4000,
-      freeMode: true,
-    });
-  }
   // $(".ct_home_slider_main").owlCarousel({
   //   loop: true,
   //   margin: 20,
@@ -418,11 +390,6 @@ $(document).ready(function () {
   // });
   // Trusted Brand Slider E
   $(window).on("load", function () {
-    if (window.requestAnimationFrame) {
-      window.requestAnimationFrame(initSwipers);
-    } else {
-      setTimeout(initSwipers, 0);
-    }
     AOS.init();
     $(".ct_loader_main").fadeOut("slow");
   });

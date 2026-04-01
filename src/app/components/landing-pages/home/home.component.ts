@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -8,6 +8,7 @@ import { FooterComponent } from '../../shared/footer/footer.component';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { NzMessageService } from 'ng-zorro-antd/message';
 declare const google: any;
+declare const Swiper: any;
 
 type BillingCycle = 'MONTH' | 'YEAR';
 
@@ -172,11 +173,15 @@ const HOME_PLAN_FALLBACK: Plan[] = [
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('homeMainSwiper') homeMainSwiper?: ElementRef<HTMLElement>;
+  @ViewChild('homeInnerSwiper') homeInnerSwiper?: ElementRef<HTMLElement>;
   location: UserLocation | null = null;
   error: string | null = null;
   allPlans: Plan[] = [];
   billingCycle: BillingCycle = 'MONTH';
+  private mainSwiperInstance: any;
+  private innerSwiperInstance: any;
   private currencySymbolMap: Record<string, string> = {
     INR: '\u20B9',
     USD: '$',
@@ -208,8 +213,24 @@ export class HomeComponent {
 
     google.accounts.id.renderButton(
       document.getElementById('googleSignInDiv'),
-      { theme: 'filled_blue', size: 'large' }
+      {
+        theme: 'outline',
+        size: 'large',
+        type: 'standard',
+        shape: 'pill',
+        text: 'continue_with',
+        logo_alignment: 'left',
+        width: 496
+      }
     );
+  }
+
+  ngAfterViewInit(): void {
+    queueMicrotask(() => this.initializeSwipers());
+  }
+
+  ngOnDestroy(): void {
+    this.destroySwipers();
   }
 
   async fetchLocation() {
@@ -348,6 +369,58 @@ export class HomeComponent {
     }
 
     return plan.plan_type;
+  }
+
+  private initializeSwipers() {
+    if (typeof Swiper === 'undefined') {
+      return;
+    }
+
+    this.destroySwipers();
+
+    const mainSwiperElement = this.homeMainSwiper?.nativeElement;
+    const innerSwiperElement = this.homeInnerSwiper?.nativeElement;
+
+    if (mainSwiperElement) {
+      this.mainSwiperInstance = new Swiper(mainSwiperElement, {
+        loop: true,
+        speed: 1000,
+        autoplay: false,
+        navigation: {
+          nextEl: mainSwiperElement.querySelector('.swiper-button-next'),
+          prevEl: mainSwiperElement.querySelector('.swiper-button-prev')
+        },
+        pagination: {
+          el: mainSwiperElement.querySelector('.swiper-pagination'),
+          clickable: true
+        }
+      });
+    }
+
+    if (innerSwiperElement) {
+      this.innerSwiperInstance = new Swiper(innerSwiperElement, {
+        loop: true,
+        slidesPerView: 'auto',
+        spaceBetween: 10,
+        autoplay: {
+          delay: 0
+        },
+        speed: 4000,
+        freeMode: true
+      });
+    }
+  }
+
+  private destroySwipers() {
+    if (this.mainSwiperInstance?.destroy) {
+      this.mainSwiperInstance.destroy(true, true);
+      this.mainSwiperInstance = null;
+    }
+
+    if (this.innerSwiperInstance?.destroy) {
+      this.innerSwiperInstance.destroy(true, true);
+      this.innerSwiperInstance = null;
+    }
   }
 
   private sortPlans(plans: Plan[]): Plan[] {

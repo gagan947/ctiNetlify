@@ -65,28 +65,8 @@
                 </button>
               </div> -->
 
-              <!-- <button type="button" class="ct_prompt_google_btn">
-                <span><svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path opacity="0.987" fill-rule="evenodd" clip-rule="evenodd"
-                      d="M10.3635 1.52519C11.4057 1.40876 12.0223 1.40876 13.1422 1.52519C15.1244 1.81858 16.9619 2.73483 18.389 4.14144C17.4246 5.05301 16.4729 5.97789 15.5342 6.91582C13.7363 5.39207 11.7296 5.04036 9.51391 5.86069C7.88857 6.60819 6.75678 7.81953 6.11853 9.49469C5.07554 8.7182 4.04613 7.92362 3.03078 7.11132C2.96022 7.07418 2.87963 7.06058 2.80078 7.07251C4.41366 3.96271 6.93407 2.11313 10.362 1.52376"
-                      fill="#F44336" />
-                    <path opacity="0.997" fill-rule="evenodd" clip-rule="evenodd"
-                      d="M2.79774 7.07245C2.8792 7.06 2.95634 7.07293 3.02918 7.11127C4.04453 7.92357 5.07393 8.71815 6.11693 9.49464C5.9528 10.1474 5.84934 10.8138 5.80786 11.4856C5.84332 12.1353 5.94634 12.7731 6.11693 13.3989L2.87536 15.9792C1.46374 13.0295 1.43786 10.0605 2.79774 7.07245Z"
-                      fill="#FFC107" />
-                    <path opacity="0.999" fill-rule="evenodd" clip-rule="evenodd"
-                      d="M18.2351 19.1044C17.2258 18.2143 16.1691 17.3793 15.0697 16.6032C16.1718 15.825 16.8407 14.7574 17.0765 13.4004H11.6758V9.64999C14.7904 9.62412 17.9035 9.65047 21.0152 9.72906C21.6056 12.9347 20.9237 15.825 18.9697 18.4001C18.7373 18.6471 18.4912 18.8821 18.2351 19.1044Z"
-                      fill="#448AFF" />
-                    <path opacity="0.993" fill-rule="evenodd" clip-rule="evenodd"
-                      d="M6.11656 13.4004C7.29531 16.33 9.45635 17.6976 12.5997 17.503C13.4821 17.4009 14.3281 17.0926 15.0693 16.6031C16.1695 17.3813 17.2246 18.2151 18.2347 19.1044C16.6342 20.5425 14.5937 21.3959 12.4459 21.5251C11.9579 21.5642 11.4676 21.5642 10.9796 21.5251C7.32071 21.0939 4.61917 19.2453 2.875 15.9793L6.11656 13.4004Z"
-                      fill="#43A047" />
-                  </svg>
-                </span>
-                Continue with Google
-              </button> -->
               <div class="ct_mt_18">
-                <a id="googleSignInDiv" class="position-relative">
-
-                </a>
+                <div id="googleSignInDiv" class="google-btn"></div>
               </div>
               <p class="ct_prompt_terms">
                 <span class="d-block">By continuing, you agree to our</span>
@@ -100,7 +80,7 @@
 
 
           <div class="col-lg-7 mb-4 mb-lg-0">
-            <div class="swiper ct_home_slider_main">
+            <div #homeMainSwiper class="swiper ct_home_slider_main">
               <div class="swiper-wrapper">
 
                 <!-- Slide 1 -->
@@ -120,7 +100,7 @@
                     </h4>
 
                     <!-- Inner Swiper -->
-                    <div class="swiper ct_home_slider_inner">
+                    <div #homeInnerSwiper class="swiper ct_home_slider_inner">
                       <div class="swiper-wrapper">
                         <div class="swiper-slide">
                           <div class="ct_inner_home_slider_img">
