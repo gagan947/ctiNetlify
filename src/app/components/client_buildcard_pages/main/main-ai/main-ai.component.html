@@ -1,50 +1,162 @@
-<section class="ct_dash_board_main main-ai-page" style="display: block !important">
-  <app-sidebar></app-sidebar>
+<div class="main-ai-page-shell">
+  <div class="main-ai-topbar" role="banner">
+    <div class="main-ai-topbar__left">
+      <a class="main-ai-topbar__home" routerLink="/dashboard">
+        <i class="fa-solid fa-table-cells-large"></i>
+        <span>Home</span>
+      </a>
 
-  <div class="ct_dash_right_content main-ai-theme-shell"
-    style="background: linear-gradient(90deg, rgb(250 218 188 / 44%), rgb(234 170 213 / 36%), rgb(220 229 244 / 69%)); height: auto; min-height: 100vh;">
+      @for (project of allProjectsList; track project.inquiryId) {
+      <button
+        type="button"
+        class="main-ai-topbar__tab"
+        [class.main-ai-topbar__tab--active]="project.inquiryId === selectedProjectId"
+        (click)="selectProjectTab(project)">
+        @if(project.inquiryId === selectedProjectId) {
+        <span class="main-ai-topbar__tab-dot-wrap">
+          <span class="main-ai-topbar__tab-dot"></span>
+        </span>
+        }
+        <span class="main-ai-topbar__tab-label">{{ project.projectName }}</span>
+        <span class="main-ai-topbar__tab-close" aria-hidden="true">
+          <i class="fa-solid fa-xmark"></i>
+        </span>
+      </button>
+      }
+
+      <button type="button" class="main-ai-topbar__add" aria-label="Add tab">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+    </div>
+
+    <div class="main-ai-topbar__right" style="padding-bottom: 6px;">
+      <button type="button" class="main-ai-topbar__credits">Upgrade</button>
+
+      <div class="main-ai-topbar__utility-group" #profileMenu>
+        <!-- <button type="button" class="main-ai-topbar__icon" aria-label="Notifications">
+          <i class="fa-solid fa-bell"></i>
+        </button>
+        <button type="button" class="main-ai-topbar__icon" aria-label="Workspace">
+          <i class="fa-solid fa-gift"></i>
+        </button> -->
+        <button
+          type="button"
+          class="main-ai-topbar__avatar"
+          aria-label="Open profile menu"
+          [class.main-ai-topbar__avatar--active]="isProfileMenuOpen"
+          (click)="toggleProfileMenu($event)">
+          @if (profileImageUrl) {
+          <img [src]="profileImageUrl" [alt]="userName">
+          } @else {
+          {{ avatarInitial }}
+          }
+        </button>
+
+        @if (isProfileMenuOpen) {
+        <div class="main-ai-profile-menu">
+          <div class="main-ai-profile-menu__email">{{ userEmail }}</div>
+
+          <div class="main-ai-profile-menu__workspace">
+            <div class="main-ai-profile-menu__workspace-left">
+              <div class="main-ai-profile-menu__workspace-avatar">
+                @if (profileImageUrl) {
+                <img [src]="profileImageUrl" [alt]="userName">
+                } @else {
+                <span>{{ avatarInitial }}</span>
+                }
+              </div>
+              <div>
+                <h4 class="text-white ct_fs_14">{{ companyName }}</h4>
+                <p>Owner • 1 member</p>
+              </div>
+            </div>
+            <button type="button" class="main-ai-profile-menu__swap" aria-label="Switch workspace">
+              <i class="fa-solid fa-right-left"></i>
+            </button>
+          </div>
+
+          <div class="main-ai-profile-menu__credits-card">
+            <div class="main-ai-profile-menu__credits-row">
+              <span>Credits <i class="fa-regular fa-circle-question"></i></span>
+              <strong><i class="fa-solid fa-circle-chevron-right"></i> -1.40</strong>
+            </div>
+            <button type="button" class="main-ai-profile-menu__upgrade">Upgrade <span>✦</span></button>
+          </div>
+
+          <div class="main-ai-profile-menu__actions">
+            <button type="button" class="main-ai-profile-menu__action">
+              <i class="fa-regular fa-user"></i>
+              <span class="ct_fs_14">Account Projects</span>
+            </button>
+            <button type="button" class="main-ai-profile-menu__action">
+              <i class="fa-solid fa-globe"></i>
+              <span class="ct_fs_14">My Plans</span>
+            </button>
+            <!-- <button type="button" class="main-ai-profile-menu__action">
+              <i class="fa-brands fa-github"></i>
+              <span>Connect to Github</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </button> -->
+            <!-- <button type="button" class="main-ai-profile-menu__action">
+              <i class="fa-brands fa-discord"></i>
+              <span>Community</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </button> -->
+            <button type="button" class="main-ai-profile-menu__action">
+              <i class="fa-regular fa-user"></i>
+              <span class="ct_fs_14">My Profile</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </button>
+          </div>
+
+          <div class="main-ai-profile-menu__footer">
+            <button type="button" class="main-ai-profile-menu__logout" (click)="LogOut()">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+              <span class="ct_fs_14">Logout</span>
+            </button>
+
+         
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="main-ai-theme-shell py-0 d-flex align-items-center justify-content-center"
+    style="height: auto; ">
+    
     <div class="ct_dash_toggle_bar">
       <i class="fa-solid fa-bars"></i>
     </div>
 
+    @if(!isChatMode){
     <div class="main-ai-wrap">
       <div class="main-ai-stage">
-        <a class="main-ai-badge" href="javascript:void(0)">
-          <span class="main-ai-badge-pill">New</span>
-          <span>Building beyond apps</span>
-          <i class="fa-solid fa-arrow-right"></i>
-        </a>
+        <h1 class="main-ai-heading">What do you want to build today?</h1>
+        <p class="main-ai-subheading">Describe your idea and let AI turn it into a real product in seconds.</p>
 
-        <h1 class="main-ai-heading">Ready to build, Mohd?</h1>
-        <p class="main-ai-subheading">Describe the product idea once. Submit will call the backend and show the result in a clean full-screen overlay.</p>
-
+      
         <div class="main-ai-composer">
-          <div class="main-ai-chip-row">
-            @for (idea of promptIdeas; track idea) {
-            <button type="button" class="main-ai-chip" (click)="promptText = idea">
-              {{ idea }}
-            </button>
-            }
-          </div>
-
-          <textarea #promptInput class="main-ai-prompt-input" rows="4"
+          <textarea #promptInput class="main-ai-prompt-input" rows="5"
             [attr.placeholder]="activePlaceholder"
             [(ngModel)]="promptText"
             (keydown)="handlePromptKeydown($event)"></textarea>
 
           <div class="main-ai-composer-footer">
-            <button type="button" class="main-ai-icon-btn main-ai-plus-btn" aria-label="Add context">
-              <i class="fa-solid fa-plus"></i>
-            </button>
+            <div class="main-ai-platform-switch">
+              <button type="button" class="main-ai-platform-pill main-ai-platform-pill--active">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+                <span>App</span>
+              </button>
+              <button type="button" class="main-ai-platform-pill">
+                <i class="fa-solid fa-desktop"></i>
+                <span>Web</span>
+              </button>
+            </div>
 
             <div class="main-ai-right-actions">
-              <button type="button" class="main-ai-icon-btn" aria-label="Open chat options">
-                <i class="fa-regular fa-message"></i>
-              </button>
-              <button type="button" class="main-ai-icon-btn" aria-label="Voice input">
-                <i class="fa-solid fa-microphone"></i>
-              </button>
-              <button type="button" class="main-ai-submit-btn" aria-label="Continue" [disabled]="isSubmitting" (click)="submitPrompt()">
+              <button type="button" class="main-ai-submit-btn" aria-label="Continue" (click)="submitPrompt()">
                 <i class="fa-solid fa-arrow-up"></i>
               </button>
             </div>
@@ -52,59 +164,8 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-@if(isOverlayOpen){
-<div class="main-ai-overlay" [class.is-loading]="overlayState === 'loading'" (click)="closeOverlay()">
-  <div class="main-ai-overlay-layer" (click)="$event.stopPropagation()">
-    @if(overlayState !== 'loading'){
-    <button type="button" class="main-ai-close-btn" aria-label="Close overlay" (click)="closeOverlay()">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
+    } @else {
+    <app-main-ai-chatbot [initialPrompt]="submittedPrompt"></app-main-ai-chatbot>
     }
-
-    <div class="main-ai-overlay-content">
-      <div class="main-ai-overlay-head">
-        <div>
-          <span class="main-ai-overlay-kicker">AI Build Review</span>
-          <h2>Prompt understanding</h2>
-        </div>
-      </div>
-
-      <div class="main-ai-overlay-thread">
-        <div class="main-ai-thread-row is-user">
-          <div class="main-ai-thread-meta">You</div>
-          <p class="main-ai-thread-text">{{ submittedPrompt }}</p>
-        </div>
-
-        <div class="main-ai-thread-row is-ai">
-          <div class="main-ai-thread-meta">AI</div>
-          @if(overlayState === 'loading'){
-          <div class="main-ai-thread-loader">
-            <div class="main-ai-loading-orb"></div>
-            <div class="main-ai-loader-copy">
-              <strong>{{ currentLoaderText }}</strong>
-              <div class="main-ai-typing-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-            <div class="main-ai-loading-bar"></div>
-          </div>
-          } @else {
-          <p class="main-ai-thread-text main-ai-ai-message" [class.is-error]="overlayState === 'error'">{{ aiResponseMessage }}</p>
-          }
-        </div>
-      </div>
-
-      @if(overlayState === 'error'){
-      <div class="main-ai-overlay-actions">
-        <button type="button" class="main-ai-secondary-btn" (click)="focusPrompt()">Edit prompt</button>
-      </div>
-      }
-    </div>
   </div>
 </div>
-}
