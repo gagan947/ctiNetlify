@@ -1,20 +1,29 @@
 export interface SubscriptionResponse {
   success: boolean;
+  access?: boolean;
   allowProjectCreate: boolean;
   message: string;
-  planType: string;           
+  planType: string;
   planName: string;
   projectCount: number;
   projectLimit: number;
+  variationLimit?: number;
+  canDeploy?: number;
+  supportType?: string;
+  githubIntegration?: number;
+  customFeatures?: number;
+  canDelete?: number;
+  paymentStatus?: string;
   template_limit: number;
   subscription: SubscriptionData | null;
   activePaymentMethod: paymentMethod | null;
   billingInterval: string;
   pricingPlan: string;
-  next_charge_date : string;
-  start_date : string;
-  subscriptionStatus : string;
-
+  discountPercent?: number;
+  isIntro?: number;
+  next_charge_date: string;
+  start_date: string;
+  subscriptionStatus: string;
 }
 
 
@@ -31,12 +40,11 @@ export interface SubscriptionData {
   updated_at: string;
 }
 export interface paymentMethod {
-type : string;
-card : string;
-bank : string;
-card_number: string;
-country: string;
-network: string;
-upi_id: string;
-
+  type: string;
+  card?: string;
+  bank?: string;
+  card_number?: string;
+  country?: string;
+  network?: string;
+  upi_id?: string;
 }

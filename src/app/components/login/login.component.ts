@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
@@ -9,7 +9,6 @@ import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-
 import { NzInputOtpComponent } from 'ng-zorro-antd/input';
 import { NzFlexDirective } from 'ng-zorro-antd/flex';
 import { GoogleAuthService } from '../../services/google-auth.service';
-declare const google: any;
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -17,7 +16,8 @@ declare const google: any;
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
+  @ViewChild('googleSignInDiv') googleSignInDiv?: ElementRef<HTMLElement>;
   loginForm: FormGroup;
   showPassword: boolean = false;
   isLoading = false
@@ -67,27 +67,15 @@ export class LoginComponent {
   }
 
   initGoogleAuth() {
-    google.accounts.id.initialize({
-      client_id: '994120717709-6hec26klmpd1h9eif5vcahincbbn2m1u.apps.googleusercontent.com',
-      callback: (response: any) => this.handleCredentialResponse(response),
-      ux_mode: 'popup',
-      auto_select: false,
-      cancel_on_tap_outside: true
-    });
-
+    this.googleAuth.setCredentialHandler((response: any) => this.handleCredentialResponse(response));
     this.renderGoogleButton();
   }
 
   renderGoogleButton() {
-    const buttonDiv = document.getElementById('googleSignInDiv');
-    if (buttonDiv) {
-      buttonDiv.innerHTML = ''; // clear any duplicate render
-      google.accounts.id.renderButton(buttonDiv, {
-        theme: 'filled_blue',
-        size: 'large',
-
-      });
-    }
+    this.googleAuth.renderButton(this.googleSignInDiv?.nativeElement ?? null, {
+      theme: 'filled_blue',
+      size: 'large',
+    });
   }
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;

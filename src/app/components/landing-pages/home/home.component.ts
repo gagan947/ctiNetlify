@@ -1,14 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { LocationService, UserLocation } from '../../../services/location.service';
+import { GoogleAuthService } from '../../../services/google-auth.service';
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { NzMessageService } from 'ng-zorro-antd/message';
-declare const google: any;
+
 declare const Swiper: any;
+declare var FB: any;
+declare const AppleID: any;
 
 type BillingCycle = 'MONTH' | 'YEAR';
 
@@ -24,147 +27,24 @@ interface Plan {
   billing_interval: BillingCycle;
   project_limit: number;
   template_limit: number;
-  created_at: string;
-  plan_type: 'FREE' | 'PRO' | 'BUSINESS' | string;
   variation_limit: number;
-  can_deploy: number;
   support_type: 'NONE' | 'CHAT' | 'PRIORITY' | string;
   github_integration: number;
   custom_features: number;
-  is_active: number;
-  test_mode: number;
-  can_delete: number;
-  has_intro_offer: number;
-  intro_amount: string;
+  can_deploy?: number;
+  plan_type: 'FREE' | 'PRO' | 'BUSINESS' | string;
+  has_intro_offer?: number;
+  intro_amount?: string | number;
+  discount_percent?: number;
 }
 
-const HOME_PLAN_FALLBACK: Plan[] = [
-  {
-    id: 11,
-    plan_key: 'free_plan',
-    plan_name: 'Free Plan',
-    cashfree_plan_id: '',
-    amount: 0,
-    currency: 'INR',
-    display_amount: '0.00',
-    display_currency: 'INR',
-    billing_interval: 'MONTH',
-    project_limit: 1,
-    template_limit: 1,
-    created_at: '2026-03-31T12:27:18.000Z',
-    plan_type: 'FREE',
-    variation_limit: 1,
-    can_deploy: 0,
-    support_type: 'NONE',
-    github_integration: 0,
-    custom_features: 0,
-    is_active: 1,
-    test_mode: 0,
-    can_delete: 0,
-    has_intro_offer: 0,
-    intro_amount: '0.00'
-  },
-  {
-    id: 7,
-    plan_key: 'pro_monthly',
-    plan_name: 'Pro Monthly',
-    cashfree_plan_id: 'cti_test_pro_monthly',
-    amount: 2999,
-    currency: 'INR',
-    display_amount: '2999.00',
-    display_currency: 'INR',
-    billing_interval: 'MONTH',
-    project_limit: 2,
-    template_limit: 5,
-    created_at: '2026-03-31T12:27:18.000Z',
-    plan_type: 'PRO',
-    variation_limit: 2,
-    can_deploy: 1,
-    support_type: 'CHAT',
-    github_integration: 0,
-    custom_features: 0,
-    is_active: 1,
-    test_mode: 0,
-    can_delete: 1,
-    has_intro_offer: 1,
-    intro_amount: '199.00'
-  },
-  {
-    id: 8,
-    plan_key: 'business_monthly',
-    plan_name: 'Business Monthly',
-    cashfree_plan_id: 'cti_test_business_monthly',
-    amount: 9999,
-    currency: 'INR',
-    display_amount: '9999.00',
-    display_currency: 'INR',
-    billing_interval: 'MONTH',
-    project_limit: 5,
-    template_limit: 10,
-    created_at: '2026-03-31T12:27:18.000Z',
-    plan_type: 'BUSINESS',
-    variation_limit: 4,
-    can_deploy: 1,
-    support_type: 'PRIORITY',
-    github_integration: 1,
-    custom_features: 1,
-    is_active: 1,
-    test_mode: 0,
-    can_delete: 1,
-    has_intro_offer: 0,
-    intro_amount: '0.00'
-  },
-  {
-    id: 9,
-    plan_key: 'pro_yearly',
-    plan_name: 'Pro Yearly',
-    cashfree_plan_id: 'cti_test_pro_yearly',
-    amount: 35499,
-    currency: 'INR',
-    display_amount: '35499.00',
-    display_currency: 'INR',
-    billing_interval: 'YEAR',
-    project_limit: 2,
-    template_limit: 5,
-    created_at: '2026-03-31T12:27:18.000Z',
-    plan_type: 'PRO',
-    variation_limit: 2,
-    can_deploy: 1,
-    support_type: 'CHAT',
-    github_integration: 0,
-    custom_features: 0,
-    is_active: 1,
-    test_mode: 0,
-    can_delete: 1,
-    has_intro_offer: 0,
-    intro_amount: '0.00'
-  },
-  {
-    id: 10,
-    plan_key: 'business_yearly',
-    plan_name: 'Business Yearly',
-    cashfree_plan_id: 'cti_test_business_yearly',
-    amount: 118999,
-    currency: 'INR',
-    display_amount: '118999.00',
-    display_currency: 'INR',
-    billing_interval: 'YEAR',
-    project_limit: 5,
-    template_limit: 10,
-    created_at: '2026-03-31T12:27:18.000Z',
-    plan_type: 'BUSINESS',
-    variation_limit: 4,
-    can_deploy: 1,
-    support_type: 'PRIORITY',
-    github_integration: 1,
-    custom_features: 1,
-    is_active: 1,
-    test_mode: 0,
-    can_delete: 1,
-    has_intro_offer: 0,
-    intro_amount: '0.00'
-  }
-];
+interface PlansResponse {
+  data?: {
+    free?: Plan[];
+    pro?: Plan[];
+    business?: Plan[];
+  };
+}
 
 @Component({
   selector: 'app-home',
@@ -176,25 +56,26 @@ const HOME_PLAN_FALLBACK: Plan[] = [
 export class HomeComponent implements AfterViewInit, OnDestroy {
   @ViewChild('homeMainSwiper') homeMainSwiper?: ElementRef<HTMLElement>;
   @ViewChild('homeInnerSwiper') homeInnerSwiper?: ElementRef<HTMLElement>;
+
   location: UserLocation | null = null;
   error: string | null = null;
-  allPlans: Plan[] = [];
   billingCycle: BillingCycle = 'MONTH';
+  freePlans: Plan[] = [];
+  proPlans: Plan[] = [];
+  businessPlans: Plan[] = [];
+  selectedProPlan: Plan | null = null;
+  proDropdownOpen = false;
+
   private mainSwiperInstance: any;
   private innerSwiperInstance: any;
-  private currencySymbolMap: Record<string, string> = {
-    INR: '\u20B9',
-    USD: '$',
-    EUR: 'EUR ',
-    GBP: 'GBP '
-  };
 
   constructor(
     private meta: Meta,
     private locationService: LocationService,
     private service: ApiService,
     private message: NzMessageService,
-    private router: Router
+    private router: Router,
+    private googleAuth: GoogleAuthService
   ) {
     this.meta.updateTag({
       name: 'description',
@@ -204,33 +85,44 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getallPlans();
-    google.accounts.id.initialize({
-      client_id: '994120717709-6hec26klmpd1h9eif5vcahincbbn2m1u.apps.googleusercontent.com', // ← use from Cloud Console
-      callback: (response: any) => this.loginWithGoogle(response),
-      ux_mode: 'popup' // prevents redirect-based popups
+    this.loadPlans();
+    this.googleAuth.setCredentialHandler((response: any) => this.loginWithGoogle(response));
+    this.googleAuth.renderButton('googleSignInDiv', {
+      theme: 'outline',
+      size: 'large',
+      type: 'standard',
+      shape: 'pill',
+      text: 'continue_with',
+      logo_alignment: 'left',
+      width: 496
     });
-
-    google.accounts.id.renderButton(
-      document.getElementById('googleSignInDiv'),
-      {
-        theme: 'outline',
-        size: 'large',
-        type: 'standard',
-        shape: 'pill',
-        text: 'continue_with',
-        logo_alignment: 'left',
-        width: 496
-      }
-    );
   }
 
   ngAfterViewInit(): void {
     queueMicrotask(() => this.initializeSwipers());
+    FB.init({
+      appId: '1435650607718739',
+      cookie: true,
+      xfbml: true,
+      version: 'v19.0'
+    });
+
+    AppleID.auth.init({
+      clientId: 'ai.creativethoughts.web',
+      scope: 'name email',
+      redirectURI: 'https://creativethoughts.ai/auth/apple/callback',
+      state: 'origin:web',
+      usePopup: true
+    });
   }
 
   ngOnDestroy(): void {
     this.destroySwipers();
+  }
+
+  @HostListener('document:click')
+  closeProDropdown() {
+    this.proDropdownOpen = false;
   }
 
   async fetchLocation() {
@@ -243,58 +135,128 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  getallPlans() {
-    this.service.getApi('api/user/getAllPlans').subscribe({
-      next: (res: any) => {
-        const plans = Array.isArray(res?.data) && res.data.length ? res.data : HOME_PLAN_FALLBACK;
-        this.allPlans = this.sortPlans(plans);
+  loadPlans() {
+    this.service.getAllPlans<PlansResponse>(this.billingCycle).subscribe({
+      next: (res) => {
+        this.freePlans = res?.data?.free || [];
+        this.proPlans = res?.data?.pro || [];
+        this.businessPlans = res?.data?.business || [];
+
+        const previouslySelectedPlanId = this.selectedProPlan?.id;
+        this.selectedProPlan =
+          this.proPlans.find((plan) => plan.id === previouslySelectedPlanId) || this.proPlans[0] || null;
       },
       error: () => {
-        this.allPlans = this.sortPlans(HOME_PLAN_FALLBACK);
+        this.freePlans = [];
+        this.proPlans = [];
+        this.businessPlans = [];
+        this.selectedProPlan = null;
       }
     });
   }
 
   setBillingCycle(cycle: BillingCycle) {
+    if (this.billingCycle === cycle) {
+      return;
+    }
+
     this.billingCycle = cycle;
+    this.proDropdownOpen = false;
+    this.loadPlans();
   }
 
-  get visiblePlans(): Plan[] {
-    const freePlan = this.allPlans.find(plan => plan.plan_type === 'FREE');
-    const selectedPlans = this.allPlans.filter(
-      plan => plan.plan_type !== 'FREE' && plan.billing_interval === this.billingCycle
-    );
-
-    return [...(freePlan ? [freePlan] : []), ...selectedPlans];
+  toggleProDropdown(event: Event) {
+    event.stopPropagation();
+    this.proDropdownOpen = !this.proDropdownOpen;
   }
 
-  formatPrice(plan: Plan): string {
-    const currency = plan?.display_currency || plan?.currency || 'INR';
-    const symbol = this.currencySymbolMap[currency] || `${currency} `;
-    const amount = Number(plan?.display_amount ?? plan?.amount ?? 0);
-    const formatted = amount.toLocaleString('en-IN', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
-    return `${symbol}${formatted}`;
+  selectProPlan(plan: Plan, event?: Event) {
+    event?.stopPropagation();
+    this.selectedProPlan = plan;
+    this.proDropdownOpen = false;
   }
 
-  formatCurrency(amount: string | number, currency?: string): string {
-    const currencyCode = currency || 'INR';
-    const symbol = this.currencySymbolMap[currencyCode] || `${currencyCode} `;
-    const value = Number(amount ?? 0);
-    const formatted = value.toLocaleString('en-IN', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
-    return `${symbol}${formatted}`;
+  get freePlan(): Plan | null {
+    return this.freePlans[0] || null;
   }
 
-  billingLabel(interval: string): string {
-    return interval === 'YEAR' ? 'Year' : 'Month';
+  get businessPlan(): Plan | null {
+    return this.businessPlans[0] || null;
   }
 
-  supportLabel(type: string): string {
+  get proDropdownPlans(): Plan[] {
+    if (!this.selectedProPlan) {
+      return this.proPlans;
+    }
+
+    return this.proPlans.filter((plan) => plan.id !== this.selectedProPlan?.id);
+  }
+
+  getDisplayAmount(plan: Plan | null): string {
+    return plan?.amount.toString() || '0.00';
+  }
+
+  getBillingSuffix(plan: Plan | null): string {
+    return `/${(plan?.billing_interval || this.billingCycle).toLowerCase()}`;
+  }
+
+  getPlanDescription(plan: Plan | null): string {
+    switch (plan?.plan_type) {
+      case 'FREE':
+        return 'Perfect for individuals to build, launch, and manage a single project with essential tools.';
+      case 'PRO':
+        return 'Built for creators and teams to design, customize, and scale high-impact projects.';
+      case 'BUSINESS':
+        return 'Ideal for growing teams that need advanced controls, integrations, and priority support.';
+      default:
+        return '';
+    }
+  }
+
+  getPlanFeatures(plan: Plan | null): string[] {
+    if (!plan) {
+      return [];
+    }
+
+    const features = [
+      `${plan.project_limit} Project Build`,
+      `${plan.template_limit} Design Template${plan.template_limit > 1 ? 's' : ''}`,
+      `${plan.variation_limit} Variation${plan.variation_limit > 1 ? 's' : ''}`,
+      this.getSupportLabel(plan.support_type)
+    ];
+
+    if (Number(plan.github_integration) === 1) {
+      features.push('GitHub Integration');
+    }
+
+    if (Number(plan.custom_features) === 1) {
+      features.push('Custom Features');
+    }
+
+    if (Number(plan.can_deploy) === 1) {
+      features.push('Deploy to Server');
+    }
+
+    return features;
+  }
+
+  showIntroOffer(plan: Plan | null): boolean {
+    return !!plan && Number(plan.has_intro_offer) === 1 && Number(plan.intro_amount || 0) > 0;
+  }
+
+  hasDiscount(plan: Plan | null): boolean {
+    return !!plan && Number(plan.discount_percent || 0) > 0;
+  }
+
+  getDiscountLabel(plan: Plan | null): string {
+    return `${Number(plan?.discount_percent || 0)}% Off`;
+  }
+
+  getIntroLabel(plan: Plan | null): string {
+    return plan ? `First-time subscription fee ₹${plan.intro_amount}` : '';
+  }
+
+  private getSupportLabel(type: string): string {
     switch (type) {
       case 'CHAT':
         return 'Chat Support';
@@ -305,70 +267,6 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       default:
         return 'Support';
     }
-  }
-
-  planDescription(plan: Plan): string {
-    switch (plan?.plan_type) {
-      case 'FREE':
-        return 'Perfect for individuals to build, launch, and manage a single project with essential tools.';
-      case 'PRO':
-        return 'Built for creators and teams to design, customize, and scale high-impact projects.';
-      case 'BUSINESS':
-        return 'Ideal for growing teams that need advanced controls, integrations, and priority support.';
-      default:
-        return 'Choose the plan that matches your needs and scale as you grow.';
-    }
-  }
-
-  priceSubLabel(plan: Plan): string {
-    return plan.plan_type === 'FREE' ? '/Always Free' : `/${this.billingLabel(plan.billing_interval)}`;
-  }
-
-  showIntroOffer(plan: Plan): boolean {
-    return !!plan.has_intro_offer && Number(plan.intro_amount) > 0;
-  }
-
-  introOfferLabel(plan: Plan): string {
-    return `Intro offer ${this.formatCurrency(plan.intro_amount, plan.currency)}`;
-  }
-
-  planFeatures(plan: Plan): string[] {
-    const features = [
-      `${plan.project_limit} Project${plan.project_limit > 1 ? 's' : ''}`,
-      `${plan.template_limit} Template${plan.template_limit > 1 ? 's' : ''}`,
-      `${plan.variation_limit} Variation${plan.variation_limit > 1 ? 's' : ''}`,
-      this.supportLabel(plan.support_type)
-    ];
-
-    if (plan.can_deploy) {
-      features.push('Deployment Access');
-    }
-
-    if (plan.github_integration) {
-      features.push('GitHub Integration');
-    }
-
-    if (plan.custom_features) {
-      features.push('Custom Features');
-    }
-
-    return features;
-  }
-
-  isFeaturedPlan(plan: Plan): boolean {
-    return plan.plan_type === 'PRO';
-  }
-
-  badgeLabel(plan: Plan): string {
-    if (plan.plan_type === 'FREE') {
-      return 'Free';
-    }
-
-    if (this.isFeaturedPlan(plan)) {
-      return 'Most Popular';
-    }
-
-    return plan.plan_type;
   }
 
   private initializeSwipers() {
@@ -423,23 +321,6 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private sortPlans(plans: Plan[]): Plan[] {
-    const planTypeOrder: Record<string, number> = {
-      FREE: 0,
-      PRO: 1,
-      BUSINESS: 2
-    };
-
-    return plans.slice().sort((a, b) => {
-      const typeDifference = (planTypeOrder[a.plan_type] ?? 99) - (planTypeOrder[b.plan_type] ?? 99);
-      if (typeDifference !== 0) {
-        return typeDifference;
-      }
-
-      return (a.amount || 0) - (b.amount || 0);
-    });
-  }
-
   loginWithGoogle(response: any) {
     const formData = {
       credential: response.credential,
@@ -473,4 +354,79 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       });
   }
 
+  loginWithFacebook() {
+    FB.login((response: any) => {
+      if (response.authResponse) {
+        const accessToken = response.authResponse.accessToken;
+        this.service.postAPI(`api/user/facebookLogin`, { accessToken: accessToken })
+          .subscribe({
+            next: (res: any) => {
+              if (res.success == true) {
+                this.service.setToken(res.data.token);
+                localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
+                this.message.success(res.message)
+                if (res.data.user.profile_visited) {
+                  this.router.navigate(['/main']);
+                } else {
+                  this.router.navigate(['/profile']);
+                }
+              } else {
+                this.message.error(res.message)
+              }
+            },
+            error: err => {
+              if (err.status === 0) {
+                this.message.error('Network error, please check your connection.');
+              } else if (err.error?.message) {
+                this.message.error(err.error.message);
+              } else {
+                this.message.error('Unexpected error occurred.');
+              }
+            }
+          })
+      } else {
+        console.log('User cancelled Facebook login or did not fully authorize.');
+      }
+    }, { scope: 'email,public_profile' });
+  }
+
+  loginWithApple() {
+    AppleID.auth.signIn().then((response: any) => {
+      const formData = {
+        identityToken: response.authorization.id_token,
+        user: response.user
+      };
+
+      this.service.postAPI(`api/user/appleLogin`, formData)
+        .subscribe({
+          next: (res: any) => {
+            if (res.success == true) {
+              this.service.setToken(res.data.token);
+              localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
+              this.message.success(res.message)
+
+              if (res.data.user.profile_visited) {
+                this.router.navigate(['/main']);
+              } else {
+                this.router.navigate(['/profile']);
+              }
+            } else {
+              this.message.error(res.message)
+            }
+          },
+          error: err => {
+            if (err.status === 0) {
+              this.message.error('Network error, please check your connection.');
+            } else if (err.error?.message) {
+              this.message.error(err.error.message);
+            } else {
+              this.message.error('Unexpected error occurred.');
+            }
+          }
+        });
+    }).catch((error: any) => {
+      console.error('Apple Sign-In error:', error);
+      this.message.error('Apple Sign-In failed. Please try again.');
+    });
+  }
 }

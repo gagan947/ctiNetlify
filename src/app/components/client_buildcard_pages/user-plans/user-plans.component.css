@@ -1,270 +1,319 @@
-
- 
-    /* Main Section Card */
- 
- 
-    /* Membership Plan Header */
-    .plan-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
- 
-    
- 
-    .status-badge {
-      background: #dbeafe;
-      color: #1e40af;
-      padding: 6px 15px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .ct_upgrade_btn{
-      position: relative;
-      overflow: hidden;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 6px 10px;
-      border: none;
-      border-radius:5px;
-      font-weight: 600;
-      font-size: 12px;
-      cursor: pointer;
-      color: #fff;
-      background: #1e91d6;  
-    }
-    
-    .ct_upgrade_btn::after{
-      content:'';
-      position:absolute;
-      top:0;
-      left:-75%;
-      width:50%;
-      height:100%;
-      background:linear-gradient(120deg,transparent,rgba(255,255,255,0.6),transparent);
-      transition:0.6s;
-    }
-    
-    .ct_upgrade_btn:hover::after{
-      left:125%;
-    }
-
-
- 
-    /* Plan Details Grid */
-    .plan-details {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-    }
- 
-    .detail-box {
-      background: #f8fafc;
-      padding: 15px;
-      border-radius: 16px;
-      border: 1px solid #e2e8f0;
-    }
- 
-    .detail-box span {
-      font-size: 13px;
-      color: #64748b;
-    }
- 
-    .detail-box strong {
-      display: block;
-      margin-top: 6px;
-      font-size: 13px;
-      font-weight: 600;
-    }
- 
-    /* Payment Cards */
-    .cards-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-top: 18px;
-    }
- 
-    .payment-card {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px;
-      border-radius: 18px;
-      border: 1px solid #e6e6e6;
-      background: #f8fafc;
-      transition: 0.2s;
-      gap: 15px;
-    }
- 
-    .payment-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 18px rgba(37, 99, 235, 0.12);
-    }
- 
-    /* Primary Card Style */
-    .payment-card.primary {
-         border: 2px solid #2393d6;
-    background: #dbeafe52;
-    }
- 
-    .card-info strong {
-      font-size: 15px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
- 
-    .card-info span {
-      font-size: 13px;
-      color:#666;
-    }
- 
-    /* Primary Badge */
-    .primary-badge {
-      background: #2563eb;
-      color: white !important;
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-weight: 600;
-    }
- 
-    /* Buttons */
-    .card-actions {
-      display: flex;
-      gap: 10px;
-    }
- 
- 
- 
-    .remove-btn {
-      background: #ef4444;
-      color: white;
-      border-color: #ef4444;
-    }
- 
-    .remove-btn:hover {
-      background: transparent;
-      color:#ef4444 ;
-    }
- 
- 
-    /* Add New Card Button */
-   
-   
- 
-    /* Renewal Box */
-
- 
-
- 
-    .renewal-dates {
-      margin-top: 18px;
-      display: flex;
-      gap: 15px;
-    }
- 
-    .date-box {
-      flex: 1;
-      background: white;
-      padding: 15px;
-      border-radius: 16px;
-      border: 1px solid #e2e8f0;
-    }
- 
-    .date-box span {
-      font-size: 13px;
-      color: #64748b;
-    }
- 
-    .date-box strong {
-      display: block;
-      margin-top: 6px;
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-
-
-
-    .ct_ecommerse_web_card{
-    position: relative;
-    overflow: hidden;
+.ct_user_plan_page {
+  background: linear-gradient(
+    90deg,
+    rgb(250 218 188 / 44%),
+    rgb(234 170 213 / 36%),
+    rgb(220 229 244 / 69%)
+  );
+  min-height: 100vh;
+  padding-top: 48px;
+  padding-bottom: 40px;
 }
 
-    .status-badge{
-    background: #dbeafe;
-    color: #1e40af;
-    padding: 6px 15px;
-    /* border-radius: 999px; */
-    font-size: 13px;
-    position: absolute;
-    top: 17px;
-    right: -45px;
-    transform: rotate(45deg);
-    width: 141px;
-    text-align: center;
+.ct_plan_page_head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 26px;
 }
 
-
-@media screen and (max-width:991px){
-       .plan-details{
-        grid-template-columns: repeat(2,1fr);
-       }
-}
-@media screen and (max-width:767px){
-      .payment-card{
-        flex-direction: column;
-        align-items: flex-start !important;
-      }
-}
-@media screen and (max-width:575px){
-       .plan-details{
-        grid-template-columns: repeat(1,1fr);
-       }
+.ct_plan_page_head p {
+  color: #48576a;
+  font-size: 15px;
+  line-height: 1.7;
 }
 
-.status-badge{
-  padding:6px 12px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:600;
+.ct_upgrade_btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  color: #fff;
+  background: #1e91d6;
 }
 
-.status-badge.active{
-  background:#e8f8f0;
-  color:#1e8e3e;
+.ct_upgrade_btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  transition: 0.6s;
 }
 
-.status-badge.cancelled{
-  background:#fff3cd;
-  color:#b7791f;
+.ct_upgrade_btn:hover::after {
+  left: 125%;
 }
 
-.status-pill{
-  padding:4px 3px;
-  border-radius:20px;
-  font-size:13px;
-  font-weight:600;
-  display:inline-block;
+.ct_plan_section {
+  margin-bottom: 28px;
+  padding: 18px;
+  border-radius: 24px;
 }
 
-/* ACTIVE */
-.status-active{
-  color:#1e8e3e;
+.ct_plan_section_head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
 }
 
-/* CANCELLED BUT ACTIVE TILL DATE */
-.status-cancelled{
-  color:#d9822b;
+.ct_plan_section_head p,
+.ct_section_title_wrap p {
+  color: #5d6777;
+  font-size: 15px;
+  line-height: 1.7;
 }
 
-/* FREE PLAN */
-.status-free{
-  color:#6c757d;
+.ct_status_badge {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
 
+.ct_status_badge.active {
+  background: #e8f8f0;
+  color: #1e8e3e;
+}
+
+.ct_status_badge.cancelled {
+  background: #fff3cd;
+  color: #b7791f;
+}
+
+.ct_status_badge.free {
+  background: #edf2f7;
+  color: #6c757d;
+}
+
+.ct_plan_summary_grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.ct_plan_summary_grid_two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ct_summary_card {
+  background: #f8fafc;
+  padding: 18px 16px;
+  border-radius: 18px;
+  border: 1px solid #d9e3ee;
+}
+
+.ct_summary_card span {
+  display: block;
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.ct_summary_card strong {
+  color: #102033;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.ct_plan_meta_grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.ct_meta_panel {
+  background: #fdfefe;
+  border: 1px solid #e3ebf5;
+  border-radius: 20px;
+  padding: 18px;
+}
+
+.ct_meta_panel h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #13243a;
+}
+
+.ct_meta_stat_row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ct_meta_stat {
+  padding: 14px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+  border: 1px solid #d9e7fb;
+}
+
+.ct_meta_stat span {
+  display: block;
+  color: #67809e;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.ct_meta_stat strong {
+  color: #102033;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.ct_feature_chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ct_feature_chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f4f9ff 0%, #ecf5ff 100%);
+  border: 1px solid #dbe9f9;
+  color: #315276;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ct_access_note {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #5c6b7f;
+  font-size: 14px;
+}
+
+.ct_access_note strong {
+  color: #14263b;
+}
+
+.ct_section_title_wrap {
+  margin-bottom: 18px;
+}
+
+.ct_payment_card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 18px;
+  border-radius: 20px;
+  border: 2px solid #2393d6;
+  background: #dbeafe52;
+}
+
+.ct_payment_copy {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ct_payment_icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #1674bc;
+  font-size: 20px;
+  box-shadow: 0 10px 24px rgba(22, 116, 188, 0.12);
+}
+
+.ct_payment_copy h3 {
+  margin-bottom: 4px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a2736;
+  text-transform: capitalize;
+}
+
+.ct_payment_copy p {
+  color: #607086;
+  font-size: 14px;
+}
+
+.remove-btn {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
+
+.remove-btn:hover {
+  background: transparent;
+  color: #ef4444;
+}
+
+.status-active {
+  color: #1e8e3e;
+}
+
+.status-cancelled {
+  color: #d9822b;
+}
+
+.status-free {
+  color: #6c757d;
+}
+
+@media screen and (max-width: 991px) {
+  .ct_plan_summary_grid,
+  .ct_plan_summary_grid_two,
+  .ct_plan_meta_grid,
+  .ct_meta_stat_row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .ct_plan_page_head,
+  .ct_plan_section_head,
+  .ct_payment_card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ct_upgrade_btn {
+    align-self: flex-end;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .ct_plan_summary_grid,
+  .ct_plan_summary_grid_two,
+  .ct_plan_meta_grid,
+  .ct_meta_stat_row {
+    grid-template-columns: 1fr;
+  }
+
+  .ct_plan_section {
+    padding: 16px;
+  }
+
+  .ct_payment_copy {
+    align-items: flex-start;
+  }
 }

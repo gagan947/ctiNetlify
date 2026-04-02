@@ -14,7 +14,7 @@ import { WorkspaceHeaderComponent } from "../workspace-header/workspace-header.c
 @Component({
   selector: 'app-user-plans',
   standalone: true,
-  imports: [SidebarComponent, CommonModule, SubcriptionPageComponent, WorkspaceHeaderComponent],
+  imports: [CommonModule, SubcriptionPageComponent, WorkspaceHeaderComponent],
   templateUrl: './user-plans.component.html',
   styleUrl: './user-plans.component.css'
 })
@@ -22,15 +22,10 @@ export class UserPlansComponent {
   planName = 'Free Plan';
   subscriptionPlan!: SubscriptionResponse;
   showModal = false;
-  isCanceling = false
+  isCanceling = false;
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
-    private el: ElementRef,
-    private renderer: Renderer2,
-    private sanitizer: DomSanitizer,
-    private aiService: AiSocketService,
-    private router: Router, private ngZone: NgZone, private fb: FormBuilder,
     private toster: NzMessageService
   ) {
 
@@ -39,6 +34,70 @@ export class UserPlansComponent {
   async ngOnInit() {
     this.getUserSubscriptionPlan();
 
+  }
+
+  get monthlyPriceLabel(): string {
+    if (!this.subscriptionPlan?.pricingPlan) {
+      return 'Free';
+    }
+
+    return `₹${this.subscriptionPlan.pricingPlan} / ${this.subscriptionPlan.billingInterval === 'YEAR' ? 'year' : 'month'}`;
+  }
+
+  get formattedStatus(): string {
+    if (!this.subscriptionPlan?.subscriptionStatus) {
+      return 'Free Plan';
+    }
+
+    return this.subscriptionPlan.subscriptionStatus === 'ACTIVE'
+      ? 'Active'
+      : this.subscriptionPlan.subscriptionStatus === 'CANCELLED'
+        ? 'Cancelled'
+        : this.subscriptionPlan.subscriptionStatus;
+  }
+
+  get paymentMethodLabel(): string {
+    const paymentMethod = this.subscriptionPlan?.activePaymentMethod;
+    if (!paymentMethod) {
+      return 'No active payment method';
+    }
+
+    if (paymentMethod.type === 'card') {
+      return `${paymentMethod.network || 'Card'} ending in ${paymentMethod.card_number || '----'}`;
+    }
+
+    return paymentMethod.upi_id || 'UPI payment method';
+  }
+
+  get featureChips(): string[] {
+    if (!this.subscriptionPlan) {
+      return [];
+    }
+
+    const chips = [
+      `${this.subscriptionPlan.projectLimit} Project Limit`,
+      `${this.subscriptionPlan.template_limit} Template Limit`,
+      `${this.subscriptionPlan.variationLimit || 0} Variations / Project`,
+      this.subscriptionPlan.supportType === 'CHAT'
+        ? 'Chat Support'
+        : this.subscriptionPlan.supportType === 'PRIORITY'
+          ? 'Priority Support'
+          : 'Basic Support'
+    ];
+
+    if (this.subscriptionPlan.canDeploy) {
+      chips.push('Deploy Access');
+    }
+
+    if (this.subscriptionPlan.githubIntegration) {
+      chips.push('GitHub Integration');
+    }
+
+    if (this.subscriptionPlan.customFeatures) {
+      chips.push('Custom Features');
+    }
+
+    return chips;
   }
 
   getUserSubscriptionPlan() {

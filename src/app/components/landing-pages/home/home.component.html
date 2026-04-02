@@ -22,8 +22,8 @@
                 Continue with Email
               </a>
 
-              <!-- <div class="ct_prompt_social_row">
-                <button type="button" class="ct_prompt_social_btn" aria-label="Continue with Google"><svg width="23"
+              <div class="ct_prompt_social_row">
+                <!-- <button type="button" class="ct_prompt_social_btn" aria-label="Continue with Google"><svg width="23"
                     height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path opacity="0.987" fill-rule="evenodd" clip-rule="evenodd"
                       d="M10.3635 1.52519C11.4057 1.40876 12.0223 1.40876 13.1422 1.52519C15.1244 1.81858 16.9619 2.73483 18.389 4.14144C17.4246 5.05301 16.4729 5.97789 15.5342 6.91582C13.7363 5.39207 11.7296 5.04036 9.51391 5.86069C7.88857 6.60819 6.75678 7.81953 6.11853 9.49469C5.07554 8.7182 4.04613 7.92362 3.03078 7.11132C2.96022 7.07418 2.87963 7.06058 2.80078 7.07251C4.41366 3.96271 6.93407 2.11313 10.362 1.52376"
@@ -38,16 +38,18 @@
                       d="M6.11656 13.4004C7.29531 16.33 9.45635 17.6976 12.5997 17.503C13.4821 17.4009 14.3281 17.0926 15.0693 16.6031C16.1695 17.3813 17.2246 18.2151 18.2347 19.1044C16.6342 20.5425 14.5937 21.3959 12.4459 21.5251C11.9579 21.5642 11.4676 21.5642 10.9796 21.5251C7.32071 21.0939 4.61917 19.2453 2.875 15.9793L6.11656 13.4004Z"
                       fill="#43A047" />
                   </svg>
-                </button>
-                <button type="button" class="ct_prompt_social_btn" aria-label="Continue with Apple"><svg width="37"
-                    height="37" viewBox="0 0 37 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                </button> -->
+                <button (click)="loginWithApple()" type="button" class="ct_prompt_social_btn"
+                  aria-label="Continue with Apple"><svg width="37" height="37" viewBox="0 0 37 37" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M26.2859 31.265C24.775 32.7296 23.1255 32.4983 21.5375 31.8046C19.8571 31.0954 18.3155 31.0646 16.5425 31.8046C14.3225 32.7604 13.1509 32.4829 11.825 31.265C4.30171 23.5104 5.41171 11.7012 13.9525 11.2696C16.0338 11.3775 17.483 12.4104 18.7009 12.5029C20.52 12.1329 22.2621 11.0692 24.2046 11.2079C26.5325 11.3929 28.29 12.3179 29.4463 13.9829C24.6363 16.8658 25.7771 23.2021 30.1863 24.975C29.3075 27.2875 28.1667 29.5846 26.2705 31.2804L26.2859 31.265ZM18.5467 11.1771C18.3155 7.73917 21.1059 4.9025 24.3125 4.625C24.7596 8.6025 20.705 11.5625 18.5467 11.1771Z"
                       fill="black" />
                   </svg>
                 </button>
-                <button type="button" class="ct_prompt_social_btn" aria-label="Continue with Facebook"><svg width="30"
-                    height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <button (click)="loginWithFacebook()" type="button" class="ct_prompt_social_btn"
+                  aria-label="Continue with Facebook"><svg width="30" height="30" viewBox="0 0 30 30" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_222_4798)">
                       <path
                         d="M30 15C30 6.71578 23.2842 0 15 0C6.71578 0 0 6.71578 0 15C0 22.4869 5.48531 28.6925 12.6562 29.8178V19.3359H8.84766V15H12.6562V11.6953C12.6562 7.93594 14.8957 5.85938 18.322 5.85938C19.9631 5.85938 21.6797 6.15234 21.6797 6.15234V9.84375H19.7883C17.9249 9.84375 17.3438 11 17.3438 12.1863V15H21.5039L20.8389 19.3359H17.3438V29.8178C24.5147 28.6925 30 22.487 30 15Z"
@@ -63,7 +65,7 @@
                     </defs>
                   </svg>
                 </button>
-              </div> -->
+              </div>
 
               <div class="ct_mt_18">
                 <div id="googleSignInDiv" class="google-btn"></div>
@@ -76,9 +78,6 @@
               </p>
             </div>
           </div>
-
-
-
           <div class="col-lg-7 mb-4 mb-lg-0">
             <div #homeMainSwiper class="swiper ct_home_slider_main">
               <div class="swiper-wrapper">
@@ -370,43 +369,168 @@
       </div>
 
       <div class="ct_pricing_grid mt-5 pt-5">
-        <div class="ct_price_card" *ngFor="let plan of visiblePlans"
-          [class.ct_price_card_featured]="isFeaturedPlan(plan)">
-          <div class="ribbon" *ngIf="isFeaturedPlan(plan)">
+        <div class="ct_price_card" *ngIf="freePlan as plan">
+          <div class="ct_price_card_top">
+            <span class="ct_price_badge">Free</span>
+            <h3>&#8377;{{ getDisplayAmount(plan) }}<span>{{ getBillingSuffix(plan) }}</span></h3>
+            <p>{{ getPlanDescription(plan) }}</p>
+            <div class="ct_price_offer_slot">
+              <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
+                <div class="ct_price_offer">{{ getIntroLabel(plan) }}</div>
+              </div>
+            </div>
+            <a routerLink="/login">Get Started</a>
+          </div>
+          <div class="ct_price_card_bottom">
+            <h4>Features you will get:</h4>
+            <ul>
+              <li *ngFor="let feature of getPlanFeatures(plan)">
+                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_222_5114)">
+                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
+                      width="20" height="20">
+                      <path
+                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
+                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    </mask>
+                    <g mask="url(#mask0_222_5114)">
+                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
+                    </g>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_222_5114">
+                      <rect width="20" height="20" fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
+                {{ feature }}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="ct_price_card ct_price_card_featured" *ngIf="selectedProPlan as plan">
+          <div class="ribbon">
             <img src="assets/img/ribbin_price.png" alt="">
           </div>
-          <span class="ct_price_badge">{{ badgeLabel(plan) }}</span>
-          <h3>{{ formatPrice(plan) }}<span>{{ priceSubLabel(plan) }}</span></h3>
-          <p>{{ planDescription(plan) }}</p>
-          <div class="ct_price_offer" *ngIf="showIntroOffer(plan)">{{ introOfferLabel(plan) }}</div>
-          <a routerLink="/login">Get Started</a>
-          <h4>Features you will get:</h4>
-          <ul>
-            <li *ngFor="let feature of planFeatures(plan)">
-              <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <g clip-path="url(#clip0_222_5114)">
-                  <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                    width="20" height="20">
-                    <path
-                      d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                      fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                    <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2" stroke-linecap="round"
-                      stroke-linejoin="round" />
-                  </mask>
-                  <g mask="url(#mask0_222_5114)">
-                    <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
+          <div class="ct_price_card_top">
+            <span class="ct_price_badge">Pro</span>
+
+            <h3 class="mb-0 mt-4">&#8377;{{ getDisplayAmount(plan) }}<span>{{ getBillingSuffix(plan) }}</span></h3>
+            <div class="ct_price_offer_slot my-2">
+              <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
+                <div class="ct_price_offer">{{ getIntroLabel(plan) }}</div>
+              </div>
+              <div class="ct_price_offer_wrap d-flex align-items-center gap-2  justify-content-center"
+                *ngIf="hasDiscount(plan)">
+                <span *ngIf="billingCycle === 'YEAR'" class=" mb-0"><del>&#8377;{{ plan.display_amount }}</del><span>{{
+                    getBillingSuffix(plan)
+                    }}</span></span>
+                <div class="ct_price_offer">{{ getDiscountLabel(plan) }}</div>
+              </div>
+            </div>
+            <p>{{ getPlanDescription(plan) }}</p>
+            <a routerLink="/login" class="mb-3">Get Started</a>
+            <div class="position-relative" *ngIf="proPlans.length > 1" (click)="$event.stopPropagation()">
+              <button type="button" class="ct_starter_plan" (click)="toggleProDropdown($event)">
+                {{ plan.plan_name }}
+                <i class="fa-solid fa-angle-down ct_show_eye"></i>
+              </button>
+              <ul class="dropdown-menu show" *ngIf="proDropdownOpen">
+                <li *ngFor="let proPlan of proDropdownPlans">
+                  <button type="button" class="dropdown-item" (click)="selectProPlan(proPlan, $event)">
+                    {{ proPlan.project_limit }} Projects - &#8377;{{ getDisplayAmount(proPlan) }}{{
+                    getBillingSuffix(proPlan) }}
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+
+          </div>
+          <div class="ct_price_card_bottom" style="margin-top: 24px;">
+            <h4>Features you will get:</h4>
+            <ul>
+              <li *ngFor="let feature of getPlanFeatures(plan)">
+                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_222_5114)">
+                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
+                      width="20" height="20">
+                      <path
+                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
+                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    </mask>
+                    <g mask="url(#mask0_222_5114)">
+                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
+                    </g>
                   </g>
-                </g>
-                <defs>
-                  <clipPath id="clip0_222_5114">
-                    <rect width="20" height="20" fill="white" />
-                  </clipPath>
-                </defs>
-              </svg>
-              {{ feature }}
-            </li>
-          </ul>
+                  <defs>
+                    <clipPath id="clip0_222_5114">
+                      <rect width="20" height="20" fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
+                {{ feature }}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="ct_price_card" *ngIf="businessPlan as plan">
+          <div class="ct_price_card_top">
+            <span class="ct_price_badge">Business</span>
+            <h3 class="mb-0">&#8377;{{ getDisplayAmount(plan) }}<span>{{ getBillingSuffix(plan) }}</span></h3>
+            <div class="ct_price_offer_slot my-2">
+              <div class="ct_price_offer_wrap d-flex align-items-center gap-2  justify-content-center my-2"
+                *ngIf="hasDiscount(plan)">
+                <span *ngIf="billingCycle === 'YEAR'" class=" mb-0"><del>&#8377;{{ plan.display_amount }}</del><span>{{
+                    getBillingSuffix(plan)
+                    }}</span></span>
+                <div class="ct_price_offer">{{ getDiscountLabel(plan) }}</div>
+              </div>
+              <p>{{ getPlanDescription(plan) }}</p>
+              <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
+                <div class="ct_price_offer">{{ getIntroLabel(plan) }}</div>
+              </div>
+
+            </div>
+            <a routerLink="/login">Get Started</a>
+          </div>
+          <div class="ct_price_card_bottom">
+            <h4>Features you will get:</h4>
+            <ul>
+              <li *ngFor="let feature of getPlanFeatures(plan)">
+                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_222_5114)">
+                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
+                      width="20" height="20">
+                      <path
+                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
+                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
+                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    </mask>
+                    <g mask="url(#mask0_222_5114)">
+                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
+                    </g>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_222_5114">
+                      <rect width="20" height="20" fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
+                {{ feature }}
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -1129,7 +1253,5 @@
       </div>
     </div>
   </section>
-
-
   <app-footer></app-footer>
 </div>

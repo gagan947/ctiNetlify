@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Country, State, City } from 'country-state-city'
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzFlexDirective } from 'ng-zorro-antd/flex';
 import { NzInputOtpComponent } from 'ng-zorro-antd/input';
-declare const google: any;
+import { GoogleAuthService } from '../../services/google-auth.service';
+
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -19,7 +20,8 @@ declare const google: any;
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
-export class SignupComponent {
+export class SignupComponent implements AfterViewInit {
+  @ViewChild('googleSignInDiv') googleSignInDiv?: ElementRef<HTMLElement>;
   SearchCountryField = SearchCountryField
   CountryISO = CountryISO
   countries: any;
@@ -33,24 +35,29 @@ export class SignupComponent {
   otpVisible: boolean = false;
   phoneNumber: string = '';
   otp: any
+
   ngOnInit(): void {
     localStorage.clear();
     this.countries = Country.getAllCountries()
-    google.accounts.id.initialize({
-      client_id: '994120717709-6hec26klmpd1h9eif5vcahincbbn2m1u.apps.googleusercontent.com', // ← use from Cloud Console
-      callback: (response: any) => this.loginWithGoogle(response),
-      ux_mode: 'popup' // prevents redirect-based popups
-    });
-
-    google.accounts.id.renderButton(
-      document.getElementById('googleSignInDiv'),
-      { theme: 'filled_blue', size: 'large' }
-    );
   };
+
+  ngAfterViewInit(): void {
+    this.googleAuth.setCredentialHandler((response: any) => this.loginWithGoogle(response));
+    this.googleAuth.renderButton(this.googleSignInDiv?.nativeElement ?? null, {
+      theme: 'filled_blue',
+      size: 'large'
+    });
+  }
 
   signupForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private apiservice: ApiService, private message: NzMessageService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private apiservice: ApiService,
+    private message: NzMessageService,
+    private router: Router,
+    private googleAuth: GoogleAuthService
+  ) {
     this.signupForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       phone: [null],
@@ -64,9 +71,6 @@ export class SignupComponent {
       ]
     });
   };
-    
-
-  
 
   get f() {
     return this.signupForm.controls;
@@ -160,7 +164,6 @@ export class SignupComponent {
     });
   }
 
-
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
@@ -243,34 +246,33 @@ export class SignupComponent {
     }
 
     this.apiservice.postAPI(`api/user/googleLogin`, formData)
-        .subscribe({
-          next: (res: any) => {
-            if (res.success == true) {
-              this.apiservice.setToken(res.data.token);
-              localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
-              this.message.success(res.message)
-              if (res.data.user.profile_visited) {
-                this.router.navigate(['/main']);
-              } else {
-                this.router.navigate(['/profile']);
-              }
-              this.isLoading = false
+      .subscribe({
+        next: (res: any) => {
+          if (res.success == true) {
+            this.apiservice.setToken(res.data.token);
+            localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
+            this.message.success(res.message)
+            if (res.data.user.profile_visited) {
+              this.router.navigate(['/main']);
             } else {
-              this.isLoading = false
-              this.message.error(res.message)
-            }
-          },
-          error: err => {
-            if (err.status === 0) {
-              this.message.error('Network error, please check your connection.');
-            } else if (err.error?.message) {
-              this.message.error(err.error.message);
-            } else {
-              this.message.error('Unexpected error occurred.');
+              this.router.navigate(['/profile']);
             }
             this.isLoading = false
+          } else {
+            this.isLoading = false
+            this.message.error(res.message)
           }
+        },
+        error: err => {
+          if (err.status === 0) {
+            this.message.error('Network error, please check your connection.');
+          } else if (err.error?.message) {
+            this.message.error(err.error.message);
+          } else {
+            this.message.error('Unexpected error occurred.');
+          }
+          this.isLoading = false
+        }
       });
   }
 }
-

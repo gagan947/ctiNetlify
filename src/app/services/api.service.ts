@@ -9,9 +9,9 @@ import { Subject, Observable, BehaviorSubject } from 'rxjs';
 export class ApiService {
   // apiUrl = 'http://192.168.1.23:4500/'
   // imageUrl = 'http://192.168.29.241:4500/'
-  // apiUrl = 'http://192.168.1.4:3000/prod/'
+  apiUrl = 'http://192.168.1.59:4500/';
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
-  apiUrl = 'https://api.creativethoughts.ai/';
+  // apiUrl = 'https://api.creativethoughts.ai/';
   imageUrl = 'https://api.creativethoughts.ai';
   // apiUrl = 'http://localhost:4500/';
   // reactBuildURl = 'http://localhost:4500';
@@ -32,6 +32,10 @@ export class ApiService {
 
   getApi<T>(url: string): Observable<T> {
     return this.http.get<T>(this.apiUrl + url);
+  }
+
+  getAllPlans<T>(billingInterval: 'MONTH' | 'YEAR'): Observable<T> {
+    return this.http.get<T>(`${this.apiUrl}api/user/getAllPlans?billing_interval=${billingInterval}`);
   }
 
   deleteApi<T>(url: string): Observable<T> {

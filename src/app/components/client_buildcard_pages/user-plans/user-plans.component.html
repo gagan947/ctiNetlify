@@ -1,237 +1,179 @@
 <section class="ct_dash_board_main" style="display: block !important">
   <app-workspace-header></app-workspace-header>
-  <div class="ct_dash_right_content pt-5" style="
-      background: linear-gradient(
-        90deg,
-        rgb(250 218 188 / 44%),
-        rgb(234 170 213 / 36%),
-        rgb(220 229 244 / 69%)
-      );
-      height: auto;
-      min-height: 100vh;
-    ">
+  <div class="ct_dash_right_content ct_user_plan_page">
     <div class="ct_dash_toggle_bar">
       <i class="fa-solid fa-bars"></i>
     </div>
+
     @if (subscriptionPlan) {
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <div class="mb-4 d-flex align-items-start justify-content-between gap-3 flex-wrap">
+          <div class="ct_plan_page_head">
             <div>
-              <h1 class="ct_fs_18 ct_fw_600 mb-0">Subcription & Billing</h1>
+              <h1 class="ct_fs_18 ct_fw_600 mb-1">Subscription & Billing</h1>
               <p class="mb-0">
-                View your subcription plan, manage saved cards, and check renewal
-                information.
+                View your subscription plan, manage saved cards, and check renewal information.
               </p>
             </div>
-            <button class="ct_upgrade_btn" (click)="showModal = true"><i class="fa-solid fa-bolt"></i> Upgrade</button>
+            <button class="ct_upgrade_btn" (click)="showModal = true">
+              <i class="fa-solid fa-bolt"></i> Upgrade
+            </button>
           </div>
 
-          <!-- Membership Plan Section -->
-          <div class="ct_white_bg ct_ecommerse_web_card mb-4 p-3">
-            <div class="plan-header">
-              <h5 class="ct_fs_18 ct_fw_600">
-                {{ subscriptionPlan.planName }} Plan
-              </h5>
-
-
+          <div class="ct_white_bg ct_ecommerse_web_card ct_plan_section">
+            <div class="ct_plan_section_head">
+              <div>
+                <h2 class="ct_fs_18 ct_fw_600 mb-1">{{ subscriptionPlan.planName }} Plan</h2>
+                <p class="mb-0" *ngIf="subscriptionPlan.message">{{ subscriptionPlan.message }}</p>
+              </div>
+              <span class="ct_status_badge" [ngClass]="{
+                'active': subscriptionPlan.subscriptionStatus === 'ACTIVE',
+                'cancelled': subscriptionPlan.subscriptionStatus === 'CANCELLED',
+                'free': !subscriptionPlan.subscriptionStatus
+              }">
+                {{ formattedStatus }}
+              </span>
             </div>
 
-            <div class="plan-details">
-
-              <!-- Template Limit -->
-              <div class="detail-box">
-                <span>Template Limit</span>
-                <strong>
-                  {{ subscriptionPlan.planName == 'Free'
-                  ? 'Not Available'
-                  : subscriptionPlan.template_limit }}
-                </strong>
+            <div class="ct_plan_summary_grid">
+              <div class="ct_summary_card">
+                <span>Project Limit</span>
+                <strong>{{ subscriptionPlan.projectLimit }}</strong>
               </div>
-
-              <!-- Price -->
-              <div class="detail-box">
-                <span>
-                  {{ subscriptionPlan.billingInterval == 'YEAR'
-                  ? 'Yearly'
-                  : 'Monthly' }} Price
-                </span>
-
-                @if (subscriptionPlan.pricingPlan) {
-                <strong>
-                  $ {{ subscriptionPlan.pricingPlan }}
-                  / {{ subscriptionPlan.billingInterval == 'YEAR' ? 'year' : 'month' }}
-                </strong>
-                } @else {
-                <strong>Free</strong>
-                }
+              <div class="ct_summary_card">
+                <span>{{ subscriptionPlan.billingInterval === 'YEAR' ? 'Yearly Price' : 'Monthly Price' }}</span>
+                <strong>{{ monthlyPriceLabel }}</strong>
               </div>
-
-              <!-- Status -->
-              <div class="detail-box">
+              <div class="ct_summary_card">
                 <span>Status</span>
-
-                <strong class="" [ngClass]="{
+                <strong [ngClass]="{
                   'status-active': subscriptionPlan.subscriptionStatus === 'ACTIVE',
                   'status-cancelled': subscriptionPlan.subscriptionStatus === 'CANCELLED',
                   'status-free': !subscriptionPlan.subscriptionStatus
-                }">
+                }">{{ formattedStatus }}</strong>
+              </div>
+              <div class="ct_summary_card">
+                <span>Next Billing Date</span>
+                <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date:'mediumDate') :
+                  'Not Available' }}</strong>
+              </div>
+            </div>
 
+            <div class="ct_plan_meta_grid">
+              <div class="ct_meta_panel">
+                <h3>Usage & Limits</h3>
+                <div class="ct_meta_stat_row">
+                  <div class="ct_meta_stat">
+                    <span>Projects Used</span>
+                    <strong>{{ subscriptionPlan.projectCount }}/{{ subscriptionPlan.projectLimit }}</strong>
+                  </div>
+                  <div class="ct_meta_stat">
+                    <span>Templates</span>
+                    <strong>{{ subscriptionPlan.template_limit }}</strong>
+                  </div>
+                  <div class="ct_meta_stat">
+                    <span>Variations / Project</span>
+                    <strong>{{ subscriptionPlan.variationLimit || 0 }}</strong>
+                  </div>
+                  <div class="ct_meta_stat">
+                    <span>Deploy Access</span>
+                    <strong>{{ subscriptionPlan.canDeploy ? 'Enabled' : 'Disabled' }}</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ct_meta_panel">
+                <h3>Plan Access</h3>
+                <div class="ct_feature_chips">
+                  <span class="ct_feature_chip" *ngFor="let chip of featureChips">{{ chip }}</span>
+                </div>
+                <div class="ct_access_note"
+                  *ngIf="subscriptionPlan.paymentStatus || subscriptionPlan.allowProjectCreate !== undefined">
+                  <span>Payment Status: <strong class="text-success">Completed</strong></span>
+                  <span>Create Projects: <strong>{{ subscriptionPlan.allowProjectCreate ? 'Allowed' : 'Limit Reached'
+                      }}</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ct_white_bg ct_ecommerse_web_card ct_plan_section" *ngIf="subscriptionPlan.activePaymentMethod">
+            <div class="ct_section_title_wrap">
+              <h2 class="ct_fs_18 ct_fw_600 mb-0">Active Payment Method</h2>
+            </div>
+
+            <div class="ct_payment_card">
+              <div class="ct_payment_copy">
+                <div class="ct_payment_icon">
+                  <i class="fa-regular fa-credit-card" *ngIf="subscriptionPlan.activePaymentMethod.type === 'card'"></i>
+                  <i class="fa-solid fa-building-columns"
+                    *ngIf="subscriptionPlan.activePaymentMethod.type !== 'card'"></i>
+                </div>
+                <div>
+                  <h3>{{ paymentMethodLabel }}</h3>
+                  <p class="mb-0">
+                    {{ subscriptionPlan.activePaymentMethod.bank || 'Saved payment method' }}
+                    <span *ngIf="subscriptionPlan.activePaymentMethod.country">, {{
+                      subscriptionPlan.activePaymentMethod.country }}</span>
+                  </p>
+                </div>
+              </div>
+
+              <button class="remove-btn ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2"
+                [disabled]="isCanceling" (click)="cancelSubcription()"
+                *ngIf="subscriptionPlan.subscriptionStatus === 'ACTIVE'">
+                {{ isCanceling ? 'Canceling...' : 'Cancel Subscription' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="ct_white_bg ct_ecommerse_web_card ct_plan_section renewal-box">
+            <div class="ct_section_title_wrap">
+              <div>
+                <h2 class="ct_fs_18 ct_fw_600 mb-1">
+                  {{ subscriptionPlan.subscriptionStatus === 'CANCELLED' ? 'Membership Ends' : 'Membership Renewal' }}
+                </h2>
+                <p class="mb-0">
                   @if (subscriptionPlan.subscriptionStatus === 'ACTIVE') {
-                  Active
+                  Your membership will renew automatically on the next billing date unless cancelled before that.
                   }
-
                   @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
-                  Cancelled (Access until {{ subscriptionPlan.next_charge_date | date }})
+                  Your subscription has been cancelled. You will continue to have access until the date below.
                   }
-
                   @if (!subscriptionPlan.subscriptionStatus) {
-                  Free Plan
+                  You are currently on the free plan.
                   }
-
-                </strong>
-              </div>
-
-              <!-- Billing / Access -->
-              <div class="detail-box">
-
-                <span>
-
-                  @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
-                  Access Until
-                  } @else {
-                  Next Billing Date
-                  }
-
-                </span>
-
-                <strong>
-                  {{ subscriptionPlan.next_charge_date
-                  ? (subscriptionPlan.next_charge_date | date)
-                  : 'Not Available' }}
-                </strong>
-
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Payment Methods Section -->
-          @if (subscriptionPlan.activePaymentMethod) {
-          <div class="ct_white_bg ct_ecommerse_web_card mb-4 p-3">
-            <h5 class="ct_fs_18 ct_fw_600">Active Payment Methods</h5>
-
-            <div class="cards-list">
-              <!-- Primary Card -->
-              <div class="payment-card primary">
-
-                <div class="card-info">
-                  @if (subscriptionPlan.activePaymentMethod.type == 'card') {
-                  <h6 class="d-flex align-items-center gap-2 flex-wrap">
-                    {{subscriptionPlan.activePaymentMethod.network}} ending in
-                    {{subscriptionPlan.activePaymentMethod.card_number}}
-                  </h6>
-                  }@else {
-                  <h6 class="d-flex align-items-center gap-2 flex-wrap">
-                    <i class="pi pi-wallet text-success"></i>
-                    <span class="fw-semibold">UPI ID:</span>
-                    <span class="text-muted">
-                      {{ subscriptionPlan.activePaymentMethod.upi_id }}
-                    </span>
-                  </h6>
-                  }
-                  <!-- <span>Expires 08/28</span> -->
-                </div>
-
-                <div class="card-actions">
-                  <!-- <button class="ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2">Update </button> -->
-                  <button
-                    class="remove-btn ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2 "
-                    [disabled]="isCanceling" (click)="cancelSubcription()"
-                    *ngIf="subscriptionPlan.subscriptionStatus === 'ACTIVE'">{{isCanceling ? 'Canceling...' : 'Cancel
-                    Subscription'}}</button>
-                </div>
+                </p>
               </div>
             </div>
 
-            <!-- <button class="ct_schedule_call_btn ct_white_nowrape_1 px-3 w-auto mt-4">+ Add New Card</button> -->
-          </div>
-
-          <!-- Renewal Details Section -->
-          <!-- Renewal Details Section -->
-          <div class="ct_white_bg ct_ecommerse_web_card mb-4 p-3 renewal-box">
-
-            <h2 class="ct_fs_18 ct_fw_600 mb-0">
-              {{ subscriptionPlan.subscriptionStatus === 'CANCELLED'
-              ? 'Membership Ends'
-              : 'Membership Renewal'
-              }}
-            </h2>
-
-            <p>
-              @if (subscriptionPlan.subscriptionStatus === 'ACTIVE') {
-              Your membership will renew automatically on the next billing date unless cancelled before that.
-              }
-
-              @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
-              Your subscription has been cancelled. You will continue to have access until the date below.
-              }
-
-              @if (!subscriptionPlan.subscriptionStatus) {
-              You are currently on the free plan.
-              }
-            </p>
-
-            <div class="renewal-dates">
-
-              <!-- Start Date -->
-              <div class="date-box">
+            <div class="ct_plan_summary_grid ct_plan_summary_grid_two">
+              <div class="ct_summary_card">
                 <span>Plan Start Date</span>
-                <strong>
-                  {{ subscriptionPlan.start_date
-                  ? (subscriptionPlan.start_date | date)
-                  : 'Not Available'
-                  }}
-                </strong>
+                <strong>{{ subscriptionPlan.start_date ? (subscriptionPlan.start_date | date:'mediumDate') :
+                  'Not Available' }}</strong>
               </div>
-
-              <!-- Renewal / End Date -->
-              <div class="date-box">
-
+              <div class="ct_summary_card">
                 <span>
-
                   @if (subscriptionPlan.subscriptionStatus === 'ACTIVE') {
                   Next Billing Date
                   }
-
                   @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
                   Access Until
                   }
-
                   @if (!subscriptionPlan.subscriptionStatus) {
                   Upgrade Anytime
                   }
-
                 </span>
-
-                <strong>
-                  {{ subscriptionPlan.next_charge_date
-                  ? (subscriptionPlan.next_charge_date | date)
-                  : 'Not Available'
-                  }}
-                </strong>
-
+                <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date:'mediumDate') :
+                  'Not Available' }}</strong>
               </div>
-
             </div>
           </div>
-
-          }
         </div>
       </div>
     </div>
-
     }
   </div>
 </section>

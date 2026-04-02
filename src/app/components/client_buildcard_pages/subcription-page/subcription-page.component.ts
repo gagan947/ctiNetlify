@@ -34,6 +34,7 @@ interface Plan {
   can_delete: number;
   has_intro_offer: number;
   intro_amount: string;
+  discount_percent?: number;
 }
 declare var window: any;
 @Component({
@@ -62,8 +63,11 @@ export class SubcriptionPageComponent {
   CountryISO = CountryISO
   selectedPlan = signal<PlanType>('creative');
   subscriptionPlan!: SubscriptionResponse;
-  allPlans: Plan[] = [];
-  orginalPlans: Plan[] = [];
+  freePlans: Plan[] = [];
+  proPlans: Plan[] = [];
+  businessPlans: Plan[] = [];
+  selectedProPlan: Plan | null = null;
+  proDropdownOpen = false;
   selectedPlanData: Plan | null = null;
   private currencySymbolMap: Record<string, string> = {
     INR: '\u20B9',
@@ -90,20 +94,28 @@ export class SubcriptionPageComponent {
 
   setBilling(cycle: BillingCycle) {
     this.billingCycle.set(cycle);
-    this.allPlans = this.sortPlans(this.orginalPlans);
+    this.proDropdownOpen = false;
+    this.getAllPlans();
   }
 
   setBillingCycle(cycle: BillingCycle) {
     this.setBilling(cycle);
   }
 
-  get visiblePlans(): Plan[] {
-    const freePlan = this.allPlans.find(plan => plan.plan_type === 'FREE');
-    const selectedPlans = this.allPlans.filter(
-      plan => plan.plan_type !== 'FREE' && plan.billing_interval === this.billingCycle()
-    );
+  get freePlan(): Plan | null {
+    return this.freePlans[0] || null;
+  }
 
-    return [...(freePlan ? [freePlan] : []), ...selectedPlans];
+  get businessPlan(): Plan | null {
+    return this.businessPlans[0] || null;
+  }
+
+  get proDropdownPlans(): Plan[] {
+    if (!this.selectedProPlan) {
+      return this.proPlans;
+    }
+
+    return this.proPlans.filter((plan) => plan.id !== this.selectedProPlan?.id);
   }
 
   selectPlan(plan: PlanType) {
@@ -117,6 +129,17 @@ export class SubcriptionPageComponent {
     this.billingSummaryModalOpen = true;
     this.selectedPlanData = planData;
     this.setBillingCycle(planData.billing_interval);
+  }
+
+  toggleProDropdown(event: Event) {
+    event.stopPropagation();
+    this.proDropdownOpen = !this.proDropdownOpen;
+  }
+
+  selectProPlan(plan: Plan, event?: Event) {
+    event?.stopPropagation();
+    this.selectedProPlan = plan;
+    this.proDropdownOpen = false;
   }
 
 
@@ -169,7 +192,24 @@ export class SubcriptionPageComponent {
   }
 
   introOfferLabel(plan: Plan): string {
-    return `Intro offer ${this.formatCurrency(plan.intro_amount, plan.currency)}`;
+    return `First-time subscription fee ${this.formatCurrency(plan.intro_amount, plan.currency)}`;
+  }
+
+  billedNowAmount(plan: Plan | null): string {
+    if (!plan) {
+      return this.formatCurrency(0, 'INR');
+    }
+
+    const amount = this.showIntroOffer(plan) ? plan.intro_amount : plan.amount;
+    return this.formatCurrency(amount, plan.currency);
+  }
+
+  renewalLabel(plan: Plan): string {
+    if (!this.showIntroOffer(plan)) {
+      return '';
+    }
+
+    return `Then ${this.formatCurrency(plan.amount, plan.currency)}${this.priceSubLabel(plan).toLowerCase()} from the next billing cycle`;
   }
 
   formatCurrency(amount: string | number, currency?: string): string {
@@ -237,11 +277,16 @@ export class SubcriptionPageComponent {
   }
 
   getAllPlans() {
-    this.apiService.getApi(`api/user/getAllPlans`)
+    this.apiService.getAllPlans<any>(this.billingCycle())
       .subscribe({
         next: (res: any) => {
-          this.orginalPlans = this.sortPlans(Array.isArray(res?.data) ? res.data : []);
-          this.allPlans = [...this.orginalPlans];
+          this.freePlans = res?.data?.free || [];
+          this.proPlans = res?.data?.pro || [];
+          this.businessPlans = res?.data?.business || [];
+
+          const previousSelectedId = this.selectedProPlan?.id;
+          this.selectedProPlan =
+            this.proPlans.find((plan) => plan.id === previousSelectedId) || this.proPlans[0] || null;
         },
         error: err => {
           // this.loading = false
@@ -258,6 +303,10 @@ export class SubcriptionPageComponent {
       maximumFractionDigits: 2
     });
     return `${symbol}${formatted}`;
+  }
+
+  getDisplayAmount(plan: Plan | null): string {
+    return plan?.display_amount || '0.00';
   }
 
   billingLabel(interval: string): string {
@@ -294,6 +343,10 @@ export class SubcriptionPageComponent {
     return plan.plan_type === 'FREE' ? '/Always Free' : `/${this.billingLabel(plan.billing_interval)}`;
   }
 
+  getBillingSuffix(plan: Plan | null): string {
+    return `/${(plan?.billing_interval || this.billingCycle()).toLowerCase()}`;
+  }
+
   planFeatures(plan: Plan): string[] {
     const features = [
       `${plan.project_limit} Project${plan.project_limit > 1 ? 's' : ''}`,
@@ -317,20 +370,12 @@ export class SubcriptionPageComponent {
     return features;
   }
 
-  isFeaturedPlan(plan: Plan): boolean {
-    return plan.plan_type === 'PRO';
+  hasDiscount(plan: Plan | null): boolean {
+    return !!plan && Number(plan.discount_percent || 0) > 0;
   }
 
-  badgeLabel(plan: Plan): string {
-    if (plan.plan_type === 'FREE') {
-      return 'Free';
-    }
-
-    if (this.isFeaturedPlan(plan)) {
-      return 'Most Popular';
-    }
-
-    return plan.plan_type;
+  getDiscountLabel(plan: Plan | null): string {
+    return `${Number(plan?.discount_percent || 0)}% Off`;
   }
 
   formatMessageWithLocalDate(message: string): string {
@@ -378,27 +423,4 @@ export class SubcriptionPageComponent {
         return 'creative';
     }
   }
-
-  private sortPlans(plans: Plan[]): Plan[] {
-    const planTypeOrder: Record<string, number> = {
-      FREE: 0,
-      PRO: 1,
-      BUSINESS: 2
-    };
-
-    return [...plans].sort((a, b) => {
-      const typeDifference = (planTypeOrder[a.plan_type] ?? 99) - (planTypeOrder[b.plan_type] ?? 99);
-
-      if (typeDifference !== 0) {
-        return typeDifference;
-      }
-
-      if (a.plan_type === 'FREE' && b.plan_type === 'FREE') {
-        return 0;
-      }
-
-      return a.billing_interval === 'MONTH' && b.billing_interval === 'YEAR' ? -1 : 1;
-    });
-  }
-
 }
