@@ -9,6 +9,8 @@ import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-
 import { NzInputOtpComponent } from 'ng-zorro-antd/input';
 import { NzFlexDirective } from 'ng-zorro-antd/flex';
 import { GoogleAuthService } from '../../services/google-auth.service';
+declare var FB: any;
+declare const AppleID: any;
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -64,6 +66,21 @@ export class LoginComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initGoogleAuth();
+
+    FB.init({
+      appId: '1435650607718739',
+      cookie: true,
+      xfbml: true,
+      version: 'v19.0'
+    });
+
+    AppleID.auth.init({
+      clientId: 'ai.creativethoughts.web',
+      scope: 'name email',
+      redirectURI: 'https://creativethoughts.ai/auth/apple/callback',
+      state: 'origin:web',
+      usePopup: true
+    });
   }
 
   initGoogleAuth() {
@@ -277,5 +294,82 @@ export class LoginComponent implements AfterViewInit {
 
   handleCredentialResponseError(error: any) {
     console.log(error);
+  }
+
+
+  loginWithFacebook() {
+    FB.login((response: any) => {
+      if (response.authResponse) {
+        const accessToken = response.authResponse.accessToken;
+        this.apiService.postAPI(`api/user/facebookLogin`, { accessToken: accessToken })
+          .subscribe({
+            next: (res: any) => {
+              if (res.success == true) {
+                this.apiService.setToken(res.data.token);
+                localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
+                this.message.success(res.message)
+                if (res.data.user.profile_visited) {
+                  this.router.navigate(['/main']);
+                } else {
+                  this.router.navigate(['/profile']);
+                }
+              } else {
+                this.message.error(res.message)
+              }
+            },
+            error: err => {
+              if (err.status === 0) {
+                this.message.error('Network error, please check your connection.');
+              } else if (err.error?.message) {
+                this.message.error(err.error.message);
+              } else {
+                this.message.error('Unexpected error occurred.');
+              }
+            }
+          })
+      } else {
+        console.log('User cancelled Facebook login or did not fully authorize.');
+      }
+    }, { scope: 'email,public_profile' });
+  }
+
+  loginWithApple() {
+    AppleID.auth.signIn().then((response: any) => {
+      const formData = {
+        identityToken: response.authorization.id_token,
+        user: response.user
+      };
+
+      this.apiService.postAPI(`api/user/appleLogin`, formData)
+        .subscribe({
+          next: (res: any) => {
+            if (res.success == true) {
+              this.apiService.setToken(res.data.token);
+              localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
+              this.message.success(res.message)
+
+              if (res.data.user.profile_visited) {
+                this.router.navigate(['/main']);
+              } else {
+                this.router.navigate(['/profile']);
+              }
+            } else {
+              this.message.error(res.message)
+            }
+          },
+          error: err => {
+            if (err.status === 0) {
+              this.message.error('Network error, please check your connection.');
+            } else if (err.error?.message) {
+              this.message.error(err.error.message);
+            } else {
+              this.message.error('Unexpected error occurred.');
+            }
+          }
+        });
+    }).catch((error: any) => {
+      console.error('Apple Sign-In error:', error);
+      this.message.error('Apple Sign-In failed. Please try again.');
+    });
   }
 }

@@ -75,16 +75,25 @@
 
 
 
+.ct_prompt_social_row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 26px;
+}
 
-
-
-
-
-
-
-
-    
-
-
-
-
+.ct_prompt_social_btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 55px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid #d9e3f7;
+      /* box-shadow: 0 10px 20px rgba(17, 24, 39, 0.06); */
+      color: #111827;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 700;
+      padding-inline: 46px;
+}

@@ -474,7 +474,7 @@ section {
 
 .ct_price_card {
   position: relative;
-  padding: 30px 28px;
+  /* padding: 30px 28px; */
   border-radius: 20px;
   background: #ffffff;
   border: 0.4px solid #6870864D;
@@ -482,7 +482,13 @@ section {
   height: 100%;
   display: flex;
   flex-direction: column;
+  /* overflow: hidden; */
+}
+
+.inner-div {
+  padding: 30px 28px;
   overflow: hidden;
+  position: relative;
 }
 
 .ct_plan_status_group {
