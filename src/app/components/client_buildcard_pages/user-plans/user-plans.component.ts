@@ -1,39 +1,41 @@
 import { Component, ElementRef, NgZone, Renderer2 } from '@angular/core';
-import { SidebarComponent } from "../sidebar/sidebar.component";
 import { SubscriptionResponse } from '../../../models/subcription';
-import { FormBuilder } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { AiSocketService } from '../../../services/ai-socket.service';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { SubcriptionPageComponent } from '../subcription-page/subcription-page.component';
 import { WorkspaceHeaderComponent } from "../workspace-header/workspace-header.component";
+import { SubcriptionService } from '../../../services/subcription.service';
+import { SubscriptionModalService } from '../../../services/subscription-modal.service';
 
 @Component({
   selector: 'app-user-plans',
   standalone: true,
-  imports: [CommonModule, SubcriptionPageComponent, WorkspaceHeaderComponent],
+  imports: [CommonModule, WorkspaceHeaderComponent],
   templateUrl: './user-plans.component.html',
   styleUrl: './user-plans.component.css'
 })
 export class UserPlansComponent {
   planName = 'Free Plan';
   subscriptionPlan!: SubscriptionResponse;
-  showModal = false;
   isCanceling = false;
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
-    private toster: NzMessageService
+    private toster: NzMessageService,
+    private subscriptionService: SubcriptionService,
+    private subscriptionModalService: SubscriptionModalService
   ) {
 
   }
 
   async ngOnInit() {
-    this.getUserSubscriptionPlan();
-
+    this.subscriptionService.loadSubscription();
+    this.subscriptionService.subscription$.subscribe(subscription => {
+      if (subscription) {
+        this.subscriptionPlan = subscription;
+        this.planName = subscription.planName;
+      }
+    });
   }
 
   get monthlyPriceLabel(): string {
@@ -100,20 +102,6 @@ export class UserPlansComponent {
     return chips;
   }
 
-  getUserSubscriptionPlan() {
-    this.apiService.getApi<SubscriptionResponse>(`api/user/getMySubscription`)
-      .subscribe({
-        next: (res) => {
-
-          this.subscriptionPlan = res;
-          this.planName = res.planName
-        },
-        error: err => {
-          // this.loading = false
-        }
-      });
-  };
-
   cancelSubcription() {
     this.isCanceling = true
     this.apiService.getApi(`api/user/cancelSubscription`)
@@ -122,7 +110,7 @@ export class UserPlansComponent {
 
           setTimeout(() => {
             this.isCanceling = false;
-            this.getUserSubscriptionPlan();
+            this.subscriptionService.refreshSubscription();
           }, 5000);
 
           this.toster.success(res.message); // instant
@@ -141,7 +129,7 @@ export class UserPlansComponent {
   }
 
 
-  closeModal() {
-    this.showModal = false;
+  openSubscriptionModal(): void {
+    this.subscriptionModalService.open();
   }
 }

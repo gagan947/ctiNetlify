@@ -7,6 +7,7 @@ import { CalendlyDirective } from '../../../helper/directives/calendly.directive
 import { SubcriptionService } from '../../../services/subcription.service';
 import { SubscriptionResponse } from '../../../models/subcription';
 import { RouterLink } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd/message';
 type BillingCycle = 'MONTH' | 'YEAR';
 type PlanType = 'free' | 'personal' | 'creative' | 'booster' | 'pro' | 'business';
 
@@ -35,6 +36,8 @@ interface Plan {
   has_intro_offer: number;
   intro_amount: string;
   discount_percent?: number;
+  is_plan_used?: boolean;
+  is_current_plan?: boolean;
 }
 declare var window: any;
 @Component({
@@ -66,6 +69,11 @@ export class SubcriptionPageComponent {
   freePlans: Plan[] = [];
   proPlans: Plan[] = [];
   businessPlans: Plan[] = [];
+  private plansCache: Partial<Record<BillingCycle, {
+    free: Plan[];
+    pro: Plan[];
+    business: Plan[];
+  }>> = {};
   selectedProPlan: Plan | null = null;
   proDropdownOpen = false;
   selectedPlanData: Plan | null = null;
@@ -75,15 +83,20 @@ export class SubcriptionPageComponent {
     EUR: 'EUR ',
     GBP: 'GBP '
   };
-  constructor(private apiService: ApiService, private fb: FormBuilder, private subscriptionService: SubcriptionService) {
+  constructor(private apiService: ApiService, private fb: FormBuilder, private subscriptionService: SubcriptionService, private message: NzMessageService,) {
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
     console.log(this.selectedTemplateId);
   }
 
   ngOnInit(): void {
+    this.subscriptionService.loadSubscription();
     this.getAllPlans();
-    this.getUserSubscriptionPlan();
+    this.subscriptionService.subscription$.subscribe(subscription => {
+      if (subscription) {
+        this.subscriptionPlan = subscription;
+      }
+    });
   }
 
   billingForm = this.fb.nonNullable.group({
@@ -123,6 +136,7 @@ export class SubcriptionPageComponent {
   }
 
   getStarted(planData: Plan) {
+    debugger
     this.close.emit();
     this.selectedPlan.set(this.mapPlanType(planData));
     this.subscriptionModalOpen = false;
@@ -153,14 +167,16 @@ export class SubcriptionPageComponent {
 
   initiateSubscriptionCheckout(billingDetails: any) {
     const inquiryId = this.projectsData?.clientEnquryId ?? null;
-    this.apiService.postAPI('api/payment/create-subscription', {
+    const apiUrl = this.subscriptionPlan.planName !== 'Free Plan' ? 'api/payment/upgrade-subscription' : 'api/payment/create-subscription'
+    this.apiService.postAPI(apiUrl, {
       planKey: this.planKey(),
       user: billingDetails,
       publicTemplateId: this.selectedTemplateId,
       inquiryId
     }).subscribe((res: any) => {
-      // ⬇️ THIS IS THE KEY
       this.openCashfreeSubscriptionCheckout(res.subscription_session_id);
+    }, (err: any) => {
+      this.message.error(err.error?.message || 'Failed to initiate subscription checkout. Please try again.');
     });
   }
 
@@ -264,25 +280,33 @@ export class SubcriptionPageComponent {
     this.billingSummaryModalOpen = false;
     this.showCalendly = true;
   }
-  getUserSubscriptionPlan() {
-    this.apiService.getApi<SubscriptionResponse>(`api/user/getMySubscription`)
-      .subscribe({
-        next: (res) => {
-          this.subscriptionPlan = res;
-        },
-        error: err => {
-          // this.loading = false
-        }
-      });
-  }
 
   getAllPlans() {
+    const cycle = this.billingCycle();
+    const cachedPlans = this.plansCache[cycle];
+
+    if (cachedPlans) {
+      this.freePlans = cachedPlans.free;
+      this.proPlans = cachedPlans.pro;
+      this.businessPlans = cachedPlans.business;
+
+      const previousSelectedId = this.selectedProPlan?.id;
+      this.selectedProPlan =
+        this.proPlans.find((plan) => plan.id === previousSelectedId) || this.proPlans[0] || null;
+      return;
+    }
+
     this.apiService.getAllPlans<any>(this.billingCycle())
       .subscribe({
         next: (res: any) => {
           this.freePlans = res?.data?.free || [];
           this.proPlans = res?.data?.pro || [];
           this.businessPlans = res?.data?.business || [];
+          this.plansCache[cycle] = {
+            free: this.freePlans,
+            pro: this.proPlans,
+            business: this.businessPlans
+          };
 
           const previousSelectedId = this.selectedProPlan?.id;
           this.selectedProPlan =
@@ -324,6 +348,14 @@ export class SubcriptionPageComponent {
       default:
         return 'Support';
     }
+  }
+
+  currentPlanDescription(plan: Plan | null): string {
+    if (!plan) {
+      return 'Choose a plan to unlock more projects, templates, and deployment options.';
+    }
+
+    return `${plan.project_limit} project${plan.project_limit > 1 ? 's' : ''} limit • ${plan.template_limit} template${plan.template_limit > 1 ? 's' : ''} • ${plan.variation_limit} variation${plan.variation_limit > 1 ? 's' : ''}`;
   }
 
   planDescription(plan: Plan): string {
@@ -376,6 +408,18 @@ export class SubcriptionPageComponent {
 
   getDiscountLabel(plan: Plan | null): string {
     return `${Number(plan?.discount_percent || 0)}% Off`;
+  }
+
+  getPlanBadges(plan: Plan): string[] {
+    if (plan.is_current_plan) {
+      return ['Active'];
+    }
+
+    if (plan.is_plan_used) {
+      return ['Used'];
+    }
+
+    return [];
   }
 
   formatMessageWithLocalDate(message: string): string {

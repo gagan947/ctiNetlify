@@ -5,29 +5,27 @@
       <div class="modal-header pb-2 pt-0 border-0">
         <button type="button" class="btn-close" (click)="closeModal()"></button>
       </div>
-
-      <!-- <div class="d-flex gap-4 align-items-start modal-header">
-        <p class="ct_fs_14">Your active plan</p>
-        <div class="">
-          <p class="ct_fs_14 ct_fw_600 mb-0">Free</p>
-          <p class="ct_fs_12 ">
-            Your project will be Public by default and data will be used to
-            train and improve our model.
-          </p>
-        </div>
-      </div> -->
       <div class="container">
-        <div class="ct_section_heading text-center">
-          <div class="ct_pricing_toggle">
-            <button type="button" [class.active]="billingCycle() === 'MONTH'"
-              (click)="setBillingCycle('MONTH')">Monthly</button>
-            <button type="button" [class.active]="billingCycle() === 'YEAR'"
-              (click)="setBillingCycle('YEAR')">Annually</button>
+        <div class="ct_subscription_topbar">
+          <div class="ct_section_heading text-center">
+            <h2 class="ct_fw_600 ct_fs_40 mb-3">Choose the perfect plan for you</h2>
+            <div class="ct_pricing_toggle">
+              <button type="button" [class.active]="billingCycle() === 'MONTH'"
+                (click)="setBillingCycle('MONTH')">Monthly</button>
+              <button type="button" [class.active]="billingCycle() === 'YEAR'"
+                (click)="setBillingCycle('YEAR')">Annually</button>
+            </div>
           </div>
         </div>
 
-        <div class="ct_pricing_grid mt-5 pt-5">
+        <div class="ct_pricing_grid mt-1 pt-4">
           <div class="ct_price_card" *ngIf="freePlan as plan">
+            <div class="ct_plan_status_group" *ngIf="getPlanBadges(plan).length">
+              <span class="ct_plan_status_badge" *ngFor="let badge of getPlanBadges(plan)"
+                [class.ct_plan_status_badge__active]="badge === 'Active'">
+                {{ badge }}
+              </span>
+            </div>
             <div class="ct_price_card_top">
               <span class="ct_price_badge">Free</span>
               <h3>&#8377;{{ getDisplayAmount(plan) }}<span>{{ getBillingSuffix(plan) }}</span></h3>
@@ -71,6 +69,12 @@
           </div>
 
           <div class="ct_price_card ct_price_card_featured" *ngIf="selectedProPlan as plan">
+            <div class="ct_plan_status_group" *ngIf="getPlanBadges(plan).length">
+              <span class="ct_plan_status_badge" *ngFor="let badge of getPlanBadges(plan)"
+                [class.ct_plan_status_badge__active]="badge === 'Active'">
+                {{ badge }}
+              </span>
+            </div>
             <div class="ribbon">
               <img src="assets/img/ribbin_price.png" alt="">
             </div>
@@ -83,7 +87,8 @@
                 </div>
                 <div class="ct_price_offer_wrap d-flex align-items-center gap-2 justify-content-center"
                   *ngIf="hasDiscount(plan)">
-                  <span *ngIf="billingCycle() === 'YEAR'" class="mb-0"><del>&#8377;{{ plan.display_amount }}</del><span>{{
+                  <span *ngIf="billingCycle() === 'YEAR'" class="mb-0"><del>&#8377;{{ plan.display_amount
+                      }}</del><span>{{
                       getBillingSuffix(plan)
                       }}</span></span>
                   <div class="ct_price_offer">{{ getDiscountLabel(plan) }}</div>
@@ -99,7 +104,8 @@
                 <ul class="dropdown-menu show" *ngIf="proDropdownOpen">
                   <li *ngFor="let proPlan of proDropdownPlans">
                     <button type="button" class="dropdown-item" (click)="selectProPlan(proPlan, $event)">
-                      {{ proPlan.project_limit }} Projects - &#8377;{{ getDisplayAmount(proPlan) }}{{ getBillingSuffix(proPlan) }}
+                      {{ proPlan.project_limit }} Projects - &#8377;{{ getDisplayAmount(proPlan) }}{{
+                      getBillingSuffix(proPlan) }}
                     </button>
                   </li>
                 </ul>
@@ -136,25 +142,32 @@
             </div>
           </div>
 
-        <div class="ct_price_card" *ngIf="businessPlan as plan">
-          <div class="ct_price_card_top">
-            <span class="ct_price_badge">Business</span>
-            <h3 class="mb-0">&#8377;{{ getDisplayAmount(plan) }}<span>{{ getBillingSuffix(plan) }}</span></h3>
-            <div class="ct_price_offer_slot my-2">
-              <div class="ct_price_offer_wrap d-flex align-items-center gap-2 justify-content-center my-2"
-                *ngIf="hasDiscount(plan)">
-                <span *ngIf="billingCycle() === 'YEAR'" class="mb-0"><del>&#8377;{{ plan.display_amount }}</del><span>{{
-                    getBillingSuffix(plan)
-                    }}</span></span>
-                <div class="ct_price_offer">{{ getDiscountLabel(plan) }}</div>
-              </div>
-              <p>{{ planDescription(plan) }}</p>
-              <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
-                <div class="ct_price_offer">{{ introOfferLabel(plan) }}</div>
-              </div>
+          <div class="ct_price_card" *ngIf="businessPlan as plan">
+            <div class="ct_plan_status_group" *ngIf="getPlanBadges(plan).length">
+              <span class="ct_plan_status_badge" *ngFor="let badge of getPlanBadges(plan)"
+                [class.ct_plan_status_badge__active]="badge === 'Active'">
+                {{ badge }}
+              </span>
             </div>
-            <a (click)="getStarted(plan)">Get Started</a>
-          </div>
+            <div class="ct_price_card_top">
+              <span class="ct_price_badge">Business</span>
+              <h3 class="mb-0">&#8377;{{ getDisplayAmount(plan) }}<span>{{ getBillingSuffix(plan) }}</span></h3>
+              <div class="ct_price_offer_slot my-2">
+                <div class="ct_price_offer_wrap d-flex align-items-center gap-2 justify-content-center my-2"
+                  *ngIf="hasDiscount(plan)">
+                  <span *ngIf="billingCycle() === 'YEAR'" class="mb-0"><del>&#8377;{{ plan.display_amount
+                      }}</del><span>{{
+                      getBillingSuffix(plan)
+                      }}</span></span>
+                  <div class="ct_price_offer">{{ getDiscountLabel(plan) }}</div>
+                </div>
+                <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
+                  <div class="ct_price_offer">{{ introOfferLabel(plan) }}</div>
+                </div>
+                <p>{{ planDescription(plan) }}</p>
+              </div>
+              <a (click)="getStarted(plan)">Get Started</a>
+            </div>
             <div class="ct_price_card_bottom">
               <h4>Features you will get:</h4>
               <ul>
@@ -220,7 +233,8 @@
           <div class="d-flex justify-content-between mb-2">
             <span>Price</span>
             <strong>
-              {{ formatCurrency(selectedPlanData?.display_amount || selectedPlanData?.amount || 0, selectedPlanData?.display_currency || selectedPlanData?.currency) }}
+              {{ formatCurrency(selectedPlanData?.display_amount || selectedPlanData?.amount || 0,
+              selectedPlanData?.display_currency || selectedPlanData?.currency) }}
               / {{ billingCycle() == 'MONTH' ? 'month' : 'year' }}
             </strong>
           </div>
@@ -230,7 +244,8 @@
           </div>
           <div class="d-flex justify-content-between mb-2" *ngIf="selectedPlanData && showIntroOffer(selectedPlanData)">
             <span>Renews at</span>
-            <strong>{{ formatCurrency(selectedPlanData.amount, selectedPlanData.currency) }} / {{ billingCycle() == 'MONTH' ? 'month' : 'year' }}</strong>
+            <strong>{{ formatCurrency(selectedPlanData.amount, selectedPlanData.currency) }} / {{ billingCycle() ==
+              'MONTH' ? 'month' : 'year' }}</strong>
           </div>
 
           <hr />

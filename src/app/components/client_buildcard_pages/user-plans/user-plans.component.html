@@ -16,7 +16,7 @@
                 View your subscription plan, manage saved cards, and check renewal information.
               </p>
             </div>
-            <button class="ct_upgrade_btn" (click)="showModal = true">
+            <button class="ct_upgrade_btn" (click)="openSubscriptionModal()">
               <i class="fa-solid fa-bolt"></i> Upgrade
             </button>
           </div>
@@ -177,5 +177,3 @@
     }
   </div>
 </section>
-
-<app-subcription-page [subscriptionModalOpen]="showModal" (close)="closeModal()"></app-subcription-page>

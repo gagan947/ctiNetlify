@@ -1,7 +1,8 @@
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { SubcriptionPageComponent } from "../subcription-page/subcription-page.component";
 import { ApiService } from '../../../services/api.service';
 import { Router, RouterLink } from '@angular/router';
+import { SubscriptionModalService } from '../../../services/subscription-modal.service';
+import { SubcriptionPageComponent } from "../subcription-page/subcription-page.component";
 
 interface UserProjectTab {
   inquiryId: string;
@@ -23,13 +24,12 @@ interface UserProfileSummary {
 @Component({
   selector: 'app-workspace-header',
   standalone: true,
-  imports: [SubcriptionPageComponent, RouterLink],
+  imports: [RouterLink, SubcriptionPageComponent],
   templateUrl: './workspace-header.component.html',
   styleUrl: './workspace-header.component.css'
 })
 export class WorkspaceHeaderComponent {
   allProjectsList: UserProjectTab[] = [];
-  showModal: boolean = false;
   selectedProjectId = '';
   profileImage = '';
   userEmail = 'creativethought.ai@gmail.com';
@@ -37,9 +37,18 @@ export class WorkspaceHeaderComponent {
   companyName = "Creative's Project";
   isProfileMenuOpen = false;
   @ViewChild('profileMenu') profileMenu?: ElementRef<HTMLDivElement>;
-
-  constructor(private apiService: ApiService, private router: Router) { }
+  subscriptionModalOpen = false;
+  selectedSubscriptionTemplateId = '';
+  constructor(
+    private apiService: ApiService,
+    private router: Router,
+    private subscriptionModalService: SubscriptionModalService,
+  ) { }
   ngOnInit(): void {
+    this.subscriptionModalService.modalState$.subscribe((state) => {
+      this.subscriptionModalOpen = state.isOpen;
+      this.selectedSubscriptionTemplateId = state.selectedTemplateId;
+    });
     this.loadUserSummary();
     this.getUserProfile();
     this.getProjects();
@@ -105,10 +114,6 @@ export class WorkspaceHeaderComponent {
     sessionStorage.setItem('projectData', JSON.stringify({ projectName: project.projectName, clientEnquryId: project.inquiryId }));
     this.router.navigate(['/code-generator', project.inquiryId]);
   }
-  closeModal() {
-    this.showModal = false;
-  }
-
   LogOut() {
     localStorage.clear()
     this.router.navigate(['/'])
@@ -123,6 +128,10 @@ export class WorkspaceHeaderComponent {
     this.isProfileMenuOpen = false;
   }
 
+  openSubscriptionModal(): void {
+    this.subscriptionModalService.open();
+  }
+
   @HostListener('document:click', ['$event'])
   handleDocumentClick(event: MouseEvent): void {
     const target = event.target as Node | null;
@@ -135,5 +144,9 @@ export class WorkspaceHeaderComponent {
     }
 
     this.closeProfileMenu();
+  }
+
+  closeSubscriptionModal(): void {
+    this.subscriptionModalService.close();
   }
 }

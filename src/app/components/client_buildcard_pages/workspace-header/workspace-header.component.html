@@ -27,7 +27,7 @@
     </div>
 
     <div class="main-ai-topbar__right" style="padding-bottom: 6px;">
-        <button type="button" class="main-ai-topbar__credits" (click)="showModal = true">Upgrade</button>
+        <button type="button" class="main-ai-topbar__credits" (click)="openSubscriptionModal()">Upgrade</button>
 
         <div class="main-ai-topbar__utility-group" #profileMenu>
             <!-- <button type="button" class="main-ai-topbar__icon" aria-label="Notifications">
@@ -73,7 +73,8 @@
               <span>Credits <i class="fa-regular fa-circle-question"></i></span>
               <strong><i class="fa-solid fa-circle-chevron-right"></i> -1.40</strong>
             </div> -->
-                    <button type="button" class="main-ai-profile-menu__upgrade" (click)="showModal = true">Upgrade
+                    <button type="button" class="main-ai-profile-menu__upgrade"
+                        (click)="openSubscriptionModal()">Upgrade
                         <span>✦</span></button>
                 </div>
 
@@ -117,4 +118,6 @@
     </div>
 </div>
 
-<app-subcription-page [subscriptionModalOpen]="showModal" (close)="closeModal()"></app-subcription-page>
+<app-subcription-page [subscriptionModalOpen]="subscriptionModalOpen"
+    [selectedTemplateId]="selectedSubscriptionTemplateId" (close)="closeSubscriptionModal()">
+</app-subcription-page>

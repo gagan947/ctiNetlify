@@ -3,19 +3,26 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { GlobalModalComponent } from "./components/shared/global-modal/global-modal.component";
 import { filter } from 'rxjs';
 import { Meta } from '@angular/platform-browser';
+import { SubcriptionPageComponent } from './components/client_buildcard_pages/subcription-page/subcription-page.component';
+import { SubscriptionModalService } from './services/subscription-modal.service';
 declare var bootstrap: any;
 declare let fbq: Function;
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, GlobalModalComponent],
+  imports: [RouterOutlet, GlobalModalComponent, SubcriptionPageComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'creative_ai';
   @ViewChild('closeModal') closeModal!: ElementRef;
-  constructor(private router: Router, private meta: Meta) {
+
+
+  constructor(
+    private router: Router,
+    private meta: Meta,
+  ) {
     this.meta.updateTag({ property: 'og:site_name', content: 'Creative AI' });
   }
 

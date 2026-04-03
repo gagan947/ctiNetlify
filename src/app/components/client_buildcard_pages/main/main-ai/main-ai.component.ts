@@ -1,15 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
 import { MainAiChatbotComponent } from '../main-ai-chatbot/main-ai-chatbot.component';
-import { ApiService } from '../../../../services/api.service';
 import { WorkspaceHeaderComponent } from "../../workspace-header/workspace-header.component";
+import { SubcriptionService } from '../../../../services/subcription.service';
+import { SubscriptionResponse } from '../../../../models/subcription';
+import { Subscription } from 'rxjs';
+import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
 
 @Component({
   selector: 'app-main-ai',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, MainAiChatbotComponent, WorkspaceHeaderComponent],
+  imports: [CommonModule, FormsModule, MainAiChatbotComponent, WorkspaceHeaderComponent],
   templateUrl: './main-ai.component.html',
   styleUrl: './main-ai.component.css'
 })
@@ -29,19 +31,28 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
     'Build a portfolio website for a photographer',
     'Design a dashboard for a project management tool'
   ];
-
+  subscriptionPlan!: SubscriptionResponse;
   activePlaceholder = '';
   promptText = '';
   isChatMode = false;
   submittedPrompt = '';
+  private subscriptionStateSub?: Subscription;
 
   private placeholderTimer: ReturnType<typeof setTimeout> | null = null;
   private activePlaceholderIndex = 0;
-  constructor(private apiService: ApiService, private router: Router) { }
+  constructor(
+    private subscriptionService: SubcriptionService,
+    private subscriptionModalService: SubscriptionModalService
+  ) { }
 
   ngOnInit(): void {
-
     this.playPlaceholderTypewriter();
+    this.subscriptionService.loadSubscription();
+    this.subscriptionStateSub = this.subscriptionService.subscription$.subscribe(subscription => {
+      if (subscription) {
+        this.subscriptionPlan = subscription;
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -53,6 +64,8 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
       clearTimeout(this.placeholderTimer);
       this.placeholderTimer = null;
     }
+
+    this.subscriptionStateSub?.unsubscribe();
   }
 
   handlePromptKeydown(event: KeyboardEvent): void {
@@ -63,6 +76,11 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   submitPrompt(): void {
+    if (this.subscriptionPlan?.allowProjectCreate === false) {
+      this.subscriptionModalService.open();
+      return;
+    }
+
     const prompt = this.promptText.trim().replace(/\s+/g, ' ');
     if (!prompt) {
       return;

@@ -6,15 +6,16 @@ import { SafeHtml, DomSanitizer, SafeResourceUrl } from '@angular/platform-brows
 import { RouterLink, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { Subject, filter, take, firstValueFrom } from 'rxjs';
-import { GenerateTemplateResponse } from '../../../../models/generatePreview';
+import { Subject, firstValueFrom } from 'rxjs';
 import { SubscriptionResponse } from '../../../../models/subcription';
 import { UserTemplate, GetUserTemplatesResponse } from '../../../../models/userTemplate';
 import { AiSocketService } from '../../../../services/ai-socket.service';
 import { ApiService } from '../../../../services/api.service';
-import { SubcriptionPageComponent } from '../../subcription-page/subcription-page.component';
 import { ReactCodeEditorComponent } from '../react-code-editor/react-code-editor.component';
 import { AiDevRendererComponent } from '../ai-dev-renderer/ai-dev-renderer.component';
+import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
+import { SubcriptionService } from '../../../../services/subcription.service';
+import { SubcriptionPageComponent } from "../../subcription-page/subcription-page.component";
 
 
 interface DesignSnapshot {
@@ -55,7 +56,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-react-build-preview',
   standalone: true,
-  imports: [CommonModule, ScrollingModule, SubcriptionPageComponent, ReactCodeEditorComponent, NzSelectModule, FormsModule, RouterLink, AiDevRendererComponent],
+  imports: [CommonModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, RouterLink, AiDevRendererComponent, SubcriptionPageComponent],
   templateUrl: './react-build-preview.component.html',
   styleUrl: './react-build-preview.component.css'
 })
@@ -90,7 +91,6 @@ export class ReactBuildPreviewComponent {
   designOrder: any[] = [];   // keeps tab order
   activeDesignId!: string;
   hasMarkedFirstBlock = false;
-  showModal = false;
   files: ReactFile[] = [];
   activeFileIndex = 0;
   activeFile!: ReactFile;
@@ -134,21 +134,26 @@ export class ReactBuildPreviewComponent {
   usedVariations: any[] = [];
   pendingPreviewUrl: string | null = null;
   skipBuildPrompt = false;
-
+  subscriptionModalOpen = false;
+  selectedSubscriptionTemplateId = '';
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
-    private el: ElementRef,
-    private renderer: Renderer2,
     private sanitizer: DomSanitizer,
     private aiService: AiSocketService,
-    private router: Router, private ngZone: NgZone, private fb: FormBuilder,
-    private toster: NzMessageService
+    private router: Router,
+    private toster: NzMessageService,
+    private subscriptionModalService: SubscriptionModalService,
+    private subscriptionService: SubcriptionService
   ) {
     this.baseURl = this.apiService.apiUrl;
   }
 
   async ngOnInit() {
+    this.subscriptionModalService.modalState$.subscribe((state) => {
+      this.subscriptionModalOpen = state.isOpen;
+      this.selectedSubscriptionTemplateId = state.selectedTemplateId;
+    });
     this.getUserSubscriptionPlan();
 
     const projectData = sessionStorage.getItem('projectData');
@@ -168,7 +173,7 @@ export class ReactBuildPreviewComponent {
     if (templates.length > 0) {
       await this.showDraftWelcomeMessages();
       await this.loadDraftTemplates(templates);
-      return; // ⛔ stop fresh flow
+      return;
     }
     await this.startFlow();
   }
@@ -241,7 +246,6 @@ export class ReactBuildPreviewComponent {
 
         this.designMap.set(designId, snapshot);
 
-        // ✅ store everything
         this.designOrder.push({
           designId,
           url: proxyUrl, // ✅ store proxy instead of real URL
@@ -259,8 +263,6 @@ export class ReactBuildPreviewComponent {
           this.safePreviewUrl =
             this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
         }
-
-
         this.isReactBuilding = false;
         this.isTyping = false;
       });
@@ -272,6 +274,7 @@ export class ReactBuildPreviewComponent {
     if (this.isTyping) return;
     if (this.designOrder.length >= this.subscriptionPlan.template_limit) {
       this.toster.error(`You have reached the maximum limit of ${this.subscriptionPlan.template_limit} templates.`);
+      this.subscriptionModalService.open();
       return;
     }
 
@@ -481,28 +484,22 @@ export class ReactBuildPreviewComponent {
 
 
   getUserSubscriptionPlan() {
-    this.apiService.getApi<SubscriptionResponse>(`api/user/getMySubscription`)
-      .subscribe({
-        next: (res) => {
-          this.subscriptionPlan = res;
-          this.planName = res.planName;
-        },
-        error: err => {
-          // this.loading = false
-        }
-      });
+    this.subscriptionService.loadSubscription();
+    this.subscriptionService.subscription$.subscribe((res: SubscriptionResponse) => {
+      if (!res) {
+        return;
+      }
+
+      this.subscriptionPlan = res;
+      this.planName = res.planName;
+    });
   }
 
   // open modal
   openModal() {
 
     console.log(this.selected_template_id);
-
-    this.showModal = true;
-  }
-
-  closeModal() {
-    this.showModal = false;
+    this.subscriptionModalService.open(this.selected_template_id);
   }
 
   openDeployModal(templateName: string) {
@@ -813,6 +810,11 @@ export class ReactBuildPreviewComponent {
     }
 
     if (actionId === 'deploy_template') {
+      if (!this.subscriptionPlan.canDeploy) {
+        this.toster.error('Your current plan does not include deployment. Please upgrade your plan to deploy this template.');
+        this.subscriptionModalService.open();
+        return;
+      }
       this.openDeployModal('1');
       return;
     }
@@ -1148,7 +1150,7 @@ export class ReactBuildPreviewComponent {
       'Preparing preview build'
     ], 1200, 1300);
 
- 
+
 
     this.setBuildStep(2);
     await this.addTerminal([
@@ -1175,7 +1177,7 @@ export class ReactBuildPreviewComponent {
     });
 
 
-     this.startPreview(null);
+    this.startPreview(null);
 
     this.appendBuildActionPrompt();
   }
@@ -1396,7 +1398,9 @@ export class ReactBuildPreviewComponent {
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
-
+  closeSubscriptionModal(): void {
+    this.subscriptionModalService.close();
+  }
 
 }
 

@@ -6,7 +6,6 @@ import { AiSocketService } from '../../../services/ai-socket.service';
 import { filter, firstValueFrom, Subject, take } from 'rxjs';
 import { Router, RouterLink } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { SubcriptionPageComponent } from "../subcription-page/subcription-page.component";
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { ReactCodeEditorComponent } from './react-code-editor/react-code-editor.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
@@ -14,6 +13,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { SubscriptionData, SubscriptionResponse } from '../../../models/subcription';
 import { GetUserTemplatesResponse, UserTemplate } from '../../../models/userTemplate';
 import { GenerateTemplateResponse } from '../../../models/generatePreview';
+import { SubscriptionModalService } from '../../../services/subscription-modal.service';
+import { SubcriptionService } from '../../../services/subcription.service';
 interface DesignSnapshot {
   id: string;
   label: string;
@@ -45,7 +46,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-ai-preview',
   standalone: true,
-  imports: [CommonModule, ScrollingModule, SubcriptionPageComponent, ReactCodeEditorComponent, NzSelectModule, FormsModule, RouterLink],
+  imports: [CommonModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, RouterLink],
   templateUrl: './ai-preview.component.html',
   styleUrl: './ai-preview.component.css'
 })
@@ -78,7 +79,6 @@ export class AiPreviewComponent {
   designOrder: any[] = [];   // keeps tab order
   activeDesignId!: string;
   hasMarkedFirstBlock = false;
-  showModal = false;
   files: ReactFile[] = [];
   activeFileIndex = 0;
   activeFile!: ReactFile;
@@ -126,7 +126,9 @@ export class AiPreviewComponent {
     private sanitizer: DomSanitizer,
     private aiService: AiSocketService,
     private router: Router, private ngZone: NgZone, private fb: FormBuilder,
-    private toster: NzMessageService
+    private toster: NzMessageService,
+    private subscriptionModalService: SubscriptionModalService,
+    private subscriptionService: SubcriptionService
   ) {
     this.baseURl = this.apiService.apiUrl;
   }
@@ -883,29 +885,22 @@ export class AiPreviewComponent {
   };
 
   getUserSubscriptionPlan() {
-    this.apiService.getApi<SubscriptionResponse>(`api/user/getMySubscription`)
-      .subscribe({
-        next: (res) => {
-          console.log(res);
-          this.subscriptionPlan = res;
-          this.planName = res.planName
-        },
-        error: err => {
-          // this.loading = false
-        }
-      });
+    this.subscriptionService.loadSubscription();
+    this.subscriptionService.subscription$.subscribe((res: SubscriptionResponse) => {
+      if (!res) {
+        return;
+      }
+
+      this.subscriptionPlan = res;
+      this.planName = res.planName;
+    });
   }
 
   // open modal
   openModal() {
 
     console.log(this.selected_template_id);
-  
-    this.showModal = true;
-  }
-
-  closeModal() {
-    this.showModal = false;
+    this.subscriptionModalService.open(this.selected_template_id);
   }
 
   openDeployModal(templateName: string) {

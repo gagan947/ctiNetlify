@@ -5,6 +5,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from "../client_buildcard_pages/sidebar/sidebar.component";
 import { WorkspaceHeaderComponent } from "../client_buildcard_pages/workspace-header/workspace-header.component";
+import { SubcriptionService } from '../../services/subcription.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,11 +21,17 @@ export class DashboardComponent {
   status: number | null = null;
   activePlan = '';
   baseURl = this.apiService.reactBuildURl;
-  constructor(private apiService: ApiService, private message: NzMessageService, private router: Router) {
+  constructor(
+    private apiService: ApiService,
+    private message: NzMessageService,
+    private router: Router,
+    private subscriptionService: SubcriptionService
+  ) {
   }
   ngOnInit(): void {
     sessionStorage.clear();
     this.getProjects();
+    this.subscriptionService.loadSubscription();
     this.getUserSubscriptionPlan();
   }
 
@@ -45,15 +52,13 @@ export class DashboardComponent {
   }
 
   getUserSubscriptionPlan() {
-    this.apiService.getApi<any>(`api/user/getMySubscription`)
-      .subscribe({
-        next: (res) => {
-          this.activePlan = res.planType
-        },
-        error: err => {
-          // this.loading = false
-        }
-      });
+    this.subscriptionService.subscription$.subscribe((res: any) => {
+      if (!res) {
+        return;
+      }
+
+      this.activePlan = res.planType;
+    });
   }
 
   Navigate(data: any) {

@@ -1,28 +1,26 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { FormBuilder, FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { Project, ProjectResponse } from '../../../models/projects';
-import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ChatbotComponent } from "../chatbot/chatbot.component";
 import { BdLoaderComponent } from "../../shared/bd-loader/bd-loader.component";
 import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { SubcriptionPageComponent } from '../subcription-page/subcription-page.component';
 import { SubcriptionService } from '../../../services/subcription.service';
 import { SubscriptionResponse } from '../../../models/subcription';
 import { WorkspaceHeaderComponent } from "../workspace-header/workspace-header.component";
+import { SubscriptionModalService } from '../../../services/subscription-modal.service';
 declare var Calendly: any;
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, FormsModule, ChatbotComponent, BdLoaderComponent, CalendlyDirective, SubcriptionPageComponent, WorkspaceHeaderComponent],
+  imports: [CommonModule, FormsModule, ChatbotComponent, BdLoaderComponent, CalendlyDirective, WorkspaceHeaderComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
 export class MainComponent {
-  showModal = false;
   @ViewChild('anchor', { static: false }) anchor!: ElementRef;
   @ViewChild('SearchInput', { static: false }) SearchInput!: ElementRef;
   private observer!: IntersectionObserver;
@@ -41,7 +39,14 @@ export class MainComponent {
   orgProjectsData: Project[] = [];
   allowProjectCreate = false;
   navigateMessage = ''
-  constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router, private message: NzMessageService, private subscriptionService: SubcriptionService) {
+  constructor(
+    private fb: FormBuilder,
+    private apiservice: ApiService,
+    private router: Router,
+    private message: NzMessageService,
+    private subscriptionService: SubcriptionService,
+    private subscriptionModalService: SubscriptionModalService
+  ) {
     this.imageURL = this.apiservice.imageUrl;
   }
 
@@ -173,7 +178,7 @@ export class MainComponent {
         skipLocationChange: true
       });
     } else {
-      this.showModal = true;
+      this.subscriptionModalService.open();
       this.message.warning(this.navigateMessage); // instant
     }
   }
@@ -200,20 +205,14 @@ export class MainComponent {
   // }
 
   getUserSubscriptionPlan() {
-    this.apiservice.getApi<SubscriptionResponse>(`api/user/getMySubscription`)
-      .subscribe({
-        next: (res) => {
-          this.allowProjectCreate = res.allowProjectCreate;
-          this.navigateMessage = res.message
-        },
-        error: err => {
-          // this.loading = false
-        }
-      });
-  }
+    this.subscriptionService.subscription$.subscribe((res: SubscriptionResponse) => {
+      if (!res) {
+        return;
+      }
 
-  closeModal() {
-    this.showModal = false;
+      this.allowProjectCreate = res.allowProjectCreate;
+      this.navigateMessage = res.message;
+    });
   }
 
 }
