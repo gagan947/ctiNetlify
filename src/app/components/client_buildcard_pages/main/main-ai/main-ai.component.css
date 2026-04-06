@@ -9,8 +9,8 @@
 
 .main-ai-theme-shell {
   position: relative;
-  min-height: calc(100vh - 55px);
-  height: calc(100vh - 55px);
+  min-height: calc(100vh - 45px);
+  height: calc(100vh - 45px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -188,7 +188,58 @@
   box-shadow: 0 12px 24px rgba(6, 6, 6, 0.28);
 }
 
+@media screen and (max-width: 767px) {
 
+
+  .main-ai-topbar__left,
+  .main-ai-topbar__right {
+    flex-wrap: wrap;
+  }
+
+  .main-ai-topbar__tab {
+    min-width: 0;
+    flex: 1 1 180px;
+  }
+
+  .main-ai-topbar__right {
+    justify-content: space-between;
+  }
+
+  .main-ai-wrap {
+    padding: 18px 14px;
+  }
+
+  /* 
+  .main-ai-heading {
+    font-size: clamp(2.1rem, 10vw, 3rem);
+  } */
+
+  .main-ai-subheading {
+    font-size: 14px;
+  }
+
+  .main-ai-suggestions {
+    margin: 72px auto 20px;
+  }
+
+  .main-ai-suggestions__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-ai-composer {
+    max-width: 100%;
+    padding: 16px 18px 12px;
+  }
+
+  .main-ai-prompt-input {
+    min-height: 100px;
+    font-size: 15px;
+  }
+
+  .main-ai-composer-footer {
+    flex-wrap: wrap;
+  }
+}
 
 
 
@@ -1025,4 +1076,41 @@ li.ct_ai_project_right {
 .ct_ai_credentials_box:hover {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   border-color: #d1d5db;
+}
+
+@media (max-width: 575px) {
+  .main-ai-composer {
+    display: flex;
+    flex-direction: column;
+    min-height: 220px;
+  }
+
+  .main-ai-prompt-input {
+    flex: 1 1 auto;
+  }
+
+  .main-ai-composer-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .main-ai-platform-switch {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .main-ai-right-actions {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .main-ai-submit-btn {
+    flex: 0 0 auto;
+  }
 }

@@ -1,44 +1,28 @@
 <div class="main-ai-page-shell">
   <app-workspace-header></app-workspace-header>
-  <div class="main-ai-theme-shell py-0" style="height: auto; ">
-    <div class="ct_dash_toggle_bar">
-      <i class="fa-solid fa-bars"></i>
-    </div>
 
-    @if(!isChatMode){
-    <div class="main-ai-wrap">
-      <div class="main-ai-stage">
+  @if(!isChatMode){
+  <div class="main-ai-wrap">
+    <div class="main-ai-stage">
+      <div class="align-self-end">
         <h1 class="main-ai-heading">What do you want to build today?</h1>
         <p class="main-ai-subheading">Describe your idea and let AI turn it into a real product in seconds.</p>
+      </div>
+      <div class="main-ai-composer">
+        <textarea #promptInput class="main-ai-prompt-input" rows="5" [attr.placeholder]="activePlaceholder"
+          [(ngModel)]="promptText" (keydown)="handlePromptKeydown($event)"></textarea>
 
-
-        <div class="main-ai-composer">
-          <textarea #promptInput class="main-ai-prompt-input" rows="5" [attr.placeholder]="activePlaceholder"
-            [(ngModel)]="promptText" (keydown)="handlePromptKeydown($event)"></textarea>
-
-          <div class="main-ai-composer-footer">
-            <!-- <div class="main-ai-platform-switch">
-              <button type="button" class="main-ai-platform-pill main-ai-platform-pill--active">
-                <i class="fa-solid fa-mobile-screen-button"></i>
-                <span>App</span>
-              </button>
-              <button type="button" class="main-ai-platform-pill">
-                <i class="fa-solid fa-desktop"></i>
-                <span>Web</span>
-              </button>
-            </div> -->
-
-            <div class="main-ai-right-actions">
-              <button type="button" class="main-ai-submit-btn" aria-label="Continue" (click)="submitPrompt()">
-                <i class="fa-solid fa-arrow-up"></i>
-              </button>
-            </div>
+        <div class="main-ai-composer-footer">
+          <div class="main-ai-right-actions">
+            <button type="button" class="main-ai-submit-btn" aria-label="Continue" (click)="submitPrompt()">
+              <i class="fa-solid fa-arrow-up"></i>
+            </button>
           </div>
         </div>
       </div>
     </div>
-    } @else {
-    <app-main-ai-chatbot [initialPrompt]="submittedPrompt"></app-main-ai-chatbot>
-    }
   </div>
+  } @else {
+  <app-main-ai-chatbot [initialPrompt]="submittedPrompt"></app-main-ai-chatbot>
+  }
 </div>

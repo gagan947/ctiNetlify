@@ -1,5 +1,11 @@
+<input id="mainAiSidebarToggle" type="checkbox" class="main-ai-mobile-nav-toggle">
+
 <div class="main-ai-topbar" role="banner">
     <div class="main-ai-topbar__left">
+        <label for="mainAiSidebarToggle" class="main-ai-topbar__menu-btn" aria-label="Open sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </label>
+
         <a class="main-ai-topbar__home" routerLink="/main">
             <i class="fa-solid fa-table-cells-large"></i>
             <span>Home</span>
@@ -9,11 +15,11 @@
         <button type="button" class="main-ai-topbar__tab"
             [class.main-ai-topbar__tab--active]="project.inquiryId === selectedProjectId"
             (click)="selectProjectTab(project)">
-            <!-- @if(project.inquiryId === selectedProjectId) { -->
+            @if(project.inquiryId === selectedProjectId) {
             <span class="main-ai-topbar__tab-dot-wrap">
                 <span class="main-ai-topbar__tab-dot"></span>
             </span>
-            <!-- } -->
+            }
             <span class="main-ai-topbar__tab-label">{{ project.projectName }}</span>
             <span class="main-ai-topbar__tab-close" aria-hidden="true">
                 <i class="fa-solid fa-xmark"></i>
@@ -63,24 +69,17 @@
                             <p>{{ userEmail }}</p>
                         </div>
                     </div>
-                    <!-- <button type="button" class="main-ai-profile-menu__swap" aria-label="Switch workspace">
-                        <i class="fa-solid fa-right-left"></i>
-                    </button> -->
                 </div>
 
                 <div class="main-ai-profile-menu__credits-card">
-                    <!-- <div class="main-ai-profile-menu__credits-row">
-              <span>Credits <i class="fa-regular fa-circle-question"></i></span>
-              <strong><i class="fa-solid fa-circle-chevron-right"></i> -1.40</strong>
-            </div> -->
+
                     <button type="button" class="main-ai-profile-menu__upgrade"
-                        (click)="openSubscriptionModal()">Upgrade
-                        <span>✦</span></button>
+                        (click)="openSubscriptionModal()">Upgrade <span>✦</span></button>
                 </div>
 
                 <div class="main-ai-profile-menu__actions">
                     <button type="button" class="main-ai-profile-menu__action" routerLink="/dashboard">
-                        <i class="fa-regular fa-building"></i>
+                        <i class="fa-regular fa-user"></i>
                         <span class="ct_fs_14">Account Projects</span>
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     </button>
@@ -89,16 +88,7 @@
                         <span class="ct_fs_14">My Plans</span>
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     </button>
-                    <!-- <button type="button" class="main-ai-profile-menu__action">
-              <i class="fa-brands fa-github"></i>
-              <span>Connect to Github</span>
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </button> -->
-                    <!-- <button type="button" class="main-ai-profile-menu__action">
-              <i class="fa-brands fa-discord"></i>
-              <span>Community</span>
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </button> -->
+
                     <button type="button" class="main-ai-profile-menu__action" routerLink="/profile">
                         <i class="fa-regular fa-user"></i>
                         <span class="ct_fs_14">My Profile</span>
@@ -118,6 +108,52 @@
     </div>
 </div>
 
-<app-subcription-page [subscriptionModalOpen]="subscriptionModalOpen"
-    [selectedTemplateId]="selectedSubscriptionTemplateId" (close)="closeSubscriptionModal()">
-</app-subcription-page>
+<label for="mainAiSidebarToggle" class="main-ai-mobile-sidebar-backdrop" aria-hidden="true"></label>
+
+<aside class="main-ai-mobile-sidebar" aria-label="Project tabs">
+    <div class="main-ai-mobile-sidebar__header">
+        <h3 class="main-ai-mobile-sidebar__title">Projects</h3>
+        <label for="mainAiSidebarToggle" class="main-ai-mobile-sidebar__close" aria-label="Close sidebar">
+            <i class="fa-solid fa-xmark"></i>
+        </label>
+    </div>
+
+    <a class="main-ai-mobile-sidebar__home" routerLink="/main">
+        <span><i class="fa-solid fa-plus ct_fs_12 me-1"></i> New Project</span>
+    </a>
+
+    <div>
+        <label class="mb-2 ct_fs_14 text-white opacity-75">Active Projects</label>
+        <div class="main-ai-mobile-sidebar__tabs">
+            @for (project of allProjectsList; track project.inquiryId) {
+            <button type="button" class="main-ai-mobile-sidebar__tab"
+                [class.main-ai-mobile-sidebar__tab--active]="project.inquiryId === selectedProjectId"
+                (click)="selectProjectTab(project)">
+                <span class="main-ai-mobile-sidebar__tab-main">
+                    @if(project.inquiryId === selectedProjectId) {
+                    <span class="main-ai-mobile-sidebar__tab-dot"></span>
+                    }
+                    <span class="main-ai-mobile-sidebar__tab-label">{{ project.projectName }}</span>
+                </span>
+                <span class="main-ai-mobile-sidebar__tab-close" aria-hidden="true">
+                    <i class="fa-solid fa-xmark"></i>
+                </span>
+            </button>
+            }
+        </div>
+    </div>
+
+    <div class="main-ai-mobile-sidebar__footer">
+        <button type="button" class="main-ai-mobile-sidebar__add" aria-label="Add tab">
+            <i class="fa-solid fa-plus"></i>
+            <span>Add tab</span>
+        </button>
+        <button type="button" class="main-ai-topbar__credits main-ai-mobile-sidebar__upgrade">Upgrade</button>
+    </div>
+</aside>
+
+<div class="main-ai-theme-shell py-0 d-flex align-items-center justify-content-center" style="height: auto; ">
+
+    <app-subcription-page [subscriptionModalOpen]="subscriptionModalOpen"
+        [selectedTemplateId]="selectedSubscriptionTemplateId" (close)="closeSubscriptionModal()">
+    </app-subcription-page>
