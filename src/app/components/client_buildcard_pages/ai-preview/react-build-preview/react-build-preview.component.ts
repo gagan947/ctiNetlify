@@ -136,6 +136,20 @@ export class ReactBuildPreviewComponent {
   skipBuildPrompt = false;
   subscriptionModalOpen = false;
   selectedSubscriptionTemplateId = '';
+
+  private readonly genericPreviewPages = ['Home', 'About', 'Features', 'Contact', 'Auth'];
+  private readonly projectTypePageMap: Record<string, string[]> = {
+    ecommerce: ['Home', 'Catalog', 'Details', 'Cart', 'Auth'],
+    'e-commerce': ['Home', 'Catalog', 'Details', 'Cart', 'Auth'],
+    social: ['Feed', 'Profile', 'Messages', 'Explore', 'Auth'],
+    'social media': ['Feed', 'Profile', 'Messages', 'Explore', 'Auth'],
+    portfolio: ['Home', 'Projects', 'About', 'Contact', 'Auth'],
+    saas: ['Home', 'Features', 'Pricing', 'Dashboard', 'Auth'],
+    dashboard: ['Overview', 'Analytics', 'Reports', 'Settings', 'Auth'],
+    education: ['Home', 'Courses', 'Lessons', 'Progress', 'Auth'],
+    healthcare: ['Home', 'Services', 'Appointments', 'Support', 'Auth'],
+    travel: ['Home', 'Destinations', 'Bookings', 'Itinerary', 'Auth']
+  };
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
@@ -320,7 +334,7 @@ export class ReactBuildPreviewComponent {
 
     await this.addTerminal([
       'Updating src/pages/home.jsx',
-      'Reworking the storefront entry experience'
+      'Reworking the primary landing experience'
     ], 1400, 1700);
     await this.addCodeBlock(this.getHomePage());
 
@@ -966,6 +980,9 @@ export class ReactBuildPreviewComponent {
 
   async startFlow() {
     this.blocks = [];
+    const projectTypeName = this.getProjectTypeDisplayName();
+    const previewPages = this.getPreviewPageNames();
+    const primaryPageName = previewPages[0] || 'Home';
 
     // 🔹 Connection / Init
     await this.playStatusSequence([
@@ -1032,7 +1049,7 @@ export class ReactBuildPreviewComponent {
     ], 1500, 1700);
 
     await this.addParagraphBlock(
-      `Environment looks usable now. I’ll start building the application structure manually and wire up routing, shared layout, and core pages.`,
+      `Environment looks usable now. I’ll start building the application structure manually and wire up routing, shared layout, and core pages for this ${projectTypeName} project.`,
       2500
     );
 
@@ -1041,7 +1058,7 @@ export class ReactBuildPreviewComponent {
       `Here’s the plan:
 
 - Create a clean React + Vite style structure
-- Add core e-commerce pages (Home, Shop, Product, Cart, Auth)
+- Add core ${projectTypeName} pages (${previewPages.join(', ')})
 - Configure react-router-dom for navigation
 - Build reusable layout (Header, Footer)
 - Add basic styling to unify the UI
@@ -1065,13 +1082,13 @@ export class ReactBuildPreviewComponent {
     // 🔥 HOME
     await this.addTerminal([
       'Creating src/pages/home.jsx',
-      'Building hero section and storefront entry'
+      `Building the ${primaryPageName.toLowerCase()} entry experience`
     ], 1700, 1900);
 
     await this.addCodeBlock(this.getHomePage());
 
     await this.addParagraphBlock(
-      `Home page acts as the entry point of the storefront. I’ve added a hero section and structured content to guide users into browsing products.`,
+      `${primaryPageName} page acts as the entry point of the experience. I’ve added a clear hero section and supporting copy so the initial screen can adapt to different product categories and use cases.`,
       2400
     );
 
@@ -1134,7 +1151,7 @@ export class ReactBuildPreviewComponent {
     ], 1600, 2100);
 
     await this.addParagraphBlock(
-      `All core pieces are now in place — routing, pages, layout, and styling. The project is structured in a scalable way and ready for further feature expansion like cart logic, APIs, and payments.`,
+      `All core pieces are now in place — routing, pages, layout, and styling. The project is structured in a scalable way and ready for further feature expansion like APIs, workflows, dashboards, or domain-specific modules.`,
       2600
     );
 
@@ -1170,7 +1187,7 @@ export class ReactBuildPreviewComponent {
       description: 'Generated complete React frontend with routing, reusable layout, and core pages',
       highlights: [
         'App.js (routing)',
-        'Home, Login, Signup pages',
+        `${previewPages.slice(0, 3).join(', ')} pages`,
         'Header component',
         'Base CSS styling'
       ]
@@ -1207,6 +1224,7 @@ export class ReactBuildPreviewComponent {
   }
 
   getHomePage() {
+    const projectTypeName = this.getProjectTypeDisplayName();
     return {
       file: 'src/pages/home.jsx',
       added: 40,
@@ -1216,8 +1234,8 @@ export class ReactBuildPreviewComponent {
         { line: 3, text: 'export default function Home() {' },
         { line: 4, text: '  return (' },
         { line: 5, text: '    <div className="home">' },
-        { line: 6, text: '      <h1>Welcome to Store</h1>' },
-        { line: 7, text: '      <p>Browse amazing products</p>' },
+        { line: 6, text: `      <h1>Welcome to Your ${projectTypeName} Project</h1>` },
+        { line: 7, text: '      <p>Start with a flexible foundation tailored to your goals</p>' },
         { line: 8, text: '    </div>' },
         { line: 9, text: '  );' },
         { line: 10, text: '}' }
@@ -1266,6 +1284,7 @@ export class ReactBuildPreviewComponent {
   }
 
   getHeaderComponent() {
+    const projectTypeName = this.getProjectTypeDisplayName();
     return {
       file: 'src/components/header.jsx',
       added: 30,
@@ -1274,12 +1293,35 @@ export class ReactBuildPreviewComponent {
         { line: 1, text: 'export default function Header() {' },
         { line: 2, text: '  return (' },
         { line: 3, text: '    <header>' },
-        { line: 4, text: '      <h1>My Store</h1>' },
+        { line: 4, text: `      <h1>${projectTypeName} App</h1>` },
         { line: 5, text: '    </header>' },
         { line: 6, text: '  );' },
         { line: 7, text: '}' }
       ]
     };
+  }
+
+  private getProjectTypeDisplayName(): string {
+    const rawProjectType = this.projectsData?.projectType;
+
+    if (typeof rawProjectType !== 'string' || !rawProjectType.trim()) {
+      return 'web';
+    }
+
+    return rawProjectType
+      .replace(/[-_]+/g, ' ')
+      .trim()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
+  private getPreviewPageNames(): string[] {
+    const rawProjectType = String(this.projectsData?.projectType || '').trim().toLowerCase();
+
+    if (!rawProjectType) {
+      return this.genericPreviewPages;
+    }
+
+    return this.projectTypePageMap[rawProjectType] || this.genericPreviewPages;
   }
 
   getHomeCSS() {

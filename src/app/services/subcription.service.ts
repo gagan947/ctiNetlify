@@ -13,9 +13,10 @@ export class SubcriptionService {
   constructor(private appService: ApiService) { }
 
   loadSubscription(force = false) {
-    if (!force && (this.subscriptionSubject.value || this.isLoading)) {
-      return;
-    }
+    // debugger
+    // if (!force && (this.subscriptionSubject.value || this.isLoading)) {
+    //   return;
+    // }
 
     this.isLoading = true;
     return this.appService.getApi('api/user/getMySubscription')

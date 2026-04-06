@@ -51,6 +51,7 @@ export class GoogleAuthService {
 
     google.accounts.id.initialize({
       client_id: this.clientId,
+      auto_select: false,
       callback: (response: any) => {
         this.zone.run(() => this.credentialHandler?.(response));
       }

@@ -136,7 +136,6 @@ export class SubcriptionPageComponent {
   }
 
   getStarted(planData: Plan) {
-    debugger
     this.close.emit();
     this.selectedPlan.set(this.mapPlanType(planData));
     this.subscriptionModalOpen = false;
