@@ -209,7 +209,7 @@ input[type="number"] {
 }
 
 .ct_fs_24 {
-  font-size: 24px;
+  font-size: 24px !important;
   line-height: 38.4px;
 }
 
