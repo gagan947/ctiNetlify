@@ -507,6 +507,9 @@
             <span class="ct_price_badge">Business</span>
             <h3 class="mb-0">&#8377;{{ getDisplayAmount(plan) }}<span>{{ getBillingSuffix(plan) }}</span></h3>
             <div class="ct_price_offer_slot my-2">
+              <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
+                <div class="ct_price_offer">{{ getIntroLabel(plan) }}</div>
+              </div>
               <div class="ct_price_offer_wrap d-flex align-items-center gap-2  justify-content-center my-2"
                 *ngIf="hasDiscount(plan)">
                 <span *ngIf="billingCycle === 'YEAR'" class=" mb-0"><del>&#8377;{{ plan.display_amount }}</del><span>{{
@@ -515,10 +518,6 @@
                 <div class="ct_price_offer">{{ getDiscountLabel(plan) }}</div>
               </div>
               <p>{{ getPlanDescription(plan) }}</p>
-              <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
-                <div class="ct_price_offer">{{ getIntroLabel(plan) }}</div>
-              </div>
-
             </div>
             <a routerLink="/login">Get Started</a>
           </div>

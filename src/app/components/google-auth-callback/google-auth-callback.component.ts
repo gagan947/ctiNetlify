@@ -4,7 +4,7 @@ import { GoogleAuthService } from '../../services/google-auth.service';
 @Component({
   selector: 'app-google-auth-callback',
   standalone: true,
-  template: '<p>Signing you in with Google...</p>'
+  template: ''
 })
 export class GoogleAuthCallbackComponent {
   constructor(private googleAuth: GoogleAuthService) { }
