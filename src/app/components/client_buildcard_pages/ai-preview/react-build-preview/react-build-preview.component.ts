@@ -1,6 +1,6 @@
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, NgZone, Renderer2, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, NgZone, Renderer2, ViewChild } from '@angular/core';
 import { FormsModule, FormBuilder } from '@angular/forms';
 import { SafeHtml, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterLink, Router } from '@angular/router';
@@ -136,7 +136,7 @@ export class ReactBuildPreviewComponent {
   skipBuildPrompt = false;
   subscriptionModalOpen = false;
   selectedSubscriptionTemplateId = '';
-
+  finalSummary: any = null;
   private readonly genericPreviewPages = ['Home', 'About', 'Features', 'Contact', 'Auth'];
   private readonly projectTypePageMap: Record<string, string[]> = {
     ecommerce: ['Home', 'Catalog', 'Details', 'Cart', 'Auth'],
@@ -161,6 +161,11 @@ export class ReactBuildPreviewComponent {
     private subscriptionService: SubcriptionService
   ) {
     this.baseURl = this.apiService.apiUrl;
+
+    effect(() => {
+      debugger
+      this.finalSummary = this.apiService._finalSummary();
+    });
   }
 
   async ngOnInit() {

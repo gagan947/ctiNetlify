@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService } from '../../../services/api.service';
 
 interface Particle {
   x: number;
@@ -34,21 +35,24 @@ export class BuilderLoaderComponent implements OnDestroy {
   private height = window.innerHeight;
   private messageInterval: ReturnType<typeof setInterval> | null = null;
   private redirectTimer: ReturnType<typeof setTimeout> | null = null;
-
+  finalSummary?: string;
   constructor(
     private router: Router,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private apiService: ApiService
+  ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.projectId = params['id'];
       this.publicEnquiryId = params['publicEnquiryId'];
-
+      this.finalSummary = params['finalSummary'];
       if (!this.projectId) {
         return;
       }
-
+      if (this.finalSummary) {
+        this.apiService._finalSummary.set(this.finalSummary);
+      }
       this.startMessageRotation();
       if (this.publicEnquiryId) {
         sessionStorage.setItem('publicEnquiryId', String(this.publicEnquiryId));

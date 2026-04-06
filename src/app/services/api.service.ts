@@ -7,13 +7,13 @@ import { Subject, Observable, BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  // apiUrl = 'http://192.168.1.23:4500/'
+  apiUrl = 'http://192.168.1.38:4500/'
   // imageUrl = 'http://192.168.29.241:4500/'
   // apiUrl = 'http://192.168.1.40:4500/';
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
   // apiUrl = 'https://api.creativethoughts.ai/';
   imageUrl = 'https://api.creativethoughts.ai';
-  apiUrl = 'http://localhost:4500/';
+  // apiUrl = 'http://localhost:4500/';
   // reactBuildURl = 'http://localhost:4500';
   reactBuildURl = 'https://api.creativethoughts.ai';
 
@@ -22,6 +22,7 @@ export class ApiService {
   _rate = signal<any>(null);
   _imagePreview = signal<any>(null);
   _htmlCode = signal<any>(null);
+  _finalSummary = signal<any>(null);
   constructor(private http: HttpClient, private route: Router) {
     const data: any = localStorage.getItem('userDetailCTI')
     if (data !== 'undefined') {

@@ -22,6 +22,7 @@ interface FormattedMessageLine {
 interface ProjectMatchPayload {
   match?: boolean;
   score?: number;
+  finalSummary?: string;
   project?: {
     _id?: string;
     id?: string | number;
@@ -88,12 +89,12 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   matchedProjectScore: number | null = null;
   private buildButtonRequested = false;
   private navigationSubscription?: Subscription;
-
+  projectMatchPayload?: ProjectMatchPayload;
   constructor(
     private apiService: ApiService,
     private router: Router,
     private ngZone: NgZone
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.socket = io(this.apiService.apiUrl);
@@ -192,7 +193,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
           this.router.navigate(['/bd_loader'], {
             queryParams: {
               id: projectId,
-              ...(publicEnquiryId ? { publicEnquiryId } : {})
+              ...(publicEnquiryId ? { publicEnquiryId } : {}),
+              ...(this.projectMatchPayload?.finalSummary ? { finalSummary: this.projectMatchPayload.finalSummary } : {})
             },
             skipLocationChange: true
           });
@@ -201,6 +203,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     });
 
     this.socket.on('projectMatch', (payload: ProjectMatchPayload) => {
+      this.projectMatchPayload = payload;
       console.log("PRoject Match", payload);
       this.ngZone.run(() => {
         const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
@@ -227,10 +230,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
         this.buildButtonRequested = false;
         this.currentLoaderText = 'Starting your project build...';
         this.scrollChatToBottom();
-
-       
         this.buildMatchedProject();
-        
       });
     });
 
@@ -347,7 +347,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   }
 
   buildMatchedProject(): void {
-    
+
     this.isBuildActionLoading = true;
 
     this.apiService.postAPI<GenerateInquiryResponse, { sd: string; user_prompt: string }>('api/user/generateInquiry', {
@@ -371,7 +371,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
         this.router.navigate(['/bd_loader'], {
           queryParams: {
             id: this.matchedProjectId,
-            publicEnquiryId: publicId
+            publicEnquiryId: publicId,
+            finalSummary: this.projectMatchPayload?.finalSummary ?? undefined
           },
           skipLocationChange: true
         });

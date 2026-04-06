@@ -329,7 +329,7 @@ export class SubcriptionPageComponent {
   }
 
   getDisplayAmount(plan: Plan | null): string {
-    return plan?.display_amount || '0.00';
+    return plan?.amount.toString() || '0.00';
   }
 
   billingLabel(interval: string): string {
