@@ -1,6 +1,276 @@
 <div class="main-ai-page-shell">
+  <input id="mainAiSidebarToggle" type="checkbox" class="main-ai-mobile-nav-toggle">
+
+  <style>
+    .main-ai-mobile-nav-toggle {
+      display: none;
+    }
+
+    .main-ai-topbar__menu-btn,
+    .main-ai-mobile-sidebar,
+    .main-ai-mobile-sidebar-backdrop {
+      display: none;
+    }
+
+    @media (max-width: 991px) {
+    
+.main-ai-topbar{
+  padding-block: 4px;
+}
+.main-ai-topbar__home{
+  border-radius: 10px;
+}
+      .main-ai-topbar__left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .main-ai-topbar__left .main-ai-topbar__tab,
+      .main-ai-topbar__left .main-ai-topbar__add {
+        display: none;
+      }
+
+      .main-ai-topbar__menu-btn {
+        width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 10px;
+        background: #141922;
+        color: #fff;
+        cursor: pointer;
+        flex: 0 0 auto;
+      }
+
+    
+
+      .main-ai-topbar__right {
+        margin-left: auto;
+        padding-bottom: 0 !important;
+      }
+
+      .main-ai-topbar__credits {
+        display: none;
+      }
+
+      .main-ai-mobile-sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.4s ease all;
+        z-index: 99;
+      }
+
+      .main-ai-mobile-sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: min(320px, 86vw);
+        height: 100vh;
+        padding: 18px 14px;
+        background: #0b1018;
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        transform: translateX(-100%);
+        display: block;
+        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.24s ease, visibility 0.24s ease;
+        z-index: 100;
+        overflow-y: auto;
+      }
+
+      .main-ai-mobile-sidebar__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .main-ai-mobile-sidebar__title {
+        margin: 0;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .main-ai-mobile-sidebar__close {
+        width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 12px;
+        background: #141922;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .main-ai-mobile-sidebar__home {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 13px 14px;
+        margin-bottom: 14px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        text-decoration: none;
+        opacity: 0;
+        transform: translateY(18px);
+        transition: transform 0.35s ease, opacity 0.35s ease;
+        transition-delay: 0.08s;
+      }
+
+      .main-ai-mobile-sidebar__tabs {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .main-ai-mobile-sidebar__tab,
+      .main-ai-mobile-sidebar__add {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        background: #111827;
+        color: #fff;
+        opacity: 0;
+        transform: translateY(18px);
+        transition: transform 0.35s ease, opacity 0.35s ease, background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .main-ai-mobile-sidebar__tab--active {
+        border-color: rgba(59, 130, 246, 0.5);
+        background: #172033;
+      }
+
+      .main-ai-mobile-sidebar__tab-main {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+      }
+
+      .main-ai-mobile-sidebar__tab-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #4da3ff;
+        flex: 0 0 auto;
+      }
+
+      .main-ai-mobile-sidebar__tab-label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .main-ai-mobile-sidebar__footer {
+        margin-top: 16px;
+        opacity: 0;
+        transform: translateY(18px);
+        transition: transform 0.35s ease, opacity 0.35s ease;
+        transition-delay: 0.24s;
+      }
+
+      .main-ai-mobile-sidebar__upgrade {
+        width: 100%;
+        margin-top: 12px;
+      }
+
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar-backdrop {
+        display: block;
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar {
+        display: block;
+        transform: translateX(0);
+        left: 0px;
+      }
+
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar .main-ai-mobile-sidebar__home,
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar .main-ai-mobile-sidebar__tab,
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar .main-ai-mobile-sidebar__footer {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar .main-ai-mobile-sidebar__tab:nth-child(1) {
+        transition-delay: 0.12s;
+      }
+
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar .main-ai-mobile-sidebar__tab:nth-child(2) {
+        transition-delay: 0.16s;
+      }
+
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar .main-ai-mobile-sidebar__tab:nth-child(3) {
+        transition-delay: 0.2s;
+      }
+
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar .main-ai-mobile-sidebar__tab:nth-child(4) {
+        transition-delay: 0.24s;
+      }
+
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar .main-ai-mobile-sidebar__tab:nth-child(5) {
+        transition-delay: 0.28s;
+      }
+
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar .main-ai-mobile-sidebar__tab:nth-child(6) {
+        transition-delay: 0.32s;
+      }
+
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar .main-ai-mobile-sidebar__tab:nth-child(7) {
+        transition-delay: 0.36s;
+      }
+
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar .main-ai-mobile-sidebar__tab:nth-child(8) {
+        transition-delay: 0.4s;
+      }
+
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar .main-ai-mobile-sidebar__tab:nth-child(9) {
+        transition-delay: 0.44s;
+      }
+
+      .main-ai-mobile-nav-toggle:checked ~ .main-ai-mobile-sidebar .main-ai-mobile-sidebar__tab:nth-child(10) {
+        transition-delay: 0.48s;
+      }
+    }
+
+    @media screen and (max-width: 575px) {
+      .main-ai-stage{
+        display: grid;
+        height: 100%;
+      }
+      .main-ai-wrap{
+        padding-bottom: 0px;
+      }
+      .main-ai-composer{
+        margin-top: auto;
+      }
+    }
+  </style>
+
   <div class="main-ai-topbar" role="banner">
     <div class="main-ai-topbar__left">
+      <label for="mainAiSidebarToggle" class="main-ai-topbar__menu-btn" aria-label="Open sidebar">
+        <i class="fa-solid fa-bars"></i>
+      </label>
+
       <a class="main-ai-topbar__home" routerLink="/dashboard">
         <i class="fa-solid fa-table-cells-large"></i>
         <span>Home</span>
@@ -114,8 +384,6 @@
               <i class="fa-solid fa-arrow-right-from-bracket"></i>
               <span class="ct_fs_14">Logout</span>
             </button>
-
-         
           </div>
         </div>
         }
@@ -123,20 +391,68 @@
     </div>
   </div>
 
+  <label for="mainAiSidebarToggle" class="main-ai-mobile-sidebar-backdrop" aria-hidden="true"></label>
+
+  <aside class="main-ai-mobile-sidebar" aria-label="Project tabs">
+    <div class="main-ai-mobile-sidebar__header">
+      <h3 class="main-ai-mobile-sidebar__title">Projects</h3>
+      <label for="mainAiSidebarToggle" class="main-ai-mobile-sidebar__close" aria-label="Close sidebar">
+        <i class="fa-solid fa-xmark"></i>
+      </label>
+    </div>
+
+    <a class="main-ai-mobile-sidebar__home" routerLink="/dashboard">
+      <span><i class="fa-solid fa-plus ct_fs_12 me-1"></i> New Project</span>
+    </a>
+
+  <div>
+    <label class="mb-2 ct_fs_14 text-white opacity-75">Active Projects</label>
+      <div class="main-ai-mobile-sidebar__tabs">
+      @for (project of allProjectsList; track project.inquiryId) {
+      <button
+        type="button"
+        class="main-ai-mobile-sidebar__tab"
+        [class.main-ai-mobile-sidebar__tab--active]="project.inquiryId === selectedProjectId"
+        (click)="selectProjectTab(project)">
+        <span class="main-ai-mobile-sidebar__tab-main">
+          @if(project.inquiryId === selectedProjectId) {
+          <span class="main-ai-mobile-sidebar__tab-dot"></span>
+          }
+          <span class="main-ai-mobile-sidebar__tab-label">{{ project.projectName }}</span>
+        </span>
+        <span class="main-ai-mobile-sidebar__tab-close" aria-hidden="true">
+          <i class="fa-solid fa-xmark"></i>
+        </span>
+      </button>
+      }
+    </div>
+  </div>
+
+    <div class="main-ai-mobile-sidebar__footer">
+      <button type="button" class="main-ai-mobile-sidebar__add" aria-label="Add tab">
+        <i class="fa-solid fa-plus"></i>
+        <span>Add tab</span>
+      </button>
+      <button type="button" class="main-ai-topbar__credits main-ai-mobile-sidebar__upgrade">Upgrade</button>
+    </div>
+  </aside>
+
   <div class="main-ai-theme-shell py-0 d-flex align-items-center justify-content-center"
     style="height: auto; ">
-    
-    <div class="ct_dash_toggle_bar">
+
+    <!-- <div class="ct_dash_toggle_bar">
       <i class="fa-solid fa-bars"></i>
-    </div>
+    </div> -->
 
     @if(!isChatMode){
     <div class="main-ai-wrap">
       <div class="main-ai-stage">
-        <h1 class="main-ai-heading">What do you want to build today?</h1>
+        <div class="align-self-end">
+          <h1 class="main-ai-heading">What do you want to build today?</h1>
         <p class="main-ai-subheading">Describe your idea and let AI turn it into a real product in seconds.</p>
+        </div>
 
-      
+
         <div class="main-ai-composer">
           <textarea #promptInput class="main-ai-prompt-input" rows="5"
             [attr.placeholder]="activePlaceholder"
