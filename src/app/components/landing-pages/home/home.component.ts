@@ -257,7 +257,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   }
 
   getIntroLabel(plan: Plan | null): string {
-    return plan ? `First-time subscription fee ₹${plan.intro_amount}` : '';
+    return plan ? `₹${plan.intro_amount}` : '';
   }
 
   private getSupportLabel(type: string): string {

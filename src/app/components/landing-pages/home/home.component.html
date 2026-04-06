@@ -439,7 +439,7 @@
           <div class="ct_price_card_top">
             <span class="ct_price_badge">Pro</span>
 
-            <h3 class="mb-0 mt-4">&#8377;{{ getDisplayAmount(plan) }}<span>{{ getBillingSuffix(plan) }}</span></h3>
+            <h3 class="mb-0 mt-4  opacity-50 ct_fs_20 ">&#8377;<span class="ct_del_price">{{ getDisplayAmount(plan) }}</span><span>{{ getBillingSuffix(plan) }}</span></h3>
             <div class="ct_price_offer_slot my-2">
               <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
                 <div class="ct_price_offer">{{ getIntroLabel(plan) }}</div>
@@ -505,7 +505,7 @@
         <div class="ct_price_card" *ngIf="businessPlan as plan">
           <div class="ct_price_card_top">
             <span class="ct_price_badge">Business</span>
-            <h3 class="mb-0">&#8377;{{ getDisplayAmount(plan) }}<span>{{ getBillingSuffix(plan) }}</span></h3>
+            <h3 class="mb-0 opacity-50 ct_fs_20 ">&#8377;<span class="ct_del_price">{{ getDisplayAmount(plan) }}</span><span>{{ getBillingSuffix(plan) }}</span></h3>
             <div class="ct_price_offer_slot my-2">
               <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
                 <div class="ct_price_offer">{{ getIntroLabel(plan) }}</div>

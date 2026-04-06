@@ -530,8 +530,11 @@ section {
 .ct_price_offer {
   text-align: center;
   color: #0064FF;
-  font-size: 15px;
+  font-size: 28px;
   font-weight: 700;
+}
+.ct_del_price{
+  text-decoration: line-through;
 }
 
 .ct_price_renewal {

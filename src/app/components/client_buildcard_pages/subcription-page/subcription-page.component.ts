@@ -207,7 +207,7 @@ export class SubcriptionPageComponent {
   }
 
   introOfferLabel(plan: Plan): string {
-    return `First-time subscription fee ${this.formatCurrency(plan.intro_amount, plan.currency)}`;
+    return ` ${this.formatCurrency(plan.intro_amount, plan.currency)}`;
   }
 
   billedNowAmount(plan: Plan | null): string {
