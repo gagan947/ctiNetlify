@@ -1,15 +1,23 @@
 import { Injectable, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GoogleAuthService {
-  private readonly clientId = '994120717709-6hec26klmpd1h9eif5vcahincbbn2m1u.apps.googleusercontent.com';
+  private readonly clientId = '316919446938-cj2jdkrjqdgqpf8p411mce8sp6lb0vr2.apps.googleusercontent.com';
   private initialized = false;
   private credentialHandler?: (response: any) => void;
   private googleReadyPromise?: Promise<any>;
 
-  constructor(private zone: NgZone) { }
+  constructor(
+    private zone: NgZone,
+    private apiService: ApiService,
+    private router: Router,
+    private message: NzMessageService
+  ) { }
 
   setCredentialHandler(callback: (response: any) => void) {
     this.credentialHandler = callback;
@@ -44,11 +52,85 @@ export class GoogleAuthService {
     });
   }
 
+  startRedirectLogin() {
+    const redirectUri = this.getRedirectUri();
+    const url = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+    url.searchParams.set('client_id', this.clientId);
+    url.searchParams.set('redirect_uri', redirectUri);
+    url.searchParams.set('response_type', 'id_token');
+    url.searchParams.set('scope', 'openid email profile');
+    url.searchParams.set('prompt', 'select_account');
+    url.searchParams.set('nonce', this.createNonce());
+
+    window.location.href = url.toString();
+  }
+
+  completeRedirectLogin(hash: string) {
+    const params = new URLSearchParams(hash.startsWith('#') ? hash.slice(1) : hash);
+    const idToken = params.get('id_token');
+    const error = params.get('error');
+
+    if (error) {
+      this.message.error('Google Sign-In was cancelled or failed.');
+      this.router.navigate(['/']);
+      return;
+    }
+
+    if (!idToken) {
+      this.message.error('Google Sign-In did not return a valid token.');
+      this.router.navigate(['/']);
+      return;
+    }
+
+    this.loginWithCredential(idToken);
+  }
+
+  loginWithCredential(credential: string, onComplete?: () => void) {
+    this.apiService.postAPI(`api/user/googleLogin`, { credential }).subscribe({
+      next: (res: any) => {
+        if (res.success === true) {
+          this.apiService.setToken(res.data.token);
+          localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
+          this.message.success(res.message);
+
+          if (res.data.user.profile_visited) {
+            this.router.navigate(['/main']);
+          } else {
+            this.router.navigate(['/profile']);
+          }
+        } else {
+          this.message.error(res.message);
+        }
+
+        onComplete?.();
+      },
+      error: (err) => {
+        if (err.status === 0) {
+          this.message.error('Network error, please check your connection.');
+        } else if (err.error?.message) {
+          this.message.error(err.error.message);
+        } else {
+          this.message.error('Unexpected error occurred.');
+        }
+
+        onComplete?.();
+      }
+    });
+  }
+
+  private getRedirectUri() {
+    return `${window.location.origin}/auth/google/callback`;
+  }
+
+  private createNonce() {
+    return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  }
+
   private ensureInitialized(google = (window as any).google) {
     if (this.initialized || !google?.accounts?.id) {
       return;
     }
-
+    google.accounts.id.disableAutoSelect();
     google.accounts.id.initialize({
       client_id: this.clientId,
       auto_select: false,

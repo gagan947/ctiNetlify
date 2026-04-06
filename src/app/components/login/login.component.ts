@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -19,7 +19,6 @@ declare const AppleID: any;
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements AfterViewInit {
-  @ViewChild('googleSignInDiv') googleSignInDiv?: ElementRef<HTMLElement>;
   loginForm: FormGroup;
   showPassword: boolean = false;
   isLoading = false
@@ -56,17 +55,9 @@ export class LoginComponent implements AfterViewInit {
     //   { theme: 'filled_blue', size: 'large' }
     // );
 
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        // re-render button if DOM is available
-        setTimeout(() => this.renderGoogleButton(), 100);
-      }
-    });
   }
 
   ngAfterViewInit(): void {
-    this.initGoogleAuth();
-
     FB.init({
       appId: '1435650607718739',
       cookie: true,
@@ -83,16 +74,8 @@ export class LoginComponent implements AfterViewInit {
     });
   }
 
-  initGoogleAuth() {
-    this.googleAuth.setCredentialHandler((response: any) => this.handleCredentialResponse(response));
-    this.renderGoogleButton();
-  }
-
-  renderGoogleButton() {
-    this.googleAuth.renderButton(this.googleSignInDiv?.nativeElement ?? null, {
-      theme: 'filled_blue',
-      size: 'large',
-    });
+  loginWithGoogle() {
+    this.googleAuth.startRedirectLogin();
   }
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
@@ -249,48 +232,6 @@ export class LoginComponent implements AfterViewInit {
     return this.loginForm.controls;
   }
 
-
-  handleCredentialResponse(response: any) {
-
-    const formData = {
-      credential: response.credential
-    }
-
-    this.apiService.postAPI(`api/user/googleLogin`, formData)
-      .subscribe({
-        next: (res: any) => {
-          if (res.success == true) {
-            this.apiService.setToken(res.data.token);
-            localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
-            this.message.success(res.message)
-
-            if (res.data.user.profile_visited) {
-              this.router.navigate(['/main']);
-            } else {
-              this.router.navigate(['/profile']);
-            }
-            // this.projectInfo = res.projectInfo
-            // this, this.getProjectMedia()
-            this.isLoading = false
-          } else {
-            this.isLoading = false
-            // this.loading = false
-            this.message.error(res.message)
-          }
-        },
-        error: err => {
-          if (err.status === 0) {
-            this.message.error('Network error, please check your connection.');
-          } else if (err.error?.message) {
-            this.message.error(err.error.message);
-          } else {
-            this.message.error('Unexpected error occurred.');
-          }
-          this.isLoading = false
-        }
-      });
-
-  };
 
   handleCredentialResponseError(error: any) {
     console.log(error);

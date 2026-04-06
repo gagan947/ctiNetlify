@@ -5,6 +5,10 @@ import { authGuard } from './guard/auth.guard';
 
 export const routes: Routes = [
       {
+            path: 'auth/google/callback',
+            loadComponent: () => import('./components/google-auth-callback/google-auth-callback.component').then(c => c.GoogleAuthCallbackComponent)
+      },
+      {
             path: 'login', loadComponent: () => import('./components/login/login.component').then(c => c.LoginComponent), canActivate: [loginGuard],
             data: { preload: true }
       },

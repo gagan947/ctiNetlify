@@ -86,16 +86,20 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadPlans();
-    this.googleAuth.setCredentialHandler((response: any) => this.loginWithGoogle(response));
-    this.googleAuth.renderButton('googleSignInDiv', {
-      theme: 'outline',
-      size: 'large',
-      type: 'standard',
-      shape: 'pill',
-      text: 'continue_with',
-      logo_alignment: 'left',
-      width: 496
-    });
+    // this.googleAuth.setCredentialHandler((response: any) => this.loginWithGoogle(response));
+    // this.googleAuth.renderButton('googleSignInDiv', {
+    //   theme: 'outline',
+    //   size: 'large',
+    //   type: 'standard',
+    //   shape: 'pill',
+    //   text: 'continue_with',
+    //   logo_alignment: 'left',
+    //   width: 496
+    // });
+  }
+
+  loginWithGoogle12() {
+    this.googleAuth.startRedirectLogin();
   }
 
   ngAfterViewInit(): void {
@@ -322,36 +326,12 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   }
 
   loginWithGoogle(response: any) {
-    const formData = {
-      credential: response.credential,
+    if (!response?.credential) {
+      this.message.error('Google Sign-In did not return a valid credential.');
+      return;
     }
 
-    this.service.postAPI(`api/user/googleLogin`, formData)
-      .subscribe({
-        next: (res: any) => {
-          if (res.success == true) {
-            this.service.setToken(res.data.token);
-            localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
-            this.message.success(res.message)
-            if (res.data.user.profile_visited) {
-              this.router.navigate(['/main']);
-            } else {
-              this.router.navigate(['/profile']);
-            }
-          } else {
-            this.message.error(res.message)
-          }
-        },
-        error: err => {
-          if (err.status === 0) {
-            this.message.error('Network error, please check your connection.');
-          } else if (err.error?.message) {
-            this.message.error(err.error.message);
-          } else {
-            this.message.error('Unexpected error occurred.');
-          }
-        }
-      });
+    this.googleAuth.loginWithCredential(response.credential);
   }
 
   loginWithFacebook() {

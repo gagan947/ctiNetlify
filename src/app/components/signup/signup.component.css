@@ -97,3 +97,25 @@
       font-weight: 700;
       padding-inline: 46px;
 }
+
+.ct_prompt_google_btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      min-height: 55px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid #d9e3f7;
+      color: #2563eb;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 12px 24px;
+}
+
+.ct_prompt_google_btn span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+}
