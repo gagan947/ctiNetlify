@@ -8,6 +8,10 @@
   scroll-behavior: smooth;
 }
 
+ul {
+  margin-bottom: 0px;
+}
+
 h2,
 h1 {
   font-family: "Figtree", sans-serif;
@@ -477,6 +481,7 @@ header {
   display: flex;
   align-items: center;
   gap: 20px;
+  margin-bottom: 0px;
 }
 
 #hamburger-12:hover .ct_line:nth-child(1) {

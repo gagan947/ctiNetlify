@@ -800,6 +800,11 @@ section {
     padding: 56px 0;
   }
 
+  .ct_pricing_grid.mt-5 {
+    gap: 60px !important;
+  }
+
+
   .ct_prompt_hero {
     min-height: auto;
     padding-inline: 96px;
@@ -848,6 +853,7 @@ section {
     display: grid;
     gap: 24px;
     min-height: auto;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .ct_launch_journey_path {
@@ -896,6 +902,11 @@ section {
   .ct_section_heading h2,
   .ct_launch_journey_intro h2 {
     font-size: 30px;
+  }
+
+  .ct_launch_journey_flow {
+
+    grid-template-columns: repeat(1, 1fr);
   }
 
   .ct_build_visual.ct_build_visual_web img+img {
