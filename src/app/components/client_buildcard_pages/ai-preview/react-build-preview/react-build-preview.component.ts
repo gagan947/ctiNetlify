@@ -163,7 +163,7 @@ export class ReactBuildPreviewComponent {
     this.baseURl = this.apiService.apiUrl;
 
     effect(() => {
-      this.finalSummary = this.apiService._finalSummary();
+      this.finalSummary = this.apiService._finalSummary() || sessionStorage.getItem('finalSummary');
     });
   }
 
@@ -187,12 +187,15 @@ export class ReactBuildPreviewComponent {
     // ============================================
 
     const templates = await this.getUserTemplates();
-
     if (templates.length > 0) {
       await this.showDraftWelcomeMessages();
       await this.loadDraftTemplates(templates);
       return;
     }
+    if (!this.projectsData.projectId) {
+      this.startAIWithoutProjectMatch(null);
+    }
+
     await this.startFlow();
   }
 
@@ -220,6 +223,9 @@ export class ReactBuildPreviewComponent {
   }
 
   startPreview(socket_id: string | null) {
+
+    if (!this.projectsData.projectId) return
+
     if (socket_id) {
       this.setBuildFlow('initial');
       this.startBuildProgressTimers();
@@ -287,6 +293,66 @@ export class ReactBuildPreviewComponent {
   }
 
 
+  startAIWithoutProjectMatch(socket_id: string | null) {
+    if (socket_id) {
+      this.setBuildFlow('initial');
+      this.startBuildProgressTimers();
+    }
+
+    const payload = {
+      prompt: this.finalSummary,
+      inquiryPublicId: this.projectsData.clientEnquryId,
+    };
+
+    this.apiService
+      .postAPI<any, any>('api/ai/generateProject', payload)
+      .subscribe((res: any) => {
+
+        this.isReactBuilding = true;
+        const templateId = res.templateId;
+        const proxyUrl = this.getPreviewProxyUrl(templateId);
+
+        // 🔹 track variation
+        if (res.variation) {
+          this.usedVariations.push(res.variation);
+        }
+
+        this.designCount++;
+
+        const designId = `design-${this.designCount}`;
+
+        const snapshot: DesignSnapshot = {
+          id: designId,
+          label: `Template ${this.designCount}`,
+          pages: res.pages || [],
+          loginRedirect: res.login_redirect || null,
+          createdAt: new Date(),
+          previewType: 'html'
+        };
+
+        this.designMap.set(designId, snapshot);
+
+        this.designOrder.push({
+          designId,
+          url: proxyUrl, // ✅ store proxy instead of real URL
+          user_template_id: res.templateId || null, // depends on backend
+          variation_no: res.variation
+        });
+
+        this.activeDesignId = designId;
+
+        if (socket_id) {
+          this.pendingPreviewUrl = proxyUrl;
+          this.isIframeLoading = true;
+        } else {
+          this.isIframeLoading = true;
+          this.safePreviewUrl =
+            this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
+        }
+        this.isReactBuilding = false;
+        this.isTyping = false;
+      });
+  }
   async regenerate() {
 
     if (this.isTyping) return;
@@ -636,9 +702,6 @@ export class ReactBuildPreviewComponent {
   }
 
 
-
-
-
   async loadDraftTemplates(templates: any[]) {
     if (!templates || templates.length === 0) return;
 
@@ -665,7 +728,6 @@ export class ReactBuildPreviewComponent {
       };
 
       this.designMap.set(designId, snapshot);
-
       // ✅ IMPORTANT: store template_id + variation
       this.designOrder.push({
         designId,
@@ -691,10 +753,6 @@ export class ReactBuildPreviewComponent {
     this.isReactBuilding = false;
     this.isTyping = false;
   }
-
-
-
-
 
 
   async showDraftWelcomeMessages() {
@@ -1061,12 +1119,12 @@ export class ReactBuildPreviewComponent {
     await this.addParagraphBlock(
       `Here’s the plan:
 
-- Create a clean React + Vite style structure
-- Add core ${projectTypeName} pages (${previewPages.join(', ')})
-- Configure react-router-dom for navigation
-- Build reusable layout (Header, Footer)
-- Add basic styling to unify the UI
-- Keep everything modular and scalable`,
+    - Create a clean React + Vite style structure
+    - Add core ${projectTypeName} pages (${previewPages.join(', ')})
+    - Configure react-router-dom for navigation
+    - Build reusable layout (Header, Footer)
+    - Add basic styling to unify the UI
+    - Keep everything modular and scalable`,
       3000
     );
 
@@ -1436,7 +1494,6 @@ export class ReactBuildPreviewComponent {
 
   async addSummary(data: any) {
     await this.delay(600);
-
     this.blocks.push({
       type: 'summary',
       data

@@ -7,6 +7,7 @@ import { SubcriptionService } from '../../../../services/subcription.service';
 import { SubscriptionResponse } from '../../../../models/subcription';
 import { Subscription } from 'rxjs';
 import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
+declare let fbq: any;
 
 @Component({
   selector: 'app-main-ai',
@@ -46,6 +47,10 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    if (typeof fbq === 'function') {
+      fbq('track', 'CompleteRegistration');
+    }
+
     this.playPlaceholderTypewriter();
     this.subscriptionService.loadSubscription();
     this.subscriptionStateSub = this.subscriptionService.subscription$.subscribe(subscription => {

@@ -115,6 +115,22 @@
   <noscript>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   </noscript>
+
+  <script>
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () {
+        n.callMethod ?
+          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+      n.queue = []; t = b.createElement(e); t.async = !0;
+      t.src = v; s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s)
+    }(window, document, 'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1584284446204535');
+    fbq('track', 'PageView');
+  </script>
   <!-- <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/responsive.css">
   <link rel="stylesheet" href="/assets/css/user-dashboard.css"> -->
@@ -240,15 +256,6 @@
 </script>
 
   <!-- Defer non-critical JS -->
-  <script>
-    window.fbq = window.fbq || function () {
-      (window.fbq.q = window.fbq.q || []).push(arguments);
-    };
-    window.fbq.loaded = true;
-    window.fbq.version = "2.0";
-    window.fbq.queue = window.fbq.queue || [];
-    window.fbq("init", "24177886171883852");
-  </script>
   <script defer src="https://connect.facebook.net/en_US/fbevents.js"></script>
   <script defer src="https://www.googletagmanager.com/gtm.js?id=GTM-PF873KR8"></script>
 
@@ -262,9 +269,8 @@
   </script>
 
   <!-- Facebook Pixel noscript -->
-  <noscript>
-    <img height="1" width="1" style="display:none" alt=""
-      src="https://www.facebook.com/tr?id=24177886171883852&ev=PageView&noscript=1" />
+  <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1584284446204535&ev=PageView&noscript=1" />
   </noscript>
 
   <!-- GTM noscript -->

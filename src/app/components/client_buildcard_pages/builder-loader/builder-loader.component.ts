@@ -52,6 +52,7 @@ export class BuilderLoaderComponent implements OnDestroy {
       // }
       if (this.finalSummary) {
         this.apiService._finalSummary.set(this.finalSummary);
+        sessionStorage.setItem('finalSummary', this.finalSummary);
       }
       this.startMessageRotation();
       if (this.publicEnquiryId) {

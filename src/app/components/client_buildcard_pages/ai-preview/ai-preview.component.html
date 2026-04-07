@@ -89,7 +89,7 @@
     </div>
   </div>
   <section class="ct_project_ai_preview_main">
-    <aside class="ct_project_ai_chat_section pe-0" [ngClass]="!fullScreen ? 'd-block' : 'd-none'">
+    <aside class="ct_project_ai_chat_section" [ngClass]="!fullScreen ? 'd-block' : 'd-none'">
       <div #chatScroll>
         <ul class="pe-3">
           @for (block of blocks; track $index) {
@@ -144,23 +144,23 @@
                 }
               </ul>
               }@else if (block.id.startsWith('credentials')) {
-                <p class="mb-0">{{ block.text.message }}</p>
-                <div class="ct_ai_credentials_box">
-                  <h6>{{ block.text.label }}</h6>
-                
-                  <div>
-                    <strong>Email:</strong>
-                    <span>{{ block.text.email }}</span>
-                  </div>
-                  
-                  <div>
-                    <strong>Password:</strong>
-                    <span>{{ block.text.password }}</span>
-                  </div>
-                  
+              <p class="mb-0">{{ block.text.message }}</p>
+              <div class="ct_ai_credentials_box">
+                <h6>{{ block.text.label }}</h6>
+
+                <div>
+                  <strong>Email:</strong>
+                  <span>{{ block.text.email }}</span>
                 </div>
+
+                <div>
+                  <strong>Password:</strong>
+                  <span>{{ block.text.password }}</span>
+                </div>
+
+              </div>
               }@else {
-                <p class="mb-0">{{ block.text }}</p>
+              <p class="mb-0">{{ block.text }}</p>
               }
             </div>
             }
@@ -176,8 +176,8 @@
           Regenerate
         </button>
 
-        <button class="ct_schedule_call_btn w-100 justify-content-center mt-auto ct_white_nowrape_1" (click)="openDeployModal('1')"
-          [ngClass]="isTyping ? 'ct_no_drop_btn' : ''">
+        <button class="ct_schedule_call_btn w-100 justify-content-center mt-auto ct_white_nowrape_1"
+          (click)="openDeployModal('1')" [ngClass]="isTyping ? 'ct_no_drop_btn' : ''">
           Deploy Now
         </button>
       </div>
@@ -274,13 +274,10 @@
       <!-- Template Preview with Image -->
       <div class="template-preview">
         <div class="preview-image">
-          <iframe
-          [src]="previewUrl"
-          class="preview-iframe mx-auto w-100"
-          [style.maxWidth]="previewWidth + 'px'"
-          [style.height.%]="100">
-        </iframe>
-        
+          <iframe [src]="previewUrl" class="preview-iframe mx-auto w-100" [style.maxWidth]="previewWidth + 'px'"
+            [style.height.%]="100">
+          </iframe>
+
         </div>
         <div class="preview-content">
           <h3>Template {{activeDesignId}}</h3>
@@ -298,7 +295,8 @@
       <!-- Buttons -->
       <div class="actions">
         <button class="btn-cancel button-deploy" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn-confirm button-deploy" (click)="checkNDeploy()" data-bs-dismiss="modal">Deploy Template</button>
+        <button class="btn-confirm button-deploy" (click)="checkNDeploy()" data-bs-dismiss="modal">Deploy
+          Template</button>
       </div>
     </div>
   </div>

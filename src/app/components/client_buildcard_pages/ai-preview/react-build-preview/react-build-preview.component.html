@@ -90,7 +90,7 @@
         </div>
     </div>
     <section class="ct_project_ai_preview_main">
-        <aside class="ct_project_ai_chat_section pe-0" style="height: calc(100vh - 38px);"
+        <aside class="ct_project_ai_chat_section" style="height: calc(100vh - 38px);"
             [ngClass]="!fullScreen ? 'd-block' : 'd-none'">
             <!-- <div #chatScroll>
                 <ul class="pe-3">
@@ -171,8 +171,8 @@
                 </ul>
             </div> -->
             <div #chatScroll class="ct_chat_scroll_wrap" (scroll)="onUserScroll()">
-                <app-ai-dev-renderer [blocks]="blocks" (actionSelected)="handleChatAction($event)"
-                    (promptSubmitted)="handlePromptSubmitted($event)">
+                <app-ai-dev-renderer [isLoading]="isReactBuilding" [blocks]="blocks"
+                    (actionSelected)="handleChatAction($event)" (promptSubmitted)="handlePromptSubmitted($event)">
                 </app-ai-dev-renderer>
             </div>
         </aside>
