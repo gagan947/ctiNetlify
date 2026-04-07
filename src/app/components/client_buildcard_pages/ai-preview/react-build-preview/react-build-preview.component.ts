@@ -163,7 +163,6 @@ export class ReactBuildPreviewComponent {
     this.baseURl = this.apiService.apiUrl;
 
     effect(() => {
-      debugger
       this.finalSummary = this.apiService._finalSummary();
     });
   }

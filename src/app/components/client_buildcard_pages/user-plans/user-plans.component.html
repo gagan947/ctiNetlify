@@ -85,11 +85,15 @@
                 <div class="ct_feature_chips">
                   <span class="ct_feature_chip" *ngFor="let chip of featureChips">{{ chip }}</span>
                 </div>
-                <div class="ct_access_note"
-                  *ngIf="subscriptionPlan.paymentStatus || subscriptionPlan.allowProjectCreate !== undefined">
+                <div class="ct_access_note">
+                  @if(subscriptionPlan.paymentStatus) {
                   <span>Payment Status: <strong class="text-success">Completed</strong></span>
+                  }
+                  @if(subscriptionPlan.allowProjectCreate !== undefined) {
                   <span>Create Projects: <strong>{{ subscriptionPlan.allowProjectCreate ? 'Allowed' : 'Limit Reached'
-                      }}</strong></span>
+                      }}</strong>
+                  </span>
+                  }
                 </div>
               </div>
             </div>
@@ -125,6 +129,7 @@
             </div>
           </div>
 
+          @if(subscriptionPlan.planType !== 'FREE') {
           <div class="ct_white_bg ct_ecommerse_web_card ct_plan_section renewal-box">
             <div class="ct_section_title_wrap">
               <div>
@@ -168,6 +173,7 @@
               </div>
             </div>
           </div>
+          }
         </div>
       </div>
     </div>

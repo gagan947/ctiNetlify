@@ -47,9 +47,9 @@ export class BuilderLoaderComponent implements OnDestroy {
       this.projectId = params['id'];
       this.publicEnquiryId = params['publicEnquiryId'];
       this.finalSummary = params['finalSummary'];
-      if (!this.projectId) {
-        return;
-      }
+      // if (!this.projectId) {
+      //   return;
+      // }
       if (this.finalSummary) {
         this.apiService._finalSummary.set(this.finalSummary);
       }

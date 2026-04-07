@@ -204,7 +204,6 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
 
     this.socket.on('projectMatch', (payload: ProjectMatchPayload) => {
       this.projectMatchPayload = payload;
-      console.log("PRoject Match", payload);
       this.ngZone.run(() => {
         const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
         this.applyProjectMatch(data);
@@ -237,7 +236,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.socket.on('showBuildButton', (show: boolean) => {
       this.ngZone.run(() => {
         this.buildButtonRequested = !!show;
-        this.showBuildProjectButton = this.buildButtonRequested && !!this.matchedProjectId;
+        this.showBuildProjectButton = true;
         this.completeLoadingState();
       });
     });

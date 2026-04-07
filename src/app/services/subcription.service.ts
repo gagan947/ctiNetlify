@@ -13,7 +13,6 @@ export class SubcriptionService {
   constructor(private appService: ApiService) { }
 
   loadSubscription(force = false) {
-    // debugger
     // if (!force && (this.subscriptionSubject.value || this.isLoading)) {
     //   return;
     // }
