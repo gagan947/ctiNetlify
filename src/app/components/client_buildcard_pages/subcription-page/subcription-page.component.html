@@ -84,7 +84,9 @@
               <div class="ct_price_card_top">
 
                 <span class="ct_price_badge">Pro</span>
-                <h3 class="mb-0 mt-4 opacity-50 ct_fs_20">&#8377;<span class="ct_del_price">{{ getDisplayAmount(plan) }}</span><span>{{ getBillingSuffix(plan) }}</span>
+                <h3 class="mb-0 mt-4 ct_fs_20" [ngClass]="billingCycle() === 'YEAR' ? 'opacity-100' : 'opacity-50'">
+                  &#8377;<span [ngClass]="billingCycle() === 'YEAR' ? 'opacity-100' : 'ct_del_price'">{{
+                    getDisplayAmount(plan) }}</span><span>{{ getBillingSuffix(plan) }}</span>
                 </h3>
                 <div class="ct_price_offer_slot my-2">
                   <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
@@ -157,7 +159,9 @@
               </div>
               <div class="ct_price_card_top">
                 <span class="ct_price_badge">Business</span>
-                <h3 class="mb-0 opacity-50 ct_fs_20">&#8377;<span class="ct_del_price">{{ getDisplayAmount(plan) }}</span><span>{{ getBillingSuffix(plan) }}</span></h3>
+                <h3 class="mb-0 ct_fs_20" [ngClass]="billingCycle() === 'YEAR' ? 'opacity-100' : 'opacity-50'">
+                  &#8377;<span [ngClass]="billingCycle() === 'YEAR' ? '' : 'ct_del_price'">{{ getDisplayAmount(plan)
+                    }}</span><span>{{ getBillingSuffix(plan) }}</span></h3>
                 <div class="ct_price_offer_slot my-2">
                   <div class="ct_price_offer_wrap d-flex align-items-center gap-2 justify-content-center my-2"
                     *ngIf="hasDiscount(plan)">
