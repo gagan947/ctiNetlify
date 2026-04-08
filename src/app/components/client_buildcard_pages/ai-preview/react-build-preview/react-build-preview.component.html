@@ -1,13 +1,6 @@
-<!-- <div class="preview-wrapper" (click)="onPreviewClick($event)" id="topScrollDiv">
-  <div [innerHTML]="currentHTML"></div>
-</div> -->
-
 <div class="ct_aappp">
     <div class="ct_ai_prjct_prev_header px-2">
         <div class="d-flex align-items-center gap-2">
-            <!-- <div>
-        <img src="assets/img/cti_black_logo1.png" alt="">
-      </div> -->
             <div class="et_reload_icon" routerLink="/main">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22px" height="22px" fill="currentColor"
                     viewBox="0 0 256 256" role="presentation">
@@ -92,84 +85,6 @@
     <section class="ct_project_ai_preview_main">
         <aside class="ct_project_ai_chat_section" style="height: calc(100vh - 38px);"
             [ngClass]="!fullScreen ? 'd-block' : 'd-none'">
-            <!-- <div #chatScroll>
-                <ul class="pe-3">
-                    @for (block of blocks; track $index) {
-                    <li class="ct_ai_project_lefr">
-                       
-                        <div class="ct_chat_ai_brand_logo">
-                            <img src="assets/img/c.png" alt="" />
-                            <p class="mb-0">Creative</p>
-                            <small class="ct_text_op_7">
-                                {{ block.timestamp | date : "MMM d, y, h:mm a" }}
-                            </small>
-                        </div>
-
-                  
-                        @if (block.id.startsWith('status')) {
-                        <div class="ct_ai_thiking_loader">
-                            <svg class="ct_ai_thiking_icon" viewBox="0 0 256 256">
-                                <line x1="128" y1="32" x2="128" y2="64" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="24"></line>
-                                <line x1="195.9" y1="60.1" x2="173.3" y2="82.7" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="24"></line>
-                                <line x1="224" y1="128" x2="192" y2="128" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="24"></line>
-                                <line x1="195.9" y1="195.9" x2="173.3" y2="173.3" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="24"></line>
-                                <line x1="128" y1="224" x2="128" y2="192" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="24"></line>
-                                <line x1="60.1" y1="195.9" x2="82.7" y2="173.3" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="24"></line>
-                                <line x1="32" y1="128" x2="64" y2="128" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="24"></line>
-                                <line x1="60.1" y1="60.1" x2="82.7" y2="82.7" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="24"></line>
-                            </svg>
-
-                            <span class="ct_ai_thiking_loading-text">
-                                {{ block.text }}
-                            </span>
-                        </div>
-                        }@else {
-                        <div class="ct_ai_project_lefr_btns" [ngClass]="{
-                'block-cmd': block.id.startsWith('cmd'),
-                'block-paragraph': block.id.startsWith('paragraph'),
-                'block-list': block.id.startsWith('list'),
-                'block-intent': block.id.startsWith('intent')
-              }">
-                         
-                            @if (isArray(block.text)) {
-                            <ul class="ct_ai_feature_list">
-                                @for (item of block.text; track $index) {
-                                <li>{{ item }}</li>
-                                }
-                            </ul>
-                            }@else if (block.id.startsWith('credentials')) {
-                            <p class="mb-0">{{ block.text.message }}</p>
-                            <div class="ct_ai_credentials_box">
-                                <h6>{{ block.text.label }}</h6>
-
-                                <div>
-                                    <strong>Email:</strong>
-                                    <span>{{ block.text.email }}</span>
-                                </div>
-
-                                <div>
-                                    <strong>Password:</strong>
-                                    <span>{{ block.text.password }}</span>
-                                </div>
-
-                            </div>
-                            }@else {
-                            <p class="mb-0">{{ block.text }}</p>
-                            }
-                        </div>
-                        }
-                    </li>
-                    }
-                </ul>
-            </div> -->
             <div #chatScroll class="ct_chat_scroll_wrap" (scroll)="onUserScroll()">
                 <app-ai-dev-renderer [isLoading]="isReactBuilding" [blocks]="blocks"
                     (actionSelected)="handleChatAction($event)" (promptSubmitted)="handlePromptSubmitted($event)">
@@ -247,12 +162,10 @@
                     <app-react-code-editor #codeEditor *ngIf="files.length >0" [files]="files"
                         [templateExists]="templateExists">
                     </app-react-code-editor>
-
                 </div>
             </div>
         </div>
     </section>
-
 </div>
 
 
@@ -286,7 +199,8 @@
             <div class="actions">
                 <button class="btn-cancel button-deploy" data-bs-dismiss="modal">Cancel</button>
                 <button class="btn-confirm button-deploy" (click)="checkNDeploy()" data-bs-dismiss="modal">Deploy
-                    Template</button>
+                    Template
+                </button>
             </div>
         </div>
     </div>
@@ -302,15 +216,16 @@
                         <path
                             d="M10.0418 16.6667C8.18072 16.6667 6.59738 16.0209 5.29183 14.7292C3.98627 13.4375 3.3335 11.8612 3.3335 10V9.85421L2.00016 11.1875L0.833496 10.0209L4.16683 6.68754L7.50016 10.0209L6.3335 11.1875L5.00016 9.85421V10C5.00016 11.3889 5.48975 12.5695 6.46891 13.5417C7.44808 14.5139 8.63905 15 10.0418 15C10.4029 15 10.7571 14.9584 11.1043 14.875C11.4516 14.7917 11.7918 14.6667 12.1252 14.5L13.3752 15.75C12.8474 16.0556 12.3057 16.2848 11.7502 16.4375C11.1946 16.5903 10.6252 16.6667 10.0418 16.6667ZM15.8335 13.3125L12.5002 9.97921L13.6668 8.81254L15.0002 10.1459V10C15.0002 8.61115 14.5106 7.4306 13.5314 6.45837C12.5522 5.48615 11.3613 5.00004 9.9585 5.00004C9.59738 5.00004 9.24322 5.04171 8.896 5.12504C8.54877 5.20837 8.2085 5.33337 7.87516 5.50004L6.62516 4.25004C7.15294 3.94449 7.69461 3.71532 8.25016 3.56254C8.80572 3.40976 9.37516 3.33337 9.9585 3.33337C11.8196 3.33337 13.4029 3.97921 14.7085 5.27087C16.014 6.56254 16.6668 8.13893 16.6668 10V10.1459L18.0002 8.81254L19.1668 9.97921L15.8335 13.3125Z"
                             fill="#fff" style="transition: fill 0.2s;"></path>
-                    </svg></button>
+                    </svg>
+                </button>
                 <h4 class="mb-0 ct_fs_18 text-white">Preview</h4>
                 <button class="et_reload_icon" data-bs-dismiss="modal"><svg xmlns="http://www.w3.org/2000/svg"
                         width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
                         <path d="M18 6 6 18"></path>
                         <path d="m6 6 12 12"></path>
-                    </svg></button>
-
+                    </svg>
+                </button>
             </div>
             <!-- Template Preview with Image -->
             <div class="template-preview mb-0">
@@ -318,11 +233,8 @@
                     <iframe [src]="safePreviewUrl" class="preview-iframe mx-auto w-100"
                         [style.maxWidth]="previewWidth + 'px'">
                     </iframe>
-
                 </div>
-
             </div>
-
         </div>
     </div>
 </div>

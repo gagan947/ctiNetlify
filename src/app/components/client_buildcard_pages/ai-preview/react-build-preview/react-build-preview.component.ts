@@ -635,16 +635,6 @@ export class ReactBuildPreviewComponent {
   }
 
 
-
-  private reorderTemplates() {
-    this.designOrder.forEach((item, index) => {
-      const snapshot = this.designMap.get(item.designId);
-      if (snapshot) {
-        snapshot.label = `Template ${index + 1}`;
-      }
-    });
-  }
-
   setBuildStep(step: number) {
     this.buildStep = step;
   }
