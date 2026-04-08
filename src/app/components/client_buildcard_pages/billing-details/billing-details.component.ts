@@ -7,7 +7,6 @@ import { CommonModule } from '@angular/common';
 import { Country } from 'country-state-city'
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { SidebarComponent } from "../sidebar/sidebar.component";
 import { MobileViewComponent } from "../main/mobile-view/mobile-view.component";
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 import { ModalService } from '../../../services/modal.service';
@@ -16,7 +15,7 @@ import { WorkspaceHeaderComponent } from "../workspace-header/workspace-header.c
 @Component({
   selector: 'app-billing-details',
   standalone: true,
-  imports: [NgxIntlTelInputModule, CommonModule, FormsModule, ReactiveFormsModule, RouterLink, SidebarComponent, MobileViewComponent, ExchangeRatePipe, WorkspaceHeaderComponent],
+  imports: [NgxIntlTelInputModule, CommonModule, FormsModule, ReactiveFormsModule, RouterLink, MobileViewComponent, ExchangeRatePipe, WorkspaceHeaderComponent],
   templateUrl: './billing-details.component.html',
   styleUrl: './billing-details.component.css'
 })

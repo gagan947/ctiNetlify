@@ -1,16 +1,14 @@
-import { Component, ElementRef, viewChild, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { GlobalModalComponent } from "./components/shared/global-modal/global-modal.component";
 import { filter } from 'rxjs';
 import { Meta } from '@angular/platform-browser';
-import { SubcriptionPageComponent } from './components/client_buildcard_pages/subcription-page/subcription-page.component';
-import { SubscriptionModalService } from './services/subscription-modal.service';
-declare var bootstrap: any;
+
 declare let fbq: Function;
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, GlobalModalComponent, SubcriptionPageComponent],
+  imports: [RouterOutlet, GlobalModalComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

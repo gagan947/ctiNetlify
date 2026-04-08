@@ -178,9 +178,6 @@ li.ct_ai_project_right {
   font-weight: 600;
 }
 
-
-
-
 .ct_select_chat_features_btns {
   display: flex;
   align-items: center;
@@ -197,7 +194,6 @@ li.ct_ai_project_right {
   color: #000;
   font-weight: 400;
 }
-
 
 .ct_ai_project_build_empty_inner_card {
   background-color: #f5f5f5;
@@ -223,11 +219,6 @@ li.ct_ai_project_right {
   gap: 20px;
 }
 
-
-
-
-
-
 /* right side waiting loader css S */
 /* From Uiverse.io by dexter-st */
 
@@ -242,12 +233,10 @@ li.ct_ai_project_right {
   flex-direction: column;
   margin: auto;
   margin-block: 30px;
-
 }
 
 .rgt_loader {
   position: relative;
-
   width: 100%;
   height: auto;
   display: flex;
@@ -388,9 +377,6 @@ li.ct_ai_project_right {
   }
 }
 
-/* right side waiting loader css E */
-
-
 .ct_ai_prjct_prev_header {
   display: flex;
   align-items: center;
@@ -404,8 +390,6 @@ li.ct_ai_project_right {
   display: flex;
   align-items: center;
   gap: 10px;
-
-
   margin-bottom: 0px;
 }
 
@@ -440,13 +424,8 @@ li.ct_ai_project_right {
   height: 100%;
   border: none;
   display: block;
-
   border-radius: 4px;
 }
-
-
-
-
 
 .ct_ai_thiking_loader2 {
   display: flex;
@@ -484,7 +463,6 @@ li.ct_ai_project_right {
   }
 }
 
-
 /* ================= TERMINAL COMMAND ================= */
 
 .block-cmd {
@@ -517,7 +495,6 @@ li.ct_ai_project_right {
 .design-tab {
   transition: all 0.25s ease;
 }
-
 
 .ct_design_tab_btn {
   background-color: #313131;
@@ -624,25 +601,19 @@ li.ct_ai_project_right {
   }
 }
 
-
 /* ednssssss */
-
 
 .ct_design_tab_btn.active {
   background-color: #fff;
   color: #000;
-
 }
 
 .ct_min_minus_height_scroll {
   min-height: calc(-145px + 100dvh);
-
 }
-
 
 .ct_first_regen_block {
   min-height: calc(-100px + 100vh);
-
 }
 
 .ct_ai_project_lefr {
@@ -687,7 +658,6 @@ li.ct_ai_project_right {
   font-size: 13px;
 }
 
-
 .ct_dropdown_device_preview123 button {
   background-color: #333;
   border: 0px;
@@ -696,8 +666,6 @@ li.ct_ai_project_right {
   padding-inline: 15px;
   padding-block: 4px;
 }
-
-
 
 .ct_dropdown_device_preview123 ul {
   flex-direction: column;
@@ -738,7 +706,6 @@ li.ct_ai_project_right {
 .ct_plan_div p {
   font-size: 12px;
   line-height: 1;
-
   white-space: nowrap;
 }
 
@@ -746,6 +713,7 @@ li.ct_ai_project_right {
   color: #ffc300;
   font-size: 12px;
 }
+
 .ct_ai_credentials_box {
   margin-top: 30px;
   padding: 16px 18px;
@@ -781,18 +749,11 @@ li.ct_ai_project_right {
   font-weight: 500;
 }
 
-
-
 /* subtle premium feel */
 .ct_ai_credentials_box:hover {
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   border-color: #d1d5db;
 }
-
-
-
-
-
 
 /* Header */
 h2 {

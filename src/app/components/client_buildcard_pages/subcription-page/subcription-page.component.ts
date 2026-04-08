@@ -43,7 +43,7 @@ declare var window: any;
 @Component({
   selector: 'app-subcription-page',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxIntlTelInputModule, CalendlyDirective, RouterLink],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxIntlTelInputModule, CalendlyDirective],
   templateUrl: './subcription-page.component.html',
   styleUrl: './subcription-page.component.css'
 })

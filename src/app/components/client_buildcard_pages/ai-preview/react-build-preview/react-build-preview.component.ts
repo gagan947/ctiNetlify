@@ -1,7 +1,7 @@
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
-import { Component, effect, ElementRef, NgZone, Renderer2, ViewChild } from '@angular/core';
-import { FormsModule, FormBuilder } from '@angular/forms';
+import { Component, effect, ElementRef, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { SafeHtml, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterLink, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -351,6 +351,9 @@ export class ReactBuildPreviewComponent {
         }
         this.isReactBuilding = false;
         this.isTyping = false;
+      }, (err) => {
+        this.toster.error('Failed to generate project. Please try again.');
+        this.router.navigate(['/main']);
       });
   }
   async regenerate() {

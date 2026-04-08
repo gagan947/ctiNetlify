@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CdkDragPlaceholder } from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-ai-dev-renderer',
   standalone: true,
-  imports: [CommonModule, CdkDragPlaceholder],
+  imports: [CommonModule],
   templateUrl: './ai-dev-renderer.component.html',
   styleUrl: './ai-dev-renderer.component.css'
 })

@@ -1,32 +1,35 @@
 :host {
-    display: block;
-    height: 100%;
-    width: 100%;
-  }
-  
-  nu-monaco-editor{
-    height: 100% !important;
-  }
-
-  .ai-code-wrapper{
-    height: calc(100vh - 88px) !important;
-  }
-
-  .code-header {
-    padding: 5px 30px;
-   
-    background-color: #333131 !important;
+  display: block;
+  height: 100%;
+  width: 100%;
 }
-.code-header span{
-    font-weight: 500;
-    font-size: 15px;
-    color: #ebebeb;
+
+nu-monaco-editor {
+  height: 100% !important;
 }
-.ct_dropdown_device_preview123 ul{
+
+.ai-code-wrapper {
+  height: calc(100vh - 88px) !important;
+}
+
+.code-header {
+  padding: 5px 30px;
+
+  background-color: #333131 !important;
+}
+
+.code-header span {
+  font-weight: 500;
+  font-size: 15px;
+  color: #ebebeb;
+}
+
+.ct_dropdown_device_preview123 ul {
   width: 212px !important;
   padding-block: 0px !important;
 }
-.ct_dropdown_device_preview123 button{
+
+.ct_dropdown_device_preview123 button {
   font-size: 12px;
   padding-block: 3px;
   background-color: #333;
@@ -37,7 +40,8 @@
   align-items: center;
   justify-content: space-between;
 }
-.ct_dropdown_device_preview123 li a{
+
+.ct_dropdown_device_preview123 li a {
   font-size: 12px;
   border-radius: 5px;
 }

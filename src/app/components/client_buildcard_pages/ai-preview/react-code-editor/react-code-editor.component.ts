@@ -5,15 +5,12 @@ import { NuMonacoEditorComponent, NuMonacoEditorEvent, NuMonacoEditorModel } fro
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { AiSocketService } from '../../../../services/ai-socket.service';
 
-
 interface ReactFile {
   id: string;
   name: string;          // ProductListing.jsx
   language: 'javascript' | 'css';
   fullCode: string;
 }
-
-
 
 @Component({
   selector: 'app-react-code-editor',
@@ -45,8 +42,6 @@ export class ReactCodeEditorComponent {
     minimap: { enabled: false },
     fontSize: 13,
     wordWrap: 'on' as const,
-
-    // 🔥 anti-blink
     cursorBlinking: 'solid' as const,
     cursorSmoothCaretAnimation: 'off' as const,
     renderWhitespace: 'none' as const,
@@ -56,7 +51,6 @@ export class ReactCodeEditorComponent {
   constructor(private aiService: AiSocketService) {
 
   }
-
 
   /* ---------- Monaco Init ---------- */
   onEditorEvent(e: NuMonacoEditorEvent) {
