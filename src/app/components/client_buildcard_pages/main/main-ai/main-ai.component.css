@@ -23,12 +23,15 @@
 
 .main-ai-wrap {
   min-height: 100%;
-  height: calc(100vh - 120px);
+  height: calc(100vh - 50px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 24px 40px;
   width: 100%;
+  background-image: url(../../../../../assets/img/Chat_Bot_UI_bg.webp);
+  background-position: center;
+  
 }
 
 .main-ai-stage {
@@ -47,12 +50,11 @@
 }
 
 .main-ai-heading {
-  margin: 0 0 10px;
-  font-size: clamp(2rem, 5vw, 3rem);
+  margin: 0 0 15px;
+font-size: clamp(24px, 5vw, 50px);
   line-height: 1.08;
-  font-weight: 800;
-  letter-spacing: -0.05em;
-  background: linear-gradient(90deg, #1c64f2 0%, #6b3df0 48%, #ff2da4 100%);
+  font-weight: 600;
+background: linear-gradient(90deg, #0062FF 0%, #FF0099 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -110,7 +112,7 @@
     0 24px 70px rgba(202, 188, 242, 0.28),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
   text-align: left;
-  margin-top: 120px;
+  margin-top: 95px;
 }
 
 .main-ai-prompt-input {
@@ -169,8 +171,8 @@
 }
 
 .main-ai-submit-btn {
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   border: 0;
   border-radius: 999px;
   display: inline-flex;
@@ -178,7 +180,6 @@
   justify-content: center;
   background: #060606;
   color: #fff;
-  box-shadow: 0 8px 18px rgba(6, 6, 6, 0.24);
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 

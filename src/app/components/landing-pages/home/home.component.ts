@@ -118,6 +118,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       state: 'origin:web',
       usePopup: true
     });
+    
   }
 
   ngOnDestroy(): void {
@@ -288,6 +289,9 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
         loop: true,
         speed: 1000,
          spaceBetween: 10,
+           nested: true,
+  observer: true,
+  observeParents: true,
         autoplay: false,
         navigation: {
           nextEl: mainSwiperElement.querySelector('.swiper-button-next'),
@@ -307,6 +311,9 @@ if (innerSwiperElement) {
     slidesPerView: 'auto',
     spaceBetween: 10,
     speed: 5000,
+      nested: true,
+  watchSlidesProgress: true,
+
 
     autoplay: {
       delay: 0,
@@ -324,9 +331,13 @@ if (innerSwiperElement) {
     this.innerSwiperInstance.update();
     this.innerSwiperInstance.autoplay.start();
   }, 100);
+  
 }
+
   }
 
+  
+  
   private destroySwipers() {
     if (this.mainSwiperInstance?.destroy) {
       this.mainSwiperInstance.destroy(true, true);
@@ -424,3 +435,4 @@ if (innerSwiperElement) {
     });
   }
 }
+
