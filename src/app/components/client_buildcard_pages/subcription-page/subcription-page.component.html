@@ -111,8 +111,7 @@
                   <ul class="dropdown-menu show" *ngIf="proDropdownOpen">
                     <li *ngFor="let proPlan of proDropdownPlans">
                       <button type="button" class="dropdown-item" (click)="selectProPlan(proPlan, $event)">
-                        {{ proPlan.project_limit }} Projects - &#8377;{{ getDisplayAmount(proPlan) }}{{
-                        getBillingSuffix(proPlan) }}
+                        {{ proPlan.plan_name }} - &#8377;{{ getDisplayAmount(proPlan) }}{{ getBillingSuffix(proPlan) }}
                       </button>
                     </li>
                   </ul>

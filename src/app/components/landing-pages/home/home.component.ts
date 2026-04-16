@@ -114,7 +114,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     queueMicrotask(() => this.initializeSwipers());
     FB.init({
-      appId: '1435650607718739',
+      appId: '1487976079653760',
       cookie: true,
       xfbml: true,
       version: 'v19.0'
@@ -304,7 +304,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       this.mainSwiperInstance = new Swiper(mainSwiperElement, {
         loop: true,
         speed: 1000,
-         spaceBetween: 10,
+        spaceBetween: 10,
         autoplay: false,
         navigation: {
           nextEl: mainSwiperElement.querySelector('.swiper-button-next'),
@@ -317,31 +317,31 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       });
     }
 
-if (innerSwiperElement) {
-  this.innerSwiperInstance = new Swiper(innerSwiperElement, {
-    
-    loop: true,
-    slidesPerView: 'auto',
-    spaceBetween: 10,
-    speed: 5000,
+    if (innerSwiperElement) {
+      this.innerSwiperInstance = new Swiper(innerSwiperElement, {
 
-    autoplay: {
-      delay: 0,
-      disableOnInteraction: false,
-    },
+        loop: true,
+        slidesPerView: 'auto',
+        spaceBetween: 10,
+        speed: 5000,
 
-    freeMode: true,
-    freeModeMomentum: false,
+        autoplay: {
+          delay: 0,
+          disableOnInteraction: false,
+        },
 
-    observer: true,
-    observeParents: true,
-  });
+        freeMode: true,
+        freeModeMomentum: false,
 
-  setTimeout(() => {
-    this.innerSwiperInstance.update();
-    this.innerSwiperInstance.autoplay.start();
-  }, 100);
-}
+        observer: true,
+        observeParents: true,
+      });
+
+      setTimeout(() => {
+        this.innerSwiperInstance.update();
+        this.innerSwiperInstance.autoplay.start();
+      }, 100);
+    }
   }
 
   private destroySwipers() {
