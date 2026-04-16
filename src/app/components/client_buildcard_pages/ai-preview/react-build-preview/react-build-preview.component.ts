@@ -16,6 +16,7 @@ import { AiDevRendererComponent } from '../ai-dev-renderer/ai-dev-renderer.compo
 import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
 import { SubcriptionService } from '../../../../services/subcription.service';
 import { SubcriptionPageComponent } from "../../subcription-page/subcription-page.component";
+import { WorkspaceHeaderComponent } from "../../workspace-header/workspace-header.component";
 
 
 interface DesignSnapshot {
@@ -56,7 +57,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-react-build-preview',
   standalone: true,
-  imports: [CommonModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, RouterLink, AiDevRendererComponent, SubcriptionPageComponent],
+  imports: [CommonModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, RouterLink, AiDevRendererComponent, SubcriptionPageComponent, WorkspaceHeaderComponent],
   templateUrl: './react-build-preview.component.html',
   styleUrl: './react-build-preview.component.css'
 })
