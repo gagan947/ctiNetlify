@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { Router, RouterLink } from '@angular/router';
 import { SubscriptionModalService } from '../../../services/subscription-modal.service';
@@ -31,6 +31,11 @@ interface UserProfileSummary {
   styleUrl: './workspace-header.component.css'
 })
 export class WorkspaceHeaderComponent {
+  @Input() fullScreen = false;
+  @Input() selectedDeviceType = '<i class="fa-solid fa-display"></i>';
+  @Input() showPreviewControls = false;
+  @Output() fullScreenToggle = new EventEmitter<void>();
+  @Output() deviceTypeChange = new EventEmitter<'desktop' | 'tablet' | 'mobile'>();
   allProjectsList: UserProjectTab[] = [];
   selectedProjectId = '';
   profileImage = '';
@@ -42,7 +47,6 @@ export class WorkspaceHeaderComponent {
   subscriptionModalOpen = false;
   selectedSubscriptionTemplateId = '';
   subsCriptionData: any;
-  fullScreen = false;
   constructor(
     private apiService: ApiService,
     private router: Router,
@@ -139,6 +143,14 @@ export class WorkspaceHeaderComponent {
 
   openSubscriptionModal(): void {
     this.subscriptionModalService.open();
+  }
+
+  handleFullScreenToggle(): void {
+    this.fullScreenToggle.emit();
+  }
+
+  handleDeviceTypeChange(deviceType: 'desktop' | 'tablet' | 'mobile'): void {
+    this.deviceTypeChange.emit(deviceType);
   }
 
   @HostListener('document:click', ['$event'])

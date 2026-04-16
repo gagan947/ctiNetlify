@@ -207,8 +207,8 @@
     border: 0;
     border-radius: 999px;
     background: linear-gradient(180deg, #ffe17d 0%, #f8ce57 100%);
-    color: #4a3500;
-    font-size: 11px;
+    color: #2b2b2b;
+    font-size: 13px;
     font-weight: 700;
     /* box-shadow: 0 0 18px rgba(248, 206, 87, 0.45); */
 }

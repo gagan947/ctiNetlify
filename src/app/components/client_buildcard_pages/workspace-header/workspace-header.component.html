@@ -25,21 +25,24 @@
     </div>
 
     <div class="main-ai-topbar__right" style="padding-bottom: 6px">
-        <div class="d-none d-lg-block">
-            <div class="et_reload_icon">
+        <div class="d-none d-lg-block" *ngIf="showPreviewControls">
+            <div class="et_reload_icon" (click)="handleFullScreenToggle()">
                 <i class="fa-solid" [ngClass]="fullScreen ? 'fa-minimize' : 'fa-expand'"></i>
             </div>
         </div>
-        <ul class="mb-0 d-none d-lg-block">
+        <ul class="mb-0 d-none d-lg-block" *ngIf="showPreviewControls">
             <li>
                 <div class="dropdown ct_dropdown_device_preview123">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                        data-bs-toggle="dropdown" aria-expanded="false" [innerHTML]="selectedDeviceType">
                     </button>
                     <ul class="dropdown-menu mb-0" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item"> <i class="fa-solid fa-display"></i></a></li>
-                        <li><a class="dropdown-item"> <i class="fa-solid fa-tablet-screen-button"></i></a></li>
-                        <li><a class="dropdown-item"> <i class="fa-solid fa-mobile-screen"></i></a></li>
+                        <li><a class="dropdown-item" (click)="handleDeviceTypeChange('desktop')"> <i
+                                    class="fa-solid fa-display"></i></a></li>
+                        <li><a class="dropdown-item" (click)="handleDeviceTypeChange('tablet')"> <i
+                                    class="fa-solid fa-tablet-screen-button"></i></a></li>
+                        <li><a class="dropdown-item" (click)="handleDeviceTypeChange('mobile')"> <i
+                                    class="fa-solid fa-mobile-screen"></i></a></li>
                     </ul>
                 </div>
             </li>
