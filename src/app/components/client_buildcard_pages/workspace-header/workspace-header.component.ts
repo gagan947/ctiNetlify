@@ -3,6 +3,8 @@ import { ApiService } from '../../../services/api.service';
 import { Router, RouterLink } from '@angular/router';
 import { SubscriptionModalService } from '../../../services/subscription-modal.service';
 import { SubcriptionPageComponent } from "../subcription-page/subcription-page.component";
+import { SubcriptionService } from '../../../services/subcription.service';
+import { CommonModule } from '@angular/common';
 
 interface UserProjectTab {
   inquiryId: string;
@@ -24,7 +26,7 @@ interface UserProfileSummary {
 @Component({
   selector: 'app-workspace-header',
   standalone: true,
-  imports: [RouterLink, SubcriptionPageComponent],
+  imports: [RouterLink, SubcriptionPageComponent, CommonModule],
   templateUrl: './workspace-header.component.html',
   styleUrl: './workspace-header.component.css'
 })
@@ -39,15 +41,22 @@ export class WorkspaceHeaderComponent {
   @ViewChild('profileMenu') profileMenu?: ElementRef<HTMLDivElement>;
   subscriptionModalOpen = false;
   selectedSubscriptionTemplateId = '';
+  subsCriptionData: any;
+  fullScreen = false;
   constructor(
     private apiService: ApiService,
     private router: Router,
     private subscriptionModalService: SubscriptionModalService,
+    private subscriptionService: SubcriptionService
   ) { }
   ngOnInit(): void {
     this.subscriptionModalService.modalState$.subscribe((state) => {
       this.subscriptionModalOpen = state.isOpen;
       this.selectedSubscriptionTemplateId = state.selectedTemplateId;
+    });
+
+    this.subscriptionService.subscription$.subscribe((subscription) => {
+      this.subsCriptionData = subscription;
     });
     this.loadUserSummary();
     this.getUserProfile();

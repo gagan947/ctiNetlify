@@ -429,24 +429,6 @@ li.ct_ai_project_right {
   margin-bottom: 0px;
 }
 
-.et_reload_icon {
-  width: 30px;
-  height: 30px;
-  background-color: #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  color: #fff;
-  border: 1px solid #333;
-  cursor: pointer;
-  transition: 0.4s ease all;
-}
-
-.et_reload_icon:hover {
-  background-color: #e6e6e6;
-  color: #000;
-}
 
 .ct_project_ai_btm_action_btns {
   display: flex;
@@ -463,9 +445,6 @@ li.ct_ai_project_right {
 
   border-radius: 4px;
 }
-
-
-
 
 
 .ct_ai_thiking_loader2 {
@@ -718,36 +697,7 @@ li.ct_ai_project_right {
 }
 
 
-.ct_dropdown_device_preview123 button {
-  background-color: #333;
-  border: 0px;
-  height: 25px;
-  font-size: 12px;
-  padding-inline: 15px;
-  padding-block: 4px;
-}
 
-
-
-.ct_dropdown_device_preview123 ul {
-  flex-direction: column;
-  width: fit-content !important;
-  min-width: fit-content;
-  padding-block: 0px;
-  gap: 2px;
-  padding: 2px;
-}
-
-.ct_dropdown_device_preview123 a.dropdown-item {
-  border-radius: 5px;
-  font-size: 12px;
-}
-
-.ct_dropdown_device_preview123 ul a.dropdown-item:focus,
-.ct_dropdown_device_preview123 ul a.dropdown-item:hover {
-  background-color: #333;
-  color: #fff;
-}
 
 .upgrade-btn {
   color: #ffc300;
@@ -1052,4 +1002,12 @@ p {
   div#ai_full_preview_modal.show {
     transform: translateY(0);
   }
+}
+
+::ng-deep .ct_dropdown_device_preview123 button {
+  display: block !important;
+}
+
+::ng-deep .et_reload_icon {
+  display: flex !important;
 }
