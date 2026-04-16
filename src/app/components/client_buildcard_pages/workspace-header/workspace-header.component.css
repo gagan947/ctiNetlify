@@ -319,7 +319,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 18px;
+    padding: 0px 18px 18px;
     border-bottom: 1px solid #333439;
 }
 
@@ -643,6 +643,9 @@
     opacity 0.3s ease,
     transform 0.3s ease,
     visibility 0s;
+}
+.main-ai-profile-menu__email{
+    display: none;
 }
 
 @media (max-width: 991px) {

@@ -31,7 +31,9 @@
   width: 100%;
   background-image: url(../../../../../assets/img/Chat_Bot_UI_bg.webp);
   background-position: center;
-  
+  background-size: cover;
+  background-repeat: no-repeat;
+
 }
 
 .main-ai-stage {
@@ -112,7 +114,7 @@ background: linear-gradient(90deg, #0062FF 0%, #FF0099 100%);
     0 24px 70px rgba(202, 188, 242, 0.28),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
   text-align: left;
-  margin-top: 95px;
+  margin-top: 70px;
 }
 
 .main-ai-prompt-input {
