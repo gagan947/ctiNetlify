@@ -229,7 +229,7 @@ input[type="number"] {
 }
 
 .ct_fs_16 {
-  font-size: 16px;
+  font-size: 16px !important;
   line-height: 20.08px;
 }
 

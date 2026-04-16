@@ -424,14 +424,20 @@ aside.ct_project_ai_chat_section {
 .ct_home_slider_main .swiper-pagination-bullet {
       width: 8px;
       height: 8px;
-      background: #D9D9D9;
+      background: #fff;
       border-radius: 100px;
       transition: 0.4s;
+      opacity: 0.5;
+      transform-origin: left;
 }
 
 .ct_home_slider_main .swiper-pagination-bullet-active {
       width: 37px;
-      background: #D9D9D9;
+      opacity: 1;
+      background: #fff;
+}
+.swiper-wrapper {
+  transition-timing-function: linear !important;
 }
 
 .ct_home_slider_inner .swiper-slide {

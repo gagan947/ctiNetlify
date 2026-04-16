@@ -287,6 +287,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       this.mainSwiperInstance = new Swiper(mainSwiperElement, {
         loop: true,
         speed: 1000,
+         spaceBetween: 10,
         autoplay: false,
         navigation: {
           nextEl: mainSwiperElement.querySelector('.swiper-button-next'),
@@ -299,18 +300,31 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       });
     }
 
-    if (innerSwiperElement) {
-      this.innerSwiperInstance = new Swiper(innerSwiperElement, {
-        loop: true,
-        slidesPerView: 'auto',
-        spaceBetween: 10,
-        autoplay: {
-          delay: 0
-        },
-        speed: 4000,
-        freeMode: true
-      });
-    }
+if (innerSwiperElement) {
+  this.innerSwiperInstance = new Swiper(innerSwiperElement, {
+    
+    loop: true,
+    slidesPerView: 'auto',
+    spaceBetween: 10,
+    speed: 5000,
+
+    autoplay: {
+      delay: 0,
+      disableOnInteraction: false,
+    },
+
+    freeMode: true,
+    freeModeMomentum: false,
+
+    observer: true,
+    observeParents: true,
+  });
+
+  setTimeout(() => {
+    this.innerSwiperInstance.update();
+    this.innerSwiperInstance.autoplay.start();
+  }, 100);
+}
   }
 
   private destroySwipers() {
