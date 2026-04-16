@@ -55,7 +55,7 @@ section.ct_project_ai_preview_main {
 
 .ct_ai_project_preview_right {
   padding: 0px;
-  height: calc(100vh - 38px);
+  height: calc(100vh - 52px);
   flex: 1;
   word-break: break-word;
   padding-inline: 12px;

@@ -14,7 +14,7 @@
 
 .preview-wrapper {
   width: 100%;
-  height: calc(100vh - 38px);
+  height: calc(100vh - 50px);
   overflow-y: auto;
   position: relative;
 }
@@ -55,7 +55,7 @@ section.ct_project_ai_preview_main {
 
 .ct_ai_project_preview_right {
   padding: 0px;
-  height: calc(100vh - 38px);
+  height: calc(100vh - 50px);
   flex: 1;
   word-break: break-word;
   /* padding-inline: 12px; */
@@ -453,7 +453,7 @@ li.ct_ai_project_right {
   align-items: center;
   padding-left: 40px;
   justify-content: center;
-  height: calc(100vh - 38px);
+  height: calc(100vh - 50px);
   z-index: 9999;
   position: absolute;
   top: 50%;
