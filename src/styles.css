@@ -334,58 +334,6 @@ aside.ct_project_ai_chat_section {
 }
 
 
-/* .ct_home_slider_main .owl-nav {
-    position: absolute;
-    bottom: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: unset;
-    width: 100%;
-    left: 0px;
-    right: 0px;
-    gap: 10px;
-    max-width: 220px;
-    justify-content: space-between;
-    margin-inline: auto;
-    z-index: 99999;
-}
-.ct_home_slider_main .owl-nav span{
-  display: none;
-}
-.ct_home_slider_main .owl-nav  button{
-      width: 34px;
-      height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #FFFFFF66 !important;
-      border-radius: 100%;
-}
-.ct_home_slider_main .owl-nav  button i{
-      pointer-events: none;
-}
-
-.ct_home_slider_main .owl-dots {
-    position: absolute;
-    bottom: 30px;
-    width: 100%;
-    left: 0px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.ct_home_slider_main .owl-dots button.owl-dot {
-    width: 8px;
-    height: 8px;
-    background: #D9D9D9;
-    border-radius: 100px;
-    transition: 0.4s ease all;
-    margin-inline: 3px;
-}
-.ct_home_slider_main .owl-dots button.owl-dot.active{
-      width: 37px;
-} */
 
 /* Navigation */
 .ct_home_slider_main .swiper-button-prev,
@@ -500,4 +448,8 @@ aside.ct_project_ai_chat_section {
 .google-btn .nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c {
       left: 30%;
       position: absolute;
+}
+
+section ,div{
+      content-visibility: auto;
 }
