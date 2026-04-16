@@ -15,15 +15,7 @@
         <button type="button" class="main-ai-topbar__tab"
             [class.main-ai-topbar__tab--active]="project.inquiryId === selectedProjectId"
             (click)="selectProjectTab(project)">
-            @if(project.inquiryId === selectedProjectId) {
-            <span class="main-ai-topbar__tab-dot-wrap">
-                <span class="main-ai-topbar__tab-dot"></span>
-            </span>
-            }
             <span class="main-ai-topbar__tab-label">{{ project.projectName }}</span>
-            <!-- <span class="main-ai-topbar__tab-close" aria-hidden="true">
-                <i class="fa-solid fa-xmark"></i>
-            </span> -->
         </button>
         }
         <!-- 

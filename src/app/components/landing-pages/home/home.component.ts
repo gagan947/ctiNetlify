@@ -25,13 +25,22 @@ interface Plan {
   display_amount: string;
   display_currency: string;
   billing_interval: BillingCycle;
-  project_limit: number;
-  template_limit: number;
-  variation_limit: number;
+  created_at?: string;
+  is_active?: number;
+  test_mode?: number;
+  credits_per_cycle: number;
+  credit_grant_interval?: BillingCycle;
+  max_projects: number;
+  max_pages: number;
+  topup_allowed?: number;
   support_type: 'NONE' | 'CHAT' | 'PRIORITY' | string;
   github_integration: number;
   custom_features: number;
   can_deploy?: number;
+  can_delete?: number;
+  credit_plan_key?: string;
+  is_plan_used?: boolean;
+  is_current_plan?: boolean;
   plan_type: 'FREE' | 'PRO' | 'BUSINESS' | string;
   has_intro_offer?: number;
   intro_amount?: string | number;
@@ -105,7 +114,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     queueMicrotask(() => this.initializeSwipers());
     FB.init({
-      appId: '1435650607718739',
+      appId: '1487976079653760',
       cookie: true,
       xfbml: true,
       version: 'v19.0'
@@ -198,7 +207,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   }
 
   getDisplayAmount(plan: Plan | null): string {
-    return plan?.amount.toString() || '0.00';
+    return plan?.display_amount || '0.00';
   }
 
   getBillingSuffix(plan: Plan | null): string {
@@ -224,11 +233,15 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     }
 
     const features = [
-      `${plan.project_limit} Project Build`,
-      `${plan.template_limit} Design Template${plan.template_limit > 1 ? 's' : ''}`,
-      `${plan.variation_limit} Variation${plan.variation_limit > 1 ? 's' : ''}`,
+      `${plan.credits_per_cycle} Credit${plan.credits_per_cycle > 1 ? 's' : ''} per ${(
+        plan.credit_grant_interval || plan.billing_interval
+      ).toLowerCase()}`,
       this.getSupportLabel(plan.support_type)
     ];
+
+    if (Number(plan.topup_allowed) === 1) {
+      features.push('Top-up Credits');
+    }
 
     if (Number(plan.github_integration) === 1) {
       features.push('GitHub Integration');
@@ -236,6 +249,10 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
     if (Number(plan.custom_features) === 1) {
       features.push('Custom Features');
+    }
+
+    if (Number(plan.can_delete) === 1) {
+      features.push('Delete Projects');
     }
 
     if (Number(plan.can_deploy) === 1) {
@@ -315,17 +332,17 @@ if (innerSwiperElement) {
   watchSlidesProgress: true,
 
 
-    autoplay: {
-      delay: 0,
-      disableOnInteraction: false,
-    },
+        autoplay: {
+          delay: 0,
+          disableOnInteraction: false,
+        },
 
-    freeMode: true,
-    freeModeMomentum: false,
+        freeMode: true,
+        freeModeMomentum: false,
 
-    observer: true,
-    observeParents: true,
-  });
+        observer: true,
+        observeParents: true,
+      });
 
   setTimeout(() => {
     this.innerSwiperInstance.update();

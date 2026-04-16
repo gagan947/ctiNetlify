@@ -30,7 +30,7 @@
               <div class="ct_price_card_top">
                 <span class="ct_price_badge">Free</span>
                 <h3>&#8377;{{ getDisplayAmount(plan) }}<span>{{ getBillingSuffix(plan) }}</span></h3>
-                <p>{{ planDescription(plan) }}</p>
+                <p class="mb-4">{{ planDescription(plan) }}</p>
                 <div class="ct_price_offer_slot">
                   <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
                     <div class="ct_price_offer">{{ introOfferLabel(plan) }}</div>
@@ -84,11 +84,11 @@
               <div class="ct_price_card_top">
 
                 <span class="ct_price_badge">Pro</span>
-                <h3 class="mb-0 mt-4 ct_fs_20" [ngClass]="billingCycle() === 'YEAR' ? 'opacity-100' : 'opacity-50'">
+                <h3 class="mb-0 ct_fs_20" [ngClass]="billingCycle() === 'YEAR' ? 'opacity-100' : 'opacity-50'">
                   &#8377;<span [ngClass]="billingCycle() === 'YEAR' ? 'opacity-100' : 'ct_del_price'">{{
                     getDisplayAmount(plan) }}</span><span>{{ getBillingSuffix(plan) }}</span>
                 </h3>
-                <div class="ct_price_offer_slot my-2">
+                <div class="ct_price_offer_slot">
                   <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
                     <div class="ct_price_offer">{{ introOfferLabel(plan) }}</div>
                   </div>
@@ -105,13 +105,14 @@
                 <a (click)="getStarted(plan)" class="mb-3">Get Started</a>
                 <div class="position-relative" *ngIf="proPlans.length > 1" (click)="$event.stopPropagation()">
                   <button type="button" class="ct_starter_plan" (click)="toggleProDropdown($event)">
-                    {{ plan.plan_name }}
+                    {{ plan.credits_per_cycle }} credits {{
+                    getBillingSuffix(plan) }}
                     <i class="fa-solid fa-angle-down ct_show_eye"></i>
                   </button>
                   <ul class="dropdown-menu show" *ngIf="proDropdownOpen">
                     <li *ngFor="let proPlan of proDropdownPlans">
                       <button type="button" class="dropdown-item" (click)="selectProPlan(proPlan, $event)">
-                        {{ proPlan.project_limit }} Projects - &#8377;{{ getDisplayAmount(proPlan) }}{{
+                        {{ proPlan.credits_per_cycle }} credits - &#8377;{{ getDisplayAmount(proPlan) }}{{
                         getBillingSuffix(proPlan) }}
                       </button>
                     </li>
@@ -162,8 +163,8 @@
                 <h3 class="mb-0 ct_fs_20" [ngClass]="billingCycle() === 'YEAR' ? 'opacity-100' : 'opacity-50'">
                   &#8377;<span [ngClass]="billingCycle() === 'YEAR' ? '' : 'ct_del_price'">{{ getDisplayAmount(plan)
                     }}</span><span>{{ getBillingSuffix(plan) }}</span></h3>
-                <div class="ct_price_offer_slot my-2">
-                  <div class="ct_price_offer_wrap d-flex align-items-center gap-2 justify-content-center my-2"
+                <div class="ct_price_offer_slot">
+                  <div class="ct_price_offer_wrap d-flex align-items-center gap-2 justify-content-center"
                     *ngIf="hasDiscount(plan)">
                     <span *ngIf="billingCycle() === 'YEAR'" class="mb-0"><del>&#8377;{{ plan.display_amount
                         }}</del><span>{{
@@ -174,7 +175,7 @@
                   <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
                     <div class="ct_price_offer">{{ introOfferLabel(plan) }}</div>
                   </div>
-                  <p>{{ planDescription(plan) }}</p>
+                  <p class="plan_description">{{ planDescription(plan) }}</p>
                 </div>
                 <a (click)="getStarted(plan)">Get Started</a>
               </div>

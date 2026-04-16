@@ -6,6 +6,10 @@ section {
   overflow: unset !important;
 }
 
+section {
+  content-visibility: auto;
+}
+
 .ct_prompt_hero_content {
   max-width: 441px;
   text-align: center;
@@ -29,9 +33,11 @@ section {
   padding: 72px 0;
 }
 
-.ct_prompt_hero{
-  padding-block: 0px ;
+.ct_prompt_hero {
+  padding-block: 0px;
+  content-visibility: auto;
 }
+
 /* .ct_prompt_hero {
   min-height: 520px;
 } */
@@ -509,7 +515,8 @@ section {
   font-weight: 600;
 }
 
-.ct_price_card_top>p {
+.ct_price_card_top>p,
+.plan_description {
   margin-bottom: 14px;
   color: #687086;
   font-size: 14px;
@@ -539,7 +546,8 @@ section {
   font-size: 28px;
   font-weight: 700;
 }
-.ct_del_price{
+
+.ct_del_price {
   text-decoration: line-through;
 }
 
@@ -769,10 +777,10 @@ section {
   /* padding-top: 30px; */
   padding-top: 15px;
   /* height: 596px; */
-height: calc(100dvh - 107px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  height: calc(100dvh - 107px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .ct_home_slider_main_img.ct_home_slider_main_bg h4 {
@@ -784,7 +792,7 @@ height: calc(100dvh - 107px);
 }
 
 .ct_ai_need_card {
-  padding: 15px  15px;
+  padding: 15px 15px;
   box-shadow: 0px 0px 84px 0px #00000040, 0px 2px 14px 0px #68708680 inset;
   border-radius: 7px;
   background-color: #fff;
@@ -801,9 +809,10 @@ height: calc(100dvh - 107px);
   .ct_launch_journey_flow img {
     display: none;
   }
+
   .ct_prompt_hero .ct_fs_40 {
     font-size: 28px;
-}
+  }
 }
 
 @media screen and (max-width: 991px) {
@@ -816,9 +825,11 @@ height: calc(100dvh - 107px);
   .ct_testimonial_section {
     padding: 56px 0;
   }
-.ct_prompt_hero{
-  padding-bottom: 0px !important;
-}
+
+  .ct_prompt_hero {
+    padding-bottom: 0px !important;
+  }
+
   .ct_pricing_grid.mt-5 {
     gap: 60px !important;
   }
@@ -1048,17 +1059,19 @@ height: calc(100dvh - 107px);
     padding-inline: 0px;
   }
 }
+
 @media (min-width: 1367px) {
   .ct_home_slider_main_img img {
 
     max-height: calc(100dvh - 330px);
     border-radius: 6px !important;
-  
-}
-.ct_home_slider_main_img.ct_home_slider_main_bg h4{
-  font-size: 30px ;
-  padding-bottom: 30px;
-}
+
+  }
+
+  .ct_home_slider_main_img.ct_home_slider_main_bg h4 {
+    font-size: 30px;
+    padding-bottom: 30px;
+  }
 
 
 }

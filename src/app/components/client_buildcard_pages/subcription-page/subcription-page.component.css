@@ -606,7 +606,8 @@ section {
   font-weight: 600;
 }
 
-.ct_price_card_top>p {
+.ct_price_card_top>p,
+.plan_description {
   margin-bottom: 14px;
   color: #687086;
   font-size: 14px;
@@ -636,7 +637,8 @@ section {
   font-size: 28px;
   font-weight: 700;
 }
-.ct_del_price{
+
+.ct_del_price {
   text-decoration: line-through;
 }
 

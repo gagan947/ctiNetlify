@@ -59,7 +59,7 @@ export class LoginComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     FB.init({
-      appId: '1435650607718739',
+      appId: '1487976079653760',
       cookie: true,
       xfbml: true,
       version: 'v19.0'

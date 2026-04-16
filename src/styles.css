@@ -384,8 +384,9 @@ aside.ct_project_ai_chat_section {
       opacity: 1;
       background: #fff;
 }
+
 .swiper-wrapper {
-  transition-timing-function: linear !important;
+      transition-timing-function: linear !important;
 }
 
 .ct_home_slider_inner .swiper-slide {
@@ -448,8 +449,4 @@ aside.ct_project_ai_chat_section {
 .google-btn .nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c {
       left: 30%;
       position: absolute;
-}
-
-section{
-      content-visibility: auto;
 }

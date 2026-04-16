@@ -6,7 +6,6 @@ import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-
 import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
 import { SubcriptionService } from '../../../services/subcription.service';
 import { SubscriptionResponse } from '../../../models/subcription';
-import { RouterLink } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 type BillingCycle = 'MONTH' | 'YEAR';
 type PlanType = 'free' | 'personal' | 'creative' | 'booster' | 'pro' | 'business';
@@ -21,11 +20,13 @@ interface Plan {
   display_amount: string;
   display_currency: string;
   billing_interval: BillingCycle;
-  project_limit: number;
-  template_limit: number;
   created_at: string;
   plan_type: 'FREE' | 'PRO' | 'BUSINESS' | string;
-  variation_limit: number;
+  credits_per_cycle: number;
+  credit_grant_interval?: BillingCycle;
+  max_projects: number;
+  max_pages: number;
+  topup_allowed?: number;
   can_deploy: number;
   support_type: 'NONE' | 'CHAT' | 'PRIORITY' | string;
   github_integration: number;
@@ -329,7 +330,7 @@ export class SubcriptionPageComponent {
   }
 
   getDisplayAmount(plan: Plan | null): string {
-    return plan?.amount.toString() || '0.00';
+    return plan?.display_amount || '0.00';
   }
 
   billingLabel(interval: string): string {
@@ -351,10 +352,10 @@ export class SubcriptionPageComponent {
 
   currentPlanDescription(plan: Plan | null): string {
     if (!plan) {
-      return 'Choose a plan to unlock more projects, templates, and deployment options.';
+      return 'Choose a plan to unlock more credits, integrations, and deployment options.';
     }
 
-    return `${plan.project_limit} project${plan.project_limit > 1 ? 's' : ''} limit • ${plan.template_limit} template${plan.template_limit > 1 ? 's' : ''} • ${plan.variation_limit} variation${plan.variation_limit > 1 ? 's' : ''}`;
+    return `${plan.credits_per_cycle} credit${plan.credits_per_cycle > 1 ? 's' : ''} per ${(plan.credit_grant_interval || plan.billing_interval).toLowerCase()}`;
   }
 
   planDescription(plan: Plan): string {
@@ -380,11 +381,15 @@ export class SubcriptionPageComponent {
 
   planFeatures(plan: Plan): string[] {
     const features = [
-      `${plan.project_limit} Project${plan.project_limit > 1 ? 's' : ''}`,
-      `${plan.template_limit} Template${plan.template_limit > 1 ? 's' : ''}`,
-      `${plan.variation_limit} Variation${plan.variation_limit > 1 ? 's' : ''}`,
+      `${plan.credits_per_cycle} Credit${plan.credits_per_cycle > 1 ? 's' : ''} per ${(
+        plan.credit_grant_interval || plan.billing_interval
+      ).toLowerCase()}`,
       this.supportLabel(plan.support_type)
     ];
+
+    if (plan.topup_allowed) {
+      features.push('Top-up Credits');
+    }
 
     if (plan.can_deploy) {
       features.push('Deployment Access');
@@ -396,6 +401,10 @@ export class SubcriptionPageComponent {
 
     if (plan.custom_features) {
       features.push('Custom Features');
+    }
+
+    if (plan.can_delete) {
+      features.push('Delete Projects');
     }
 
     return features;
