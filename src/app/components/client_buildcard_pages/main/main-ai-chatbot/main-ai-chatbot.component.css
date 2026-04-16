@@ -16,7 +16,7 @@
 
 .main-ai-chat-shell::before {
   top: -90px;
-  left: -80px;
+  left: 0px;
   width: 260px;
   height: 260px;
   border-radius: 999px;
@@ -25,7 +25,7 @@
 }
 
 .main-ai-chat-shell::after {
-  right: -120px;
+  right: 0px;
   bottom: 120px;
   width: 320px;
   height: 320px;
