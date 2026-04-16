@@ -1,290 +1,250 @@
-<input
-  id="mainAiSidebarToggle"
-  type="checkbox"
-  class="main-ai-mobile-nav-toggle"
-/>
+<input id="mainAiSidebarToggle" type="checkbox" class="main-ai-mobile-nav-toggle" />
 
 <div class="main-ai-topbar" role="banner">
-  <div class="main-ai-topbar__left">
-    <label
-      for="mainAiSidebarToggle"
-      class="main-ai-topbar__menu-btn"
-      aria-label="Open sidebar"
-    >
-      <i class="fa-solid fa-bars"></i>
-    </label>
+    <div class="main-ai-topbar__left">
+        <label for="mainAiSidebarToggle" class="main-ai-topbar__menu-btn" aria-label="Open sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </label>
 
-    <a class="main-ai-topbar__home" routerLink="/main">
-      <i class="fa-solid fa-table-cells-large"></i>
-      <span>Home</span>
-    </a>
+        <a class="main-ai-topbar__home" routerLink="/main">
+            <i class="fa-solid fa-table-cells-large"></i>
+            <span>Home</span>
+        </a>
 
-    @for (project of allProjectsList; track project.inquiryId) {
-      <button
-        type="button"
-        class="main-ai-topbar__tab"
-        [class.main-ai-topbar__tab--active]="
+        @for (project of allProjectsList; track project.inquiryId) {
+        <button type="button" class="main-ai-topbar__tab" [class.main-ai-topbar__tab--active]="
           project.inquiryId === selectedProjectId
-        "
-        (click)="selectProjectTab(project)"
-      >
-        <span class="main-ai-topbar__tab-label">{{ project.projectName }}</span>
-      </button>
-    }
-    <!-- 
+        " (click)="selectProjectTab(project)">
+            <span class="main-ai-topbar__tab-label">{{ project.projectName }}</span>
+        </button>
+        }
+        <!-- 
         <button type="button" class="main-ai-topbar__add" aria-label="Add tab">
             <i class="fa-solid fa-plus"></i>
         </button> -->
-  </div>
+    </div>
 
-  <div class="main-ai-topbar__right" style="padding-bottom: 6px">
-    <button
-      type="button"
-      class="main-ai-topbar__credits"
-      (click)="openSubscriptionModal()"
-    >
-      Upgrade
-    </button>
+    <div class="main-ai-topbar__right" style="padding-bottom: 6px">
+        <div class="d-none d-lg-block" *ngIf="showPreviewControls">
+            <div class="et_reload_icon" (click)="handleFullScreenToggle()">
+                <i class="fa-solid" [ngClass]="fullScreen ? 'fa-minimize' : 'fa-expand'"></i>
+            </div>
+        </div>
+        <ul class="mb-0 d-none d-lg-block" *ngIf="showPreviewControls">
+            <li>
+                <div class="dropdown ct_dropdown_device_preview123">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown" aria-expanded="false" [innerHTML]="selectedDeviceType">
+                    </button>
+                    <ul class="dropdown-menu mb-0" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" (click)="handleDeviceTypeChange('desktop')"> <i
+                                    class="fa-solid fa-display"></i></a></li>
+                        <li><a class="dropdown-item" (click)="handleDeviceTypeChange('tablet')"> <i
+                                    class="fa-solid fa-tablet-screen-button"></i></a></li>
+                        <li><a class="dropdown-item" (click)="handleDeviceTypeChange('mobile')"> <i
+                                    class="fa-solid fa-mobile-screen"></i></a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+        <button type="button" class="main-ai-topbar__credits" (click)="openSubscriptionModal()">
+            Buy Credits
+        </button>
 
-    <div class="main-ai-topbar__utility-group" #profileMenu>
-      <!-- <button type="button" class="main-ai-topbar__icon" aria-label="Notifications">
+        <div class="main-ai-topbar__utility-group" #profileMenu>
+            <!-- <button type="button" class="main-ai-topbar__icon" aria-label="Notifications">
           <i class="fa-solid fa-bell"></i>
         </button>
         <button type="button" class="main-ai-topbar__icon" aria-label="Workspace">
           <i class="fa-solid fa-gift"></i>
         </button> -->
-      <button
-        type="button"
-        class="main-ai-topbar__avatar"
-        aria-label="Open profile menu"
-        [class.main-ai-topbar__avatar--active]="isProfileMenuOpen"
-        (click)="toggleProfileMenu($event)"
-      >
-        @if (profileImageUrl) {
-          <img [src]="profileImageUrl" [alt]="userName" />
-        } @else {
-          {{ avatarInitial }}
-        }
-      </button>
-
-      @if (isProfileMenuOpen) {
-        <div class="main-ai-profile-menu">
-          <div class="main-ai-profile-menu__email">{{ userEmail }}</div>
-
-          <div class="main-ai-profile-menu__workspace">
-            <div class="main-ai-profile-menu__workspace-left">
-              <div class="main-ai-profile-menu__workspace-avatar">
+            <button type="button" class="main-ai-topbar__avatar" aria-label="Open profile menu"
+                [class.main-ai-topbar__avatar--active]="isProfileMenuOpen" (click)="toggleProfileMenu($event)">
                 @if (profileImageUrl) {
-                  <img [src]="profileImageUrl" [alt]="userName" />
+                <img [src]="profileImageUrl" [alt]="userName" />
                 } @else {
-                  <span>{{ avatarInitial }}</span>
+                {{ avatarInitial }}
                 }
-              </div>
-              <div>
-                <h4 class="text-white ct_fs_14">{{ companyName }}</h4>
-                <p>{{ userEmail }}</p>
-              </div>
-            </div>
-          </div>
+            </button>
 
-          <div class="main-ai-profile-menu__credits-card">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <div class="position-relative ct_credit_hover_card">
-                <h6 class="ct_fs_14 mb-0 text-white">
-                 <span class="me-1 ct_fw_600"> Credits</span>
-                  <svg
-                  
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    fill="currentColor"
-                    class="bi bi-info-circle"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
-                    />
-                    <path
-                      d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"
-                    />
-                  </svg>
-                </h6>
-                <div class="credit-card">
-                  <div class="credit-header">
-                    <div>
-                      <p class="label">Available Credits</p>
-                      <h2 class="amount"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20" fill="none" class="w-6 h-6"><g clip-path="url(#clip0_header_credit_coin)"><circle opacity="0.1" cx="10" cy="10" r="10" fill="var(--credit-coin-color)"></circle><path d="M10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2ZM10.4082 6.58984C10.1446 5.93661 9.92302 5.71814 9.60645 6.49805C8.91401 8.15984 8.0872 8.95183 6.45996 9.6377C6.29657 9.71319 6.00191 9.84453 6 10C6.00211 10.1554 6.29471 10.2868 6.45996 10.3623C8.08527 11.0462 8.91405 11.8399 9.60645 13.502C9.9268 14.2958 10.1491 14.0465 10.4082 13.4102C11.1026 11.8036 11.8788 11.0584 13.5166 10.3623C13.6883 10.2804 13.9713 10.1709 14 10.0078V9.98926C13.9709 9.8277 13.6901 9.71755 13.5166 9.63574V9.6377C11.8789 8.9416 11.1026 8.19694 10.4082 6.58984Z" fill="var(--credit-coin-color)"></path><path d="M10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2ZM10.4082 6.58984C10.1446 5.93661 9.92302 5.71814 9.60645 6.49805C8.91401 8.15984 8.0872 8.95183 6.45996 9.6377C6.29657 9.71319 6.00191 9.84453 6 10C6.00211 10.1554 6.29471 10.2868 6.45996 10.3623C8.08527 11.0462 8.91405 11.8399 9.60645 13.502C9.9268 14.2958 10.1491 14.0465 10.4082 13.4102C11.1026 11.8036 11.8788 11.0584 13.5166 10.3623C13.6883 10.2804 13.9713 10.1709 14 10.0078V9.98926C13.9709 9.8277 13.6901 9.71755 13.5166 9.63574V9.6377C11.8789 8.9416 11.1026 8.19694 10.4082 6.58984Z" fill="#f4cf69" style="mix-blend-mode: overlay;"></path></g><defs><linearGradient id="paint0_header_credit_coin" x1="10" y1="2" x2="10" y2="18" gradientUnits="userSpaceOnUse"><stop stop-color="white"></stop><stop offset="1"></stop></linearGradient><clipPath id="clip0_header_credit_coin"><rect width="20" height="20" fill="white"></rect></clipPath></defs></svg>5.29</h2>
+            @if (isProfileMenuOpen) {
+            <div class="main-ai-profile-menu">
+                <div class="main-ai-profile-menu__email">{{ userEmail }}</div>
+
+                <div class="main-ai-profile-menu__workspace">
+                    <div class="main-ai-profile-menu__workspace-left">
+                        <div class="main-ai-profile-menu__workspace-avatar">
+                            @if (profileImageUrl) {
+                            <img [src]="profileImageUrl" [alt]="userName" />
+                            } @else {
+                            <span>{{ avatarInitial }}</span>
+                            }
+                        </div>
+                        <div>
+                            <h4 class="text-white ct_fs_14">{{ companyName }}</h4>
+                            <p>{{ userEmail }}</p>
+                        </div>
                     </div>
-                    <span class="badge">Free Tier</span>
-                  </div>
-
-                  <div class="credit-body">
-                    <div class="ct_div_row">
-                      <span>Free Credits</span>
-                      <strong>5.29 / <span>10</span></strong>
-                    </div>
-                    <div class="ct_div_row">
-                      <span>Bonus Credits</span>
-                      <strong><span>0.00</span></strong>
-                    </div>
-                  </div>
-
-                  <button class="btn">Buy More Credits</button>
-
-                  <p class="info">
-                    You're on the Free tier with 10 monthly credits. Upgrade to
-                    unlock more features.
-                  </p>
                 </div>
-              </div>
-              <h6 class="mb-0 ct_fs_14 text-white">
-                <svg
-                  width="16"
-                  class="me-1"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM12.5107 7.7373C12.1812 6.92076 11.9035 6.64719 11.5078 7.62207C10.6422 9.69969 9.60868 10.6895 7.57422 11.5469C7.36996 11.6412 7.00239 11.8057 7 12C7.00264 12.1942 7.36761 12.3578 7.57422 12.4521C9.60626 13.3071 10.6422 14.3002 11.5078 16.3779C11.9082 17.37 12.1869 17.0582 12.5107 16.2627C13.3788 14.2545 14.3482 13.3223 16.3955 12.4521C16.61 12.3499 16.9637 12.2143 17 12.0107V11.9873C16.9641 11.785 16.6125 11.6473 16.3955 11.5449V11.5469C14.3485 10.6768 13.3787 9.74605 12.5107 7.7373Z"
-                    fill="#fff"
-                  ></path></svg
-                >5.29
-              </h6>
+
+                <div class="main-ai-profile-menu__credits-card">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="position-relative ct_credit_hover_card">
+                            <h6 class="ct_fs_14 mb-0 text-white">
+                                <span class="me-1 ct_fw_600"> Credits</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                    class="bi bi-info-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                    <path
+                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                </svg>
+                            </h6>
+                            <div class="credit-card">
+                                <div class="credit-header">
+                                    <div>
+                                        <p class="label">Available Credits</p>
+                                        <h2 class="amount"> <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" viewBox="0 0 20 20" fill="none" class="w-6 h-6">
+                                                <g clip-path="url(#clip0_header_credit_coin)">
+                                                    <circle opacity="0.1" cx="10" cy="10" r="10"
+                                                        fill="var(--credit-coin-color)"></circle>
+                                                    <path
+                                                        d="M10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2ZM10.4082 6.58984C10.1446 5.93661 9.92302 5.71814 9.60645 6.49805C8.91401 8.15984 8.0872 8.95183 6.45996 9.6377C6.29657 9.71319 6.00191 9.84453 6 10C6.00211 10.1554 6.29471 10.2868 6.45996 10.3623C8.08527 11.0462 8.91405 11.8399 9.60645 13.502C9.9268 14.2958 10.1491 14.0465 10.4082 13.4102C11.1026 11.8036 11.8788 11.0584 13.5166 10.3623C13.6883 10.2804 13.9713 10.1709 14 10.0078V9.98926C13.9709 9.8277 13.6901 9.71755 13.5166 9.63574V9.6377C11.8789 8.9416 11.1026 8.19694 10.4082 6.58984Z"
+                                                        fill="var(--credit-coin-color)"></path>
+                                                    <path
+                                                        d="M10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2ZM10.4082 6.58984C10.1446 5.93661 9.92302 5.71814 9.60645 6.49805C8.91401 8.15984 8.0872 8.95183 6.45996 9.6377C6.29657 9.71319 6.00191 9.84453 6 10C6.00211 10.1554 6.29471 10.2868 6.45996 10.3623C8.08527 11.0462 8.91405 11.8399 9.60645 13.502C9.9268 14.2958 10.1491 14.0465 10.4082 13.4102C11.1026 11.8036 11.8788 11.0584 13.5166 10.3623C13.6883 10.2804 13.9713 10.1709 14 10.0078V9.98926C13.9709 9.8277 13.6901 9.71755 13.5166 9.63574V9.6377C11.8789 8.9416 11.1026 8.19694 10.4082 6.58984Z"
+                                                        fill="#f4cf69" style="mix-blend-mode: overlay;"></path>
+                                                </g>
+                                                <defs>
+                                                    <linearGradient id="paint0_header_credit_coin" x1="10" y1="2"
+                                                        x2="10" y2="18" gradientUnits="userSpaceOnUse">
+                                                        <stop stop-color="white"></stop>
+                                                        <stop offset="1"></stop>
+                                                    </linearGradient>
+                                                    <clipPath id="clip0_header_credit_coin">
+                                                        <rect width="20" height="20" fill="white"></rect>
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>{{subsCriptionData?.creditsPerCycle || 0}}</h2>
+                                    </div>
+                                    <span class="badge">{{subsCriptionData?.planName || 'Free'}}</span>
+                                </div>
+
+                                <div class="credit-body">
+                                    <div class="ct_div_row">
+                                        <span>Free Credits</span>
+                                        <strong>5.29 / <span>{{subsCriptionData?.creditsPerCycle || 0}}</span></strong>
+                                    </div>
+                                    <div class="ct_div_row">
+                                        <span>Bonus Credits</span>
+                                        <strong><span>0.00</span></strong>
+                                    </div>
+                                </div>
+
+                                <button class="btn" (click)="openSubscriptionModal()">Buy More Credits</button>
+
+                                <p class="info">
+                                    You're on the {{subsCriptionData?.planName || 'Free'}} plan with
+                                    {{subsCriptionData?.creditsPerCycle || 0}} monthly credits. Upgrade to
+                                    unlock more features.
+                                </p>
+                            </div>
+                        </div>
+                        <h6 class="mb-0 ct_fs_14 text-white">
+                            <svg width="16" class="me-1" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM12.5107 7.7373C12.1812 6.92076 11.9035 6.64719 11.5078 7.62207C10.6422 9.69969 9.60868 10.6895 7.57422 11.5469C7.36996 11.6412 7.00239 11.8057 7 12C7.00264 12.1942 7.36761 12.3578 7.57422 12.4521C9.60626 13.3071 10.6422 14.3002 11.5078 16.3779C11.9082 17.37 12.1869 17.0582 12.5107 16.2627C13.3788 14.2545 14.3482 13.3223 16.3955 12.4521C16.61 12.3499 16.9637 12.2143 17 12.0107V11.9873C16.9641 11.785 16.6125 11.6473 16.3955 11.5449V11.5469C14.3485 10.6768 13.3787 9.74605 12.5107 7.7373Z"
+                                    fill="#fff"></path>
+                            </svg>{{subsCriptionData?.creditsPerCycle || 0}}
+                        </h6>
+                    </div>
+                    <button type="button" class="main-ai-profile-menu__upgrade" (click)="openSubscriptionModal()">
+                        Upgrade <span>✦</span>
+                    </button>
+                </div>
+
+                <div class="main-ai-profile-menu__actions">
+                    <button type="button" class="main-ai-profile-menu__action" routerLink="/dashboard">
+                        <i class="fa-regular fa-building"></i>
+                        <span class="ct_fs_14">My Projects</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </button>
+                    <button type="button" class="main-ai-profile-menu__action" routerLink="/my-plan">
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="ct_fs_14">My Plans</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </button>
+
+                    <button type="button" class="main-ai-profile-menu__action" routerLink="/profile">
+                        <i class="fa-regular fa-user"></i>
+                        <span class="ct_fs_14">My Profile</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </button>
+                </div>
+
+                <div class="main-ai-profile-menu__footer">
+                    <button type="button" class="main-ai-profile-menu__logout w-100" (click)="LogOut()">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span class="ct_fs_14">Logout</span>
+                    </button>
+                </div>
             </div>
-            <button
-              type="button"
-              class="main-ai-profile-menu__upgrade"
-              (click)="openSubscriptionModal()"
-            >
-              Upgrade <span>✦</span>
-            </button>
-          </div>
-
-          <div class="main-ai-profile-menu__actions">
-            <button
-              type="button"
-              class="main-ai-profile-menu__action"
-              routerLink="/dashboard"
-            >
-              <i class="fa-regular fa-building"></i>
-              <span class="ct_fs_14">My Projects</span>
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </button>
-            <button
-              type="button"
-              class="main-ai-profile-menu__action"
-              routerLink="/my-plan"
-            >
-              <i class="fa-solid fa-globe"></i>
-              <span class="ct_fs_14">My Plans</span>
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </button>
-
-            <button
-              type="button"
-              class="main-ai-profile-menu__action"
-              routerLink="/profile"
-            >
-              <i class="fa-regular fa-user"></i>
-              <span class="ct_fs_14">My Profile</span>
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </button>
-          </div>
-
-          <div class="main-ai-profile-menu__footer">
-            <button
-              type="button"
-              class="main-ai-profile-menu__logout w-100"
-              (click)="LogOut()"
-            >
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
-              <span class="ct_fs_14">Logout</span>
-            </button>
-          </div>
+            }
         </div>
-      }
     </div>
-  </div>
 </div>
 
-<label
-  for="mainAiSidebarToggle"
-  class="main-ai-mobile-sidebar-backdrop"
-  aria-hidden="true"
-></label>
+<label for="mainAiSidebarToggle" class="main-ai-mobile-sidebar-backdrop" aria-hidden="true"></label>
 
 <aside class="main-ai-mobile-sidebar" aria-label="Project tabs">
-  <div class="main-ai-mobile-sidebar__header">
-    <h3 class="main-ai-mobile-sidebar__title">Projects</h3>
-    <label
-      for="mainAiSidebarToggle"
-      class="main-ai-mobile-sidebar__close"
-      aria-label="Close sidebar"
-    >
-      <i class="fa-solid fa-xmark"></i>
-    </label>
-  </div>
+    <div class="main-ai-mobile-sidebar__header">
+        <h3 class="main-ai-mobile-sidebar__title">Projects</h3>
+        <label for="mainAiSidebarToggle" class="main-ai-mobile-sidebar__close" aria-label="Close sidebar">
+            <i class="fa-solid fa-xmark"></i>
+        </label>
+    </div>
 
-  <!-- <a class="main-ai-mobile-sidebar__home" routerLink="/main">
+    <!-- <a class="main-ai-mobile-sidebar__home" routerLink="/main">
         <span><i class="fa-solid fa-plus ct_fs_12 me-1"></i> New Project</span>
     </a> -->
 
-  <div>
-    <label class="mb-2 ct_fs_14 text-white opacity-75">Active Projects</label>
-    <div class="main-ai-mobile-sidebar__tabs">
-      @for (project of allProjectsList; track project.inquiryId) {
-        <button
-          type="button"
-          class="main-ai-mobile-sidebar__tab"
-          [class.main-ai-mobile-sidebar__tab--active]="
+    <div>
+        <label class="mb-2 ct_fs_14 text-white opacity-75">Active Projects</label>
+        <div class="main-ai-mobile-sidebar__tabs">
+            @for (project of allProjectsList; track project.inquiryId) {
+            <button type="button" class="main-ai-mobile-sidebar__tab" [class.main-ai-mobile-sidebar__tab--active]="
             project.inquiryId === selectedProjectId
-          "
-          (click)="selectProjectTab(project)"
-        >
-          <span class="main-ai-mobile-sidebar__tab-main">
-            @if (project.inquiryId === selectedProjectId) {
-              <span class="main-ai-mobile-sidebar__tab-dot"></span>
-            }
-            <span class="main-ai-mobile-sidebar__tab-label">{{
-              project.projectName
-            }}</span>
-          </span>
-          <!-- <span class="main-ai-mobile-sidebar__tab-close" aria-hidden="true">
+          " (click)="selectProjectTab(project)">
+                <span class="main-ai-mobile-sidebar__tab-main">
+                    @if (project.inquiryId === selectedProjectId) {
+                    <span class="main-ai-mobile-sidebar__tab-dot"></span>
+                    }
+                    <span class="main-ai-mobile-sidebar__tab-label">{{
+                        project.projectName
+                        }}</span>
+                </span>
+                <!-- <span class="main-ai-mobile-sidebar__tab-close" aria-hidden="true">
                     <i class="fa-solid fa-xmark"></i>
                 </span> -->
-        </button>
-      }
+            </button>
+            }
+        </div>
     </div>
-  </div>
 
-  <div class="main-ai-mobile-sidebar__footer">
-    <button
-      type="button"
-      class="main-ai-mobile-sidebar__add"
-      aria-label="Add tab"
-    >
-      <i class="fa-solid fa-plus"></i>
-      <span>Add tab</span>
-    </button>
-    <button
-      type="button"
-      class="main-ai-topbar__credits main-ai-mobile-sidebar__upgrade"
-    >
-      Upgrade
-    </button>
-  </div>
+    <div class="main-ai-mobile-sidebar__footer">
+        <button type="button" class="main-ai-mobile-sidebar__add" aria-label="Add tab">
+            <i class="fa-solid fa-plus"></i>
+            <span>Add tab</span>
+        </button>
+        <button type="button" class="main-ai-topbar__credits main-ai-mobile-sidebar__upgrade">
+            Upgrade
+        </button>
+    </div>
 </aside>
 
-<div
-  class="main-ai-theme-shell py-0 d-flex align-items-center justify-content-center"
-  style="height: auto"
->
-  <app-subcription-page
-    [subscriptionModalOpen]="subscriptionModalOpen"
-    [selectedTemplateId]="selectedSubscriptionTemplateId"
-    (close)="closeSubscriptionModal()"
-  >
-  </app-subcription-page>
+<div class="main-ai-theme-shell py-0 d-flex align-items-center justify-content-center" style="height: auto">
+    <app-subcription-page [subscriptionModalOpen]="subscriptionModalOpen"
+        [selectedTemplateId]="selectedSubscriptionTemplateId" (close)="closeSubscriptionModal()">
+    </app-subcription-page>
 </div>

@@ -207,10 +207,10 @@
     border: 0;
     border-radius: 999px;
     background: linear-gradient(180deg, #ffe17d 0%, #f8ce57 100%);
-    color: #4a3500;
-    font-size: 11px;
+    color: #2b2b2b;
+    font-size: 13px;
     font-weight: 700;
-    box-shadow: 0 0 18px rgba(248, 206, 87, 0.45);
+    /* box-shadow: 0 0 18px rgba(248, 206, 87, 0.45); */
 }
 
 .main-ai-topbar__utility-group {
@@ -517,7 +517,7 @@
 
 
 .credit-card {
- width: 100%;
+    width: 100%;
     padding: 20px;
     border-radius: 16px;
     background: #1f1f22;
@@ -528,38 +528,39 @@
     right: 0px;
     min-width: 380px;
     transition: 0.4s ease all;
-     /* hidden state */
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(10px) scale(0.98);
+    /* hidden state */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(10px) scale(0.98);
 
-  transition: 
-    opacity 0.3s ease,
-    transform 0.3s ease,
-    visibility 0s linear 0.3s; /* delay hide */
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease,
+        visibility 0s linear 0.3s;
+    /* delay hide */
 }
 
 /* Header */
 .credit-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
 }
 
 .credit-card .label {
-  font-size: 14px;
-  color: #ffffff80;
-  margin-bottom: 0px;
+    font-size: 14px;
+    color: #ffffff80;
+    margin-bottom: 0px;
 }
 
 .credit-card .amount {
-  font-size: 24px;
-  font-weight: 600;
-  margin-top: 4px;
-  color: #fff;
-  margin-bottom: 0px;
-  color: #fff;
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 4px;
+    color: #fff;
+    margin-bottom: 0px;
+    color: #fff;
     margin-bottom: 0px;
     display: flex;
     align-items: center;
@@ -568,83 +569,88 @@
 
 /* Badge */
 .credit-card .badge {
-  background: rgba(255,255,255,0.1);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
 }
 
 /* Body */
 .credit-card .credit-body {
-  margin: 16px 0px 0px;
-  padding: 16px;
-  background-color: #ffffff05;
+    margin: 16px 0px 0px;
+    padding: 16px;
+    background-color: #ffffff05;
 }
 
 .credit-card .ct_div_row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  font-size: 14px;
-  color: #ccc;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #ccc;
 }
 
-.ct_div_row strong span{
+.ct_div_row strong span {
     color: #ffffff99;
 }
+
 .credit-card .ct_div_row strong {
-  color: #fff;
+    color: #fff;
 }
 
 /* Button */
 .credit-card .btn {
-  width: 100%;
-  padding: 8px;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(90deg, #ffd54f, #ffca28);
-  color: #000;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #ffd54f, #ffca28);
+    color: #000;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .credit-card .btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(255, 213, 79, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 213, 79, 0.4);
 }
 
 /* Info text */
 .credit-card .info {
-  font-size: 14px;
-  color: #aaa;
-  margin-top: 12px;
-  line-height: 1.4;
-  margin-bottom: 0px;
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 12px;
+    line-height: 1.4;
+    margin-bottom: 0px;
 }
-.ct_credit_hover_card{
+
+.ct_credit_hover_card {
     transition: 0.4s ease all;
 }
-.ct_credit_hover_card :where(h6 ,svg) {
+
+.ct_credit_hover_card :where(h6, svg) {
     transition: 0.4s ease all;
-    
+
 }
-.ct_credit_hover_card svg{
+
+.ct_credit_hover_card svg {
     cursor: pointer;
 }
 
-.ct_credit_hover_card:hover h6  ~ .credit-card {
+.ct_credit_hover_card:hover h6~.credit-card {
     opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
 
-  transition: 
-    opacity 0.3s ease,
-    transform 0.3s ease,
-    visibility 0s;
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease,
+        visibility 0s;
 }
-.main-ai-profile-menu__email{
+
+.main-ai-profile-menu__email {
     display: none;
 }
 
@@ -958,15 +964,16 @@
 }
 
 
-@media screen and (max-width:600px){
-    .ct_credit_hover_card h6 svg{
+@media screen and (max-width:600px) {
+    .ct_credit_hover_card h6 svg {
         display: none;
     }
-    .ct_credit_hover_card:hover h6  ~ .credit-card {
-    opacity: 1;
-    transform: translateY(0);
-    display: none;
-}
+
+    .ct_credit_hover_card:hover h6~.credit-card {
+        opacity: 1;
+        transform: translateY(0);
+        display: none;
+    }
 }
 
 @media (max-width: 575px) {
@@ -1004,4 +1011,56 @@
     .main-ai-submit-btn {
         flex: 0 0 auto;
     }
+}
+
+.ct_dropdown_device_preview123 button {
+    background-color: #333;
+    border: 0px;
+    height: 25px;
+    font-size: 12px;
+    padding-inline: 15px;
+    padding-block: 4px;
+    display: none;
+}
+
+
+
+.ct_dropdown_device_preview123 ul {
+    flex-direction: column;
+    width: fit-content !important;
+    min-width: fit-content;
+    padding-block: 0px;
+    gap: 2px;
+    padding: 2px;
+}
+
+.ct_dropdown_device_preview123 a.dropdown-item {
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.ct_dropdown_device_preview123 ul a.dropdown-item:focus,
+.ct_dropdown_device_preview123 ul a.dropdown-item:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+.et_reload_icon {
+    width: 30px;
+    height: 30px;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    color: #fff;
+    border: 1px solid #333;
+    cursor: pointer;
+    transition: 0.4s ease all;
+    display: none;
+}
+
+.et_reload_icon:hover {
+    background-color: #e6e6e6;
+    color: #000;
 }

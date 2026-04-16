@@ -1,8 +1,10 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { Router, RouterLink } from '@angular/router';
 import { SubscriptionModalService } from '../../../services/subscription-modal.service';
 import { SubcriptionPageComponent } from "../subcription-page/subcription-page.component";
+import { SubcriptionService } from '../../../services/subcription.service';
+import { CommonModule } from '@angular/common';
 
 interface UserProjectTab {
   inquiryId: string;
@@ -24,11 +26,16 @@ interface UserProfileSummary {
 @Component({
   selector: 'app-workspace-header',
   standalone: true,
-  imports: [RouterLink, SubcriptionPageComponent],
+  imports: [RouterLink, SubcriptionPageComponent, CommonModule],
   templateUrl: './workspace-header.component.html',
   styleUrl: './workspace-header.component.css'
 })
 export class WorkspaceHeaderComponent {
+  @Input() fullScreen = false;
+  @Input() selectedDeviceType = '<i class="fa-solid fa-display"></i>';
+  @Input() showPreviewControls = false;
+  @Output() fullScreenToggle = new EventEmitter<void>();
+  @Output() deviceTypeChange = new EventEmitter<'desktop' | 'tablet' | 'mobile'>();
   allProjectsList: UserProjectTab[] = [];
   selectedProjectId = '';
   profileImage = '';
@@ -39,15 +46,21 @@ export class WorkspaceHeaderComponent {
   @ViewChild('profileMenu') profileMenu?: ElementRef<HTMLDivElement>;
   subscriptionModalOpen = false;
   selectedSubscriptionTemplateId = '';
+  subsCriptionData: any;
   constructor(
     private apiService: ApiService,
     private router: Router,
     private subscriptionModalService: SubscriptionModalService,
+    private subscriptionService: SubcriptionService
   ) { }
   ngOnInit(): void {
     this.subscriptionModalService.modalState$.subscribe((state) => {
       this.subscriptionModalOpen = state.isOpen;
       this.selectedSubscriptionTemplateId = state.selectedTemplateId;
+    });
+
+    this.subscriptionService.subscription$.subscribe((subscription) => {
+      this.subsCriptionData = subscription;
     });
     this.loadUserSummary();
     this.getUserProfile();
@@ -130,6 +143,14 @@ export class WorkspaceHeaderComponent {
 
   openSubscriptionModal(): void {
     this.subscriptionModalService.open();
+  }
+
+  handleFullScreenToggle(): void {
+    this.fullScreenToggle.emit();
+  }
+
+  handleDeviceTypeChange(deviceType: 'desktop' | 'tablet' | 'mobile'): void {
+    this.deviceTypeChange.emit(deviceType);
   }
 
   @HostListener('document:click', ['$event'])
