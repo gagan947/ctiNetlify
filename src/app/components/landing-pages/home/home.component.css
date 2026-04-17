@@ -9,7 +9,14 @@ section {
 section {
   content-visibility: auto;
 }
-
+.ct_build_visual.ct_build_visual_web.mt-auto {
+    text-align: end;
+}
+.ct_build_visual.ct_build_visual_web img{
+  width: 100%;
+  object-fit: contain;
+  max-width: 350px;
+}
 .ct_prompt_hero_content {
   max-width: 441px;
   text-align: center;
@@ -236,12 +243,7 @@ section {
 
 
 
-.ct_build_visual.ct_build_visual_web {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
+
 
 
 
@@ -939,14 +941,9 @@ section {
     grid-template-columns: repeat(1, 1fr);
   }
 
-  .ct_build_visual.ct_build_visual_web img+img {
-    height: 210px !important;
-    max-width: 226px !important;
-  }
+ 
 
-  .ct_build_visual.ct_build_visual_web img {
-    max-width: 110px;
-  }
+ 
 
   .ct_fs_40 {
     font-size: 30px;
