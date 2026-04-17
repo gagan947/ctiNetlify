@@ -162,7 +162,6 @@ export class ReactBuildPreviewComponent {
     private subscriptionService: SubcriptionService
   ) {
     this.baseURl = this.apiService.apiUrl;
-
     effect(() => {
       this.finalSummary = this.apiService._finalSummary() || sessionStorage.getItem('finalSummary');
     });
@@ -187,16 +186,16 @@ export class ReactBuildPreviewComponent {
     // ✅ 1. LOAD DRAFT TEMPLATES FIRST
     // ============================================
 
+    setTimeout(() => {
+      this.startPreview(null);
+    });
+
     const templates = await this.getUserTemplates();
     if (templates.length > 0) {
       await this.showDraftWelcomeMessages();
       await this.loadDraftTemplates(templates);
       return;
     }
-    if (!this.projectsData.projectId) {
-      this.startAIWithoutProjectMatch(null);
-    }
-
     await this.startFlow();
   }
 
@@ -225,25 +224,20 @@ export class ReactBuildPreviewComponent {
 
   startPreview(socket_id: string | null) {
 
-    if (!this.projectsData.projectId) return
-
     if (socket_id) {
       this.setBuildFlow('initial');
       this.startBuildProgressTimers();
     }
-
     const payload = {
+      prompt: this.finalSummary,
       project_id: this.projectsData.projectId,
-      project_description: this.projectsData.projectDescription,
-      project_type: this.projectsData.projectType,
-      clientEnquryId: this.projectsData.clientEnquryId,
+      inquiryPublicId: this.projectsData.clientEnquryId,
       socket_id,
-      design_no: this.designOrder.length + 1,
       excludeVariations: this.usedVariations
     };
 
     this.apiService
-      .postAPI<any, any>('api/user/generateProjectCode', payload)
+      .postAPI<any, any>('api/ai/generateProject', payload)
       .subscribe((res: any) => {
 
         this.isReactBuilding = true;
@@ -294,69 +288,7 @@ export class ReactBuildPreviewComponent {
   }
 
 
-  startAIWithoutProjectMatch(socket_id: string | null) {
-    if (socket_id) {
-      this.setBuildFlow('initial');
-      this.startBuildProgressTimers();
-    }
 
-    const payload = {
-      prompt: this.finalSummary,
-      inquiryPublicId: this.projectsData.clientEnquryId,
-    };
-
-    this.apiService
-      .postAPI<any, any>('api/ai/generateProject', payload)
-      .subscribe((res: any) => {
-
-        this.isReactBuilding = true;
-        const templateId = res.templateId;
-        const proxyUrl = this.getPreviewProxyUrl(templateId);
-
-        // 🔹 track variation
-        if (res.variation) {
-          this.usedVariations.push(res.variation);
-        }
-
-        this.designCount++;
-
-        const designId = `design-${this.designCount}`;
-
-        const snapshot: DesignSnapshot = {
-          id: designId,
-          label: `Template ${this.designCount}`,
-          pages: res.pages || [],
-          loginRedirect: res.login_redirect || null,
-          createdAt: new Date(),
-          previewType: 'html'
-        };
-
-        this.designMap.set(designId, snapshot);
-
-        this.designOrder.push({
-          designId,
-          url: proxyUrl, // ✅ store proxy instead of real URL
-          user_template_id: res.templateId || null, // depends on backend
-          variation_no: res.variation
-        });
-
-        this.activeDesignId = designId;
-
-        if (socket_id) {
-          this.pendingPreviewUrl = proxyUrl;
-          this.isIframeLoading = true;
-        } else {
-          this.isIframeLoading = true;
-          this.safePreviewUrl =
-            this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
-        }
-        this.isReactBuilding = false;
-        this.isTyping = false;
-      }, (err) => {
-        this.toster.error('Failed to generate project. Please try again.');
-        this.router.navigate(['/main']);
-      });
-  }
   async regenerate() {
 
     if (this.isTyping) return;
@@ -466,7 +398,7 @@ export class ReactBuildPreviewComponent {
 
     setTimeout(() => this.scrollToBottom(true), 0);
     this.isTyping = false;
-    this.startPreview(null);
+    // this.startPreview(null);
     this.appendBuildActionPrompt();
     return;
 
@@ -1250,7 +1182,7 @@ export class ReactBuildPreviewComponent {
     });
 
 
-    this.startPreview(null);
+    // this.startPreview(null);
 
     this.appendBuildActionPrompt();
   }
