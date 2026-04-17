@@ -87,7 +87,6 @@ export class SubcriptionPageComponent {
   constructor(private apiService: ApiService, private fb: FormBuilder, private subscriptionService: SubcriptionService, private message: NzMessageService,) {
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
-    console.log(this.selectedTemplateId);
   }
 
   ngOnInit(): void {

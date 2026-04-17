@@ -47,7 +47,8 @@
                 </div>
             </li>
         </ul>
-        <button type="button" class="main-ai-topbar__credits" (click)="openSubscriptionModal()">
+        <button type="button" class="main-ai-topbar__credits"
+            (click)="subsCriptionData.planType === 'FREE' ? openSubscriptionModal() : openBuyMoreCreditsModal()">
             Buy Credits
         </button>
 

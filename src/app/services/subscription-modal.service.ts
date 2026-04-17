@@ -15,7 +15,10 @@ export class SubscriptionModalService {
     selectedTemplateId: ''
   });
 
+  private buyMoreCreditsModalStateSubject = new BehaviorSubject<boolean>(false);
+
   modalState$ = this.modalStateSubject.asObservable();
+  buyMoreCreditsModalState$ = this.buyMoreCreditsModalStateSubject.asObservable();
 
   get currentState(): SubscriptionModalState {
     return this.modalStateSubject.value;
@@ -33,5 +36,13 @@ export class SubscriptionModalService {
       isOpen: false,
       selectedTemplateId: ''
     });
+  }
+
+  openBuyMoreCreditsModal(): void {
+    this.buyMoreCreditsModalStateSubject.next(true);
+  }
+
+  closeBuyMoreCreditsModal(): void {
+    this.buyMoreCreditsModalStateSubject.next(false);
   }
 }

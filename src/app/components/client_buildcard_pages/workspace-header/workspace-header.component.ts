@@ -145,6 +145,10 @@ export class WorkspaceHeaderComponent {
     this.subscriptionModalService.open();
   }
 
+  openBuyMoreCreditsModal(): void {
+    this.subscriptionModalService.openBuyMoreCreditsModal();
+  }
+
   handleFullScreenToggle(): void {
     this.fullScreenToggle.emit();
   }
