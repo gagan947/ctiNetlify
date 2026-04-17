@@ -2,6 +2,10 @@
   display: block;
 }
 
+.ct_subscription_modal_root {
+  width: 100%;
+}
+
 section {
   overflow: unset !important;
 }
@@ -1128,6 +1132,3 @@ section {
   }
 }
 
-.modal.fade.modal-xl.show.d-block {
-  background: rgba(0, 0, 0, 0.5);
-}

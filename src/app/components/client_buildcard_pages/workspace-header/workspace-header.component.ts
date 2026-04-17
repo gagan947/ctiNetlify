@@ -2,7 +2,6 @@ import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewC
 import { ApiService } from '../../../services/api.service';
 import { Router, RouterLink } from '@angular/router';
 import { SubscriptionModalService } from '../../../services/subscription-modal.service';
-import { SubcriptionPageComponent } from "../subcription-page/subcription-page.component";
 import { SubcriptionService } from '../../../services/subcription.service';
 import { CommonModule } from '@angular/common';
 
@@ -26,7 +25,7 @@ interface UserProfileSummary {
 @Component({
   selector: 'app-workspace-header',
   standalone: true,
-  imports: [RouterLink, SubcriptionPageComponent, CommonModule],
+  imports: [RouterLink, CommonModule],
   templateUrl: './workspace-header.component.html',
   styleUrl: './workspace-header.component.css'
 })
@@ -44,8 +43,6 @@ export class WorkspaceHeaderComponent {
   companyName = "Creative's Project";
   isProfileMenuOpen = false;
   @ViewChild('profileMenu') profileMenu?: ElementRef<HTMLDivElement>;
-  subscriptionModalOpen = false;
-  selectedSubscriptionTemplateId = '';
   subsCriptionData: any;
   constructor(
     private apiService: ApiService,
@@ -54,11 +51,6 @@ export class WorkspaceHeaderComponent {
     private subscriptionService: SubcriptionService
   ) { }
   ngOnInit(): void {
-    this.subscriptionModalService.modalState$.subscribe((state) => {
-      this.subscriptionModalOpen = state.isOpen;
-      this.selectedSubscriptionTemplateId = state.selectedTemplateId;
-    });
-
     this.subscriptionService.subscription$.subscribe((subscription) => {
       this.subsCriptionData = subscription;
     });
@@ -169,9 +161,5 @@ export class WorkspaceHeaderComponent {
     }
 
     this.closeProfileMenu();
-  }
-
-  closeSubscriptionModal(): void {
-    this.subscriptionModalService.close();
   }
 }

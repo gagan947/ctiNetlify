@@ -1,4 +1,4 @@
-import { Component, computed, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, computed, inject, Input, Optional, signal } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,6 +7,8 @@ import { CalendlyDirective } from '../../../helper/directives/calendly.directive
 import { SubcriptionService } from '../../../services/subcription.service';
 import { SubscriptionResponse } from '../../../models/subcription';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
+import { SubscriptionModalData, SubscriptionModalResult } from '../../../services/subscription-modal.service';
 type BillingCycle = 'MONTH' | 'YEAR';
 type PlanType = 'free' | 'personal' | 'creative' | 'booster' | 'pro' | 'business';
 
@@ -39,6 +41,7 @@ interface Plan {
   discount_percent?: number;
   is_plan_used?: boolean;
   is_current_plan?: boolean;
+  credit_plan_key?: string;
 }
 declare var window: any;
 @Component({
@@ -49,11 +52,7 @@ declare var window: any;
   styleUrl: './subcription-page.component.css'
 })
 export class SubcriptionPageComponent {
-  @Input() subscriptionModalOpen = false;
   @Input() selectedTemplateId = '';
-
-
-  @Output() close = new EventEmitter<void>();
   billingSummaryModalOpen = false;
   showCalendly = false;
   billingCycle = signal<BillingCycle>('MONTH');
@@ -67,8 +66,134 @@ export class SubcriptionPageComponent {
   CountryISO = CountryISO
   selectedPlan = signal<PlanType>('creative');
   subscriptionPlan!: SubscriptionResponse;
-  freePlans: Plan[] = [];
-  proPlans: Plan[] = [];
+  freePlans: Plan[] = [
+    {
+      "id": 1,
+      "plan_key": "free_plan",
+      "plan_name": "Free Plan",
+      "cashfree_plan_id": "",
+      "amount": 0,
+      "currency": "INR",
+      "display_amount": "0.00",
+      "display_currency": "INR",
+      "billing_interval": "MONTH",
+      "created_at": "2026-04-16T07:51:13.000Z",
+      "plan_type": "FREE",
+      "is_active": 1,
+      "test_mode": 0,
+      "has_intro_offer": 0,
+      "intro_amount": "0.00",
+      "discount_percent": 0,
+      "credits_per_cycle": 50,
+      "credit_grant_interval": "MONTH",
+      "max_projects": 1,
+      "max_pages": 5,
+      "topup_allowed": 0,
+      "can_deploy": 0,
+      "support_type": "NONE",
+      "github_integration": 0,
+      "custom_features": 0,
+      "can_delete": 0,
+      "credit_plan_key": "credit_free_plan",
+      "is_plan_used": true,
+      "is_current_plan": false
+    }
+  ];
+  proPlans: Plan[] = [
+    {
+      "id": 2,
+      "plan_key": "pro_starter_monthly",
+      "plan_name": "Pro Starter Monthly",
+      "cashfree_plan_id": "pro_starter_monthly",
+      "amount": 999,
+      "currency": "INR",
+      "display_amount": "999.00",
+      "display_currency": "INR",
+      "billing_interval": "MONTH",
+      "created_at": "2026-04-16T07:51:13.000Z",
+      "plan_type": "PRO",
+      "is_active": 1,
+      "test_mode": 0,
+      "has_intro_offer": 1,
+      "intro_amount": "49.00",
+      "discount_percent": 0,
+      "credits_per_cycle": 100,
+      "credit_grant_interval": "MONTH",
+      "max_projects": 1,
+      "max_pages": 1,
+      "topup_allowed": 1,
+      "can_deploy": 1,
+      "support_type": "CHAT",
+      "github_integration": 0,
+      "custom_features": 0,
+      "can_delete": 0,
+      "credit_plan_key": "credit_pro_starter_monthly",
+      "is_plan_used": true,
+      "is_current_plan": true
+    },
+    {
+      "id": 3,
+      "plan_key": "pro_growth_monthly",
+      "plan_name": "Pro Growth Monthly",
+      "cashfree_plan_id": "pro_growth_monthly",
+      "amount": 1796,
+      "currency": "INR",
+      "display_amount": "1796.00",
+      "display_currency": "INR",
+      "billing_interval": "MONTH",
+      "created_at": "2026-04-16T07:51:13.000Z",
+      "plan_type": "PRO",
+      "is_active": 1,
+      "test_mode": 0,
+      "has_intro_offer": 1,
+      "intro_amount": "49.00",
+      "discount_percent": 0,
+      "credits_per_cycle": 275,
+      "credit_grant_interval": "MONTH",
+      "max_projects": 1,
+      "max_pages": 1,
+      "topup_allowed": 1,
+      "can_deploy": 1,
+      "support_type": "CHAT",
+      "github_integration": 0,
+      "custom_features": 0,
+      "can_delete": 1,
+      "credit_plan_key": "credit_pro_growth_monthly",
+      "is_plan_used": false,
+      "is_current_plan": false
+    },
+    {
+      "id": 4,
+      "plan_key": "pro_scale_monthly",
+      "plan_name": "Pro Scale Monthly",
+      "cashfree_plan_id": "pro_scale_monthly",
+      "amount": 5089,
+      "currency": "INR",
+      "display_amount": "5089.00",
+      "display_currency": "INR",
+      "billing_interval": "MONTH",
+      "created_at": "2026-04-16T07:51:13.000Z",
+      "plan_type": "PRO",
+      "is_active": 1,
+      "test_mode": 0,
+      "has_intro_offer": 1,
+      "intro_amount": "69.00",
+      "discount_percent": 0,
+      "credits_per_cycle": 500,
+      "credit_grant_interval": "MONTH",
+      "max_projects": 1,
+      "max_pages": 1,
+      "topup_allowed": 1,
+      "can_deploy": 1,
+      "support_type": "PRIORITY",
+      "github_integration": 1,
+      "custom_features": 1,
+      "can_delete": 1,
+      "credit_plan_key": "credit_pro_scale_monthly",
+      "is_plan_used": false,
+      "is_current_plan": false
+    }
+  ];
   businessPlans: Plan[] = [];
   private plansCache: Partial<Record<BillingCycle, {
     free: Plan[];
@@ -84,12 +209,21 @@ export class SubcriptionPageComponent {
     EUR: 'EUR ',
     GBP: 'GBP '
   };
-  constructor(private apiService: ApiService, private fb: FormBuilder, private subscriptionService: SubcriptionService, private message: NzMessageService,) {
+  private readonly modalData = inject<SubscriptionModalData | null>(NZ_MODAL_DATA, { optional: true });
+  constructor(
+    private apiService: ApiService,
+    private fb: FormBuilder,
+    private subscriptionService: SubcriptionService,
+    private message: NzMessageService,
+    @Optional() private modalRef?: NzModalRef<SubcriptionPageComponent, SubscriptionModalResult>
+  ) {
     const projectData = sessionStorage.getItem('projectData');
-    this.projectsData = JSON.parse(projectData!);
+    this.projectsData = projectData ? JSON.parse(projectData) : null;
   }
 
   ngOnInit(): void {
+    this.selectedTemplateId = this.selectedTemplateId || this.modalData?.selectedTemplateId || '';
+    this.updateModalWidth(1250);
     this.subscriptionService.loadSubscription();
     this.getAllPlans();
     this.subscriptionService.subscription$.subscribe(subscription => {
@@ -136,12 +270,11 @@ export class SubcriptionPageComponent {
   }
 
   getStarted(planData: Plan) {
-    this.close.emit();
     this.selectedPlan.set(this.mapPlanType(planData));
-    this.subscriptionModalOpen = false;
     this.billingSummaryModalOpen = true;
     this.selectedPlanData = planData;
     this.setBillingCycle(planData.billing_interval);
+    this.updateModalWidth(520);
   }
 
   toggleProDropdown(event: Event) {
@@ -267,17 +400,14 @@ export class SubcriptionPageComponent {
   }
 
   closeModal() {
-    this.close.emit();
-    this.subscriptionModalOpen = false;
-    this.billingSummaryModalOpen = false;
-    this.showCalendly = false;
+    this.modalRef?.close({ action: 'closed', reason: 'cancel' });
   }
 
 
   openCalednlyModal() {
-    this.subscriptionModalOpen = false;
     this.billingSummaryModalOpen = false;
     this.showCalendly = true;
+    this.updateModalWidth(900);
   }
 
   getAllPlans() {
@@ -473,5 +603,11 @@ export class SubcriptionPageComponent {
       default:
         return 'creative';
     }
+  }
+
+  private updateModalWidth(width: number): void {
+    this.modalRef?.updateConfig({
+      nzWidth: width
+    });
   }
 }

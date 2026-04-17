@@ -7,6 +7,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SelectivePreloadingStrategy } from './helper/selective-preloading.strategy';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 const scrollConfig: InMemoryScrollingOptions = {
   scrollPositionRestoration: 'top',
@@ -26,6 +27,7 @@ const firebaseConfig = {
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(MonacoEditorModule.forRoot()),
+    importProvidersFrom(NzModalModule),
 
     provideAnimations(),
     importProvidersFrom(DragDropModule),

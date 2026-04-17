@@ -126,7 +126,7 @@
                                                         <rect width="20" height="20" fill="white"></rect>
                                                     </clipPath>
                                                 </defs>
-                                            </svg>{{subsCriptionData?.creditsPerCycle || 0}}</h2>
+                                            </svg>{{subsCriptionData?.creditBalance || 0}}</h2>
                                     </div>
                                     <span class="badge">{{subsCriptionData?.planName || 'Free'}}</span>
                                 </div>
@@ -134,7 +134,8 @@
                                 <div class="credit-body">
                                     <div class="ct_div_row">
                                         <span>Free Credits</span>
-                                        <strong>5.29 / <span>{{subsCriptionData?.creditsPerCycle || 0}}</span></strong>
+                                        <strong>{{subsCriptionData?.planCredits.left || 0}} /
+                                            <span>{{subsCriptionData?.planCredits.total || 0}}</span></strong>
                                     </div>
                                     <div class="ct_div_row">
                                         <span>Bonus Credits</span>
@@ -142,7 +143,7 @@
                                     </div>
                                 </div>
 
-                                <button class="btn" (click)="openSubscriptionModal()">Buy More Credits</button>
+                                <button class="btn" (click)="openBuyMoreCreditsModal()">Buy More Credits</button>
 
                                 <p class="info">
                                     You're on the {{subsCriptionData?.planName || 'Free'}} plan with
@@ -157,7 +158,7 @@
                                 <path
                                     d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM12.5107 7.7373C12.1812 6.92076 11.9035 6.64719 11.5078 7.62207C10.6422 9.69969 9.60868 10.6895 7.57422 11.5469C7.36996 11.6412 7.00239 11.8057 7 12C7.00264 12.1942 7.36761 12.3578 7.57422 12.4521C9.60626 13.3071 10.6422 14.3002 11.5078 16.3779C11.9082 17.37 12.1869 17.0582 12.5107 16.2627C13.3788 14.2545 14.3482 13.3223 16.3955 12.4521C16.61 12.3499 16.9637 12.2143 17 12.0107V11.9873C16.9641 11.785 16.6125 11.6473 16.3955 11.5449V11.5469C14.3485 10.6768 13.3787 9.74605 12.5107 7.7373Z"
                                     fill="#fff"></path>
-                            </svg>{{subsCriptionData?.creditsPerCycle || 0}}
+                            </svg>{{subsCriptionData?.creditBalance || 0}}
                         </h6>
                     </div>
                     <button type="button" class="main-ai-profile-menu__upgrade" (click)="openSubscriptionModal()">
@@ -243,9 +244,3 @@
         </button>
     </div>
 </aside>
-
-<div class="main-ai-theme-shell py-0 d-flex align-items-center justify-content-center" style="height: auto">
-    <app-subcription-page [subscriptionModalOpen]="subscriptionModalOpen"
-        [selectedTemplateId]="selectedSubscriptionTemplateId" (close)="closeSubscriptionModal()">
-    </app-subcription-page>
-</div>

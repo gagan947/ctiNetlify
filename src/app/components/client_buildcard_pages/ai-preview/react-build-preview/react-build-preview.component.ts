@@ -15,7 +15,6 @@ import { ReactCodeEditorComponent } from '../react-code-editor/react-code-editor
 import { AiDevRendererComponent } from '../ai-dev-renderer/ai-dev-renderer.component';
 import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
 import { SubcriptionService } from '../../../../services/subcription.service';
-import { SubcriptionPageComponent } from "../../subcription-page/subcription-page.component";
 import { WorkspaceHeaderComponent } from "../../workspace-header/workspace-header.component";
 
 
@@ -57,7 +56,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-react-build-preview',
   standalone: true,
-  imports: [CommonModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, RouterLink, AiDevRendererComponent, SubcriptionPageComponent, WorkspaceHeaderComponent],
+  imports: [CommonModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, RouterLink, AiDevRendererComponent, WorkspaceHeaderComponent],
   templateUrl: './react-build-preview.component.html',
   styleUrl: './react-build-preview.component.css'
 })
@@ -135,8 +134,6 @@ export class ReactBuildPreviewComponent {
   usedVariations: any[] = [];
   pendingPreviewUrl: string | null = null;
   skipBuildPrompt = false;
-  subscriptionModalOpen = false;
-  selectedSubscriptionTemplateId = '';
   finalSummary: any = null;
   private readonly genericPreviewPages = ['Home', 'About', 'Features', 'Contact', 'Auth'];
   private readonly projectTypePageMap: Record<string, string[]> = {
@@ -168,10 +165,6 @@ export class ReactBuildPreviewComponent {
   }
 
   async ngOnInit() {
-    this.subscriptionModalService.modalState$.subscribe((state) => {
-      this.subscriptionModalOpen = state.isOpen;
-      this.selectedSubscriptionTemplateId = state.selectedTemplateId;
-    });
     this.getUserSubscriptionPlan();
 
     const projectData = sessionStorage.getItem('projectData');
@@ -517,8 +510,6 @@ export class ReactBuildPreviewComponent {
 
   // open modal
   openModal() {
-
-    console.log(this.selected_template_id);
     this.subscriptionModalService.open(this.selected_template_id);
   }
 
@@ -1425,10 +1416,6 @@ export class ReactBuildPreviewComponent {
       data
     });
     setTimeout(() => this.scrollToBottom(true), 0);
-  }
-
-  closeSubscriptionModal(): void {
-    this.subscriptionModalService.close();
   }
 
 }

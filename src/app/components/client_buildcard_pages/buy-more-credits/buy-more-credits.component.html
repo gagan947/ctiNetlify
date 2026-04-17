@@ -1,112 +1,107 @@
-<div class="modal fade modal-xl show d-block" id="purchasePlan" tabindex="-1" aria-labelledby="purchasePlanLabel"
-  aria-hidden="true" *ngIf="buyCreditsModalOpen">
-  <div class="modal-dialog modal-dialog-centered" style="max-width: 1250px">
-    <div class="modal-content p-4 rounded-4 pt-3">
-      <div class="modal-header pb-2 pt-0 border-0">
-        <button type="button" class="btn-close" (click)="closeModal()"></button>
-      </div>
-      <section class="ct_buy_credits">
-        <div class="ct_buy_credits__dialog">
-          <button type="button" class="ct_buy_credits__close" aria-label="Close">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+<div class="ct_buy_credits_modal_root">
+  <section class="ct_buy_credits">
+    <div class="ct_buy_credits__dialog">
+      <button type="button" class="ct_buy_credits__close" aria-label="Close" (click)="closeModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
 
-          <header class="ct_buy_credits__header">
-            <div class="ct_buy_credits__title_wrap">
-              <div class="ct_buy_credits__icon">
-                <i class="fa-solid fa-bolt"></i>
-              </div>
-              <div>
-                <p class="ct_buy_credits__eyebrow">Workspace Credits</p>
-                <h2>Purchase Credits</h2>
-              </div>
-            </div>
-          </header>
-
-          <div class="ct_buy_credits__banner">
-            <div class="ct_buy_credits__banner_icon">
-              <i class="fa-solid fa-tag"></i>
-            </div>
-            <div>
-              <h3>50% off credit bundles for a limited time</h3>
-              <p>Stock up on extra credits for larger builds, faster iterations, and longer AI sessions.</p>
-            </div>
-          </div>
-
-          <div class="ct_buy_credits__grid">
-            <article class="ct_credit_card">
-              <span class="ct_credit_card__offer">50% OFF</span>
-              <h4>100 credits</h4>
-              <div class="ct_credit_card__price">
-                <span class="ct_credit_card__old">&#8377;1,700</span>
-                <strong>&#8377;850</strong>
-              </div>
-              <button type="button">Buy Now</button>
-            </article>
-
-            <article class="ct_credit_card">
-              <span class="ct_credit_card__offer">50% OFF</span>
-              <h4>200 credits</h4>
-              <div class="ct_credit_card__price">
-                <span class="ct_credit_card__old">&#8377;3,400</span>
-                <strong>&#8377;1,700</strong>
-              </div>
-              <button type="button">Buy Now</button>
-            </article>
-
-            <article class="ct_credit_card">
-              <span class="ct_credit_card__offer">50% OFF</span>
-              <h4>500 credits</h4>
-              <div class="ct_credit_card__price">
-                <span class="ct_credit_card__old">&#8377;8,500</span>
-                <strong>&#8377;4,250</strong>
-              </div>
-              <button type="button">Buy Now</button>
-            </article>
-
-            <article class="ct_credit_card">
-              <span class="ct_credit_card__offer">50% OFF</span>
-              <h4>1,000 credits</h4>
-              <div class="ct_credit_card__price">
-                <span class="ct_credit_card__old">&#8377;17,000</span>
-                <strong>&#8377;8,500</strong>
-              </div>
-              <button type="button">Buy Now</button>
-            </article>
-
-            <article class="ct_credit_card">
-              <span class="ct_credit_card__offer">50% OFF</span>
-              <h4>2,500 credits</h4>
-              <div class="ct_credit_card__price">
-                <span class="ct_credit_card__old">&#8377;42,500</span>
-                <strong>&#8377;21,250</strong>
-              </div>
-              <button type="button">Buy Now</button>
-            </article>
-
-            <article class="ct_credit_card">
-              <span class="ct_credit_card__offer">50% OFF</span>
-              <h4>5,000 credits</h4>
-              <div class="ct_credit_card__price">
-                <span class="ct_credit_card__old">&#8377;85,000</span>
-                <strong>&#8377;42,500</strong>
-              </div>
-              <button type="button">Buy Now</button>
-            </article>
-          </div>
-
-          <div class="ct_buy_credits__custom">
-            <label for="creditCustomAmount">Custom amount</label>
-            <div class="ct_buy_credits__custom_row">
-              <div class="ct_buy_credits__input_wrap">
-                <span>&#8377;</span>
-                <input id="creditCustomAmount" type="text" placeholder="Enter custom amount" />
-              </div>
-              <button type="button" class="ct_buy_credits__custom_btn">Buy 0 Credits</button>
-            </div>
+      <div class="ct_buy_credits__hero">
+        <div class="ct_buy_credits__header">
+          <p class="ct_buy_credits__eyebrow">Workspace Credits</p>
+          <h2>Buy more credits when you need extra capacity</h2>
+          <p class="ct_buy_credits__subtitle">
+            Top up your workspace with discounted credit bundles for larger builds, faster iterations, and longer AI sessions.
+          </p>
+          <div class="ct_buy_credits__promo_strip">
+            <span class="ct_buy_credits__promo_badge">Limited Offer</span>
+            <span>50% off credit bundles for a limited time</span>
           </div>
         </div>
-      </section>
+      </div>
+
+      <div class="ct_buy_credits__grid">
+        <article class="ct_credit_card">
+          <span class="ct_credit_card__offer">Popular</span>
+          <h4>100 credits</h4>
+          <div class="ct_credit_card__price">
+            <span class="ct_credit_card__old">&#8377;1,700</span>
+            <strong>&#8377;850</strong>
+          </div>
+          <p>Ideal for quick design iterations and short AI work sessions.</p>
+          <button type="button">Buy Now</button>
+        </article>
+
+        <article class="ct_credit_card ct_credit_card__featured">
+          <span class="ct_credit_card__offer">Best Value</span>
+          <h4>200 credits</h4>
+          <div class="ct_credit_card__price">
+            <span class="ct_credit_card__old">&#8377;3,400</span>
+            <strong>&#8377;1,700</strong>
+          </div>
+          <p>Great for active workspaces shipping multiple pages and revisions.</p>
+          <button type="button">Buy Now</button>
+        </article>
+
+        <article class="ct_credit_card">
+          <span class="ct_credit_card__offer">Team Pack</span>
+          <h4>500 credits</h4>
+          <div class="ct_credit_card__price">
+            <span class="ct_credit_card__old">&#8377;8,500</span>
+            <strong>&#8377;4,250</strong>
+          </div>
+          <p>Built for heavier design cycles, experimentation, and longer runs.</p>
+          <button type="button">Buy Now</button>
+        </article>
+
+        <article class="ct_credit_card">
+          <span class="ct_credit_card__offer">Scale</span>
+          <h4>1,000 credits</h4>
+          <div class="ct_credit_card__price">
+            <span class="ct_credit_card__old">&#8377;17,000</span>
+            <strong>&#8377;8,500</strong>
+          </div>
+          <p>For power users handling larger projects, previews, and deployments.</p>
+          <button type="button">Buy Now</button>
+        </article>
+
+        <article class="ct_credit_card">
+          <span class="ct_credit_card__offer">Studio</span>
+          <h4>2,500 credits</h4>
+          <div class="ct_credit_card__price">
+            <span class="ct_credit_card__old">&#8377;42,500</span>
+            <strong>&#8377;21,250</strong>
+          </div>
+          <p>Perfect for high-volume creation, internal teams, and deep iterations.</p>
+          <button type="button">Buy Now</button>
+        </article>
+
+        <article class="ct_credit_card">
+          <span class="ct_credit_card__offer">Enterprise</span>
+          <h4>5,000 credits</h4>
+          <div class="ct_credit_card__price">
+            <span class="ct_credit_card__old">&#8377;85,000</span>
+            <strong>&#8377;42,500</strong>
+          </div>
+          <p>Best for long-running production workflows across multiple stakeholders.</p>
+          <button type="button">Buy Now</button>
+        </article>
+      </div>
+
+      <div class="ct_buy_credits__custom">
+        <div class="ct_buy_credits__custom_head">
+          <div>
+            <label for="creditCustomAmount">Custom amount</label>
+            <p>Need a different bundle size? Enter a custom amount and generate credits instantly.</p>
+          </div>
+        </div>
+        <div class="ct_buy_credits__custom_row">
+          <div class="ct_buy_credits__input_wrap">
+            <span>&#8377;</span>
+            <input id="creditCustomAmount" type="text" placeholder="Enter custom amount" />
+          </div>
+          <button type="button" class="ct_buy_credits__custom_btn">Buy 0 Credits</button>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
 </div>
