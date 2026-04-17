@@ -7,101 +7,47 @@
 
       <div class="ct_buy_credits__hero">
         <div class="ct_buy_credits__header">
-          <p class="ct_buy_credits__eyebrow">Workspace Credits</p>
-          <h2>Buy more credits when you need extra capacity</h2>
+          <h2>Choose a credit bundle for your workspace</h2>
           <p class="ct_buy_credits__subtitle">
-            Top up your workspace with discounted credit bundles for larger builds, faster iterations, and longer AI sessions.
+            Add more credits instantly whenever you need extra generation capacity.
           </p>
-          <div class="ct_buy_credits__promo_strip">
-            <span class="ct_buy_credits__promo_badge">Limited Offer</span>
-            <span>50% off credit bundles for a limited time</span>
-          </div>
         </div>
       </div>
 
-      <div class="ct_buy_credits__grid">
-        <article class="ct_credit_card">
-          <span class="ct_credit_card__offer">Popular</span>
-          <h4>100 credits</h4>
-          <div class="ct_credit_card__price">
-            <span class="ct_credit_card__old">&#8377;1,700</span>
-            <strong>&#8377;850</strong>
+      <div class="ct_buy_credits__grid" *ngIf="topUpPacks.length; else emptyState">
+        <article class="ct_credit_card" *ngFor="let pack of topUpPacks; let i = index; trackBy: trackByPackId">
+          <div class="ct_credit_card__body">
+            <h6>{{ pack.credits }} credits</h6>
+            <div class="ct_credit_card__price">
+              <strong>{{ pack.price_inr | currency : 'INR' }}</strong>
+            </div>
           </div>
-          <p>Ideal for quick design iterations and short AI work sessions.</p>
-          <button type="button">Buy Now</button>
-        </article>
-
-        <article class="ct_credit_card ct_credit_card__featured">
-          <span class="ct_credit_card__offer">Best Value</span>
-          <h4>200 credits</h4>
-          <div class="ct_credit_card__price">
-            <span class="ct_credit_card__old">&#8377;3,400</span>
-            <strong>&#8377;1,700</strong>
-          </div>
-          <p>Great for active workspaces shipping multiple pages and revisions.</p>
-          <button type="button">Buy Now</button>
-        </article>
-
-        <article class="ct_credit_card">
-          <span class="ct_credit_card__offer">Team Pack</span>
-          <h4>500 credits</h4>
-          <div class="ct_credit_card__price">
-            <span class="ct_credit_card__old">&#8377;8,500</span>
-            <strong>&#8377;4,250</strong>
-          </div>
-          <p>Built for heavier design cycles, experimentation, and longer runs.</p>
-          <button type="button">Buy Now</button>
-        </article>
-
-        <article class="ct_credit_card">
-          <span class="ct_credit_card__offer">Scale</span>
-          <h4>1,000 credits</h4>
-          <div class="ct_credit_card__price">
-            <span class="ct_credit_card__old">&#8377;17,000</span>
-            <strong>&#8377;8,500</strong>
-          </div>
-          <p>For power users handling larger projects, previews, and deployments.</p>
-          <button type="button">Buy Now</button>
-        </article>
-
-        <article class="ct_credit_card">
-          <span class="ct_credit_card__offer">Studio</span>
-          <h4>2,500 credits</h4>
-          <div class="ct_credit_card__price">
-            <span class="ct_credit_card__old">&#8377;42,500</span>
-            <strong>&#8377;21,250</strong>
-          </div>
-          <p>Perfect for high-volume creation, internal teams, and deep iterations.</p>
-          <button type="button">Buy Now</button>
-        </article>
-
-        <article class="ct_credit_card">
-          <span class="ct_credit_card__offer">Enterprise</span>
-          <h4>5,000 credits</h4>
-          <div class="ct_credit_card__price">
-            <span class="ct_credit_card__old">&#8377;85,000</span>
-            <strong>&#8377;42,500</strong>
-          </div>
-          <p>Best for long-running production workflows across multiple stakeholders.</p>
           <button type="button">Buy Now</button>
         </article>
       </div>
 
-      <div class="ct_buy_credits__custom">
+      <div class="ct_buy_credits__custom" *ngIf="topUpPacks.length">
         <div class="ct_buy_credits__custom_head">
           <div>
-            <label for="creditCustomAmount">Custom amount</label>
-            <p>Need a different bundle size? Enter a custom amount and generate credits instantly.</p>
+            <label for="creditCustomAmount">Custom buy credit option</label>
+            <p>Enter a custom amount to estimate the credits for a one-time purchase.</p>
           </div>
         </div>
         <div class="ct_buy_credits__custom_row">
           <div class="ct_buy_credits__input_wrap">
             <span>&#8377;</span>
-            <input id="creditCustomAmount" type="text" placeholder="Enter custom amount" />
+            <input id="creditCustomAmount" type="text" [value]="customAmount" (input)="onCustomAmountChange($event)"
+              placeholder="Enter custom amount" />
           </div>
-          <button type="button" class="ct_buy_credits__custom_btn">Buy 0 Credits</button>
+          <button type="button" class="ct_buy_credits__custom_btn">Buy {{ customCredits }} Credits</button>
         </div>
       </div>
+
+      <ng-template #emptyState>
+        <div class="ct_buy_credits__empty" *ngIf="!isLoading">
+          No active credit bundles are available right now.
+        </div>
+      </ng-template>
     </div>
   </section>
 </div>

@@ -5,6 +5,16 @@ import { BuyMoreCreditsModalResult } from '../../../services/subscription-modal.
 import { ApiService } from '../../../services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
+interface TopUpPack {
+  id: number;
+  pack_key: string;
+  pack_name: string;
+  price_inr: string;
+  credits: number;
+  is_active: number;
+  sort_order: number;
+}
+
 @Component({
   selector: 'app-buy-more-credits',
   standalone: true,
@@ -13,6 +23,40 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   styleUrl: './buy-more-credits.component.css'
 })
 export class BuyMoreCreditsComponent {
+  topUpPacks: TopUpPack[] = [];
+  isLoading = false;
+  customAmount = '';
+
+  private readonly fallbackTopUpPacks: TopUpPack[] = [
+    {
+      id: 16,
+      pack_key: 'topup_small_2000',
+      pack_name: 'Small Top-Up',
+      price_inr: '2000.00',
+      credits: 100,
+      is_active: 1,
+      sort_order: 10
+    },
+    {
+      id: 17,
+      pack_key: 'topup_medium_5000',
+      pack_name: 'Medium Top-Up',
+      price_inr: '5000.00',
+      credits: 260,
+      is_active: 1,
+      sort_order: 20
+    },
+    {
+      id: 18,
+      pack_key: 'topup_large_10000',
+      pack_name: 'Large Top-Up',
+      price_inr: '10000.00',
+      credits: 550,
+      is_active: 1,
+      sort_order: 30
+    }
+  ];
+
   constructor(
     private apiService: ApiService,
     private message: NzMessageService,
@@ -21,23 +65,54 @@ export class BuyMoreCreditsComponent {
 
 
   ngOnInit(): void {
-    debugger
     this.getAllTopUpPlans();
   }
 
   getAllTopUpPlans() {
+    this.isLoading = true;
     this.apiService.getApi('api/payment/topup-packs').subscribe({
-      next: (res) => {
-        console.log(res);
+      next: (res: any) => {
+        this.topUpPacks = this.extractTopUpPacks(res?.data);
+        this.isLoading = false;
       },
       error: (err) => {
         console.error(err);
-        this.message.error('Failed to fetch top-up plans. Please try again later.');
+        this.topUpPacks = this.extractTopUpPacks(this.fallbackTopUpPacks);
+        this.isLoading = false;
+        this.message.error('Failed to fetch top-up plans. Showing the available credit packs.');
       }
     });
   }
 
+
+  trackByPackId(_index: number, pack: TopUpPack): number {
+    return pack.id;
+  }
+
+  onCustomAmountChange(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    const rawValue = input?.value || '';
+    this.customAmount = rawValue.replace(/[^\d.]/g, '');
+  }
+
+  get customCredits(): number {
+    const amount = Number(this.customAmount || 0);
+    if (!amount || amount <= 0) {
+      return 0;
+    }
+
+    const mediumPack = this.topUpPacks.find(pack => pack.pack_key === 'topup_medium_5000');
+    const creditsPerRupee = mediumPack ? mediumPack.credits / Number(mediumPack.price_inr) : 0.052;
+    return Math.floor(amount * creditsPerRupee);
+  }
+
   closeModal() {
     this.modalRef?.close({ action: 'closed', reason: 'cancel' });
+  }
+
+  private extractTopUpPacks(packs: TopUpPack[] | null | undefined): TopUpPack[] {
+    return (packs || [])
+      .filter((pack) => pack.is_active === 1)
+      .sort((a, b) => a.sort_order - b.sort_order);
   }
 }
