@@ -1,0 +1,266 @@
+.ct_buy_credits {
+  min-height: 100vh;
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at top, rgba(255, 223, 137, 0.14), transparent 32%),
+    rgba(5, 6, 10, 0.76);
+}
+
+.ct_buy_credits__dialog {
+  position: relative;
+  width: min(860px, 100%);
+  padding: 26px 26px 28px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, #1f1f22 0%, #19191c 100%);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+  color: #f5f7fb;
+  font-family: inherit;
+}
+
+.ct_buy_credits__close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: #8c8f98;
+  font-size: 18px;
+}
+
+.ct_buy_credits__header {
+  margin-bottom: 18px;
+}
+
+.ct_buy_credits__title_wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ct_buy_credits__icon {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffe8a2 0%, #f6ca5b 100%);
+  color: #2a2a1d;
+  font-size: 18px;
+  box-shadow: 0 10px 22px rgba(246, 202, 91, 0.18);
+}
+
+.ct_buy_credits__eyebrow {
+  margin: 0 0 2px;
+  color: #9ba0aa;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ct_buy_credits__header h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.ct_buy_credits__banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 26px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: linear-gradient(90deg, #f6d5bd 0%, #fff0bd 100%);
+}
+
+.ct_buy_credits__banner_icon {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: rgba(29, 27, 22, 0.9);
+  color: #ffe28a;
+  flex: 0 0 auto;
+}
+
+.ct_buy_credits__banner h3 {
+  margin: 0 0 2px;
+  color: #2d2315;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ct_buy_credits__banner p {
+  margin: 0;
+  color: rgba(45, 35, 21, 0.82);
+  font-size: 14px;
+}
+
+.ct_buy_credits__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.ct_credit_card {
+  position: relative;
+  min-height: 220px;
+  padding: 28px 18px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  text-align: center;
+}
+
+.ct_credit_card__offer {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 14px;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(180deg, #fff0bd 0%, #f7df8a 100%);
+  color: #37290f;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.ct_credit_card h4 {
+  margin: 34px 0 10px;
+  color: #f4f5f8;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.ct_credit_card__price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 52px;
+}
+
+.ct_credit_card__old {
+  color: #8f939b;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: line-through;
+}
+
+.ct_credit_card__price strong {
+  color: #1ecb7a;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.ct_credit_card button,
+.ct_buy_credits__custom_btn {
+  min-height: 44px;
+  border: 0;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.ct_credit_card button {
+  width: 100%;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f4f7 100%);
+  color: #24262d;
+}
+
+.ct_buy_credits__custom {
+  margin-top: 26px;
+}
+
+.ct_buy_credits__custom label {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #aeb3be;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.ct_buy_credits__custom_row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.ct_buy_credits__input_wrap {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #1a1a1d;
+}
+
+.ct_buy_credits__input_wrap span {
+  color: #8f939b;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.ct_buy_credits__input_wrap input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #f4f5f8;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.ct_buy_credits__input_wrap input::placeholder {
+  color: #666b75;
+}
+
+.ct_buy_credits__custom_btn {
+  min-width: 160px;
+  padding: 0 18px;
+  background: linear-gradient(180deg, #b5994a 0%, #967932 100%);
+  color: #17130b;
+}
+
+@media (max-width: 991px) {
+  .ct_buy_credits__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .ct_buy_credits {
+    padding: 14px;
+  }
+
+  .ct_buy_credits__dialog {
+    padding: 22px 16px;
+  }
+
+  .ct_buy_credits__banner,
+  .ct_buy_credits__title_wrap {
+    align-items: flex-start;
+  }
+
+  .ct_buy_credits__grid,
+  .ct_buy_credits__custom_row {
+    grid-template-columns: 1fr;
+  }
+}
