@@ -4,6 +4,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { BuyMoreCreditsModalResult } from '../../../services/subscription-modal.service';
 import { ApiService } from '../../../services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+declare var window: any;
 
 interface TopUpPack {
   id: number;
@@ -152,5 +153,48 @@ export class BuyMoreCreditsComponent {
     return (packs || [])
       .filter((pack) => pack.is_active === 1)
       .sort((a, b) => a.sort_order - b.sort_order);
+  }
+
+  buyCredits(pack: TopUpPack) {
+    this.apiService.postAPI('api/payment/create-topup-order', { packKey: pack.pack_key }).subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          if (res.data.payment_session_id) {
+            this.openCashfreeSubscriptionCheckout(res.data.payment_session_id);
+          }
+        } else {
+          this.message.error(res.message || 'Failed to create top-up order. Please try again.');
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.message.error('An error occurred while processing your request. Please try again later.');
+      }
+    });
+  }
+
+  openCashfreeSubscriptionCheckout(subscriptionSessionId: string) {
+    if (!subscriptionSessionId) {
+      console.error("Missing subscription_session_id!");
+      return;
+    }
+    const cashfree = new (window as any).Cashfree({
+      // mode: "production",
+      mode: "sandbox",
+    });
+
+    cashfree
+      .subscriptionsCheckout({
+        subsSessionId: subscriptionSessionId,
+        redirectTarget: "_blank",
+      })
+      .then((result: any) => {
+        if (result.error) {
+          alert(result.error.message);
+        }
+      })
+      .catch((err: any) => {
+        console.error("Unexpected Cashfree subscription error:", err);
+      });
   }
 }

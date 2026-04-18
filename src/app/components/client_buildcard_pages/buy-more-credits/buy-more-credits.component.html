@@ -15,9 +15,7 @@
       </div>
 
       <div class="ct_buy_credits__grid" *ngIf="topUpPacks.length; else emptyState">
-        <article
-          class="ct_credit_card"
-          *ngFor="let pack of topUpPacks; let i = index; trackBy: trackByPackId"
+        <article class="ct_credit_card" *ngFor="let pack of topUpPacks; let i = index; trackBy: trackByPackId"
           [class.ct_credit_card__featured]="isFeatured(i)">
           <span class="ct_credit_card__offer">{{ getPackBadge(pack, i) }}</span>
           <div class="ct_credit_card__body">
@@ -27,7 +25,7 @@
               <strong>&#8377;{{ formatPrice(pack.price_inr) }}</strong>
             </div>
           </div>
-          <button type="button">Buy Now</button>
+          <button type="button" (click)="buyCredits(pack)">Buy Now</button>
         </article>
       </div>
 
