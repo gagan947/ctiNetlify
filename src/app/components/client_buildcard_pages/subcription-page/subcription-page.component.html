@@ -1,5 +1,5 @@
 <div class="ct_subscription_modal_root">
-  <div class="modal-content p-4 rounded-4 pt-3">
+  <div class="modal-content p-4 rounded-4 pt-3" *ngIf="!billingSummaryModalOpen">
     <div class="container">
       <div class="ct_subscription_topbar">
         <div class="ct_section_heading text-center">
@@ -212,12 +212,12 @@
   <div class="modal-content rounded-4" *ngIf="billingSummaryModalOpen">
     <!-- HEADER -->
     <div class="modal-header">
-      <h5 class="modal-title">Confirm your subscription</h5>
-      <button type="button" class="btn-close" (click)="closeModal()"></button>
+      <h5 class="modal-title mt-2 ps-4">Confirm your subscription</h5>
+      <!-- <button type="button" class="btn-close" (click)="closeModal()"></button> -->
     </div>
 
     <!-- BODY -->
-    <div class="modal-body">
+    <div class="modal-body pt-2 px-4">
       <!-- ================= ORDER SUMMARY ================= -->
       <div class="bg-light rounded p-3 mb-4">
         <h6 class="mb-3">Order Summary</h6>
@@ -306,12 +306,12 @@
     </div>
 
     <!-- FOOTER -->
-    <div class="modal-footer">
+    <div class="modal-footer px-4 pb-4">
       <button class="btn btn-outline-secondary" (click)="closeModal()">
         Cancel
       </button>
 
-      <button class="btn btn-primary" [disabled]="billingForm.invalid" (click)="confirmAndPay()">
+      <button class="btn btn-primary ms-2" [disabled]="billingForm.invalid" (click)="confirmAndPay()">
         Subscribe & Pay {{ billedNowAmount(selectedPlanData) }}
       </button>
     </div>

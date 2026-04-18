@@ -301,6 +301,7 @@ export class SubcriptionPageComponent {
       publicTemplateId: this.selectedTemplateId,
       inquiryId
     }).subscribe((res: any) => {
+      debugger
       this.openCashfreeSubscriptionCheckout(res.subscription_session_id);
     }, (err: any) => {
       this.message.error(err.error?.message || 'Failed to initiate subscription checkout. Please try again.');
