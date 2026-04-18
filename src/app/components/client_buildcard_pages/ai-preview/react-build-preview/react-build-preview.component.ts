@@ -134,6 +134,8 @@ export class ReactBuildPreviewComponent {
   skipBuildPrompt = false;
   finalSummary: any = null;
   selectedPublishOption: 'creative-ai-domain' | 'custom-domain' = 'creative-ai-domain';
+  customDomain = '';
+  customDomainTouched = false;
   private shouldDeferPreviewApply = false;
   private hasInitialFlowCompleted = false;
   private pendingPreviewResponse: { res: any; socketId: string | null } | null = null;
@@ -158,7 +160,7 @@ export class ReactBuildPreviewComponent {
     private aiService: AiSocketService,
     private router: Router,
     private toster: NzMessageService,
-    private subscriptionModalService: SubscriptionModalService,
+    public subscriptionModalService: SubscriptionModalService,
     private subscriptionService: SubcriptionService
   ) {
     this.baseURl = this.apiService.apiUrl;
@@ -433,6 +435,20 @@ export class ReactBuildPreviewComponent {
     return Number((this.subscriptionPlan as any)?.creditBalance || 0);
   }
 
+  onCustomDomainInput(event: Event) {
+    const input = event.target as HTMLInputElement | null;
+    this.customDomain = (input?.value || '').trim();
+    this.customDomainTouched = true;
+  }
+
+  get isCustomDomainValid(): boolean {
+    if (!this.customDomain) {
+      return false;
+    }
+
+    return /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.customDomain);
+  }
+
 
 
   async regenerate() {
@@ -649,11 +665,11 @@ export class ReactBuildPreviewComponent {
 
 
   getUserSubscriptionPlan() {
+    this.subscriptionService.loadSubscription();
     this.subscriptionService.subscription$.subscribe((res: SubscriptionResponse) => {
       if (!res) {
         return;
       }
-      debugger
 
       this.subscriptionPlan = res;
       this.planName = res.planName;
@@ -1017,8 +1033,31 @@ export class ReactBuildPreviewComponent {
   }
 
   continuePublishProject() {
+    if (this.selectedPublishOption === 'creative-ai-domain') {
+      this.closeBootstrapModal('publishProjectModal');
+      this.deployProject(this.selected_template_id, 'creativeai');
+      return;
+    }
+
     this.closeBootstrapModal('publishProjectModal');
-    this.deployProject(this.selected_template_id);
+    this.openBootstrapModal('customDomainModal', { backdrop: 'static', keyboard: true });
+  }
+
+  backToPublishProjectModal() {
+    this.closeBootstrapModal('customDomainModal');
+    this.openBootstrapModal('publishProjectModal', { backdrop: 'static', keyboard: true });
+  }
+
+  deployWithCustomDomain() {
+    this.customDomainTouched = true;
+
+    if (!this.isCustomDomainValid) {
+      this.toster.error('Please enter a valid custom domain to continue.');
+      return;
+    }
+
+    this.closeBootstrapModal('customDomainModal');
+    this.deployProject(this.selected_template_id, 'custom', this.customDomain);
   }
 
   setPreviewUrl(url: string) {
@@ -1030,12 +1069,19 @@ export class ReactBuildPreviewComponent {
     return `${apiBaseUrl}/api/user/generate/${templateId}`;
   }
 
-  deployProject(selected_template_id: string) {
+  deployProject(selected_template_id: string, deploymentDomainType: 'creativeai' | 'custom', customDomain?: string) {
+    const payload: any = {
+      publicTemplateId: selected_template_id,
+      publicInquiryId: this.projectsData.clientEnquryId,
+      deploymentDomainType
+    };
+
+    if (deploymentDomainType === 'custom') {
+      payload.customDomain = customDomain;
+    }
+
     this.apiService
-      .postAPI('api/user/tempalteDeployed', {
-        publicTemplateId: selected_template_id,
-        publicInquiryId: this.projectsData.clientEnquryId
-      })
+      .postAPI('api/user/tempalteDeployed', payload)
       .subscribe((res: any) => {
         if (res.success) {
           this.router.navigate([`/dashboard`]);
