@@ -18,7 +18,7 @@ section {
   max-width: 350px;
 }
 .ct_prompt_hero_content {
-  max-width: 441px;
+  max-width: 447px;
   text-align: center;
 }
 
@@ -172,6 +172,7 @@ section {
   max-height: calc(100dvh - 207px);
   object-fit: contain;
   border-radius: 6px !important;
+  object-position: top;
 }
 
 
@@ -767,7 +768,8 @@ section {
   background-image: url(../../../../assets/img/slider_home_bg_clr.jpg);
   border-radius: 10px;
   background-position: top;
-  padding-inline: 54px;
+  /* padding-inline: 54px; */
+  padding-inline: 15px;
   background-size: cover;
 }
 
@@ -937,12 +939,16 @@ section {
   }
 
   .ct_launch_journey_flow {
-
     grid-template-columns: repeat(1, 1fr);
   }
 
  
-
+.ct_launch_step_icon ,.ct_launch_step_content{
+  margin-inline: auto;
+}
+.ct_launch_step_content h4 ,.ct_launch_step_content p{
+  text-align: center;
+}
  
 
   .ct_fs_40 {
@@ -1060,7 +1066,8 @@ section {
 @media (min-width: 1367px) {
   .ct_home_slider_main_img img {
 
-    max-height: calc(100dvh - 330px);
+    /* max-height: calc(100dvh - 330px); */
+    max-height: calc(100dvh - 267px);
     border-radius: 6px !important;
 
   }
