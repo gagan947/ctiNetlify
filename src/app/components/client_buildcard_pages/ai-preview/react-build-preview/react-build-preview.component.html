@@ -111,9 +111,84 @@
             </div>
             <div class="actions">
                 <button class="btn-cancel button-deploy" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn-confirm button-deploy" (click)="checkNDeploy()" data-bs-dismiss="modal">
+                <button class="btn-confirm button-deploy" (click)="checkNDeploy()">
                     Continue
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="publishProjectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ct_publish_project_modal">
+            <div class="ct_publish_project_modal__header">
+                <div>
+                    <h2>Publish Your Project</h2>
+                    <p>Choose how you'd like to deploy your project.</p>
+                </div>
+                <button type="button" class="ct_publish_project_modal__close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <button type="button" class="ct_publish_option"
+                [class.ct_publish_option--active]="selectedPublishOption === 'creative-ai-domain'"
+                (click)="selectedPublishOption = 'creative-ai-domain'">
+                <div class="ct_publish_option__icon ct_publish_option__icon--blue">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+                <div class="ct_publish_option__body">
+                    <h3>Deploy on Creative AI Domain</h3>
+                    <p>Launch instantly using a free Creative AI subdomain.</p>
+                    <span>yourproject.creativeai.app</span>
+                </div>
+                <div class="ct_publish_option__radio"
+                    [class.ct_publish_option__radio--active]="selectedPublishOption === 'creative-ai-domain'">
+                </div>
+            </button>
+
+            <button type="button" class="ct_publish_option"
+                [class.ct_publish_option--active]="selectedPublishOption === 'custom-domain'"
+                (click)="selectedPublishOption = 'custom-domain'">
+                <div class="ct_publish_option__icon ct_publish_option__icon--neutral">
+                    <i class="fa-solid fa-globe"></i>
+                </div>
+                <div class="ct_publish_option__body">
+                    <h3>Use Your Own Domain</h3>
+                    <p>Connect your personal or business domain.</p>
+                    <span>www.yourbrand.com</span>
+                </div>
+                <div class="ct_publish_option__radio"
+                    [class.ct_publish_option__radio--active]="selectedPublishOption === 'custom-domain'">
+                </div>
+            </button>
+
+            <div class="ct_publish_project_modal__tip">
+                <i class="fa-regular fa-lightbulb"></i>
+                <p><strong>Pro Tip:</strong> Custom domains improve SEO and brand recognition for enterprise deployments.</p>
+            </div>
+
+            <div class="ct_publish_project_modal__footer">
+                <button type="button" class="btn-cancel button-deploy" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn-confirm button-deploy" (click)="continuePublishProject()">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="insufficientCreditsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ct_build_failed_modal ct_insufficient_credits_modal">
+            <div class="ct_build_failed_modal__icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+            <h2>Insufficient Credit Balance</h2>
+            <p>You need at least 60 credits to continue with project publishing. Your current balance is {{ getCurrentCreditBalance() }} credits.</p>
+            <div class="actions">
+                <button class="btn-confirm button-deploy w-100" data-bs-dismiss="modal">Okay</button>
             </div>
         </div>
     </div>

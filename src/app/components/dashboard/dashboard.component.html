@@ -101,28 +101,6 @@
                                                                         </div>
                                                                         <div class="ct_creative_card_body">
                                                                               <div class="all-feature-box">
-                                                                                    <div>
-                                                                                          <h4 class=" head">FEATURES
-                                                                                          </h4>
-                                                                                          <p class="mb-0 desc">
-                                                                                                {{item.allFeatureCount ?
-                                                                                                item.allFeatureCount :
-                                                                                                '-'}}
-                                                                                          </p>
-                                                                                    </div>
-                                                                                    <div>
-                                                                                          <h4 class=" head">DURATION
-                                                                                          </h4>
-                                                                                          <p class="mb-0 desc">
-                                                                                                {{item.durations ?
-                                                                                                item.durations + '
-                                                                                                Weeks' : '-'}}
-                                                                                          </p>
-                                                                                    </div>
-
-
-
-
                                                                                     @if(item.project_deployed == 1){
                                                                                     <div>
                                                                                           <h4 class="head">Created
@@ -138,10 +116,9 @@
                                                                                           <h4 class="head">Deployed
                                                                                           </h4>
                                                                                           <a class="desc link-primary"
-                                                                                                [href]="baseURl + item.deployed_url"
+                                                                                                [href]="item.deployed_url"
                                                                                                 target="_blank">
-                                                                                                {{baseURl +
-                                                                                                item.deployed_url}}
+                                                                                                {{item.deployed_url}}
                                                                                           </a>
                                                                                     </div>
 

@@ -133,6 +133,7 @@ export class ReactBuildPreviewComponent {
   pendingPreviewUrl: string | null = null;
   skipBuildPrompt = false;
   finalSummary: any = null;
+  selectedPublishOption: 'creative-ai-domain' | 'custom-domain' = 'creative-ai-domain';
   private shouldDeferPreviewApply = false;
   private hasInitialFlowCompleted = false;
   private pendingPreviewResponse: { res: any; socketId: string | null } | null = null;
@@ -407,6 +408,31 @@ export class ReactBuildPreviewComponent {
     this.runInitialBuildSequence();
   }
 
+  private openBootstrapModal(modalId: string, options?: { backdrop?: boolean | 'static'; keyboard?: boolean }) {
+    const modalElement = document.getElementById(modalId);
+    if (!modalElement) {
+      return;
+    }
+
+    bootstrap.Modal.getOrCreateInstance(modalElement, {
+      backdrop: options?.backdrop ?? true,
+      keyboard: options?.keyboard ?? true
+    }).show();
+  }
+
+  private closeBootstrapModal(modalId: string) {
+    const modalElement = document.getElementById(modalId);
+    if (!modalElement) {
+      return;
+    }
+
+    bootstrap.Modal.getOrCreateInstance(modalElement).hide();
+  }
+
+  getCurrentCreditBalance(): number {
+    return Number((this.subscriptionPlan as any)?.creditBalance || 0);
+  }
+
 
 
   async regenerate() {
@@ -627,6 +653,7 @@ export class ReactBuildPreviewComponent {
       if (!res) {
         return;
       }
+      debugger
 
       this.subscriptionPlan = res;
       this.planName = res.planName;
@@ -928,11 +955,6 @@ export class ReactBuildPreviewComponent {
     }
 
     if (actionId === 'deploy_template') {
-      if (!this.subscriptionPlan.canDeploy) {
-        this.toster.error('Your current plan does not include deployment. Please upgrade your plan to deploy this template.');
-        this.subscriptionModalService.open();
-        return;
-      }
       this.openDeployModal();
       return;
     }
@@ -973,12 +995,6 @@ export class ReactBuildPreviewComponent {
 
 
   checkNDeploy() {
-    if (this.subscriptionPlan.planType === 'free') {
-      this.openModal();
-      return;
-    }
-    console.log(this.designOrder);
-
     const activeDesign = this.designOrder.find(
       d => d.designId === this.activeDesignId
     );
@@ -989,9 +1005,20 @@ export class ReactBuildPreviewComponent {
     }
 
     this.selected_template_id = activeDesign.user_template_id;
+    this.closeBootstrapModal('deployConfirmModal');
 
-    this.deployProject(this.selected_template_id)
+    if (this.getCurrentCreditBalance() >= 60) {
+      this.openBootstrapModal('publishProjectModal', { backdrop: 'static', keyboard: true });
+      return;
+    }
 
+    this.openBootstrapModal('insufficientCreditsModal', { backdrop: 'static', keyboard: true });
+
+  }
+
+  continuePublishProject() {
+    this.closeBootstrapModal('publishProjectModal');
+    this.deployProject(this.selected_template_id);
   }
 
   setPreviewUrl(url: string) {
