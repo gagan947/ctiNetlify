@@ -26,13 +26,12 @@
 .ct_dashboard_intro h1 {
   margin: 0;
   color: #0f172a;
-  font-size: 32px;
+  font-size: 28px;
   line-height: 1.08;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .ct_dashboard_subtitle {
-  max-width: 640px;
   margin: 10px 0 0;
   color: #475569;
   font-size: 15px;
@@ -42,7 +41,7 @@
 .ct_dashboard_tabs {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 22px;
 }
@@ -50,9 +49,9 @@
 .ct_dashboard_tab {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 25px;
   min-height: 44px;
-  padding: 0 16px;
+  padding: 8px 6px 8px 16px;
   border: 1px solid #dbe4f0;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.78);
@@ -140,7 +139,6 @@
 .ct_dashboard_card__hero {
   position: relative;
   padding: 22px 22px 20px;
-  min-height: 166px;
   background:
     linear-gradient(135deg, rgba(255, 246, 231, 0.86), rgba(233, 221, 255, 0.88) 54%, rgba(223, 237, 255, 0.92));
   z-index: 1;
@@ -148,7 +146,7 @@
 
 .ct_dashboard_card__top {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 14px;
 }
@@ -156,9 +154,8 @@
 .ct_dashboard_card__top h2 {
   margin: 0;
   color: #0f172a;
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .ct_dashboard_card__top p {

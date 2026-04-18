@@ -1,6 +1,6 @@
 <section class="ct_dashboard_shell">
       <app-workspace-header></app-workspace-header>
-      <div class="ct_dash_right_content ct_white_bg_page ct_dashboard_page">
+      <div class="ct_dash_right_content ct_white_bg_page ct_dashboard_page px-sm-5 px-3">
             <div class="container-fluid">
                   <div class="ct_dashboard_intro">
                         <div>
@@ -29,17 +29,19 @@
                         <article class="ct_dashboard_card">
                               <div class="ct_dashboard_card__hero">
                                     <div class="ct_dashboard_card__top">
-                                          <div>
-                                                <h2>{{ project.projectName || 'Untitled Project' }}</h2>
-                                          </div>
-                                    </div>
-
-                                    <div class="ct_dashboard_card__badges">
-
-                                          <span class="ct_dashboard_status_badge" [ngClass]="getStatusClass(project)">
+                                      
+                                                <h2 class="mb-0">{{ project.projectName || 'Untitled Project' }}</h2>
+                                                
+                                         
+                                            <span class="ct_dashboard_status_badge" [ngClass]="getStatusClass(project)">
                                                 {{ getProjectStatusLabel(project) }}
                                           </span>
                                     </div>
+
+                                    
+
+                                        
+                                   
                               </div>
 
                               <div class="ct_dashboard_card__body">
