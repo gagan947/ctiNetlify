@@ -975,6 +975,7 @@ p {
   background: #F3F4F6;
   text-align: left;
   transition: all 0.2s ease;
+  justify-content: space-between;
 }
 
 .ct_publish_option--active {
