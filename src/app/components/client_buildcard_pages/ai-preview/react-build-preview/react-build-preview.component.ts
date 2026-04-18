@@ -294,11 +294,6 @@ export class ReactBuildPreviewComponent {
     this.isTyping = false;
 
     const modalElement = document.getElementById('buildGenerationFailedModal');
-    if (!modalElement) {
-      this.router.navigateByUrl('/main');
-      return;
-    }
-
     const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement, {
       backdrop: 'static',
       keyboard: false
