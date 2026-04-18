@@ -183,7 +183,7 @@ export class BuyMoreCreditsComponent {
       mode: "sandbox",
     });
 
-    cashfree.subscriptionsCheckout({
+    cashfree.checkout({
       paymentSessionId: subscriptionSessionId,
       redirectTarget: "_blank",
     })

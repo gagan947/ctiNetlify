@@ -18,14 +18,14 @@ export class GoogleAuthCallbackComponent implements OnInit, OnDestroy {
   activeStepIndex = 0;
   private stepTimer?: ReturnType<typeof setInterval>;
 
-  constructor(private googleAuth: GoogleAuthService) { }
+  constructor(private googleAuth: GoogleAuthService) {
+    this.googleAuth.completeRedirectLogin(window.location.hash);
+  }
 
   ngOnInit(): void {
     this.stepTimer = window.setInterval(() => {
       this.activeStepIndex = (this.activeStepIndex + 1) % this.loadingSteps.length;
     }, 1400);
-
-    this.googleAuth.completeRedirectLogin(window.location.hash);
   }
 
   ngOnDestroy(): void {
