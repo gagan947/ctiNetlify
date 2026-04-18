@@ -183,11 +183,10 @@ export class BuyMoreCreditsComponent {
       mode: "sandbox",
     });
 
-    cashfree
-      .subscriptionsCheckout({
-        subsSessionId: subscriptionSessionId,
-        redirectTarget: "_blank",
-      })
+    cashfree.subscriptionsCheckout({
+      paymentSessionId: subscriptionSessionId,
+      redirectTarget: "_blank",
+    })
       .then((result: any) => {
         if (result.error) {
           alert(result.error.message);

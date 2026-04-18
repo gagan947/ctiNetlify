@@ -141,6 +141,11 @@ export class WorkspaceHeaderComponent {
     this.subscriptionModalService.openBuyMoreCreditsModal();
   }
 
+  openUserPlansModal(): void {
+    this.closeProfileMenu();
+    this.subscriptionModalService.openUserPlansModal();
+  }
+
   handleFullScreenToggle(): void {
     this.fullScreenToggle.emit();
   }

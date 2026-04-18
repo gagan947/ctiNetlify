@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ModalOptions, NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { SubcriptionPageComponent } from '../components/client_buildcard_pages/subcription-page/subcription-page.component';
 import { BuyMoreCreditsComponent } from '../components/client_buildcard_pages/buy-more-credits/buy-more-credits.component';
+import { UserPlansComponent } from '../components/client_buildcard_pages/user-plans/user-plans.component';
 
 export interface SubscriptionModalData {
   selectedTemplateId: string;
@@ -26,12 +27,22 @@ export interface BuyMoreCreditsModalOpenOptions {
   modalOptions?: ModalOptions<BuyMoreCreditsComponent, object, BuyMoreCreditsModalResult>;
 }
 
+export interface UserPlansModalResult {
+  action: 'closed';
+  reason?: 'cancel' | 'dismiss';
+}
+
+export interface UserPlansModalOpenOptions {
+  modalOptions?: ModalOptions<UserPlansComponent, object, UserPlansModalResult>;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class SubscriptionModalService {
   private activeModalRef?: NzModalRef<SubcriptionPageComponent, SubscriptionModalResult>;
   private activeBuyMoreCreditsModalRef?: NzModalRef<BuyMoreCreditsComponent, BuyMoreCreditsModalResult>;
+  private activeUserPlansModalRef?: NzModalRef<UserPlansComponent, UserPlansModalResult>;
 
   constructor(private modalService: NzModalService) { }
 
@@ -41,6 +52,10 @@ export class SubscriptionModalService {
 
   get currentBuyMoreCreditsRef(): NzModalRef<BuyMoreCreditsComponent, BuyMoreCreditsModalResult> | undefined {
     return this.activeBuyMoreCreditsModalRef;
+  }
+
+  get currentUserPlansRef(): NzModalRef<UserPlansComponent, UserPlansModalResult> | undefined {
+    return this.activeUserPlansModalRef;
   }
 
   open(
@@ -128,6 +143,48 @@ export class SubscriptionModalService {
     result: BuyMoreCreditsModalResult = { action: 'closed', reason: 'dismiss' }
   ): void {
     this.activeBuyMoreCreditsModalRef?.close(result);
+  }
+
+  openUserPlansModal(
+    options: UserPlansModalOpenOptions = {}
+  ): NzModalRef<UserPlansComponent, UserPlansModalResult> {
+    this.activeUserPlansModalRef?.destroy();
+
+    const modalRef = this.modalService.create<
+      UserPlansComponent,
+      object,
+      UserPlansModalResult
+    >({
+      nzContent: UserPlansComponent,
+      nzFooter: null,
+      nzClosable: true,
+      nzMaskClosable: false,
+      nzKeyboard: true,
+      nzWidth: 940,
+      nzStyle: { top: '12px' },
+      nzClassName: 'user-plans-modal-shell',
+      nzBodyStyle: {
+        padding: '0',
+        overflow: 'hidden',
+        borderRadius: '32px'
+      },
+      ...options.modalOptions
+    });
+
+    this.activeUserPlansModalRef = modalRef;
+    modalRef.afterClose.subscribe(() => {
+      if (this.activeUserPlansModalRef === modalRef) {
+        this.activeUserPlansModalRef = undefined;
+      }
+    });
+
+    return modalRef;
+  }
+
+  closeUserPlansModal(
+    result: UserPlansModalResult = { action: 'closed', reason: 'dismiss' }
+  ): void {
+    this.activeUserPlansModalRef?.close(result);
   }
 
   private normalizeOpenOptions(
