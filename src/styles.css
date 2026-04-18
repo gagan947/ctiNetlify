@@ -352,7 +352,10 @@ aside.ct_project_ai_chat_section {
 .ct_home_slider_main .swiper-button-prev {
       left: calc(50% - 100px);
 }
-
+.ct_home_slider_main .swiper-button-prev svg ,.ct_home_slider_main .swiper-button-next svg{
+      width: 18px;
+      height: 18px;
+}
 .ct_home_slider_main .swiper-button-next {
       right: calc(50% - 100px);
 }
