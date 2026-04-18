@@ -327,17 +327,17 @@ if (innerSwiperElement) {
     loop: true,
     slidesPerView: 'auto',
     spaceBetween: 10,
-    speed: 5000,
+    speed: 1000,
       nested: true,
   watchSlidesProgress: true,
 
 
         autoplay: {
-          delay: 0,
+          delay: 2000,
           disableOnInteraction: false,
         },
 
-        freeMode: true,
+        freeMode: false,
         freeModeMomentum: false,
 
         observer: true,
@@ -452,4 +452,3 @@ if (innerSwiperElement) {
     });
   }
 }
-

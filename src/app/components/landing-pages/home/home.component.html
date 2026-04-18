@@ -2,71 +2,32 @@
   <div class="ct_hero_banner">
     <app-header></app-header>
 
-    <!-- <section class="ct_prompt_hero ct_inner_banner_main_cnt d-block">
+    <section class="ct_prompt_hero ct_inner_banner_main_cnt d-block">
       <div class="container-fluid">
         <div class="row align-items-center">
           <div class="col-lg-5 mb-4 mb-lg-0">
             <div class="ct_prompt_hero_content mx-auto">
               <h2 class="ct_fs_40 ct_fw_600 ct_mb_30">
-                <span class="ct_orange_gredient_text ct_ff_figtree">Build Web & Mobile Apps
-</span>  in Seconds Just by Typing a Prompt.
+                <span class="ct_orange_gredient_text ct_ff_figtree">Build Web & Mobile Apps</span>  in Seconds Just by Typing a Prompt.
               </h2>
               <a routerLink="/login" class="ct_prompt_primary_btn ct_blue_btn_fill ">
-                <span><svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                      d="M4.02533 4.98325L11.2703 10.417C11.3367 10.4668 11.4174 10.4937 11.5003 10.4937C11.5833 10.4937 11.664 10.4668 11.7303 10.417L18.9753 4.98325H4.02533ZM19.9337 5.702L12.4203 11.337C12.1549 11.5361 11.8321 11.6437 11.5003 11.6437C11.1686 11.6437 10.8457 11.5361 10.5803 11.337L3.06699 5.702V18.0166H19.9337V5.702ZM2.87533 3.83325H20.1253C20.3795 3.83325 20.6232 3.93422 20.803 4.11394C20.9827 4.29366 21.0837 4.53742 21.0837 4.79159V18.2083C21.0837 18.4624 20.9827 18.7062 20.803 18.8859C20.6232 19.0656 20.3795 19.1666 20.1253 19.1666H2.87533C2.62116 19.1666 2.3774 19.0656 2.19768 18.8859C2.01796 18.7062 1.91699 18.4624 1.91699 18.2083V4.79159C1.91699 4.53742 2.01796 4.29366 2.19768 4.11394C2.3774 3.93422 2.62116 3.83325 2.87533 3.83325Z"
-                      fill="white" />
-                  </svg>
-                </span>
+                  <img src="assets/img/home_mail_icon.svg" alt="">
                 Continue with Email
               </a>
-
               <div class="ct_prompt_social_row">
-              
                 <button (click)="loginWithApple()" type="button" class="ct_prompt_social_btn"
-                  aria-label="Continue with Apple"><svg width="37" height="37" viewBox="0 0 37 37" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M26.2859 31.265C24.775 32.7296 23.1255 32.4983 21.5375 31.8046C19.8571 31.0954 18.3155 31.0646 16.5425 31.8046C14.3225 32.7604 13.1509 32.4829 11.825 31.265C4.30171 23.5104 5.41171 11.7012 13.9525 11.2696C16.0338 11.3775 17.483 12.4104 18.7009 12.5029C20.52 12.1329 22.2621 11.0692 24.2046 11.2079C26.5325 11.3929 28.29 12.3179 29.4463 13.9829C24.6363 16.8658 25.7771 23.2021 30.1863 24.975C29.3075 27.2875 28.1667 29.5846 26.2705 31.2804L26.2859 31.265ZM18.5467 11.1771C18.3155 7.73917 21.1059 4.9025 24.3125 4.625C24.7596 8.6025 20.705 11.5625 18.5467 11.1771Z"
-                      fill="black" />
-                  </svg>
+                  aria-label="Continue with Apple">
+                 <img src="assets/img/home_app_ion.svg" alt="">
                 </button>
                 <button (click)="loginWithFacebook()" type="button" class="ct_prompt_social_btn"
-                  aria-label="Continue with Facebook"><svg width="30" height="30" viewBox="0 0 30 30" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <g clip-path="url(#clip0_222_4798)">
-                      <path
-                        d="M30 15C30 6.71578 23.2842 0 15 0C6.71578 0 0 6.71578 0 15C0 22.4869 5.48531 28.6925 12.6562 29.8178V19.3359H8.84766V15H12.6562V11.6953C12.6562 7.93594 14.8957 5.85938 18.322 5.85938C19.9631 5.85938 21.6797 6.15234 21.6797 6.15234V9.84375H19.7883C17.9249 9.84375 17.3438 11 17.3438 12.1863V15H21.5039L20.8389 19.3359H17.3438V29.8178C24.5147 28.6925 30 22.487 30 15Z"
-                        fill="#1877F2" />
-                      <path
-                        d="M20.8389 19.3359L21.5039 15H17.3438V12.1863C17.3438 10.9999 17.9249 9.84375 19.7883 9.84375H21.6797V6.15234C21.6797 6.15234 19.9631 5.85938 18.3219 5.85938C14.8957 5.85938 12.6562 7.93594 12.6562 11.6953V15H8.84766V19.3359H12.6562V29.8178C13.4316 29.9393 14.2152 30.0002 15 30C15.7848 30.0002 16.5684 29.9393 17.3438 29.8178V19.3359H20.8389Z"
-                        fill="white" />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_222_4798">
-                        <rect width="30" height="30" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
+                  aria-label="Continue with Facebook">
+                  <img src="assets/img/home_fb_icon.svg" alt="">
                 </button>
               </div>
               <button type="button" class="ct_prompt_google_btn" (click)="loginWithGoogle12()"
                 aria-label="Continue with Google">
-                <span><svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path opacity="0.987" fill-rule="evenodd" clip-rule="evenodd"
-                      d="M10.3635 1.52519C11.4057 1.40876 12.0223 1.40876 13.1422 1.52519C15.1244 1.81858 16.9619 2.73483 18.389 4.14144C17.4246 5.05301 16.4729 5.97789 15.5342 6.91582C13.7363 5.39207 11.7296 5.04036 9.51391 5.86069C7.88857 6.60819 6.75678 7.81953 6.11853 9.49469C5.07554 8.7182 4.04613 7.92362 3.03078 7.11132C2.96022 7.07418 2.87963 7.06058 2.80078 7.07251C4.41366 3.96271 6.93407 2.11313 10.362 1.52376"
-                      fill="#F44336" />
-                    <path opacity="0.997" fill-rule="evenodd" clip-rule="evenodd"
-                      d="M2.79774 7.07245C2.8792 7.06 2.95634 7.07293 3.02918 7.11127C4.04453 7.92357 5.07393 8.71815 6.11693 9.49464C5.9528 10.1474 5.84934 10.8138 5.80786 11.4856C5.84332 12.1353 5.94634 12.7731 6.11693 13.3989L2.87536 15.9792C1.46374 13.0295 1.43786 10.0605 2.79774 7.07245Z"
-                      fill="#FFC107" />
-                    <path opacity="0.999" fill-rule="evenodd" clip-rule="evenodd"
-                      d="M18.2351 19.1044C17.2258 18.2143 16.1691 17.3793 15.0697 16.6032C16.1718 15.825 16.8407 14.7574 17.0765 13.4004H11.6758V9.64999C14.7904 9.62412 17.9035 9.65047 21.0152 9.72906C21.6056 12.9347 20.9237 15.825 18.9697 18.4001C18.7373 18.6471 18.4912 18.8821 18.2351 19.1044Z"
-                      fill="#448AFF" />
-                    <path opacity="0.993" fill-rule="evenodd" clip-rule="evenodd"
-                      d="M6.11656 13.4004C7.29531 16.33 9.45635 17.6976 12.5997 17.503C13.4821 17.4009 14.3281 17.0926 15.0693 16.6031C16.1695 17.3813 17.2246 18.2151 18.2347 19.1044C16.6342 20.5425 14.5937 21.3959 12.4459 21.5251C11.9579 21.5642 11.4676 21.5642 10.9796 21.5251C7.32071 21.0939 4.61917 19.2453 2.875 15.9793L6.11656 13.4004Z"
-                      fill="#43A047" />
-                  </svg>
-                </span>
+               
+                 <img src="assets/img/home_google_icon.svg" alt="">
                 Continue with Google
               </button>
             
@@ -84,22 +45,21 @@
 
                 <div class="swiper-slide">
                   <div class="ct_home_slider_main_img ct_home_slider_main_bg">
-                    <div class="ct_home_slider_inner_w_max">
                       <h4 class="mb-2 ct_fs_22 ct_fw_600 text-center text-white">Build Your First App Free
                       </h4>
-                      <img src="assets/img/slider_home_1.webp" alt="" fetchpriority="high" loading="eager"
-                        decoding="async" />
-                    </div>
+                      <img src="assets/img/slider_home_1.webp"  alt="App preview"
+     width="800"
+     height="500"
+     loading="eager"
+     fetchpriority="high"/>
                   </div>
                 </div>
 
                 <div class="swiper-slide">
                   <div class="ct_home_slider_main_img ct_home_slider_main_bg px-0">
-                    <div class="ct_home_slider_inner_w_max">
                       <h4 class="mb-2 ct_fs_22 ct_fw_600 text-center text-white">Design Seamless Web & Mobile
                         Experiences
                       </h4>
-
                       <div #homeInnerSwiper class="swiper ct_home_slider_inner">
                         <div class="swiper-wrapper">
                           <div class="swiper-slide">
@@ -128,22 +88,19 @@
                           </div>
                         </div>
                       </div>
-                    </div>
                   </div>
                 </div>
 
                 <div class="swiper-slide">
                   <div class="ct_home_slider_main_img ct_home_slider_main_bg">
-                    <div class="ct_home_slider_inner_w_max">
                       <h4 class="mb-2 ct_fs_22 ct_fw_600 text-center text-white">Launch Your Mobile App in Minutes</h4>
                       <img src="assets/img/Launch_Your_M_bile_App_in_Minutes.webp" alt="" />
-                    </div>
                   </div>
                 </div>
 
                 <div class="swiper-slide">
                   <div class="ct_home_slider_main_img ct_home_slider_main_bg px-3">
-                    <div class="ct_home_slider_inner_w_max" style="max-width: 800px; margin: 0 auto;">
+                    <div style="max-width: 800px; margin: 0 auto;">
                       <h4 class="mb-2 ct_fs_22 ct_fw_600 text-center pb-0 text-white">AI App Builders for Every Need
                       </h4>
                       <p class=" text-white mx-auto text-center " style="max-width: 405px; margin-bottom: 30px;">Create
@@ -151,7 +108,10 @@
                       <div class="row">
                         <div class="col-lg-6 mb-3">
                           <div class="ct_ai_need_card">
-                            <img src="assets/img/ai_app_gif_1.gif" alt="">
+                            <!-- <img src="assets/img/ai_app_gif_1.gif" alt=""> -->
+                             <video autoplay muted loop playsinline>
+                              <source src="assets/img/ai_app_gif_1.mp4" type="video/mp4">
+                            </video>
                             <div class="mt-3">
                               <h4 class="ct_fs_16 ct_fw_600 pb-0">AI App Generator</h4>
                               <p class="mb-0 ct_fs_12">Create complete apps from simple prompts from idea to interface
@@ -164,7 +124,9 @@
                         </div>
                         <div class="col-lg-6 mb-3">
                           <div class="ct_ai_need_card">
-                            <img src="assets/img/ai_app_gif_2.gif" alt="">
+                             <video autoplay muted loop playsinline>
+                              <source src="assets/img/ai_app_gif_2.mp4" type="video/mp4">
+                            </video>
                             <div class="mt-3">
                               <h4 class="ct_fs_16 ct_fw_600 pb-0">Smart Automation Engine</h4>
                               <p class="mb-0 ct_fs_12">Automate workflows, logic & backend processes without writing a
@@ -176,7 +138,9 @@
                         </div>
                         <div class="col-lg-6 mb-3">
                           <div class="ct_ai_need_card">
-                            <img src="assets/img/ai_app_gif_3.gif" alt="">
+                              <video autoplay muted loop playsinline>
+                              <source src="assets/img/ai_app_gif_3.mp4" type="video/mp4">
+                            </video>
                             <div class="mt-3">
                               <h4 class="ct_fs_16 ct_fw_600 pb-0">Website to App Converter</h4>
                               <p class="mb-0 ct_fs_12">Turn any website into a fully functional mobile app with
@@ -189,7 +153,9 @@
                         </div>
                         <div class="col-lg-6 mb-3">
                           <div class="ct_ai_need_card">
-                            <img src="assets/img/ai_app_gif_4.gif" alt="">
+                              <video autoplay muted loop playsinline>
+                              <source src="assets/img/ai_app_gif_4.mp4" type="video/mp4">
+                            </video>
                             <div class="mt-3">
                               <h4 class="ct_fs_16 ct_fw_600 pb-0">And Much More</h4>
                               <p class="mb-0 ct_fs_12">From e-commerce to healthcare apps, build anything with flexible
@@ -206,20 +172,23 @@
                     </div>
                   </div>
                 </div>
-
               </div>
-
               <div class="ct_swiper_nav_hom_main">
-                <div class="swiper-button-prev"><i class="fa-solid fa-angle-left"></i></div>
-                <div class="swiper-button-next"><i class="fa-solid fa-angle-right"></i></div>
+                <div class="swiper-button-prev"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+</svg></div>
+                <div class="swiper-button-next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+</svg>
+                </div>
               </div>
-
               <div class="swiper-pagination"></div>
             </div>
           </div>
         </div>
       </div>
-    </section> -->
+    </section>
   </div>
 
   <section class="ct_build_section">
@@ -230,18 +199,14 @@
         </h2>
         <p>
           From idea to live application, our AI app builder helps you create powerful web and mobile apps faster, <br> without coding or complexity.
-
         </p>
       </div>
-
       <div class="ct_build_grid">
         <div class="ct_build_card ct_build_card_wide">
           <div class="ct_build_card_content">
-            <h3>Build Mobile Apps with Creative AI 
-</h3>
+            <h3>Build Mobile Apps with Creative AI </h3>
             <p>
              Create apps in minutes using our AI app builder. No coding required, just describe your idea and launch instantly.
-
             </p>
           </div>
           <div class="ct_build_visual ct_build_visual_mobile">
@@ -249,20 +214,17 @@
             <img src="assets/img/mobile_app_card_img_2.webp" alt="" />
           </div>
         </div>
-
         <div class="ct_build_card d-grid">
           <div class="ct_build_card_content">
             <h3>Web Applications with AI Tools</h3>
             <p>
            Design modern, responsive web applications with our AI app builder, which simplifies development and saves hours of manual work.
-
             </p>
           </div>
           <div class="ct_build_visual ct_build_visual_web mt-auto">
             <img src="assets/img/AI_Tools_img_1.webp" alt="" />
           </div>
         </div>
-
         <div class="ct_build_card" style="
             background: linear-gradient(
               138deg,
@@ -271,11 +233,9 @@
             );
           ">
           <div class="ct_build_card_content">
-            <h3>Build Custom Apps Without Code with AI
-</h3>
+            <h3>Build Custom Apps Without Code with AI</h3>
             <p>
              Build business applications tailored to your needs. Automate workflows, manage operations, and scale faster with AI-powered solutions.
-
             </p>
           </div>
           <div class="ct_build_visual ct_build_visual_custom">
@@ -293,44 +253,24 @@
           <h2>How <span class="ct_orange_gredient_text ct_ff_figtree">Creative AI</span> Builds Your App</h2>
           <p>Build Your App in 3 Simple Steps with AI App Builder</p>
         </div>
-
         <div class="ct_launch_journey_flow">
           <img src="assets/img/design_curver_line.png" alt="" />
-
           <div class="ct_launch_step ct_launch_step_one">
-            <span class="ct_launch_step_number"><img src="assets/img/1.png" alt="">
-
-
-
-
-            </span>
+            <span class="ct_launch_step_number"><img src="assets/img/1.png" alt=""></span>
             <div class="ct_launch_step_icon">
-              <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M33.1348 16.7769C33.1348 21.2763 30.92 24.738 27.5507 27.0174C26.7659 27.5475 26.3735 27.8126 26.18 28.1161C25.9881 28.416 25.9201 28.8136 25.7893 29.6054L25.6847 30.221C25.4545 31.6127 25.3376 32.3085 24.8493 32.7218C24.361 33.1351 23.6565 33.1351 22.2456 33.1351H17.6904C16.2796 33.1351 15.575 33.1351 15.0867 32.7218C14.5984 32.3085 14.4833 31.6127 14.2496 30.221L14.1485 29.6054C14.0159 28.8154 13.9514 28.4195 13.7596 28.1195C13.5677 27.8196 13.1736 27.551 12.3871 27.0139C9.05438 24.7345 6.97559 21.2745 6.97559 16.7769C6.97559 9.44009 12.8318 3.48798 20.0552 3.48798C20.9339 3.48705 21.8105 3.57587 22.6711 3.75306"
-                  stroke="#0064FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                <path
-                  d="M23.5432 33.1352V34.8791C23.5432 36.5236 23.5432 37.3451 23.0322 37.856C22.5212 38.367 21.6998 38.367 20.0553 38.367C18.4107 38.367 17.5893 38.367 17.0784 37.856C16.5674 37.3451 16.5674 36.5236 16.5674 34.8791V33.1352M28.775 3.48798L29.225 4.70351C29.8144 6.29748 30.1092 7.09447 30.6899 7.6752C31.2724 8.25768 32.0694 8.55241 33.6633 9.14187L34.8789 9.59181L33.6633 10.0417C32.0694 10.6312 31.2724 10.9259 30.6916 11.5067C30.1092 12.0891 29.8144 12.8861 29.225 14.4801L28.775 15.6956L28.3251 14.4801C27.7356 12.8861 27.4409 12.0891 26.8602 11.5084C26.2777 10.9259 25.4807 10.6312 23.8867 10.0417L22.6712 9.59181L23.8867 9.14187C25.4807 8.55241 26.2777 8.25768 26.8584 7.67695C27.4409 7.09447 27.7356 6.29748 28.3251 4.70351L28.775 3.48798Z"
-                  stroke="#0064FF" stroke-width="2.5" stroke-linejoin="round" />
-              </svg>
+              <img src="assets/img/launch_step_icon_1.svg" alt="">
             </div>
             <div class="ct_launch_step_content">
-              <h4> Describe Your Idea</h4>
+              <h4>Describe Your Idea</h4>
               <p>Create a fitness app with login & dashboard.</p>
             </div>
           </div>
-
           <div class="ct_launch_step ct_launch_step_two">
             <span class="ct_launch_step_number">
               <img src="assets/img/2.png" alt="">
-
             </span>
             <div class="ct_launch_step_icon">
-              <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M17.3692 15.9345L18.9143 10.53C19.4933 8.507 22.3604 8.507 22.9393 10.53L24.4827 15.9345C24.5805 16.2764 24.7637 16.5877 25.0151 16.8391C25.2665 17.0906 25.5779 17.2738 25.9198 17.3715L31.3243 18.9149C33.3472 19.4939 33.3472 22.3609 31.3243 22.9399L25.9198 24.4833C25.5779 24.5811 25.2665 24.7643 25.0151 25.0157C24.7637 25.2671 24.5805 25.5785 24.4827 25.9203L22.9393 31.3249C22.3604 33.3478 19.4933 33.3478 18.9143 31.3249L17.3709 25.9203C17.2732 25.5785 17.09 25.2671 16.8385 25.0157C16.5871 24.7643 16.2758 24.5811 15.9339 24.4833L10.5294 22.9399C8.50641 22.3609 8.50641 19.4939 10.5294 18.9149L15.9339 17.3715C16.2758 17.2738 16.5871 17.0906 16.8385 16.8391C17.09 16.5877 17.2732 16.2764 17.3709 15.9345M31.5719 28.7874C32.0759 27.3173 34.1948 27.3155 34.6971 28.7874L34.7424 28.9391L35.2586 31.0109L37.3304 31.5289C39.0046 31.9474 39.0046 34.3227 37.3304 34.7413L35.2586 35.2592L34.7424 37.331C34.3239 39.0035 31.9468 39.0035 31.5283 37.331L31.0103 35.2592L28.9385 34.7413C27.2643 34.3227 27.2643 31.9457 28.9385 31.5289L31.0103 31.0109L31.5283 28.9391L31.5719 28.7874ZM33.1345 32.7811C33.0341 32.9155 32.9149 33.0347 32.7805 33.1351C32.9149 33.2354 33.0341 33.3547 33.1345 33.4891C33.2348 33.3547 33.3541 33.2354 33.4885 33.1351C33.354 33.0342 33.2347 32.9143 33.1345 32.7793M7.15659 4.37035C7.67629 2.85137 9.92075 2.90194 10.3271 4.52207L10.8433 6.59389L12.9151 7.11184C14.5893 7.53039 14.5893 9.90565 12.9151 10.3242L10.8433 10.8422L10.3271 12.914C9.90854 14.5864 7.53154 14.5864 7.11299 12.914L6.59504 10.8422L4.52322 10.3242C2.84903 9.90565 2.84903 7.52864 4.52322 7.11184L6.59504 6.59389L7.11299 4.52207L7.15659 4.37035ZM8.71917 8.36574C8.61867 8.49954 8.49944 8.61819 8.36515 8.71802C8.49969 8.81892 8.61893 8.93875 8.71917 9.07379C8.8194 8.93875 8.93865 8.81892 9.07319 8.71802C8.93877 8.61765 8.81953 8.50016 8.71917 8.36574Z"
-                  fill="#0064FF" />
-              </svg>
+             <img src="assets/img/launch_step_icon_2.svg" alt="">
             </div>
             <div class="ct_launch_step_content">
               <h4>AI Builds Everything</h4>
@@ -339,18 +279,12 @@
               </p>
             </div>
           </div>
-
           <div class="ct_launch_step ct_launch_step_three">
             <span class="ct_launch_step_number">
               <img src="assets/img/3.png" alt="">
-
             </span>
             <div class="ct_launch_step_icon">
-              <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M27.1881 25.0606C27.373 25.8349 27.466 26.6371 27.4672 27.4672C27.4672 30.2424 26.3647 32.9039 24.4024 34.8662C22.4401 36.8285 19.7786 37.9309 17.0035 37.9309V29.56M27.1881 25.0606C30.5189 22.6344 33.2284 19.4546 35.0955 15.7812C36.9625 12.1077 37.9341 8.04462 37.9309 3.9239C33.8104 3.92092 29.7477 4.89263 26.0746 6.75967C22.4014 8.62672 19.222 11.3361 16.7959 14.6666M27.1881 25.0606C24.1577 27.2789 20.6842 28.8139 17.0035 29.56M17.0035 29.56C16.8233 29.5972 16.6425 29.6321 16.4611 29.6646C14.878 28.4111 13.4454 26.9785 12.1919 25.3954L12.2948 24.8513M16.7959 14.6666C15.2593 14.3032 13.6603 14.2922 12.1188 14.6346C10.5773 14.977 9.13326 15.6638 7.89493 16.6436C6.65661 17.6234 5.65609 18.8707 4.96837 20.2922C4.28064 21.7136 3.92354 23.2722 3.92383 24.8513H12.2948M16.7959 14.6666C14.5779 17.6965 13.0411 21.1712 12.2948 24.8513M8.39009 29.0193C7.24244 29.872 6.35016 31.0227 5.81001 32.3464C5.26986 33.6702 5.10246 35.1166 5.32596 36.5288C5.72242 36.5916 6.12702 36.623 6.53975 36.623C7.7628 36.6233 8.96898 36.3377 10.0621 35.789C11.1551 35.2404 12.1049 34.4438 12.8354 33.4629M28.7751 15.6956C28.7751 16.3893 28.4995 17.0547 28.0089 17.5453C27.5184 18.0359 26.853 18.3115 26.1592 18.3115C25.4654 18.3115 24.8 18.0359 24.3095 17.5453C23.8189 17.0547 23.5433 16.3893 23.5433 15.6956C23.5433 15.0018 23.8189 14.3364 24.3095 13.8458C24.8 13.3552 25.4654 13.0796 26.1592 13.0796C26.853 13.0796 27.5184 13.3552 28.0089 13.8458C28.4995 14.3364 28.7751 15.0018 28.7751 15.6956Z"
-                  stroke="#0064FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
+              <img src="assets/img/launch_step_icon_3.svg" alt="">
             </div>
             <div class="ct_launch_step_content">
               <h4> Launch Instantly</h4>
@@ -361,7 +295,6 @@
       </div>
     </div>
   </section>
-
   <section class="ct_pricing_section">
     <div class="container">
       <div class="ct_section_heading text-center">
@@ -370,9 +303,7 @@
         </h2>
         <p class="mx-auto" style="max-width: 716px">
          Join early users creating real apps with AI. Pick your plan, get started in seconds, and launch faster than ever.
-
         </p>
-
         <div class="ct_pricing_toggle">
           <button type="button" [class.active]="billingCycle === 'MONTH'"
             (click)="setBillingCycle('MONTH')">Monthly</button>
@@ -380,7 +311,6 @@
             (click)="setBillingCycle('YEAR')">Annually</button>
         </div>
       </div>
-
       <div class="ct_pricing_grid mt-5 pt-5">
         <div class="ct_price_card" *ngIf="freePlan as plan">
           <div class="ct_price_card_top">
@@ -398,33 +328,12 @@
             <h4>Features you will get:</h4>
             <ul>
               <li *ngFor="let feature of getPlanFeatures(plan)">
-                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
+                <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
                 {{ feature }}
               </li>
             </ul>
           </div>
         </div>
-
         <div class="ct_price_card ct_price_card_featured" *ngIf="selectedProPlan as plan">
           <div class="ribbon">
             <img src="assets/img/ribbin_price.png" alt="">
@@ -464,40 +373,17 @@
                 </li>
               </ul>
             </div>
-
-
           </div>
           <div class="ct_price_card_bottom" style="margin-top: 24px;">
             <h4>Features you will get:</h4>
             <ul>
               <li *ngFor="let feature of getPlanFeatures(plan)">
-                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
+                 <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
                 {{ feature }}
               </li>
             </ul>
           </div>
         </div>
-
         <div class="ct_price_card" *ngIf="businessPlan as plan">
           <div class="ct_price_card_top">
             <span class="ct_price_badge">Business</span>
@@ -523,34 +409,13 @@
             <h4>Features you will get:</h4>
             <ul>
               <li *ngFor="let feature of getPlanFeatures(plan)">
-                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
+                 <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
                 {{ feature }}
               </li>
             </ul>
           </div>
         </div>
       </div>
-
       <div class="row mt-5 pt-5 d-none">
         <div class="col-lg-4 mb-5 mb-lg-0">
           <div class="ct_price_card">
@@ -563,48 +428,12 @@
             <a routerLink="/free-demo">Get Started</a>
             <h4>Features you will get:</h4>
             <ul>
-              <li> <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>1 Project Build</li>
-              <li> <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>1 Design Templates</li>
+              <li>
+              <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
+                1 Project Build</li>
+              <li>
+                <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
+                1 Design Templates</li>
             </ul>
           </div>
         </div>
@@ -622,111 +451,21 @@
             <a routerLink="/free-demo">Get Started</a>
             <h4>Features you will get:</h4>
             <ul>
-              <li> <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>2 Project Build</li>
-              <li> <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>2 Design Templates</li>
-              <li> <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>Base Cloud, AI Usage</li>
-              <li> <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>Deploy to Server</li>
-              <li> <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>Email Chat Support</li>
+              <li>
+                <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
+                2 Project Build</li>
+              <li>
+                <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
+                2 Design Templates</li>
+              <li>
+                 <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
+                Base Cloud, AI Usage</li>
+              <li>
+                <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
+                Deploy to Server</li>
+              <li>
+                <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
+                Email Chat Support</li>
             </ul>
           </div>
         </div>
@@ -742,154 +481,33 @@
             <h4>Pro features and you will get:</h4>
             <ul>
               <li>
-                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
+                 <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
                 5 Project Build
               </li>
               <li>
-                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
+               <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
                 4 Design Templates
               </li>
               <li>
-                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
+                 <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
                 SSL
               </li>
               <li>
-                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
+                <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
                 Dedicated Support
               </li>
               <li>
-                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
+               <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
                 Custom Features
               </li>
               <li>
-                <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_222_5114)">
-                    <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                      width="20" height="20">
-                      <path
-                        d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                        fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                      <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </mask>
-                    <g mask="url(#mask0_222_5114)">
-                      <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                    </g>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_222_5114">
-                      <rect width="20" height="20" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
+               <img src="assets/img/pricing_check_icon.svg" alt="" class="me-2">
                 Integration Tools
               </li>
             </ul>
           </div>
         </div>
       </div>
-
       <div class="ct_pricing_cta">
         <div>
           <h4>Stuck or Need Guidance?</h4>
@@ -901,19 +519,13 @@
       </div>
     </div>
   </section>
-
   <section class="ct_action_video_section pt-5">
     <div class="container">
       <div class="ct_section_heading text-center ">
         <h2 class="ct_fs_40 ct_fw_600 mb-2">See How <span class="ct_orange_gredient_text ct_ff_figtree">Creative AI
             Works</span></h2>
-        <p>
-        Watch how your idea turns into a real app in minutes.
-
-        </p>
+        <p>Watch how your idea turns into a real app in minutes.</p>
       </div>
-
-
     </div>
     <span class="ct_action_video_card" aria-label="Watch product demo video">
       <div class="ct_action_video_overlay"></div>
@@ -922,17 +534,12 @@
       </div>
     </span>
   </section>
-
   <section class="ct_testimonial_section pt-0">
     <div class="container">
       <div class="ct_section_heading text-center">
-        <h2 class="ct_fw_600 ct_fs_40 mb-0">Real Apps Built With  <span class="ct_orange_gredient_text ct_ff_figtree"> Creative AI </span>
-</h2>
-        <p>
-         Build real apps faster without coding or complexity.
-        </p>
+        <h2 class="ct_fw_600 ct_fs_40 mb-0">Real Apps Built With  <span class="ct_orange_gredient_text ct_ff_figtree"> Creative AI </span></h2>
+        <p>Build real apps faster without coding or complexity.</p>
       </div>
-
       <div class="owl-carousel owl-theme ct_testimonial_slider mt-4">
           <div class="item">
             <div class="ct_testimonial_main">
@@ -948,7 +555,6 @@
                   quickly. Highly recommended for startups and enterprises looking to build apps smarter and faster.
                 </p>
               </div>
-
               <div class="mt-auto">
                 <div class="ct_testimonial_user_img">
                   <img src="assets/img/sam.webp" alt="AI app builder for mobile and web" loading="lazy">
@@ -972,7 +578,6 @@
                   enterprise-level quality.
                 </p>
               </div>
-
               <div class="mt-auto">
                 <div class="ct_testimonial_user_img">
                   <img src="assets/img/james.webp" alt="AI app builder for mobile and web" loading="lazy">
@@ -994,7 +599,6 @@
                   hassle. The transparency and smooth workflow really set it apart from other tools I’ve tried.
                 </p>
               </div>
-
               <div class="mt-auto">
                 <div class="ct_testimonial_user_img">
                   <img src="assets/img/paul.webp" alt="AI app builder for mobile and web" loading="lazy">
@@ -1020,7 +624,6 @@
                   dedication to client success truly sets them apart.
                 </p>
               </div>
-
               <div class="mt-auto">
                 <div class="ct_testimonial_user_img">
                   <img src="assets/img/nirdesh.webp" alt="AI app builder for mobile and web" loading="lazy">
@@ -1041,7 +644,6 @@
                   good work. The communication is great. You always get a fast responds. I definitely recommend them.
                 </p>
               </div>
-
               <div class="mt-auto">
                 <div class="ct_testimonial_user_img">
                   <img src="assets/img/client_2.webp" alt="AI app builder for mobile and web" loading="lazy">
@@ -1063,7 +665,6 @@
                   very professional fellow. Keep up the great work folks!
                 </p>
               </div>
-
               <div class="mt-auto">
                 <div class="ct_testimonial_user_img">
                   <img src="assets/img/client_1.webp" alt="AI app builder for mobile and web" loading="lazy">
@@ -1085,7 +686,6 @@
                   was my first time using this platform and I'd say I'm pleased with the work in general.
                 </p>
               </div>
-
               <div class="mt-auto">
                 <div class="ct_testimonial_user_img">
                   <img src="assets/img/client_3.webp" alt="AI app builder for mobile and web" loading="lazy">
@@ -1097,7 +697,6 @@
               </div>
             </div>
           </div>
-
           <div class="item">
             <div class="ct_testimonial_main">
               <div>
@@ -1108,7 +707,6 @@
                   recommended!
                 </p>
               </div>
-
               <div class="mt-auto">
                 <div class="ct_testimonial_user_img">
                   <img src="assets/img/client_4.webp" alt="AI app builder for mobile and web" loading="lazy">
@@ -1130,7 +728,6 @@
                   in traffic and leads!
                 </p>
               </div>
-
               <div class="mt-auto">
                 <div class="ct_testimonial_user_img">
                   <img src="assets/img/client_5.webp" alt="AI app builder for mobile and web" loading="lazy">
@@ -1142,22 +739,16 @@
               </div>
             </div>
           </div>
-
         </div>
     </div>
   </section>
-
-
   <section class="ct_grey_bg ct_py_70">
     <div class="container">
-
       <div class="row mt-4 align-items-start">
         <div class="col-md-4 mb-4 mb-md-0">
           <h2 class="ct_fs_44  ct_fw_700"> Got Questions? We've  <span class="ct_orange_gredient_text">Got You</span>
           </h2>
-          <p class=""> Everything you need to know about building apps with our AI app builder
-</p>
-          <!-- <div  class="ct_faq_img mt-4"><img  loading="lazy" src="assets/img/faq_xcti_new1223.webp" alt="AI-powered app and web development"></div> -->
+          <p> Everything you need to know about building apps with our AI app builder</p>
         </div>
         <div class="col-md-7 offset-md-1 mb-4 mb-md-0">
           <div class="ct_how_works_collapse">
@@ -1169,8 +760,7 @@
                 <div id="collapsefaq_one" aria-labelledby="faq_one" data-bs-parent="#ct_how_works_accordion"
                   class="accordion-collapse collapse show">
                   <div class="accordion-body">
-                    <p class="ct_fs_16 mb-0 ct_line_h_30">An AI app builder is a tool that lets you create apps just by describing your idea. It automatically builds the design, features, and backend for you.
-</p>
+                    <p class="ct_fs_16 mb-0 ct_line_h_30">An AI app builder is a tool that lets you create apps just by describing your idea. It automatically builds the design, features, and backend for you.</p>
                   </div>
                 </div>
               </div>
@@ -1181,35 +771,29 @@
                 <div id="collapsefaq_Two" aria-labelledby="faqtwo" data-bs-parent="#ct_how_works_accordion"
                   class="accordion-collapse collapse">
                   <div class="accordion-body">
-                    <p class="ct_fs_16 mb-0 ct_line_h_30">You simply type what you want to build, and the AI turns it into a working app step by step, in minutes.
-</p>
+                    <p class="ct_fs_16 mb-0 ct_line_h_30">You simply type what you want to build, and the AI turns it into a working app step by step, in minutes.</p>
                   </div>
                 </div>
               </div>
               <div class="accordion-item">
                 <h2 id="faqthree" class="accordion-header"><button type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapsefaq_Three" aria-expanded="false" aria-controls="collapsefaq_Three"
-                    class="accordion-button collapsed"> Do I need coding to build an app?
-</button></h2>
+                    class="accordion-button collapsed"> Do I need coding to build an app?</button></h2>
                 <div id="collapsefaq_Three" aria-labelledby="faqthree" data-bs-parent="#ct_how_works_accordion"
                   class="accordion-collapse collapse">
                   <div class="accordion-body">
-                    <p class="ct_fs_16 mb-0 ct_line_h_30"> No, you don’t need any coding skills. The AI handles everything; you just focus on your idea.
-
-                    </p>
+                    <p class="ct_fs_16 mb-0 ct_line_h_30"> No, you don’t need any coding skills. The AI handles everything; you just focus on your idea.</p>
                   </div>
                 </div>
               </div>
               <div class="accordion-item">
                 <h2 id="faqfour" class="accordion-header"><button type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapsefaq_four" aria-expanded="false" aria-controls="collapsefaq_four"
-                    class="accordion-button collapsed"> What kind of apps can I build?
-</button></h2>
+                    class="accordion-button collapsed"> What kind of apps can I build?</button></h2>
                 <div id="collapsefaq_four" aria-labelledby="faqfour" data-bs-parent="#ct_how_works_accordion"
                   class="accordion-collapse collapse">
                   <div class="accordion-body">
                     <p class="ct_fs_16 mb-1 ct_line_h_30"> You can build web apps, mobile apps, dashboards, tools, and more. If you can describe it, you can build it.
-
                     </p>
                   </div>
                 </div>
@@ -1218,98 +802,78 @@
                 <h2 id="faqfive" class="accordion-header"><button type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapsefaq_five" aria-expanded="false" aria-controls="collapsefaq_five"
                     class="accordion-button collapsed"> How fast can I launch my app?
-
                   </button></h2>
                 <div id="collapsefaq_five" aria-labelledby="faqfive" data-bs-parent="#ct_how_works_accordion"
                   class="accordion-collapse collapse">
                   <div class="accordion-body">
-                    <p class="ct_fs_16 mb-0 ct_line_h_30">You can create and launch your app in just a few minutes, depending on your idea.
-
-                    </p>
+                    <p class="ct_fs_16 mb-0 ct_line_h_30">You can create and launch your app in just a few minutes, depending on your idea.</p>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
-
   <section class="ct_py_70">
     <div class="owl-carousel owl-theme ct_featured_slider ">
       <div class="item">
         <div class="ct_featured_logo">
-          <img src="assets/img/brand_logo_1.png" alt="" loading=>
-
+          <img src="assets/img/brand_logo_1.png" alt="" loading="lazy">
         </div>
       </div>
       <div class="item">
         <div class="ct_featured_logo">
-          <img src="assets/img/brand_logo_2.png" alt="" loading=>
-
+          <img src="assets/img/brand_logo_2.png" alt="" loading="lazy">
         </div>
       </div>
       <div class="item">
         <div class="ct_featured_logo">
-          <img src="assets/img/brand_logo_3.png" alt="" loading=>
-
+          <img src="assets/img/brand_logo_3.png" alt="" loading="lazy">
         </div>
       </div>
       <div class="item">
         <div class="ct_featured_logo">
-          <img src="assets/img/brand_logo_4.png" alt="" loading=>
-
+          <img src="assets/img/brand_logo_4.png" alt="" loading="lazy">
         </div>
       </div>
       <div class="item">
         <div class="ct_featured_logo">
-          <img src="assets/img/brand_logo_5.png" alt="" loading=>
-
+          <img src="assets/img/brand_logo_5.png" alt="" loading="lazy">
         </div>
       </div>
       <div class="item">
         <div class="ct_featured_logo">
-          <img src="assets/img/brand_logo_6.png" alt="" loading=>
-
+          <img src="assets/img/brand_logo_6.png" alt="" loading="lazy">
         </div>
       </div>
       <div class="item">
         <div class="ct_featured_logo">
-          <img src="assets/img/brand_logo_7.png" alt="" loading=>
-
+          <img src="assets/img/brand_logo_7.png" alt="" loading="lazy">
         </div>
       </div>
       <div class="item">
         <div class="ct_featured_logo">
-          <img src="assets/img/brand_logo_8.png" alt="" loading=>
-
+          <img src="assets/img/brand_logo_8.png" alt="" loading="lazy">
         </div>
       </div>
     </div>
   </section>
-
   <section class="ct_ai_cta_section">
     <div class="container">
       <div class="ct_ai_cta_card row align-items-center">
         <div class="col-md-7 mb-4 mb-md-0">
           <div class="ct_ai_cta_content">
             <h2 class="ct_fs_40 ct_fw_600"> From Idea to App Made Simple.</h2>
-            <p>Fast, easy, and no coding needed
-
-</p>
-            <a routerLink="/free-demo" class="ct_blue_outline_btn ct_white_btn"> Launch Your App Today
- 
-</a>
+            <p>Fast, easy, and no coding needed</p>
+            <a routerLink="/free-demo" class="ct_blue_outline_btn ct_white_btn"> Launch Your App Today</a>
           </div>
-
         </div>
         <div class="col-md-5 mb-4 mb-md-0">
           <div class="ct_ai_cta_image">
             <img src="assets/img/thumb_img_news.webp" alt="Creative AI app preview on mobile" loading="lazy" />
           </div>
-
         </div>
       </div>
     </div>
