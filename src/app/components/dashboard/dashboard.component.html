@@ -1,243 +1,106 @@
-<section class="ct_dash_board_main">
+<section class="ct_dashboard_shell">
       <app-workspace-header></app-workspace-header>
-      <div class="ct_dash_right_content ct_white_bg_page ">
+      <div class="ct_dash_right_content ct_white_bg_page ct_dashboard_page">
             <div class="container-fluid">
-                  <div class="row">
-                        <div class="col-md-12">
-                              <div>
-                                    <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
-                                          <h3 class="ct_fs_26 ct_fw_700 mb-0">My Creative Projects</h3><span
-                                                class="ct_fs_16">
-                                                Active plan :
-                                                <span class="ct_custom_badge"> {{
-                                                      activePlan === 'FREE'
-                                                      ? 'Free'
-                                                      : activePlan.includes('personal')
-                                                      ? 'Personal'
-                                                      : 'Creative'
-                                                      }} plan</span>
-                                          </span>
-                                    </div>
-                                    <div class="pt-4">
-                                          <ul class="nav nav-pills mb-3 ct_dash_board_tab" id="pills-tab"
-                                                role="tablist">
-                                                <li class="nav-item" role="presentation">
-                                                      <button class="nav-link" [ngClass]="{ 'active': status === null }"
-                                                            (click)="filterByStatus(null)">All</button>
-                                                </li>
-                                                <li class="nav-item" role="presentation">
-                                                      <button class="nav-link" [ngClass]="{ 'active': status === 0 }"
-                                                            (click)="filterByStatus(0)">Draft</button>
-                                                </li>
-                                                <li class="nav-item" role="presentation">
-                                                      <button class="nav-link" [ngClass]="{ 'active': status === 1 }"
-                                                            (click)="filterByStatus(1)">Live</button>
-                                                </li>
-                                                <li class="nav-item" role="presentation">
-                                                      <button class="nav-link" [ngClass]="{ 'active': status === 2 }"
-                                                            (click)="filterByStatus(2)">Expired</button>
-                                                </li>
+                  <div class="ct_dashboard_intro">
+                        <div>
+                              <h1>My Creative Projects</h1>
+                              <p class="ct_dashboard_subtitle">
+                                    Track every draft and live deployment from one place, then jump back in exactly
+                                    where you left off.
+                              </p>
+                        </div>
 
-                                          </ul>
-                                          <div class="tab-content mt-4 pt-2" id="pills-tabContent">
-                                                <div class="tab-pane fade show active" id="pills-all" role="tabpanel"
-                                                      aria-labelledby="pills-all-tab">
-                                                      <div class="row">
-                                                            @if(allProjectsList.length > 0) {
-                                                            @for (item of allProjectsList; track $index) {
-                                                            <div class="col-xxl-4 col-xl-5 col-lg-6 mb-4">
-                                                                  <div class="ct_creative_cards">
-                                                                        <div class="ct_creative_card_head">
-                                                                              <div
-                                                                                    class="d-flex justify-content-between gap-3">
-                                                                                    <div>
-                                                                                          <h6
-                                                                                                class="mb-0 ct_fw_700 mt-0">
-                                                                                                {{item.projectName}}
-                                                                                          </h6>
-                                                                                    </div>
-                                                                                    @if(activePlan !== 'FREE'){
-                                                                                    <div class="dropdown">
-                                                                                          <i class="fa-solid fa-ellipsis-vertical"
-                                                                                                id="dropdownMenuButton1"
-                                                                                                data-bs-toggle="dropdown"
-                                                                                                aria-expanded="false"></i>
-                                                                                          <ul class="dropdown-menu"
-                                                                                                aria-labelledby="dropdownMenuButton1">
-                                                                                                <li><a (click)="discardProject(item.inquiryId)"
-                                                                                                            class="dropdown-item">Remove</a>
-                                                                                                </li>
-                                                                                          </ul>
-                                                                                    </div>
-                                                                                    }
-                                                                              </div>
-                                                                              <div
-                                                                                    class="d-flex align-items-center justify-content-between gap-3 mt-4">
-                                                                                    <div
-                                                                                          class="d-flex align-items-center gap-2">
-                                                                                          <svg width="21" height="9"
-                                                                                                viewBox="0 0 21 9"
-                                                                                                fill="none"
-                                                                                                xmlns="http://www.w3.org/2000/svg">
-                                                                                                <path d="M16.135 4.41708H17.435M18.1285 2.42308H16.135V6.41058H18.1285M7.6915 6.39858L8.9875 2.42358L10.2835 6.41058M9.85 5.07658H8.1225M5.199 4.41658H3.554M5.199 4.41658C5.46342 4.41658 5.71701 4.52162 5.90399 4.70859C6.09096 4.89557 6.196 5.14916 6.196 5.41358C6.196 5.678 6.09096 5.93159 5.90399 6.11857C5.71701 6.30554 5.46342 6.41058 5.199 6.41058H3.554V2.42308H5.199C5.46342 2.42308 5.71701 2.52812 5.90399 2.71509C6.09096 2.90207 6.196 3.15566 6.196 3.42008C6.196 3.6845 6.09096 3.93809 5.90399 4.12507C5.71701 4.31204 5.46342 4.41658 5.199 4.41658ZM11.939 5.97408C12.183 6.29258 12.49 6.41108 12.9165 6.41108H13.5065C13.7704 6.41108 14.0235 6.30625 14.2101 6.11965C14.3967 5.93305 14.5015 5.67997 14.5015 5.41608V5.41208C14.5015 5.14819 14.3967 4.89511 14.2101 4.70851C14.0235 4.52191 13.7704 4.41708 13.5065 4.41708H12.8555C12.7248 4.41721 12.5953 4.39157 12.4744 4.34163C12.3536 4.29168 12.2438 4.21841 12.1513 4.12601C12.0588 4.0336 11.9854 3.92387 11.9353 3.80308C11.8853 3.6823 11.8595 3.55283 11.8595 3.42208C11.8595 2.87058 12.3065 2.42358 12.8575 2.42358H13.4445C13.8715 2.42358 14.178 2.54208 14.4225 2.86058M2 0.44458H19.5C19.7652 0.44458 20.0196 0.549937 20.2071 0.737473C20.3946 0.92501 20.5 1.17936 20.5 1.44458V7.55558C20.5 7.8208 20.3946 8.07515 20.2071 8.26269C20.0196 8.45022 19.7652 8.55558 19.5 8.55558H2C1.73478 8.55558 1.48043 8.45022 1.29289 8.26269C1.10536 8.07515 1 7.8208 1 7.55558V1.44458C1 1.17936 1.10536 0.92501 1.29289 0.737473C1.48043 0.549937 1.73478 0.44458 2 0.44458Z"
-                                                                                                      stroke="black"
-                                                                                                      stroke-width="0.5"
-                                                                                                      stroke-linecap="round"
-                                                                                                      stroke-linejoin="round" />
-                                                                                          </svg>
-                                                                                          <p
-                                                                                                class="mb-0 text-capitalize">
-                                                                                                {{item.currentRoutes?.split('/')[1]?.replace('-',
-                                                                                                ' ')}}
-                                                                                          </p>
-                                                                                    </div>
-                                                                                    <div>
-                                                                                          <span class="badge"
-                                                                                                [ngClass]="getStatusClass(item.projectStatus)">{{checkStatus(item.projectStatus)}}</span>
-                                                                                    </div>
-                                                                              </div>
+                  </div>
 
+                  <div class="ct_dashboard_tabs">
+                        @for (filter of filters; track filter.key) {
+                        <button type="button" class="ct_dashboard_tab" [class.active]="activeFilter === filter.key"
+                              (click)="setFilter(filter.key)">
+                              {{ filter.label }}
+                              <span>{{ getFilterCount(filter.key) }}</span>
+                        </button>
+                        }
+                  </div>
 
-                                                                        </div>
-                                                                        <div class="ct_creative_card_body">
-                                                                              <div class="all-feature-box">
-                                                                                    @if(item.project_deployed == 1){
-                                                                                    <div>
-                                                                                          <h4 class="head">Created
-                                                                                          </h4>
-                                                                                          <p class="desc">
-                                                                                                <small>{{item.createdAt
-                                                                                                      | date}}</small>
-
-                                                                                          </p>
-                                                                                    </div>
-
-                                                                                    <div>
-                                                                                          <h4 class="head">Deployed
-                                                                                          </h4>
-                                                                                          <a class="desc link-primary"
-                                                                                                [href]="item.deployed_url"
-                                                                                                target="_blank">
-                                                                                                {{item.deployed_url}}
-                                                                                          </a>
-                                                                                    </div>
-
-                                                                                    }
-                                                                              </div>
-
-                                                                              <div class="mt-4 border-5">
-                                                                                    <a (click)="Navigate(item)"
-                                                                                          class="ct_schedule_call_btn w-100 justify-content-center">{{item.project_deployed
-                                                                                          == 1 ? 'View Details' :
-                                                                                          'Continue Building'}}</a>
-                                                                              </div>
-                                                                        </div>
-                                                                  </div>
-                                                            </div>
-                                                            }
-                                                            }@else{
-                                                            <div
-                                                                  class="no-build-container d-flex flex-column align-items-center justify-content-center text-center">
-                                                                  <div class="no-build-illustration mb-4">
-                                                                        <div
-                                                                              class="no-build-circle d-flex align-items-center justify-content-center">
-                                                                              <i
-                                                                                    class="bi bi-layout-text-window-reverse no-build-icon"></i>
-                                                                        </div>
-                                                                  </div>
-
-                                                                  <h4 class="no-build-title mb-2">No Build Cards Found
-                                                                  </h4>
-
-                                                                  @if(!status){
-                                                                  <p class="no-build-subtitle mb-3">
-                                                                        You haven’t created any build cards yet. Start a
-                                                                        new project and begin building today!
-                                                                  </p>
-
-                                                                  <button routerLink="/main"
-                                                                        class="ct_schedule_call_btn justify-content-center mt-3">Start
-                                                                        a new project</button>
-                                                                  }@else{
-                                                                  <p class="no-build-subtitle mb-3">
-                                                                        No {{checkStatus(status)}} build cards found
-                                                                  </p>
-                                                                  }
-                                                            </div>
-                                                            }
-                                                      </div>
-                                                </div>
+                  @if (allProjectsList.length > 0) {
+                  <div class="ct_dashboard_grid">
+                        @for (project of allProjectsList; track trackByInquiryId($index, project)) {
+                        <article class="ct_dashboard_card">
+                              <div class="ct_dashboard_card__hero">
+                                    <div class="ct_dashboard_card__top">
+                                          <div>
+                                                <h2>{{ project.projectName || 'Untitled Project' }}</h2>
                                           </div>
                                     </div>
+
+                                    <div class="ct_dashboard_card__badges">
+
+                                          <span class="ct_dashboard_status_badge" [ngClass]="getStatusClass(project)">
+                                                {{ getProjectStatusLabel(project) }}
+                                          </span>
+                                    </div>
                               </div>
-                        </div>
+
+                              <div class="ct_dashboard_card__body">
+                                    <div class="ct_dashboard_meta_grid">
+                                          <div class="ct_dashboard_meta">
+                                                <span>Created</span>
+                                                <strong>{{ project.createdAt | date:'MMM d, y' }}</strong>
+                                          </div>
+
+                                          <div class="ct_dashboard_meta">
+                                                <span>Build Status</span>
+                                                <strong>{{ project.build_status === 1 ? 'Ready' : 'In Progress'
+                                                      }}</strong>
+                                          </div>
+
+                                          <div class="ct_dashboard_meta">
+                                                <span>Plan Usage</span>
+                                                <strong>{{ project.countsTowardsPlanLimit ? 'Counts toward plan' :
+                                                      'Excluded' }}</strong>
+                                          </div>
+
+                                          <div class="ct_dashboard_meta">
+                                                <span>{{ project.project_deployed === 1 ? 'Deployed URL' : 'Next Step'
+                                                      }}</span>
+                                                @if (project.project_deployed === 1 && project.deployed_url) {
+                                                <a class="ct_dashboard_link" [href]="project.deployed_url"
+                                                      target="_blank" rel="noopener">
+                                                      {{ getDeployedUrlLabel(project) }}
+                                                </a>
+                                                } @else {
+                                                <strong>Continue from preview workspace</strong>
+                                                }
+                                          </div>
+                                    </div>
+
+                                    <button type="button" class="ct_dashboard_card__action" (click)="navigate(project)">
+                                          {{ getActionLabel(project) }}
+                                    </button>
+                              </div>
+                        </article>
+                        }
                   </div>
+                  } @else {
+                  <div class="ct_dashboard_empty">
+                        <div class="ct_dashboard_empty__icon">
+                              <i class="bi bi-layout-text-window-reverse"></i>
+                        </div>
+                        <h3>No projects found</h3>
+                        <p>
+                              @if (activeFilter === 'all') {
+                              You haven't created any projects yet. Start a new build to see your workspace fill up
+                              here.
+                              } @else {
+                              No {{ activeFilter }} projects are available right now.
+                              }
+                        </p>
+                        @if (activeFilter === 'all') {
+                        <a routerLink="/main" class="ct_dashboard_empty__cta">Start a New Project</a>
+                        }
+                  </div>
+                  }
             </div>
       </div>
 </section>
-
-<!-- Mobile page section S -->
-<section class="ct_mobile_section_main">
-      <div class="ct_mobile_header_main_bg">
-            <img loading="lazy" src="assets/img/cti_black_logo.svg" alt="AI app builder for mobile and web">
-      </div>
-      <div class="container">
-            <div class="row">
-                  <div class="col-md-12">
-                        <div class="mt-4">
-                              <h3 class="ct_fs_24 text-center ct_fw_700">Why it's worth heading to a desktop now</h3>
-                              <p class="text-center">Our mobile site isn't the best place to order your app…yet.</p>
-
-                              <div class="ct_grey_bg p-4 mt-3">
-                                    <h6 class="ct_fs_16 ct_fw_700 mb-4">Go to your desktop now and Vanya, our AI can:
-                                    </h6>
-                                    <ul class="ct_list_style_dics">
-                                          <li>Guide you to find all the app features you need</li>
-                                          <li>Help you Start designing - get a feel of what your app could look like
-                                          </li>
-                                          <li>Give you a guaranteed price and accurate timeline</li>
-                                    </ul>
-                              </div>
-                              <p class="mb-0 mt-3 text-center">Want to give it a try? Grab a bigger screen and let's
-                                    bring
-                                    your app to
-                                    life!</p>
-
-                              <div class="mt-5">
-                                    <a href="index.html" class="ct_blue_btn_fill w-100">Return to Creative AI</a>
-                              </div>
-                        </div>
-                  </div>
-            </div>
-      </div>
-</section>
-<!-- Mobile page section E -->
-
-<!-- Refrsh page modal S -->
-<div class="modal fade modal-lg" id="ct_refresh_page" tabindex="-1" aria-labelledby="ct_refresh_pageLabel"
-      aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content  p-4">
-                  <div class="modal-body  p-0">
-                        <!-- You Need To Import Schedule Form here -->
-                        <div class="ct_schedule_call_main12">
-                              <h4 class="ct_fs_24 ct_fw_700 text-center mb-2">Are you sure you want to continue with
-                                    this
-                                    refresh?</h4>
-                              <p class="mb-0 text-center">Doing so may result in the loss of your recent interactions
-                                    and
-                                    changes.
-                              </p>
-                              <div
-                                    class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center">
-                                    <button class="ct_blue_outline_btn  justify-content-center"
-                                          data-bs-dismiss="modal">Cancel</button>
-                                    <button data-bs-dismiss="modal" class="ct_blue_btn_fill  justify-content-center"
-                                          routerLink="/main">Proceed</button>
-                              </div>
-                        </div>
-                  </div>
-            </div>
-      </div>
-</div>
-<!-- Refrsh page modal E -->

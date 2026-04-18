@@ -1,33 +1,66 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { ApiService } from '../../services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { CommonModule } from '@angular/common';
-import { SidebarComponent } from "../client_buildcard_pages/sidebar/sidebar.component";
-import { WorkspaceHeaderComponent } from "../client_buildcard_pages/workspace-header/workspace-header.component";
+import { WorkspaceHeaderComponent } from '../client_buildcard_pages/workspace-header/workspace-header.component';
+import { ApiService } from '../../services/api.service';
 import { SubcriptionService } from '../../services/subcription.service';
+
+interface DashboardProject {
+  inquiryId: string;
+  projectId: string | null;
+  projectName: string;
+  currentRoutes: string | null;
+  projectStatus: number;
+  clientProjectLogo: string | null;
+  projectFeatures: any;
+  project_deployed: number;
+  deployed_url: string | null;
+  build_status: number;
+  countsTowardsPlanLimit: boolean;
+  createdAt: string;
+  phases_deliverables?: any;
+  billing_details?: any;
+  durations?: any;
+  final_cost_with_tax_discount?: any;
+  platforms?: any;
+  development_speed?: any;
+  total_cost_delivery?: any;
+  payment_plan?: string;
+  installment_type?: any;
+  features_cost?: any;
+  no_of_features?: any;
+  html_pages?: string;
+}
+
+type DashboardFilter = 'all' | 'draft' | 'live' | 'expired';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink, CommonModule, SidebarComponent, WorkspaceHeaderComponent],
+  imports: [RouterLink, CommonModule, WorkspaceHeaderComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
-  allProjectsList: any[] = []
-  orgProjectList: any[] = []
-  estimatedDate: Date | undefined;
-  status: number | null = null;
+  allProjectsList: DashboardProject[] = [];
+  originalProjectsList: DashboardProject[] = [];
   activePlan = '';
-  baseURl = this.apiService.reactBuildURl;
+  activeFilter: DashboardFilter = 'all';
+
+  readonly filters: Array<{ key: DashboardFilter; label: string }> = [
+    { key: 'all', label: 'All' },
+    { key: 'draft', label: 'Draft' },
+    { key: 'live', label: 'Live' },
+  ];
+
   constructor(
     private apiService: ApiService,
     private message: NzMessageService,
     private router: Router,
     private subscriptionService: SubcriptionService
-  ) {
-  }
+  ) { }
+
   ngOnInit(): void {
     sessionStorage.clear();
     this.getProjects();
@@ -36,19 +69,23 @@ export class DashboardComponent {
   }
 
   getProjects() {
-    this.apiService.getApi<any>('api/user/fetchClientAllProjects').subscribe(
-      (res) => {
-        if (res.success) {
-          this.allProjectsList = this.orgProjectList = res.data;
-          this.allProjectsList = this.allProjectsList.map(item => {
-            const activeStep = item.currentRoutes?.split("/")[1]?.replace("-", " ") || "";
-            const activeIndex = this.steps.findIndex(step => step.routes.includes(activeStep));
-            return { ...item, activeIndex };
-          });
+    this.apiService.getApi<any>('api/user/fetchClientAllProjects').subscribe({
+      next: (res) => {
+        if (!res?.success) {
+          this.allProjectsList = [];
+          this.originalProjectsList = [];
+          return;
         }
-      }
-    );
 
+        this.originalProjectsList = res.data || [];
+        this.applyFilters();
+      },
+      error: () => {
+        this.message.error('Unable to load your projects right now.');
+        this.allProjectsList = [];
+        this.originalProjectsList = [];
+      }
+    });
   }
 
   getUserSubscriptionPlan() {
@@ -57,109 +94,124 @@ export class DashboardComponent {
         return;
       }
 
-      this.activePlan = res.planType;
+      this.activePlan = String(res.planType || '');
     });
   }
 
-  Navigate(data: any) {
-    if (data.project_deployed) {
-      this.router.navigate([`user-live-projects/${data.inquiryId}`]);
-    } else {
-      let projectData = {
-        clientEnquryId: data.inquiryId,
-        projectId: data.projectId,
-        phases_deliverables: data.phases_deliverables,
-        bellingDetails: data.billing_details,
-        estimated_time: data.durations,
-        final_cost_with_tax_discount: data.final_cost_with_tax_discount,
-        platform: data.platforms,
-        projectLogo: data.clientProjectLogo,
-        selectdFeature: data.projectFeatures,
-        speed: data.development_speed,
-        total_cost_delivery: data.total_cost_delivery,
-        paymentPlan: data.payment_plan == 'Installment' ? '2' : '1',
-        installmentType: data.installment_type,
-        features_cost: data.features_cost,
-        no_of_features: data.no_of_features,
-        projectName: data.projectName
-      };
-
-      sessionStorage.setItem('htmlCode', data.html_pages);
-      sessionStorage.setItem('projectData', JSON.stringify(projectData));
-      this.router.navigate(['/code-generator/', data.inquiryId], { state: { projectData } });
-
+  navigate(project: DashboardProject) {
+    if (project.project_deployed) {
+      this.router.navigate([`user-live-projects/${project.inquiryId}`]);
+      return;
     }
 
+    const projectData = {
+      clientEnquryId: project.inquiryId,
+      projectId: project.projectId,
+      phases_deliverables: project.phases_deliverables,
+      bellingDetails: project.billing_details,
+      estimated_time: project.durations,
+      final_cost_with_tax_discount: project.final_cost_with_tax_discount,
+      platform: project.platforms,
+      projectLogo: project.clientProjectLogo,
+      selectdFeature: project.projectFeatures,
+      speed: project.development_speed,
+      total_cost_delivery: project.total_cost_delivery,
+      paymentPlan: project.payment_plan === 'Installment' ? '2' : '1',
+      installmentType: project.installment_type,
+      features_cost: project.features_cost,
+      no_of_features: project.no_of_features,
+      projectName: project.projectName
+    };
+
+    sessionStorage.setItem('htmlCode', project.html_pages || '');
+    sessionStorage.setItem('projectData', JSON.stringify(projectData));
+    this.router.navigate(['/code-generator/', project.inquiryId], { state: { projectData } });
   }
 
-  discardProject(id: number) {
-    this.apiService.getApi(`api/user/discardProject?id=${id}`).subscribe({
+  discardProject(inquiryId: string) {
+    this.apiService.getApi(`api/user/discardProject?id=${inquiryId}`).subscribe({
       next: (res: any) => {
-        this.message.success(res.message);
+        this.message.success(res.message || 'Project removed successfully.');
         this.getProjects();
       },
-      error: (err: any) => {
-        this.message.error(err);
+      error: () => {
+        this.message.error('Unable to remove this project right now.');
       }
-    })
+    });
   }
 
-  checkStatus(status: number): string {
-    switch (status) {
-      case 0:
-        return 'Draft';
-      case 1:
-        return 'Live';
-      case 2:
-        return 'Expired';
-      case 3:
-        return 'Completed';
-      default:
-        return 'Draft';
-    }
-  }
-
-  getStatusClass(status: number): string {
-    switch (status) {
-      case 0:
-        return 'ct_yellow_badge_bg';
-      case 1:
-        return 'ct_green_badge_bg';
-      case 2:
-        return 'ct_blue_badge_bg';
-      case 3:
-        return 'Completed';
-      default:
-        return 'Draft';
-    }
-  }
-
-  steps = [
-    { id: "list_1", icon: "🏗️", routes: ["make it-mine"] },
-    { id: "list_2", icon: "✏️", routes: ["refine idea",] },
-    { id: "list_3", icon: "💡", routes: ["plan delivery",] },
-    { id: "list_4", icon: "📝", routes: ["billing details",] },
-    { id: "list_5", icon: "💰", routes: ["payment plan",] },
-    // { id: "list_6", icon: "💳", routes: ["payment option"] }
-  ];
-
-
-  filterByStatus(status: number | null) {
-    this.status = status;
+  setFilter(filter: DashboardFilter) {
+    this.activeFilter = filter;
     this.applyFilters();
   }
 
   applyFilters() {
-    this.allProjectsList = this.orgProjectList.filter((item: {
-      projectStatus: number
-    }) => {
-      const matchStatus =
-        this.status == null || item.projectStatus === this.status;
-      return matchStatus
-    }).map(item => {
-      const activeStep = item.currentRoutes?.split("/")[1]?.replace("-", " ") || "";
-      const activeIndex = this.steps.findIndex(step => step.routes.includes(activeStep));
-      return { ...item, activeIndex };
+    this.allProjectsList = this.originalProjectsList.filter((project) => {
+      if (this.activeFilter === 'all') {
+        return true;
+      }
+
+      return this.getProjectStatusKey(project) === this.activeFilter;
     });
+  }
+
+  getProjectStatusLabel(project: DashboardProject): string {
+    switch (this.getProjectStatusKey(project)) {
+      case 'live':
+        return 'Live';
+      case 'expired':
+        return 'Expired';
+      case 'draft':
+      default:
+        return 'Draft';
+    }
+  }
+
+  getProjectStatusKey(project: DashboardProject): DashboardFilter {
+    if (project.project_deployed === 1) {
+      return 'live';
+    }
+
+    if (project.projectStatus === 2) {
+      return 'expired';
+    }
+
+    return 'draft';
+  }
+
+  getStatusClass(project: DashboardProject): string {
+    switch (this.getProjectStatusKey(project)) {
+      case 'live':
+        return 'ct_dashboard_status_badge--live';
+      case 'expired':
+        return 'ct_dashboard_status_badge--expired';
+      case 'draft':
+      default:
+        return 'ct_dashboard_status_badge--draft';
+    }
+  }
+
+  getActionLabel(project: DashboardProject): string {
+    return project.project_deployed === 1 ? 'View Details' : 'Continue Building';
+  }
+
+  getDeployedUrlLabel(project: DashboardProject): string {
+    if (!project.deployed_url) {
+      return 'Not published yet';
+    }
+
+    return project.deployed_url.replace(/^https?:\/\//, '');
+  }
+
+  getFilterCount(filter: DashboardFilter): number {
+    if (filter === 'all') {
+      return this.originalProjectsList.length;
+    }
+
+    return this.originalProjectsList.filter((project) => this.getProjectStatusKey(project) === filter).length;
+  }
+
+  trackByInquiryId(_index: number, project: DashboardProject): string {
+    return project.inquiryId;
   }
 }
