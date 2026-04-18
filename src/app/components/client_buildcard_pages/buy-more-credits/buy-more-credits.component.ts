@@ -84,6 +84,44 @@ export class BuyMoreCreditsComponent {
     });
   }
 
+  formatPrice(price: string | number): string {
+    return Number(price || 0).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  getPackBadge(pack: TopUpPack, index: number): string {
+    if (index === 1) {
+      return 'Best Value';
+    }
+
+    if (pack.pack_key.startsWith('topup_')) {
+      return pack.pack_name.replace('Top-Up', '').trim() || 'Top Up';
+    }
+
+    if (pack.pack_name.toLowerCase().includes('yearly')) {
+      return 'Yearly';
+    }
+
+    if (pack.pack_name.toLowerCase().includes('monthly')) {
+      return 'Monthly';
+    }
+
+    return 'Credits';
+  }
+
+  isFeatured(index: number): boolean {
+    return index === 1;
+  }
+
+  getPackSubLabel(pack: TopUpPack): string {
+    if (pack.pack_key.startsWith('topup_')) {
+      return 'One-time top-up';
+    }
+
+    return pack.pack_name;
+  }
 
   trackByPackId(_index: number, pack: TopUpPack): number {
     return pack.id;

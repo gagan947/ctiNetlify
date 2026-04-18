@@ -87,13 +87,13 @@
 .ct_buy_credits__grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 18px;
+  gap: 14px;
 }
 
 .ct_credit_card {
   position: relative;
   min-height: 100%;
-  padding: 20px 18px 18px;
+  padding: 14px 14px 14px;
   border-radius: 18px;
   border: 1px solid #d7deea;
   background: #ffffff;
@@ -114,7 +114,7 @@
   align-items: center;
   justify-content: center;
   min-height: 32px;
-  padding: 6px 16px;
+  padding: 5px 14px;
   border-radius: 999px;
   background: linear-gradient(90deg, #1454ff 0%, #2b79ff 100%);
   color: #ffffff;
@@ -122,21 +122,22 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  margin: 0 auto 18px;
+  margin: 0 auto 12px;
 }
 
 .ct_credit_card__body {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 18px;
+  gap: 6px;
+  margin-bottom: 14px;
 }
 
 .ct_credit_card h4 {
   margin: 0;
   color: #202531;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .ct_credit_card__price {
@@ -144,13 +145,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
   margin-bottom: 0;
 }
 
 .ct_credit_card__price strong {
   color: #1454ff;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 800;
   line-height: 1.2;
 }
@@ -158,16 +159,16 @@
 .ct_credit_card__meta {
   margin: 0;
   color: #667085;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.5;
   font-weight: 600;
 }
 
 .ct_credit_card button,
 .ct_buy_credits__custom_btn {
-  min-height: 44px;
+  min-height: 40px;
   border-radius: 12px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   transition: all 0.2s ease;
 }
