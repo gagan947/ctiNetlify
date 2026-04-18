@@ -777,7 +777,14 @@ section {
   object-fit: contain;
   display: block;
 }
-
+.ct_build_section,
+.ct_launch_journey_section,
+.ct_pricing_section,
+.ct_grey_bg,
+.ct_ai_cta_section {
+  content-visibility: auto;
+  contain-intrinsic-size: 600px;
+}
 @keyframes logoScroll {
   0% {
     transform: translateX(0);

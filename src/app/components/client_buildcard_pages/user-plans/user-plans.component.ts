@@ -52,7 +52,7 @@ export class UserPlansComponent {
           subtitle: 'Advanced Logic Processing',
           delta: -5,
           time: '11:05 AM',
-          icon: 'fa-comment-dots',
+          icon: 'fa-message',
           iconClass: 'ct_transaction_icon--purple'
         }
       ]
@@ -66,7 +66,7 @@ export class UserPlansComponent {
           subtitle: 'Professional Bundle Purchase',
           delta: 500,
           time: '09:15 AM',
-          icon: 'fa-plus',
+          icon: 'fa-circle-plus',
           iconClass: 'ct_transaction_icon--green'
         },
         {

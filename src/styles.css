@@ -453,3 +453,6 @@ aside.ct_project_ai_chat_section {
       left: 30%;
       position: absolute;
 }
+.ant-modal-content{
+      border-radius: 30px !important;
+}
