@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { SafeHtml, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterLink, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { firstValueFrom } from 'rxjs';
 import { SubscriptionResponse } from '../../../../models/subcription';
@@ -153,6 +154,7 @@ export class ReactBuildPreviewComponent {
     private aiService: AiSocketService,
     private router: Router,
     private toster: NzMessageService,
+    private modal: NzModalService,
     private subscriptionModalService: SubscriptionModalService,
     private subscriptionService: SubcriptionService
   ) {
@@ -177,15 +179,15 @@ export class ReactBuildPreviewComponent {
     // ✅ 1. LOAD DRAFT TEMPLATES FIRST
     // ============================================
 
-    setTimeout(() => {
-      this.startPreview(null);
-    });
-
     const templates = await this.getUserTemplates();
     if (templates.length > 0) {
       await this.showDraftWelcomeMessages();
       await this.loadDraftTemplates(templates);
       return;
+    } else {
+      setTimeout(() => {
+        this.startPreview(null);
+      });
     }
     await this.startFlow();
   }
@@ -229,53 +231,79 @@ export class ReactBuildPreviewComponent {
 
     this.apiService
       .postAPI<any, any>('api/ai/generateProject', payload)
-      .subscribe((res: any) => {
+      .subscribe({
+        next: (res: any) => {
+          if (!res?.success || !res?.data?.templateId) {
+            this.handleBuildGenerationFailure();
+            return;
+          }
 
-        this.isReactBuilding = true;
+          this.isReactBuilding = true;
 
-        const templateId = res.data.templateId;
-        const proxyUrl = this.getPreviewProxyUrl(templateId);
+          const templateId = res.data.templateId;
+          const proxyUrl = this.getPreviewProxyUrl(templateId);
 
-        // 🔹 track variation
-        if (res.data.variation) {
-          this.usedVariations.push(res.data.variation);
+          // 🔹 track variation
+          if (res.data.variation) {
+            this.usedVariations.push(res.data.variation);
+          }
+
+          this.designCount++;
+
+          const designId = `design-${this.designCount}`;
+
+          const snapshot: DesignSnapshot = {
+            id: designId,
+            label: `Template ${this.designCount}`,
+            pages: res.data.pages,
+            loginRedirect: res.data.login_redirect,
+            createdAt: new Date(),
+            previewType: 'html'
+          };
+
+          this.designMap.set(designId, snapshot);
+
+          this.designOrder.push({
+            designId,
+            url: proxyUrl, // ✅ store proxy instead of real URL
+            user_template_id: res.data.templateId || null, // depends on backend
+            variation_no: res.data.variation
+          });
+
+          this.activeDesignId = designId;
+
+          if (socket_id) {
+            this.pendingPreviewUrl = proxyUrl;
+            this.isIframeLoading = true;
+          } else {
+            this.isIframeLoading = true;
+            this.safePreviewUrl =
+              this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
+          }
+          this.isReactBuilding = false;
+          this.isTyping = false;
+        },
+        error: () => {
+          this.handleBuildGenerationFailure();
         }
-
-        this.designCount++;
-
-        const designId = `design-${this.designCount}`;
-
-        const snapshot: DesignSnapshot = {
-          id: designId,
-          label: `Template ${this.designCount}`,
-          pages: res.data.pages,
-          loginRedirect: res.data.login_redirect,
-          createdAt: new Date(),
-          previewType: 'html'
-        };
-
-        this.designMap.set(designId, snapshot);
-
-        this.designOrder.push({
-          designId,
-          url: proxyUrl, // ✅ store proxy instead of real URL
-          user_template_id: res.data.templateId || null, // depends on backend
-          variation_no: res.data.variation
-        });
-
-        this.activeDesignId = designId;
-
-        if (socket_id) {
-          this.pendingPreviewUrl = proxyUrl;
-          this.isIframeLoading = true;
-        } else {
-          this.isIframeLoading = true;
-          this.safePreviewUrl =
-            this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
-        }
-        this.isReactBuilding = false;
-        this.isTyping = false;
       });
+  }
+
+  private handleBuildGenerationFailure() {
+    this.clearBuildStepTimers();
+    this.isReactBuilding = false;
+    this.isIframeLoading = false;
+    this.isTyping = false;
+
+    this.modal.error({
+      nzTitle: 'Build generation failed',
+      nzContent: 'Build generation failed. Please try again.',
+      nzOkText: 'Try Again',
+      nzMaskClosable: false,
+      nzClosable: true,
+      nzCentered: true,
+      nzOnOk: () => this.router.navigateByUrl('/main')
+    });
   }
 
 
