@@ -16,7 +16,7 @@
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                     <div class="preview-wrapper d-flex w-100" id="topScrollDiv">
-                        <!-- 🔥 FADE CONTAINER -->
+                        <!-- ðŸ”¥ FADE CONTAINER -->
                         <div class="iframe-container d-flex align-items-center justify-content-center preview-guard"
                             [class.loading]="isIframeLoading" (contextmenu)="blockPreviewInteraction($event)"
                             (dragstart)="blockPreviewInteraction($event)"
@@ -91,35 +91,28 @@
 
 <div class="modal fade" id="deployConfirmModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content mb-2" style="padding: 30px;">
-            <h2>Confirm Template Deployment</h2>
-            <p class="mb-0">You have selected the following template preview:</p>
-            <!-- Template Preview with Image -->
-            <div class="template-preview mb-0">
-                <div class="preview-image">
-                    <iframe [src]="safePreviewUrl" class="preview-iframe mx-auto w-100" style="aspect-ratio: 4/4;"
-                        [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100">
-                    </iframe>
-
-                </div>
-                <div class="preview-content">
-                    <h3>Template {{activeDesignId}}</h3>
-                    <span>Modern Business Landing Page Layout</span>
-                </div>
+        <div class="modal-content mb-2 ct_deploy_confirm_modal">
+            <div class="ct_deploy_confirm_modal__badge">
+                <i class="fa-solid fa-rocket"></i>
             </div>
-            <!-- Warning -->
-            <div class="info-box mb-0">
-                <div class="info-icon">⚠</div>
+            <div class="ct_deploy_confirm_modal__header">
+                <h2>Deploy This Template?</h2>
+                <p class="mb-0">
+                    You are about to move this preview into deployment for your project. Once you continue, this
+                    becomes the final selected template for the current project.
+                </p>
+            </div>
+            <div class="info-box mb-0 ct_deploy_confirm_modal__info">
+                <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
                 <div class="info-text">
-                    You’re almost Ready! Keep in mind that once deployed, this template can’t be switched.<br>
-                    <b>This project supports only one template deployment.</b>
+                    This is a one-time deployment decision. Please make sure you are happy with this version, because
+                    you will not be able to switch to another template variation after deployment.
                 </div>
             </div>
-            <!-- Buttons -->
             <div class="actions">
                 <button class="btn-cancel button-deploy" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn-confirm button-deploy" (click)="checkNDeploy()" data-bs-dismiss="modal">Deploy
-                    Template
+                <button class="btn-confirm button-deploy" (click)="checkNDeploy()" data-bs-dismiss="modal">
+                    Continue
                 </button>
             </div>
         </div>

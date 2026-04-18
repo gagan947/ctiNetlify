@@ -45,7 +45,7 @@
   color: #434655;
   font-size: 16px;
   line-height: 1.55;
-    font-family: "Figtree", sans-serif;
+  font-family: "Figtree", sans-serif;
 
 }
 
@@ -60,8 +60,8 @@
 }
 
 .ct_credit_summary_card {
-    padding: 24px 12px;
-    text-align: center;
+  padding: 24px 12px;
+  text-align: center;
 }
 
 .ct_credit_summary_card span {
@@ -72,7 +72,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-    font-family: "Figtree", sans-serif;
+  font-family: "Figtree", sans-serif;
 
 }
 
@@ -80,9 +80,9 @@
   color: #191C1E;
   font-size: 24px;
   font-weight: 800;
-    font-family: "Figtree", sans-serif;
+  font-family: "Figtree", sans-serif;
 
-  
+
   line-height: 1.2;
 }
 
@@ -91,9 +91,9 @@
 }
 
 .ct_credit_transactions_scroll {
-    max-height: calc(100vh - 366px);
-    overflow-y: auto;
-    padding: 0 14px 24px;
+  max-height: calc(100vh - 367px);
+  overflow-y: auto;
+  padding: 0 14px 24px;
 }
 
 .ct_credit_transactions_scroll::-webkit-scrollbar {
@@ -110,12 +110,12 @@
 }
 
 .ct_credit_group h3 {
-    margin: 0 0 12px;
-    color: #737686;
-    font-size: 18px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-      font-family: "Figtree", sans-serif;
+  margin: 0 0 12px;
+  color: #737686;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-family: "Figtree", sans-serif;
 
 }
 
@@ -191,7 +191,7 @@
   font-size: 17px;
   font-weight: 700;
   line-height: 1.2;
-    font-family: "Figtree", sans-serif;
+  font-family: "Figtree", sans-serif;
 
 }
 
@@ -200,7 +200,7 @@
   color: #596171;
   font-size: 14px;
   line-height: 1.5;
-    font-family: "Figtree", sans-serif;
+  font-family: "Figtree", sans-serif;
 
 }
 
@@ -214,7 +214,7 @@
   margin-bottom: 0px;
   font-size: 15px;
   font-weight: 800;
-    font-family: "Figtree", sans-serif;
+  font-family: "Figtree", sans-serif;
 
 }
 
@@ -229,7 +229,7 @@
 .ct_credit_transaction_meta span {
   color: #8c93a3;
   font-size: 12px;
-    font-family: "Figtree", sans-serif;
+  font-family: "Figtree", sans-serif;
 
   font-weight: 500;
 }
@@ -243,9 +243,11 @@
   border-top: 1px solid #e4e6eb;
   background: #eef0f4;
 }
-.ct_border_radius_100{
+
+.ct_border_radius_100 {
   border-radius: 100px;
 }
+
 .ct_credit_live_status {
   display: inline-flex;
   align-items: center;
@@ -287,14 +289,14 @@
   .ct_credit_summary_grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
   .ct_credit_transactions_scroll {
     max-height: calc(100vh - 463px);
 
     height: auto;
-}
+  }
 
-  .ct_credit_transaction_row
-   {
+  .ct_credit_transaction_row {
     align-items: flex-start;
   }
 
@@ -316,13 +318,16 @@
   .ct_credit_summary_grid {
     margin-inline: 8px;
   }
-  .ct_credit_summary_card{
+
+  .ct_credit_summary_card {
     padding-block: 18px;
   }
-  .ct_credit_transactions_footer{
+
+  .ct_credit_transactions_footer {
     padding: 20px;
   }
-  .ct_credit_transactions_dialog{
+
+  .ct_credit_transactions_dialog {
     padding-top: 40px;
   }
 
@@ -334,7 +339,8 @@
   .ct_credit_transactions_footer {
     padding-inline: 12px;
   }
-  .ct_credit_transaction_row{
+
+  .ct_credit_transaction_row {
     flex-direction: column;
   }
 }
