@@ -119,7 +119,7 @@ export class SubscriptionModalService {
       nzMaskClosable: false,
       nzKeyboard: true,
       nzWidth: 1250,
-      nzStyle: { top: '20px' },
+      nzStyle: { top: '60px' },
       nzClassName: 'buy-more-credits-modal-shell',
       nzBodyStyle: {
         padding: '0',

@@ -1,53 +1,56 @@
-<div class="ct_buy_credits_modal_root">
-  <section class="ct_buy_credits">
-    <div class="ct_buy_credits__dialog">
-      <!-- <button type="button" class="ct_buy_credits__close" aria-label="Close" (click)="closeModal()">
+<section class="">
+  <div class="ct_buy_credits__dialog">
+    <!-- <button type="button" class="ct_buy_credits__close" aria-label="Close" (click)="closeModal()">
         <i class="fa-solid fa-xmark"></i>
       </button> -->
 
-      <div class="ct_buy_credits__hero">
-        <div class="ct_buy_credits__header">
-          <h2>Purchase Credits</h2>
-        </div>
+    <div class="ct_buy_credits__hero">
+      <div class="ct_buy_credits__header">
+        <h2>Purchase Credits</h2>
       </div>
-
-      <div class="ct_buy_credits__grid" *ngIf="topUpPacks.length; else emptyState">
-        <article class="ct_credit_card" *ngFor="let pack of topUpPacks; let i = index; trackBy: trackByPackId"
-          [class.ct_credit_card__featured]="isFeatured(i)">
-          <span class="ct_credit_card__offer">{{ getPackBadge(pack, i) }}</span>
-          <div class="ct_credit_card__body">
-            <h4>{{ pack.credits }} credits</h4>
-            <div class="ct_credit_card__meta">{{ getPackSubLabel(pack) }}</div>
-            <div class="ct_credit_card__price">
-              <strong>&#8377;{{ formatPrice(pack.price_inr) }}</strong>
-            </div>
-          </div>
-          <button type="button" (click)="buyCredits(pack)">Buy Now</button>
-        </article>
-      </div>
-
-      <div class="ct_buy_credits__custom" *ngIf="topUpPacks.length">
-        <div class="ct_buy_credits__custom_head">
-          <div>
-            <label for="creditCustomAmount">Custom buy credit option</label>
-            <p>Enter a custom amount to estimate the credits for a one-time purchase.</p>
-          </div>
-        </div>
-        <div class="ct_buy_credits__custom_row">
-          <div class="ct_buy_credits__input_wrap">
-            <span>&#8377;</span>
-            <input id="creditCustomAmount" type="text" [value]="customAmount" (input)="onCustomAmountChange($event)"
-              placeholder="Enter custom amount" />
-          </div>
-          <button type="button" class="ct_buy_credits__custom_btn">Buy {{ customCredits }} Credits</button>
-        </div>
-      </div>
-
-      <ng-template #emptyState>
-        <div class="ct_buy_credits__empty" *ngIf="!isLoading">
-          No active credit bundles are available right now.
-        </div>
-      </ng-template>
     </div>
-  </section>
-</div>
+
+    <div class="ct_buy_credits__grid" *ngIf="topUpPacks.length; else emptyState">
+      <article class="ct_credit_card" *ngFor="let pack of topUpPacks; let i = index; trackBy: trackByPackId"
+        [class.ct_credit_card__featured]="isFeatured(i)">
+        <span class="ct_credit_card__offer">{{ getPackBadge(pack, i) }}</span>
+        <div class="ct_credit_card__body">
+          <h4>{{ pack.credits }} Credits</h4>
+          <div class="ct_credit_card__price">
+            <strong>&#8377;{{ formatPrice(pack.price_inr) }}</strong>
+          </div>
+          <ul class="ct_credit_card__benefits">
+            <li *ngFor="let item of getPackHighlights(pack, i)">
+              <i class="fa-solid fa-check"></i>
+              <span>{{ item }}</span>
+            </li>
+          </ul>
+        </div>
+        <button type="button" (click)="buyCredits(pack)">Buy Now</button>
+      </article>
+    </div>
+
+    <div class="ct_buy_credits__custom" *ngIf="topUpPacks.length">
+      <div class="ct_buy_credits__custom_head">
+        <div>
+          <label for="creditCustomAmount">Custom buy credit option</label>
+          <p>Enter a custom amount to estimate the credits for a one-time purchase.</p>
+        </div>
+      </div>
+      <div class="ct_buy_credits__custom_row">
+        <div class="ct_buy_credits__input_wrap">
+          <span>&#8377;</span>
+          <input id="creditCustomAmount" type="text" [value]="customAmount" (input)="onCustomAmountChange($event)"
+            placeholder="Enter custom amount" />
+        </div>
+        <button type="button" class="ct_buy_credits__custom_btn">Buy {{ customCredits }} Credits</button>
+      </div>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="ct_buy_credits__empty" *ngIf="!isLoading">
+        No active credit bundles are available right now.
+      </div>
+    </ng-template>
+  </div>
+</section>

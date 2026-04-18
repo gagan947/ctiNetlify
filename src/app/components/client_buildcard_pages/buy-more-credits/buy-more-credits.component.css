@@ -13,12 +13,11 @@
 
 .ct_buy_credits__dialog {
   position: relative;
-  width: min(1180px, 100%);
-  padding: 20px 18px 24px;
-  border-radius: 24px;
+  padding: 32px 38px 30px;
+  border-radius: 32px;
   background:
-    radial-gradient(circle at top, rgba(43, 121, 255, 0.12), transparent 26%),
-    linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    radial-gradient(circle at top center, rgba(255, 255, 255, 0.88), transparent 30%),
+    linear-gradient(135deg, #f2f0ff 0%, #eef1ff 52%, #f6f2ff 100%);
   color: #101828;
   font-family: inherit;
   overflow: hidden;
@@ -39,65 +38,37 @@
 
 .ct_buy_credits__hero {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 34px;
+  display: block;
+  margin-bottom: 24px;
 }
 
 .ct_buy_credits__header {
   width: 100%;
   max-width: 700px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  margin: 0 auto;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.ct_buy_credits__eyebrow {
-  margin: 0 0 10px;
-  color: #1454ff;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .ct_buy_credits__header h2 {
-  margin: 0 0 5px;
-  color: #202531;
-  font-size: 34px;
-  line-height: 1.18;
+  margin: 0;
+  color: #111827;
+  font-size: 24px;
+  line-height: 1.2;
   font-weight: 700;
-  text-wrap: balance;
-  /* max-width: 640px; */
-}
-
-.ct_buy_credits__subtitle {
-  margin: 0 auto;
-  max-width: 640px;
-  color: #667085;
-  font-size: 17px;
-  line-height: 1.65;
 }
 
 .ct_buy_credits__grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
 
 .ct_credit_card {
   position: relative;
   min-height: 100%;
-  padding: 14px 14px 14px;
-  border-radius: 18px;
-  border: 1px solid #d7deea;
+  padding: 0 12px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(223, 228, 248, 0.9);
   background: #ffffff;
-  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+  box-shadow: 0 10px 30px rgba(111, 116, 177, 0.12);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -105,39 +76,40 @@
 }
 
 .ct_credit_card__featured {
-  border-color: #2b79ff;
-  box-shadow: 0 20px 42px rgba(20, 84, 255, 0.12);
+  border-color: #d9def5;
+  box-shadow: 0 14px 34px rgba(109, 121, 203, 0.14);
 }
 
 .ct_credit_card__offer {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 32px;
-  padding: 5px 14px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #1454ff 0%, #2b79ff 100%);
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  margin: 0 auto 12px;
+  min-height: 30px;
+  padding: 6px 12px;
+  border-radius: 0 0 10px 10px;
+  background: #ffca10;
+  color: #121212;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0 auto 18px;
 }
 
 .ct_credit_card__body {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 14px;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex: 1;
 }
 
 .ct_credit_card h4 {
   margin: 0;
-  color: #202531;
+  color: #161616;
   font-size: 18px;
   font-weight: 700;
   line-height: 1.2;
+  margin-top: 2px;
 }
 
 .ct_credit_card__price {
@@ -150,33 +122,49 @@
 }
 
 .ct_credit_card__price strong {
-  color: #1454ff;
-  font-size: 20px;
-  font-weight: 800;
+  color: #1bb13f;
+  font-size: 15px;
+  font-weight: 500;
   line-height: 1.2;
 }
 
-.ct_credit_card__meta {
-  margin: 0;
-  color: #667085;
-  font-size: 12px;
-  line-height: 1.5;
-  font-weight: 600;
+.ct_credit_card__benefits {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: grid;
+  gap: 10px;
+  text-align: left;
+}
+
+.ct_credit_card__benefits li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #424242;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.ct_credit_card__benefits li i {
+  color: #4a4dff;
+  font-size: 14px;
+  margin-top: 2px;
 }
 
 .ct_credit_card button,
 .ct_buy_credits__custom_btn {
-  min-height: 40px;
-  border-radius: 12px;
+  min-height: 34px;
+  border-radius: 6px;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 500;
   transition: all 0.2s ease;
 }
 
 .ct_credit_card button {
   width: 100%;
-  border: 1px solid #2b79ff;
-  background: #ffffff;
+  border: 1px solid #d9e5fb;
+  background: #dfeaff;
   color: #1454ff;
 }
 
@@ -197,11 +185,12 @@
 }
 
 .ct_buy_credits__custom {
-  margin-top: 22px;
-  padding: 20px;
+  margin-top: 18px;
+  padding: 18px 20px 20px;
   border-radius: 18px;
-  border: 1px solid #dce8ff;
-  background: linear-gradient(180deg, #f8fbff 0%, #f3f7ff 100%);
+  border: 1px solid rgba(220, 226, 248, 0.9);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(8px);
 }
 
 .ct_buy_credits__custom_head {
@@ -264,7 +253,7 @@
   min-width: 180px;
   padding: 0 18px;
   border: 0;
-  background: linear-gradient(90deg, #1454ff 0%, #2b79ff 100%);
+  background: #1454ff;
   color: #ffffff;
 }
 
@@ -280,15 +269,11 @@
   }
 
   .ct_buy_credits__dialog {
-    padding: 16px 10px 18px;
+    padding: 22px 16px 18px;
   }
 
   .ct_buy_credits__header h2 {
-    font-size: 32px;
-  }
-
-  .ct_buy_credits__subtitle {
-    font-size: 17px;
+    font-size: 22px;
   }
 
   .ct_buy_credits__grid,
@@ -305,19 +290,13 @@
 
   .ct_buy_credits__header {
     max-width: 100%;
-    padding-inline: 10px;
   }
 
   .ct_buy_credits__header h2 {
-    font-size: 28px;
-  }
-
-  .ct_buy_credits__subtitle {
-    font-size: 15px;
-    line-height: 1.7;
+    font-size: 20px;
   }
 
   .ct_credit_card {
-    padding: 24px 20px;
+    padding: 0 14px 18px;
   }
 }

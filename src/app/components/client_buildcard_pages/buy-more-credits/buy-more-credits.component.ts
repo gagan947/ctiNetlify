@@ -124,6 +124,30 @@ export class BuyMoreCreditsComponent {
     return pack.pack_name;
   }
 
+  getPackHighlights(pack: TopUpPack, index: number): string[] {
+    if (index === 0) {
+      return [
+        'Quick top-up for small usage',
+        'Instant credit addition',
+        'Works for all users (no plan required)'
+      ];
+    }
+
+    if (index === 1) {
+      return [
+        'Balanced for moderate usage',
+        'Ideal for ongoing customization',
+        'No subscription needed'
+      ];
+    }
+
+    return [
+      'Quick top-up for heavy usage',
+      'Instant credit addition',
+      'Works for all users (no plan required)'
+    ];
+  }
+
   trackByPackId(_index: number, pack: TopUpPack): number {
     return pack.id;
   }
