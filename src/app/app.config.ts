@@ -14,16 +14,6 @@ const scrollConfig: InMemoryScrollingOptions = {
   anchorScrolling: 'enabled',
 };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDAhaDNGbFyFAnDa-M5dt1iumtbl5NSu-U",
-  authDomain: "creative-ai-a17ae.firebaseapp.com",
-  projectId: "creative-ai-a17ae",
-  storageBucket: "creative-ai-a17ae.firebasestorage.app",
-  messagingSenderId: "316919446938",
-  appId: "1:316919446938:web:9a74bd17bafe8c7b6f8e23",
-  measurementId: "G-CZMF0RJ5K4"
-};
-
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(MonacoEditorModule.forRoot()),

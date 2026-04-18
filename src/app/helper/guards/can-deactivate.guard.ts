@@ -4,7 +4,7 @@ export interface CanComponentDeactivate {
 }
 export const canDeactivateGuard: CanDeactivateFn<CanComponentDeactivate> =
 
-  (component, currentRoute, currentState, nextState) => {
+  (component, _currentRoute, _currentState, nextState) => {
     if (!nextState) return true;
     const nextUrl = nextState.url;
     console.log('nextUrl', nextUrl);

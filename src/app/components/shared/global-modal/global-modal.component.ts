@@ -26,11 +26,11 @@ export class GlobalModalComponent {
 
   discardProject() {
     this.apiService.getApi(`api/user/discardProject?id=${this.inquiryId}`).subscribe({
-      next: (res: any) => {
+      next: () => {
 
         this.service.close(true);
       },
-      error: (err: any) => {
+      error: () => {
         this.service.close(true);
       }
     })

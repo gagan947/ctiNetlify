@@ -1,5 +1,5 @@
-import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
-import { FormBuilder, FormsModule, Validators } from '@angular/forms';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../../../services/api.service';
 import { CommonModule } from '@angular/common';
@@ -7,7 +7,6 @@ import { Location } from '@angular/common';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../../sidebar/sidebar.component";
-import { ModalService } from '../../../../services/modal.service';
 import { ImageCropperComponent, ImageCroppedEvent } from 'ngx-image-cropper';
 import { CustomColorPickerComponent } from '../custom-color-picker/custom-color-picker.component';
 import { MobileViewComponent } from '../mobile-view/mobile-view.component';
@@ -41,8 +40,7 @@ export class MakeItMineComponent {
     previewProject: boolean = false;
     projectType!: string;
 
-    private modal = inject(ModalService);
-    constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService,) {
+    constructor(private apiService: ApiService, private router: Router, public location: Location, private message: NzMessageService,) {
         let projectData = sessionStorage.getItem('projectData');
         this.projectsData = JSON.parse(projectData!);
         if (this.projectsData) {

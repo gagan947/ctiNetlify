@@ -3,7 +3,7 @@ import { CanActivateFn } from '@angular/router';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 
-export const loginGuard: CanActivateFn = (route, state) => {
+export const loginGuard: CanActivateFn = () => {
       const router = inject(Router);
       const authService = inject(ApiService);
       if (authService.isLogedIn()) {

@@ -1,6 +1,5 @@
 import { Component, effect, inject } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { Feature } from '../../../models/projects';
 import { CommonModule } from '@angular/common';
@@ -23,7 +22,7 @@ export class ReviewBuildcardComponent {
   totalSubFeatures: any;
   rate: any
   private modal = inject(ModalService);
-  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router) {
+  constructor(private apiService: ApiService) {
     effect(() => {
       this.rate = this.apiService._rate()
     })

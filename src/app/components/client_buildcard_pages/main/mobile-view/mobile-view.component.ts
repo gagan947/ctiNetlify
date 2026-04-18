@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, Input, input, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, Input, ViewChild } from '@angular/core';
 import { ApiService } from '../../../../services/api.service';
 
 @Component({

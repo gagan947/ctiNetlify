@@ -6,7 +6,7 @@ import { SafeHtml, DomSanitizer, SafeResourceUrl } from '@angular/platform-brows
 import { RouterLink, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { Subject, firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { SubscriptionResponse } from '../../../../models/subcription';
 import { UserTemplate, GetUserTemplatesResponse } from '../../../../models/userTemplate';
 import { AiSocketService } from '../../../../services/ai-socket.service';
@@ -83,9 +83,7 @@ export class ReactBuildPreviewComponent {
   builds: any[] = [];
   currentBuildId = 1;
   parentBlock = []
-  private destroy$ = new Subject<void>();
   isTyping = true;
-  private frontendJobId = 0;
   private buildStepTimeouts: ReturnType<typeof setTimeout>[] = [];
   designMap = new Map<string, DesignSnapshot>();
   designOrder: any[] = [];   // keeps tab order
@@ -298,7 +296,6 @@ export class ReactBuildPreviewComponent {
     this.clearFirstBlockMinHeight();
     this.isTyping = true;
 
-    const jobId = ++this.frontendJobId;
     this.currentBuildId++;
 
     this.blocks = this.blocks.filter(block => block?.id !== 'action-prompt-build');
@@ -454,7 +451,7 @@ export class ReactBuildPreviewComponent {
     return el.scrollHeight - el.scrollTop - el.clientHeight < 120;
   }
 
-  scrollToBottom(force = false) {
+  scrollToBottom(_force = false) {
     if (!this.chatScroll) return;
     const el = this.chatScroll.nativeElement;
     // 🚀 auto-scroll freely UNTIL user touches scroll
@@ -513,7 +510,7 @@ export class ReactBuildPreviewComponent {
     this.subscriptionModalService.open(this.selected_template_id);
   }
 
-  openDeployModal(templateName: string) {
+  openDeployModal() {
     // this.selectedTemplateName = templateName;
 
     const modal = new bootstrap.Modal(
@@ -808,7 +805,7 @@ export class ReactBuildPreviewComponent {
         this.subscriptionModalService.open();
         return;
       }
-      this.openDeployModal('1');
+      this.openDeployModal();
       return;
     }
 

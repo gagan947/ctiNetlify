@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, viewChild, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { SidebarComponent } from "../client_buildcard_pages/sidebar/sidebar.component";
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';

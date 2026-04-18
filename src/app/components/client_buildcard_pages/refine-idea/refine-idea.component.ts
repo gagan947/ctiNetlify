@@ -1,5 +1,4 @@
 import { Component, effect, inject, Input } from '@angular/core';
-import { FormBuilder } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { Feature, FeatureResponse, SubFeature } from '../../../models/projects';
@@ -84,7 +83,7 @@ export class RefineIdeaComponent {
           } else {
           }
         },
-        error: err => {
+        error: () => {
         }
       });
   };
@@ -102,7 +101,7 @@ export class RefineIdeaComponent {
             this.isLoading = false
           }
         },
-        error: err => {
+        error: () => {
           this.isLoading = false
         }
       });
@@ -227,13 +226,6 @@ export class RefineIdeaComponent {
         this.addtionalFeatures[featureIndex].subFeatures.splice(subFeatureIndex, 1);
       } else {
         const newSub = { ...item, flashClass: 'flash-added' };
-        const newFeature = [{
-          flashClass: 'flash-added',
-          id: features.id,
-          featureName: features.featureName,
-          subFeatures: [newSub],
-          featureTime: item.estimated_time
-        }];
         this.addtionalFeatures[featureIndex].subFeatures.push(newSub);
 
         this.projectsFeaturs[featureIndex].featureTime = this.projectsFeaturs[featureIndex].subFeatures.reduce((pre: any, next: { estimated_time: any }) => pre + Number(next.estimated_time), 0);

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FooterComponent } from "../../shared/footer/footer.component";
 import { HeaderComponent } from "../../shared/header/header.component";
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 

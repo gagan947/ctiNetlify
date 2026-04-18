@@ -4,7 +4,6 @@ import { FooterComponent } from "../shared/footer/footer.component";
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 declare var bootstrap: any;
@@ -29,7 +28,7 @@ export class FreeDemoComponent {
   countries: any;
   myForm!: FormGroup;
   demoId: any;
-  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService) { }
+  constructor(private fb: FormBuilder, private apiService: ApiService, private message: NzMessageService) { }
   selectedFiles: File[] = [];
   isSubmitting: any = false;
   ngOnInit(): void {

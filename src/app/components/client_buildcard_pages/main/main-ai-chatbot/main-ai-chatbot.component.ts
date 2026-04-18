@@ -87,7 +87,6 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   lastUserPrompt = '';
   matchedProject: ProjectMatchPayload['project'] | null = null;
   matchedProjectScore: number | null = null;
-  private buildButtonRequested = false;
   private navigationSubscription?: Subscription;
   projectMatchPayload?: ProjectMatchPayload;
   constructor(
@@ -140,7 +139,6 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     ];
     this.lastUserPrompt = prompt;
     this.showBuildProjectButton = false;
-    this.buildButtonRequested = false;
     this.matchedProjectId = '';
     this.matchedProjectName = 'My Creative Project';
     this.matchedProject = null;
@@ -226,16 +224,14 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
           this.lastUserPrompt;
 
         this.showBuildProjectButton = false;
-        this.buildButtonRequested = false;
         this.currentLoaderText = 'Starting your project build...';
         this.scrollChatToBottom();
         this.buildMatchedProject();
       });
     });
 
-    this.socket.on('showBuildButton', (show: boolean) => {
+    this.socket.on('showBuildButton', (_show: boolean) => {
       this.ngZone.run(() => {
-        this.buildButtonRequested = !!show;
         this.showBuildProjectButton = true;
         this.completeLoadingState();
       });
@@ -340,7 +336,6 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.isSubmitting = true;
     this.currentLoaderText = 'Refining your project direction...';
     this.showBuildProjectButton = false;
-    this.buildButtonRequested = false;
     this.scrollChatToBottom();
     this.socket.emit('skipBuild');
   }

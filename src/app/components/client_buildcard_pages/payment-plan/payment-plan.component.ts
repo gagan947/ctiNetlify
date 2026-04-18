@@ -1,11 +1,9 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { Feature } from '../../../models/projects';
-import { FormBuilder, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { ProjectData, SelectedFeature } from '../../../models/sessionData';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { MobileViewComponent } from "../main/mobile-view/mobile-view.component";
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
@@ -39,7 +37,7 @@ export class PaymentPlanComponent {
   billingDetails: any
   userData: any;
   currencyCode = 'INR';
-  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private http: HttpClient) {
+  constructor(private apiService: ApiService, private router: Router, private http: HttpClient) {
 
     let projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
@@ -150,7 +148,7 @@ export class PaymentPlanComponent {
       next: (res: any) => {
         if (res.success) {
         }
-      }, error(err) {
+      }, error() {
 
       },
     })
@@ -193,8 +191,6 @@ export class PaymentPlanComponent {
           console.log(response.data.cf_offer_id);
 
           const paymentSessionId = response?.data?.payment_session_id;
-          const cf_offer_id = response?.data?.cf_offer_id;
-
           if (!paymentSessionId) {
             alert("Payment session missing");
             return;
@@ -230,8 +226,8 @@ export class PaymentPlanComponent {
             this.billingDetails = JSON.parse(res.data.billing_details)[0]
           }
         },
-        error: (err) => {
-          console.error('Error fetching blogs:', err);
+        error: (error) => {
+          console.error('Error fetching blogs:', error);
         }
       });
   }

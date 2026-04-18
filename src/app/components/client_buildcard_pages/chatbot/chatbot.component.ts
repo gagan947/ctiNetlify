@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, NgZone, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
@@ -30,10 +30,9 @@ export class ChatbotComponent {
   standardChatbot: boolean = true;
   userName: string = 'there';
   profileImage: string = 'assets/img/np_pro.png';
-  private autoScroll = true;
   @Output() dataEmitter = new EventEmitter<string>();
   basicOptions: any[] = []
-  constructor(private fb: FormBuilder, private apiservice: ApiService, private router: Router, private ngZone: NgZone) {
+  constructor(private apiservice: ApiService, private router: Router, private ngZone: NgZone) {
     const data: any = localStorage.getItem('userDetailCTI')
     if (data !== 'undefined') {
       const user = JSON.parse(data);
@@ -48,7 +47,6 @@ export class ChatbotComponent {
   ngOnInit() {
     this.basicOptions = this.flow['welcome'].options;
     this.socket = io(this.apiservice.apiUrl);
-    let currentBotMsg = "";
     // listen for streaming tokens
     this.socket.on('botReply', (msg: string) => {
 
@@ -99,7 +97,6 @@ export class ChatbotComponent {
     // when streaming ends
     this.socket.on('botDone', () => {
       console.log("✅ Bot finished response");
-      currentBotMsg = "";
     });
   }
 

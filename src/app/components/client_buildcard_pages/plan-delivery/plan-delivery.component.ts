@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, Input, signal } from '@angular/core';
-import { FormBuilder, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Feature } from '../../../models/projects';
 import { ApiService } from '../../../services/api.service';
@@ -58,13 +58,6 @@ export class PlanDeliveryComponent {
   designLink = '';
   originalEstimatedTime: number = 0;
   billingCycle = signal<BillingCycle>('monthly');
-  BASE_PRICES = {
-    personal: 49,
-    creative: 99,
-    booster: 199
-  };
-  YEARLY_DISCOUNT = 0.2;
-
   PLAN_PRICES = {
     monthly: {
       personal: 49,
@@ -85,7 +78,7 @@ export class PlanDeliveryComponent {
 
 
 
-  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService) {
+  constructor(private apiService: ApiService, private router: Router, private message: NzMessageService) {
     effect(() => {
       this.rate = this.apiService._rate()
     })
@@ -255,7 +248,7 @@ export class PlanDeliveryComponent {
     }
   }
 
-  totalCost(featureData: any) {
+  totalCost() {
     // this.total_cost_delivery = featureData.reduce((pre: any, next: { totalSubFeaturedPrice: any; totalCustomisationPrice: any; }) => pre + next.totalSubFeaturedPrice + next.totalCustomisationPrice, 0);
   }
 

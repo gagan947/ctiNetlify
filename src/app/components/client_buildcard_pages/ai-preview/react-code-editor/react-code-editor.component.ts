@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NuMonacoEditorComponent, NuMonacoEditorEvent, NuMonacoEditorModel } from '@ng-util/monaco-editor';
 import { NzSelectModule } from 'ng-zorro-antd/select';
@@ -77,7 +77,6 @@ export class ReactCodeEditorComponent {
       } else {
         this.startTyping()
       }
-      const model = this.editor.getModel();
       // model?.setValue('');
     }
   }

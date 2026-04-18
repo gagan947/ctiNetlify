@@ -1,6 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Country, State, City } from 'country-state-city'
+import { Country } from 'country-state-city'
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';

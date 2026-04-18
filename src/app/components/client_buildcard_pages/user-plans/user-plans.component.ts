@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, Renderer2 } from '@angular/core';
+import { Component } from '@angular/core';
 import { SubscriptionResponse } from '../../../models/subcription';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ApiService } from '../../../services/api.service';
@@ -117,7 +117,7 @@ export class UserPlansComponent {
 
 
         },
-        error: err => {
+        error: () => {
 
           setTimeout(() => {
             this.isCanceling = false;

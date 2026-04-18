@@ -57,11 +57,6 @@ export class SubcriptionPageComponent {
   showCalendly = false;
   billingCycle = signal<BillingCycle>('MONTH');
   projectsData: any;
-  billingDetails = {
-    name: '',
-    email: '',
-    phoneNumber: ''
-  };
   SearchCountryField = SearchCountryField
   CountryISO = CountryISO
   selectedPlan = signal<PlanType>('creative');
@@ -441,7 +436,7 @@ export class SubcriptionPageComponent {
           this.selectedProPlan =
             this.proPlans.find((plan) => plan.id === previousSelectedId) || this.proPlans[0] || null;
         },
-        error: err => {
+        error: () => {
           // this.loading = false
         }
       });

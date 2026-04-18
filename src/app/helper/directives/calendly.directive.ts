@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, Input, Output, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
 declare var Calendly: any;
 @Directive({
   selector: '[appCalendlyWidget]',
@@ -6,11 +6,7 @@ declare var Calendly: any;
 })
 export class CalendlyDirective {
   @Input() calendlyUrl!: string;
-  @Output() eventScheduled = new EventEmitter<any>();
   private loader!: HTMLElement;
-
-
-  private handleCalendlyEvent = this.onCalendlyEvent.bind(this);
   constructor(private el: ElementRef, private renderer: Renderer2) { }
 
   ngAfterViewInit(): void {
@@ -48,13 +44,6 @@ export class CalendlyDirective {
       if (iframe) {
         iframe.addEventListener('load', () => this.hideLoader());
       }
-    }
-  }
-
-  private onCalendlyEvent(e: MessageEvent) {
-    if (e.origin === 'https://calendly.com' && e.data.event === 'calendly.event_scheduled') {
-      console.log('Calendly event scheduled', e.data);
-      this.eventScheduled.emit(e.data);
     }
   }
 

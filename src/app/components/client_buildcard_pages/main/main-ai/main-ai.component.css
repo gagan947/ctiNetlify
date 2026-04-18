@@ -1,24 +1,6 @@
-.main-ai-page {
-  display: block !important;
-}
-
 .main-ai-page-shell {
   min-height: 100vh;
   background: #fff;
-}
-
-.main-ai-theme-shell {
-  position: relative;
-  min-height: calc(100vh - 45px);
-  height: calc(100vh - 45px);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  background:
-    radial-gradient(circle at 50% 62%, rgba(208, 131, 255, 0.22), transparent 28%),
-    radial-gradient(circle at 30% 88%, rgba(255, 188, 210, 0.22), transparent 22%),
-    radial-gradient(circle at 72% 84%, rgba(170, 198, 255, 0.24), transparent 24%),
-    linear-gradient(180deg, #ffffff 0%, #fffdfd 100%);
 }
 
 .main-ai-wrap {
@@ -193,20 +175,6 @@ background: linear-gradient(90deg, #0062FF 0%, #FF0099 100%);
 
 @media screen and (max-width: 767px) {
 
-
-  .main-ai-topbar__left,
-  .main-ai-topbar__right {
-    flex-wrap: wrap;
-  }
-
-  .main-ai-topbar__tab {
-    min-width: 0;
-    flex: 1 1 180px;
-  }
-
-  .main-ai-topbar__right {
-    justify-content: space-between;
-  }
 
   .main-ai-wrap {
     padding: 18px 14px;

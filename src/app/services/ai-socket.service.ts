@@ -9,7 +9,6 @@ export class AiSocketService {
   socketId!: any;
   socketReady$ = new BehaviorSubject<string | undefined>(undefined);
   private listening = false;
-  private frontendJobId = 0;
 
   constructor(private apiService: ApiService) {
     this.socket = io(this.apiService.apiUrl);

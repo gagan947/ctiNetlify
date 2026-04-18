@@ -89,7 +89,7 @@
     justify-content: start;
   }
 
-  .ct_middle_navbar li {
+  .ct_middle_navbar li+li {
     width: 100%;
   }
 

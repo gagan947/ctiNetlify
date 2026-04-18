@@ -1,7 +1,5 @@
 import { Component, effect, inject } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { SelectedFeature, ProjectData } from '../../../models/sessionData';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
@@ -11,7 +9,6 @@ import { MobileViewComponent } from '../main/mobile-view/mobile-view.component';
 import { ExchangeRatePipe } from '../../../helper/exchange-rate.pipe';
 import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
 import { ModalService } from '../../../services/modal.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { WorkspaceHeaderComponent } from "../workspace-header/workspace-header.component";
 declare var Razorpay: any;
 declare var Calendly: any;
@@ -54,7 +51,7 @@ export class PaymentDetailComponent {
   customerPhone: string = '+919090407368';
   private modal = inject(ModalService);
   billingDetails: any
-  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private http: HttpClient) {
+  constructor(private apiService: ApiService, private router: Router, private http: HttpClient) {
     effect(() => {
       this.rate = this.apiService._rate()
     })
@@ -120,7 +117,7 @@ export class PaymentDetailComponent {
         if (res.success) {
           this.router.navigate(['/payment-option'])
         }
-      }, error(err) {
+      }, error() {
         // this.message.error(err.error.message)
       },
     })
