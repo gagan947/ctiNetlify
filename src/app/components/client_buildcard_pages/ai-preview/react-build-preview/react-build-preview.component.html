@@ -126,6 +126,21 @@
     </div>
 </div>
 
+<div class="modal fade" id="buildGenerationFailedModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ct_build_failed_modal">
+            <div class="ct_build_failed_modal__icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h2>Build generation failed</h2>
+            <p>Please try again. We could not generate your project preview this time.</p>
+            <div class="actions">
+                <button class="btn-confirm button-deploy w-100" (click)="retryBuildGeneration()">Try Again</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade" id="ai_full_preview_modal" tabindex="-1">
     <div class="modal-dialog">

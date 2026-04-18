@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { SafeHtml, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterLink, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { firstValueFrom } from 'rxjs';
 import { SubscriptionResponse } from '../../../../models/subcription';
@@ -154,7 +153,6 @@ export class ReactBuildPreviewComponent {
     private aiService: AiSocketService,
     private router: Router,
     private toster: NzMessageService,
-    private modal: NzModalService,
     private subscriptionModalService: SubscriptionModalService,
     private subscriptionService: SubcriptionService
   ) {
@@ -166,7 +164,7 @@ export class ReactBuildPreviewComponent {
 
   async ngOnInit() {
     this.getUserSubscriptionPlan();
-
+    this.handleBuildGenerationFailure();
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
 
@@ -295,15 +293,27 @@ export class ReactBuildPreviewComponent {
     this.isIframeLoading = false;
     this.isTyping = false;
 
-    this.modal.error({
-      nzTitle: 'Build generation failed',
-      nzContent: 'Build generation failed. Please try again.',
-      nzOkText: 'Try Again',
-      nzMaskClosable: false,
-      nzClosable: true,
-      nzCentered: true,
-      nzOnOk: () => this.router.navigateByUrl('/main')
+    const modalElement = document.getElementById('buildGenerationFailedModal');
+    if (!modalElement) {
+      this.router.navigateByUrl('/main');
+      return;
+    }
+
+    const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement, {
+      backdrop: 'static',
+      keyboard: false
     });
+    modalInstance.show();
+  }
+
+  retryBuildGeneration() {
+    const modalElement = document.getElementById('buildGenerationFailedModal');
+    if (modalElement) {
+      bootstrap.Modal.getOrCreateInstance(modalElement).hide();
+    }
+
+    this.startFlow();
+    this.startPreview(null);
   }
 
 
@@ -780,11 +790,11 @@ export class ReactBuildPreviewComponent {
       text: {
         message: 'Do you want me to continue with the next step? Choose one option below.',
         options: [
-          {
-            id: 'regenerate_template',
-            title: 'Generate New Template',
-            description: 'Create another variation with a fresh layout and styling direction.'
-          },
+          // {
+          //   id: 'regenerate_template',
+          //   title: 'Generate New Template',
+          //   description: 'Create another variation with a fresh layout and styling direction.'
+          // },
           {
             id: 'customize_template',
             title: 'Customize This Template',
@@ -873,7 +883,6 @@ export class ReactBuildPreviewComponent {
 
 
   checkNDeploy() {
-
     if (this.subscriptionPlan.planType === 'free') {
       this.openModal();
       return;
