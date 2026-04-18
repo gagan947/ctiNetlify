@@ -133,6 +133,10 @@ export class ReactBuildPreviewComponent {
   pendingPreviewUrl: string | null = null;
   skipBuildPrompt = false;
   finalSummary: any = null;
+  private shouldDeferPreviewApply = false;
+  private hasInitialFlowCompleted = false;
+  private pendingPreviewResponse: { res: any; socketId: string | null } | null = null;
+  private pendingPreviewFailure = false;
   private readonly genericPreviewPages = ['Home', 'About', 'Features', 'Contact', 'Auth'];
   private readonly projectTypePageMap: Record<string, string[]> = {
     ecommerce: ['Home', 'Catalog', 'Details', 'Cart', 'Auth'],
@@ -164,7 +168,6 @@ export class ReactBuildPreviewComponent {
 
   async ngOnInit() {
     this.getUserSubscriptionPlan();
-    this.handleBuildGenerationFailure();
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
 
@@ -182,12 +185,9 @@ export class ReactBuildPreviewComponent {
       await this.showDraftWelcomeMessages();
       await this.loadDraftTemplates(templates);
       return;
-    } else {
-      setTimeout(() => {
-        this.startPreview(null);
-      });
     }
-    await this.startFlow();
+
+    await this.runInitialBuildSequence();
   }
 
   async getUserTemplates(): Promise<UserTemplate[]> {
@@ -232,9 +232,12 @@ export class ReactBuildPreviewComponent {
       .subscribe({
         next: (res: any) => {
           if (!res?.success || !res?.data?.templateId) {
-            this.handleBuildGenerationFailure();
+            this.queueBuildGenerationFailure();
             return;
           }
+
+          this.queueGeneratedPreview(res, socket_id);
+          return;
 
           this.isReactBuilding = true;
 
@@ -282,7 +285,7 @@ export class ReactBuildPreviewComponent {
           this.isTyping = false;
         },
         error: () => {
-          this.handleBuildGenerationFailure();
+          this.queueBuildGenerationFailure();
         }
       });
   }
@@ -301,14 +304,107 @@ export class ReactBuildPreviewComponent {
     modalInstance.show();
   }
 
+  private queueGeneratedPreview(res: any, socketId: string | null) {
+    if (this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
+      this.pendingPreviewResponse = { res, socketId };
+      return;
+    }
+
+    this.applyGeneratedPreview(res, socketId);
+  }
+
+  private applyGeneratedPreview(res: any, socketId: string | null) {
+    this.subscriptionService.loadSubscription();
+    this.isReactBuilding = true;
+
+    const templateId = res.data.templateId;
+    const proxyUrl = this.getPreviewProxyUrl(templateId);
+
+    if (res.data.variation) {
+      this.usedVariations.push(res.data.variation);
+    }
+
+    this.designCount++;
+
+    const designId = `design-${this.designCount}`;
+
+    const snapshot: DesignSnapshot = {
+      id: designId,
+      label: `Template ${this.designCount}`,
+      pages: res.data.pages,
+      loginRedirect: res.data.login_redirect,
+      createdAt: new Date(),
+      previewType: 'html'
+    };
+
+    this.designMap.set(designId, snapshot);
+
+    this.designOrder.push({
+      designId,
+      url: proxyUrl,
+      user_template_id: res.data.templateId || null,
+      variation_no: res.data.variation
+    });
+
+    this.activeDesignId = designId;
+
+    if (socketId) {
+      this.pendingPreviewUrl = proxyUrl;
+      this.isIframeLoading = true;
+    } else {
+      this.isIframeLoading = true;
+      this.safePreviewUrl =
+        this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
+    }
+
+    this.isReactBuilding = false;
+    this.isTyping = false;
+  }
+
+  private queueBuildGenerationFailure() {
+    if (this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
+      this.pendingPreviewFailure = true;
+      return;
+    }
+
+    this.handleBuildGenerationFailure();
+  }
+
+  private flushDeferredPreviewState() {
+    if (this.pendingPreviewFailure) {
+      this.pendingPreviewFailure = false;
+      this.handleBuildGenerationFailure();
+      return;
+    }
+
+    if (this.pendingPreviewResponse) {
+      const pendingResponse = this.pendingPreviewResponse;
+      this.pendingPreviewResponse = null;
+      this.applyGeneratedPreview(pendingResponse.res, pendingResponse.socketId);
+    }
+  }
+
+  private async runInitialBuildSequence() {
+    this.shouldDeferPreviewApply = true;
+    this.hasInitialFlowCompleted = false;
+    this.pendingPreviewResponse = null;
+    this.pendingPreviewFailure = false;
+
+    this.startPreview(null);
+    await this.startFlow();
+
+    this.hasInitialFlowCompleted = true;
+    this.shouldDeferPreviewApply = false;
+    this.flushDeferredPreviewState();
+  }
+
   retryBuildGeneration() {
     const modalElement = document.getElementById('buildGenerationFailedModal');
     if (modalElement) {
       bootstrap.Modal.getOrCreateInstance(modalElement).hide();
     }
 
-    this.startFlow();
-    this.startPreview(null);
+    this.runInitialBuildSequence();
   }
 
 
@@ -527,7 +623,6 @@ export class ReactBuildPreviewComponent {
 
 
   getUserSubscriptionPlan() {
-    this.subscriptionService.loadSubscription();
     this.subscriptionService.subscription$.subscribe((res: SubscriptionResponse) => {
       if (!res) {
         return;
