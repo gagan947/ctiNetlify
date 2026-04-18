@@ -1,39 +1,7 @@
-<section class="ct_google_callback_shell">
-  <div class="ct_google_callback_glow ct_google_callback_glow--blue"></div>
-  <div class="ct_google_callback_glow ct_google_callback_glow--gold"></div>
-
-  <div class="ct_google_callback_card">
-    <div class="ct_google_callback_badge">
-      <span class="ct_google_dot ct_google_dot--blue"></span>
-      <span class="ct_google_dot ct_google_dot--red"></span>
-      <span class="ct_google_dot ct_google_dot--yellow"></span>
-      <span class="ct_google_dot ct_google_dot--green"></span>
-      <span>Google Sign-In</span>
-    </div>
-
-    <div class="ct_google_loader" aria-hidden="true">
-      <div class="ct_google_loader_ring"></div>
-      <div class="ct_google_loader_ring ct_google_loader_ring--delay"></div>
-      <div class="ct_google_loader_core">
-        <span>G</span>
-      </div>
-    </div>
-
-    <div class="ct_google_callback_content">
-      <p class="ct_google_callback_eyebrow">Almost there</p>
-      <h1>Signing you in with Google</h1>
-      <p class="ct_google_callback_text">
-        We are validating your account and getting your Creative AI space ready.
-      </p>
-
-      <div class="ct_google_callback_steps">
-        @for (step of loadingSteps; track step; let i = $index) {
-        <div class="ct_google_callback_step" [class.ct_google_callback_step--active]="i === activeStepIndex">
-          <span class="ct_google_callback_step_bullet"></span>
-          <span>{{ step }}</span>
-        </div>
-        }
-      </div>
-    </div>
+<section class="ct_google_callback_simple">
+  <div class="ct_google_callback_simple__card">
+    <div class="ct_google_callback_simple__loader" aria-hidden="true"></div>
+    <h1>Signing you in</h1>
+    <p>Please wait while we complete your Google login.</p>
   </div>
 </section>

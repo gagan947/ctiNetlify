@@ -2,11 +2,13 @@ import { Routes } from '@angular/router';
 import { canDeactivateGuard } from './helper/guards/can-deactivate.guard';
 import { loginGuard } from './guard/login.guard';
 import { authGuard } from './guard/auth.guard';
+import { GoogleAuthCallbackComponent } from './components/google-auth-callback/google-auth-callback.component';
 
 export const routes: Routes = [
       {
             path: 'auth/google/callback',
-            loadComponent: () => import('./components/google-auth-callback/google-auth-callback.component').then(c => c.GoogleAuthCallbackComponent)
+            component: GoogleAuthCallbackComponent,
+            data: { preload: true }
       },
       {
             path: 'login', loadComponent: () => import('./components/login/login.component').then(c => c.LoginComponent), canActivate: [loginGuard],

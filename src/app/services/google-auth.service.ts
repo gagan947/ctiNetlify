@@ -52,33 +52,36 @@ export class GoogleAuthService {
     });
   }
 
-  startRedirectLogin() {
+  startRedirectLogin(forceAccountSelection = false) {
     const redirectUri = this.getRedirectUri();
     const url = new URL('https://accounts.google.com/o/oauth2/v2/auth');
     url.searchParams.set('client_id', this.clientId);
     url.searchParams.set('redirect_uri', redirectUri);
     url.searchParams.set('response_type', 'id_token');
     url.searchParams.set('scope', 'openid email profile');
-    url.searchParams.set('prompt', 'select_account');
+    if (forceAccountSelection) {
+      url.searchParams.set('prompt', 'select_account');
+    }
     url.searchParams.set('nonce', this.createNonce());
 
-    window.location.href = url.toString();
+    window.location.replace(url.toString());
   }
 
   completeRedirectLogin(hash: string) {
     const params = new URLSearchParams(hash.startsWith('#') ? hash.slice(1) : hash);
     const idToken = params.get('id_token');
     const error = params.get('error');
+    window.history.replaceState({}, document.title, this.getRedirectUri());
 
     if (error) {
       this.message.error('Google Sign-In was cancelled or failed.');
-      this.router.navigate(['/']);
+      this.router.navigateByUrl('/', { replaceUrl: true });
       return;
     }
 
     if (!idToken) {
       this.message.error('Google Sign-In did not return a valid token.');
-      this.router.navigate(['/']);
+      this.router.navigateByUrl('/', { replaceUrl: true });
       return;
     }
 
@@ -91,12 +94,11 @@ export class GoogleAuthService {
         if (res.success === true) {
           this.apiService.setToken(res.data.token);
           localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
-          this.message.success(res.message);
 
           if (res.data.user.profile_visited) {
-            this.router.navigate(['/main']);
+            this.router.navigateByUrl('/main', { replaceUrl: true });
           } else {
-            this.router.navigate(['/profile']);
+            this.router.navigateByUrl('/profile', { replaceUrl: true });
           }
         } else {
           this.message.error(res.message);
