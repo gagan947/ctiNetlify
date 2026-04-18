@@ -67,13 +67,13 @@
 }
 
 .ct_buy_credits__header h2 {
-  margin: 0 0 12px;
+  margin: 0 0 5px;
   color: #202531;
   font-size: 34px;
   line-height: 1.18;
   font-weight: 700;
   text-wrap: balance;
-  max-width: 640px;
+  /* max-width: 640px; */
 }
 
 .ct_buy_credits__subtitle {
@@ -86,7 +86,7 @@
 
 .ct_buy_credits__grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 14px;
 }
 

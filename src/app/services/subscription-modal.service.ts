@@ -61,7 +61,7 @@ export class SubscriptionModalService {
       },
       nzFooter: null,
       nzClosable: true,
-      nzMaskClosable: true,
+      nzMaskClosable: false,
       nzKeyboard: true,
       nzWidth: 1250,
       nzStyle: { top: '20px' },
@@ -100,10 +100,10 @@ export class SubscriptionModalService {
     >({
       nzContent: BuyMoreCreditsComponent,
       nzFooter: null,
-      nzClosable: false,
-      nzMaskClosable: true,
+      nzClosable: true,
+      nzMaskClosable: false,
       nzKeyboard: true,
-      nzWidth: 960,
+      nzWidth: 1250,
       nzStyle: { top: '20px' },
       nzClassName: 'buy-more-credits-modal-shell',
       nzBodyStyle: {
