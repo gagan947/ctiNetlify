@@ -118,7 +118,7 @@ export class SubscriptionModalService {
       nzClosable: true,
       nzMaskClosable: false,
       nzKeyboard: true,
-      nzWidth: 1250,
+      nzWidth: 833,
       nzStyle: { top: '60px' },
       nzClassName: 'buy-more-credits-modal-shell',
       nzBodyStyle: {
@@ -160,7 +160,7 @@ export class SubscriptionModalService {
       nzClosable: true,
       nzMaskClosable: false,
       nzKeyboard: true,
-      nzWidth: 940,
+      nzWidth: 866,
       nzStyle: { top: '12px' },
       nzClassName: 'user-plans-modal-shell',
       nzBodyStyle: {
