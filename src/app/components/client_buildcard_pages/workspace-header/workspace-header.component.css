@@ -361,6 +361,7 @@
     color: #9d9da3;
     font-size: 12px;
     font-weight: 600;
+    word-break: break-word;
 }
 
 .main-ai-profile-menu__swap {
