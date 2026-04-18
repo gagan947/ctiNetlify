@@ -29,19 +29,19 @@
                         <article class="ct_dashboard_card">
                               <div class="ct_dashboard_card__hero">
                                     <div class="ct_dashboard_card__top">
-                                      
-                                                <h2 class="mb-0">{{ project.projectName || 'Untitled Project' }}</h2>
-                                                
-                                         
-                                            <span class="ct_dashboard_status_badge" [ngClass]="getStatusClass(project)">
+
+                                          <h2 class="mb-0">{{ project.projectName || 'Untitled Project' }}</h2>
+
+
+                                          <span class="ct_dashboard_status_badge" [ngClass]="getStatusClass(project)">
                                                 {{ getProjectStatusLabel(project) }}
                                           </span>
                                     </div>
 
-                                    
 
-                                        
-                                   
+
+
+
                               </div>
 
                               <div class="ct_dashboard_card__body">
@@ -57,24 +57,18 @@
                                                       }}</strong>
                                           </div>
 
-                                          <div class="ct_dashboard_meta">
-                                                <span>Plan Usage</span>
-                                                <strong>{{ project.countsTowardsPlanLimit ? 'Counts toward plan' :
-                                                      'Excluded' }}</strong>
-                                          </div>
-
-                                          <div class="ct_dashboard_meta">
-                                                <span>{{ project.project_deployed === 1 ? 'Deployed URL' : 'Next Step'
-                                                      }}</span>
-                                                @if (project.project_deployed === 1 && project.deployed_url) {
-                                                <a class="ct_dashboard_link" [href]="project.deployed_url"
-                                                      target="_blank" rel="noopener">
-                                                      {{ getDeployedUrlLabel(project) }}
-                                                </a>
-                                                } @else {
-                                                <strong>Continue from preview workspace</strong>
-                                                }
-                                          </div>
+                                    </div>
+                                    <div class="ct_dashboard_meta mt-3">
+                                          <span>{{ project.project_deployed === 1 ? 'Deployed URL' : 'Next Step'
+                                                }}</span>
+                                          @if (project.project_deployed === 1 && project.deployed_url) {
+                                          <a class="ct_dashboard_link" [href]="project.deployed_url" target="_blank"
+                                                rel="noopener">
+                                                {{ getDeployedUrlLabel(project) }}
+                                          </a>
+                                          } @else {
+                                          <strong>Continue from preview workspace</strong>
+                                          }
                                     </div>
 
                                     <button type="button" class="ct_dashboard_card__action" (click)="navigate(project)">
