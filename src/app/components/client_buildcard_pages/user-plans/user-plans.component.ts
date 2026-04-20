@@ -67,9 +67,13 @@ interface CreditTransactionGroup {
 })
 export class UserPlansComponent {
   private destroyRef = inject(DestroyRef);
+  private readonly pageSize = 20;
+  private historyItems: CreditHistoryEntry[] = [];
+  private totalHistoryItems = 0;
 
   transactionGroups: CreditTransactionGroup[] = [];
   isHistoryLoading = false;
+  isLoadingMoreHistory = false;
 
   private subscriptionPlan: any = null;
 
@@ -117,6 +121,10 @@ export class UserPlansComponent {
     return this.transactionGroups.length > 0;
   }
 
+  get hasMoreHistory(): boolean {
+    return this.historyItems.length < this.totalHistoryItems;
+  }
+
   formatCredits(value: number): string {
     return `${Number(value || 0).toLocaleString('en-IN')} cr`;
   }
@@ -131,6 +139,15 @@ export class UserPlansComponent {
     this.subscriptionModalService.openBuyMoreCreditsModal();
   }
 
+  onHistoryScroll(event: Event): void {
+    const element = event.target as HTMLElement;
+    const remainingScroll = element.scrollHeight - element.scrollTop - element.clientHeight;
+
+    if (remainingScroll <= 120) {
+      this.loadCreditHistory(true);
+    }
+  }
+
   private loadSubscriptionDetails(): void {
     this.subscriptionService.loadSubscription();
     this.subscriptionService.subscription$
@@ -142,19 +159,43 @@ export class UserPlansComponent {
       });
   }
 
-  private loadCreditHistory(): void {
-    this.isHistoryLoading = true;
+  private loadCreditHistory(loadMore = false): void {
+    if (this.isHistoryLoading || this.isLoadingMoreHistory) {
+      return;
+    }
 
-    this.apiService.getCreditHistory<CreditHistoryResponse>(20, 0)
+    if (loadMore && !this.hasMoreHistory) {
+      return;
+    }
+
+    if (loadMore) {
+      this.isLoadingMoreHistory = true;
+    } else {
+      this.isHistoryLoading = true;
+      this.historyItems = [];
+      this.totalHistoryItems = 0;
+      this.transactionGroups = [];
+    }
+
+    const offset = this.historyItems.length;
+
+    this.apiService.getCreditHistory<CreditHistoryResponse>(this.pageSize, offset)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.transactionGroups = this.groupTransactions(response?.data?.items ?? []);
+          const newItems = response?.data?.items ?? [];
+          this.totalHistoryItems = Number(response?.data?.total ?? this.totalHistoryItems);
+          this.historyItems = [...this.historyItems, ...newItems];
+          this.transactionGroups = this.groupTransactions(this.historyItems);
           this.isHistoryLoading = false;
+          this.isLoadingMoreHistory = false;
         },
         error: () => {
-          this.transactionGroups = [];
           this.isHistoryLoading = false;
+          this.isLoadingMoreHistory = false;
+          if (!loadMore) {
+            this.transactionGroups = [];
+          }
           this.toster.error('Unable to load credit history right now.');
         }
       });

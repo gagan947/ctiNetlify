@@ -1133,7 +1133,7 @@ p {
   font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.04em;
-font-family: "Figtree", sans-serif;
+  font-family: "Figtree", sans-serif;
   text-transform: uppercase;
 }
 
@@ -1359,7 +1359,7 @@ font-family: "Figtree", sans-serif;
     width: fit-content;
   }
 
- 
+
 
   .ct_publish_project_modal__footer .button-deploy {
     width: 100%;
@@ -1445,4 +1445,8 @@ font-family: "Figtree", sans-serif;
 
 ::ng-deep .et_reload_icon {
   display: flex !important;
+}
+
+::ng-deep .main-ai-topbar__tab:not(.main-ai-topbar__tab.main-ai-topbar__tab--active) {
+  display: none !important;
 }

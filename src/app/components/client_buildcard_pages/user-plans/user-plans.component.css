@@ -115,6 +115,16 @@
   margin-top: 16px;
 }
 
+.ct_credit_inline_state {
+  display: flex;
+  justify-content: center;
+  padding: 18px 12px 4px;
+  color: #737686;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: "Figtree", sans-serif;
+}
+
 .ct_credit_group h3 {
   margin: 0 0 12px;
   color: #737686;

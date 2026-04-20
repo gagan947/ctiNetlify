@@ -192,7 +192,7 @@ export class BuyMoreCreditsComponent {
       },
       error: (err) => {
         console.error(err);
-        this.message.error('An error occurred while processing your request. Please try again later.');
+        this.message.error(err.error.message || 'Failed to create top-up order. Please try again.');
       }
     });
   }

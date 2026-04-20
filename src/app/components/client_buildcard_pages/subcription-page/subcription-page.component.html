@@ -31,7 +31,7 @@
                   <div class="ct_price_offer">{{ introOfferLabel(plan) }}</div>
                 </div>
               </div>
-              <a (click)="getStarted(plan)">Get Started</a>
+              <a aria-disabled="true" class="disable_btn">Get Started</a>
             </div>
             <div class="ct_price_card_bottom">
               <h4>Features you will get:</h4>
@@ -212,7 +212,7 @@
   <div class="modal-content rounded-4" *ngIf="billingSummaryModalOpen">
     <!-- HEADER -->
     <div class="modal-header">
-      <h5 class="modal-title mt-2 ps-4">Confirm your subscription</h5>
+      <h5 class="modal-title mt-2 ps-4">Confirm Your Plan</h5>
       <!-- <button type="button" class="btn-close" (click)="closeModal()"></button> -->
     </div>
 

@@ -27,49 +27,54 @@
         </article>
       </div>
 
-      <div class="ct_credit_transactions_scroll">
+      <div class="ct_credit_transactions_scroll" (scroll)="onHistoryScroll($event)">
         @if (isHistoryLoading) {
-          <div class="ct_credit_state_card">
-            <h3>Loading history...</h3>
-            <p>Fetching your latest credit transactions.</p>
-          </div>
+        <div class="ct_credit_state_card">
+          <h3>Loading history...</h3>
+          <p>Fetching your latest credit transactions.</p>
+        </div>
         } @else if (hasTransactions) {
-          @for (group of transactionGroups; track group.label) {
-            <section class="ct_credit_group">
-              <h3>{{ group.label }}</h3>
+        @for (group of transactionGroups; track group.label) {
+        <section class="ct_credit_group">
+          <h3>{{ group.label }}</h3>
 
-              <div class="ct_credit_group_card">
-                @for (item of group.items; track item.id; let isLast = $last) {
-                  <article class="ct_credit_transaction_row" [class.ct_credit_transaction_row--last]="isLast">
-                    <div class="ct_credit_transaction_main">
-                      <div class="ct_transaction_icon" [ngClass]="item.iconClass">
-                        <i class="fa-solid" [ngClass]="item.icon"></i>
-                      </div>
+          <div class="ct_credit_group_card">
+            @for (item of group.items; track item.id; let isLast = $last) {
+            <article class="ct_credit_transaction_row" [class.ct_credit_transaction_row--last]="isLast">
+              <div class="ct_credit_transaction_main">
+                <div class="ct_transaction_icon" [ngClass]="item.iconClass">
+                  <i class="fa-solid" [ngClass]="item.icon"></i>
+                </div>
 
-                      <div class="ct_credit_transaction_copy">
-                        <h4>{{ item.title }}</h4>
-                        <p>{{ item.subtitle }}</p>
-                      </div>
-                    </div>
-
-                    <div class="ct_credit_transaction_meta">
-                      <strong
-                        [class.ct_credit_delta_positive]="item.delta > 0"
-                        [class.ct_credit_delta_negative]="item.delta < 0">
-                        {{ formatDelta(item.delta) }}
-                      </strong>
-                      <span>{{ item.time }}</span>
-                    </div>
-                  </article>
-                }
+                <div class="ct_credit_transaction_copy">
+                  <h4>{{ item.title }}</h4>
+                  <p>{{ item.subtitle }}</p>
+                </div>
               </div>
-            </section>
-          }
-        } @else {
-          <div class="ct_credit_state_card">
-            <h3>No transactions yet</h3>
-            <p>Your credit usage and top-ups will appear here once activity starts.</p>
+
+              <div class="ct_credit_transaction_meta">
+                <strong [class.ct_credit_delta_positive]="item.delta > 0"
+                  [class.ct_credit_delta_negative]="item.delta < 0">
+                  {{ formatDelta(item.delta) }}
+                </strong>
+                <span>{{ item.time }}</span>
+              </div>
+            </article>
+            }
           </div>
+        </section>
+        }
+
+        @if (isLoadingMoreHistory) {
+        <div class="ct_credit_inline_state">
+          <span>Loading more transactions...</span>
+        </div>
+        }
+        } @else {
+        <div class="ct_credit_state_card">
+          <h3>No transactions yet</h3>
+          <p>Your credit usage and top-ups will appear here once activity starts.</p>
+        </div>
         }
       </div>
     </div>

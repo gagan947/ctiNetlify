@@ -1126,9 +1126,13 @@ section {
   }
 }
 
+.disable_btn {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
 @media screen and (max-width:575px) {
   .ct_prompt_hero {
     padding-inline: 0px;
   }
 }
-
