@@ -220,8 +220,7 @@ export class UserPlansComponent {
   private mapTransactionItem(item: CreditHistoryEntry): CreditTransactionItem {
     const meta = item.meta_json ?? {};
     const packName = typeof meta['pack_name'] === 'string' ? meta['pack_name'] : '';
-    const referenceId = item.reference_id ? `Ref: ${item.reference_id}` : '';
-    const subtitle = packName || referenceId || item.source_key.replace(/_/g, ' ');
+    const subtitle = packName;
 
     return {
       id: item.id,

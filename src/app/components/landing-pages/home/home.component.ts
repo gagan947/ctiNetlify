@@ -127,7 +127,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       state: 'origin:web',
       usePopup: true
     });
-    
+
   }
 
   ngOnDestroy(): void {
@@ -243,20 +243,8 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       features.push('Top-up Credits');
     }
 
-    if (Number(plan.github_integration) === 1) {
-      features.push('GitHub Integration');
-    }
-
-    if (Number(plan.custom_features) === 1) {
-      features.push('Custom Features');
-    }
-
-    if (Number(plan.can_delete) === 1) {
-      features.push('Delete Projects');
-    }
-
     if (Number(plan.can_deploy) === 1) {
-      features.push('Deploy to Server');
+      features.push('Deployment Access');
     }
 
     return features;
@@ -305,10 +293,10 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       this.mainSwiperInstance = new Swiper(mainSwiperElement, {
         loop: true,
         speed: 1000,
-         spaceBetween: 10,
-           nested: true,
-  observer: true,
-  observeParents: true,
+        spaceBetween: 10,
+        nested: true,
+        observer: true,
+        observeParents: true,
         autoplay: false,
         navigation: {
           nextEl: mainSwiperElement.querySelector('.swiper-button-next'),
@@ -321,15 +309,15 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       });
     }
 
-if (innerSwiperElement) {
-  this.innerSwiperInstance = new Swiper(innerSwiperElement, {
-    
-    loop: true,
-    slidesPerView: 'auto',
-    spaceBetween: 10,
-    speed: 1000,
-      nested: true,
-  watchSlidesProgress: true,
+    if (innerSwiperElement) {
+      this.innerSwiperInstance = new Swiper(innerSwiperElement, {
+
+        loop: true,
+        slidesPerView: 'auto',
+        spaceBetween: 10,
+        speed: 1000,
+        nested: true,
+        watchSlidesProgress: true,
 
 
         autoplay: {
@@ -344,17 +332,17 @@ if (innerSwiperElement) {
         observeParents: true,
       });
 
-  setTimeout(() => {
-    this.innerSwiperInstance.update();
-    this.innerSwiperInstance.autoplay.start();
-  }, 100);
-  
-}
+      setTimeout(() => {
+        this.innerSwiperInstance.update();
+        this.innerSwiperInstance.autoplay.start();
+      }, 100);
+
+    }
 
   }
 
-  
-  
+
+
   private destroySwipers() {
     if (this.mainSwiperInstance?.destroy) {
       this.mainSwiperInstance.destroy(true, true);

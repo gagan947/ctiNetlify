@@ -520,18 +520,6 @@ export class SubcriptionPageComponent {
       features.push('Deployment Access');
     }
 
-    if (plan.github_integration) {
-      features.push('GitHub Integration');
-    }
-
-    if (plan.custom_features) {
-      features.push('Custom Features');
-    }
-
-    if (plan.can_delete) {
-      features.push('Delete Projects');
-    }
-
     return features;
   }
 
