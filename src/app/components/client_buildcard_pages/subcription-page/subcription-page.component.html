@@ -1,10 +1,10 @@
 <div class="ct_subscription_modal_root">
-  <div class="modal-content p-4 rounded-4 pt-3" *ngIf="!billingSummaryModalOpen">
+  <div class="modal-content p-4 rounded-4 pt-4" *ngIf="!billingSummaryModalOpen">
     <div class="container">
       <div class="ct_subscription_topbar">
         <div class="ct_section_heading text-center">
-          <h2 class="ct_fw_600 ct_fs_40 mb-3">Choose the perfect plan for you</h2>
-          <div class="ct_pricing_toggle">
+          <h4 class="ct_fw_600 ct_fs_32 mb-3">Choose the perfect plan for you</h4>
+          <div class="ct_pricing_toggle mb-0">
             <button type="button" [class.active]="billingCycle() === 'MONTH'"
               (click)="setBillingCycle('MONTH')">Monthly</button>
             <button type="button" [class.active]="billingCycle() === 'YEAR'"
