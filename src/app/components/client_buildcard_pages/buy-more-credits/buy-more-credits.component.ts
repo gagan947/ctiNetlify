@@ -27,7 +27,8 @@ export class BuyMoreCreditsComponent {
   topUpPacks: TopUpPack[] = [];
   isLoading = false;
   customAmount = '';
-
+  customCredits = 0;
+  customAmountError = '';
   private readonly fallbackTopUpPacks: TopUpPack[] = [
     {
       id: 16,
@@ -156,17 +157,13 @@ export class BuyMoreCreditsComponent {
     const input = event.target as HTMLInputElement | null;
     const rawValue = input?.value || '';
     this.customAmount = rawValue.replace(/[^\d.]/g, '');
-  }
-
-  get customCredits(): number {
-    const amount = Number(this.customAmount || 0);
-    if (!amount || amount <= 0) {
-      return 0;
+    if (Number(this.customAmount) < 1650) {
+      this.customAmountError = 'Minimum amount is 1650 INR';
+      return;
     }
 
-    const mediumPack = this.topUpPacks.find(pack => pack.pack_key === 'topup_medium_5000');
-    const creditsPerRupee = mediumPack ? mediumPack.credits / Number(mediumPack.price_inr) : 0.052;
-    return Math.floor(amount * creditsPerRupee);
+    this.customAmountError = '';
+    this.customCredits = this.customAmount ? Math.round(Number(this.customAmount) / 16.50) : 0;
   }
 
   closeModal() {
@@ -179,8 +176,20 @@ export class BuyMoreCreditsComponent {
       .sort((a, b) => a.sort_order - b.sort_order);
   }
 
-  buyCredits(pack: TopUpPack) {
-    this.apiService.postAPI('api/payment/create-topup-order', { packKey: pack.pack_key }).subscribe({
+  buyCredits(pack: TopUpPack | null) {
+
+    let payload = {};
+    if (pack) {
+      payload = {
+        packKey: pack.pack_key
+      };
+    } else {
+      payload = {
+        customAmountInr: this.customAmount
+      };
+    }
+
+    this.apiService.postAPI('api/payment/create-topup-order', payload).subscribe({
       next: (res: any) => {
         if (res.success) {
           if (res.data.payment_session_id) {

@@ -61,6 +61,10 @@
   gap: 14px;
 }
 
+.ct_buy_credits__custom_error {
+  color: red;
+}
+
 .ct_credit_card {
   position: relative;
   min-height: 100%;
@@ -112,8 +116,8 @@
   font-weight: 700;
   line-height: 1.2;
   margin-top: 0px;
-    font-family: "Figtree", sans-serif;
-    margin-bottom: 8px;
+  font-family: "Figtree", sans-serif;
+  margin-bottom: 8px;
 
 }
 
@@ -127,11 +131,12 @@
 }
 
 .ct_credit_card__price strong {
-    color: #35BE3A;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 1.2;
+  color: #35BE3A;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
 }
+
 .ct_credit_card__benefits {
   list-style: none;
   padding: 0;
