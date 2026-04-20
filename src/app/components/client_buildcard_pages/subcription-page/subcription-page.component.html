@@ -23,18 +23,22 @@
               </span>
             </div>
             <div class="ct_price_card_top">
-              <span class="ct_price_badge">Free</span>
-              <h3>&#8377;{{ getDisplayAmount(plan) }}<span>{{ getBillingSuffix(plan) }}</span></h3>
-              <p class="mb-4">{{ planDescription(plan) }}</p>
+              <span class="ct_price_badge">{{ getPlanBadge(plan) }}</span>
+              <h3 class="ct_price_credits">{{ plan.credits_per_cycle }} Credits</h3>
+              <div class="ct_price_value">
+                <span class="ct_price_current">&#8377;{{ getCurrentPrice(plan) }}</span>
+                <span class="ct_price_suffix">{{ getBillingSuffix(plan) }}</span>
+              </div>
+              <p>{{ planDescription(plan) }}</p>
               <div class="ct_price_offer_slot">
                 <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
                   <div class="ct_price_offer">{{ introOfferLabel(plan) }}</div>
                 </div>
               </div>
-              <a aria-disabled="true" class="disable_btn">Get Started</a>
+              <a aria-disabled="true" class="disable_btn ct_price_cta">{{ getPlanButtonLabel(plan) }}</a>
             </div>
             <div class="ct_price_card_bottom">
-              <h4>Features you will get:</h4>
+              <h4>{{ getPlanFeaturesTitle(plan) }}</h4>
               <ul>
                 <li *ngFor="let feature of planFeatures(plan)">
                   <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -58,16 +62,14 @@
                       </clipPath>
                     </defs>
                   </svg>
-                  {{ feature }}
+                  <span>{{ feature }}</span>
                 </li>
               </ul>
+              <p class="ct_price_note">{{ getPlanFootnote(plan) }}</p>
             </div>
           </div>
         </div>
         <div class="ct_price_card ct_price_card_featured" *ngIf="selectedProPlan as plan">
-          <div class="ribbon">
-            <img src="assets/img/ribbin_price.png" alt="">
-          </div>
           <div class="inner-div">
             <div class="ct_plan_status_group" *ngIf="getPlanBadges(plan).length">
               <span class="ct_plan_status_badge" *ngFor="let badge of getPlanBadges(plan)"
@@ -78,11 +80,15 @@
 
             <div class="ct_price_card_top">
 
-              <span class="ct_price_badge">Pro</span>
-              <h3 class="mb-0 ct_fs_20" [ngClass]="billingCycle() === 'YEAR' ? 'opacity-100' : 'opacity-50'">
-                &#8377;<span [ngClass]="billingCycle() === 'YEAR' ? 'opacity-100' : 'ct_del_price'">{{
-                  getDisplayAmount(plan) }}</span><span>{{ getBillingSuffix(plan) }}</span>
-              </h3>
+              <span class="ct_price_badge">{{ getPlanBadge(plan) }}</span>
+              <h3 class="ct_price_credits">{{ plan.credits_per_cycle }} Credits</h3>
+              <div class="ct_price_value ct_price_value_compact" [class.ct_price_value_with_old]="shouldShowPreviousPrice(plan)">
+                <span class="ct_price_previous" *ngIf="shouldShowPreviousPrice(plan)">
+                  &#8377;{{ getDisplayAmount(plan) }}{{ getBillingSuffix(plan) }}
+                </span>
+                <span class="ct_price_current">&#8377;{{ getCurrentPrice(plan) }}</span>
+                <span class="ct_price_suffix">{{ getBillingSuffix(plan) }}</span>
+              </div>
               <div class="ct_price_offer_slot">
                 <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
                   <div class="ct_price_offer">{{ introOfferLabel(plan) }}</div>
@@ -97,7 +103,7 @@
                 </div>
               </div>
               <p>{{ planDescription(plan) }}</p>
-              <a (click)="getStarted(plan)" class="mb-3">Get Started</a>
+              <a (click)="handlePlanAction(plan)" class="ct_price_cta ct_price_cta_filled">{{ getPlanButtonLabel(plan) }}</a>
               <div class="position-relative" *ngIf="proPlans.length > 1" (click)="$event.stopPropagation()">
                 <button type="button" class="ct_starter_plan" (click)="toggleProDropdown($event)">
                   {{ plan.credits_per_cycle }} credits {{
@@ -107,15 +113,15 @@
                 <ul class="dropdown-menu show" *ngIf="proDropdownOpen">
                   <li *ngFor="let proPlan of proDropdownPlans">
                     <button type="button" class="dropdown-item" (click)="selectProPlan(proPlan, $event)">
-                      {{ proPlan.credits_per_cycle }} credits - &#8377;{{ getDisplayAmount(proPlan) }}{{
+                      {{ proPlan.credits_per_cycle }} credits - &#8377;{{ getCurrentPrice(proPlan) }}{{
                       getBillingSuffix(proPlan) }}
                     </button>
                   </li>
                 </ul>
               </div>
             </div>
-            <div class="ct_price_card_bottom" style="margin-top: 24px;">
-              <h4>Features you will get:</h4>
+            <div class="ct_price_card_bottom">
+              <h4>{{ getPlanFeaturesTitle(plan) }}</h4>
               <ul>
                 <li *ngFor="let feature of planFeatures(plan)">
                   <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -139,9 +145,10 @@
                       </clipPath>
                     </defs>
                   </svg>
-                  {{ feature }}
+                  <span>{{ feature }}</span>
                 </li>
               </ul>
+              <p class="ct_price_note">{{ getPlanFootnote(plan) }}</p>
             </div>
           </div>
         </div>
@@ -154,10 +161,12 @@
               </span>
             </div>
             <div class="ct_price_card_top">
-              <span class="ct_price_badge">Business</span>
-              <h3 class="mb-0 ct_fs_20" [ngClass]="billingCycle() === 'YEAR' ? 'opacity-100' : 'opacity-50'">
-                &#8377;<span [ngClass]="billingCycle() === 'YEAR' ? '' : 'ct_del_price'">{{ getDisplayAmount(plan)
-                  }}</span><span>{{ getBillingSuffix(plan) }}</span></h3>
+              <span class="ct_price_badge">{{ getPlanBadge(plan) }}</span>
+              <h3 class="ct_price_credits">{{ plan.credits_per_cycle }} Credits</h3>
+              <div class="ct_price_value">
+                <span class="ct_price_current">&#8377;{{ getCurrentPrice(plan) }}</span>
+                <span class="ct_price_suffix">{{ getBillingSuffix(plan) }}</span>
+              </div>
               <div class="ct_price_offer_slot">
                 <div class="ct_price_offer_wrap d-flex align-items-center gap-2 justify-content-center"
                   *ngIf="hasDiscount(plan)">
@@ -172,10 +181,10 @@
                 </div>
                 <p class="plan_description">{{ planDescription(plan) }}</p>
               </div>
-              <a (click)="getStarted(plan)">Get Started</a>
+              <a (click)="handlePlanAction(plan)" class="ct_price_cta">{{ getPlanButtonLabel(plan) }}</a>
             </div>
             <div class="ct_price_card_bottom">
-              <h4>Features you will get:</h4>
+              <h4>{{ getPlanFeaturesTitle(plan) }}</h4>
               <ul>
                 <li *ngFor="let feature of planFeatures(plan)">
                   <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -199,9 +208,10 @@
                       </clipPath>
                     </defs>
                   </svg>
-                  {{ feature }}
+                  <span>{{ feature }}</span>
                 </li>
               </ul>
+              <p class="ct_price_note">{{ getPlanFootnote(plan) }}</p>
             </div>
           </div>
         </div>

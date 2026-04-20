@@ -260,10 +260,6 @@ export class SubcriptionPageComponent {
     return this.proPlans.filter((plan) => plan.id !== this.selectedProPlan?.id);
   }
 
-  selectPlan(plan: PlanType) {
-    this.selectedPlan.set(plan);
-  }
-
   getStarted(planData: Plan) {
     this.selectedPlan.set(this.mapPlanType(planData));
     this.billingSummaryModalOpen = true;
@@ -346,14 +342,6 @@ export class SubcriptionPageComponent {
 
     const amount = this.showIntroOffer(plan) ? plan.intro_amount : plan.amount;
     return this.formatCurrency(amount, plan.currency);
-  }
-
-  renewalLabel(plan: Plan): string {
-    if (!this.showIntroOffer(plan)) {
-      return '';
-    }
-
-    return `Then ${this.formatCurrency(plan.amount, plan.currency)}${this.priceSubLabel(plan).toLowerCase()} from the next billing cycle`;
   }
 
   formatCurrency(amount: string | number, currency?: string): string {
@@ -443,84 +431,129 @@ export class SubcriptionPageComponent {
       });
   }
 
-  formatPrice(plan: Plan): string {
-    const currency = plan?.display_currency || plan?.currency || 'INR';
-    const symbol = this.currencySymbolMap[currency] || `${currency} `;
-    const amount = Number(plan?.display_amount ?? plan?.amount ?? 0);
-    const formatted = amount.toLocaleString('en-IN', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
-    return `${symbol}${formatted}`;
-  }
-
   getDisplayAmount(plan: Plan | null): string {
     return plan?.display_amount || '0.00';
-  }
-
-  billingLabel(interval: string): string {
-    return interval === 'YEAR' ? 'Year' : 'Month';
-  }
-
-  supportLabel(type: string): string {
-    switch (type) {
-      case 'CHAT':
-        return 'Chat Support';
-      case 'PRIORITY':
-        return 'Priority Support';
-      case 'NONE':
-        return 'Basic Support';
-      default:
-        return 'Support';
-    }
-  }
-
-  currentPlanDescription(plan: Plan | null): string {
-    if (!plan) {
-      return 'Choose a plan to unlock more credits, integrations, and deployment options.';
-    }
-
-    return `${plan.credits_per_cycle} credit${plan.credits_per_cycle > 1 ? 's' : ''} per ${(plan.credit_grant_interval || plan.billing_interval).toLowerCase()}`;
   }
 
   planDescription(plan: Plan): string {
     switch (plan?.plan_type) {
       case 'FREE':
-        return 'Perfect for individuals to build, launch, and manage a single project with essential tools.';
+        return 'Best for exploring the platform';
       case 'PRO':
-        return 'Built for creators and teams to design, customize, and scale high-impact projects.';
+        return 'Perfect to build your first real product';
       case 'BUSINESS':
-        return 'Ideal for growing teams that need advanced controls, integrations, and priority support.';
+        return 'For agencies & enterprise teams';
       default:
         return 'Choose the plan that matches your needs and scale as you grow.';
     }
-  }
-
-  priceSubLabel(plan: Plan): string {
-    return plan.plan_type === 'FREE' ? '/Always Free' : `/${this.billingLabel(plan.billing_interval)}`;
   }
 
   getBillingSuffix(plan: Plan | null): string {
     return `/${(plan?.billing_interval || this.billingCycle()).toLowerCase()}`;
   }
 
+  getPlanBadge(plan: Plan | null): string {
+    switch (plan?.plan_type) {
+      case 'FREE':
+        return 'FREE PLAN';
+      case 'PRO':
+        return 'STANDARD PLAN';
+      case 'BUSINESS':
+        return 'ENTERPRISE PLAN';
+      default:
+        return '';
+    }
+  }
+
+  getPlanFeaturesTitle(plan: Plan | null): string {
+    return plan?.plan_type === 'BUSINESS' ? 'Pro Features and you will get:' : 'Features you will get:';
+  }
+
   planFeatures(plan: Plan): string[] {
-    const features = [
-      `${plan.credits_per_cycle} Credit${plan.credits_per_cycle > 1 ? 's' : ''} per ${(
-        plan.credit_grant_interval || plan.billing_interval
-      ).toLowerCase()}`,
-      this.supportLabel(plan.support_type)
-    ];
+    switch (plan?.plan_type) {
+      case 'FREE':
+        return [
+          'Create your first project (at 25 credits)',
+          'Use remaining credits for minor edits & tweaks',
+          'Access to basic AI generation',
+          'Single agent processing',
+          'Chat-based interaction only'
+        ];
+      case 'PRO':
+        return [
+          'Create full-scale projects',
+          'Basic deployment access',
+          'Standard customization (credit-based)',
+          'Faster generation vs free plan',
+          'Clean production-ready outputs'
+        ];
+      case 'BUSINESS':
+        return [
+          'Unlimited scale project creation',
+          'Enterprise-grade deployment infrastructure',
+          'Full customization freedom (no limitations)',
+          'Chat + Email + Phone Support',
+          'Maximum speed & priority processing',
+          'Optimized for large-scale automation'
+        ];
+      default:
+        return [];
+    }
+  }
 
-    if (plan.topup_allowed) {
-      features.push('Top-up Credits');
+  getPlanButtonLabel(plan: Plan | null): string {
+    switch (plan?.plan_type) {
+      case 'FREE':
+        return 'Start Free';
+      case 'PRO':
+        return 'Get Started';
+      case 'BUSINESS':
+        return 'Contact Sales';
+      default:
+        return 'Get Started';
+    }
+  }
+
+  getPlanFootnote(plan: Plan | null): string {
+    switch (plan?.plan_type) {
+      case 'FREE':
+        return 'Upgrade anytime or buy credits directly';
+      case 'PRO':
+        return 'Auto-upgrades to Standard plan next month.';
+      case 'BUSINESS':
+        return 'Tailored for high-end business workflows';
+      default:
+        return '';
+    }
+  }
+
+  shouldShowPreviousPrice(plan: Plan | null): boolean {
+    return !!plan && plan.plan_type === 'PRO' && this.showIntroOffer(plan);
+  }
+
+  getCurrentPrice(plan: Plan | null): string {
+    if (!plan) {
+      return '0.00';
     }
 
-    if (plan.can_deploy) {
-      features.push('Deployment Access');
+    if (this.shouldShowPreviousPrice(plan)) {
+      return String(plan.intro_amount || '0.00');
     }
 
-    return features;
+    return this.getDisplayAmount(plan);
+  }
+
+  handlePlanAction(plan: Plan): void {
+    if (plan.plan_type === 'BUSINESS') {
+      this.openCalednlyModal();
+      return;
+    }
+
+    if (plan.plan_type === 'FREE') {
+      return;
+    }
+
+    this.getStarted(plan);
   }
 
   hasDiscount(plan: Plan | null): boolean {
