@@ -1,68 +1,77 @@
 <section class="ct_credit_transactions_modal">
   <div class="ct_credit_transactions_dialog">
-    <!-- <button type="button" class="ct_credit_transactions_close" (click)="closeModal()" aria-label="Close">
-      <i class="fa-solid fa-xmark"></i>
-    </button> -->
-
     <div class="px-3">
       <div class="ct_credit_transactions_head">
-      <div>
-        <h2 class="mb-1">Credit Transactions</h2>
-        <p>A detailed history of your credit usage and top-ups.</p>
-      </div>
-    </div>
-
-    <div class="ct_credit_summary_grid">
-      <article class="ct_credit_summary_card">
-        <span>Total Balance</span>
-        <strong class="ct_credit_summary_primary">{{ formatCredits(totalBalance) }}</strong>
-      </article>
-      <article class="ct_credit_summary_card">
-        <span>Plan Credits</span>
-        <strong>{{ formatCredits(planCredits) }}</strong>
-      </article>
-      <article class="ct_credit_summary_card">
-        <span>Top-up Credits</span>
-        <strong>{{ formatCredits(topUpCredits) }}</strong>
-      </article>
-      <article class="ct_credit_summary_card">
-        <span>Free Credits</span>
-        <strong>{{ formatCredits(freeCredits) }}</strong>
-      </article>
-    </div>
-
-    <div class="ct_credit_transactions_scroll">
-      @for (group of transactionGroups; track group.label) {
-      <section class="ct_credit_group">
-        <h3>{{ group.label }}</h3>
-
-        <div class="ct_credit_group_card">
-          @for (item of group.items; track item.id; let isLast = $last) {
-          <article class="ct_credit_transaction_row" [class.ct_credit_transaction_row--last]="isLast">
-            <div class="ct_credit_transaction_main">
-              <div class="ct_transaction_icon" [ngClass]="item.iconClass">
-                <i class="fa-solid" [ngClass]="item.icon"></i>
-              </div>
-
-              <div class="ct_credit_transaction_copy">
-                <h4>{{ item.title }}</h4>
-                <p>{{ item.subtitle }}</p>
-              </div>
-            </div>
-
-            <div class="ct_credit_transaction_meta">
-              <strong [class.ct_credit_delta_positive]="item.delta > 0"
-                [class.ct_credit_delta_negative]="item.delta < 0">
-                {{ formatDelta(item.delta) }}
-              </strong>
-              <span>{{ item.time }}</span>
-            </div>
-          </article>
-          }
+        <div>
+          <h2 class="mb-1">Credit Transactions</h2>
+          <p>A detailed history of your credit usage and top-ups.</p>
         </div>
-      </section>
-      }
-    </div>
+      </div>
+
+      <div class="ct_credit_summary_grid">
+        <article class="ct_credit_summary_card">
+          <span>Total Balance</span>
+          <strong class="ct_credit_summary_primary">{{ formatCredits(totalBalance) }}</strong>
+        </article>
+        <article class="ct_credit_summary_card">
+          <span>Plan Credits</span>
+          <strong>{{ formatCredits(planCredits) }}</strong>
+        </article>
+        <article class="ct_credit_summary_card">
+          <span>Top-up Credits</span>
+          <strong>{{ formatCredits(topUpCredits) }}</strong>
+        </article>
+        <article class="ct_credit_summary_card">
+          <span>Free Credits</span>
+          <strong>{{ formatCredits(freeCredits) }}</strong>
+        </article>
+      </div>
+
+      <div class="ct_credit_transactions_scroll">
+        @if (isHistoryLoading) {
+          <div class="ct_credit_state_card">
+            <h3>Loading history...</h3>
+            <p>Fetching your latest credit transactions.</p>
+          </div>
+        } @else if (hasTransactions) {
+          @for (group of transactionGroups; track group.label) {
+            <section class="ct_credit_group">
+              <h3>{{ group.label }}</h3>
+
+              <div class="ct_credit_group_card">
+                @for (item of group.items; track item.id; let isLast = $last) {
+                  <article class="ct_credit_transaction_row" [class.ct_credit_transaction_row--last]="isLast">
+                    <div class="ct_credit_transaction_main">
+                      <div class="ct_transaction_icon" [ngClass]="item.iconClass">
+                        <i class="fa-solid" [ngClass]="item.icon"></i>
+                      </div>
+
+                      <div class="ct_credit_transaction_copy">
+                        <h4>{{ item.title }}</h4>
+                        <p>{{ item.subtitle }}</p>
+                      </div>
+                    </div>
+
+                    <div class="ct_credit_transaction_meta">
+                      <strong
+                        [class.ct_credit_delta_positive]="item.delta > 0"
+                        [class.ct_credit_delta_negative]="item.delta < 0">
+                        {{ formatDelta(item.delta) }}
+                      </strong>
+                      <span>{{ item.time }}</span>
+                    </div>
+                  </article>
+                }
+              </div>
+            </section>
+          }
+        } @else {
+          <div class="ct_credit_state_card">
+            <h3>No transactions yet</h3>
+            <p>Your credit usage and top-ups will appear here once activity starts.</p>
+          </div>
+        }
+      </div>
     </div>
 
     <div class="ct_credit_transactions_footer">

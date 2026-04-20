@@ -1,14 +1,50 @@
-import { Component, Optional } from '@angular/core';
-import { SubscriptionResponse } from '../../../models/subcription';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { SubcriptionService } from '../../../services/subcription.service';
-import { BuyMoreCreditsModalResult, SubscriptionModalService, UserPlansModalResult } from '../../../services/subscription-modal.service';
+import { Component, DestroyRef, Optional, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef } from 'ng-zorro-antd/modal';
+import { ApiService } from '../../../services/api.service';
+import {
+  BuyMoreCreditsModalResult,
+  SubscriptionModalService,
+  UserPlansModalResult
+} from '../../../services/subscription-modal.service';
+import { SubcriptionService } from '../../../services/subcription.service';
+
+interface CreditHistoryResponse {
+  success: boolean;
+  status: number;
+  message: string;
+  data: {
+    page: number;
+    limit: number;
+    total: number;
+    items: CreditHistoryEntry[];
+  };
+}
+
+interface CreditHistoryEntry {
+  id: number;
+  transaction_type: string;
+  source_key: string;
+  action_name: string;
+  credits: number;
+  credit_delta: number;
+  balance_after: number;
+  plan_credits_delta: number | null;
+  topup_credits_delta: number | null;
+  plan_balance_after: number | null;
+  topup_balance_after: number | null;
+  amount_inr: string | null;
+  currency: string | null;
+  reference_type: string;
+  reference_id: string;
+  meta_json: Record<string, unknown> | null;
+  created_at: string;
+}
 
 interface CreditTransactionItem {
-  id: string;
+  id: number;
   title: string;
   subtitle: string;
   delta: number;
@@ -30,80 +66,12 @@ interface CreditTransactionGroup {
   styleUrl: './user-plans.component.css'
 })
 export class UserPlansComponent {
-  planName = 'Free Plan';
-  subscriptionPlan!: SubscriptionResponse;
-  isCanceling = false;
-  readonly transactionGroups: CreditTransactionGroup[] = [
-    {
-      label: 'Today',
-      items: [
-        {
-          id: 'project-generation',
-          title: 'Project Generation',
-          subtitle: 'Vanguard Branding Campaign',
-          delta: -25,
-          time: '14:22 PM',
-          icon: 'fa-bolt',
-          iconClass: 'ct_transaction_icon--blue'
-        },
-        {
-          id: 'ai-chat',
-          title: 'AI Assistant Chat',
-          subtitle: 'Advanced Logic Processing',
-          delta: -5,
-          time: '11:05 AM',
-          icon: 'fa-message',
-          iconClass: 'ct_transaction_icon--purple'
-        }
-      ]
-    },
-    {
-      label: 'Oct 24',
-      items: [
-        {
-          id: 'credit-topup',
-          title: 'Credit Top-up',
-          subtitle: 'Professional Bundle Purchase',
-          delta: 500,
-          time: '09:15 AM',
-          icon: 'fa-circle-plus',
-          iconClass: 'ct_transaction_icon--green'
-        },
-        {
-          id: 'asset-edit',
-          title: 'Asset Edit',
-          subtitle: 'Social Media Pack #04',
-          delta: -10,
-          time: '16:40 PM',
-          icon: 'fa-pen-to-square',
-          iconClass: 'ct_transaction_icon--indigo'
-        }
-      ]
-    },
-    {
-      label: 'Oct 22',
-      items: [
-        {
-          id: 'render-suite',
-          title: 'Project Generation',
-          subtitle: 'Interior Renderings Suite',
-          delta: -50,
-          time: '10:02 AM',
-          icon: 'fa-bolt',
-          iconClass: 'ct_transaction_icon--blue'
-        },
-        {
-          id: 'monthly-allocation',
-          title: 'Monthly Allocation',
-          subtitle: 'Plan credit refresh',
-          delta: 1000,
-          time: '08:00 AM',
-          icon: 'fa-wallet',
-          iconClass: 'ct_transaction_icon--slate'
-        }
-      ]
-    }
-  ];
+  private destroyRef = inject(DestroyRef);
+
+  transactionGroups: CreditTransactionGroup[] = [];
+  isHistoryLoading = false;
+
+  private subscriptionPlan: any = null;
 
   constructor(
     private apiService: ApiService,
@@ -111,106 +79,42 @@ export class UserPlansComponent {
     private subscriptionService: SubcriptionService,
     private subscriptionModalService: SubscriptionModalService,
     @Optional() private modalRef?: NzModalRef<UserPlansComponent, UserPlansModalResult | BuyMoreCreditsModalResult>
-  ) {
+  ) { }
 
-  }
-
-  async ngOnInit() {
-    this.subscriptionService.loadSubscription();
-    this.subscriptionService.subscription$.subscribe(subscription => {
-      if (subscription) {
-        this.subscriptionPlan = subscription;
-        this.planName = subscription.planName;
-      }
-    });
-  }
-
-  get monthlyPriceLabel(): string {
-    if (!this.subscriptionPlan?.pricingPlan) {
-      return 'Free';
-    }
-
-    return `₹${this.subscriptionPlan.pricingPlan} / ${this.subscriptionPlan.billingInterval === 'YEAR' ? 'year' : 'month'}`;
-  }
-
-  get formattedStatus(): string {
-    if (!this.subscriptionPlan?.subscriptionStatus) {
-      return 'Free Plan';
-    }
-
-    return this.subscriptionPlan.subscriptionStatus === 'ACTIVE'
-      ? 'Active'
-      : this.subscriptionPlan.subscriptionStatus === 'CANCELLED'
-        ? 'Cancelled'
-        : this.subscriptionPlan.subscriptionStatus;
-  }
-
-  get paymentMethodLabel(): string {
-    const paymentMethod = this.subscriptionPlan?.activePaymentMethod;
-    if (!paymentMethod) {
-      return 'No active payment method';
-    }
-
-    if (paymentMethod.type === 'card') {
-      return `${paymentMethod.network || 'Card'} ending in ${paymentMethod.card_number || '----'}`;
-    }
-
-    return paymentMethod.upi_id || 'UPI payment method';
-  }
-
-  get featureChips(): string[] {
-    if (!this.subscriptionPlan) {
-      return [];
-    }
-
-    const chips = [
-      `${this.subscriptionPlan.projectLimit} Project Limit`,
-      `${this.subscriptionPlan.template_limit} Template Limit`,
-      `${this.subscriptionPlan.variationLimit || 0} Variations / Project`,
-      this.subscriptionPlan.supportType === 'CHAT'
-        ? 'Chat Support'
-        : this.subscriptionPlan.supportType === 'PRIORITY'
-          ? 'Priority Support'
-          : 'Basic Support'
-    ];
-
-    if (this.subscriptionPlan.canDeploy) {
-      chips.push('Deploy Access');
-    }
-
-    if (this.subscriptionPlan.githubIntegration) {
-      chips.push('GitHub Integration');
-    }
-
-    if (this.subscriptionPlan.customFeatures) {
-      chips.push('Custom Features');
-    }
-
-    return chips;
+  ngOnInit(): void {
+    this.loadSubscriptionDetails();
+    this.loadCreditHistory();
   }
 
   get totalBalance(): number {
-    return Number((this.subscriptionPlan as any)?.creditBalance || 0);
+    return Number(this.subscriptionPlan?.creditBalance || 0);
   }
 
   get planCredits(): number {
-    const rawPlanCredits = (this.subscriptionPlan as any)?.planCredits;
-    return Number(rawPlanCredits?.left ?? rawPlanCredits?.total ?? (this.subscriptionPlan as any)?.creditsPerCycle ?? 0);
+    const rawPlanCredits = this.subscriptionPlan?.planCredits;
+    return Number(rawPlanCredits?.left ?? rawPlanCredits?.total ?? this.subscriptionPlan?.creditsPerCycle ?? 0);
   }
 
   get freeCredits(): number {
-    const raw = this.subscriptionPlan as any;
-    return Number(raw?.freeCredits?.left ?? raw?.freeCredits ?? (this.subscriptionPlan?.planType === 'FREE' ? this.planCredits : 0));
+    return Number(this.subscriptionPlan?.freeCredits?.left ?? this.subscriptionPlan?.freeCredits ?? 0);
   }
 
   get topUpCredits(): number {
-    const raw = this.subscriptionPlan as any;
-    const directValue = raw?.topUpCredits?.left ?? raw?.topUpCredits ?? raw?.bonusCredits?.left ?? raw?.bonusCredits;
+    const directValue =
+      this.subscriptionPlan?.topUpCredits?.left ??
+      this.subscriptionPlan?.topUpCredits ??
+      this.subscriptionPlan?.bonusCredits?.left ??
+      this.subscriptionPlan?.bonusCredits;
+
     if (directValue !== undefined && directValue !== null) {
       return Number(directValue);
     }
 
     return Math.max(this.totalBalance - this.planCredits - this.freeCredits, 0);
+  }
+
+  get hasTransactions(): boolean {
+    return this.transactionGroups.length > 0;
   }
 
   formatCredits(value: number): string {
@@ -219,46 +123,127 @@ export class UserPlansComponent {
 
   formatDelta(value: number): string {
     const prefix = value >= 0 ? '+' : '-';
-    return `${prefix} ${Math.abs(value)} cr`;
-  }
-
-  closeModal(): void {
-    this.modalRef?.close({ action: 'closed', reason: 'cancel' });
-  }
-
-  cancelSubcription() {
-    this.isCanceling = true
-    this.apiService.getApi(`api/user/cancelSubscription`)
-      .subscribe({
-        next: (res: any) => {
-
-          setTimeout(() => {
-            this.isCanceling = false;
-            this.subscriptionService.refreshSubscription();
-          }, 5000);
-
-          this.toster.success(res.message); // instant
-
-
-        },
-        error: () => {
-
-          setTimeout(() => {
-            this.isCanceling = false;
-
-          }, 2000);
-          // this.loading = false
-        }
-      });
-  }
-
-
-  openSubscriptionModal(): void {
-    this.subscriptionModalService.open();
+    return `${prefix} ${Math.abs(value).toLocaleString('en-IN')} cr`;
   }
 
   openBuyMoreCreditsModal(): void {
     this.closeModal();
     this.subscriptionModalService.openBuyMoreCreditsModal();
+  }
+
+  private loadSubscriptionDetails(): void {
+    this.subscriptionService.loadSubscription();
+    this.subscriptionService.subscription$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((subscription) => {
+        if (subscription) {
+          this.subscriptionPlan = subscription;
+        }
+      });
+  }
+
+  private loadCreditHistory(): void {
+    this.isHistoryLoading = true;
+
+    this.apiService.getCreditHistory<CreditHistoryResponse>(20, 0)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.transactionGroups = this.groupTransactions(response?.data?.items ?? []);
+          this.isHistoryLoading = false;
+        },
+        error: () => {
+          this.transactionGroups = [];
+          this.isHistoryLoading = false;
+          this.toster.error('Unable to load credit history right now.');
+        }
+      });
+  }
+
+  private groupTransactions(items: CreditHistoryEntry[]): CreditTransactionGroup[] {
+    const groups = new Map<string, CreditTransactionItem[]>();
+
+    items.forEach((item) => {
+      const label = this.getGroupLabel(item.created_at);
+      const currentItems = groups.get(label) ?? [];
+      currentItems.push(this.mapTransactionItem(item));
+      groups.set(label, currentItems);
+    });
+
+    return Array.from(groups.entries()).map(([label, groupedItems]) => ({
+      label,
+      items: groupedItems
+    }));
+  }
+
+  private mapTransactionItem(item: CreditHistoryEntry): CreditTransactionItem {
+    const meta = item.meta_json ?? {};
+    const packName = typeof meta['pack_name'] === 'string' ? meta['pack_name'] : '';
+    const referenceId = item.reference_id ? `Ref: ${item.reference_id}` : '';
+    const subtitle = packName || referenceId || item.source_key.replace(/_/g, ' ');
+
+    return {
+      id: item.id,
+      title: item.action_name,
+      subtitle,
+      delta: Number(item.credit_delta || 0),
+      time: this.formatTime(item.created_at),
+      ...this.getTransactionVisuals(item)
+    };
+  }
+
+  private getTransactionVisuals(item: CreditHistoryEntry): Pick<CreditTransactionItem, 'icon' | 'iconClass'> {
+    const transactionType = item.transaction_type?.toUpperCase();
+    const sourceKey = item.source_key?.toUpperCase();
+    const delta = Number(item.credit_delta || 0);
+
+    if (transactionType === 'TOPUP' || sourceKey.includes('TOPUP')) {
+      return { icon: 'fa-circle-plus', iconClass: 'ct_transaction_icon--green' };
+    }
+
+    if (transactionType === 'GRANT' || sourceKey.includes('GRANT') || sourceKey.includes('BONUS')) {
+      return { icon: 'fa-wallet', iconClass: 'ct_transaction_icon--slate' };
+    }
+
+    if (delta < 0) {
+      return { icon: 'fa-bolt', iconClass: 'ct_transaction_icon--blue' };
+    }
+
+    return { icon: 'fa-clock-rotate-left', iconClass: 'ct_transaction_icon--indigo' };
+  }
+
+  private getGroupLabel(dateValue: string): string {
+    const createdAt = new Date(dateValue);
+    const now = new Date();
+
+    const createdDate = new Date(createdAt.getFullYear(), createdAt.getMonth(), createdAt.getDate());
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const diffInDays = Math.round((today.getTime() - createdDate.getTime()) / 86400000);
+
+    if (diffInDays === 0) {
+      return 'Today';
+    }
+
+    if (diffInDays === 1) {
+      return 'Yesterday';
+    }
+
+    return createdAt.toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: createdAt.getFullYear() === now.getFullYear() ? undefined : 'numeric'
+    });
+  }
+
+  private formatTime(dateValue: string): string {
+    return new Date(dateValue).toLocaleTimeString('en-IN', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  }
+
+  private closeModal(): void {
+    this.modalRef?.close({ action: 'closed', reason: 'cancel' });
   }
 }

@@ -5,26 +5,13 @@
 
 .ct_credit_transactions_dialog {
   position: relative;
-  padding: 34px 0px 0;
+  padding: 34px 0 0;
   border-radius: 32px;
   background: #f8f8f9;
   box-shadow:
     0 40px 90px rgba(15, 23, 42, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.75);
   overflow: hidden;
-}
-
-.ct_credit_transactions_close {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  width: 40px;
-  height: 40px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: #565d69;
-  font-size: 24px;
 }
 
 .ct_credit_transactions_head {
@@ -34,7 +21,7 @@
 
 .ct_credit_transactions_head h2 {
   margin: 0 0 8px;
-  color: #191C1E;
+  color: #191c1e;
   font-size: 30px;
   font-weight: 700;
   line-height: 1.1;
@@ -46,16 +33,14 @@
   font-size: 16px;
   line-height: 1.55;
   font-family: "Figtree", sans-serif;
-
 }
 
 .ct_credit_summary_grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0;
   margin: 0 14px 10px;
   border-radius: 10px;
-  background: #F3F4F6;
+  background: #f3f4f6;
   overflow: hidden;
 }
 
@@ -73,16 +58,13 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-family: "Figtree", sans-serif;
-
 }
 
 .ct_credit_summary_card strong {
-  color: #191C1E;
+  color: #191c1e;
   font-size: 24px;
   font-weight: 800;
   font-family: "Figtree", sans-serif;
-
-
   line-height: 1.2;
 }
 
@@ -105,6 +87,30 @@
   border-radius: 999px;
 }
 
+.ct_credit_state_card {
+  margin-top: 16px;
+  padding: 28px 20px;
+  border-radius: 24px;
+  background: #f1f2f4;
+  text-align: center;
+}
+
+.ct_credit_state_card h3 {
+  margin: 0 0 8px;
+  color: #1f252e;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: "Figtree", sans-serif;
+}
+
+.ct_credit_state_card p {
+  margin: 0;
+  color: #596171;
+  font-size: 14px;
+  line-height: 1.5;
+  font-family: "Figtree", sans-serif;
+}
+
 .ct_credit_group {
   margin-top: 16px;
 }
@@ -116,7 +122,6 @@
   font-weight: 500;
   letter-spacing: 0.04em;
   font-family: "Figtree", sans-serif;
-
 }
 
 .ct_credit_group_card {
@@ -161,11 +166,6 @@
   background: #dfe8fb;
 }
 
-.ct_transaction_icon--purple {
-  color: #6f42d9;
-  background: #e8ddfa;
-}
-
 .ct_transaction_icon--green {
   color: #027a5c;
   background: #daefe8;
@@ -192,7 +192,6 @@
   font-weight: 700;
   line-height: 1.2;
   font-family: "Figtree", sans-serif;
-
 }
 
 .ct_credit_transaction_copy p {
@@ -201,7 +200,6 @@
   font-size: 14px;
   line-height: 1.5;
   font-family: "Figtree", sans-serif;
-
 }
 
 .ct_credit_transaction_meta {
@@ -211,11 +209,10 @@
 
 .ct_credit_transaction_meta strong {
   display: block;
-  margin-bottom: 0px;
+  margin-bottom: 0;
   font-size: 15px;
   font-weight: 800;
   font-family: "Figtree", sans-serif;
-
 }
 
 .ct_credit_delta_positive {
@@ -223,14 +220,13 @@
 }
 
 .ct_credit_delta_negative {
-  color: #BA1A1A;
+  color: #ba1a1a;
 }
 
 .ct_credit_transaction_meta span {
   color: #8c93a3;
   font-size: 12px;
   font-family: "Figtree", sans-serif;
-
   font-weight: 500;
 }
 
@@ -264,19 +260,6 @@
   background: #027a5c;
 }
 
-.ct_credit_topup_btn {
-  min-width: 146px;
-  min-height: 44px;
-  padding: 10px 22px;
-  border: 0;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #1454ff 0%, #0f49de 100%);
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
-  box-shadow: 0 14px 30px rgba(20, 84, 255, 0.24);
-}
-
 @media screen and (max-width: 767px) {
   .ct_credit_transactions_dialog {
     padding-top: 52px;
@@ -292,7 +275,6 @@
 
   .ct_credit_transactions_scroll {
     max-height: calc(100vh - 463px);
-
     height: auto;
   }
 
@@ -303,16 +285,13 @@
   .ct_credit_transaction_meta {
     text-align: left;
   }
-
-  .ct_credit_topup_btn {
-    width: 100%;
-  }
 }
 
 @media screen and (max-width: 575px) {
   .ct_credit_transactions_dialog {
     border-radius: 24px;
-    padding-inline: 0px;
+    padding-inline: 0;
+    padding-top: 40px;
   }
 
   .ct_credit_summary_grid {
@@ -323,21 +302,13 @@
     padding-block: 18px;
   }
 
-  .ct_credit_transactions_footer {
-    padding: 20px;
-  }
-
-  .ct_credit_transactions_dialog {
-    padding-top: 40px;
-  }
-
   .ct_credit_transactions_head,
   .ct_credit_transactions_scroll {
     padding-inline: 8px;
   }
 
   .ct_credit_transactions_footer {
-    padding-inline: 12px;
+    padding: 20px 12px;
   }
 
   .ct_credit_transaction_row {

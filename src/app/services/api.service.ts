@@ -39,6 +39,10 @@ export class ApiService {
     return this.http.get<T>(`${this.apiUrl}api/user/getAllPlans?billing_interval=${billingInterval}`);
   }
 
+  getCreditHistory<T>(limit: number, offset: number): Observable<T> {
+    return this.http.get<T>(`${this.apiUrl}api/user/getCreditHistory?limit=${limit}&offset=${offset}`);
+  }
+
   deleteApi<T>(url: string): Observable<T> {
     return this.http.delete<T>(this.apiUrl + url);
   }
