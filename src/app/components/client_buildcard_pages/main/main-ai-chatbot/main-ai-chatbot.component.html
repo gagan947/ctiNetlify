@@ -15,12 +15,12 @@
           <div class="main-ai-thread-meta">You</div>
           } -->
 
-          <div class="main-ai-thread-text" [class.main-ai-ai-message]="message.sender === 'ai'"
+          <div class="main-ai-thread-text pe-0" [class.main-ai-ai-message]="message.sender === 'ai'"
             [class.is-error]="message.variant === 'error'">
             <div class="main-ai-thread-content">
               @for(line of formatMessage(message.text); track $index) {
               @if(line.type === 'text') {
-              <p class="text-line ct_fs_14">{{ line.text }}</p>
+              <p class="text-line ct_fs_14 ct_para_scroll ct_custom_scroll pe-2" style="word-break: break-word;">{{ line.text }}</p>
               }
 
               @if(line.type === 'bullet') {

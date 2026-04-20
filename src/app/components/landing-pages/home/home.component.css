@@ -795,8 +795,11 @@ section {
 }
 
 @media screen and (max-width:1199px) {
-  .ct_launch_journey_flow img {
+  .ct_launch_journey_flow > img {
     display: none;
+  }
+  .ct_launch_journey_flow .ct_launch_step_icon img{
+    display: block;
   }
 
   .ct_prompt_hero .ct_fs_40 {

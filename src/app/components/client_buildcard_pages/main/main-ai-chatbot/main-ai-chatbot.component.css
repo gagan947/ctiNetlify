@@ -193,7 +193,11 @@
 .is-ai .main-ai-thread-content {
   max-width: 80%;
 }
-
+.ct_para_scroll{
+  height: auto;
+  max-height: 207px;
+  overflow-y: auto;
+}
 .main-ai-message-footer {
   display: flex;
   align-items: center;
