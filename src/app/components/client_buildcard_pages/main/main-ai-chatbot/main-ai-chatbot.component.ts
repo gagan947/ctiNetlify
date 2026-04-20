@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, input, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NavigationStart, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 import { ApiService } from '../../../../services/api.service';
 import { io } from 'socket.io-client';
-
+import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
+declare var bootstrap: any;
 interface ChatMessage {
   sender: 'user' | 'ai';
   text: string;
@@ -71,6 +72,7 @@ interface AiStreamPayload {
 })
 export class MainAiChatbotComponent implements OnInit, OnDestroy {
   @Input() initialPrompt = '';
+  @Input() subsriptionPlan: any | null = null;
   @ViewChild('chatScroll') chatScroll?: ElementRef<HTMLDivElement>;
   @ViewChild('chatPromptInput') chatPromptInput?: ElementRef<HTMLTextAreaElement>;
 
@@ -92,10 +94,12 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   constructor(
     private apiService: ApiService,
     private router: Router,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    public subscriptionModalService: SubscriptionModalService
   ) { }
 
   ngOnInit(): void {
+    this
     this.socket = io(this.apiService.apiUrl);
     this.registerSocketHandlers();
     this.watchPageChange();
@@ -280,6 +284,10 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.scrollChatToBottom();
   }
 
+  getCurrentCreditBalance(): number {
+    return Number((this.subsriptionPlan as any)?.creditBalance || 0);
+  }
+
   private handleAiStream(payload: AiStreamPayload): void {
     const blockId = payload?.blockId?.trim();
     const content = payload?.content ?? '';
@@ -371,8 +379,11 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
           skipLocationChange: true
         });
       },
-      error: () => {
+      error: (err) => {
         this.isBuildActionLoading = false;
+        if (err?.error?.type === 'INSUFFICIENT_BALANCE') {
+          this.openBootstrapModal('insufficientCreditsModal', { backdrop: 'static', keyboard: true });
+        }
       }
     });
   }
@@ -481,5 +492,17 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       hour: 'numeric',
       minute: '2-digit'
     }).format(timestamp);
+  }
+
+  private openBootstrapModal(modalId: string, options?: { backdrop?: boolean | 'static'; keyboard?: boolean }) {
+    const modalElement = document.getElementById(modalId);
+    if (!modalElement) {
+      return;
+    }
+
+    bootstrap.Modal.getOrCreateInstance(modalElement, {
+      backdrop: options?.backdrop ?? true,
+      keyboard: options?.keyboard ?? true
+    }).show();
   }
 }

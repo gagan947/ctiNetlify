@@ -193,11 +193,13 @@
 .is-ai .main-ai-thread-content {
   max-width: 80%;
 }
-.ct_para_scroll{
+
+.ct_para_scroll {
   height: auto;
   max-height: 207px;
   overflow-y: auto;
 }
+
 .main-ai-message-footer {
   display: flex;
   align-items: center;
@@ -510,6 +512,51 @@
 
 .main-ai-chat-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(151, 154, 166, 0.9);
+}
+
+.ct_insufficient_credits_modal .ct_build_failed_modal__icon {
+  background: linear-gradient(135deg, #dbeafe, #eff6ff);
+  color: #2563eb;
+}
+
+.ct_build_failed_modal {
+  padding: 32px;
+  border: 0;
+  border-radius: 24px;
+  text-align: center;
+}
+
+.ct_build_failed_modal__icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 18px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #fee2e2, #ffedd5);
+  color: #dc2626;
+  font-size: 30px;
+}
+
+.button-deploy {
+  border: none;
+  cursor: pointer;
+  padding: 11px 20px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+.btn-confirm {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+}
+
+.btn-confirm:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
 }
 
 @media (max-width: 991px) {

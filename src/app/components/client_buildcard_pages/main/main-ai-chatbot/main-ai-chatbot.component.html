@@ -20,7 +20,8 @@
             <div class="main-ai-thread-content">
               @for(line of formatMessage(message.text); track $index) {
               @if(line.type === 'text') {
-              <p class="text-line ct_fs_14 ct_para_scroll ct_custom_scroll pe-2" style="word-break: break-word;">{{ line.text }}</p>
+              <p class="text-line ct_fs_14 ct_para_scroll ct_custom_scroll pe-2" style="word-break: break-word;">{{
+                line.text }}</p>
               }
 
               @if(line.type === 'bullet') {
@@ -123,6 +124,23 @@
               <i class="fa-solid fa-arrow-up"></i>
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="insufficientCreditsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content ct_build_failed_modal ct_insufficient_credits_modal">
+        <div class="ct_build_failed_modal__icon">
+          <i class="fa-solid fa-wallet"></i>
+        </div>
+        <h2>Insufficient Credit Balance</h2>
+        <p>You need at least 100 credits to continue with project publishing. Your current balance is {{
+          getCurrentCreditBalance() }} credits.</p>
+        <div class="actions">
+          <button class="btn-confirm button-deploy w-100" data-bs-dismiss="modal"
+            (click)="subscriptionModalService.openBuyMoreCreditsModal()">Buy Credits</button>
         </div>
       </div>
     </div>
