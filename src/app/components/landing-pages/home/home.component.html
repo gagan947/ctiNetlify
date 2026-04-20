@@ -329,7 +329,7 @@
                 <div class="ct_price_offer">₹{{ plan.intro_amount }}</div>
               </div>
             </div>
-            <a [routerLink]="getPlanButtonLink(plan)" class="ct_price_cta">{{ getPlanButtonLabel(plan) }}</a>
+            <a routerLink="/login" class="ct_price_cta">{{ getPlanButtonLabel(plan) }}</a>
           </div>
           <div class="ct_price_card_bottom">
             <h4>{{ getPlanFeaturesTitle(plan) }}</h4>
@@ -367,7 +367,7 @@
               </div>
             </div>
             <p>{{ getPlanDescription(plan) }}</p>
-            <a [routerLink]="getPlanButtonLink(plan)" class="ct_price_cta">{{
+            <a routerLink="/login" class="ct_price_cta">{{
               getPlanButtonLabel(plan) }}</a>
             <div class="position-relative" *ngIf="proPlans.length > 1" (click)="$event.stopPropagation()">
               <button type="button" class="ct_starter_plan" (click)="toggleProDropdown($event)">
@@ -421,7 +421,7 @@
               </div>
               <p>{{ getPlanDescription(plan) }}</p>
             </div>
-            <a [routerLink]="getPlanButtonLink(plan)" class="ct_price_cta">{{ getPlanButtonLabel(plan) }}</a>
+            <a routerLink="/login" class="ct_price_cta">{{ getPlanButtonLabel(plan) }}</a>
           </div>
           <div class="ct_price_card_bottom">
             <h4>{{ getPlanFeaturesTitle(plan) }}</h4>

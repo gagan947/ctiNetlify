@@ -544,11 +544,6 @@ export class SubcriptionPageComponent {
   }
 
   handlePlanAction(plan: Plan): void {
-    if (plan.plan_type === 'BUSINESS') {
-      this.openCalednlyModal();
-      return;
-    }
-
     if (plan.plan_type === 'FREE') {
       return;
     }

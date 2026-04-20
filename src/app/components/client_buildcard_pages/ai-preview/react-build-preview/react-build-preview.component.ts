@@ -741,9 +741,9 @@ export class ReactBuildPreviewComponent {
     switch (flowType) {
       case 'restore':
         return [
-          { pendingIconClass: 'fa-regular fa-folder-open', label: 'Fetching saved templates' },
+          { pendingIconClass: 'fa-regular fa-folder-open', label: 'Fetching saved project' },
           { pendingIconClass: 'fa-regular fa-image', label: 'Loading draft preview' },
-          { pendingIconClass: 'fa-solid fa-arrow-up-right-from-square', label: 'Opening selected template' }
+          { pendingIconClass: 'fa-solid fa-arrow-up-right-from-square', label: 'Opening selected project' }
         ];
       case 'switch':
         return [
@@ -1355,7 +1355,7 @@ export class ReactBuildPreviewComponent {
     this.setBuildStep(3);
     await this.addTerminal([
       'Deploying preview',
-      'Opening first template tab'
+      'Opening project'
     ], 1200, 1500);
 
     // 🔹 SUMMARY

@@ -251,10 +251,10 @@
             / {{ billingCycle() == 'MONTH' ? 'month' : 'year' }}
           </strong>
         </div>
-        <div class="d-flex justify-content-between mb-2">
+        <!-- <div class="d-flex justify-content-between mb-2">
           <span>{{ selectedPlanData && showIntroOffer(selectedPlanData) ? 'First payment' : 'Charged as' }}</span>
           <strong> {{ billedNowAmount(selectedPlanData) }} </strong>
-        </div>
+        </div> -->
         <div class="d-flex justify-content-between mb-2" *ngIf="selectedPlanData && showIntroOffer(selectedPlanData)">
           <span>Renews at</span>
           <strong>{{ formatCurrency(selectedPlanData.amount, selectedPlanData.currency) }} / {{ billingCycle() ==

@@ -300,9 +300,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  getPlanButtonLink(plan: Plan | null): string {
-    return plan?.plan_type === 'BUSINESS' ? '/contact' : '/login';
-  }
+
 
   getPlanFootnote(plan: Plan | null): string {
     switch (plan?.plan_type) {
