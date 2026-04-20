@@ -706,6 +706,10 @@
     flex-direction: column;
     align-items: flex-start !important;
   }
+  .ct_fs_32{
+    font-size: 26px;
+    line-height: unset;
+  }
 }
 
 
