@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { ApiService } from '../../../services/api.service';
-import { LocationService, UserLocation } from '../../../services/location.service';
 import { GoogleAuthService } from '../../../services/google-auth.service';
+import { LocationService, UserLocation } from '../../../services/location.service';
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { HeaderComponent } from '../../shared/header/header.component';
-import { NzMessageService } from 'ng-zorro-antd/message';
 
 declare const Swiper: any;
 declare var FB: any;
@@ -127,7 +127,6 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       state: 'origin:web',
       usePopup: true
     });
-
   }
 
   ngOnDestroy(): void {
@@ -214,40 +213,66 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     return `/${(plan?.billing_interval || this.billingCycle).toLowerCase()}`;
   }
 
-  getPlanDescription(plan: Plan | null): string {
+  getPlanBadge(plan: Plan | null): string {
     switch (plan?.plan_type) {
       case 'FREE':
-        return 'Perfect for individuals to build, launch, and manage a single project with essential tools.';
+        return 'FREE PLAN';
       case 'PRO':
-        return 'Built for creators and teams to design, customize, and scale high-impact projects.';
+        return 'STANDARD PLAN';
       case 'BUSINESS':
-        return 'Ideal for growing teams that need advanced controls, integrations, and priority support.';
+        return 'ENTERPRISE PLAN';
       default:
         return '';
     }
   }
 
+  getPlanDescription(plan: Plan | null): string {
+    switch (plan?.plan_type) {
+      case 'FREE':
+        return 'Best for exploring the platform';
+      case 'PRO':
+        return 'Perfect to build your first real product';
+      case 'BUSINESS':
+        return 'For agencies & enterprise teams';
+      default:
+        return '';
+    }
+  }
+
+  getPlanFeaturesTitle(plan: Plan | null): string {
+    return plan?.plan_type === 'BUSINESS' ? 'Pro Features and you will get:' : 'Features you will get:';
+  }
+
   getPlanFeatures(plan: Plan | null): string[] {
-    if (!plan) {
-      return [];
+    switch (plan?.plan_type) {
+      case 'FREE':
+        return [
+          'Create your first project (at 25 credits)',
+          'Use remaining credits for minor edits & tweaks',
+          'Access to basic AI generation',
+          'Single agent processing',
+          'Chat-based interaction only'
+        ];
+      case 'PRO':
+        return [
+          'Create full-scale projects',
+          'Basic deployment access',
+          'Standard customization (credit-based)',
+          'Faster generation vs free plan',
+          'Clean production-ready outputs'
+        ];
+      case 'BUSINESS':
+        return [
+          'Unlimited scale project creation',
+          'Enterprise-grade deployment infrastructure',
+          'Full customization freedom (no limitations)',
+          'Chat + Email + Phone Support',
+          'Maximum speed & priority processing',
+          'Optimized for large-scale automation'
+        ];
+      default:
+        return [];
     }
-
-    const features = [
-      `${plan.credits_per_cycle} Credit${plan.credits_per_cycle > 1 ? 's' : ''} per ${(
-        plan.credit_grant_interval || plan.billing_interval
-      ).toLowerCase()}`,
-      this.getSupportLabel(plan.support_type)
-    ];
-
-    if (Number(plan.topup_allowed) === 1) {
-      features.push('Top-up Credits');
-    }
-
-    if (Number(plan.can_deploy) === 1) {
-      features.push('Deployment Access');
-    }
-
-    return features;
   }
 
   showIntroOffer(plan: Plan | null): boolean {
@@ -262,21 +287,46 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     return `${Number(plan?.discount_percent || 0)}% Off`;
   }
 
-  getIntroLabel(plan: Plan | null): string {
-    return plan ? `₹${plan.intro_amount}` : '';
+  getPlanButtonLabel(plan: Plan | null): string {
+    switch (plan?.plan_type) {
+      case 'FREE':
+        return 'Start Free';
+      case 'PRO':
+        return 'Get Started';
+      case 'BUSINESS':
+        return 'Contact Sales';
+      default:
+        return 'Get Started';
+    }
   }
 
-  private getSupportLabel(type: string): string {
-    switch (type) {
-      case 'CHAT':
-        return 'Chat Support';
-      case 'PRIORITY':
-        return 'Priority Support';
-      case 'NONE':
-        return 'Basic Support';
+  getPlanButtonLink(plan: Plan | null): string {
+    return plan?.plan_type === 'BUSINESS' ? '/contact' : '/login';
+  }
+
+  getPlanFootnote(plan: Plan | null): string {
+    switch (plan?.plan_type) {
+      case 'FREE':
+        return 'Upgrade anytime or buy credits directly';
+      case 'PRO':
+        return 'Auto-upgrades to Standard plan next month.';
+      case 'BUSINESS':
+        return 'Tailored for high-end business workflows';
       default:
-        return 'Support';
+        return '';
     }
+  }
+
+  shouldShowPreviousPrice(plan: Plan | null): boolean {
+    return plan?.plan_type === 'PRO' && Number(plan?.has_intro_offer) === 1 && Number(plan?.intro_amount || 0) > 0;
+  }
+
+  getCurrentPrice(plan: Plan | null): string {
+    if (this.shouldShowPreviousPrice(plan)) {
+      return String(plan?.intro_amount || '0.00');
+    }
+
+    return this.getDisplayAmount(plan);
   }
 
   private initializeSwipers() {
@@ -311,37 +361,28 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
     if (innerSwiperElement) {
       this.innerSwiperInstance = new Swiper(innerSwiperElement, {
-
         loop: true,
         slidesPerView: 'auto',
         spaceBetween: 10,
         speed: 1000,
         nested: true,
         watchSlidesProgress: true,
-
-
         autoplay: {
           delay: 2000,
-          disableOnInteraction: false,
+          disableOnInteraction: false
         },
-
         freeMode: false,
         freeModeMomentum: false,
-
         observer: true,
-        observeParents: true,
+        observeParents: true
       });
 
       setTimeout(() => {
         this.innerSwiperInstance.update();
         this.innerSwiperInstance.autoplay.start();
       }, 100);
-
     }
-
   }
-
-
 
   private destroySwipers() {
     if (this.mainSwiperInstance?.destroy) {
@@ -368,23 +409,23 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     FB.login((response: any) => {
       if (response.authResponse) {
         const accessToken = response.authResponse.accessToken;
-        this.service.postAPI(`api/user/facebookLogin`, { accessToken: accessToken })
+        this.service.postAPI(`api/user/facebookLogin`, { accessToken })
           .subscribe({
             next: (res: any) => {
               if (res.success == true) {
                 this.service.setToken(res.data.token);
                 localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
-                this.message.success(res.message)
+                this.message.success(res.message);
                 if (res.data.user.profile_visited) {
                   this.router.navigate(['/main']);
                 } else {
                   this.router.navigate(['/profile']);
                 }
               } else {
-                this.message.error(res.message)
+                this.message.error(res.message);
               }
             },
-            error: err => {
+            error: (err) => {
               if (err.status === 0) {
                 this.message.error('Network error, please check your connection.');
               } else if (err.error?.message) {
@@ -393,7 +434,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
                 this.message.error('Unexpected error occurred.');
               }
             }
-          })
+          });
       } else {
         console.log('User cancelled Facebook login or did not fully authorize.');
       }
@@ -413,7 +454,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
             if (res.success == true) {
               this.service.setToken(res.data.token);
               localStorage.setItem('userDetailCTI', JSON.stringify(res.data.user));
-              this.message.success(res.message)
+              this.message.success(res.message);
 
               if (res.data.user.profile_visited) {
                 this.router.navigate(['/main']);
@@ -421,10 +462,10 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
                 this.router.navigate(['/profile']);
               }
             } else {
-              this.message.error(res.message)
+              this.message.error(res.message);
             }
           },
-          error: err => {
+          error: (err) => {
             if (err.status === 0) {
               this.message.error('Network error, please check your connection.');
             } else if (err.error?.message) {

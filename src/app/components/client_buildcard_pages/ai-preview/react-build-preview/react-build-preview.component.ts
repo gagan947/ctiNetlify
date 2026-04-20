@@ -407,6 +407,7 @@ export class ReactBuildPreviewComponent {
       bootstrap.Modal.getOrCreateInstance(modalElement).hide();
     }
 
+    this.isReactBuilding = true
     this.runInitialBuildSequence();
   }
 
