@@ -130,7 +130,7 @@ export class BuyMoreCreditsComponent {
       return [
         'Quick top-up for small usage',
         'Instant credit addition',
-        'Works for all users (no plan required)'
+        'Works for all users'
       ];
     }
 
@@ -138,14 +138,14 @@ export class BuyMoreCreditsComponent {
       return [
         'Balanced for moderate usage',
         'Ideal for ongoing customization',
-        'No subscription needed'
+        'Works for all users'
       ];
     }
 
     return [
       'Quick top-up for heavy usage',
       'Instant credit addition',
-      'Works for all users (no plan required)'
+      'Works for all users'
     ];
   }
 
@@ -164,10 +164,6 @@ export class BuyMoreCreditsComponent {
 
     this.customAmountError = '';
     this.customCredits = this.customAmount ? Math.round(Number(this.customAmount) / 16.50) : 0;
-  }
-
-  closeModal() {
-    this.modalRef?.close({ action: 'closed', reason: 'cancel' });
   }
 
   private extractTopUpPacks(packs: TopUpPack[] | null | undefined): TopUpPack[] {

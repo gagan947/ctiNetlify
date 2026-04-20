@@ -82,7 +82,8 @@
 
               <span class="ct_price_badge">{{ getPlanBadge(plan) }}</span>
               <h3 class="ct_price_credits">{{ plan.credits_per_cycle }} Credits</h3>
-              <div class="ct_price_value ct_price_value_compact" [class.ct_price_value_with_old]="shouldShowPreviousPrice(plan)">
+              <div class="ct_price_value ct_price_value_compact"
+                [class.ct_price_value_with_old]="shouldShowPreviousPrice(plan)">
                 <span class="ct_price_previous" *ngIf="shouldShowPreviousPrice(plan)">
                   &#8377;{{ getDisplayAmount(plan) }}{{ getBillingSuffix(plan) }}
                 </span>
@@ -103,7 +104,7 @@
                 </div>
               </div>
               <p>{{ planDescription(plan) }}</p>
-              <a (click)="handlePlanAction(plan)" class="ct_price_cta ct_price_cta_filled">{{ getPlanButtonLabel(plan) }}</a>
+              <a (click)="handlePlanAction(plan)" class="ct_price_cta">{{ getPlanButtonLabel(plan) }}</a>
               <div class="position-relative" *ngIf="proPlans.length > 1" (click)="$event.stopPropagation()">
                 <button type="button" class="ct_starter_plan" (click)="toggleProDropdown($event)">
                   {{ plan.credits_per_cycle }} credits {{

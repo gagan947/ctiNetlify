@@ -508,7 +508,7 @@ export class SubcriptionPageComponent {
       case 'PRO':
         return 'Get Started';
       case 'BUSINESS':
-        return 'Contact Sales';
+        return 'Get Started';
       default:
         return 'Get Started';
     }

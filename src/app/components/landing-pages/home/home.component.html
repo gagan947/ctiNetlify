@@ -367,7 +367,7 @@
               </div>
             </div>
             <p>{{ getPlanDescription(plan) }}</p>
-            <a [routerLink]="getPlanButtonLink(plan)" class="ct_price_cta ct_price_cta_filled">{{
+            <a [routerLink]="getPlanButtonLink(plan)" class="ct_price_cta">{{
               getPlanButtonLabel(plan) }}</a>
             <div class="position-relative" *ngIf="proPlans.length > 1" (click)="$event.stopPropagation()">
               <button type="button" class="ct_starter_plan" (click)="toggleProDropdown($event)">
