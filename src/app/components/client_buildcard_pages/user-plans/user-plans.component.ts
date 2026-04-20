@@ -126,12 +126,12 @@ export class UserPlansComponent {
   }
 
   formatCredits(value: number): string {
-    return `${Number(value || 0).toLocaleString('en-IN')} cr`;
+    return `${Number(value || 0).toLocaleString('en-IN')} credits`;
   }
 
   formatDelta(value: number): string {
     const prefix = value >= 0 ? '+' : '-';
-    return `${prefix} ${Math.abs(value).toLocaleString('en-IN')} cr`;
+    return `${prefix} ${Math.abs(value).toLocaleString('en-IN')} credits`;
   }
 
   openBuyMoreCreditsModal(): void {

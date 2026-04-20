@@ -179,6 +179,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     });
 
     this.socket.on('navigateToBuilder', (payload: any) => {
+      console.log('navigateToBuilder', payload);
       this.ngZone.run(() => {
         const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
         const projectId = String(data?.projectId ?? this.matchedProjectId ?? '');
@@ -205,6 +206,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     });
 
     this.socket.on('projectMatch', (payload: ProjectMatchPayload) => {
+      console.log('projectMatch', payload);
+
       this.projectMatchPayload = payload;
       this.ngZone.run(() => {
         const data = typeof payload === 'string' ? JSON.parse(payload) : payload;

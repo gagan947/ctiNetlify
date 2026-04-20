@@ -312,7 +312,7 @@ export class ReactBuildPreviewComponent {
       this.pendingPreviewResponse = { res, socketId };
       return;
     }
-
+    this.scrollToBottom();
     this.applyGeneratedPreview(res, socketId);
   }
 

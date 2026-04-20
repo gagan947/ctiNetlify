@@ -157,13 +157,14 @@ export class BuyMoreCreditsComponent {
     const input = event.target as HTMLInputElement | null;
     const rawValue = input?.value || '';
     this.customAmount = rawValue.replace(/[^\d.]/g, '');
-    if (Number(this.customAmount) < 1650) {
-      this.customAmountError = 'Minimum amount is 1650 INR';
+    if (Number(this.customAmount) < 16.50) {
+      this.customCredits = 0;
+      this.customAmountError = 'Minimum amount is 16.50 INR';
       return;
     }
 
     this.customAmountError = '';
-    this.customCredits = this.customAmount ? Math.round(Number(this.customAmount) / 16.50) : 0;
+    this.customCredits = Math.round(Number(this.customAmount) / 16.50);
   }
 
   private extractTopUpPacks(packs: TopUpPack[] | null | undefined): TopUpPack[] {
