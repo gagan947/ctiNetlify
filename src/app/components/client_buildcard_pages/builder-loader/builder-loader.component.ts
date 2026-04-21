@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
+import { WorkspaceHeaderComponent } from "../workspace-header/workspace-header.component";
 
 interface Particle {
   x: number;
@@ -14,7 +15,7 @@ interface Particle {
 @Component({
   selector: 'app-builder-loader',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, WorkspaceHeaderComponent],
   templateUrl: './builder-loader.component.html',
   styleUrl: './builder-loader.component.css'
 })

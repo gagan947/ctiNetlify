@@ -190,7 +190,10 @@ export class ReactBuildPreviewComponent {
       this.selectedProjectId = res.params['id'];
       this.loadDraftTemplates(templates);
     });
-    if (templates.length > 0) {
+
+    const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
+
+    if (existingTemplate) {
       await this.showDraftWelcomeMessages(false);
       await this.loadDraftTemplates(templates);
       return;
@@ -392,6 +395,7 @@ export class ReactBuildPreviewComponent {
   }
 
   private async runInitialBuildSequence() {
+    this.isReactBuilding = true;
     this.shouldDeferPreviewApply = true;
     this.hasInitialFlowCompleted = false;
     this.pendingPreviewResponse = null;
