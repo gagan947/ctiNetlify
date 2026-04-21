@@ -62,7 +62,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 14px;
-    min-height: 52px;
+    min-height: 50px;
     padding: 4px 14px 0;
     background: #212121;
     border-top: 1px solid #455157;
@@ -107,7 +107,7 @@
 .main-ai-topbar__home,
 .main-ai-topbar__tab,
 .main-ai-topbar__add {
-    height: 42px;
+    height: 38px;
     /* border: 1px solid transparent; */
     background: transparent;
     color: #f3f4f6;
@@ -180,7 +180,7 @@
 }
 
 .main-ai-topbar__tab--active {
-    height: 44px;
+    height: 38px;
     margin-left: 10px;
     margin-top: 0;
     padding-inline: 18px 14px;
@@ -268,7 +268,7 @@
 }
 
 .main-ai-topbar__add {
-    height: 42px;
+    height: 38px;
     margin-left: 8px;
     border-radius: 0;
     border: 0;

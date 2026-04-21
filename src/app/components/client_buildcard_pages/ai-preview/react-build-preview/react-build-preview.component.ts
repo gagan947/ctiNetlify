@@ -203,7 +203,7 @@ export class ReactBuildPreviewComponent {
     await this.runInitialBuildSequence();
   }
 
-  async getUserTemplates(): Promise<UserTemplate[]> {
+  async getUserTemplates(): Promise<any[]> {
     const res = await firstValueFrom(
       this.apiService.getApi<any>(
         'api/user/fetchClientAllProjects',
@@ -1048,17 +1048,16 @@ export class ReactBuildPreviewComponent {
   }
 
 
-  checkNDeploy() {
-    const activeDesign = this.designOrder.find(
-      d => d.designId === this.activeDesignId
-    );
+  async checkNDeploy() {
+    const templates = await this.getUserTemplates();
+    const activeDesign = templates.find((t: any) => t.inquiryId === this.selectedProjectId).templateId;
 
     if (!activeDesign) {
       console.error("No active design found");
       return;
     }
 
-    this.selected_template_id = activeDesign.user_template_id;
+    this.selected_template_id = activeDesign;
     this.closeBootstrapModal('deployConfirmModal');
 
     if (this.getCurrentCreditBalance() >= 60) {
