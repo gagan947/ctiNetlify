@@ -21,14 +21,17 @@
                 <span class="main-ai-topbar__tab-dot"></span>
             </span>
             <span class="main-ai-topbar__tab-label">{{ project.projectName }}</span>
+
             <span class="main-ai-topbar__tab-close" aria-hidden="true"
-                (click)="removeProjectFromTab(project.inquiryId)">
+                (click)="$event.stopPropagation(); removeProjectFromTab(project.inquiryId)">
                 <i class="fa-solid fa-xmark"></i>
             </span>
+
         </button>
         }
         @if(selectedProjectId !== ''){
-        <button (click)="selectedProjectId = ''" type="button" class="main-ai-topbar__add" aria-label="Add tab">
+        <button routerLink="/main" (click)="selectedProjectId = ''" type="button" class="main-ai-topbar__add"
+            aria-label="Add tab">
             <i class="fa-solid fa-plus"></i>
         </button>
         }
