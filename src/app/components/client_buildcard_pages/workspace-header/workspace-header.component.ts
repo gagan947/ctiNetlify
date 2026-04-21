@@ -105,8 +105,7 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   private syncSelectedProjectFromRoute(): void {
     const inquiryId =
       this.route.snapshot.paramMap.get('id') ||
-      this.route.snapshot.queryParamMap.get('publicEnquiryId') ||
-      '';
+      this.route.snapshot.queryParamMap.get('publicEnquiryId') || '';
 
     this.selectedProjectId = inquiryId;
   }
@@ -238,7 +237,35 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   removeProjectFromTab(projectId: string): void {
     this.apiService.postAPI('api/user/projectRemovedHeader', { inquiryId: projectId }).subscribe((res: any) => {
       if (res.success) {
+        const currentIndex = this.allProjectsList.findIndex((project) => project.inquiryId === projectId);
+        if (currentIndex === -1) {
+          return;
+        }
+
+        const isClosingActiveTab = this.selectedProjectId === projectId;
+        const nextActiveProject =
+          this.allProjectsList[currentIndex + 1] ||
+          this.allProjectsList[currentIndex - 1] ||
+          null;
+
         this.allProjectsList = this.allProjectsList.filter((project) => project.inquiryId !== projectId);
+
+        if (this.getPendingWorkspaceTab()?.inquiryId === projectId) {
+          this.clearPendingWorkspaceTab();
+        }
+
+        if (!isClosingActiveTab) {
+          return;
+        }
+
+        if (nextActiveProject?.inquiryId) {
+          this.selectedProjectId = nextActiveProject.inquiryId;
+          this.router.navigate(['/code-generator', nextActiveProject.inquiryId]);
+          return;
+        }
+
+        this.selectedProjectId = '';
+        this.router.navigate(['/main']);
       }
     });
   }

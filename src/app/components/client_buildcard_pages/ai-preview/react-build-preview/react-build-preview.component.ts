@@ -1267,111 +1267,111 @@ export class ReactBuildPreviewComponent {
     );
 
     // 🧠 Plan
-    await this.addParagraphBlock(
-      `Here’s the plan:
+    // await this.addParagraphBlock(
+    //   `Here’s the plan:
 
-    - Create a clean React + Vite style structure
-    - Add core ${projectTypeName} pages (${previewPages.join(', ')})
-    - Configure react-router-dom for navigation
-    - Build reusable layout (Header, Footer)
-    - Add basic styling to unify the UI
-    - Keep everything modular and scalable`,
-      3000
-    );
+    // - Create a clean React + Vite style structure
+    // - Add core ${projectTypeName} pages (${previewPages.join(', ')})
+    // - Configure react-router-dom for navigation
+    // - Build reusable layout (Header, Footer)
+    // - Add basic styling to unify the UI
+    // - Keep everything modular and scalable`,
+    //   3000
+    // );
 
-    // 🔥 APP SETUP
-    await this.addTerminal([
-      'Creating src/App.js',
-      'Configuring route structure and layout shell'
-    ], 1700, 1900);
+    // // 🔥 APP SETUP
+    // await this.addTerminal([
+    //   'Creating src/App.js',
+    //   'Configuring route structure and layout shell'
+    // ], 1700, 1900);
 
-    await this.addCodeBlock(this.getAppJs());
+    // await this.addCodeBlock(this.getAppJs());
 
-    await this.addParagraphBlock(
-      `App component now defines the main routing structure and wraps all pages with a shared layout. This ensures consistent navigation and UI across screens.`,
-      2400
-    );
+    // await this.addParagraphBlock(
+    //   `App component now defines the main routing structure and wraps all pages with a shared layout. This ensures consistent navigation and UI across screens.`,
+    //   2400
+    // );
 
-    // 🔥 HOME
-    await this.addTerminal([
-      'Creating src/pages/home.jsx',
-      `Building the ${primaryPageName.toLowerCase()} entry experience`
-    ], 1700, 1900);
+    // // 🔥 HOME
+    // await this.addTerminal([
+    //   'Creating src/pages/home.jsx',
+    //   `Building the ${primaryPageName.toLowerCase()} entry experience`
+    // ], 1700, 1900);
 
-    await this.addCodeBlock(this.getHomePage());
+    // await this.addCodeBlock(this.getHomePage());
 
-    await this.addParagraphBlock(
-      `${primaryPageName} page acts as the entry point of the experience. I’ve added a clear hero section and supporting copy so the initial screen can adapt to different product categories and use cases.`,
-      2400
-    );
+    // await this.addParagraphBlock(
+    //   `${primaryPageName} page acts as the entry point of the experience. I’ve added a clear hero section and supporting copy so the initial screen can adapt to different product categories and use cases.`,
+    //   2400
+    // );
 
-    // 🔥 LOGIN
-    await this.addTerminal([
-      'Creating src/pages/login.jsx',
-      'Adding authentication form layout'
-    ], 1700, 1900);
+    // // 🔥 LOGIN
+    // await this.addTerminal([
+    //   'Creating src/pages/login.jsx',
+    //   'Adding authentication form layout'
+    // ], 1700, 1900);
 
-    await this.addCodeBlock(this.getLoginPage());
+    // await this.addCodeBlock(this.getLoginPage());
 
-    await this.addParagraphBlock(
-      `Login page includes a simple form structure with email and password inputs. It’s designed to be easily extendable for real authentication logic.`,
-      2300
-    );
+    // await this.addParagraphBlock(
+    //   `Login page includes a simple form structure with email and password inputs. It’s designed to be easily extendable for real authentication logic.`,
+    //   2300
+    // );
 
     // 🔥 SIGNUP
-    await this.addTerminal([
-      'Creating src/pages/signup.jsx',
-      'Adding user registration flow'
-    ], 1700, 1900);
+    // await this.addTerminal([
+    //   'Creating src/pages/signup.jsx',
+    //   'Adding user registration flow'
+    // ], 1700, 1900);
 
-    await this.addCodeBlock(this.getSignupPage());
+    // await this.addCodeBlock(this.getSignupPage());
 
-    await this.addParagraphBlock(
-      `Signup flow mirrors the login experience for consistency, with additional fields for account creation.`,
-      2200
-    );
+    // await this.addParagraphBlock(
+    //   `Signup flow mirrors the login experience for consistency, with additional fields for account creation.`,
+    //   2200
+    // );
 
-    // 🔥 HEADER
-    await this.addTerminal([
-      'Creating src/components/header.jsx',
-      'Building shared navigation component'
-    ], 1700, 1900);
+    // // 🔥 HEADER
+    // await this.addTerminal([
+    //   'Creating src/components/header.jsx',
+    //   'Building shared navigation component'
+    // ], 1700, 1900);
 
-    await this.addCodeBlock(this.getHeaderComponent());
+    // await this.addCodeBlock(this.getHeaderComponent());
 
-    await this.addParagraphBlock(
-      `Header component provides global navigation across all pages. It’s reusable and connected to routing for seamless transitions.`,
-      2300
-    );
+    // await this.addParagraphBlock(
+    //   `Header component provides global navigation across all pages. It’s reusable and connected to routing for seamless transitions.`,
+    //   2300
+    // );
 
-    // 🔥 CSS
-    await this.addTerminal([
-      'Creating src/styles/home.css',
-      'Applying layout spacing and typography'
-    ], 1700, 1900);
+    // // 🔥 CSS
+    // await this.addTerminal([
+    //   'Creating src/styles/home.css',
+    //   'Applying layout spacing and typography'
+    // ], 1700, 1900);
 
-    await this.addCodeBlock(this.getHomeCSS());
+    // await this.addCodeBlock(this.getHomeCSS());
 
-    await this.addParagraphBlock(
-      `Basic styling is added to ensure visual consistency across the application. Focus is on spacing, typography, and layout clarity.`,
-      2300
-    );
+    // await this.addParagraphBlock(
+    //   `Basic styling is added to ensure visual consistency across the application. Focus is on spacing, typography, and layout clarity.`,
+    //   2300
+    // );
 
-    // 🔍 FINAL CHECK
-    await this.addTerminal([
-      'Reviewing generated files',
-      'Validating routing and structure'
-    ], 1600, 2100);
+    // // 🔍 FINAL CHECK
+    // await this.addTerminal([
+    //   'Reviewing generated files',
+    //   'Validating routing and structure'
+    // ], 1600, 2100);
 
-    await this.addParagraphBlock(
-      `All core pieces are now in place — routing, pages, layout, and styling. The project is structured in a scalable way and ready for further feature expansion like APIs, workflows, dashboards, or domain-specific modules.`,
-      2600
-    );
+    // await this.addParagraphBlock(
+    //   `All core pieces are now in place — routing, pages, layout, and styling. The project is structured in a scalable way and ready for further feature expansion like APIs, workflows, dashboards, or domain-specific modules.`,
+    //   2600
+    // );
 
-    await this.addParagraphBlock(
-      `The foundation is ready. I'm building the first preview now so you can review the generated template in the workspace.`,
-      1800
-    );
+    // await this.addParagraphBlock(
+    //   `The foundation is ready. I'm building the first preview now so you can review the generated template in the workspace.`,
+    //   1800
+    // );
 
     this.setBuildFlow('initial');
     this.setBuildStep(1);
