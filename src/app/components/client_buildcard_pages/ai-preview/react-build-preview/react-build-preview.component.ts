@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, effect, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SafeHtml, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { firstValueFrom } from 'rxjs';
@@ -97,6 +97,7 @@ export class ReactBuildPreviewComponent {
   userHasScrolled = false;
   designCount = 0;
   selected_template_id = '';
+  selectedProjectId = '';
   subscriptionPlan!: SubscriptionResponse;
   isIframeLoading = true;
   selectedDeviceType: string = '<i class="fa-solid fa-display"></i>';
@@ -161,7 +162,8 @@ export class ReactBuildPreviewComponent {
     private router: Router,
     private toster: NzMessageService,
     public subscriptionModalService: SubscriptionModalService,
-    private subscriptionService: SubcriptionService
+    private subscriptionService: SubcriptionService,
+    private route: ActivatedRoute
   ) {
     this.baseURl = this.apiService.apiUrl;
     effect(() => {
@@ -184,25 +186,28 @@ export class ReactBuildPreviewComponent {
     // ============================================
 
     const templates = await this.getUserTemplates();
+    this.route.paramMap.subscribe((res: any) => {
+      this.selectedProjectId = res.params['id'];
+      this.loadDraftTemplates(templates);
+    });
     if (templates.length > 0) {
       await this.showDraftWelcomeMessages(false);
       await this.loadDraftTemplates(templates);
       return;
     }
 
+
     await this.runInitialBuildSequence();
   }
 
   async getUserTemplates(): Promise<UserTemplate[]> {
     const res = await firstValueFrom(
-      this.apiService.postAPI<GetUserTemplatesResponse, any>(
-        'api/user/getUserTemplates',
-        { clientEnquryId: this.projectsData.clientEnquryId }
+      this.apiService.getApi<any>(
+        'api/user/fetchClientAllProjects',
       )
     );
-
-    if (res.success && res.templateExists) {
-      this.templateExists = true;
+    if (res.success) {
+      this.templateExists = res.data.length > 0;
       return res.data;
     }
 
@@ -790,55 +795,12 @@ export class ReactBuildPreviewComponent {
   async loadDraftTemplates(templates: any[]) {
     if (!templates || templates.length === 0) return;
 
-    this.designOrder = [];
-    this.designMap.clear();
-    this.usedVariations = [];
-    this.designCount = 0;
-
-    templates.forEach((tpl, index) => {
-      const designId = `design-${index + 1}`;
-
-      // 🔹 Track variation
-      if (tpl.variation_no) {
-        this.usedVariations.push(tpl.variation_no);
-      }
-
-      const snapshot: DesignSnapshot = {
-        id: designId,
-        label: `Template ${index + 1}`,
-        pages: [],
-        loginRedirect: null,
-        createdAt: new Date(),
-        previewType: 'html'
-      };
-
-      this.designMap.set(designId, snapshot);
-      // ✅ IMPORTANT: store template_id + variation
-      this.designOrder.push({
-        designId,
-        url: this.getPreviewProxyUrl(tpl.public_template_id),
-        user_template_id: tpl.public_template_id,
-        variation_no: tpl.variation_no
-      });
-
-      this.designCount++;
-    });
-
-    // ✅ Set first template active
-    const firstDesign = this.designOrder[0];
-
-    if (firstDesign?.url) {
-      this.activeDesignId = firstDesign.designId;
-      this.isIframeLoading = true;
-
-      this.safePreviewUrl =
-        this.sanitizer.bypassSecurityTrustResourceUrl(firstDesign.url);
-    }
-
+    console.log('selectedProjectId', this.selectedProjectId);
+    const templateId = templates.find((t: any) => t.inquiryId === this.selectedProjectId)?.templateId;
+    this.safePreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.getPreviewProxyUrl(templateId));
     this.isReactBuilding = false;
     this.isTyping = false;
   }
-
 
   async showDraftWelcomeMessages(streamMessages = true) {
 

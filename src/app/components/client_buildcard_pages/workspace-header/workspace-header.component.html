@@ -147,12 +147,18 @@
                                 <div class="credit-body">
                                     <div class="ct_div_row">
                                         <span>Free Credits</span>
+                                        <strong>{{subsCriptionData?.freeCredits.left || 0}} /
+                                            <span>{{subsCriptionData?.freeCredits.total || 0}}</span></strong>
+                                    </div>
+                                    <div class="ct_div_row">
+                                        <span>Plan Credits</span>
                                         <strong>{{subsCriptionData?.planCredits.left || 0}} /
                                             <span>{{subsCriptionData?.planCredits.total || 0}}</span></strong>
                                     </div>
                                     <div class="ct_div_row">
-                                        <span>Bonus Credits</span>
-                                        <strong><span>0.00</span></strong>
+                                        <span>Top-up Credits</span>
+                                        <strong>{{subsCriptionData?.topupCredits.left || 0}} /
+                                            <span>{{subsCriptionData?.topupCredits.total || 0}}</span></strong>
                                     </div>
                                 </div>
 
