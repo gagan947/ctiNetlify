@@ -181,6 +181,9 @@ export class BuyMoreCreditsComponent {
         packKey: pack.pack_key
       };
     } else {
+      if (Number(this.customAmount) < 16.50 || !this.customAmount || !Number(this.customAmount) || isNaN(Number(this.customAmount))) {
+        return;
+      }
       payload = {
         customAmountInr: this.customAmount
       };
@@ -215,7 +218,7 @@ export class BuyMoreCreditsComponent {
 
     cashfree.checkout({
       paymentSessionId: subscriptionSessionId,
-      redirectTarget: "_blank",
+      // redirectTarget: "self",
     })
       .then((result: any) => {
         if (result.error) {

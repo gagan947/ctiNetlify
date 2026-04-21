@@ -1,93 +1,137 @@
-<section class="ct_credit_transactions_modal">
-  <div class="ct_credit_transactions_dialog">
-    <div class="px-3">
-      <div class="ct_credit_transactions_head">
-        <div>
-          <h2 class="mb-1">Credit Transactions</h2>
-          <p>A detailed history of your credit usage and top-ups.</p>
-        </div>
-      </div>
+<section class="ct_dash_board_main" style="display: block !important">
+  <app-workspace-header></app-workspace-header>
+  <div class="ct_dash_right_content ct_user_plan_page">
 
-      <div class="ct_credit_summary_grid">
-        <article class="ct_credit_summary_card">
-          <span>Total Balance</span>
-          <strong class="ct_credit_summary_primary">{{ formatCredits(totalBalance) }}</strong>
-        </article>
-        <article class="ct_credit_summary_card">
-          <span>Plan Credits</span>
-          <strong>{{ formatCredits(planCredits) }}</strong>
-        </article>
-        <article class="ct_credit_summary_card">
-          <span>Top-up Credits</span>
-          <strong>{{ formatCredits(topUpCredits) }}</strong>
-        </article>
-        <article class="ct_credit_summary_card">
-          <span>Free Credits</span>
-          <strong>{{ formatCredits(freeCredits) }}</strong>
-        </article>
-      </div>
-
-      <div class="ct_credit_transactions_scroll" (scroll)="onHistoryScroll($event)">
-        @if (isHistoryLoading) {
-        <div class="ct_credit_state_card">
-          <h3>Loading history...</h3>
-          <p>Fetching your latest credit transactions.</p>
-        </div>
-        } @else if (hasTransactions) {
-        @for (group of transactionGroups; track group.label) {
-        <section class="ct_credit_group">
-          <h3>{{ group.label }}</h3>
-
-          <div class="ct_credit_group_card">
-            @for (item of group.items; track item.id; let isLast = $last) {
-            <article class="ct_credit_transaction_row" [class.ct_credit_transaction_row--last]="isLast">
-              <div class="ct_credit_transaction_main">
-                <div class="ct_transaction_icon" [ngClass]="item.iconClass">
-                  <i class="fa-solid" [ngClass]="item.icon"></i>
-                </div>
-
-                <div class="ct_credit_transaction_copy">
-                  <h4>{{ item.title }}</h4>
-                  <p>{{ item.subtitle }}</p>
-                </div>
-              </div>
-
-              <div class="ct_credit_transaction_meta">
-                <strong [class.ct_credit_delta_positive]="item.delta > 0"
-                  [class.ct_credit_delta_negative]="item.delta < 0">
-                  {{ formatDelta(item.delta) }}
-                </strong>
-                <span>{{ item.time }}</span>
-              </div>
-            </article>
-            }
+    @if (subscriptionPlan) {
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="ct_plan_page_head">
+            <div>
+              <h1 class="ct_fs_18 ct_fw_600 mb-1">Subscription & Billing</h1>
+              <p class="mb-0">
+                View your subscription plan, manage saved cards, and check renewal information.
+              </p>
+            </div>
+            <button class="ct_upgrade_btn" (click)="openSubscriptionModal()">
+              <i class="fa-solid fa-bolt"></i> Upgrade
+            </button>
           </div>
-        </section>
-        }
 
-        @if (isLoadingMoreHistory) {
-        <div class="ct_credit_inline_state">
-          <span>Loading more transactions...</span>
+          <div class="ct_white_bg ct_ecommerse_web_card ct_plan_section">
+            <div class="ct_plan_section_head">
+              <div>
+                <h2 class="ct_fs_18 ct_fw_600 mb-1">{{ subscriptionPlan.planName }}</h2>
+                <p class="mb-0" *ngIf="subscriptionPlan.message">{{ subscriptionPlan.message }}</p>
+              </div>
+              <span class="ct_status_badge" [ngClass]="{
+                'active': subscriptionPlan.subscriptionStatus === 'ACTIVE',
+                'cancelled': subscriptionPlan.subscriptionStatus === 'CANCELLED',
+                'free': !subscriptionPlan.subscriptionStatus
+              }">
+                {{ formattedStatus }}
+              </span>
+            </div>
+
+            <div class="ct_plan_summary_grid">
+              <div class="ct_summary_card">
+                <span>{{ subscriptionPlan.billingInterval === 'YEAR' ? 'Yearly Price' : 'Monthly Price' }}</span>
+                <strong>{{ monthlyPriceLabel }}</strong>
+              </div>
+              <div class="ct_summary_card">
+                <span>Status</span>
+                <strong [ngClass]="{
+                  'status-active': subscriptionPlan.subscriptionStatus === 'ACTIVE',
+                  'status-cancelled': subscriptionPlan.subscriptionStatus === 'CANCELLED',
+                  'status-free': !subscriptionPlan.subscriptionStatus
+                }">{{ formattedStatus }}</strong>
+              </div>
+              <div class="ct_summary_card">
+                <span>Next Billing Date</span>
+                <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date:'mediumDate') :
+                  'Not Available' }}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="ct_white_bg ct_ecommerse_web_card ct_plan_section" *ngIf="subscriptionPlan.activePaymentMethod">
+            <div class="ct_section_title_wrap">
+              <h2 class="ct_fs_18 ct_fw_600 mb-0">Active Payment Method</h2>
+            </div>
+
+            <div class="ct_payment_card">
+              <div class="ct_payment_copy">
+                <div class="ct_payment_icon">
+                  <i class="fa-regular fa-credit-card" *ngIf="subscriptionPlan.activePaymentMethod.type === 'card'"></i>
+                  <i class="fa-solid fa-building-columns"
+                    *ngIf="subscriptionPlan.activePaymentMethod.type !== 'card'"></i>
+                </div>
+                <div>
+                  <h3>{{ paymentMethodLabel }}</h3>
+                  <p class="mb-0">
+                    {{ subscriptionPlan.activePaymentMethod.bank || 'Saved payment method' }}
+                    <span *ngIf="subscriptionPlan.activePaymentMethod.country">, {{
+                      subscriptionPlan.activePaymentMethod.country }}</span>
+                  </p>
+                </div>
+              </div>
+
+              <button class="remove-btn ct_schedule_call_btn ct_white_nowrape_1 px-3 justify-content-center w-auto py-2"
+                [disabled]="isCanceling" (click)="cancelSubcription()"
+                *ngIf="subscriptionPlan.subscriptionStatus === 'ACTIVE'">
+                {{ isCanceling ? 'Canceling...' : 'Cancel Subscription' }}
+              </button>
+            </div>
+          </div>
+
+          @if(subscriptionPlan.planType !== 'FREE') {
+          <div class="ct_white_bg ct_ecommerse_web_card ct_plan_section renewal-box">
+            <div class="ct_section_title_wrap">
+              <div>
+                <h2 class="ct_fs_18 ct_fw_600 mb-1">
+                  {{ subscriptionPlan.subscriptionStatus === 'CANCELLED' ? 'Membership Ends' : 'Membership Renewal' }}
+                </h2>
+                <p class="mb-0">
+                  @if (subscriptionPlan.subscriptionStatus === 'ACTIVE') {
+                  Your membership will renew automatically on the next billing date unless cancelled before that.
+                  }
+                  @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
+                  Your subscription has been cancelled. You will continue to have access until the date below.
+                  }
+                  @if (!subscriptionPlan.subscriptionStatus) {
+                  You are currently on the free plan.
+                  }
+                </p>
+              </div>
+            </div>
+
+            <div class="ct_plan_summary_grid ct_plan_summary_grid_two">
+              <div class="ct_summary_card">
+                <span>Plan Start Date</span>
+                <strong>{{ subscriptionPlan.start_date ? (subscriptionPlan.start_date | date:'mediumDate') :
+                  'Not Available' }}</strong>
+              </div>
+              <div class="ct_summary_card">
+                <span>
+                  @if (subscriptionPlan.subscriptionStatus === 'ACTIVE') {
+                  Next Billing Date
+                  }
+                  @if (subscriptionPlan.subscriptionStatus === 'CANCELLED') {
+                  Access Until
+                  }
+                  @if (!subscriptionPlan.subscriptionStatus) {
+                  Upgrade Anytime
+                  }
+                </span>
+                <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date:'mediumDate') :
+                  'Not Available' }}</strong>
+              </div>
+            </div>
+          </div>
+          }
         </div>
-        }
-        } @else {
-        <div class="ct_credit_state_card">
-          <h3>No transactions yet</h3>
-          <p>Your credit usage and top-ups will appear here once activity starts.</p>
-        </div>
-        }
       </div>
     </div>
-
-    <div class="ct_credit_transactions_footer">
-      <div class="ct_credit_live_status">
-        <span class="ct_credit_live_status_dot"></span>
-        <span>Real-time sync active</span>
-      </div>
-
-      <button type="button" class="ct_blue_btn_fill ct_border_radius_100" (click)="openBuyMoreCreditsModal()">
-        Top up Credits
-      </button>
-    </div>
+    }
   </div>
 </section>

@@ -368,7 +368,7 @@ export class SubcriptionPageComponent {
     cashfree
       .subscriptionsCheckout({
         subsSessionId: subscriptionSessionId,
-        redirectTarget: "_blank",
+        // redirectTarget: "_blank",
       })
       .then((result: any) => {
         if (result.error) {
