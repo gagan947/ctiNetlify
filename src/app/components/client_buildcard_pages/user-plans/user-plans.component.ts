@@ -112,7 +112,7 @@ export class UserPlansComponent {
       return 'Free';
     }
 
-    return `₹${this.subscriptionPlan.pricingPlan} / ${this.subscriptionPlan.billingInterval === 'YEAR' ? 'year' : 'month'}`;
+    return `Rs. ${this.subscriptionPlan.pricingPlan} / ${this.subscriptionPlan.billingInterval === 'YEAR' ? 'year' : 'month'}`;
   }
 
   get formattedStatus(): string {
@@ -138,37 +138,6 @@ export class UserPlansComponent {
     }
 
     return paymentMethod.upi_id || 'UPI payment method';
-  }
-
-  get featureChips(): string[] {
-    if (!this.subscriptionPlan) {
-      return [];
-    }
-
-    const chips = [
-      `${this.subscriptionPlan.projectLimit} Project Limit`,
-      `${this.subscriptionPlan.template_limit} Template Limit`,
-      `${this.subscriptionPlan.variationLimit || 0} Variations / Project`,
-      this.subscriptionPlan.supportType === 'CHAT'
-        ? 'Chat Support'
-        : this.subscriptionPlan.supportType === 'PRIORITY'
-          ? 'Priority Support'
-          : 'Basic Support'
-    ];
-
-    if (this.subscriptionPlan.canDeploy) {
-      chips.push('Deploy Access');
-    }
-
-    if (this.subscriptionPlan.githubIntegration) {
-      chips.push('GitHub Integration');
-    }
-
-    if (this.subscriptionPlan.customFeatures) {
-      chips.push('Custom Features');
-    }
-
-    return chips;
   }
 
   get hasCreditHistory(): boolean {

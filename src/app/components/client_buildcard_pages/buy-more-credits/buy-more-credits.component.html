@@ -45,7 +45,7 @@
       <div class="ct_buy_credits__custom_row">
         <div class="ct_buy_credits__input_wrap">
           <span>&#8377;</span>
-          <input id="creditCustomAmount" type="text" [value]="customAmount" (input)="onCustomAmountChange($event)"
+          <input id="creditCustomAmount" type="number" [value]="customAmount" (input)="onCustomAmountChange($event)"
             placeholder="Enter custom amount" />
         </div>
         <button type="button" class="ct_buy_credits__custom_btn" (click)="buyCredits(null)">Buy {{ customCredits }}
