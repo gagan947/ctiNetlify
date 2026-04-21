@@ -8,23 +8,26 @@
           <div class="ct_plan_shell">
             <div class="ct_plan_hero">
               <div class="ct_plan_hero_copy">
-                <h1>{{ subscriptionPlan.planName }} overview and credit wallet</h1>
-                <p>
-                  Keep an eye on your current membership, available balance, and recent credit activity from one clean
-                  dashboard.
-                </p>
-
-                <div class="ct_plan_hero_actions">
-                  <button class="ct_upgrade_btn" type="button" (click)="openSubscriptionModal()">
-                    <i class="fa-solid fa-bolt"></i>
-                    <span>Upgrade Plan</span>
-                  </button>
-                  <button class="ct_secondary_btn" type="button" (click)="openBuyCreditsModal()">
-                    <i class="fa-solid fa-wallet"></i>
-                    <span>Buy Credits</span>
-                  </button>
+                <div class="d-flex justify-content-between align-items-start">
+                  <div>
+                    <h1>{{ subscriptionPlan.planName }} overview and credit wallet</h1>
+                    <p>
+                      Keep an eye on your current membership, available balance, and recent credit activity from one
+                      clean
+                      dashboard.
+                    </p>
+                  </div>
+                  <div class="ct_plan_hero_actions">
+                    <button class="ct_upgrade_btn" type="button" (click)="openSubscriptionModal()">
+                      <i class="fa-solid fa-bolt"></i>
+                      <span>Upgrade Plan</span>
+                    </button>
+                    <button class="ct_secondary_btn" type="button" (click)="openBuyCreditsModal()">
+                      <i class="fa-solid fa-wallet"></i>
+                      <span>Buy Credits</span>
+                    </button>
+                  </div>
                 </div>
-
                 <div class="ct_plan_hero_metrics">
                   <div class="ct_hero_metric">
                     <span>Status</span>
@@ -32,11 +35,11 @@
                   </div>
                   <div class="ct_hero_metric">
                     <span>Total Credits</span>
-                    <strong>{{ creditBalanceSummary.total | number:'1.0-0' }} cr</strong>
+                    <strong>{{ creditBalanceSummary.total | number:'1.0-0' }} credits</strong>
                   </div>
                   <div class="ct_hero_metric">
                     <span>Top-up Credits</span>
-                    <strong>{{ creditBalanceSummary.topup | number:'1.0-0' }} cr</strong>
+                    <strong>{{ creditBalanceSummary.topup | number:'1.0-0' }} credits</strong>
                   </div>
                   <div class="ct_hero_metric">
                     <span>Next billing</span>
@@ -44,34 +47,6 @@
                       date:'mediumDate') :
                       'Not Available' }}</strong>
                   </div>
-                </div>
-              </div>
-
-              <div class="ct_plan_hero_panel">
-                <div class="ct_plan_hero_panel_head">
-                  <div>
-                    <span class="ct_plan_hero_label">Current Plan</span>
-                    <h2>{{ subscriptionPlan.planName }}</h2>
-                  </div>
-                  <span class="ct_status_badge" [ngClass]="{
-                    'active': subscriptionPlan.subscriptionStatus === 'ACTIVE',
-                    'cancelled': subscriptionPlan.subscriptionStatus === 'CANCELLED',
-                    'free': !subscriptionPlan.subscriptionStatus
-                  }">
-                    {{ formattedStatus }}
-                  </span>
-                </div>
-
-                <div class="ct_plan_highlight_box">
-                  <span>Billing cycle</span>
-                  <strong>{{ monthlyPriceLabel }}</strong>
-                </div>
-
-                <div class="ct_plan_highlight_box">
-                  <span>Next renewal</span>
-                  <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date:'mediumDate')
-                    :
-                    'Not Available' }}</strong>
                 </div>
               </div>
             </div>
@@ -89,29 +64,29 @@
                         <i class="fa-solid fa-rotate-right"></i>
                         <span>Refresh</span>
                       </button>
-                      <button class="ct_upgrade_btn" type="button" (click)="openBuyCreditsModal()">
+                      <!-- <button class="ct_upgrade_btn" type="button" (click)="openBuyCreditsModal()">
                         <i class="fa-solid fa-plus"></i>
                         <span>Top up Credits</span>
-                      </button>
+                      </button> -->
                     </div>
                   </div>
 
                   <div class="ct_credit_balance_strip">
-                    <div class="ct_credit_balance_card ct_credit_balance_card_primary">
+                    <div class="ct_credit_balance_card">
                       <span>Total Balance</span>
-                      <strong>{{ creditBalanceSummary.total | number:'1.0-0' }} cr</strong>
+                      <strong>{{ creditBalanceSummary.total | number:'1.0-0' }} credits</strong>
                     </div>
                     <div class="ct_credit_balance_card">
                       <span>Plan Credits</span>
-                      <strong>{{ creditBalanceSummary.plan | number:'1.0-0' }} cr</strong>
+                      <strong>{{ creditBalanceSummary.plan | number:'1.0-0' }} credits</strong>
                     </div>
                     <div class="ct_credit_balance_card">
                       <span>Top-up Credits</span>
-                      <strong>{{ creditBalanceSummary.topup | number:'1.0-0' }} cr</strong>
+                      <strong>{{ creditBalanceSummary.topup | number:'1.0-0' }} credits</strong>
                     </div>
                     <div class="ct_credit_balance_card">
                       <span>Free / Bonus</span>
-                      <strong>{{ creditBalanceSummary.free | number:'1.0-0' }} cr</strong>
+                      <strong>{{ creditBalanceSummary.free | number:'1.0-0' }} credits</strong>
                     </div>
                   </div>
 
@@ -193,6 +168,34 @@
               </div>
 
               <div class="ct_dashboard_side">
+                <div class="ct_plan_hero_panel">
+                  <div class="ct_plan_hero_panel_head">
+                    <div>
+                      <span class="ct_plan_hero_label">Current Plan</span>
+                      <h2>{{ subscriptionPlan.planName }}</h2>
+                    </div>
+                    <span class="ct_status_badge" [ngClass]="{
+                                    'active': subscriptionPlan.subscriptionStatus === 'ACTIVE',
+                                    'cancelled': subscriptionPlan.subscriptionStatus === 'CANCELLED',
+                                    'free': !subscriptionPlan.subscriptionStatus
+                                  }">
+                      {{ formattedStatus }}
+                    </span>
+                  </div>
+
+                  <div class="ct_plan_highlight_box">
+                    <span>Billing cycle</span>
+                    <strong>{{ monthlyPriceLabel }}</strong>
+                  </div>
+
+                  <div class="ct_plan_highlight_box">
+                    <span>Next renewal</span>
+                    <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date |
+                      date:'mediumDate')
+                      :
+                      'Not Available' }}</strong>
+                  </div>
+                </div>
                 <div class="ct_white_bg ct_ecommerse_web_card ct_plan_section ct_side_card"
                   *ngIf="subscriptionPlan.activePaymentMethod">
                   <div class="ct_section_header">

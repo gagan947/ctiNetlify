@@ -240,9 +240,9 @@
     border-radius: 999px;
 }
 
-.main-ai-topbar__avatar--active {
+/* .main-ai-topbar__avatar--active {
     box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.32);
-}
+} */
 
 .main-ai-topbar__home:hover,
 .main-ai-topbar__add:hover,

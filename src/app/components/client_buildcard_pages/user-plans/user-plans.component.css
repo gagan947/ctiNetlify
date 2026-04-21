@@ -22,12 +22,12 @@
   gap: 16px;
 }
 
-.ct_plan_hero {
+/* .ct_plan_hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.65fr);
+  grid-template-columns: minmax(0, 1fr) 420px;
   gap: 14px;
-  align-items: stretch;
-}
+  align-items: start;
+} */
 
 .ct_plan_hero_copy,
 .ct_plan_hero_panel,
@@ -82,7 +82,7 @@
 }
 
 .ct_plan_hero_copy p {
-  max-width: 56ch;
+  /* max-width: 56ch; */
   color: var(--ct-text-soft);
   font-size: 13px;
   line-height: 1.6;
@@ -117,7 +117,7 @@
 .ct_upgrade_btn {
   color: #fff;
   background: linear-gradient(135deg, #0d63f3 0%, #1655c0 100%);
-  box-shadow: 0 12px 24px rgba(22, 85, 192, 0.2);
+  /* box-shadow: 0 12px 24px rgba(22, 85, 192, 0.2); */
 }
 
 .ct_upgrade_btn:hover,
@@ -173,7 +173,7 @@
   flex-direction: column;
   gap: 12px;
   justify-content: flex-start;
-  min-height: 100%;
+  height: 100%;
 }
 
 .ct_plan_hero_panel_head {
@@ -246,7 +246,7 @@
 
 .ct_dashboard_grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.58fr);
+  grid-template-columns: minmax(0, 1fr) 420px;
   gap: 16px;
   align-items: start;
 }
@@ -260,6 +260,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 }
 
 .ct_dashboard_side {
@@ -292,7 +293,7 @@
 .ct_section_header p {
   margin-bottom: 0;
   color: var(--ct-text-soft);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.55;
 }
 
@@ -308,14 +309,13 @@
   gap: 8px;
   padding: 8px;
   border-radius: 18px;
-  background: linear-gradient(180deg, #f7f9fc 0%, #eef3f8 100%);
-  border: 1px solid #e0e7f0;
 }
 
 .ct_credit_balance_card {
   padding: 10px 12px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.82);
+  background: linear-gradient(180deg, #f7f9fc 0%, #eef3f8 100%);
+  border: 1px solid #e0e7f0;
 }
 
 .ct_credit_balance_card_primary {
@@ -543,6 +543,7 @@
 
 .ct_side_card {
   padding: 16px;
+  width: 100%;
 }
 
 .ct_payment_card {
