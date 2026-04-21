@@ -122,7 +122,7 @@ export class DashboardComponent {
       no_of_features: project.no_of_features,
       projectName: project.projectName
     };
-
+    this.apiService.postAPI('api/user/projectRemovedHeader', { inquiryId: project.projectId }).subscribe()
     sessionStorage.setItem('htmlCode', project.html_pages || '');
     sessionStorage.setItem('projectData', JSON.stringify(projectData));
     this.router.navigate(['/code-generator/', project.inquiryId], { state: { projectData } });

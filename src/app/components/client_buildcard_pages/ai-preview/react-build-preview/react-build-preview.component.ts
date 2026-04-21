@@ -185,7 +185,7 @@ export class ReactBuildPreviewComponent {
 
     const templates = await this.getUserTemplates();
     if (templates.length > 0) {
-      await this.showDraftWelcomeMessages();
+      await this.showDraftWelcomeMessages(false);
       await this.loadDraftTemplates(templates);
       return;
     }
@@ -194,7 +194,6 @@ export class ReactBuildPreviewComponent {
   }
 
   async getUserTemplates(): Promise<UserTemplate[]> {
-
     const res = await firstValueFrom(
       this.apiService.postAPI<GetUserTemplatesResponse, any>(
         'api/user/getUserTemplates',
@@ -841,17 +840,99 @@ export class ReactBuildPreviewComponent {
   }
 
 
-  async showDraftWelcomeMessages() {
+  async showDraftWelcomeMessages(streamMessages = true) {
 
     const now = new Date();
+    const introMessage = `I found previously generated templates for this project, and I'm restoring them into the workspace so you can continue review without starting over.`;
+    const closingMessage = `Your saved variations are now ready. You can review each template, request a fresh variation, customize the current direction, or move ahead when you're ready to deploy.`;
+    const restoredWorkspaceBlock = {
+      file: 'workspace/template-session.json',
+      added: 12,
+      removed: 0,
+      content: [
+        { line: 1, text: '{' },
+        { line: 2, text: '  "status": "restored",' },
+        { line: 3, text: '  "templates": ["Template 1", "Template 2"],' },
+        { line: 4, text: '  "activePreview": "Template 1",' },
+        { line: 5, text: '  "deploymentState": "ready"' },
+        { line: 6, text: '}' }
+      ]
+    };
 
     this.blocks = [];
     this.isReactBuilding = true;
     this.setBuildFlow('restore');
     this.setBuildStep(1);
 
+    if (!streamMessages) {
+      this.setBuildStep(3);
+      this.blocks = [
+        {
+          id: `paragraph-${Date.now()}-0`,
+          text: introMessage,
+          done: true,
+          timestamp: now
+        },
+        {
+          type: 'terminal',
+          data: {
+            lines: ['Fetching saved templates'],
+            done: true
+          }
+        },
+        {
+          type: 'terminal',
+          data: {
+            lines: ['Loading draft previews'],
+            done: true
+          }
+        },
+        {
+          type: 'terminal',
+          data: {
+            lines: ['Restoring template tabs in the workspace'],
+            done: true
+          }
+        },
+        {
+          type: 'code',
+          data: restoredWorkspaceBlock
+        },
+        {
+          id: `paragraph-${Date.now()}-1`,
+          text: closingMessage,
+          done: true,
+          timestamp: now
+        },
+        {
+          type: 'summary',
+          data: {
+            time: '24s',
+            description: 'Restored your saved template workspace and reloaded the available preview variations.',
+            highlights: ['Saved template restore', 'Draft previews loaded', 'Workspace ready']
+          }
+        }
+      ];
+
+      this.blocks.push({
+        id: 'credentials',
+        text: {
+          label: 'Project Credentials',
+          email: 'creative@gmail.com',
+          password: 'Test@123',
+          message: 'You can use these credentials to login to your project.'
+        },
+        done: true,
+        timestamp: now
+      });
+
+      this.appendBuildActionPrompt();
+      setTimeout(() => this.scrollToBottom(true), 0);
+      return;
+    }
+
     await this.addParagraphBlock(
-      `I found previously generated templates for this project, and I'm restoring them into the workspace so you can continue review without starting over.`,
+      introMessage,
       1800
     );
 
@@ -870,21 +951,11 @@ export class ReactBuildPreviewComponent {
     ], 1300, 1600);
 
     await this.addCodeBlock({
-      file: 'workspace/template-session.json',
-      added: 12,
-      removed: 0,
-      content: [
-        { line: 1, text: '{' },
-        { line: 2, text: '  "status": "restored",' },
-        { line: 3, text: '  "templates": ["Template 1", "Template 2"],' },
-        { line: 4, text: '  "activePreview": "Template 1",' },
-        { line: 5, text: '  "deploymentState": "ready"' },
-        { line: 6, text: '}' }
-      ]
+      ...restoredWorkspaceBlock
     });
 
     await this.addParagraphBlock(
-      `Your saved variations are now ready. You can review each template, request a fresh variation, customize the current direction, or move ahead when you're ready to deploy.`,
+      closingMessage,
       2000
     );
 

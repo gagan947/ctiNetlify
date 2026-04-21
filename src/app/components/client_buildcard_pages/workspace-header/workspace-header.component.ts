@@ -13,6 +13,7 @@ interface UserProjectTab {
   projectStatus?: number;
   project_deployed?: number;
   createdAt?: string;
+  is_header_available?: number;
 }
 
 interface UserProfileSummary {
@@ -72,7 +73,7 @@ export class WorkspaceHeaderComponent {
     this.apiService.getApi<any>('api/user/fetchClientAllProjects').subscribe(
       (res) => {
         if (res.success) {
-          this.allProjectsList = (res.data || []) as UserProjectTab[];
+          this.allProjectsList = (res.data || []).filter((project: UserProjectTab) => project.is_header_available === 1);
 
           // if (!this.selectedProjectId && this.allProjectsList.length > 0) {
           //   this.selectedProjectId = this.allProjectsList[0].inquiryId;
@@ -161,7 +162,11 @@ export class WorkspaceHeaderComponent {
   }
 
   removeProjectFromTab(projectId: string): void {
-    this.allProjectsList = this.allProjectsList.filter((project) => project.inquiryId !== projectId);
+    this.apiService.postAPI('api/user/projectRemovedHeader', { inquiryId: projectId }).subscribe((res: any) => {
+      if (res.success) {
+        this.allProjectsList = this.allProjectsList.filter((project) => project.inquiryId !== projectId);
+      }
+    });
   }
 
   @HostListener('document:click', ['$event'])
