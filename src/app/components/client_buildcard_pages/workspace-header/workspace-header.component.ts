@@ -74,9 +74,9 @@ export class WorkspaceHeaderComponent {
         if (res.success) {
           this.allProjectsList = (res.data || []) as UserProjectTab[];
 
-          // if (!this.selectedProjectId && this.allProjectsList.length > 0) {
-          //   this.selectedProjectId = this.allProjectsList[0].inquiryId;
-          // }
+          if (!this.selectedProjectId && this.allProjectsList.length > 0) {
+            this.selectedProjectId = this.allProjectsList[0].inquiryId;
+          }
 
           const inquiryId = this.route.snapshot.paramMap.get('id');
           if (inquiryId) {
@@ -160,6 +160,10 @@ export class WorkspaceHeaderComponent {
     this.deviceTypeChange.emit(deviceType);
   }
 
+  removeProjectFromTab(projectId: string): void {
+    this.allProjectsList = this.allProjectsList.filter((project) => project.inquiryId !== projectId);
+  }
+
   @HostListener('document:click', ['$event'])
   handleDocumentClick(event: MouseEvent): void {
     const target = event.target as Node | null;
@@ -170,7 +174,6 @@ export class WorkspaceHeaderComponent {
     if (this.profileMenu?.nativeElement.contains(target)) {
       return;
     }
-
     this.closeProfileMenu();
   }
 }

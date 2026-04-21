@@ -6,7 +6,8 @@
             <i class="fa-solid fa-bars"></i>
         </label>
 
-        <a class="main-ai-topbar__home" routerLink="/main">
+        <a class="main-ai-topbar__home" [class.main-ai-topbar__tab--active]="selectedProjectId === ''"
+            routerLink="/main" (click)="selectedProjectId = ''">
             <i class="fa-solid fa-table-cells-large"></i>
             <span>Home</span>
         </a>
@@ -15,13 +16,22 @@
         <button type="button" class="main-ai-topbar__tab" [class.main-ai-topbar__tab--active]="
           project.inquiryId === selectedProjectId
         " (click)="selectProjectTab(project)">
+            <span class="main-ai-topbar__tab-dot-wrap"
+                [class.main-ai-topbar__tab-dot-wrap--active]="project.inquiryId === selectedProjectId">
+                <span class="main-ai-topbar__tab-dot"></span>
+            </span>
             <span class="main-ai-topbar__tab-label">{{ project.projectName }}</span>
+            <span class="main-ai-topbar__tab-close" aria-hidden="true"
+                (click)="removeProjectFromTab(project.inquiryId)">
+                <i class="fa-solid fa-xmark"></i>
+            </span>
         </button>
         }
-        <!-- 
-        <button type="button" class="main-ai-topbar__add" aria-label="Add tab">
+        @if(selectedProjectId !== ''){
+        <button (click)="selectedProjectId = ''" type="button" class="main-ai-topbar__add" aria-label="Add tab">
             <i class="fa-solid fa-plus"></i>
-        </button> -->
+        </button>
+        }
     </div>
 
     <div class="main-ai-topbar__right" style="padding-bottom: 6px">

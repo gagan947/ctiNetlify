@@ -34,11 +34,11 @@
                     <strong>{{ formattedStatus }}</strong>
                   </div>
                   <div class="ct_hero_metric">
-                    <span>Total Credits</span>
+                    <span>Remaining Credits</span>
                     <strong>{{ creditBalanceSummary.total | number:'1.0-0' }} credits</strong>
                   </div>
                   <div class="ct_hero_metric">
-                    <span>Top-up Credits</span>
+                    <span>Total Top-up Credits</span>
                     <strong>{{ creditBalanceSummary.topup | number:'1.0-0' }} credits</strong>
                   </div>
                   <div class="ct_hero_metric">
@@ -136,8 +136,6 @@
                                 <p class="mb-0">{{ item.subtitle }}</p>
                               </div>
                             </div>
-
-
 
                             <div class="ct_credit_history_item_right">
                               <strong [ngClass]="{

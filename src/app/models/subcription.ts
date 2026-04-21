@@ -2,6 +2,11 @@ export interface SubscriptionResponse {
   success: boolean;
   access?: boolean;
   allowProjectCreate: boolean;
+  availableCredits?: number;
+  creditBalance?: number;
+  creditsPerCycle?: number;
+  creditGrantInterval?: string;
+  limitsEnforced?: boolean;
   message: string;
   planType: string;
   planName: string;
@@ -15,6 +20,10 @@ export interface SubscriptionResponse {
   canDelete?: number;
   paymentStatus?: string;
   template_limit: number;
+  freeCredits?: CreditBucket;
+  planCredits?: CreditBucket;
+  topupCredits?: CreditBucket;
+  topupAllowed?: number;
   subscription: SubscriptionData | null;
   activePaymentMethod: paymentMethod | null;
   billingInterval: string;
@@ -24,6 +33,11 @@ export interface SubscriptionResponse {
   next_charge_date: string;
   start_date: string;
   subscriptionStatus: string;
+}
+
+export interface CreditBucket {
+  left: number;
+  total: number;
 }
 
 

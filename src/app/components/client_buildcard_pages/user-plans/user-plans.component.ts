@@ -101,6 +101,7 @@ export class UserPlansComponent {
         if (subscription) {
           this.subscriptionPlan = subscription;
           this.planName = subscription.planName;
+          this.creditBalanceSummary = this.buildCreditBalanceSummaryFromSubscription(subscription);
         }
       });
 
@@ -124,7 +125,7 @@ export class UserPlansComponent {
       ? 'Active'
       : this.subscriptionPlan.subscriptionStatus === 'CANCELLED'
         ? 'Cancelled'
-        : this.subscriptionPlan.subscriptionStatus;
+        : this.subscriptionPlan.subscriptionStatus === 'BANK_APPROVAL_PENDING' ? 'Bank Approval Pending' : '';
   }
 
   get paymentMethodLabel(): string {
@@ -154,7 +155,9 @@ export class UserPlansComponent {
         next: (response) => {
           const items = response?.data?.items || [];
           this.creditHistoryGroups = this.groupCreditTransactions(items);
-          this.creditBalanceSummary = this.buildCreditBalanceSummary(items);
+          if (!this.subscriptionPlan) {
+            this.creditBalanceSummary = this.buildCreditBalanceSummary(items);
+          }
           this.isCreditHistoryLoading = false;
         },
         error: (error) => {
@@ -173,7 +176,7 @@ export class UserPlansComponent {
   }
 
   getCreditAmountLabel(value: number): string {
-    return `${Math.abs(value).toLocaleString('en-IN')} cr`;
+    return `${Math.abs(value).toLocaleString('en-IN')} credits`;
   }
 
   trackByHistoryGroup(_index: number, group: CreditTransactionGroup): string {
@@ -229,6 +232,39 @@ export class UserPlansComponent {
     const free = Math.max(total - plan - topup, 0);
 
     return { total, plan, topup, free };
+  }
+
+  private buildCreditBalanceSummaryFromSubscription(subscription: SubscriptionResponse): CreditBalanceSummary {
+    const total = Number(
+      subscription.creditBalance ??
+      subscription.availableCredits ??
+      0
+    );
+
+    const plan = Number(
+      subscription.planCredits?.total ??
+      subscription.planCredits?.left ??
+      0
+    );
+
+    const topup = Number(
+      subscription.topupCredits?.total ??
+      subscription.topupCredits?.left ??
+      0
+    );
+
+    const free = Number(
+      subscription.freeCredits?.total ??
+      subscription.freeCredits?.left ??
+      0
+    );
+
+    return {
+      total,
+      plan,
+      topup,
+      free
+    };
   }
 
   private groupCreditTransactions(entries: CreditHistoryEntry[]): CreditTransactionGroup[] {
@@ -306,9 +342,9 @@ export class UserPlansComponent {
       return metaTitle;
     }
 
-    if (entry.reference_type) {
-      return this.toTitleCase(entry.reference_type.replace(/_/g, ' '));
-    }
+    // if (entry.reference_type) {
+    //   return this.toTitleCase(entry.reference_type.replace(/_/g, ' '));
+    // }
 
     return this.toTitleCase((entry.source_key || 'Transaction').replace(/_/g, ' '));
   }
