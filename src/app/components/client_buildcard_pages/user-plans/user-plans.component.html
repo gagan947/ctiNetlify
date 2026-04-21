@@ -10,7 +10,7 @@
             <div>
               <h1 class="ct_fs_18 ct_fw_600 mb-1">Subscription & Billing</h1>
               <p class="mb-0">
-                View your subscription plan, manage saved cards, and check renewal information.
+                View your subscription plan, manage saved cards, and review credit activity in one place.
               </p>
             </div>
             <button class="ct_upgrade_btn" (click)="openSubscriptionModal()">
@@ -50,6 +50,10 @@
                 <span>Next Billing Date</span>
                 <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date:'mediumDate') :
                   'Not Available' }}</strong>
+              </div>
+              <div class="ct_summary_card ct_summary_card_emphasis">
+                <span>Total Credits</span>
+                <strong>{{ creditBalanceSummary.total | number:'1.0-0' }} cr</strong>
               </div>
             </div>
           </div>
@@ -129,6 +133,107 @@
             </div>
           </div>
           }
+
+          <div class="ct_white_bg ct_ecommerse_web_card ct_plan_section ct_credit_history_section">
+            <div class="ct_plan_section_head ct_credit_history_head">
+              <div>
+                <h2 class="ct_fs_18 ct_fw_600 mb-1">Credit Transactions</h2>
+                <p class="mb-0">
+                  A detailed history of your credit usage, top-ups, and remaining balances.
+                </p>
+              </div>
+              <div class="ct_credit_history_actions">
+                <button class="ct_credit_action_btn ct_credit_action_btn_secondary" type="button"
+                  (click)="loadCreditHistory()">
+                  Refresh
+                </button>
+                <button class="ct_credit_action_btn" type="button" (click)="openBuyCreditsModal()">
+                  Top up Credits
+                </button>
+              </div>
+            </div>
+
+            <div class="ct_credit_balance_strip">
+              <div class="ct_credit_balance_card">
+                <span>Total Balance</span>
+                <strong>{{ creditBalanceSummary.total | number:'1.0-0' }} cr</strong>
+              </div>
+              <div class="ct_credit_balance_card">
+                <span>Plan Credits</span>
+                <strong>{{ creditBalanceSummary.plan | number:'1.0-0' }} cr</strong>
+              </div>
+              <div class="ct_credit_balance_card">
+                <span>Top-up Credits</span>
+                <strong>{{ creditBalanceSummary.topup | number:'1.0-0' }} cr</strong>
+              </div>
+              <div class="ct_credit_balance_card">
+                <span>Free / Bonus</span>
+                <strong>{{ creditBalanceSummary.free | number:'1.0-0' }} cr</strong>
+              </div>
+            </div>
+
+            <div class="ct_credit_history_state" *ngIf="isCreditHistoryLoading">
+              <i class="fa-solid fa-rotate fa-spin"></i>
+              <span>Loading credit history...</span>
+            </div>
+
+            <div class="ct_credit_history_state ct_credit_history_state_error"
+              *ngIf="!isCreditHistoryLoading && creditHistoryError">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <span>{{ creditHistoryError }}</span>
+            </div>
+
+            <div class="ct_credit_history_state"
+              *ngIf="!isCreditHistoryLoading && !creditHistoryError && !hasCreditHistory">
+              <i class="fa-regular fa-clock"></i>
+              <span>No credit transactions found yet.</span>
+            </div>
+
+            <div class="ct_credit_history_groups"
+              *ngIf="!isCreditHistoryLoading && !creditHistoryError && hasCreditHistory">
+              <div class="ct_credit_history_group" *ngFor="let group of creditHistoryGroups; trackBy: trackByHistoryGroup">
+                <div class="ct_credit_history_label">{{ group.label }}</div>
+
+                <div class="ct_credit_history_item" *ngFor="let item of group.items; trackBy: trackByHistoryItem">
+                  <div class="ct_credit_history_item_left">
+                    <div class="ct_credit_history_icon" [ngClass]="item.iconClass">
+                      <i class="fa-solid fa-bolt" *ngIf="item.icon === 'bolt'"></i>
+                      <i class="fa-solid fa-comments" *ngIf="item.icon === 'comment'"></i>
+                      <i class="fa-solid fa-plus" *ngIf="item.icon === 'plus'"></i>
+                      <i class="fa-solid fa-pen-to-square" *ngIf="item.icon === 'edit'"></i>
+                      <i class="fa-solid fa-wallet" *ngIf="item.icon === 'wallet'"></i>
+                    </div>
+
+                    <div class="ct_credit_history_copy">
+                      <h3>{{ item.title }}</h3>
+                      <p class="mb-0">{{ item.subtitle }}</p>
+                    </div>
+                  </div>
+
+                  <div class="ct_credit_history_item_right">
+                    <strong [ngClass]="{
+                      'is-positive': item.delta >= 0,
+                      'is-negative': item.delta < 0
+                    }">
+                      {{ item.delta >= 0 ? '+' : '-' }} {{ getCreditAmountLabel(item.delta) }}
+                    </strong>
+                    <span>{{ item.time }}</span>
+                    <small>Balance: {{ item.balanceAfter | number:'1.0-0' }} cr</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ct_credit_footer">
+              <div class="ct_credit_footer_status">
+                <span class="ct_credit_footer_dot"></span>
+                <span>Real-time sync active</span>
+              </div>
+              <button class="ct_credit_action_btn" type="button" (click)="openBuyCreditsModal()">
+                Buy More Credits
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
