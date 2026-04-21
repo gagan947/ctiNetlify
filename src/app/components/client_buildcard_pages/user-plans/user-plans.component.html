@@ -1,7 +1,6 @@
 <section class="ct_dash_board_main" style="display: block !important">
   <app-workspace-header></app-workspace-header>
   <div class="ct_dash_right_content ct_user_plan_page">
-
     @if (subscriptionPlan) {
     <div class="container">
       <div class="row">
@@ -9,7 +8,6 @@
           <div class="ct_plan_shell">
             <div class="ct_plan_hero">
               <div class="ct_plan_hero_copy">
-                <div class="ct_plan_eyebrow">Billing Dashboard</div>
                 <h1>{{ subscriptionPlan.planName }} overview and credit wallet</h1>
                 <p>
                   Keep an eye on your current membership, available balance, and recent credit activity from one clean
@@ -29,16 +27,16 @@
 
                 <div class="ct_plan_hero_metrics">
                   <div class="ct_hero_metric">
-                    <span>Current Plan</span>
-                    <strong>{{ subscriptionPlan.planName }}</strong>
-                  </div>
-                  <div class="ct_hero_metric">
                     <span>Status</span>
                     <strong>{{ formattedStatus }}</strong>
                   </div>
                   <div class="ct_hero_metric">
                     <span>Total Credits</span>
                     <strong>{{ creditBalanceSummary.total | number:'1.0-0' }} cr</strong>
+                  </div>
+                  <div class="ct_hero_metric">
+                    <span>Top-up Credits</span>
+                    <strong>{{ creditBalanceSummary.topup | number:'1.0-0' }} cr</strong>
                   </div>
                   <div class="ct_hero_metric">
                     <span>Next billing</span>
@@ -71,13 +69,14 @@
 
                 <div class="ct_plan_highlight_box">
                   <span>Next renewal</span>
-                  <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date:'mediumDate') :
+                  <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date:'mediumDate')
+                    :
                     'Not Available' }}</strong>
                 </div>
               </div>
             </div>
 
-            <div class="ct_dashboard_grid">
+            <div class="ct_dashboard_grid" [class.ct_dashboard_grid_full]="!subscriptionPlan.activePaymentMethod">
               <div class="ct_dashboard_main">
                 <div class="ct_white_bg ct_ecommerse_web_card ct_plan_section ct_credit_history_section">
                   <div class="ct_section_header ct_credit_history_head">
@@ -116,65 +115,64 @@
                     </div>
                   </div>
 
-                  <div class="ct_credit_history_state" *ngIf="isCreditHistoryLoading">
-                    <i class="fa-solid fa-rotate fa-spin"></i>
-                    <span>Loading credit history...</span>
-                  </div>
+                  <div class="ct_credit_history_body">
+                    <div class="ct_credit_history_state" *ngIf="isCreditHistoryLoading">
+                      <i class="fa-solid fa-rotate fa-spin"></i>
+                      <span>Loading credit history...</span>
+                    </div>
 
-                  <div class="ct_credit_history_state ct_credit_history_state_error"
-                    *ngIf="!isCreditHistoryLoading && creditHistoryError">
-                    <i class="fa-solid fa-circle-exclamation"></i>
-                    <span>{{ creditHistoryError }}</span>
-                  </div>
+                    <div class="ct_credit_history_state ct_credit_history_state_error"
+                      *ngIf="!isCreditHistoryLoading && creditHistoryError">
+                      <i class="fa-solid fa-circle-exclamation"></i>
+                      <span>{{ creditHistoryError }}</span>
+                    </div>
 
-                  <div class="ct_credit_history_state"
-                    *ngIf="!isCreditHistoryLoading && !creditHistoryError && !hasCreditHistory">
-                    <i class="fa-regular fa-clock"></i>
-                    <span>No credit transactions found yet.</span>
-                  </div>
+                    <div class="ct_credit_history_state"
+                      *ngIf="!isCreditHistoryLoading && !creditHistoryError && !hasCreditHistory">
+                      <i class="fa-regular fa-clock"></i>
+                      <span>No credit transactions found yet.</span>
+                    </div>
 
-                  <div class="ct_credit_history_groups"
-                    *ngIf="!isCreditHistoryLoading && !creditHistoryError && hasCreditHistory">
-                    <div class="ct_credit_history_group"
-                      *ngFor="let group of creditHistoryGroups; trackBy: trackByHistoryGroup">
-                      <div class="ct_credit_history_label">{{ group.label }}</div>
+                    <div class="ct_credit_history_groups"
+                      *ngIf="!isCreditHistoryLoading && !creditHistoryError && hasCreditHistory">
+                      <div class="ct_credit_history_group"
+                        *ngFor="let group of creditHistoryGroups; trackBy: trackByHistoryGroup">
+                        <div class="ct_credit_history_label">{{ group.label }}</div>
 
-                      <div class="ct_credit_history_table">
-                        <div class="ct_credit_history_table_head">
-                          <span>Activity</span>
-                          <span>Details</span>
-                          <span>Credits</span>
-                        </div>
-
-                        <div class="ct_credit_history_item"
-                          *ngFor="let item of group.items; trackBy: trackByHistoryItem">
-                          <div class="ct_credit_history_item_left">
-                            <div class="ct_credit_history_icon" [ngClass]="item.iconClass">
-                              <i class="fa-solid fa-bolt" *ngIf="item.icon === 'bolt'"></i>
-                              <i class="fa-solid fa-comments" *ngIf="item.icon === 'comment'"></i>
-                              <i class="fa-solid fa-plus" *ngIf="item.icon === 'plus'"></i>
-                              <i class="fa-solid fa-pen-to-square" *ngIf="item.icon === 'edit'"></i>
-                              <i class="fa-solid fa-wallet" *ngIf="item.icon === 'wallet'"></i>
-                            </div>
-
-                            <div class="ct_credit_history_copy">
-                              <h3>{{ item.title }}</h3>
-                              <p class="mb-0">{{ item.subtitle }}</p>
-                            </div>
+                        <div class="ct_credit_history_table">
+                          <div class="ct_credit_history_table_head">
+                            <span>Activity</span>
+                            <span>Credits</span>
                           </div>
 
-                          <div class="ct_credit_history_item_meta">
-                            <span>{{ item.time }}</span>
-                            <small>Balance: {{ item.balanceAfter | number:'1.0-0' }} cr</small>
-                          </div>
+                          <div class="ct_credit_history_item"
+                            *ngFor="let item of group.items; trackBy: trackByHistoryItem">
+                            <div class="ct_credit_history_item_left">
+                              <div class="ct_credit_history_icon" [ngClass]="item.iconClass">
+                                <i class="fa-solid fa-bolt" *ngIf="item.icon === 'bolt'"></i>
+                                <i class="fa-solid fa-comments" *ngIf="item.icon === 'comment'"></i>
+                                <i class="fa-solid fa-plus" *ngIf="item.icon === 'plus'"></i>
+                                <i class="fa-solid fa-pen-to-square" *ngIf="item.icon === 'edit'"></i>
+                                <i class="fa-solid fa-wallet" *ngIf="item.icon === 'wallet'"></i>
+                              </div>
 
-                          <div class="ct_credit_history_item_right">
-                            <strong [ngClass]="{
-                              'is-positive': item.delta >= 0,
-                              'is-negative': item.delta < 0
-                            }">
-                              {{ item.delta >= 0 ? '+' : '-' }} {{ getCreditAmountLabel(item.delta) }}
-                            </strong>
+                              <div class="ct_credit_history_copy">
+                                <h3>{{ item.title }}</h3>
+                                <p class="mb-0">{{ item.subtitle }}</p>
+                              </div>
+                            </div>
+
+
+
+                            <div class="ct_credit_history_item_right">
+                              <strong [ngClass]="{
+                                'is-positive': item.delta >= 0,
+                                'is-negative': item.delta < 0
+                              }">
+                                {{ item.delta >= 0 ? '+' : '-' }} {{ getCreditAmountLabel(item.delta) }}
+                              </strong>
+                              <span>{{ item.time }}</span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -220,18 +218,6 @@
                             subscriptionPlan.activePaymentMethod.country }}</span>
                         </p>
                       </div>
-                    </div>
-                  </div>
-
-                  <div class="ct_side_meta">
-                    <div class="ct_side_meta_row">
-                      <span>Subscription</span>
-                      <strong>{{ formattedStatus }}</strong>
-                    </div>
-                    <div class="ct_side_meta_row">
-                      <span>Upcoming billing</span>
-                      <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date:'mediumDate') :
-                        'Not Available' }}</strong>
                     </div>
                   </div>
 

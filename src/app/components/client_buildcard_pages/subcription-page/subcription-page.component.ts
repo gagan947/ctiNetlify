@@ -1,6 +1,6 @@
 import { Component, computed, inject, Input, Optional, signal } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
@@ -204,6 +204,8 @@ export class SubcriptionPageComponent {
     EUR: 'EUR ',
     GBP: 'GBP '
   };
+  userInfo: any = {}
+  billingForm: FormGroup = new FormGroup({});
   private readonly modalData = inject<SubscriptionModalData | null>(NZ_MODAL_DATA, { optional: true });
   constructor(
     private apiService: ApiService,
@@ -226,13 +228,15 @@ export class SubcriptionPageComponent {
         this.subscriptionPlan = subscription;
       }
     });
+
+    this.userInfo = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
+    this.billingForm = this.fb.nonNullable.group({
+      name: [this.userInfo.name || '', Validators.required],
+      email: [this.userInfo.email || '', [Validators.required, Validators.email]],
+      phoneNumber: [this.userInfo.phoneNumber || '', Validators.required]
+    });
   }
 
-  billingForm = this.fb.nonNullable.group({
-    name: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    phoneNumber: [null as any, Validators.required]
-  });
 
   setBilling(cycle: BillingCycle) {
     this.billingCycle.set(cycle);
@@ -297,7 +301,6 @@ export class SubcriptionPageComponent {
       publicTemplateId: this.selectedTemplateId,
       inquiryId
     }).subscribe((res: any) => {
-      debugger
       this.openCashfreeSubscriptionCheckout(res.subscription_session_id);
     }, (err: any) => {
       this.message.error(err.error?.message || 'Failed to initiate subscription checkout. Please try again.');
@@ -564,7 +567,7 @@ export class SubcriptionPageComponent {
       return ['Active'];
     }
 
-    if (plan.is_plan_used) {
+    if (plan.is_plan_used && plan.plan_key == 'free_plan') {
       return ['Used'];
     }
 

@@ -1447,6 +1447,6 @@ p {
   display: flex !important;
 }
 
-/* ::ng-deep .main-ai-topbar__tab:not(.main-ai-topbar__tab.main-ai-topbar__tab--active) {
+::ng-deep .main-ai-topbar__tab:not(.main-ai-topbar__tab.main-ai-topbar__tab--active) {
   display: none !important;
-} */
+}

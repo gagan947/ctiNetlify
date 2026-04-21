@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SubscriptionModalService } from '../../../services/subscription-modal.service';
 import { SubcriptionService } from '../../../services/subcription.service';
 import { CommonModule } from '@angular/common';
@@ -48,7 +48,8 @@ export class WorkspaceHeaderComponent {
     private apiService: ApiService,
     private router: Router,
     private subscriptionModalService: SubscriptionModalService,
-    private subscriptionService: SubcriptionService
+    private subscriptionService: SubcriptionService,
+    private route: ActivatedRoute
   ) { }
   ngOnInit(): void {
     this.subscriptionService.subscription$.subscribe((subscription) => {
@@ -73,8 +74,13 @@ export class WorkspaceHeaderComponent {
         if (res.success) {
           this.allProjectsList = (res.data || []) as UserProjectTab[];
 
-          if (!this.selectedProjectId && this.allProjectsList.length > 0) {
-            this.selectedProjectId = this.allProjectsList[0].inquiryId;
+          // if (!this.selectedProjectId && this.allProjectsList.length > 0) {
+          //   this.selectedProjectId = this.allProjectsList[0].inquiryId;
+          // }
+
+          const inquiryId = this.route.snapshot.paramMap.get('id');
+          if (inquiryId) {
+            this.selectedProjectId = inquiryId;
           }
         }
       }

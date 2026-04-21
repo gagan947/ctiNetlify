@@ -1615,7 +1615,6 @@ export class ReactBuildPreviewComponent {
     });
     setTimeout(() => this.scrollToBottom(true), 0);
   }
-
 }
 
 
