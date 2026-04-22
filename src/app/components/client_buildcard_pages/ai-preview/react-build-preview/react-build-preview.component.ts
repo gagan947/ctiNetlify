@@ -61,6 +61,7 @@ declare var bootstrap: any;
   styleUrl: './react-build-preview.component.css'
 })
 export class ReactBuildPreviewComponent {
+  private readonly mobileBreakpoint = 991;
 
   safePreviewUrl: SafeResourceUrl | null = null;
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
@@ -132,6 +133,8 @@ export class ReactBuildPreviewComponent {
   planName = 'Free Plan';
   usedVariations: any[] = [];
   pendingPreviewUrl: string | null = null;
+  private hasAutoOpenedCurrentMobilePreview = false;
+  private hasDismissedCurrentMobilePreview = false;
   skipBuildPrompt = false;
   finalSummary: any = null;
   selectedPublishOption: 'creative-ai-domain' | 'custom-domain' = 'creative-ai-domain';
@@ -285,11 +288,9 @@ export class ReactBuildPreviewComponent {
 
           if (socket_id) {
             this.pendingPreviewUrl = proxyUrl;
-            this.isIframeLoading = true;
+            this.preparePreviewLoadState();
           } else {
-            this.isIframeLoading = true;
-            this.safePreviewUrl =
-              this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
+            this.setSafePreviewUrl(proxyUrl);
           }
           this.isReactBuilding = false;
           this.isTyping = false;
@@ -360,11 +361,9 @@ export class ReactBuildPreviewComponent {
 
     if (socketId) {
       this.pendingPreviewUrl = proxyUrl;
-      this.isIframeLoading = true;
+      this.preparePreviewLoadState();
     } else {
-      this.isIframeLoading = true;
-      this.safePreviewUrl =
-        this.sanitizer.bypassSecurityTrustResourceUrl(proxyUrl);
+      this.setSafePreviewUrl(proxyUrl);
     }
 
     this.isReactBuilding = false;
@@ -665,6 +664,11 @@ export class ReactBuildPreviewComponent {
   onIframeLoad() {
     this.clearBuildStepTimers();
     this.isIframeLoading = false;
+
+    if (this.isMobileView() && !this.hasAutoOpenedCurrentMobilePreview && !this.hasDismissedCurrentMobilePreview) {
+      this.fullScreen = true;
+      this.hasAutoOpenedCurrentMobilePreview = true;
+    }
   }
 
   blockPreviewInteraction(event: Event) {
@@ -711,6 +715,43 @@ export class ReactBuildPreviewComponent {
   openFullPreview() {
     if (this.isReactBuilding) return
     this.fullScreen = !this.fullScreen;
+  }
+
+  handleMobileViewToggle(event?: Event) {
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    if (this.isReactBuilding) {
+      return;
+    }
+
+    if (this.fullScreen) {
+      this.showChatSection();
+      return;
+    }
+
+    this.hasDismissedCurrentMobilePreview = true;
+    this.fullScreen = true;
+  }
+
+  isMobileView(): boolean {
+    return typeof window !== 'undefined' && window.innerWidth <= this.mobileBreakpoint;
+  }
+
+  showChatSection() {
+    this.hasDismissedCurrentMobilePreview = true;
+    this.fullScreen = false;
+  }
+
+  private preparePreviewLoadState() {
+    this.isIframeLoading = true;
+    this.hasAutoOpenedCurrentMobilePreview = false;
+    this.hasDismissedCurrentMobilePreview = false;
+  }
+
+  private setSafePreviewUrl(url: string) {
+    this.preparePreviewLoadState();
+    this.safePreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
 
@@ -801,7 +842,7 @@ export class ReactBuildPreviewComponent {
 
     console.log('selectedProjectId', this.selectedProjectId);
     const templateId = templates.find((t: any) => t.inquiryId === this.selectedProjectId)?.templateId;
-    this.safePreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.getPreviewProxyUrl(templateId));
+    this.setSafePreviewUrl(this.getPreviewProxyUrl(templateId));
     this.isReactBuilding = false;
     this.isTyping = false;
   }
@@ -1135,9 +1176,7 @@ export class ReactBuildPreviewComponent {
 
     if (design?.url) {
       this.startQuickBuildProgress('switch');
-      this.isIframeLoading = true;
-
-      this.safePreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(design.url);
+      this.setSafePreviewUrl(design.url);
     }
   }
 
@@ -1175,8 +1214,7 @@ export class ReactBuildPreviewComponent {
 
             this.activeDesignId = newActive.designId;
 
-            this.safePreviewUrl =
-              this.sanitizer.bypassSecurityTrustResourceUrl(newActive.url);
+            this.setSafePreviewUrl(newActive.url);
           } else {
             this.activeDesignId = '';
             this.safePreviewUrl = null;
