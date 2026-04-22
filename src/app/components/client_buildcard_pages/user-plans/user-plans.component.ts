@@ -148,7 +148,7 @@ export class UserPlansComponent {
   loadCreditHistory(offset = 0): void {
     this.isCreditHistoryLoading = true;
     this.creditHistoryError = '';
-
+    this.subscriptionService.loadSubscription();
     this.apiService.getCreditHistory<CreditHistoryResponse>(this.creditHistoryLimit, offset)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({

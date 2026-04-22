@@ -164,9 +164,13 @@
                                 <button class="btn" (click)="openBuyMoreCreditsModal()">Buy More Credits</button>
 
                                 <p class="info">
-                                    You're on the {{subsCriptionData?.planName || 'Free'}} plan with
-                                    {{subsCriptionData?.creditsPerCycle || 0}} monthly credits. Upgrade to
-                                    unlock more features.
+                                    You're on the {{subsCriptionData?.planName || 'Free'}} @if
+                                    (subsCriptionData?.planType !== 'FREE') { plan } with
+                                    {{subsCriptionData?.creditsPerCycle || 0}}
+                                    @if (subsCriptionData?.planType == 'FREE') { free }
+                                    @else if (subsCriptionData?.creditGrantInterval == 'MONTH') { monthly }
+                                    @else { yearly }
+                                    credits. Upgrade to unlock more features.
                                 </p>
                             </div>
                         </div>
