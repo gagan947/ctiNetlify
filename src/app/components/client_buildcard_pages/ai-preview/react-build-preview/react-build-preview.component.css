@@ -1280,6 +1280,11 @@ p {
   font-size: 30px;
 }
 
+.ct_build_failed_modal__icon--success {
+  background: linear-gradient(135deg, #dcfce7, #ecfdf3);
+  color: #16a34a;
+}
+
 .ct_build_failed_modal p {
   max-width: 360px;
   margin: 10px auto 0;

@@ -318,6 +318,24 @@
     </div>
 </div>
 
+<div class="modal fade" id="deploymentSuccessModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ct_build_failed_modal">
+            <button type="button" class="ct_modal_close_btn" aria-label="Close" (click)="confirmDeploymentSuccess()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="ct_build_failed_modal__icon ct_build_failed_modal__icon--success">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h2>Request Saved</h2>
+            <p>{{ deploymentSuccessMessage }}</p>
+            <div class="actions">
+                <button class="btn-confirm button-deploy w-100" (click)="confirmDeploymentSuccess()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade" id="ai_full_preview_modal" tabindex="-1">
     <div class="modal-dialog">

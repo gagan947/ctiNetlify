@@ -140,6 +140,7 @@ export class ReactBuildPreviewComponent {
   selectedPublishOption: 'creative-ai-domain' | 'custom-domain' = 'creative-ai-domain';
   customDomain = '';
   customDomainTouched = false;
+  deploymentSuccessMessage = '';
   private shouldDeferPreviewApply = false;
   private hasInitialFlowCompleted = false;
   private pendingPreviewResponse: { res: any; socketId: string | null } | null = null;
@@ -1162,9 +1163,17 @@ export class ReactBuildPreviewComponent {
       .postAPI('api/user/tempalteDeployed', payload)
       .subscribe((res: any) => {
         if (res.success) {
-          this.router.navigate([`/dashboard`]);
+          this.deploymentSuccessMessage = deploymentDomainType === 'custom'
+            ? 'Your domain request has been saved successfully. Our team will reach out to you shortly if we need any additional details.'
+            : 'Your project has been deployed successfully. We will take you to the dashboard once you confirm.';
+          this.openBootstrapModal('deploymentSuccessModal', { backdrop: 'static', keyboard: false });
         }
       });
+  }
+
+  confirmDeploymentSuccess() {
+    this.closeBootstrapModal('deploymentSuccessModal');
+    this.router.navigate([`/dashboard`]);
   }
 
   switchDesign(designId: string) {
