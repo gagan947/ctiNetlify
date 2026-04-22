@@ -3,7 +3,7 @@
         [showPreviewControls]="true" (fullScreenToggle)="openFullPreview()"
         (deviceTypeChange)="onDeviceTypeChange($event)" />
     <section class="ct_project_ai_preview_main">
-        @if (!isMobileView() || !fullScreen) {
+        @if (!fullScreen) {
         <aside class="ct_project_ai_chat_section" style="height: calc(100vh - 50px);">
             <div #chatScroll class="ct_chat_scroll_wrap" (scroll)="onUserScroll()">
                 <app-ai-dev-renderer [isLoading]="isReactBuilding" [blocks]="blocks"
