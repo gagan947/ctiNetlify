@@ -1405,15 +1405,15 @@ p {
   }
 
   .preview-wrapper {
-    height: calc(100vh - 118px - env(safe-area-inset-bottom, 0px));
+    /* height: calc(100vh - 118px - env(safe-area-inset-bottom, 0px)); */
     overflow: hidden;
   }
 
-  .preview-wrapper iframe.preview-iframe,
+  /* .preview-wrapper iframe.preview-iframe,
   .iframe-container,
   .preview-wrapper>div {
     height: calc(100vh - 118px - env(safe-area-inset-bottom, 0px));
-  }
+  } */
 
   .ct_ai_thiking_loader2 {
     padding-left: 20px;
