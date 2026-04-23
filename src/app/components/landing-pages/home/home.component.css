@@ -1080,7 +1080,7 @@ section {
 
 @media (min-width: 1367px) {
   .ct_home_slider_main_img img {
-    max-height: calc(100dvh - 267px);
+    max-height: calc(100dvh - 209px);
     border-radius: 6px !important;
   }
   .ct_home_slider_main_img.ct_home_slider_main_bg h4 {
