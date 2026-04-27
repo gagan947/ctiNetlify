@@ -136,7 +136,7 @@ export class ReactBuildPreviewComponent {
   private hasAutoOpenedCurrentMobilePreview = false;
   private hasDismissedCurrentMobilePreview = false;
   skipBuildPrompt = false;
-  finalSummary: any = null;
+  finalPrompt: any = null;
   selectedPublishOption: 'creative-ai-domain' | 'custom-domain' = 'creative-ai-domain';
   customDomain = '';
   customDomainTouched = false;
@@ -171,7 +171,7 @@ export class ReactBuildPreviewComponent {
   ) {
     this.baseURl = this.apiService.apiUrl;
     effect(() => {
-      this.finalSummary = this.apiService._finalSummary() || sessionStorage.getItem('finalSummary');
+      this.finalPrompt = this.apiService._finalPrompt() || sessionStorage.getItem('finalPrompt');
     });
   }
 
@@ -234,7 +234,7 @@ export class ReactBuildPreviewComponent {
       this.startBuildProgressTimers();
     }
     const payload = {
-      prompt: this.finalSummary,
+      prompt: this.finalPrompt,
       project_id: this.projectsData.projectId,
       inquiryPublicId: this.projectsData.clientEnquryId,
       socket_id,

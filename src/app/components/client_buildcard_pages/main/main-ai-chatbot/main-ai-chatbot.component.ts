@@ -24,6 +24,7 @@ interface ProjectMatchPayload {
   match?: boolean;
   score?: number;
   finalSummary?: string;
+  finalPrompt?: string;
   project?: {
     _id?: string;
     id?: string | number;
@@ -204,7 +205,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
             queryParams: {
               id: projectId,
               ...(publicEnquiryId ? { publicEnquiryId } : {}),
-              ...(this.projectMatchPayload?.finalSummary ? { finalSummary: this.projectMatchPayload.finalSummary } : {})
+              ...(this.projectMatchPayload?.finalPrompt ? { finalPrompt: this.projectMatchPayload.finalPrompt } : {}), ...(this.projectMatchPayload?.finalSummary ? { finalSummary: this.projectMatchPayload.finalSummary } : {})
             },
             skipLocationChange: true
           });
@@ -213,8 +214,9 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     });
 
     this.socket.on('projectMatch', (payload: ProjectMatchPayload) => {
-      console.log('projectMatch', payload);
-
+      console.log("project====>>", payload);
+      this.lastUserPrompt = payload?.finalPrompt?.trim() || this.lastUserPrompt;
+      
       this.projectMatchPayload = payload;
       this.ngZone.run(() => {
         const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
@@ -224,25 +226,25 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.socket.on('triggerBuildProject', (payload: TriggerBuildProjectPayload) => {
-      this.ngZone.run(() => {
-        const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
+    // this.socket.on('triggerBuildProject', (payload: TriggerBuildProjectPayload) => {
+    //   this.ngZone.run(() => {
+    //     const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
 
-        if (data?.projectMatch) {
-          this.applyProjectMatch(data.projectMatch);
-        }
+    //     if (data?.projectMatch) {
+    //       this.applyProjectMatch(data.projectMatch);
+    //     }
 
-        this.lastUserPrompt =
-          data?.description?.trim() ||
-          data?.finalIdea?.trim() ||
-          this.lastUserPrompt;
+    //     this.lastUserPrompt =
+    //       data?.description?.trim() ||
+    //       data?.finalIdea?.trim() ||
+    //       this.lastUserPrompt;
 
-        this.showBuildProjectButton = false;
-        this.currentLoaderText = 'Starting your project build...';
-        this.scrollChatToBottom();
-        this.buildMatchedProject();
-      });
-    });
+    //     this.showBuildProjectButton = false;
+    //     this.currentLoaderText = 'Starting your project build...';
+    //     this.scrollChatToBottom();
+    //     // this.buildMatchedProject();
+    //   });
+    // });
 
     this.socket.on('showBuildButton', (_show: boolean) => {
       this.ngZone.run(() => {
@@ -389,6 +391,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
           queryParams: {
             id: this.matchedProjectId,
             publicEnquiryId: publicId,
+            finalPrompt: this.projectMatchPayload?.finalPrompt ?? undefined,
             finalSummary: this.projectMatchPayload?.finalSummary ?? undefined
           },
           skipLocationChange: true

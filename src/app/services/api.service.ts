@@ -22,7 +22,7 @@ export class ApiService {
   _rate = signal<any>(null);
   _imagePreview = signal<any>(null);
   _htmlCode = signal<any>(null);
-  _finalSummary = signal<any>(null);
+  _finalPrompt = signal<any>(null);
   constructor(private http: HttpClient, private route: Router) {
     const data: any = localStorage.getItem('userDetailCTI')
     if (data !== 'undefined') {

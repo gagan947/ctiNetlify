@@ -37,6 +37,7 @@ export class BuilderLoaderComponent implements OnDestroy {
   private messageInterval: ReturnType<typeof setInterval> | null = null;
   private redirectTimer: ReturnType<typeof setTimeout> | null = null;
   finalSummary?: string;
+  finalPrompt?: string;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -48,12 +49,10 @@ export class BuilderLoaderComponent implements OnDestroy {
       this.projectId = params['id'];
       this.publicEnquiryId = params['publicEnquiryId'];
       this.finalSummary = params['finalSummary'];
-      // if (!this.projectId) {
-      //   return;
-      // }
-      if (this.finalSummary) {
-        this.apiService._finalSummary.set(this.finalSummary);
-        sessionStorage.setItem('finalSummary', this.finalSummary);
+      this.finalPrompt = params['finalPrompt'];
+      if (this.finalPrompt) {
+        this.apiService._finalPrompt.set(this.finalPrompt || this.finalSummary );
+        sessionStorage.setItem('finalPrompt', this.finalPrompt || '');
       }
       this.startMessageRotation();
       if (this.publicEnquiryId) {
