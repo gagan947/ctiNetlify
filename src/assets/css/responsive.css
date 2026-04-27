@@ -710,6 +710,9 @@
     font-size: 26px;
     line-height: unset;
   }
+  .ct_build_visual.ct_build_visual_mobile img + img {
+    display: none;
+}
 }
 
 
