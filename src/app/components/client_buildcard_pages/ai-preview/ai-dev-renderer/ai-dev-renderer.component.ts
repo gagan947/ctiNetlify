@@ -43,9 +43,7 @@ export class AiDevRendererComponent {
     return typeof block?.id === 'string' && block.id.startsWith('status');
   }
 
-  isCredentialsBlock(block: any): boolean {
-    return typeof block?.id === 'string' && block.id.startsWith('credentials');
-  }
+ 
 
   isActionBlock(block: any): boolean {
     return typeof block?.id === 'string'
@@ -71,6 +69,38 @@ export class AiDevRendererComponent {
       && typeof block?.text === 'object';
   }
 
+  isPhaseHeadingBlock(block: any): boolean {
+    return this.isLegacyBlock(block) && block?.variant === 'phase';
+  }
+
+  isSupportParagraphBlock(block: any): boolean {
+    return this.isLegacyBlock(block) && block?.variant === 'support';
+  }
+
+  isBuildSectionBlock(block: any): boolean {
+    return block?.type === 'build-section';
+  }
+
+  isFileActivityBlock(block: any): boolean {
+    return block?.type === 'file' || block?.type === 'code';
+  }
+
+  isFileActivityPending(block: any): boolean {
+    return !!block?.data?.pending;
+  }
+
+  getFileActivityTitle(block: any): string {
+    return block?.data?.title || 'updating file';
+  }
+
+  getFileActivitySummary(block: any): string {
+    return block?.data?.summary || 'Prepared this file as part of the current build step.';
+  }
+
+  getBuildSectionItems(block: any): any[] {
+    return Array.isArray(block?.data?.items) ? block.data.items : [];
+  }
+
   submitPrompt(block: any, value: string) {
     const trimmedValue = value.trim();
     if (!trimmedValue) return;
@@ -89,12 +119,66 @@ export class AiDevRendererComponent {
     return Array.isArray(block?.data?.lines) ? block.data.lines : [];
   }
 
+  isTerminalRunningLine(block: any, lineIndex: number): boolean {
+    const lines = this.getTerminalLines(block);
+    return block?.type === 'terminal' && block?.data?.done === false && lineIndex === lines.length - 1;
+  }
+
+  getTerminalLineClass(text: string | undefined): string {
+    if (!text) {
+      return '';
+    }
+
+    if (/^structure\s+\|/i.test(text)) {
+      return 'is-structure';
+    }
+
+    if (/^file_writer\s+\|/i.test(text)) {
+      return 'is-file-writer';
+    }
+
+    if (/^httpx\s+\|/i.test(text)) {
+      return 'is-httpx';
+    }
+
+    if (/^llm_client\s+\|/i.test(text)) {
+      return 'is-llm';
+    }
+
+    if (/^builder\s+\|/i.test(text)) {
+      return 'is-builder';
+    }
+
+    if (/^api\s+\|/i.test(text)) {
+      return 'is-api';
+    }
+
+    return '';
+  }
+
   formatTerminalLine(text: string | undefined): string {
     if (!text) {
       return '';
     }
 
     const escaped = this.escapeHtml(text);
+    const simpleLogMatch = text.match(/^([\w.-]+)\s+\|\s+(.+)$/);
+
+    if (simpleLogMatch) {
+      return `<span class="simple-log-module">${this.escapeHtml(simpleLogMatch[1])}</span> <span class="pm2-sep">|</span> <span class="simple-log-message">${this.escapeHtml(simpleLogMatch[2])}</span>`;
+    }
+
+    const pm2LogMatch = text.match(/^(\d+\|[\w-]+)\s+\|\s+([\d-]+\s[\d:,]+)\s+\|\s+([A-Z]+)\s+\|\s+([\w.-]+)\s+\|\s+(.+)$/);
+
+    if (pm2LogMatch) {
+      return `<span class="pm2-prefix">${this.escapeHtml(pm2LogMatch[1])}</span> <span class="pm2-sep">|</span> <span class="pm2-time">${this.escapeHtml(pm2LogMatch[2])}</span> <span class="pm2-sep">|</span> <span class="pm2-level">${this.escapeHtml(pm2LogMatch[3])}</span> <span class="pm2-sep">|</span> <span class="pm2-module">${this.escapeHtml(pm2LogMatch[4])}</span> <span class="pm2-sep">|</span> <span class="pm2-message">${this.escapeHtml(pm2LogMatch[5])}</span>`;
+    }
+
+    const fileWriteMatch = text.match(/^\s*(?:->|✓)\s+(.+)$/);
+    if (fileWriteMatch) {
+      return `<span class="pm2-check">✓</span> <span class="pm2-file">${this.escapeHtml(fileWriteMatch[1])}</span>`;
+    }
+
     const commandMatch = text.match(/^Ran (.+?)(?: for (\d+s))?$/);
 
     if (commandMatch) {

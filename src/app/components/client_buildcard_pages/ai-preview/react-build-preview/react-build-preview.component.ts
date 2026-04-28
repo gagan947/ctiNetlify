@@ -62,6 +62,9 @@ declare var bootstrap: any;
 })
 export class ReactBuildPreviewComponent {
   private readonly mobileBreakpoint = 991;
+  private buildLogCursor = new Date('2026-04-27T19:45:01.607');
+  private aiProcessingInterval?: ReturnType<typeof setInterval>;
+  private pendingFinalBuildSection: any = null;
 
   safePreviewUrl: SafeResourceUrl | null = null;
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
@@ -145,6 +148,7 @@ export class ReactBuildPreviewComponent {
   private hasInitialFlowCompleted = false;
   private pendingPreviewResponse: { res: any; socketId: string | null } | null = null;
   private pendingPreviewFailure = false;
+  private hasInitialBuildCompletionUi = false;
   private readonly genericPreviewPages = ['Home', 'About', 'Features', 'Contact', 'Auth'];
   private readonly projectTypePageMap: Record<string, string[]> = {
     ecommerce: ['Home', 'Catalog', 'Details', 'Cart', 'Auth'],
@@ -176,32 +180,33 @@ export class ReactBuildPreviewComponent {
   }
 
   async ngOnInit() {
-    this.getUserSubscriptionPlan();
-    const projectData = sessionStorage.getItem('projectData');
-    this.projectsData = JSON.parse(projectData!);
+    this.startFlow()
+    // this.getUserSubscriptionPlan();
+    // const projectData = sessionStorage.getItem('projectData');
+    // this.projectsData = JSON.parse(projectData!);
 
-    this.blocks = [];
+    // this.blocks = [];
 
-    // 🔹 Store preview temporarily (IMPORTANT)
-    this.pendingPreviewUrl = null;
+    // // 🔹 Store preview temporarily (IMPORTANT)
+    // this.pendingPreviewUrl = null;
 
-    // ============================================
-    // ✅ 1. LOAD DRAFT TEMPLATES FIRST
-    // ============================================
+    // // ============================================
+    // // ✅ 1. LOAD DRAFT TEMPLATES FIRST
+    // // ============================================
 
-    const templates = await this.getUserTemplates();
-    this.route.paramMap.subscribe((res: any) => {
-      this.selectedProjectId = res.params['id'];
-      this.loadDraftTemplates(templates);
-    });
+    // const templates = await this.getUserTemplates();
+    // this.route.paramMap.subscribe((res: any) => {
+    //   this.selectedProjectId = res.params['id'];
+    //   this.loadDraftTemplates(templates);
+    // });
 
-    const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
+    // const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
 
-    if (existingTemplate) {
-      await this.showDraftWelcomeMessages(false);
-      await this.loadDraftTemplates(templates);
-      return;
-    }
+    // if (existingTemplate) {
+    //   await this.showDraftWelcomeMessages(false);
+    //   await this.loadDraftTemplates(templates);
+    //   return;
+    // }
 
 
     await this.runInitialBuildSequence();
@@ -304,6 +309,8 @@ export class ReactBuildPreviewComponent {
 
   private handleBuildGenerationFailure() {
     this.clearBuildStepTimers();
+    this.stopAiProcessingPhase();
+    this.pendingFinalBuildSection = null;
     this.isReactBuilding = false;
     this.isIframeLoading = false;
     this.isTyping = false;
@@ -327,6 +334,7 @@ export class ReactBuildPreviewComponent {
 
   private applyGeneratedPreview(res: any, socketId: string | null) {
     this.subscriptionService.loadSubscription();
+    this.stopAiProcessingPhase();
     this.isReactBuilding = true;
 
     const templateId = res.data.templateId;
@@ -369,6 +377,7 @@ export class ReactBuildPreviewComponent {
 
     this.isReactBuilding = false;
     this.isTyping = false;
+    this.completeInitialBuildUi();
   }
 
   private queueBuildGenerationFailure() {
@@ -400,6 +409,8 @@ export class ReactBuildPreviewComponent {
     this.hasInitialFlowCompleted = false;
     this.pendingPreviewResponse = null;
     this.pendingPreviewFailure = false;
+    this.hasInitialBuildCompletionUi = false;
+    this.stopAiProcessingPhase();
 
     this.startPreview(null);
     await this.startFlow();
@@ -407,6 +418,10 @@ export class ReactBuildPreviewComponent {
     this.hasInitialFlowCompleted = true;
     this.shouldDeferPreviewApply = false;
     this.flushDeferredPreviewState();
+
+    if (!this.hasInitialBuildCompletionUi && this.isReactBuilding) {
+      await this.showRealAiProcessingPhase();
+    }
   }
 
   retryBuildGeneration() {
@@ -502,23 +517,9 @@ export class ReactBuildPreviewComponent {
       1700
     );
 
-    await this.addTerminal([
-      'Updating src/components/header.jsx',
-      'Restructuring the shared navigation shell'
-    ], 1400, 1700);
-    await this.addCodeBlock(this.getHeaderComponent());
-
-    await this.addTerminal([
-      'Updating src/pages/home.jsx',
-      'Reworking the primary landing experience'
-    ], 1400, 1700);
-    await this.addCodeBlock(this.getHomePage());
-
-    await this.addTerminal([
-      'Updating src/styles/home.css',
-      'Adjusting spacing, typography, and visual rhythm'
-    ], 1400, 1700);
-    await this.addCodeBlock(this.getHomeCSS());
+    await this.addFileActivityBlock('src/components/header.jsx', 'Restructured the shared navigation shell for the refreshed template direction.');
+    await this.addFileActivityBlock('src/pages/home.jsx', 'Reworked the primary landing experience with updated hierarchy and section flow.');
+    await this.addFileActivityBlock('src/styles/home.css', 'Adjusted spacing, typography, and visual rhythm for the new variation.');
 
     await this.addParagraphBlock(
       `The next template variation is ready. I'm building the preview now so you can compare it with the other versions in your workspace.`,
@@ -622,6 +623,7 @@ export class ReactBuildPreviewComponent {
 
   ngOnDestroy() {
     this.blocks = [];
+    this.stopAiProcessingPhase();
     this.aiService.stop();
 
   }
@@ -854,17 +856,12 @@ export class ReactBuildPreviewComponent {
     const introMessage = `I found previously generated templates for this project, and I'm restoring them into the workspace so you can continue review without starting over.`;
     const closingMessage = `Your saved variations are now ready. You can review each template, request a fresh variation, customize the current direction, or move ahead when you're ready to deploy.`;
     const restoredWorkspaceBlock = {
-      file: 'workspace/template-session.json',
-      added: 12,
-      removed: 0,
-      content: [
-        { line: 1, text: '{' },
-        { line: 2, text: '  "status": "restored",' },
-        { line: 3, text: '  "templates": ["Template 1", "Template 2"],' },
-        { line: 4, text: '  "activePreview": "Template 1",' },
-        { line: 5, text: '  "deploymentState": "ready"' },
-        { line: 6, text: '}' }
-      ]
+      type: 'file',
+      data: {
+        title: 'Restored workspace',
+        file: 'workspace session',
+        summary: 'Recovered saved template variations, restored the active preview, and prepared the workspace state.'
+      }
     };
 
     this.blocks = [];
@@ -902,10 +899,7 @@ export class ReactBuildPreviewComponent {
             done: true
           }
         },
-        {
-          type: 'code',
-          data: restoredWorkspaceBlock
-        },
+        restoredWorkspaceBlock,
         {
           id: `paragraph-${Date.now()}-1`,
           text: closingMessage,
@@ -958,9 +952,9 @@ export class ReactBuildPreviewComponent {
       'Restoring template tabs in the workspace'
     ], 1300, 1600);
 
-    await this.addCodeBlock({
-      ...restoredWorkspaceBlock
-    });
+    this.blocks.push(restoredWorkspaceBlock);
+    setTimeout(() => this.scrollToBottom(true), 0);
+    await this.delay(420);
 
     await this.addParagraphBlock(
       closingMessage,
@@ -1240,6 +1234,206 @@ export class ReactBuildPreviewComponent {
 
   async startFlow() {
     this.blocks = [];
+
+    this.setBuildFlow('initial');
+    this.setBuildStep(1);
+    await this.addParagraphBlock('Analyzing your prompt...', 700, 'phase');
+    await this.showLoader('Thinking through product requirements...');
+    await this.addBuildSection(
+      'Analyzing your prompt...',
+      '🧠',
+      [
+        'Understanding project direction',
+        'Mapping the main screens and user flow',
+        'Defining overall product specification'
+      ],
+      5200,
+      1800
+    );
+    this.hideLoader();
+    await this.pauseBetweenMajorSteps('Synthesizing prompt insights...');
+
+    await this.addParagraphBlock(
+      `The scope is clear now, so I’m moving into the actual build flow with structure first and code generation right after that.`,
+      1200,
+      'support'
+    );
+
+    await this.addParagraphBlock('Initializing project...', 700, 'phase');
+    await this.showLoader('Preparing base workspace...');
+    await this.addBuildSection(
+      'Initializing project...',
+      '⚙️',
+      [
+        'Preparing workspace',
+        'Initializing React project shell',
+        'Setting up the base environment'
+      ],
+      4200,
+      1600
+    );
+    this.hideLoader();
+    await this.pauseBetweenMajorSteps('Thinking through system setup...');
+
+    await this.addParagraphBlock('Creating structure...', 700, 'phase');
+    await this.showLoader('Creating project folders...');
+    await this.addBuildSection(
+      'Creating structure...',
+      '📁',
+      [
+        'src/',
+        'components/',
+        'pages/',
+        'services/',
+        'hooks/',
+        'context/'
+      ],
+      3600,
+      1500
+    );
+    this.hideLoader();
+    await this.pauseBetweenMajorSteps('Planning the first file generation batch...');
+
+    this.setBuildStep(2);
+    await this.addParagraphBlock('Creating core files...', 700, 'phase');
+    await this.showLoader('Generating foundation files...');
+    await this.addBuildSection(
+      'Creating core files...',
+      '📦',
+      [
+        'package.json',
+        'vite.config.js',
+        'index.html',
+        'src/main.jsx',
+        'src/App.jsx'
+      ],
+      4300,
+      1700
+    );
+    this.hideLoader();
+    await this.pauseBetweenMajorSteps('Reviewing generated foundation files...');
+
+    await this.addParagraphBlock('Building UI...', 700, 'phase');
+    await this.showLoader('Designing UI system and reusable components...');
+    await this.addBuildSection(
+      'Building UI...',
+      '🧩',
+      [
+        'Navbar.jsx',
+        'Footer.jsx',
+        'AppContext.jsx',
+        'useProjectData.js',
+        'api.js'
+      ],
+      4300,
+      1700
+    );
+    this.hideLoader();
+    await this.pauseBetweenMajorSteps('Refining shared UI building blocks...');
+
+    await this.addParagraphBlock('Creating pages...', 700, 'phase');
+    await this.showLoader('Generating screen-level page code...');
+    await this.addBuildSection(
+      'Creating pages...',
+      '📄',
+      [
+        'HomePage.jsx',
+        'AboutPage.jsx',
+        'ContactPage.jsx'
+      ],
+      4500,
+      1800
+    );
+    this.hideLoader();
+    await this.pauseBetweenMajorSteps('Checking page flow and navigation...');
+
+    this.setBuildStep(3);
+    await this.addParagraphBlock('Finalizing...', 700, 'phase');
+    await this.showLoader('Final checks and deployment prep...');
+    await this.addBuildSectionKeepingLastActive(
+      'Finalizing...',
+      '🚀',
+      [
+        'Installing dependencies',
+        'Building preview bundle',
+        'Deploying preview'
+      ],
+      6500,
+      1200
+    );
+    this.hideLoader();
+
+    this.setBuildStep(2);
+    return;
+
+    this.setBuildStep(2);
+    await this.addTerminal([
+      this.buildPm2Info('api', 'Phase 3: Generating core files...', 0.4),
+      this.buildPm2Info('llm_client', 'Starting core file generation batch...', 0.04),
+      this.buildPm2Info('httpx', 'HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"', 0.77),
+      '  ✓ index.html (387 bytes)',
+      this.buildPm2Info('file_writer', 'Written: index.html (387 bytes)', 1.1),
+      '  ✓ package.json (539 bytes)',
+      this.buildPm2Info('file_writer', 'Written: package.json (539 bytes)', 1.22),
+      '  ✓ vite.config.js (179 bytes)',
+      this.buildPm2Info('file_writer', 'Written: vite.config.js (179 bytes)', 0.22),
+      '  ✓ src/main.jsx (230 bytes)',
+      this.buildPm2Info('file_writer', 'Written: src/main.jsx (230 bytes)', 0.66),
+      '  ✓ src/App.jsx (1881 bytes)',
+      this.buildPm2Info('file_writer', 'Written: src/App.jsx (1881 bytes)', 1.48)
+    ], 760, 4700);
+
+    await this.addTerminal([
+      this.buildPm2Info('api', 'Phase 4: Generating shared modules...', 0.5),
+      '  ✓ src/context/AppContext.jsx (1621 bytes)',
+      this.buildPm2Info('file_writer', 'Written: src/context/AppContext.jsx (1621 bytes)', 1.35),
+      '  ✓ src/hooks/useProjectData.js (674 bytes)',
+      this.buildPm2Info('file_writer', 'Written: src/hooks/useProjectData.js (674 bytes)', 1.18),
+      '  ✓ src/services/api.js (1353 bytes)',
+      this.buildPm2Info('file_writer', 'Written: src/services/api.js (1353 bytes)', 1.31),
+      '  ✓ src/components/Navbar.jsx (2144 bytes)',
+      this.buildPm2Info('file_writer', 'Written: src/components/Navbar.jsx (2144 bytes)', 1.26),
+      '  ✓ src/components/Footer.jsx (982 bytes)',
+      this.buildPm2Info('file_writer', 'Written: src/components/Footer.jsx (982 bytes)', 1.2)
+    ], 780, 4300);
+
+    await this.addTerminal([
+      this.buildPm2Info('api', 'Phase 5: Generating pages...', 0.45),
+      this.buildPm2Info('llm_client', 'Starting page generation for the primary flow...', 0.03),
+      this.buildPm2Info('httpx', 'HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"', 0.74),
+      '  ✓ src/pages/HomePage.jsx (4643 bytes)',
+      this.buildPm2Info('file_writer', 'Written: src/pages/HomePage.jsx (4643 bytes)', 1.54),
+      '  ✓ src/pages/AboutPage.jsx (3364 bytes)',
+      this.buildPm2Info('file_writer', 'Written: src/pages/AboutPage.jsx (3364 bytes)', 1.37),
+      '  ✓ src/pages/ContactPage.jsx (2780 bytes)',
+      this.buildPm2Info('file_writer', 'Written: src/pages/ContactPage.jsx (2780 bytes)', 1.42)
+    ], 820, 4600);
+
+    this.setBuildStep(3);
+    await this.addTerminal([
+      this.buildPm2Info('api', 'Phase 6: Building preview...', 0.55),
+      this.buildPm2Info('builder', 'Installing dependencies for preview build...', 0.14),
+      this.buildPm2Info('builder', 'Running production build...', 1.84),
+      this.buildPm2Info('builder', 'Deploying preview artifacts...', 1.76),
+      this.buildPm2Info('api', 'Preview ready | opening project workspace', 1.15)
+    ], 980, 5200);
+
+    await this.addSummary({
+      time: '2m 18s',
+      description: 'Created a fresh React project from scratch with Vite configuration, reusable UI components, generic pages, and a small support layer for services, hooks, and shared context.',
+      highlights: [
+        'Project setup',
+        'Folder structure',
+        'Core React files',
+        'Reusable components',
+        'Generic pages',
+        'Services, hooks, and context'
+      ]
+    });
+
+    this.appendBuildActionPrompt();
+    return;
+
     const projectTypeName = this.getProjectTypeDisplayName();
     const previewPages = this.getPreviewPageNames();
     const primaryPageName = previewPages[0] || 'Home';
@@ -1459,6 +1653,121 @@ export class ReactBuildPreviewComponent {
     this.appendBuildActionPrompt();
   }
 
+  private async addFileActivityBlock(file: string, summary: string, waitAfter = 320, title = 'Updated file') {
+    const block = {
+      type: 'file',
+      data: {
+        title,
+        file,
+        summary,
+        pending: true
+      }
+    };
+
+    this.blocks.push(block);
+
+    setTimeout(() => this.scrollToBottom(true), 0);
+    await this.delay(waitAfter);
+    block.data.pending = false;
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private async showRealAiProcessingPhase() {
+    await this.addParagraphBlock('Generating real application using AI...', 300, 'phase');
+    await this.addParagraphBlock('This may take 2–5 minutes depending on complexity.', 500, 'support');
+    this.startAiProcessingPhase();
+  }
+
+  private startAiProcessingPhase() {
+    const steps = [
+      'Designing UI layouts...',
+      'Writing component logic...',
+      'Connecting pages and routing...',
+      'Optimizing performance...',
+      'Finalizing project build...'
+    ];
+
+    this.stopAiProcessingPhase();
+    let stepIndex = 0;
+    this.showLoader(steps[stepIndex]);
+    setTimeout(() => this.scrollToBottom(true), 0);
+
+    this.aiProcessingInterval = setInterval(() => {
+      stepIndex = (stepIndex + 1) % steps.length;
+      const loaderBlock = this.blocks.find(block => block.id === 'status');
+      if (!loaderBlock) {
+        return;
+      }
+
+      loaderBlock.text = steps[stepIndex];
+      setTimeout(() => this.scrollToBottom(true), 0);
+    }, 3000);
+  }
+
+  private stopAiProcessingPhase() {
+    if (this.aiProcessingInterval) {
+      clearInterval(this.aiProcessingInterval);
+      this.aiProcessingInterval = undefined;
+    }
+    this.hideLoader();
+  }
+
+  private completeInitialBuildUi() {
+    if (this.hasInitialBuildCompletionUi || this.buildFlowType !== 'initial') {
+      return;
+    }
+
+    this.hasInitialBuildCompletionUi = true;
+    this.stopAiProcessingPhase();
+    this.setBuildStep(3);
+
+    if (this.pendingFinalBuildSection?.data?.items?.length) {
+      const lastIndex = this.pendingFinalBuildSection.data.items.length - 1;
+      this.pendingFinalBuildSection.data.items[lastIndex].status = 'done';
+      this.pendingFinalBuildSection.data.done = true;
+      this.pendingFinalBuildSection = null;
+      setTimeout(() => this.scrollToBottom(true), 0);
+    }
+
+    this.blocks.push({
+      type: 'summary',
+      data: {
+        time: 'Ready',
+        description: 'The real AI build is complete and the preview is now available in your workspace.',
+        highlights: [
+          'Prompt analyzed',
+          'Project structured',
+          'Core files generated',
+          'Preview opened'
+        ]
+      }
+    });
+
+    this.appendBuildActionPrompt();
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private resetBuildLogClock() {
+    this.buildLogCursor = new Date('2026-04-27T19:45:01.607');
+  }
+
+  private buildPm2Info(module: string, message: string, advanceSeconds = 0): string {
+    this.buildLogCursor = new Date(this.buildLogCursor.getTime() + (advanceSeconds * 1000));
+    return `14|creative-ai-python  | ${this.formatBuildLogTimestamp(this.buildLogCursor)} | INFO     | ${module} | ${message}`;
+  }
+
+  private formatBuildLogTimestamp(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    const millis = String(date.getMilliseconds()).padStart(3, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds},${millis}`;
+  }
+
   getAppJs() {
     return {
       file: 'src/App.js',
@@ -1624,10 +1933,11 @@ export class ReactBuildPreviewComponent {
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
-  async addParagraphBlock(text: string, waitAfter = 2200) {
+  async addParagraphBlock(text: string, waitAfter = 2200, variant: 'default' | 'phase' | 'support' = 'default') {
     const block = {
       id: `paragraph-${Date.now()}-${this.blocks.length}`,
       text: '',
+      variant,
       done: false,
       timestamp: new Date()
     };
@@ -1649,6 +1959,90 @@ export class ReactBuildPreviewComponent {
     await this.delay(waitAfter);
   }
 
+  async addListBlock(items: string[], waitAfter = 1200) {
+    this.blocks.push({
+      id: `list-${Date.now()}-${this.blocks.length}`,
+      text: items,
+      done: true,
+      timestamp: new Date()
+    });
+
+    setTimeout(() => this.scrollToBottom(true), 0);
+    await this.delay(waitAfter);
+  }
+
+  private async pauseBetweenMajorSteps(text: string, waitAfter = 1400) {
+    this.showLoader(text);
+    setTimeout(() => this.scrollToBottom(true), 0);
+    await this.delay(waitAfter);
+    this.hideLoader();
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  async addBuildSection(title: string, icon: string, items: string[], itemDelay = 4200, finishDelay = 1800) {
+    const block = {
+      type: 'build-section',
+      data: {
+        title,
+        icon,
+        done: false,
+        items: [] as Array<{ label: string; status: 'active' | 'done' }>
+      }
+    };
+
+    this.blocks.push(block);
+    setTimeout(() => this.scrollToBottom(true), 0);
+
+    for (const item of items) {
+      block.data.items.push({
+        label: item,
+        status: 'active'
+      });
+
+      setTimeout(() => this.scrollToBottom(true), 0);
+      await this.delay(itemDelay);
+      block.data.items[block.data.items.length - 1].status = 'done';
+      setTimeout(() => this.scrollToBottom(true), 0);
+    }
+
+    await this.delay(finishDelay);
+    block.data.done = true;
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  async addBuildSectionKeepingLastActive(title: string, icon: string, items: string[], itemDelay = 4200, settleDelay = 1200) {
+    const block = {
+      type: 'build-section',
+      data: {
+        title,
+        icon,
+        done: false,
+        items: [] as Array<{ label: string; status: 'active' | 'done' }>
+      }
+    };
+
+    this.blocks.push(block);
+    this.pendingFinalBuildSection = block;
+    setTimeout(() => this.scrollToBottom(true), 0);
+
+    for (let index = 0; index < items.length; index++) {
+      block.data.items.push({
+        label: items[index],
+        status: 'active'
+      });
+
+      setTimeout(() => this.scrollToBottom(true), 0);
+      await this.delay(itemDelay);
+
+      if (index < items.length - 1) {
+        block.data.items[index].status = 'done';
+        setTimeout(() => this.scrollToBottom(true), 0);
+      }
+    }
+
+    await this.delay(settleDelay);
+  }
+
   async addCodeBlock(fileData: any) {
     const block = {
       type: 'code',
@@ -1663,7 +2057,7 @@ export class ReactBuildPreviewComponent {
     this.blocks.push(block);
     setTimeout(() => this.scrollToBottom(true), 0);
 
-    await this.delay(900);
+    await this.delay(fileData.initialDelay ?? 900);
 
     for (let row of fileData.content) {
       const nextRow = {
@@ -1679,14 +2073,14 @@ export class ReactBuildPreviewComponent {
         if (char === '\n' || nextRow.text.length % 6 === 0) {
           setTimeout(() => this.scrollToBottom(true), 0);
         }
-        await this.delay(char === ' ' ? 10 : 16);
+        await this.delay(char === ' ' ? 10 : (fileData.lineDelay ?? 16));
       }
 
       setTimeout(() => this.scrollToBottom(true), 0);
-      await this.delay(180);
+      await this.delay(fileData.rowDelay ?? 180);
     }
 
-    await this.delay(1400);
+    await this.delay(fileData.finishDelay ?? 1400);
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 

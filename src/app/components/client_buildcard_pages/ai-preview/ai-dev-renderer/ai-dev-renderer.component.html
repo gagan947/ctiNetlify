@@ -6,8 +6,10 @@
     </div>
 
     <div *ngIf="!isStatusBlock(block)" class="ct_legacy_block">
-      <p *ngIf="!isArray(block?.text) && !isCredentialsBlock(block) && !isActionBlock(block) && !isInputBlock(block) && !isInlineCtaBlock(block) && !isUserMessageBlock(block)"
-        class="mb-0 ct_legacy_text">
+      <p *ngIf="!isArray(block?.text) && !isActionBlock(block) && !isInputBlock(block) && !isInlineCtaBlock(block) && !isUserMessageBlock(block)"
+        class="mb-0 ct_legacy_text"
+        [class.ct_phase_heading]="isPhaseHeadingBlock(block)"
+        [class.ct_support_paragraph]="isSupportParagraphBlock(block)">
         {{ block?.text }}
       </p>
 
@@ -17,13 +19,7 @@
           <span class="pill">{{ item }}</span>
         </li>
       </ul>
-      <div *ngIf="isCredentialsBlock(block) && !isLoading" class="ct_ai_credentials_box">
-        <p class="mb-2 ct_legacy_text">{{ block?.text?.message }}</p>
-        <h6>{{ block?.text?.label }}</h6>
-        <div><strong>Email:</strong> <span>{{ block?.text?.email }}</span></div>
-        <div><strong>Password:</strong> <span>{{ block?.text?.password }}</span></div>
-      </div>
-
+   
       <div *ngIf="isActionBlock(block) && !isLoading" class="ct_ai_action_box">
         <p class="mb-2 ct_legacy_text">{{ block?.text?.message }}</p>
         <div class="ct_ai_action_list">
@@ -62,41 +58,45 @@
     </div>
   </div>
 
-  <div *ngIf="block?.type === 'terminal' && block?.data?.done !== false" class="terminal">
+  <div *ngIf="block?.type === 'terminal'" class="terminal" [class.is-running]="block?.data?.done === false">
     <div *ngFor="let line of getTerminalLines(block); let lineIndex = index; trackBy: trackByIndex" class="line pe-3"
-      [class.muted]="lineIndex > 0" [innerHTML]="formatTerminalLine(line)">
+      [class.running]="isTerminalRunningLine(block, lineIndex)"
+      [ngClass]="getTerminalLineClass(line)"
+      [innerHTML]="formatTerminalLine(line)">
     </div>
   </div>
 
-  <a *ngIf="block?.type === 'terminal' && block?.data?.done === false" href="javascript:void(0)"
-    class="btn-shine px-3 ct_terminal_thinking">
-    Thinking
-  </a>
+  <div *ngIf="isBuildSectionBlock(block)" class="ct_build_section pe-3" [class.is-running]="block?.data?.done === false">
+    <div class="ct_build_section__header">
+      <span class="ct_build_section__icon">{{ block?.data?.icon }}</span>
+      <span class="ct_build_section__title">{{ block?.data?.title }}</span>
+    </div>
 
-  <div *ngIf="block?.type === 'code'" class="code-container mb-3 pe-3">
-    <span class="muted mb-1 d-block" data-bs-toggle="collapse" [attr.data-bs-target]="'#codeCollapse' + i">
-      Created file
-      <span class="ct_fs_12">
-        <span class="ct_filte_text_clr">{{ block?.data?.file }}</span>
-        <span class="text-success">+{{ block?.data?.added ?? 0 }}</span>
-        -
-        <span class="text-danger">{{ block?.data?.removed ?? 0 }}</span>
-      </span>
-      <i class="ms-2 fa-solid fa-angle-down"></i>
-    </span>
-
-    <div class="collapse mt-2 show" [id]="'codeCollapse' + i">
-      <div class="code-header d-flex justify-content-between align-items-center">
-        <span>{{ block?.data?.file }} +{{ block?.data?.added ?? 0 }} -{{ block?.data?.removed ?? 0 }}</span>
-        <i class="fa-regular fa-copy" style="cursor:pointer;" (click)="copyCode(block?.data?.content || [])"></i>
+    <div class="ct_build_section__items">
+      <div *ngFor="let item of getBuildSectionItems(block); trackBy: trackByIndex" class="ct_build_section__item"
+        [class.is-active]="item?.status === 'active'">
+        <span class="ct_build_section__item_icon">
+          <span *ngIf="item?.status === 'done'" class="ct_build_section__item_check">✓</span>
+          <span *ngIf="item?.status === 'active'" class="ct_build_section__item_loader"></span>
+        </span>
+        <span class="ct_build_section__item_text">{{ item?.label }}</span>
       </div>
+    </div>
+  </div>
 
-      <div class="code-body">
-        <div *ngFor="let row of block?.data?.content || []; trackBy: trackByLine" class="line">
-          <div class="line-number">{{ row?.line }}</div>
-          <div class="line-content" [class.heading]="isHeading(row?.text)" [innerHTML]="formatCodeLine(row?.text)">
-          </div>
-        </div>
+  <div *ngIf="isFileActivityBlock(block)" class="file-activity-container mb-3 pe-3">
+    <div *ngIf="isFileActivityPending(block)" class="file-activity-progress">
+      <span class="file-activity-progress-text">{{ getFileActivityTitle(block) }}</span>
+      <span class="file-activity-progress-dots"></span>
+    </div>
+
+    <div *ngIf="!isFileActivityPending(block)" class="file-activity-card">
+      <div class="file-activity-icon">
+        <i class="fa-regular fa-file-lines"></i>
+      </div>
+      <div class="file-activity-copy">
+        <div class="file-activity-name">{{ block?.data?.file }}</div>
+        <div class="file-activity-summary">{{ getFileActivitySummary(block) }}</div>
       </div>
     </div>
   </div>

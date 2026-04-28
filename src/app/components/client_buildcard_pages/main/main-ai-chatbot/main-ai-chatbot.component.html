@@ -58,15 +58,21 @@
         </div>
         <div class="main-ai-thread-stack">
           <div class="main-ai-thread-loader">
-            <div class="main-ai-loader-copy">
-              <div class="main-ai-typing-dots">
-                <span></span>
-                <span></span>
-                <span></span>
+            <div class="main-ai-loader-copy" aria-live="polite">
+              <div class="main-ai-loader-body">
+                <div class="main-ai-loader-line">
+                  <span class="main-ai-loader-status-wrap">
+                    <span class="main-ai-loader-status ct_fs_12" [class.is-visible]="!!currentLoaderText">
+                      {{ currentLoaderText }}
+                    </span>
+                  </span>
+                  <div class="main-ai-typing-dots" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
               </div>
-              <span class="main-ai-loader-status ct_fs_12" [class.is-visible]="!!currentLoaderText">
-                {{ currentLoaderText }}
-              </span>
             </div>
           </div>
         </div>
