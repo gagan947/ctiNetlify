@@ -180,33 +180,33 @@ export class ReactBuildPreviewComponent {
   }
 
   async ngOnInit() {
-    this.startFlow()
-    // this.getUserSubscriptionPlan();
-    // const projectData = sessionStorage.getItem('projectData');
-    // this.projectsData = JSON.parse(projectData!);
+   
+    this.getUserSubscriptionPlan();
+    const projectData = sessionStorage.getItem('projectData');
+    this.projectsData = JSON.parse(projectData!);
 
-    // this.blocks = [];
+    this.blocks = [];
 
-    // // 🔹 Store preview temporarily (IMPORTANT)
-    // this.pendingPreviewUrl = null;
+    // 🔹 Store preview temporarily (IMPORTANT)
+    this.pendingPreviewUrl = null;
 
-    // // ============================================
-    // // ✅ 1. LOAD DRAFT TEMPLATES FIRST
-    // // ============================================
+    // ============================================
+    // ✅ 1. LOAD DRAFT TEMPLATES FIRST
+    // ============================================
 
-    // const templates = await this.getUserTemplates();
-    // this.route.paramMap.subscribe((res: any) => {
-    //   this.selectedProjectId = res.params['id'];
-    //   this.loadDraftTemplates(templates);
-    // });
+    const templates = await this.getUserTemplates();
+    this.route.paramMap.subscribe((res: any) => {
+      this.selectedProjectId = res.params['id'];
+      this.loadDraftTemplates(templates);
+    });
 
-    // const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
+    const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
 
-    // if (existingTemplate) {
-    //   await this.showDraftWelcomeMessages(false);
-    //   await this.loadDraftTemplates(templates);
-    //   return;
-    // }
+    if (existingTemplate) {
+      await this.showDraftWelcomeMessages(false);
+      await this.loadDraftTemplates(templates);
+      return;
+    }
 
 
     await this.runInitialBuildSequence();
@@ -314,6 +314,8 @@ export class ReactBuildPreviewComponent {
     this.isReactBuilding = false;
     this.isIframeLoading = false;
     this.isTyping = false;
+    this.safePreviewUrl = null;
+    this.pendingPreviewUrl = null;
 
     const modalElement = document.getElementById('buildGenerationFailedModal');
     const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement, {
@@ -553,18 +555,6 @@ export class ReactBuildPreviewComponent {
         'Refined CSS rhythm',
         'New preview build'
       ]
-    });
-
-    this.blocks.push({
-      id: 'credentials',
-      text: {
-        label: 'Project Credentials',
-        email: 'creative@gmail.com',
-        password: 'Test@123',
-        message: 'You can use these credentials to login to your project.'
-      },
-      done: true,
-      timestamp: new Date()
     });
 
     setTimeout(() => this.scrollToBottom(true), 0);
@@ -916,18 +906,6 @@ export class ReactBuildPreviewComponent {
         }
       ];
 
-      this.blocks.push({
-        id: 'credentials',
-        text: {
-          label: 'Project Credentials',
-          email: 'creative@gmail.com',
-          password: 'Test@123',
-          message: 'You can use these credentials to login to your project.'
-        },
-        done: true,
-        timestamp: now
-      });
-
       this.appendBuildActionPrompt();
       setTimeout(() => this.scrollToBottom(true), 0);
       return;
@@ -965,18 +943,6 @@ export class ReactBuildPreviewComponent {
       time: '24s',
       description: 'Restored your saved template workspace and reloaded the available preview variations.',
       highlights: ['Saved template restore', 'Draft previews loaded', 'Workspace ready']
-    });
-
-    this.blocks.push({
-      id: 'credentials',
-      text: {
-        label: 'Project Credentials',
-        email: 'creative@gmail.com',
-        password: 'Test@123',
-        message: 'You can use these credentials to login to your project.'
-      },
-      done: true,
-      timestamp: now
     });
 
     this.appendBuildActionPrompt();
@@ -1363,7 +1329,6 @@ export class ReactBuildPreviewComponent {
     );
     this.hideLoader();
 
-    this.setBuildStep(2);
     return;
 
     this.setBuildStep(2);
@@ -1673,17 +1638,17 @@ export class ReactBuildPreviewComponent {
   }
 
   private async showRealAiProcessingPhase() {
-    await this.addParagraphBlock('Generating real application using AI...', 300, 'phase');
-    await this.addParagraphBlock('This may take 2–5 minutes depending on complexity.', 500, 'support');
+    this.setBuildStep(3);
+    await this.addParagraphBlock('Final preview processing is still running...', 300, 'phase');
+    await this.addParagraphBlock('This may take 2–5 minutes depending on project complexity.', 500, 'support');
     this.startAiProcessingPhase();
   }
 
   private startAiProcessingPhase() {
     const steps = [
-      'Designing UI layouts...',
-      'Writing component logic...',
-      'Connecting pages and routing...',
-      'Optimizing performance...',
+      'Installing project dependencies...',
+      'Building preview bundle...',
+      'Deploying preview workspace...',
       'Finalizing project build...'
     ];
 

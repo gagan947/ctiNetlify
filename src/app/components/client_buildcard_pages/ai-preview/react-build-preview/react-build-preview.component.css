@@ -76,6 +76,7 @@ aside.ct_project_ai_chat_section {
   display: grid;
   flex: 0 0 auto;
   color: #fff;
+  padding-right: 0px;
 
 }
 
@@ -102,7 +103,7 @@ aside.ct_project_ai_chat_section>div:first-child {
 
 /* Handle */
 .ct_chat_scroll_wrap::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #333;
 }
 
 /* Handle on hover */

@@ -24,7 +24,7 @@
                             (dragstart)="blockPreviewInteraction($event)"
                             (selectstart)="blockPreviewInteraction($event)">
 
-                            <iframe #previewFrame class="preview-iframe mx-auto w-100 "
+                            <iframe *ngIf="safePreviewUrl" #previewFrame class="preview-iframe mx-auto w-100 "
                                 [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100" [src]="safePreviewUrl"
                                 sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-downloads"
                                 referrerpolicy="no-referrer" (load)="onIframeLoad()">
@@ -303,9 +303,6 @@
 <div class="modal fade" id="buildGenerationFailedModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content ct_build_failed_modal">
-            <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
             <div class="ct_build_failed_modal__icon">
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
