@@ -2461,6 +2461,9 @@ table.table.ct_compare_table {
   color: #fff;
   padding: 13px 17px;
 }
+.ct_project_count_overlay h4 {
+    color: #fff;
+}
 
 /*✨✨ Faq Section E ✨✨*/
 
