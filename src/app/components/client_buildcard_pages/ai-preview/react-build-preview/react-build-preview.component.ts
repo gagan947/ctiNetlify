@@ -8,7 +8,6 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { firstValueFrom } from 'rxjs';
 import { SubscriptionResponse } from '../../../../models/subcription';
-import { UserTemplate, GetUserTemplatesResponse } from '../../../../models/userTemplate';
 import { AiSocketService } from '../../../../services/ai-socket.service';
 import { ApiService } from '../../../../services/api.service';
 import { ReactCodeEditorComponent } from '../react-code-editor/react-code-editor.component';

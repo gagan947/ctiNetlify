@@ -11,29 +11,45 @@
             <span>Home</span>
         </a>
 
-        @for (project of allProjectsList; track project.inquiryId) {
-        <button type="button" class="main-ai-topbar__tab" [class.main-ai-topbar__tab--active]="
-          project.inquiryId === selectedProjectId
-        " (click)="selectProjectTab(project)">
-            <span class="main-ai-topbar__tab-dot-wrap"
-                [class.main-ai-topbar__tab-dot-wrap--active]="project.inquiryId === selectedProjectId">
-                <span class="main-ai-topbar__tab-dot"></span>
-            </span>
-            <span class="main-ai-topbar__tab-label">{{ project.projectName }}</span>
+        <div class="main-ai-topbar__tabs-shell">
+            <button type="button" class="main-ai-topbar__scroll-btn main-ai-topbar__scroll-btn--left"
+                [class.main-ai-topbar__scroll-btn--visible]="canScrollTabsLeft" (click)="scrollTabs('left')"
+                aria-label="Scroll tabs left">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
 
-            <span class="main-ai-topbar__tab-close" aria-hidden="true"
-                (click)="$event.stopPropagation(); removeProjectFromTab(project.inquiryId)">
-                <i class="fa-solid fa-xmark"></i>
-            </span>
+            <div #tabsScroller class="main-ai-topbar__tabs-viewport" (scroll)="updateTabOverflowState()">
+                @for (project of allProjectsList; track project.inquiryId) {
+                <button type="button" class="main-ai-topbar__tab" [class.main-ai-topbar__tab--active]="
+                  project.inquiryId === selectedProjectId
+                " (click)="selectProjectTab(project)">
+                    <span class="main-ai-topbar__tab-dot-wrap"
+                        [class.main-ai-topbar__tab-dot-wrap--active]="project.inquiryId === selectedProjectId">
+                        <span class="main-ai-topbar__tab-dot"></span>
+                    </span>
+                    <span class="main-ai-topbar__tab-label">{{ project.projectName }}</span>
 
-        </button>
-        }
-        @if(selectedProjectId !== ''){
-        <button routerLink="/main" (click)="selectedProjectId = ''" type="button" class="main-ai-topbar__add"
-            aria-label="Add tab">
-            <i class="fa-solid fa-plus"></i>
-        </button>
-        }
+                    <span class="main-ai-topbar__tab-close" aria-hidden="true"
+                        (click)="$event.stopPropagation(); removeProjectFromTab(project.inquiryId)">
+                        <i class="fa-solid fa-xmark"></i>
+                    </span>
+
+                </button>
+                }
+                @if(selectedProjectId !== ''){
+                <button routerLink="/main" (click)="selectedProjectId = ''" type="button" class="main-ai-topbar__add"
+                    aria-label="Add tab">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                }
+            </div>
+
+            <button type="button" class="main-ai-topbar__scroll-btn main-ai-topbar__scroll-btn--right"
+                [class.main-ai-topbar__scroll-btn--visible]="canScrollTabsRight" (click)="scrollTabs('right')"
+                aria-label="Scroll tabs right">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
     </div>
 
     <div class="main-ai-topbar__right" style="padding-bottom: 6px">

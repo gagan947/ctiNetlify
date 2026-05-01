@@ -54,7 +54,10 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   isProfileMenuOpen = false;
   private routeSubscription?: Subscription;
   @ViewChild('profileMenu') profileMenu?: ElementRef<HTMLDivElement>;
+  @ViewChild('tabsScroller') tabsScroller?: ElementRef<HTMLDivElement>;
   subsCriptionData: any;
+  canScrollTabsLeft = false;
+  canScrollTabsRight = false;
   constructor(
     private apiService: ApiService,
     private router: Router,
@@ -75,6 +78,7 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.syncSelectedProjectFromRoute();
         this.syncPendingWorkspaceTab();
+        this.queueTabOverflowCheck();
       });
   }
 
@@ -97,6 +101,8 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
           this.allProjectsList = (res.data || []).filter((project: UserProjectTab) => project.is_header_available === 1);
           this.syncPendingWorkspaceTab();
           this.syncSelectedProjectFromRoute();
+          this.queueTabOverflowCheck();
+          this.queueActiveTabIntoView();
         }
       }
     );
@@ -108,6 +114,7 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
       this.route.snapshot.queryParamMap.get('publicEnquiryId') || '';
 
     this.selectedProjectId = inquiryId;
+    this.queueActiveTabIntoView();
   }
 
   private syncPendingWorkspaceTab(): void {
@@ -195,11 +202,12 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
     });
   }
   selectProjectTab(project: UserProjectTab): void {
-  
     this.selectedProjectId = project.inquiryId;
     sessionStorage.setItem('projectData', JSON.stringify({ projectName: project.projectName, clientEnquryId: project.inquiryId }));
     this.apiService.deleteConversationID();
     this.router.navigate(['/code-generator', project.inquiryId]);
+    this.queueTabOverflowCheck();
+    this.queueActiveTabIntoView();
   }
   LogOut() {
     localStorage.clear()
@@ -263,13 +271,41 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
         if (nextActiveProject?.inquiryId) {
           this.selectedProjectId = nextActiveProject.inquiryId;
           this.router.navigate(['/code-generator', nextActiveProject.inquiryId]);
+          this.queueActiveTabIntoView();
           return;
         }
 
         this.selectedProjectId = '';
         this.router.navigate(['/main']);
+        this.queueTabOverflowCheck();
       }
     });
+  }
+
+  scrollTabs(direction: 'left' | 'right'): void {
+    const scroller = this.tabsScroller?.nativeElement;
+    if (!scroller) {
+      return;
+    }
+
+    const scrollAmount = Math.max(240, Math.floor(scroller.clientWidth * 0.6));
+    scroller.scrollBy({
+      left: direction === 'right' ? scrollAmount : -scrollAmount,
+      behavior: 'smooth'
+    });
+  }
+
+  updateTabOverflowState(): void {
+    const scroller = this.tabsScroller?.nativeElement;
+    if (!scroller) {
+      this.canScrollTabsLeft = false;
+      this.canScrollTabsRight = false;
+      return;
+    }
+
+    const maxScrollLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+    this.canScrollTabsLeft = scroller.scrollLeft > 2;
+    this.canScrollTabsRight = scroller.scrollLeft < maxScrollLeft - 2;
   }
 
   @HostListener('document:click', ['$event'])
@@ -283,5 +319,46 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
       return;
     }
     this.closeProfileMenu();
+  }
+
+  @HostListener('window:resize')
+  handleWindowResize(): void {
+    this.queueTabOverflowCheck();
+  }
+
+  private queueTabOverflowCheck(): void {
+    setTimeout(() => this.updateTabOverflowState(), 0);
+  }
+
+  private queueActiveTabIntoView(): void {
+    setTimeout(() => this.scrollActiveTabIntoView(), 0);
+  }
+
+  private scrollActiveTabIntoView(): void {
+    const scroller = this.tabsScroller?.nativeElement;
+    if (!scroller || !this.selectedProjectId) {
+      return;
+    }
+
+    const activeTab = scroller.querySelector('.main-ai-topbar__tab--active') as HTMLElement | null;
+    if (!activeTab) {
+      return;
+    }
+
+    const tabLeft = activeTab.offsetLeft;
+    const tabRight = tabLeft + activeTab.offsetWidth;
+    const visibleLeft = scroller.scrollLeft;
+    const visibleRight = visibleLeft + scroller.clientWidth;
+
+    if (tabLeft >= visibleLeft && tabRight <= visibleRight) {
+      return;
+    }
+
+    const targetLeft = tabLeft - Math.max(24, (scroller.clientWidth - activeTab.offsetWidth) / 2);
+    scroller.scrollTo({
+      left: Math.max(0, targetLeft),
+      behavior: 'smooth'
+    });
+    this.queueTabOverflowCheck();
   }
 }
