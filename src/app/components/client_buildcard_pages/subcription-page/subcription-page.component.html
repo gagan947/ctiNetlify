@@ -104,7 +104,11 @@
                 </div>
               </div>
               <p>{{ planDescription(plan) }}</p>
-              <a (click)="handlePlanAction(plan)" class="ct_price_cta">{{ getPlanButtonLabel(plan) }}</a>
+              <a (click)="handlePlanAction(plan)" class="ct_price_cta"
+                [class.disable_btn]="isPlanActionDisabled(plan)"
+                [attr.aria-disabled]="isPlanActionDisabled(plan)">
+                {{ getPlanButtonLabel(plan) }}
+              </a>
               <div class="position-relative" *ngIf="proPlans.length > 1" (click)="$event.stopPropagation()">
                 <button type="button" class="ct_starter_plan" (click)="toggleProDropdown($event)">
                   {{ plan.credits_per_cycle }} credits {{
@@ -182,7 +186,11 @@
                 </div>
                 <p class="plan_description">{{ planDescription(plan) }}</p>
               </div>
-              <a (click)="handlePlanAction(plan)" class="ct_price_cta">{{ getPlanButtonLabel(plan) }}</a>
+              <a (click)="handlePlanAction(plan)" class="ct_price_cta"
+                [class.disable_btn]="isPlanActionDisabled(plan)"
+                [attr.aria-disabled]="isPlanActionDisabled(plan)">
+                {{ getPlanButtonLabel(plan) }}
+              </a>
             </div>
             <div class="ct_price_card_bottom">
               <h4>{{ getPlanFeaturesTitle(plan) }}</h4>

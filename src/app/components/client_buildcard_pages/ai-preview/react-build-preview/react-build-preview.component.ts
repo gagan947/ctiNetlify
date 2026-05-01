@@ -184,7 +184,7 @@ export class ReactBuildPreviewComponent {
   }
 
   async ngOnInit() {
-   
+
     this.getUserSubscriptionPlan();
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
@@ -770,6 +770,13 @@ export class ReactBuildPreviewComponent {
     this.subscriptionModalService.open(this.selected_template_id);
   }
 
+  openCallbackModal() {
+    const modal = new bootstrap.Modal(
+      document.getElementById('callbackModal')!
+    );
+    modal.show();
+  }
+
   openDeployModal() {
     // this.selectedTemplateName = templateName;
 
@@ -1051,10 +1058,15 @@ export class ReactBuildPreviewComponent {
           //   title: 'Generate New Template',
           //   description: 'Create another variation with a fresh layout and styling direction.'
           // },
+          // {
+          //   id: 'customize_template',
+          //   title: 'Customize This Template',
+          //   description: 'Refine this version further based on your preferred changes and requirements.'
+          // },
           {
-            id: 'customize_template',
-            title: 'Customize This Template',
-            description: 'Refine this version further based on your preferred changes and requirements.'
+            id: 'Request_callback',
+            title: 'Request Callback',
+            description: 'Get in touch with our team for personalized assistance.'
           },
           {
             id: 'deploy_template',
@@ -1100,6 +1112,11 @@ export class ReactBuildPreviewComponent {
 
     if (actionId === 'upgrade_plan') {
       this.openModal();
+      return;
+    }
+
+    if (actionId === 'Request_callback') {
+      this.openCallbackModal();
       return;
     }
   }

@@ -297,6 +297,7 @@ export class SubcriptionPageComponent {
   initiateSubscriptionCheckout(billingDetails: any) {
     const inquiryId = this.projectsData?.clientEnquryId ?? null;
     const redirectPath = window.location.origin + this.router.url || '/my-plan';
+    debugger
     const apiUrl = this.subscriptionPlan.planName !== 'Free Plan' ? 'api/payment/upgrade-subscription' : 'api/payment/create-subscription'
     this.apiService.postAPI(apiUrl, {
       planKey: this.planKey(),
@@ -509,9 +510,23 @@ export class SubcriptionPageComponent {
   }
 
   getPlanButtonLabel(plan: Plan | null): string {
+    if (!plan) {
+      return 'Get Started';
+    }
+
+    if (plan.plan_type === 'FREE') {
+      return 'Start Free';
+    }
+
+    if (this.isActivePaidPlan(plan)) {
+      return 'Active';
+    }
+
+    if (this.hasActivePaidPlan()) {
+      return 'Upgrade';
+    }
+
     switch (plan?.plan_type) {
-      case 'FREE':
-        return 'Start Free';
       case 'PRO':
         return 'Get Started';
       case 'BUSINESS':
@@ -551,7 +566,7 @@ export class SubcriptionPageComponent {
   }
 
   handlePlanAction(plan: Plan): void {
-    if (plan.plan_type === 'FREE') {
+    if (plan.plan_type === 'FREE' || this.isPlanActionDisabled(plan)) {
       return;
     }
 
@@ -576,6 +591,26 @@ export class SubcriptionPageComponent {
     }
 
     return [];
+  }
+
+  hasActivePaidPlan(): boolean {
+    return [...this.proPlans, ...this.businessPlans].some((plan) => this.isActivePaidPlan(plan));
+  }
+
+  isActivePaidPlan(plan: Plan | null): boolean {
+    return !!plan && plan.plan_type !== 'FREE' && !!plan.is_current_plan;
+  }
+
+  isPlanActionDisabled(plan: Plan | null): boolean {
+    if (!plan) {
+      return true;
+    }
+
+    if (plan.plan_type === 'FREE') {
+      return true;
+    }
+
+    return this.isActivePaidPlan(plan);
   }
 
   formatMessageWithLocalDate(message: string): string {
