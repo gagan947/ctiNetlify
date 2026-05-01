@@ -352,33 +352,91 @@
 
 
 <div class="modal fade" id="callbackModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content mb-2" style="padding: 30px;">
-            <div class="d-flex align-items-center justify-content-between gap-2 ct_ai_modal_header_new">
-                <button class="et_reload_icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
-                        viewBox="0 0 20 20" fill="#fff" class="" aria-label="Refresh icon" focusable="false">
-                        <path
-                            d="M10.0418 16.6667C8.18072 16.6667 6.59738 16.0209 5.29183 14.7292C3.98627 13.4375 3.3335 11.8612 3.3335 10V9.85421L2.00016 11.1875L0.833496 10.0209L4.16683 6.68754L7.50016 10.0209L6.3335 11.1875L5.00016 9.85421V10C5.00016 11.3889 5.48975 12.5695 6.46891 13.5417C7.44808 14.5139 8.63905 15 10.0418 15C10.4029 15 10.7571 14.9584 11.1043 14.875C11.4516 14.7917 11.7918 14.6667 12.1252 14.5L13.3752 15.75C12.8474 16.0556 12.3057 16.2848 11.7502 16.4375C11.1946 16.5903 10.6252 16.6667 10.0418 16.6667ZM15.8335 13.3125L12.5002 9.97921L13.6668 8.81254L15.0002 10.1459V10C15.0002 8.61115 14.5106 7.4306 13.5314 6.45837C12.5522 5.48615 11.3613 5.00004 9.9585 5.00004C9.59738 5.00004 9.24322 5.04171 8.896 5.12504C8.54877 5.20837 8.2085 5.33337 7.87516 5.50004L6.62516 4.25004C7.15294 3.94449 7.69461 3.71532 8.25016 3.56254C8.80572 3.40976 9.37516 3.33337 9.9585 3.33337C11.8196 3.33337 13.4029 3.97921 14.7085 5.27087C16.014 6.56254 16.6668 8.13893 16.6668 10V10.1459L18.0002 8.81254L19.1668 9.97921L15.8335 13.3125Z"
-                            fill="#fff" style="transition: fill 0.2s;"></path>
-                    </svg>
-                </button>
-                <h4 class="mb-0 ct_fs_18 text-white">Preview</h4>
-                <button class="et_reload_icon" data-bs-dismiss="modal"><svg xmlns="http://www.w3.org/2000/svg"
-                        width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
-                        <path d="M18 6 6 18"></path>
-                        <path d="m6 6 12 12"></path>
-                    </svg>
-                </button>
-            </div>
-            <!-- Template Preview with Image -->
-            <div class="template-preview mb-0">
-                <div class="preview-image">
-                    <iframe [src]="safePreviewUrl" class="preview-iframe mx-auto w-100"
-                        [style.maxWidth]="previewWidth + 'px'">
-                    </iframe>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content ct_callback_modal">
+            <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="ct_callback_modal__hero">
+                <div class="ct_callback_modal__badge">
+                    <i class="fa-solid fa-phone-volume"></i>
+                </div>
+                <div>
+                    <h2>Request a Call Back</h2>
+                    <p class="mb-0">Share your basic details and our team will reach out to help with your project.</p>
                 </div>
             </div>
+
+            <div class="ct_callback_modal__meta">
+                <div>
+                    <span>Project Name</span>
+                    <strong>{{ projectsData?.projectName || getProjectTypeDisplayName() }}</strong>
+                </div>
+                <div>
+                    <span>Date</span>
+                    <strong>{{ today | date:'medium' }}</strong>
+                </div>
+            </div>
+
+            <form [formGroup]="callbackRequestForm" class="ct_callback_form" (ngSubmit)="submitCallbackRequest()">
+                <div class="ct_callback_form__grid">
+                    <div class="ct_callback_field">
+                        <label for="callbackFullName">Full Name</label>
+                        <input id="callbackFullName" type="text" formControlName="fullName"
+                            placeholder="Enter your full name" />
+                        <small *ngIf="isCallbackFieldInvalid('fullName')">Please enter your full name.</small>
+                    </div>
+
+                    <div class="ct_callback_field">
+                        <label for="callbackCompanyName">Company Name</label>
+                        <input id="callbackCompanyName" type="text" formControlName="companyName"
+                            placeholder="Enter your company name" />
+                        <small *ngIf="isCallbackFieldInvalid('companyName')">Please enter your company name.</small>
+                    </div>
+
+                    <div class="ct_callback_field">
+                        <label for="callbackBusinessEmail">Work Email</label>
+                        <input id="callbackBusinessEmail" type="email" formControlName="businessEmail"
+                            placeholder="name@company.com" />
+                        <small *ngIf="isCallbackFieldInvalid('businessEmail')">Please enter a valid email
+                            address.</small>
+                    </div>
+
+                    <div class="ct_callback_field">
+                        <label for="callbackPhoneNumber">Phone
+                            Number</label>
+                        <div class="position-relative">
+                            <ngx-intl-tel-input id="callbackPhoneNumber" formControlName="phoneNumber"
+                                [cssClass]="'form-control ct_input w-full ps-5 ct_pe_90'"
+                                [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+                                [customPlaceholder]="'Enter your phone number'"
+                                [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                [selectFirstCountry]="false" [selectedCountryISO]="selectedCountry" [maxLength]="15"
+                                [phoneValidation]="true">
+                            </ngx-intl-tel-input>
+                        </div>
+                        <small *ngIf="isCallbackFieldInvalid('phoneNumber')">Please enter a valid phone
+                            number.</small>
+                    </div>
+                </div>
+
+                <div class="ct_callback_field">
+                    <label for="callbackProjectDescription">What would you like help with? <span>Optional</span></label>
+                    <textarea id="callbackProjectDescription" rows="4" formControlName="projectDescription"
+                        placeholder="Tell us what you want to discuss about this project, deployment, or next steps."></textarea>
+                    <small *ngIf="isCallbackFieldInvalid('projectDescription')">Keep your note under 400
+                        characters.</small>
+                </div>
+
+                <div class="ct_callback_modal__footer">
+                    <button type="button" class="btn-cancel button-deploy" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn-confirm button-deploy ct_border_radius_100"
+                        [disabled]="isCallbackSubmitting">
+                        {{ isCallbackSubmitting ? 'Submitting...' : 'Request Call' }}
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -17,7 +17,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [SidebarComponent, CommonModule, FormsModule, NzSelectModule, NgxIntlTelInputModule, NzInputOtpComponent, NzFlexDirective, RouterLink, ImageCropperComponent, WorkspaceHeaderComponent],
+  imports: [CommonModule, FormsModule, NzSelectModule, NgxIntlTelInputModule, NzInputOtpComponent, NzFlexDirective, RouterLink, ImageCropperComponent, WorkspaceHeaderComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })

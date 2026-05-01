@@ -1,7 +1,7 @@
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { Component, effect, ElementRef, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SafeHtml, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -16,6 +16,7 @@ import { AiDevRendererComponent } from '../ai-dev-renderer/ai-dev-renderer.compo
 import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
 import { SubcriptionService } from '../../../../services/subcription.service';
 import { WorkspaceHeaderComponent } from "../../workspace-header/workspace-header.component";
+import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 
 
 interface DesignSnapshot {
@@ -52,11 +53,16 @@ interface BuildProgressStep {
   label: string;
 }
 
+export function noWhitespaceValidator(control: FormControl) {
+  const value = String(control.value || '');
+  return value.trim().length === 0 ? { whitespace: true } : null;
+}
+
 declare var bootstrap: any;
 @Component({
   selector: 'app-react-build-preview',
   standalone: true,
-  imports: [CommonModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, RouterLink, AiDevRendererComponent, WorkspaceHeaderComponent],
+  imports: [CommonModule, NgxIntlTelInputModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, ReactiveFormsModule, RouterLink, AiDevRendererComponent, WorkspaceHeaderComponent],
   templateUrl: './react-build-preview.component.html',
   styleUrl: './react-build-preview.component.css'
 })
@@ -107,6 +113,9 @@ export class ReactBuildPreviewComponent {
   subscriptionPlan!: SubscriptionResponse;
   isIframeLoading = true;
   selectedDeviceType: string = '<i class="fa-solid fa-display"></i>';
+  SearchCountryField = SearchCountryField
+  CountryISO = CountryISO;
+  selectedCountry = CountryISO.India;
   languages = [
     {
       value: 'USD',
@@ -146,8 +155,12 @@ export class ReactBuildPreviewComponent {
   customDomain = '';
   customDomainTouched = false;
   deploymentSuccessMessage = '';
+  successModalAction: 'navigate-dashboard' | 'close-only' = 'navigate-dashboard';
   buildGenerationErrorMessage = '';
   isBuildGenerationErrorExpanded = false;
+  callbackRequestForm!: FormGroup;
+  isCallbackSubmitting = false;
+  userInfo: any = {};
   private shouldDeferPreviewApply = false;
   private hasInitialFlowCompleted = false;
   private pendingPreviewResponse: { res: any; socketId: string | null } | null = null;
@@ -166,6 +179,7 @@ export class ReactBuildPreviewComponent {
     healthcare: ['Home', 'Services', 'Appointments', 'Support', 'Auth'],
     travel: ['Home', 'Destinations', 'Bookings', 'Itinerary', 'Auth']
   };
+  today = new Date();
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
@@ -175,7 +189,8 @@ export class ReactBuildPreviewComponent {
     private toster: NzMessageService,
     public subscriptionModalService: SubscriptionModalService,
     private subscriptionService: SubcriptionService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private fb: FormBuilder
   ) {
     this.baseURl = this.apiService.apiUrl;
     effect(() => {
@@ -188,6 +203,8 @@ export class ReactBuildPreviewComponent {
     this.getUserSubscriptionPlan();
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = JSON.parse(projectData!);
+    this.userInfo = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
+    this.initializeCallbackRequestForm();
 
     this.blocks = [];
 
@@ -771,6 +788,13 @@ export class ReactBuildPreviewComponent {
   }
 
   openCallbackModal() {
+    this.callbackRequestForm.reset({
+      fullName: this.userInfo?.name || '',
+      businessEmail: this.userInfo?.email || '',
+      phoneNumber: this.userInfo?.phoneNumber || '',
+      companyName: this.userInfo?.companyName || '',
+      projectDescription: ''
+    });
     const modal = new bootstrap.Modal(
       document.getElementById('callbackModal')!
     );
@@ -1223,6 +1247,7 @@ export class ReactBuildPreviewComponent {
       .postAPI('api/user/tempalteDeployed', payload)
       .subscribe((res: any) => {
         if (res.success) {
+          this.successModalAction = 'navigate-dashboard';
           this.deploymentSuccessMessage = deploymentDomainType === 'custom'
             ? 'Your domain request has been saved successfully. Our team will reach out to you shortly if we need any additional details.'
             : 'Your project has been deployed successfully. We will take you to the dashboard once you confirm.';
@@ -1233,7 +1258,56 @@ export class ReactBuildPreviewComponent {
 
   confirmDeploymentSuccess() {
     this.closeBootstrapModal('deploymentSuccessModal');
-    this.router.navigate([`/dashboard`]);
+
+    if (this.successModalAction === 'navigate-dashboard') {
+      this.router.navigate([`/dashboard`]);
+    }
+  }
+
+  submitCallbackRequest() {
+    if (this.callbackRequestForm.invalid) {
+      this.callbackRequestForm.markAllAsTouched();
+      return;
+    }
+
+    this.isCallbackSubmitting = true;
+    const raw = this.callbackRequestForm.getRawValue();
+    debugger
+    const callbackPayload = {
+      fullName: String(raw.fullName || '').trim(),
+      businessEmail: String(raw.businessEmail || '').trim(),
+      companyName: String(raw.companyName || '').trim(),
+      phoneNumber: String(raw.phoneNumber || '').trim(),
+      project_name: this.projectsData?.projectName || this.getProjectTypeDisplayName(),
+      project_description: String(raw.projectDescription || '').trim() || this.finalPrompt || 'Requested a callback from the React build preview screen.',
+      companySize: 'Not specified',
+      jobTitle: 'Not specified'
+    };
+
+    this.apiService.postAPI('api/user/getFreeDemo', callbackPayload).subscribe({
+      next: (response: any) => {
+        this.isCallbackSubmitting = false;
+
+        if (!response?.success) {
+          this.toster.error(response?.message || 'Failed to submit your callback request. Please try again.');
+          return;
+        }
+
+        this.closeBootstrapModal('callbackModal');
+        this.successModalAction = 'close-only';
+        this.deploymentSuccessMessage = 'Your callback request has been saved successfully. Our team will get in touch with you shortly.';
+        this.openBootstrapModal('deploymentSuccessModal', { backdrop: 'static', keyboard: false });
+      },
+      error: (error: any) => {
+        this.isCallbackSubmitting = false;
+        this.toster.error(error?.error?.message || 'Failed to submit your callback request. Please try again.');
+      }
+    });
+  }
+
+  isCallbackFieldInvalid(controlName: string): boolean {
+    const control = this.callbackRequestForm.get(controlName);
+    return !!control && control.invalid && (control.touched || control.dirty);
   }
 
   switchDesign(designId: string) {
@@ -1935,7 +2009,7 @@ export class ReactBuildPreviewComponent {
     };
   }
 
-  private getProjectTypeDisplayName(): string {
+  getProjectTypeDisplayName(): string {
     const rawProjectType = this.projectsData?.projectType;
 
     if (typeof rawProjectType !== 'string' || !rawProjectType.trim()) {
@@ -2156,6 +2230,16 @@ export class ReactBuildPreviewComponent {
       data
     });
     setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private initializeCallbackRequestForm() {
+    this.callbackRequestForm = this.fb.group({
+      fullName: [this.userInfo?.name || '', [Validators.required, Validators.minLength(3), noWhitespaceValidator]],
+      businessEmail: [this.userInfo?.email || '', [Validators.required, Validators.email, noWhitespaceValidator]],
+      phoneNumber: [this.userInfo?.phoneNumber || '', Validators.required],
+      companyName: [this.userInfo?.companyName || ''],
+      projectDescription: ['', [Validators.maxLength(1000)]]
+    });
   }
 }
 
