@@ -4,6 +4,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { BuyMoreCreditsModalResult } from '../../../services/subscription-modal.service';
 import { ApiService } from '../../../services/api.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { Router } from '@angular/router';
 declare var window: any;
 
 interface TopUpPack {
@@ -62,6 +63,7 @@ export class BuyMoreCreditsComponent {
   constructor(
     private apiService: ApiService,
     private message: NzMessageService,
+    private router: Router,
     @Optional() private modalRef?: NzModalRef<BuyMoreCreditsComponent, BuyMoreCreditsModalResult>,
   ) { }
 
@@ -178,17 +180,18 @@ export class BuyMoreCreditsComponent {
     let payload = {};
     if (pack) {
       payload = {
-        packKey: pack.pack_key
+        packKey: pack.pack_key,
+        redirectPath: window.location.origin + this.router.url || '/my-plan'
       };
     } else {
       if (Number(this.customAmount) < 16.50 || !this.customAmount || !Number(this.customAmount) || isNaN(Number(this.customAmount))) {
         return;
       }
       payload = {
-        customAmountInr: this.customAmount
+        customAmountInr: this.customAmount,
+        redirectPath: window.location.origin + this.router.url || '/my-plan'
       };
     }
-
     this.apiService.postAPI('api/payment/create-topup-order', payload).subscribe({
       next: (res: any) => {
         if (res.success) {
