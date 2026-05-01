@@ -200,8 +200,7 @@ export class ReactBuildPreviewComponent {
   async ngOnInit() {
 
     this.getUserSubscriptionPlan();
-    const projectData = sessionStorage.getItem('projectData');
-    this.projectsData = JSON.parse(projectData!);
+    this.refreshProjectContext();
     this.userInfo = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
     this.initializeCallbackRequestForm();
 
@@ -215,9 +214,11 @@ export class ReactBuildPreviewComponent {
     // ============================================
 
     const templates = await this.getUserTemplates();
-    this.route.paramMap.subscribe((res: any) => {
+    this.route.paramMap.subscribe(async (res: any) => {
       this.selectedProjectId = res.params['id'];
-      this.loadDraftTemplates(templates);
+      this.refreshProjectContext();
+      const latestTemplates = await this.getUserTemplates();
+      this.loadDraftTemplates(latestTemplates);
     });
 
     const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
@@ -944,10 +945,29 @@ export class ReactBuildPreviewComponent {
 
 
   async loadDraftTemplates(templates: any[]) {
-    if (!templates || templates.length === 0) return;
+    if (!this.selectedProjectId) {
+      return;
+    }
 
-    console.log('selectedProjectId', this.selectedProjectId);
-    const templateId = templates.find((t: any) => t.inquiryId === this.selectedProjectId)?.templateId;
+    const selectedProject = (templates || []).find((t: any) => t.inquiryId === this.selectedProjectId);
+    const templateId = selectedProject?.templateId;
+
+    if (!templateId) {
+      this.safePreviewUrl = null;
+      this.pendingPreviewUrl = null;
+
+      if (this.projectsData?.clientEnquryId === this.selectedProjectId) {
+        this.isReactBuilding = true;
+        this.isIframeLoading = true;
+        return;
+      }
+
+      this.isReactBuilding = false;
+      this.isIframeLoading = false;
+      return;
+    }
+
+    this.startQuickBuildProgress('restore');
     this.setSafePreviewUrl(this.getPreviewProxyUrl(templateId));
     this.isReactBuilding = false;
     this.isTyping = false;
@@ -1271,7 +1291,6 @@ export class ReactBuildPreviewComponent {
 
     this.isCallbackSubmitting = true;
     const raw = this.callbackRequestForm.getRawValue();
-    debugger
     const callbackPayload = {
       fullName: String(raw.fullName || '').trim(),
       businessEmail: String(raw.businessEmail || '').trim(),
@@ -2229,6 +2248,11 @@ export class ReactBuildPreviewComponent {
       data
     });
     setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private refreshProjectContext() {
+    const projectData = sessionStorage.getItem('projectData');
+    this.projectsData = projectData ? JSON.parse(projectData) : null;
   }
 
   private initializeCallbackRequestForm() {

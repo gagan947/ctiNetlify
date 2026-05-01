@@ -316,13 +316,15 @@
                 <div class="ct_build_failed_modal__error_icon">
                     <i class="fa-solid fa-circle-exclamation"></i>
                 </div>
-                <p class="ct_build_failed_modal__error_text mt-0">{{ displayedBuildGenerationErrorMessage }}</p>
-                @if (shouldShowBuildGenerationErrorToggle) {
-                <button type="button" class="ct_build_failed_modal__error_toggle"
-                    (click)="toggleBuildGenerationErrorExpanded()">
-                    {{ isBuildGenerationErrorExpanded ? 'Show less' : 'Show more' }}
-                </button>
-                }
+                <div>
+                    <p class="ct_build_failed_modal__error_text mt-0">{{ displayedBuildGenerationErrorMessage }}</p>
+                    @if (shouldShowBuildGenerationErrorToggle) {
+                    <button type="button" class="ct_build_failed_modal__error_toggle"
+                        (click)="toggleBuildGenerationErrorExpanded()">
+                        {{ isBuildGenerationErrorExpanded ? 'Show less' : 'Show more' }}
+                    </button>
+                    }
+                </div>
             </div>
             }
             <div class="actions">
