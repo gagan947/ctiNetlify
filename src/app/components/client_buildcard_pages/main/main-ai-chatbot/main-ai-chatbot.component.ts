@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, input, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NavigationStart, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
@@ -64,6 +64,13 @@ interface AiStreamPayload {
   done?: boolean;
 }
 
+interface ConversationResumePayload {
+  conversationId?: string;
+  source?: 'memory' | 'database' | 'fresh' | string;
+  state?: Record<string, any> | null;
+  messages?: any[];
+}
+
 interface PendingWorkspaceProjectTab {
   inquiryId: string;
   projectId?: string;
@@ -78,7 +85,9 @@ interface PendingWorkspaceProjectTab {
   styleUrl: './main-ai-chatbot.component.css'
 })
 export class MainAiChatbotComponent implements OnInit, OnDestroy {
+  private readonly conversationStorageKey = 'conversationId';
   private readonly pendingWorkspaceTabStorageKey = 'pendingWorkspaceProjectTab';
+  private readonly resumeFallbackDelayMs = 1500;
   @Input() initialPrompt = '';
   @Input() subsriptionPlan: any | null = null;
   @ViewChild('chatScroll') chatScroll?: ElementRef<HTMLDivElement>;
@@ -89,6 +98,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   promptText = '';
   isSubmitting = false;
   isBuildActionLoading = false;
+  isRestoringConversation = true;
+  isFreshConversation = false;
   chatMessages: ChatMessage[] = [];
   currentLoaderText = '';
   showBuildProjectButton = false;
@@ -97,6 +108,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   lastUserPrompt = '';
   matchedProject: ProjectMatchPayload['project'] | null = null;
   matchedProjectScore: number | null = null;
+  private pendingInitialPrompt = '';
+  private resumeFallbackTimer: ReturnType<typeof setTimeout> | null = null;
   private navigationSubscription?: Subscription;
   projectMatchPayload?: ProjectMatchPayload;
   constructor(
@@ -107,17 +120,16 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this
-    this.socket = io(this.apiService.apiUrl);
+    this.pendingInitialPrompt = this.initialPrompt.trim();
+    this.socket = io(this.apiService.apiUrl, {
+      auth: {
+        token: localStorage.getItem('tokenCTi'),
+        conversationId: this.getStoredConversationId()
+      }
+    });
     this.registerSocketHandlers();
+    this.startResumeFallback();
     this.watchPageChange();
-
-    if (this.initialPrompt.trim()) {
-      this.submitPrompt(this.initialPrompt);
-      return;
-    }
-
-    this.focusInput();
   }
 
   ngOnDestroy(): void {
@@ -138,6 +150,10 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   }
 
   submitPrompt(promptOverride?: string): void {
+    if (this.isRestoringConversation) {
+      return;
+    }
+
     const prompt = (promptOverride ?? this.promptText).trim().replace(/\s+/g, ' ');
     if (!prompt || this.isSubmitting) {
       return;
@@ -163,6 +179,19 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   }
 
   private registerSocketHandlers(): void {
+    this.socket.on('connect', () => {
+      this.ngZone.run(() => {
+        this.startResumeFallback();
+      });
+    });
+
+    this.socket.on('conversationResumed', (payload: ConversationResumePayload) => {
+      console.log('conversationResumed', payload);
+      this.ngZone.run(() => {
+        this.handleConversationResumed(payload);
+      });
+    });
+
     this.socket.on('ai:stream', (payload: AiStreamPayload) => {
       this.ngZone.run(() => {
         this.handleAiStream(payload);
@@ -281,6 +310,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   }
 
   private disconnectSocket(): void {
+    this.clearResumeFallback();
+
     if (!this.socket) {
       return;
     }
@@ -288,6 +319,61 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.socket.removeAllListeners();
     this.socket.disconnect();
     this.socket = null;
+  }
+
+  private handleConversationResumed(payload?: ConversationResumePayload | null): void {
+    this.clearResumeFallback();
+    this.isRestoringConversation = false;
+    this.isFreshConversation = payload?.source === 'fresh';
+
+    this.saveConversationId(payload?.conversationId);
+    this.chatMessages = this.normalizeConversationMessages(payload?.messages);
+    this.restoreConversationState(payload?.state ?? null);
+    this.isSubmitting = false;
+
+    if (this.pendingInitialPrompt && this.isFreshConversation && this.chatMessages.length === 0) {
+      const initialPrompt = this.pendingInitialPrompt;
+      this.pendingInitialPrompt = '';
+      this.submitPrompt(initialPrompt);
+      return;
+    }
+
+    this.pendingInitialPrompt = '';
+    this.focusInput();
+    this.scrollChatToBottom();
+  }
+
+  private startResumeFallback(): void {
+    this.clearResumeFallback();
+
+    this.resumeFallbackTimer = setTimeout(() => {
+      this.ngZone.run(() => {
+        if (!this.isRestoringConversation) {
+          return;
+        }
+
+        this.isRestoringConversation = false;
+        this.isFreshConversation = !this.getStoredConversationId();
+
+        if (this.pendingInitialPrompt) {
+          const initialPrompt = this.pendingInitialPrompt;
+          this.pendingInitialPrompt = '';
+          this.submitPrompt(initialPrompt);
+          return;
+        }
+
+        this.focusInput();
+      });
+    }, this.resumeFallbackDelayMs);
+  }
+
+  private clearResumeFallback(): void {
+    if (!this.resumeFallbackTimer) {
+      return;
+    }
+
+    clearTimeout(this.resumeFallbackTimer);
+    this.resumeFallbackTimer = null;
   }
 
   private completeLoadingState(): void {
@@ -301,6 +387,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   }
 
   private handleAiStream(payload: AiStreamPayload): void {
+    this.isRestoringConversation = false;
     const blockId = payload?.blockId?.trim();
     const content = payload?.content ?? '';
 
@@ -532,5 +619,148 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       backdrop: options?.backdrop ?? true,
       keyboard: options?.keyboard ?? true
     }).show();
+  }
+
+  private restoreConversationState(state?: Record<string, any> | null): void {
+    if (!state) {
+      return;
+    }
+
+    this.currentLoaderText = this.getStringStateValue(state, ['currentLoaderText', 'loadingText', 'loaderMessage']);
+    this.showBuildProjectButton = this.getBooleanStateValue(state, ['showBuildProjectButton']);
+    this.isBuildActionLoading = this.getBooleanStateValue(state, ['isBuildActionLoading']);
+    this.matchedProjectId = this.getStringStateValue(state, ['matchedProjectId']);
+    this.matchedProjectName =
+      this.getStringStateValue(state, ['matchedProjectName']) || this.matchedProjectName;
+    this.lastUserPrompt = this.getStringStateValue(state, ['lastUserPrompt']);
+    this.matchedProject = this.getObjectStateValue<ProjectMatchPayload['project']>(state, ['matchedProject']);
+    this.projectMatchPayload = this.getObjectStateValue<ProjectMatchPayload>(state, ['projectMatchPayload', 'projectMatch']);
+
+    const restoredScore = this.getNumberStateValue(state, ['matchedProjectScore']);
+    this.matchedProjectScore = restoredScore ?? null;
+  }
+
+  private normalizeConversationMessages(messages?: any[]): ChatMessage[] {
+    if (!Array.isArray(messages)) {
+      return [];
+    }
+
+    const normalizedMessages: ChatMessage[] = [];
+
+    messages.forEach((message, index) => {
+        const normalizedText = this.extractMessageText(message);
+        if (!normalizedText) {
+          return;
+        }
+
+        const sender = this.normalizeMessageSender(message?.sender ?? message?.role);
+        const createdAt = this.normalizeMessageTimestamp(
+          message?.createdAt ?? message?.timestamp ?? message?.time,
+          index
+        );
+
+        normalizedMessages.push({
+          sender,
+          text: normalizedText,
+          variant: message?.variant === 'error' ? 'error' : 'default',
+          streamBlockId: this.getOptionalString(message?.streamBlockId ?? message?.blockId),
+          createdAt
+        });
+      });
+
+    return normalizedMessages;
+  }
+
+  private extractMessageText(message: any): string {
+    const textCandidate =
+      typeof message === 'string'
+        ? message
+        : message?.text ?? message?.content ?? message?.message ?? '';
+
+    return typeof textCandidate === 'string' ? textCandidate.trim() : '';
+  }
+
+  private normalizeMessageSender(sender: string): 'user' | 'ai' {
+    const normalizedSender = (sender || '').toLowerCase();
+    return ['user', 'you', 'human'].includes(normalizedSender) ? 'user' : 'ai';
+  }
+
+  private normalizeMessageTimestamp(value: unknown, fallbackIndex: number): number {
+    if (typeof value === 'number' && Number.isFinite(value)) {
+      return value;
+    }
+
+    if (typeof value === 'string') {
+      const parsed = Date.parse(value);
+      if (!Number.isNaN(parsed)) {
+        return parsed;
+      }
+    }
+
+    return Date.now() + fallbackIndex;
+  }
+
+  private saveConversationId(conversationId?: string): void {
+    const normalizedId = conversationId?.trim();
+    if (!normalizedId || typeof sessionStorage === 'undefined') {
+      return;
+    }
+
+    sessionStorage.setItem(this.conversationStorageKey, normalizedId);
+  }
+
+  private getStoredConversationId(): string | null {
+    if (typeof sessionStorage === 'undefined') {
+      return null;
+    }
+
+    return sessionStorage.getItem(this.conversationStorageKey);
+  }
+
+  private getStringStateValue(state: Record<string, any>, keys: string[]): string {
+    for (const key of keys) {
+      const value = state[key];
+      if (typeof value === 'string' && value.trim()) {
+        return value;
+      }
+    }
+
+    return '';
+  }
+
+  private getBooleanStateValue(state: Record<string, any>, keys: string[]): boolean {
+    for (const key of keys) {
+      if (typeof state[key] === 'boolean') {
+        return state[key];
+      }
+    }
+
+    return false;
+  }
+
+  private getNumberStateValue(state: Record<string, any>, keys: string[]): number | undefined {
+    for (const key of keys) {
+      const value = state[key];
+      if (typeof value === 'number' && Number.isFinite(value)) {
+        return value;
+      }
+    }
+
+    return undefined;
+  }
+
+  private getObjectStateValue<T>(state: Record<string, any>, keys: string[]): T | undefined {
+    for (const key of keys) {
+      const value = state[key];
+      if (value && typeof value === 'object') {
+        return value as T;
+      }
+    }
+
+    return undefined;
+  }
+
+  private getOptionalString(value: unknown): string | undefined {
+    return typeof value === 'string' && value.trim() ? value : undefined;
   }
 }

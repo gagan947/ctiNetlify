@@ -8,6 +8,7 @@ import { SubcriptionService } from '../../../services/subcription.service';
 import { SubscriptionResponse } from '../../../models/subcription';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
+import { Router } from '@angular/router';
 import { SubscriptionModalData, SubscriptionModalResult } from '../../../services/subscription-modal.service';
 type BillingCycle = 'MONTH' | 'YEAR';
 type PlanType = 'free' | 'personal' | 'creative' | 'booster' | 'pro' | 'business';
@@ -212,6 +213,7 @@ export class SubcriptionPageComponent {
     private fb: FormBuilder,
     private subscriptionService: SubcriptionService,
     private message: NzMessageService,
+    private router: Router,
     @Optional() private modalRef?: NzModalRef<SubcriptionPageComponent, SubscriptionModalResult>
   ) {
     const projectData = sessionStorage.getItem('projectData');
@@ -294,12 +296,14 @@ export class SubcriptionPageComponent {
 
   initiateSubscriptionCheckout(billingDetails: any) {
     const inquiryId = this.projectsData?.clientEnquryId ?? null;
+    const redirectPath = this.router.url || '/my-plan';
     const apiUrl = this.subscriptionPlan.planName !== 'Free Plan' ? 'api/payment/upgrade-subscription' : 'api/payment/create-subscription'
     this.apiService.postAPI(apiUrl, {
       planKey: this.planKey(),
       user: billingDetails,
       publicTemplateId: this.selectedTemplateId,
-      inquiryId
+      inquiryId,
+      redirectPath
     }).subscribe((res: any) => {
       this.openCashfreeSubscriptionCheckout(res.subscription_session_id);
     }, (err: any) => {

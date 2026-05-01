@@ -51,6 +51,21 @@
       </div>
       }
 
+      @if(!isRestoringConversation && isFreshConversation && !chatMessages.length && !currentLoaderText){
+      <div class="main-ai-thread-row is-ai">
+        <div class="main-ai-thread-avatar" aria-hidden="true">
+          <span></span>
+        </div>
+        <div class="main-ai-thread-stack">
+          <div class="main-ai-thread-text main-ai-ai-message">
+            <div class="main-ai-thread-content">
+              <p class="text-line ct_fs_14" style="word-break: break-word;">Start describing your idea and I'll pick up from there.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+
       @if(currentLoaderText){
       <div class="main-ai-thread-row is-ai">
         <div class="main-ai-thread-avatar" aria-hidden="true">
@@ -104,7 +119,7 @@
       <div class="main-ai-composer main-ai-chat-composer-box">
 
         <textarea #chatPromptInput class="main-ai-prompt-input main-ai-chat-input" rows="2"
-          [attr.placeholder]="placeholderText" [(ngModel)]="promptText"
+          [attr.placeholder]="placeholderText" [disabled]="isRestoringConversation" [(ngModel)]="promptText"
           (keydown)="handlePromptKeydown($event)"></textarea>
 
         <div class="main-ai-composer-footer">
@@ -118,7 +133,7 @@
           </div>
 
           <div class="main-ai-right-actions">
-            <button type="button" class="main-ai-submit-btn" aria-label="Send message" [disabled]="isSubmitting"
+            <button type="button" class="main-ai-submit-btn" aria-label="Send message" [disabled]="isSubmitting || isRestoringConversation"
               (click)="submitPrompt()">
               <i class="fa-solid fa-arrow-up"></i>
             </button>

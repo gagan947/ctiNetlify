@@ -195,8 +195,10 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
     });
   }
   selectProjectTab(project: UserProjectTab): void {
+  
     this.selectedProjectId = project.inquiryId;
     sessionStorage.setItem('projectData', JSON.stringify({ projectName: project.projectName, clientEnquryId: project.inquiryId }));
+    this.apiService.deleteConversationID();
     this.router.navigate(['/code-generator', project.inquiryId]);
   }
   LogOut() {

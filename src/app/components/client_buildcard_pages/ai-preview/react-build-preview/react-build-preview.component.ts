@@ -62,6 +62,8 @@ declare var bootstrap: any;
 })
 export class ReactBuildPreviewComponent {
   private readonly mobileBreakpoint = 991;
+  private readonly buildErrorPreviewLineLimit = 6;
+  private readonly buildErrorPreviewCharLimit = 700;
   private buildLogCursor = new Date('2026-04-27T19:45:01.607');
   private aiProcessingInterval?: ReturnType<typeof setInterval>;
   private pendingFinalBuildSection: any = null;
@@ -144,6 +146,8 @@ export class ReactBuildPreviewComponent {
   customDomain = '';
   customDomainTouched = false;
   deploymentSuccessMessage = '';
+  buildGenerationErrorMessage = '';
+  isBuildGenerationErrorExpanded = false;
   private shouldDeferPreviewApply = false;
   private hasInitialFlowCompleted = false;
   private pendingPreviewResponse: { res: any; socketId: string | null } | null = null;
@@ -251,6 +255,7 @@ export class ReactBuildPreviewComponent {
       .subscribe({
         next: (res: any) => {
           if (!res?.success || !res?.data?.templateId) {
+            this.setBuildGenerationError(res);
             this.queueBuildGenerationFailure();
             return;
           }
@@ -301,7 +306,8 @@ export class ReactBuildPreviewComponent {
           this.isReactBuilding = false;
           this.isTyping = false;
         },
-        error: () => {
+        error: (error: any) => {
+          this.setBuildGenerationError(error);
           this.queueBuildGenerationFailure();
         }
       });
@@ -432,8 +438,85 @@ export class ReactBuildPreviewComponent {
       bootstrap.Modal.getOrCreateInstance(modalElement).hide();
     }
 
+    this.resetBuildGenerationError();
     this.isReactBuilding = true
     this.runInitialBuildSequence();
+  }
+
+  get hasBuildGenerationErrorMessage(): boolean {
+    return !!this.buildGenerationErrorMessage.trim();
+  }
+
+  get displayedBuildGenerationErrorMessage(): string {
+    const message = this.buildGenerationErrorMessage.trim();
+    if (!message) {
+      return '';
+    }
+
+    if (this.isBuildGenerationErrorExpanded) {
+      return message;
+    }
+
+    const lines = message
+      .split(/\r?\n/)
+      .map((line) => line.trimEnd())
+      .filter((line, index, arr) => line.length > 0 || (index > 0 && arr[index - 1].length > 0));
+
+    const previewLines = lines.slice(0, this.buildErrorPreviewLineLimit);
+    let preview = previewLines.join('\n').trim();
+
+    if (preview.length > this.buildErrorPreviewCharLimit) {
+      preview = `${preview.slice(0, this.buildErrorPreviewCharLimit).trimEnd()}...`;
+    }
+
+    if (!preview) {
+      preview = message.slice(0, this.buildErrorPreviewCharLimit).trimEnd();
+    }
+
+    return preview;
+  }
+
+  get shouldShowBuildGenerationErrorToggle(): boolean {
+    const message = this.buildGenerationErrorMessage.trim();
+    if (!message) {
+      return false;
+    }
+
+    const lines = message.split(/\r?\n/).filter((line) => line.trim().length > 0);
+    return lines.length > this.buildErrorPreviewLineLimit || message.length > this.buildErrorPreviewCharLimit;
+  }
+
+  toggleBuildGenerationErrorExpanded() {
+    this.isBuildGenerationErrorExpanded = !this.isBuildGenerationErrorExpanded;
+  }
+
+  private resetBuildGenerationError() {
+    this.buildGenerationErrorMessage = '';
+    this.isBuildGenerationErrorExpanded = false;
+  }
+
+  private setBuildGenerationError(source?: any) {
+    const message = this.extractBuildGenerationErrorMessage(source);
+    this.buildGenerationErrorMessage = message;
+    this.isBuildGenerationErrorExpanded = false;
+  }
+
+  private extractBuildGenerationErrorMessage(source?: any): string {
+    const candidate = source?.error?.message
+      || source?.error?.error?.message
+      || source?.error?.data?.message
+      || source?.data?.message;
+
+    if (typeof candidate !== 'string') {
+      return '';
+    }
+
+    return candidate
+      .replace(/\r\n/g, '\n')
+      .split('\n')
+      .map((line) => line.replace(/[ \t]+/g, ' ').trimEnd())
+      .join('\n')
+      .trim();
   }
 
   private openBootstrapModal(modalId: string, options?: { backdrop?: boolean | 'static'; keyboard?: boolean }) {

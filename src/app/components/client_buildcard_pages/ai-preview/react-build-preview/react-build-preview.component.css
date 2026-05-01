@@ -1291,6 +1291,55 @@ p {
   margin: 10px auto 0;
 }
 
+.ct_build_failed_modal__error {
+  margin: 18px auto 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #fff4f2;
+  border: 1px solid #ffd9d2;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 430px;
+}
+
+.ct_build_failed_modal__error_icon {
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #fde2dd;
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 1px;
+}
+
+.ct_build_failed_modal__error_text {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #7f1d1d;
+  flex: 1;
+}
+
+.ct_build_failed_modal__error_toggle {
+  margin-top: 2px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  align-self: center;
+  white-space: nowrap;
+}
+
 .button-deploy {
   border: none;
   cursor: pointer;

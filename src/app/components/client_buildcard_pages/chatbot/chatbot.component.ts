@@ -15,6 +15,7 @@ import { take } from 'rxjs/operators';
   styleUrl: './chatbot.component.css'
 })
 export class ChatbotComponent {
+  private readonly conversationStorageKey = 'conversationId';
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
   autoScrollEnabled = true;
   loadingText: string = 'Thinking...';
@@ -25,6 +26,7 @@ export class ChatbotComponent {
   messages: any[] = [];
   relevantFeatures: any[] = [];
   isLoading: boolean = false;
+  isRestoringConversation: boolean = true;
   userData: any = {};
   userInput: string = '';
   standardChatbot: boolean = true;
@@ -46,9 +48,20 @@ export class ChatbotComponent {
 
   ngOnInit() {
     this.basicOptions = this.flow['welcome'].options;
-    this.socket = io(this.apiservice.apiUrl);
+    this.socket = io(this.apiservice.apiUrl, {
+      auth: {
+        conversationId: this.getStoredConversationId()
+      }
+    });
+    this.socket.on('conversationResumed', (payload: any) => {
+      this.ngZone.run(() => {
+        this.handleConversationResumed(payload);
+      });
+    });
+
     // listen for streaming tokens
     this.socket.on('botReply', (msg: string) => {
+      this.isRestoringConversation = false;
 
       if (msg === "[END]") {
         console.log("✅ Stream finished");
@@ -178,7 +191,7 @@ export class ChatbotComponent {
   //   }
   // }
   sendMessage() {
-    if (!this.userMessage.trim()) return;
+    if (!this.userMessage.trim() || this.isRestoringConversation) return;
 
     this.messages.push({ sender: 'You', text: this.userMessage });
     this.ngZone.onStable.pipe(take(1)).subscribe(() => {
@@ -271,6 +284,83 @@ export class ChatbotComponent {
         this.addBotMessage(response.answer);
       }, 500)
     })
+  }
+
+  private handleConversationResumed(payload: any): void {
+    this.isRestoringConversation = false;
+    this.isLoading = false;
+
+    const conversationId = typeof payload?.conversationId === 'string' ? payload.conversationId.trim() : '';
+    if (conversationId && typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem(this.conversationStorageKey, conversationId);
+    }
+
+    if (Array.isArray(payload?.messages)) {
+      this.messages = payload.messages
+        .map((message: any, index: number) => {
+          const text = this.extractMessageText(message);
+          if (!text) {
+            return null;
+          }
+
+          const sender = this.normalizeMessageSender(message?.sender ?? message?.role);
+          return {
+            sender,
+            text,
+            time: this.normalizeMessageTime(message?.createdAt ?? message?.timestamp ?? message?.time, index)
+          };
+        })
+        .filter((message: any) => !!message);
+    }
+
+    if (payload?.state && typeof payload.state === 'object' && typeof payload.state.loadingText === 'string') {
+      this.loadingText = payload.state.loadingText;
+    }
+
+    this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+      this.scrollToBottom();
+    });
+  }
+
+  private getStoredConversationId(): string | null {
+    if (typeof sessionStorage === 'undefined') {
+      return null;
+    }
+
+    return sessionStorage.getItem(this.conversationStorageKey);
+  }
+
+  private extractMessageText(message: any): string {
+    const textCandidate =
+      typeof message === 'string'
+        ? message
+        : message?.text ?? message?.content ?? message?.message ?? '';
+
+    return typeof textCandidate === 'string' ? textCandidate.trim() : '';
+  }
+
+  private normalizeMessageSender(sender: string): 'You' | 'Bot' {
+    const normalizedSender = (sender || '').toLowerCase();
+    return ['user', 'you', 'human'].includes(normalizedSender) ? 'You' : 'Bot';
+  }
+
+  private normalizeMessageTime(value: unknown, fallbackIndex: number): Date {
+    if (value instanceof Date) {
+      return value;
+    }
+
+    if (typeof value === 'number' && Number.isFinite(value)) {
+      return new Date(value);
+    }
+
+    if (typeof value === 'string') {
+      const parsed = Date.parse(value);
+      if (!Number.isNaN(parsed)) {
+        return new Date(parsed);
+      }
+    }
+
+    return new Date(Date.now() + fallbackIndex);
   }
 
   ngOnDestroy(): void {

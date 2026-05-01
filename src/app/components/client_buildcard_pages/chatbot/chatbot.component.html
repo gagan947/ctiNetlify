@@ -40,7 +40,7 @@
                 </div>
                 }
 
-                <div *ngIf="isLoading" class="msg-row in">
+                <div *ngIf="!isRestoringConversation && isLoading" class="msg-row in">
                     <!-- <div class="spinner-grow" role="status">
                         <span class="sr-only">Loading...</span>
                     </div> -->
@@ -52,11 +52,11 @@
             <footer class="chat-input">
                 <!-- <input [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Type your message…"
                     autocomplete="off" /> -->
-                <textarea [autosize]="true" [rows]="1" [maxRows]="6" [(ngModel)]="userMessage" [disabled]="isLoading"
+                <textarea [autosize]="true" [rows]="1" [maxRows]="6" [(ngModel)]="userMessage" [disabled]="isLoading || isRestoringConversation"
                     (keyup.enter)="sendMessage()" class="form-control ct_input" placeholder="Type your message…"
                     [onlyGrow]="false" style="height: 45px !important;"></textarea>
 
-                <button (click)="sendMessage()" aria-label="Send message">
+                <button (click)="sendMessage()" aria-label="Send message" [disabled]="isRestoringConversation">
                     ➤
                 </button>
             </footer>

@@ -308,6 +308,20 @@
             </div>
             <h2>Build generation failed</h2>
             <p>Please try again. We could not generate your project preview this time.</p>
+            @if (hasBuildGenerationErrorMessage) {
+            <div class="ct_build_failed_modal__error">
+                <div class="ct_build_failed_modal__error_icon">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <p class="ct_build_failed_modal__error_text mt-0">{{ displayedBuildGenerationErrorMessage }}</p>
+                @if (shouldShowBuildGenerationErrorToggle) {
+                <button type="button" class="ct_build_failed_modal__error_toggle"
+                    (click)="toggleBuildGenerationErrorExpanded()">
+                    {{ isBuildGenerationErrorExpanded ? 'Show less' : 'Show more' }}
+                </button>
+                }
+            </div>
+            }
             <div class="actions">
                 <button class="btn-confirm button-deploy w-100" (click)="retryBuildGeneration()">Build Again</button>
             </div>
