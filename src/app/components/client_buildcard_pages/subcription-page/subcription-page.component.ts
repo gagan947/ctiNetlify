@@ -228,6 +228,7 @@ export class SubcriptionPageComponent {
     this.subscriptionService.subscription$.subscribe(subscription => {
       if (subscription) {
         this.subscriptionPlan = subscription;
+        this.applyActiveSubscriptionDefaults(subscription);
       }
     });
 
@@ -409,10 +410,7 @@ export class SubcriptionPageComponent {
       this.freePlans = cachedPlans.free;
       this.proPlans = cachedPlans.pro;
       this.businessPlans = cachedPlans.business;
-
-      const previousSelectedId = this.selectedProPlan?.id;
-      this.selectedProPlan =
-        this.proPlans.find((plan) => plan.id === previousSelectedId) || this.proPlans[0] || null;
+      this.selectedProPlan = this.resolveSelectedProPlan();
       return;
     }
 
@@ -427,10 +425,7 @@ export class SubcriptionPageComponent {
             pro: this.proPlans,
             business: this.businessPlans
           };
-
-          const previousSelectedId = this.selectedProPlan?.id;
-          this.selectedProPlan =
-            this.proPlans.find((plan) => plan.id === previousSelectedId) || this.proPlans[0] || null;
+          this.selectedProPlan = this.resolveSelectedProPlan();
         },
         error: () => {
           // this.loading = false
@@ -662,5 +657,35 @@ export class SubcriptionPageComponent {
     this.modalRef?.updateConfig({
       nzWidth: width
     });
+  }
+
+  private resolveSelectedProPlan(): Plan | null {
+    const activeProPlan = this.proPlans.find((plan) => plan.is_current_plan);
+    if (activeProPlan) {
+      return activeProPlan;
+    }
+
+    const previousSelectedId = this.selectedProPlan?.id;
+    return this.proPlans.find((plan) => plan.id === previousSelectedId) || this.proPlans[0] || null;
+  }
+
+  private applyActiveSubscriptionDefaults(subscription: SubscriptionResponse): void {
+    const activeBillingCycle = this.normalizeBillingCycle(subscription.billingInterval);
+    if (!activeBillingCycle || this.billingCycle() === activeBillingCycle) {
+      return;
+    }
+
+    this.billingCycle.set(activeBillingCycle);
+    this.proDropdownOpen = false;
+    this.getAllPlans();
+  }
+
+  private normalizeBillingCycle(cycle: string | null | undefined): BillingCycle | null {
+    const normalizedCycle = String(cycle || '').toUpperCase();
+    if (normalizedCycle === 'MONTH' || normalizedCycle === 'YEAR') {
+      return normalizedCycle as BillingCycle;
+    }
+
+    return null;
   }
 }
