@@ -245,7 +245,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.socket.on('projectMatch', (payload: ProjectMatchPayload) => {
       console.log("project====>>", payload);
       this.lastUserPrompt = payload?.finalPrompt?.trim() || this.lastUserPrompt;
-      
+
       this.projectMatchPayload = payload;
       this.ngZone.run(() => {
         const data = typeof payload === 'string' ? JSON.parse(payload) : payload;
@@ -474,6 +474,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
           projectName: projectData.projectName
         });
 
+        sessionStorage.removeItem('conversationId');
         this.router.navigate(['/bd_loader'], {
           queryParams: {
             id: this.matchedProjectId,
@@ -648,25 +649,25 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     const normalizedMessages: ChatMessage[] = [];
 
     messages.forEach((message, index) => {
-        const normalizedText = this.extractMessageText(message);
-        if (!normalizedText) {
-          return;
-        }
+      const normalizedText = this.extractMessageText(message);
+      if (!normalizedText) {
+        return;
+      }
 
-        const sender = this.normalizeMessageSender(message?.sender ?? message?.role);
-        const createdAt = this.normalizeMessageTimestamp(
-          message?.createdAt ?? message?.timestamp ?? message?.time,
-          index
-        );
+      const sender = this.normalizeMessageSender(message?.sender ?? message?.role);
+      const createdAt = this.normalizeMessageTimestamp(
+        message?.createdAt ?? message?.timestamp ?? message?.time,
+        index
+      );
 
-        normalizedMessages.push({
-          sender,
-          text: normalizedText,
-          variant: message?.variant === 'error' ? 'error' : 'default',
-          streamBlockId: this.getOptionalString(message?.streamBlockId ?? message?.blockId),
-          createdAt
-        });
+      normalizedMessages.push({
+        sender,
+        text: normalizedText,
+        variant: message?.variant === 'error' ? 'error' : 'default',
+        streamBlockId: this.getOptionalString(message?.streamBlockId ?? message?.blockId),
+        createdAt
       });
+    });
 
     return normalizedMessages;
   }

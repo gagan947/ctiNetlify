@@ -72,6 +72,7 @@ export class ReactBuildPreviewComponent {
   private buildLogCursor = new Date('2026-04-27T19:45:01.607');
   private aiProcessingInterval?: ReturnType<typeof setInterval>;
   private pendingFinalBuildSection: any = null;
+  private repairAttemptVersion = 0;
 
   safePreviewUrl: SafeResourceUrl | null = null;
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
@@ -259,16 +260,61 @@ export class ReactBuildPreviewComponent {
       this.setBuildFlow('initial');
       this.startBuildProgressTimers();
     }
-    const payload = {
-      prompt: this.finalPrompt,
-      project_id: this.projectsData.projectId,
-      inquiryPublicId: this.projectsData.clientEnquryId,
-      socket_id,
-      excludeVariations: this.usedVariations
-    };
+    const payload = this.buildPreviewPayload(socket_id);
 
     this.apiService
       .postAPI<any, any>('api/ai/generateProject', payload)
+      .subscribe({
+        next: (res: any) => {
+          if (!res?.success || !res?.data?.templateId) {
+            this.setBuildGenerationError(res.data?.message || 'Failed to generate preview');
+            this.queueBuildGenerationFailure();
+            return;
+          }
+
+          this.queueGeneratedPreview(res, socket_id);
+          return;
+        },
+        error: (error: any) => {
+          if (error.error.status === 422 && error.error.data.canRepairBuild) {
+            let repairPayload = {
+              templatePublicId: error.error.data.templatePublicId,
+              inquiryPublicId: this.projectsData.clientEnquryId,
+              error_message: error.error.message,
+            }
+
+            this.attemptBuildRepair(repairPayload, error);
+            return;
+          }
+          this.setBuildGenerationError(error);
+          this.queueBuildGenerationFailure();
+        }
+      });
+  }
+
+  private buildPreviewPayload(socketId: string | null) {
+    return {
+      prompt: this.finalPrompt,
+      project_id: this.projectsData.projectId,
+      inquiryPublicId: this.projectsData.clientEnquryId,
+      socket_id: socketId,
+      excludeVariations: this.usedVariations
+    };
+  }
+
+  private attemptBuildRepair(payload: any, buildFailureSource?: any) {
+    this.setBuildGenerationError(buildFailureSource);
+    this.clearBuildStepTimers();
+    const repairAttemptVersion = ++this.repairAttemptVersion;
+    void this.announceRepairAttempt(repairAttemptVersion);
+
+    const repairPayload = {
+      ...payload,
+      buildError: this.buildGenerationErrorMessage || undefined
+    };
+
+    this.apiService
+      .postAPI<any, any>('api/ai/repairBuild', repairPayload)
       .subscribe({
         next: (res: any) => {
           if (!res?.success || !res?.data?.templateId) {
@@ -277,51 +323,7 @@ export class ReactBuildPreviewComponent {
             return;
           }
 
-          this.queueGeneratedPreview(res, socket_id);
-          return;
-
-          this.isReactBuilding = true;
-
-          const templateId = res.data.templateId;
-          const proxyUrl = this.getPreviewProxyUrl(templateId);
-
-          // 🔹 track variation
-          if (res.data.variation) {
-            this.usedVariations.push(res.data.variation);
-          }
-
-          this.designCount++;
-
-          const designId = `design-${this.designCount}`;
-
-          const snapshot: DesignSnapshot = {
-            id: designId,
-            label: `Template ${this.designCount}`,
-            pages: res.data.pages,
-            loginRedirect: res.data.login_redirect,
-            createdAt: new Date(),
-            previewType: 'html'
-          };
-
-          this.designMap.set(designId, snapshot);
-
-          this.designOrder.push({
-            designId,
-            url: proxyUrl, // ✅ store proxy instead of real URL
-            user_template_id: res.data.templateId || null, // depends on backend
-            variation_no: res.data.variation
-          });
-
-          this.activeDesignId = designId;
-
-          if (socket_id) {
-            this.pendingPreviewUrl = proxyUrl;
-            this.preparePreviewLoadState();
-          } else {
-            this.setSafePreviewUrl(proxyUrl);
-          }
-          this.isReactBuilding = false;
-          this.isTyping = false;
+          this.queueGeneratedPreview(res, payload.socket_id ?? null);
         },
         error: (error: any) => {
           this.setBuildGenerationError(error);
@@ -330,7 +332,53 @@ export class ReactBuildPreviewComponent {
       });
   }
 
+  private async announceRepairAttempt(repairAttemptVersion: number) {
+    this.isReactBuilding = true;
+    this.isTyping = true;
+    this.setBuildStep(2);
+
+    await this.addParagraphBlock(
+      'Build generation failed on the first pass. I am working on an automated repair now.',
+      700,
+      'phase'
+    );
+    if (repairAttemptVersion !== this.repairAttemptVersion) {
+      return;
+    }
+
+    await this.addParagraphBlock(
+      `I’m checking the failed output, correcting the generated build artifacts, and retrying the preview before showing any failure popup.`,
+      1200,
+      'support'
+    );
+    if (repairAttemptVersion !== this.repairAttemptVersion) {
+      return;
+    }
+
+    await this.showLoader('Inspecting failed build output...');
+    await this.addBuildSection(
+      'Repairing build...',
+      'fa-solid fa-screwdriver-wrench',
+      [
+        'Inspecting the failed build response',
+        'Repairing generated files and configuration',
+        'Retrying preview generation'
+      ],
+      2200,
+      900
+    );
+    this.hideLoader();
+    if (repairAttemptVersion !== this.repairAttemptVersion) {
+      return;
+    }
+
+    this.setBuildStep(3);
+    this.showLoader('Repair build is in progress...');
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
   private handleBuildGenerationFailure() {
+    this.repairAttemptVersion++;
     this.clearBuildStepTimers();
     this.stopAiProcessingPhase();
     this.pendingFinalBuildSection = null;
@@ -358,6 +406,7 @@ export class ReactBuildPreviewComponent {
   }
 
   private applyGeneratedPreview(res: any, socketId: string | null) {
+    this.repairAttemptVersion++;
     this.subscriptionService.loadSubscription();
     this.stopAiProcessingPhase();
     this.isReactBuilding = true;
