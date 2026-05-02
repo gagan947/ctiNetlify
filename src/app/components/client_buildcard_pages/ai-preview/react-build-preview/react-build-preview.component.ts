@@ -793,7 +793,7 @@ export class ReactBuildPreviewComponent {
       businessEmail: this.userInfo?.email || '',
       phoneNumber: this.userInfo?.phoneNumber || '',
       companyName: this.userInfo?.companyName || '',
-      projectDescription: ''
+      description: ''
     });
     const modal = new bootstrap.Modal(
       document.getElementById('callbackModal')!
@@ -1283,7 +1283,7 @@ export class ReactBuildPreviewComponent {
     }
   }
 
-  submitCallbackRequest() {
+  async submitCallbackRequest() {
     if (this.callbackRequestForm.invalid) {
       this.callbackRequestForm.markAllAsTouched();
       return;
@@ -1291,18 +1291,26 @@ export class ReactBuildPreviewComponent {
 
     this.isCallbackSubmitting = true;
     const raw = this.callbackRequestForm.getRawValue();
+    const templates = await this.getUserTemplates();
+    const activeDesign = templates.find((t: any) => t.inquiryId === this.selectedProjectId).templateId;
+
+    if (!activeDesign) {
+      console.error("No active design found");
+      return;
+    }
+    this.selected_template_id = activeDesign;
     const callbackPayload = {
-      fullName: String(raw.fullName || '').trim(),
-      businessEmail: String(raw.businessEmail || '').trim(),
-      companyName: String(raw.companyName || '').trim(),
-      phoneNumber: String(raw.phoneNumber || '').trim(),
-      project_name: this.projectsData?.projectName || this.getProjectTypeDisplayName(),
-      project_description: String(raw.projectDescription || '').trim() || this.finalPrompt || 'Requested a callback from the React build preview screen.',
-      companySize: 'Not specified',
-      jobTitle: 'Not specified'
+      public_template_id: this.selected_template_id,
+      date: new Date().toISOString(),
+      full_name: String(raw.fullName || '').trim(),
+      work_email: String(raw.businessEmail || '').trim(),
+      company_name: String(raw.companyName || '').trim(),
+      phone_number: String(raw.phoneNumber.number || '').trim(),
+      country_code: String(raw.phoneNumber.dialCode || '').trim(),
+      description: String(raw.description || '').trim(),
     };
 
-    this.apiService.postAPI('api/user/getFreeDemo', callbackPayload).subscribe({
+    this.apiService.postAPI('api/user/requestProjectCallback', callbackPayload).subscribe({
       next: (response: any) => {
         this.isCallbackSubmitting = false;
 
@@ -2261,7 +2269,7 @@ export class ReactBuildPreviewComponent {
       businessEmail: [this.userInfo?.email || '', [Validators.required, Validators.email, noWhitespaceValidator]],
       phoneNumber: [this.userInfo?.phoneNumber || '', Validators.required],
       companyName: [this.userInfo?.companyName || ''],
-      projectDescription: ['', [Validators.maxLength(1000)]]
+      description: ['', [Validators.maxLength(1000)]]
     });
   }
 }
