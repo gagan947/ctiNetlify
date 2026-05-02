@@ -211,7 +211,14 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   }
   LogOut() {
     localStorage.clear()
+    sessionStorage.clear()
     this.router.navigate(['/'])
+  }
+
+  openNewTab(): void {
+    this.apiService.resetWorkspaceChatState();
+    this.selectedProjectId = '';
+    this.router.navigate(['/main']);
   }
 
   toggleProfileMenu(event: MouseEvent): void {

@@ -42,6 +42,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   isChatMode = false;
   submittedPrompt = '';
   private subscriptionStateSub?: Subscription;
+  private newChatSubscription?: Subscription;
   private placeholderTimer: ReturnType<typeof setTimeout> | null = null;
   private resumeProbeTimer: ReturnType<typeof setTimeout> | null = null;
   private resumeProbeSocket: any = null;
@@ -66,6 +67,9 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
         this.subscriptionPlan = subscription;
       }
     });
+    this.newChatSubscription = this.apiService.newChat$.subscribe(() => {
+      this.resetToFreshChat();
+    });
   }
 
   ngAfterViewInit(): void {
@@ -79,6 +83,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.subscriptionStateSub?.unsubscribe();
+    this.newChatSubscription?.unsubscribe();
     this.clearResumeProbe();
     this.disconnectResumeProbeSocket();
   }
@@ -205,5 +210,14 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     return sessionStorage.getItem(this.conversationStorageKey);
+  }
+
+  private resetToFreshChat(): void {
+    this.clearResumeProbe();
+    this.disconnectResumeProbeSocket();
+    this.isChatMode = false;
+    this.submittedPrompt = '';
+    this.promptText = '';
+    setTimeout(() => this.promptInput?.nativeElement.focus(), 0);
   }
 }

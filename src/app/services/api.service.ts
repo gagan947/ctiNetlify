@@ -19,6 +19,7 @@ export class ApiService {
 
 
   private clearInputSubject = new Subject<void>();
+  private newChatSubject = new Subject<void>();
   _rate = signal<any>(null);
   _imagePreview = signal<any>(null);
   _htmlCode = signal<any>(null);
@@ -135,10 +136,15 @@ export class ApiService {
 
   // Observable that components can subscribe to
   clearInput$ = this.clearInputSubject.asObservable();
+  newChat$ = this.newChatSubject.asObservable();
 
   // Method to trigger the clear event
   triggerClearInput() {
     this.clearInputSubject.next();
+  }
+
+  triggerNewChat() {
+    this.newChatSubject.next();
   }
 
   private userDataSubject = new BehaviorSubject<any>(null);
@@ -151,5 +157,14 @@ export class ApiService {
 
   deleteConversationID() {
     sessionStorage.removeItem('conversationId');
+  }
+
+  resetWorkspaceChatState() {
+    sessionStorage.removeItem('conversationId');
+    sessionStorage.removeItem('publicEnquiryId');
+    sessionStorage.removeItem('projectData');
+    sessionStorage.removeItem('pendingWorkspaceProjectTab');
+    this.triggerClearInput();
+    this.triggerNewChat();
   }
 }

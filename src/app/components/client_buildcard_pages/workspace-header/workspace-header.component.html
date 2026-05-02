@@ -36,12 +36,11 @@
 
                 </button>
                 }
-                @if(selectedProjectId !== ''){
-                <button routerLink="/main" (click)="selectedProjectId = ''" type="button" class="main-ai-topbar__add"
-                    aria-label="Add tab">
+                <!-- @if(selectedProjectId !== ''){ -->
+                <button (click)="openNewTab()" type="button" class="main-ai-topbar__add" aria-label="Add tab">
                     <i class="fa-solid fa-plus"></i>
                 </button>
-                }
+                <!-- } -->
             </div>
 
             <button type="button" class="main-ai-topbar__scroll-btn main-ai-topbar__scroll-btn--right"
