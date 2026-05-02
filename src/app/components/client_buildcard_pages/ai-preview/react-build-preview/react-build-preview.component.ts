@@ -69,6 +69,7 @@ export class ReactBuildPreviewComponent {
   private readonly mobileBreakpoint = 991;
   private readonly buildErrorPreviewLineLimit = 6;
   private readonly buildErrorPreviewCharLimit = 700;
+  private readonly maxBuildRepairAttempts = 5;
   private buildLogCursor = new Date('2026-04-27T19:45:01.607');
   private aiProcessingInterval?: ReturnType<typeof setInterval>;
   private pendingFinalBuildSection: any = null;
@@ -302,11 +303,11 @@ export class ReactBuildPreviewComponent {
     };
   }
 
-  private attemptBuildRepair(payload: any, buildFailureSource?: any) {
+  private attemptBuildRepair(payload: any, buildFailureSource?: any, attemptNumber = 1) {
     this.setBuildGenerationError(buildFailureSource);
     this.clearBuildStepTimers();
     const repairAttemptVersion = ++this.repairAttemptVersion;
-    void this.announceRepairAttempt(repairAttemptVersion);
+    void this.announceRepairAttempt(repairAttemptVersion, attemptNumber);
 
     const repairPayload = {
       ...payload,
@@ -318,6 +319,11 @@ export class ReactBuildPreviewComponent {
       .subscribe({
         next: (res: any) => {
           if (!res?.success || !res?.data?.templateId) {
+            if (attemptNumber < this.maxBuildRepairAttempts) {
+              this.attemptBuildRepair(repairPayload, res, attemptNumber + 1);
+              return;
+            }
+
             this.setBuildGenerationError(res);
             this.queueBuildGenerationFailure();
             return;
@@ -326,19 +332,28 @@ export class ReactBuildPreviewComponent {
           this.queueGeneratedPreview(res, payload.socket_id ?? null);
         },
         error: (error: any) => {
+          console.log('Build repair attempt failed:', error);
+          if (attemptNumber < this.maxBuildRepairAttempts) {
+            repairPayload.error_message = error.error.message;
+            this.attemptBuildRepair(repairPayload, error, attemptNumber + 1);
+            return;
+          }
+
           this.setBuildGenerationError(error);
           this.queueBuildGenerationFailure();
         }
       });
   }
 
-  private async announceRepairAttempt(repairAttemptVersion: number) {
+  private async announceRepairAttempt(repairAttemptVersion: number, attemptNumber: number) {
     this.isReactBuilding = true;
     this.isTyping = true;
     this.setBuildStep(2);
 
     await this.addParagraphBlock(
-      'Build generation failed on the first pass. I am working on an automated repair now.',
+      attemptNumber === 1
+        ? 'Build generation failed on the first pass. I am working on an automated repair now.'
+        : `The previous repair attempt did not succeed. I am trying repair pass ${attemptNumber} of ${this.maxBuildRepairAttempts} now.`,
       700,
       'phase'
     );
@@ -357,7 +372,7 @@ export class ReactBuildPreviewComponent {
 
     await this.showLoader('Inspecting failed build output...');
     await this.addBuildSection(
-      'Repairing build...',
+      `Repairing build${attemptNumber > 1 ? ` (attempt ${attemptNumber}/${this.maxBuildRepairAttempts})` : '...'}`,
       'fa-solid fa-screwdriver-wrench',
       [
         'Inspecting the failed build response',
