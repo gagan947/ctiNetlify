@@ -411,6 +411,7 @@ export class ReactBuildPreviewComponent {
 
     this.setBuildStep(3);
     this.showLoader('Repair build is in progress...');
+    this.appendBuildActionPrompt();
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
