@@ -69,7 +69,7 @@ export class ReactBuildPreviewComponent {
   private readonly mobileBreakpoint = 991;
   private readonly buildErrorPreviewLineLimit = 6;
   private readonly buildErrorPreviewCharLimit = 700;
-  private readonly maxBuildRepairAttempts = 5;
+  private readonly maxBuildRepairAttempts = 7;
   private readonly buildRepairAttemptMessages = [
     {
       phase: 'Initial preview build hit an issue. Starting automated repair attempt 1.',
