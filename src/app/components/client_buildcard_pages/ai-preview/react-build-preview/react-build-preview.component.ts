@@ -45,7 +45,7 @@ interface ReactFile {
   fullCode: string;
 }
 
-type BuildFlowType = 'initial' | 'restore' | 'regenerate' | 'switch';
+type BuildFlowType = 'initial' | 'restore' | 'regenerate' | 'switch' | 'repair';
 
 interface BuildProgressStep {
   pendingIconClass: string;
@@ -70,10 +70,34 @@ export class ReactBuildPreviewComponent {
   private readonly buildErrorPreviewLineLimit = 6;
   private readonly buildErrorPreviewCharLimit = 700;
   private readonly maxBuildRepairAttempts = 5;
+  private readonly buildRepairAttemptMessages = [
+    {
+      phase: 'Initial preview build hit an issue. Starting automated repair attempt 1.',
+      support: 'I am reviewing the failed build output, correcting the most likely file and configuration issues, and preparing a clean retry.'
+    },
+    {
+      phase: 'Repair attempt 2 is now running after the first recovery pass did not fully stabilize the preview.',
+      support: 'This pass focuses on unresolved import, dependency, and environment-level build blockers before I retry the preview.'
+    },
+    {
+      phase: 'Repair attempt 3 is in progress with a deeper validation pass across the generated build.',
+      support: 'I am rechecking generated code paths, fixing remaining build-time conflicts, and trying another preview recovery.'
+    },
+    {
+      phase: 'Repair attempt 4 is underway. I am narrowing down the remaining build issues before the next retry.',
+      support: 'This pass targets stubborn configuration mismatches, invalid references, and deployment preparation issues that may still be blocking the preview.'
+    },
+    {
+      phase: 'Final repair attempt 5 is in progress before I surface a failure message.',
+      support: 'I am applying one last recovery pass, revalidating the build artifacts, and retrying the preview with the latest fixes.'
+    }
+  ];
   private buildLogCursor = new Date('2026-04-27T19:45:01.607');
   private aiProcessingInterval?: ReturnType<typeof setInterval>;
   private pendingFinalBuildSection: any = null;
   private repairAttemptVersion = 0;
+  private initialFlowRunId = 0;
+  private hasRepairFlowTakenOver = false;
 
   safePreviewUrl: SafeResourceUrl | null = null;
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
@@ -283,8 +307,7 @@ export class ReactBuildPreviewComponent {
               inquiryPublicId: this.projectsData.clientEnquryId,
               error_message: error.error.message,
             }
-
-            this.attemptBuildRepair(repairPayload, error);
+            void this.attemptBuildRepair(repairPayload, error);
             return;
           }
           this.setBuildGenerationError(error);
@@ -303,28 +326,24 @@ export class ReactBuildPreviewComponent {
     };
   }
 
-  private attemptBuildRepair(payload: any, buildFailureSource?: any, attemptNumber = 1) {
+  private async attemptBuildRepair(payload: any, buildFailureSource?: any, attemptNumber = 1) {
     this.setBuildGenerationError(buildFailureSource);
     this.clearBuildStepTimers();
+    this.hasRepairFlowTakenOver = true;
+    this.hideLoader();
+    this.setBuildFlow('repair');
     const repairAttemptVersion = ++this.repairAttemptVersion;
-    void this.announceRepairAttempt(repairAttemptVersion, attemptNumber);
-
-    const repairPayload = {
-      ...payload,
-      buildError: this.buildGenerationErrorMessage || undefined
-    };
+    await this.announceRepairAttempt(repairAttemptVersion, attemptNumber);
+    if (repairAttemptVersion !== this.repairAttemptVersion) {
+      return;
+    }
 
     this.apiService
-      .postAPI<any, any>('api/ai/repairBuild', repairPayload)
+      .postAPI<any, any>('api/ai/repairBuild', payload)
       .subscribe({
         next: (res: any) => {
           if (!res?.success || !res?.data?.templateId) {
-            if (attemptNumber < this.maxBuildRepairAttempts) {
-              this.attemptBuildRepair(repairPayload, res, attemptNumber + 1);
-              return;
-            }
-
-            this.setBuildGenerationError(res);
+            this.setBuildGenerationError(res.data?.message || 'Failed to generate preview');
             this.queueBuildGenerationFailure();
             return;
           }
@@ -333,12 +352,13 @@ export class ReactBuildPreviewComponent {
         },
         error: (error: any) => {
           console.log('Build repair attempt failed:', error);
-          if (attemptNumber < this.maxBuildRepairAttempts) {
-            repairPayload.error_message = error.error.message;
-            this.attemptBuildRepair(repairPayload, error, attemptNumber + 1);
-            return;
+          if (error.error.status === 422 && error.error.data.canRepairBuild) {
+            if (attemptNumber < this.maxBuildRepairAttempts) {
+              payload.error_message = error.error.message;
+              void this.attemptBuildRepair(payload, error, attemptNumber + 1);
+              return;
+            }
           }
-
           this.setBuildGenerationError(error);
           this.queueBuildGenerationFailure();
         }
@@ -348,12 +368,13 @@ export class ReactBuildPreviewComponent {
   private async announceRepairAttempt(repairAttemptVersion: number, attemptNumber: number) {
     this.isReactBuilding = true;
     this.isTyping = true;
-    this.setBuildStep(2);
+    this.setBuildStep(1);
+    const repairAttemptMessage =
+      this.buildRepairAttemptMessages[attemptNumber - 1] ||
+      this.buildRepairAttemptMessages[this.buildRepairAttemptMessages.length - 1];
 
     await this.addParagraphBlock(
-      attemptNumber === 1
-        ? 'Build generation failed on the first pass. I am working on an automated repair now.'
-        : `The previous repair attempt did not succeed. I am trying repair pass ${attemptNumber} of ${this.maxBuildRepairAttempts} now.`,
+      `${repairAttemptMessage.phase} (Attempt ${attemptNumber}/${this.maxBuildRepairAttempts})`,
       700,
       'phase'
     );
@@ -362,7 +383,7 @@ export class ReactBuildPreviewComponent {
     }
 
     await this.addParagraphBlock(
-      `I’m checking the failed output, correcting the generated build artifacts, and retrying the preview before showing any failure popup.`,
+      repairAttemptMessage.support,
       1200,
       'support'
     );
@@ -371,13 +392,14 @@ export class ReactBuildPreviewComponent {
     }
 
     await this.showLoader('Inspecting failed build output...');
+    this.setBuildStep(2);
     await this.addBuildSection(
       `Repairing build${attemptNumber > 1 ? ` (attempt ${attemptNumber}/${this.maxBuildRepairAttempts})` : '...'}`,
-      'fa-solid fa-screwdriver-wrench',
+      '🔧',
       [
-        'Inspecting the failed build response',
-        'Repairing generated files and configuration',
-        'Retrying preview generation'
+        `Reviewing failure diagnostics for attempt ${attemptNumber}`,
+        'Repairing generated files and build configuration',
+        `Retrying preview generation after repair pass ${attemptNumber}`
       ],
       2200,
       900
@@ -499,6 +521,7 @@ export class ReactBuildPreviewComponent {
     this.pendingPreviewResponse = null;
     this.pendingPreviewFailure = false;
     this.hasInitialBuildCompletionUi = false;
+    this.hasRepairFlowTakenOver = false;
     this.stopAiProcessingPhase();
 
     this.startPreview(null);
@@ -508,7 +531,7 @@ export class ReactBuildPreviewComponent {
     this.shouldDeferPreviewApply = false;
     this.flushDeferredPreviewState();
 
-    if (!this.hasInitialBuildCompletionUi && this.isReactBuilding) {
+    if (!this.hasRepairFlowTakenOver && !this.hasInitialBuildCompletionUi && this.isReactBuilding) {
       await this.showRealAiProcessingPhase();
     }
   }
@@ -959,6 +982,12 @@ export class ReactBuildPreviewComponent {
 
   getBuildSteps(flowType: BuildFlowType): BuildProgressStep[] {
     switch (flowType) {
+      case 'repair':
+        return [
+          { pendingIconClass: 'fa-solid fa-magnifying-glass', label: 'Reviewing failure diagnostics' },
+          { pendingIconClass: 'fa-solid fa-screwdriver-wrench', label: 'Repairing generated build' },
+          { pendingIconClass: 'fa-solid fa-rotate-right', label: 'Retrying preview generation' }
+        ];
       case 'restore':
         return [
           { pendingIconClass: 'fa-regular fa-folder-open', label: 'Fetching saved project' },
@@ -1463,11 +1492,15 @@ export class ReactBuildPreviewComponent {
 
 
   async startFlow() {
+    const flowRunId = ++this.initialFlowRunId;
     this.blocks = [];
 
     this.setBuildFlow('initial');
     this.setBuildStep(1);
     await this.addParagraphBlock('Analyzing your prompt...', 700, 'phase');
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     await this.showLoader('Thinking through product requirements...');
     await this.addBuildSection(
       'Analyzing your prompt...',
@@ -1480,16 +1513,28 @@ export class ReactBuildPreviewComponent {
       5200,
       1800
     );
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     this.hideLoader();
     await this.pauseBetweenMajorSteps('Synthesizing prompt insights...');
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
 
     await this.addParagraphBlock(
       `The scope is clear now, so I’m moving into the actual build flow with structure first and code generation right after that.`,
       1200,
       'support'
     );
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
 
     await this.addParagraphBlock('Initializing project...', 700, 'phase');
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     await this.showLoader('Preparing base workspace...');
     await this.addBuildSection(
       'Initializing project...',
@@ -1502,10 +1547,19 @@ export class ReactBuildPreviewComponent {
       4200,
       1600
     );
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     this.hideLoader();
     await this.pauseBetweenMajorSteps('Thinking through system setup...');
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
 
     await this.addParagraphBlock('Creating structure...', 700, 'phase');
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     await this.showLoader('Creating project folders...');
     await this.addBuildSection(
       'Creating structure...',
@@ -1521,11 +1575,20 @@ export class ReactBuildPreviewComponent {
       3600,
       1500
     );
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     this.hideLoader();
     await this.pauseBetweenMajorSteps('Planning the first file generation batch...');
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
 
     this.setBuildStep(2);
     await this.addParagraphBlock('Creating core files...', 700, 'phase');
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     await this.showLoader('Generating foundation files...');
     await this.addBuildSection(
       'Creating core files...',
@@ -1540,10 +1603,19 @@ export class ReactBuildPreviewComponent {
       4300,
       1700
     );
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     this.hideLoader();
     await this.pauseBetweenMajorSteps('Reviewing generated foundation files...');
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
 
     await this.addParagraphBlock('Building UI...', 700, 'phase');
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     await this.showLoader('Designing UI system and reusable components...');
     await this.addBuildSection(
       'Building UI...',
@@ -1558,10 +1630,19 @@ export class ReactBuildPreviewComponent {
       4300,
       1700
     );
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     this.hideLoader();
     await this.pauseBetweenMajorSteps('Refining shared UI building blocks...');
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
 
     await this.addParagraphBlock('Creating pages...', 700, 'phase');
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     await this.showLoader('Generating screen-level page code...');
     await this.addBuildSection(
       'Creating pages...',
@@ -1574,11 +1655,20 @@ export class ReactBuildPreviewComponent {
       4500,
       1800
     );
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     this.hideLoader();
     await this.pauseBetweenMajorSteps('Checking page flow and navigation...');
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
 
     this.setBuildStep(3);
     await this.addParagraphBlock('Finalizing...', 700, 'phase');
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     await this.showLoader('Final checks and deployment prep...');
     await this.addBuildSectionKeepingLastActive(
       'Finalizing...',
@@ -1591,6 +1681,9 @@ export class ReactBuildPreviewComponent {
       6500,
       1200
     );
+    if (!this.shouldContinueInitialFlow(flowRunId)) {
+      return;
+    }
     this.hideLoader();
 
     return;
@@ -2320,6 +2413,16 @@ export class ReactBuildPreviewComponent {
       data
     });
     setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private shouldContinueInitialFlow(flowRunId: number): boolean {
+    return !this.hasRepairFlowTakenOver && flowRunId === this.initialFlowRunId;
+  }
+
+  get previewOverlayTitle(): string {
+    return this.buildFlowType === 'repair'
+      ? "I'm Repairing the Preview Build."
+      : "I'm Generating the Preview.";
   }
 
   private refreshProjectContext() {

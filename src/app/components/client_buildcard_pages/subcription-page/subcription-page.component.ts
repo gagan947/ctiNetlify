@@ -298,7 +298,7 @@ export class SubcriptionPageComponent {
   initiateSubscriptionCheckout(billingDetails: any) {
     const inquiryId = this.projectsData?.clientEnquryId ?? null;
     const redirectPath = window.location.origin + this.router.url || '/my-plan';
-    const apiUrl = this.subscriptionPlan.planName !== 'Free Plan' ? 'api/payment/upgrade-subscription' : 'api/payment/create-subscription'
+    const apiUrl = this.subscriptionPlan.planName !== 'Free Plan' && this.subscriptionPlan.subscriptionStatus !== 'CANCELLED' ? 'api/payment/upgrade-subscription' : 'api/payment/create-subscription'
     this.apiService.postAPI(apiUrl, {
       planKey: this.planKey(),
       user: billingDetails,

@@ -159,9 +159,9 @@ export class BuyMoreCreditsComponent {
     const input = event.target as HTMLInputElement | null;
     const rawValue = input?.value || '';
     this.customAmount = rawValue.replace(/[^\d.]/g, '');
-    if (Number(this.customAmount) < 16.50) {
+    if (Number(this.customAmount) < 1650) {
       this.customCredits = 0;
-      this.customAmountError = 'Minimum amount is 16.50 INR';
+      this.customAmountError = 'Minimum amount is 1650 INR';
       return;
     }
 
@@ -184,7 +184,7 @@ export class BuyMoreCreditsComponent {
         redirectPath: window.location.origin + this.router.url || '/my-plan'
       };
     } else {
-      if (Number(this.customAmount) < 16.50 || !this.customAmount || !Number(this.customAmount) || isNaN(Number(this.customAmount))) {
+      if (Number(this.customAmount) < 1650 || !this.customAmount || !Number(this.customAmount) || isNaN(Number(this.customAmount))) {
         return;
       }
       payload = {

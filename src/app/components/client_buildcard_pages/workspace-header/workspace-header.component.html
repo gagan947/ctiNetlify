@@ -74,11 +74,10 @@
                 </div>
             </li>
         </ul>
-        <button type="button" class="main-ai-topbar__credits"
-            (click)="subsCriptionData.planType === 'FREE' ? openSubscriptionModal() : openBuyMoreCreditsModal()">
-            Buy Credits
-        </button>
 
+        <button type="button" class="main-ai-topbar__credits" (click)="openSubscriptionModal()">
+            Upgrade <span>✦</span>
+        </button>
         <div class="main-ai-topbar__utility-group" #profileMenu>
             <!-- <button type="button" class="main-ai-topbar__icon" aria-label="Notifications">
           <i class="fa-solid fa-bell"></i>
@@ -198,8 +197,9 @@
                             </svg>{{subsCriptionData?.creditBalance || 0}}
                         </h6>
                     </div>
-                    <button type="button" class="main-ai-profile-menu__upgrade" (click)="openSubscriptionModal()">
-                        Upgrade <span>✦</span>
+                    <button type="button" class="main-ai-profile-menu__upgrade"
+                        (click)="subsCriptionData.planType === 'FREE' ? openSubscriptionModal() : openBuyMoreCreditsModal()">
+                        Buy Credits
                     </button>
                 </div>
 

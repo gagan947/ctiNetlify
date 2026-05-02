@@ -179,6 +179,10 @@
                                   }">
                       {{ formattedStatus }}
                     </span>
+                    <button class="remove-btn ct_side_action_btn" [disabled]="isCanceling" (click)="cancelSubcription()"
+                      *ngIf="subscriptionPlan.subscriptionStatus === 'ACTIVE'">
+                      {{ isCanceling ? 'Canceling...' : 'Cancel Subscription' }}
+                    </button>
                   </div>
 
                   <div class="ct_plan_highlight_box">
@@ -221,11 +225,6 @@
                       </div>
                     </div>
                   </div>
-
-                  <button class="remove-btn ct_side_action_btn" [disabled]="isCanceling" (click)="cancelSubcription()"
-                    *ngIf="subscriptionPlan.subscriptionStatus === 'ACTIVE'">
-                    {{ isCanceling ? 'Canceling...' : 'Cancel Subscription' }}
-                  </button>
                 </div>
               </div>
             </div>
