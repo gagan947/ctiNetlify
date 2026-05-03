@@ -4,7 +4,9 @@
             <div class="container-fluid pt-4">
                   <div class="row">
                         <div class="col-md-12">
-                              <h4 class="mb-5 ct_fw_600">Edit Profile</h4>
+                              <h4 class="mb-5 ct_fw_600">{{user?.profile_visited == 1 ? 'Update Profile' :
+                                    'Complete Your Profile'}}
+                              </h4>
                               <div class="ct_profile_page_main ct_py_70 pt-0">
                                     <div>
                                           <div class="ct_profile_user">

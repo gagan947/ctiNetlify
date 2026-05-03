@@ -186,6 +186,7 @@ export class ReactBuildPreviewComponent {
   isBuildGenerationErrorExpanded = false;
   callbackRequestForm!: FormGroup;
   isCallbackSubmitting = false;
+  isRetryBuildGenerationSubmitting = false;
   userInfo: any = {};
   private shouldDeferPreviewApply = false;
   private hasInitialFlowCompleted = false;
@@ -422,6 +423,7 @@ export class ReactBuildPreviewComponent {
   }
 
   private handleBuildGenerationFailure() {
+    this.isRetryBuildGenerationSubmitting = false;
     this.repairAttemptVersion++;
     this.clearBuildStepTimers();
     this.stopAiProcessingPhase();
@@ -450,6 +452,7 @@ export class ReactBuildPreviewComponent {
   }
 
   private applyGeneratedPreview(res: any, socketId: string | null) {
+    this.isRetryBuildGenerationSubmitting = false;
     this.repairAttemptVersion++;
     this.subscriptionService.loadSubscription();
     this.stopAiProcessingPhase();
@@ -544,6 +547,11 @@ export class ReactBuildPreviewComponent {
   }
 
   retryBuildGeneration() {
+    if (this.isRetryBuildGenerationSubmitting) {
+      return;
+    }
+
+    this.isRetryBuildGenerationSubmitting = true;
     const modalElement = document.getElementById('buildGenerationFailedModal');
     if (modalElement) {
       bootstrap.Modal.getOrCreateInstance(modalElement).hide();

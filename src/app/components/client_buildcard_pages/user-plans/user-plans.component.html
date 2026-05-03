@@ -194,10 +194,12 @@
                       :
                       'Not Available' }}</strong>
                   </div>
+                  @if(subscriptionPlan.planType !== 'FREE') {
                   <button class="remove-btn ct_side_action_btn" [disabled]="isCanceling" (click)="cancelSubcription()"
                     *ngIf="subscriptionPlan.subscriptionStatus === 'ACTIVE'">
                     {{ isCanceling ? 'Canceling...' : 'Cancel Subscription' }}
                   </button>
+                  }
                 </div>
                 <div class="ct_white_bg ct_ecommerse_web_card ct_plan_section ct_side_card"
                   *ngIf="subscriptionPlan.activePaymentMethod">

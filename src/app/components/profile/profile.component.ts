@@ -305,7 +305,7 @@ export class ProfileComponent {
     formData.append('profile_image', this.logoImg ? this.logoImg : '');
     this.apiService.postAPI('api/user/updateProfileImage', formData).subscribe((res: any) => {
       if (res.success) {
-        this.message.success('Profile image updated successfully');
+        // this.message.success('Profile image updated successfully');
       }
     })
   }

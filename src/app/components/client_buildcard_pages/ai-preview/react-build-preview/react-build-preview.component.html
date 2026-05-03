@@ -328,7 +328,10 @@
             </div>
             }
             <div class="actions">
-                <button class="btn-confirm button-deploy w-100" (click)="retryBuildGeneration()">Build Again</button>
+                <button class="btn-confirm button-deploy w-100" [disabled]="isRetryBuildGenerationSubmitting"
+                    (click)="retryBuildGeneration()">
+                    {{ isRetryBuildGenerationSubmitting ? 'Building...' : 'Build Again' }}
+                </button>
             </div>
         </div>
     </div>
