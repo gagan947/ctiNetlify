@@ -343,11 +343,15 @@ export class ReactBuildPreviewComponent {
       .subscribe({
         next: (res: any) => {
           if (!res?.success || !res?.data?.templateId) {
+            if (attemptNumber >= this.maxBuildRepairAttempts) {
+              this.appendBuildActionPrompt();
+            }
             this.setBuildGenerationError(res.data?.message || 'Failed to generate preview');
             this.queueBuildGenerationFailure();
             return;
           }
 
+          this.appendBuildActionPrompt();
           this.queueGeneratedPreview(res, payload.socket_id ?? null);
         },
         error: (error: any) => {
@@ -358,6 +362,9 @@ export class ReactBuildPreviewComponent {
               void this.attemptBuildRepair(payload, error, attemptNumber + 1);
               return;
             }
+          }
+          if (attemptNumber >= this.maxBuildRepairAttempts) {
+            this.appendBuildActionPrompt();
           }
           this.setBuildGenerationError(error);
           this.queueBuildGenerationFailure();
@@ -411,8 +418,6 @@ export class ReactBuildPreviewComponent {
 
     this.setBuildStep(3);
     this.showLoader('Repair build is in progress...');
-    this.appendBuildActionPrompt();
-    setTimeout(() => this.scrollToBottom(true), 0);
   }
 
   private handleBuildGenerationFailure() {

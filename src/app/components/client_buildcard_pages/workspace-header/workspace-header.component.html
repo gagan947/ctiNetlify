@@ -260,9 +260,10 @@
                         project.projectName
                         }}</span>
                 </span>
-                <!-- <span class="main-ai-mobile-sidebar__tab-close" aria-hidden="true">
+                <span class="main-ai-mobile-sidebar__tab-close" aria-hidden="true"
+                    (click)="$event.stopPropagation(); removeProjectFromTab(project.inquiryId)">
                     <i class="fa-solid fa-xmark"></i>
-                </span> -->
+                </span>
             </button>
             }
         </div>
