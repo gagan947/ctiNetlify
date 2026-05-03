@@ -94,6 +94,7 @@ export class ReactBuildPreviewComponent {
   ];
   private buildLogCursor = new Date('2026-04-27T19:45:01.607');
   private aiProcessingInterval?: ReturnType<typeof setInterval>;
+  private aiProcessingPhaseVersion = 0;
   private pendingFinalBuildSection: any = null;
   private repairAttemptVersion = 0;
   private initialFlowRunId = 0;
@@ -2001,9 +2002,16 @@ export class ReactBuildPreviewComponent {
   }
 
   private async showRealAiProcessingPhase() {
+    const phaseVersion = ++this.aiProcessingPhaseVersion;
     this.setBuildStep(3);
     await this.addParagraphBlock('Final preview processing is still running...', 300, 'phase');
+    if (!this.shouldStartAiProcessingPhase(phaseVersion)) {
+      return;
+    }
     await this.addParagraphBlock('This may take 2–5 minutes depending on project complexity.', 500, 'support');
+    if (!this.shouldStartAiProcessingPhase(phaseVersion)) {
+      return;
+    }
     this.startAiProcessingPhase();
   }
 
@@ -2033,6 +2041,7 @@ export class ReactBuildPreviewComponent {
   }
 
   private stopAiProcessingPhase() {
+    this.aiProcessingPhaseVersion++;
     if (this.aiProcessingInterval) {
       clearInterval(this.aiProcessingInterval);
       this.aiProcessingInterval = undefined;
@@ -2073,6 +2082,13 @@ export class ReactBuildPreviewComponent {
 
     this.appendBuildActionPrompt();
     setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private shouldStartAiProcessingPhase(phaseVersion: number): boolean {
+    return phaseVersion === this.aiProcessingPhaseVersion
+      && !this.hasInitialBuildCompletionUi
+      && !this.hasRepairFlowTakenOver
+      && this.isReactBuilding;
   }
 
   private resetBuildLogClock() {
