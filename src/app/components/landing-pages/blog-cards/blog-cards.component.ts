@@ -7,7 +7,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-blog-cards',
   standalone: true,
-  imports: [FooterComponent, HeaderComponent,RouterLink],
+  imports: [RouterLink],
   templateUrl: './blog-cards.component.html',
   styleUrl: './blog-cards.component.css'
 })
@@ -15,15 +15,19 @@ export class BlogCardsComponent {
 
   private apiService = inject(ApiService);
   imageUrl = this.apiService.imageUrl;
+  blogData: any[] = [];
   constructor() {
     this.getBlogs();
   }
 
   getBlogs(): void {
-    this.apiService.getApi('/getBlogs')
+    this.apiService.getApi('api/user/getBlogs')
       .pipe(takeUntilDestroyed())
       .subscribe({
         next: (res: any) => {
+          if (res.success) {
+            this.blogData = res.data
+          }
           console.log('Blogs:', res);
         },
         error: (err) => {
