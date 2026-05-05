@@ -17,24 +17,23 @@ export class BlogDetailComponent {
 
   private apiService = inject(ApiService);
   private route = inject(ActivatedRoute);
-  blogId = this.route.snapshot.queryParamMap.get('blog');
-  
+  blogId = this.route.snapshot.paramMap.get('slug');
+
   imageUrl = this.apiService.imageUrl;
   blogData: any;
   constructor() {
     this.getBlogs();
-   
   }
 
   getBlogs(): void {
-    this.apiService.getApi('api/user/getBlogById?id=' + this.blogId)
+    this.apiService.getApi('api/user/getBlogById?slug=' + this.blogId)
       .pipe(takeUntilDestroyed())
       .subscribe({
         next: (res: any) => {
           if (res.success) {
             this.blogData = res.data[0]
           }
-       
+
         },
         error: (err) => {
           console.error('Error fetching blogs:', err);

@@ -16,7 +16,8 @@
       <div class="col-lg-6 mb-4 mb-lg-0">
         <div class="ct_hero_right_main">
           <div class="position-relative">
-            <img src="assets/img/blog_banner_right_img.webp" alt="AI app builder for mobile and web" style="width: 60%;">
+            <img src="assets/img/blog_banner_right_img.webp" alt="AI app builder for mobile and web"
+              style="width: 60%;">
           </div>
         </div>
       </div>
@@ -60,7 +61,7 @@
       <div class="col-lg-4 col-md-6 mb-4">
         <div class="ct_related_article_card">
           <figure>
-            <div class="ct_article_img" routerLink="/blog-detail" [queryParams]="{blog: item.id}">
+            <div class="ct_article_img" [routerLink]="'/blog-detail/' + item.slug">
               <img [src]="imageUrl + item.banner_image" alt="AI app builder for mobile and web" />
             </div>
             <figcaption class="mt-4 px-3">
@@ -76,8 +77,9 @@
                 </p>
               </div>
               <div class="mt-auto">
-                <button class="ct_blue_btn_fill w-100 mt-4" routerLink="/blog-detail"
-                  [queryParams]="{blog: item.id}">Learn More</button>
+                <button class="ct_blue_btn_fill w-100 mt-4" [routerLink]="'/blog-detail/' + item.slug">
+                  Learn More
+                </button>
               </div>
 
             </figcaption>
