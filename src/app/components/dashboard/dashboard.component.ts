@@ -23,6 +23,7 @@ interface DashboardProject {
   billing_details?: any;
   durations?: any;
   final_cost_with_tax_discount?: any;
+  is_header_available?: number;
   platforms?: any;
   development_speed?: any;
   total_cost_delivery?: any;
@@ -99,11 +100,14 @@ export class DashboardComponent {
   }
 
   navigate(project: DashboardProject) {
+
     if (project.project_deployed) {
       this.router.navigate([`user-live-projects/${project.inquiryId}`]);
       return;
     }
-    this.apiService.postAPI('api/user/projectRemovedHeader', { inquiryId: project.inquiryId }).subscribe((res: any) => { });
+    if (project.is_header_available === 0) {
+      this.apiService.postAPI('api/user/projectRemovedHeader', { inquiryId: project.inquiryId }).subscribe((res: any) => { });
+    }
 
     const projectData = {
       clientEnquryId: project.inquiryId,
