@@ -1,11 +1,11 @@
-<div class="owl-carousel owl-theme ct_related_article ct_dot_nav_hover">
+<div #relatedArticleCarousel class="owl-carousel owl-theme ct_related_article ct_dot_nav_hover">
   @for (item of blogData; track $index) {
   <div class="item">
     <div class="ct_related_article_card">
       <figure>
         <div class="ct_article_img" [routerLink]="'/blog-detail/' + item.slug">
           <img [src]="imageUrl + item.banner_image" alt="AI app builder for mobile and web"
-            style="object-fit: contain;" />
+            style="aspect-ratio: 16 / 5 !important;" />
         </div>
         <figcaption class="mt-4 px-3">
           <div>
