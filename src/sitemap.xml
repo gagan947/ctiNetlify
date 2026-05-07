@@ -1,136 +1,104 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://creativethoughts.ai/</loc>
-    <lastmod>2026-02-19</lastmod>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/creative-studio</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://creativethoughts.ai/auth/google/callback</loc>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/creative-store</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://creativethoughts.ai/login</loc>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/creative-now</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://creativethoughts.ai/signup</loc>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/enterprenuers</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://creativethoughts.ai/dashboard</loc>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/smbs</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://creativethoughts.ai/free-demo</loc>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/enterprise</loc>
-    <lastmod>2026-02-19</lastmod>
-    <priority>0.9</priority>
+    <loc>https://creativethoughts.ai/main</loc>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/retail-ecommerce</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://creativethoughts.ai/chatbot</loc>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/financial-services</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://creativethoughts.ai/schedule-a-call</loc>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/health-care</loc>
-    <lastmod>2026-02-19</lastmod>
-    <priority>0.9</priority>
+    <loc>https://creativethoughts.ai/billing-details</loc>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/manufacturing</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://creativethoughts.ai/payment-plan</loc>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/entertainment</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://creativethoughts.ai/payment-status</loc>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/education</loc>
-    <lastmod>2026-02-19</lastmod>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/telecom</loc>
-    <lastmod>2026-02-19</lastmod>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/energy</loc>
-    <lastmod>2026-02-19</lastmod>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/why-we-use-ai</loc>
-    <lastmod>2026-02-19</lastmod>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/case-studies</loc>
-    <lastmod>2026-02-19</lastmod>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/our-story</loc>
-    <lastmod>2026-02-19</lastmod>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/careers</loc>
-    <lastmod>2026-02-19</lastmod>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/our-projects</loc>
-    <lastmod>2026-02-19</lastmod>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/blog</loc>
-    <lastmod>2026-02-19</lastmod>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/FAQs</loc>
-    <lastmod>2026-02-19</lastmod>
-  </url>
-  <url>
-    <loc>https://creativethoughts.ai/pricing</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://creativethoughts.ai/profile</loc>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
+    <priority>1.0</priority>
   </url>
   <url>
     <loc>https://creativethoughts.ai/contact</loc>
-    <lastmod>2026-02-19</lastmod>
+    <lastmod>2026-05-05T07:56:17+01:00</lastmod>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/ai-app-generator</loc>
-    <lastmod>2026-02-19</lastmod>
-    <priority>0.9</priority>
+    <loc>https://creativethoughts.ai/retail-ecommerce</loc>
+    <lastmod>2026-05-05T06:37:56+00:00</lastmod>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/android-app-builder</loc>
-    <lastmod>2026-02-19</lastmod>
-    <priority>0.9</priority>
+    <loc>https://creativethoughts.ai/financial-services</loc>
+    <lastmod>2026-05-05T06:39:17+00:00</lastmod>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/iphone-app-builder</loc>
-    <lastmod>2026-02-19</lastmod>
-    <priority>0.9</priority>
+    <loc>https://creativethoughts.ai/health-care</loc>
+    <lastmod>2026-05-05T06:40:13+00:00</lastmod>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/convert-web-to-app</loc>
-    <lastmod>2026-02-19</lastmod>
-    <priority>0.9</priority>
+    <loc>https://creativethoughts.ai/manufacturing</loc>
+    <lastmod>2026-05-05T06:41:55+00:00</lastmod>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/ecommerce-store-builder</loc>
-    <lastmod>2026-02-19</lastmod>
-    <priority>0.9</priority>
+    <loc>https://creativethoughts.ai/entertainment</loc>
+    <lastmod>2026-05-05T06:42:51+00:00</lastmod>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/health-app-builder</loc>
-    <lastmod>2026-02-19</lastmod>
-    <priority>0.9</priority>
+    <loc>https://creativethoughts.ai/education</loc>
+    <lastmod>2026-05-05T06:44:16+00:00</lastmod>
   </url>
   <url>
-    <loc>https://creativethoughts.ai/all-industries</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://creativethoughts.ai/telecom</loc>
+    <lastmod>2026-05-05T06:45:57+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://creativethoughts.ai/energy</loc>
+    <lastmod>2026-05-05T06:46:54+00:00</lastmod>
   </url>
 </urlset>
