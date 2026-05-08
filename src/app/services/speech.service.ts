@@ -20,7 +20,7 @@ export class SpeechService {
 
   constructor(private message: NzMessageService) { }
 
-  start(callbacks: SpeechStartCallbacks) {
+  start(callbacks: SpeechStartCallbacks): boolean {
 
     const SpeechRecognition =
       (window as any).SpeechRecognition ||
@@ -31,11 +31,12 @@ export class SpeechService {
       this.message.warning('Voice input is not supported in this browser.');
       callbacks.onError?.();
 
-      return;
+      return false;
     }
 
     if (this.isListening) {
-      return;
+      callbacks.onListeningChange?.(true);
+      return false;
     }
 
     this.recognition = new SpeechRecognition();
@@ -96,6 +97,7 @@ export class SpeechService {
       this.isListening = false;
       callbacks.onListeningChange?.(false);
       callbacks.onError?.();
+      this.cleanupRecognition();
 
       this.showSpeechError(event?.error);
     };
@@ -106,18 +108,30 @@ export class SpeechService {
 
       this.isListening = false;
       callbacks.onListeningChange?.(false);
+      this.cleanupRecognition();
     };
 
-    this.recognition.start();
+    try {
+      this.recognition.start();
+      return true;
+    } catch (error) {
+      console.error('Speech start failed', error);
+      this.isListening = false;
+      callbacks.onError?.();
+      this.cleanupRecognition();
+      this.message.error('Voice input could not start. Please try again.');
+      return false;
+    }
   }
 
-  stop() {
+  stop(): void {
 
     if (this.recognition) {
 
       this.recognition.stop();
 
       this.isListening = false;
+      this.cleanupRecognition();
     }
   }
 
@@ -197,5 +211,17 @@ export class SpeechService {
     }
 
     return `${normalizedBase} ${normalizedAddition}`.trim();
+  }
+
+  private cleanupRecognition(): void {
+    if (!this.recognition) {
+      return;
+    }
+
+    this.recognition.onstart = null;
+    this.recognition.onresult = null;
+    this.recognition.onerror = null;
+    this.recognition.onend = null;
+    this.recognition = null;
   }
 }

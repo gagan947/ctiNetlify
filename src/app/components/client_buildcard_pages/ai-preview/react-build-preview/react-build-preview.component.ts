@@ -16,7 +16,7 @@ import { SubscriptionModalService } from '../../../../services/subscription-moda
 import { SubcriptionService } from '../../../../services/subcription.service';
 import { WorkspaceHeaderComponent } from "../../workspace-header/workspace-header.component";
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
-
+import { io } from 'socket.io-client';
 
 interface DesignSnapshot {
   id: string;
@@ -66,6 +66,7 @@ declare var bootstrap: any;
   styleUrl: './react-build-preview.component.css'
 })
 export class ReactBuildPreviewComponent {
+  socket: any;
   private readonly mobileBreakpoint = 991;
   private readonly buildErrorPreviewLineLimit = 6;
   private readonly buildErrorPreviewCharLimit = 700;
@@ -142,23 +143,6 @@ export class ReactBuildPreviewComponent {
   SearchCountryField = SearchCountryField
   CountryISO = CountryISO;
   selectedCountry = CountryISO.India;
-  languages = [
-    {
-      value: 'USD',
-      label: 'US Dollar',
-      icon: 'img/mobile_app_icon_svg.svg'
-    },
-    {
-      value: 'EUR',
-      label: 'Euro',
-      icon: 'img/mobile_app_icon_svg.svg'
-    },
-    {
-      value: 'INR',
-      label: 'Indian Rupee',
-      icon: 'img/mobile_app_icon_svg.svg'
-    }
-  ];
   baseURl: any;
   previewUrl: any = null;
   isReactBuilding = true;
@@ -193,19 +177,6 @@ export class ReactBuildPreviewComponent {
   private pendingPreviewResponse: { res: any; socketId: string | null } | null = null;
   private pendingPreviewFailure = false;
   private hasInitialBuildCompletionUi = false;
-  private readonly genericPreviewPages = ['Home', 'About', 'Features', 'Contact', 'Auth'];
-  private readonly projectTypePageMap: Record<string, string[]> = {
-    ecommerce: ['Home', 'Catalog', 'Details', 'Cart', 'Auth'],
-    'e-commerce': ['Home', 'Catalog', 'Details', 'Cart', 'Auth'],
-    social: ['Feed', 'Profile', 'Messages', 'Explore', 'Auth'],
-    'social media': ['Feed', 'Profile', 'Messages', 'Explore', 'Auth'],
-    portfolio: ['Home', 'Projects', 'About', 'Contact', 'Auth'],
-    saas: ['Home', 'Features', 'Pricing', 'Dashboard', 'Auth'],
-    dashboard: ['Overview', 'Analytics', 'Reports', 'Settings', 'Auth'],
-    education: ['Home', 'Courses', 'Lessons', 'Progress', 'Auth'],
-    healthcare: ['Home', 'Services', 'Appointments', 'Support', 'Auth'],
-    travel: ['Home', 'Destinations', 'Bookings', 'Itinerary', 'Auth']
-  };
   today = new Date();
   // Redirect page for login action
   constructor(
@@ -226,7 +197,12 @@ export class ReactBuildPreviewComponent {
   }
 
   async ngOnInit() {
-
+    this.socket = io(this.apiService.apiUrl, {
+      auth: {
+        token: localStorage.getItem('tokenCTi'),
+        inquiryPublicId: this.projectsData.clientEnquryId,
+      }
+    })
     this.getUserSubscriptionPlan();
     this.refreshProjectContext();
     this.userInfo = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
@@ -1702,292 +1678,6 @@ export class ReactBuildPreviewComponent {
     this.hideLoader();
 
     return;
-
-    this.setBuildStep(2);
-    await this.addTerminal([
-      this.buildPm2Info('api', 'Phase 3: Generating core files...', 0.4),
-      this.buildPm2Info('llm_client', 'Starting core file generation batch...', 0.04),
-      this.buildPm2Info('httpx', 'HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"', 0.77),
-      '  ✓ index.html (387 bytes)',
-      this.buildPm2Info('file_writer', 'Written: index.html (387 bytes)', 1.1),
-      '  ✓ package.json (539 bytes)',
-      this.buildPm2Info('file_writer', 'Written: package.json (539 bytes)', 1.22),
-      '  ✓ vite.config.js (179 bytes)',
-      this.buildPm2Info('file_writer', 'Written: vite.config.js (179 bytes)', 0.22),
-      '  ✓ src/main.jsx (230 bytes)',
-      this.buildPm2Info('file_writer', 'Written: src/main.jsx (230 bytes)', 0.66),
-      '  ✓ src/App.jsx (1881 bytes)',
-      this.buildPm2Info('file_writer', 'Written: src/App.jsx (1881 bytes)', 1.48)
-    ], 760, 4700);
-
-    await this.addTerminal([
-      this.buildPm2Info('api', 'Phase 4: Generating shared modules...', 0.5),
-      '  ✓ src/context/AppContext.jsx (1621 bytes)',
-      this.buildPm2Info('file_writer', 'Written: src/context/AppContext.jsx (1621 bytes)', 1.35),
-      '  ✓ src/hooks/useProjectData.js (674 bytes)',
-      this.buildPm2Info('file_writer', 'Written: src/hooks/useProjectData.js (674 bytes)', 1.18),
-      '  ✓ src/services/api.js (1353 bytes)',
-      this.buildPm2Info('file_writer', 'Written: src/services/api.js (1353 bytes)', 1.31),
-      '  ✓ src/components/Navbar.jsx (2144 bytes)',
-      this.buildPm2Info('file_writer', 'Written: src/components/Navbar.jsx (2144 bytes)', 1.26),
-      '  ✓ src/components/Footer.jsx (982 bytes)',
-      this.buildPm2Info('file_writer', 'Written: src/components/Footer.jsx (982 bytes)', 1.2)
-    ], 780, 4300);
-
-    await this.addTerminal([
-      this.buildPm2Info('api', 'Phase 5: Generating pages...', 0.45),
-      this.buildPm2Info('llm_client', 'Starting page generation for the primary flow...', 0.03),
-      this.buildPm2Info('httpx', 'HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"', 0.74),
-      '  ✓ src/pages/HomePage.jsx (4643 bytes)',
-      this.buildPm2Info('file_writer', 'Written: src/pages/HomePage.jsx (4643 bytes)', 1.54),
-      '  ✓ src/pages/AboutPage.jsx (3364 bytes)',
-      this.buildPm2Info('file_writer', 'Written: src/pages/AboutPage.jsx (3364 bytes)', 1.37),
-      '  ✓ src/pages/ContactPage.jsx (2780 bytes)',
-      this.buildPm2Info('file_writer', 'Written: src/pages/ContactPage.jsx (2780 bytes)', 1.42)
-    ], 820, 4600);
-
-    this.setBuildStep(3);
-    await this.addTerminal([
-      this.buildPm2Info('api', 'Phase 6: Building preview...', 0.55),
-      this.buildPm2Info('builder', 'Installing dependencies for preview build...', 0.14),
-      this.buildPm2Info('builder', 'Running production build...', 1.84),
-      this.buildPm2Info('builder', 'Deploying preview artifacts...', 1.76),
-      this.buildPm2Info('api', 'Preview ready | opening project workspace', 1.15)
-    ], 980, 5200);
-
-    await this.addSummary({
-      time: '2m 18s',
-      description: 'Created a fresh React project from scratch with Vite configuration, reusable UI components, generic pages, and a small support layer for services, hooks, and shared context.',
-      highlights: [
-        'Project setup',
-        'Folder structure',
-        'Core React files',
-        'Reusable components',
-        'Generic pages',
-        'Services, hooks, and context'
-      ]
-    });
-
-    this.appendBuildActionPrompt();
-    return;
-
-    const projectTypeName = this.getProjectTypeDisplayName();
-    const previewPages = this.getPreviewPageNames();
-    const primaryPageName = previewPages[0] || 'Home';
-
-    // 🔹 Connection / Init
-    await this.playStatusSequence([
-      'Reconnecting... 1/5',
-      'Reconnecting... 2/5',
-      'Reconnecting... 3/5',
-      'Reconnecting... 4/5',
-      'Reconnecting... 5/5'
-    ], 950, 1200);
-
-    await this.addParagraphBlock(
-      `Connection is stable again, so I'm starting the first build pass now. I'll quickly inspect the workspace to see whether there's an existing React structure I should continue from, or whether I should set up the project from scratch.`,
-      2600
-    );
-
-    // 🔍 Inspect workspace
-    await this.addTerminal([
-      'Ran git status --short',
-      'Ran Get-ChildItem -Force'
-    ], 1500, 1700);
-
-    await this.addParagraphBlock(
-      `The workspace looks empty and there’s no existing Git context I can rely on. I’ll proceed by creating a fresh React structure instead of trying to extend anything.`,
-      2300
-    );
-
-    // 🔍 File scan fallback
-    await this.addTerminal([
-      'Ran rg --files for 1s',
-      'Ran cmd /c dir'
-    ], 1500, 1800);
-
-    await this.addParagraphBlock(
-      `Confirmed — no project files exist here. I’ll initialize a lightweight React setup using a Vite-style structure and then layer routing and pages on top.`,
-      2500
-    );
-
-    // 🔍 Node check
-    await this.addTerminal([
-      'Ran node -v',
-      'Ran npm -v'
-    ], 1500, 1800);
-
-    await this.addParagraphBlock(
-      `Node is available, but npm seems to have a shell-related execution issue. I’ll locate the actual executable paths and try to bypass the failing entrypoint.`,
-      2600
-    );
-
-    // 🔍 Fix npm
-    await this.addTerminal([
-      'Ran cmd /c where npm',
-      'Ran cmd /c where npm.cmd',
-      'Ran cmd /c where npx'
-    ], 1500, 1800);
-
-    await this.addParagraphBlock(
-      `Found Windows command shims (npm.cmd / npx.cmd). These should work even if the default npm script is broken. I’ll use these to proceed safely.`,
-      2400
-    );
-
-    await this.addTerminal([
-      'Ran cmd /c npx.cmd -v',
-      'Ran cmd /c npm.cmd -v'
-    ], 1500, 1700);
-
-    await this.addParagraphBlock(
-      `Environment looks usable now. I’ll start building the application structure manually and wire up routing, shared layout, and core pages for this ${projectTypeName} project.`,
-      2500
-    );
-
-    // 🧠 Plan
-    // await this.addParagraphBlock(
-    //   `Here’s the plan:
-
-    // - Create a clean React + Vite style structure
-    // - Add core ${projectTypeName} pages (${previewPages.join(', ')})
-    // - Configure react-router-dom for navigation
-    // - Build reusable layout (Header, Footer)
-    // - Add basic styling to unify the UI
-    // - Keep everything modular and scalable`,
-    //   3000
-    // );
-
-    // // 🔥 APP SETUP
-    // await this.addTerminal([
-    //   'Creating src/App.js',
-    //   'Configuring route structure and layout shell'
-    // ], 1700, 1900);
-
-    // await this.addCodeBlock(this.getAppJs());
-
-    // await this.addParagraphBlock(
-    //   `App component now defines the main routing structure and wraps all pages with a shared layout. This ensures consistent navigation and UI across screens.`,
-    //   2400
-    // );
-
-    // // 🔥 HOME
-    // await this.addTerminal([
-    //   'Creating src/pages/home.jsx',
-    //   `Building the ${primaryPageName.toLowerCase()} entry experience`
-    // ], 1700, 1900);
-
-    // await this.addCodeBlock(this.getHomePage());
-
-    // await this.addParagraphBlock(
-    //   `${primaryPageName} page acts as the entry point of the experience. I’ve added a clear hero section and supporting copy so the initial screen can adapt to different product categories and use cases.`,
-    //   2400
-    // );
-
-    // // 🔥 LOGIN
-    // await this.addTerminal([
-    //   'Creating src/pages/login.jsx',
-    //   'Adding authentication form layout'
-    // ], 1700, 1900);
-
-    // await this.addCodeBlock(this.getLoginPage());
-
-    // await this.addParagraphBlock(
-    //   `Login page includes a simple form structure with email and password inputs. It’s designed to be easily extendable for real authentication logic.`,
-    //   2300
-    // );
-
-    // 🔥 SIGNUP
-    // await this.addTerminal([
-    //   'Creating src/pages/signup.jsx',
-    //   'Adding user registration flow'
-    // ], 1700, 1900);
-
-    // await this.addCodeBlock(this.getSignupPage());
-
-    // await this.addParagraphBlock(
-    //   `Signup flow mirrors the login experience for consistency, with additional fields for account creation.`,
-    //   2200
-    // );
-
-    // // 🔥 HEADER
-    // await this.addTerminal([
-    //   'Creating src/components/header.jsx',
-    //   'Building shared navigation component'
-    // ], 1700, 1900);
-
-    // await this.addCodeBlock(this.getHeaderComponent());
-
-    // await this.addParagraphBlock(
-    //   `Header component provides global navigation across all pages. It’s reusable and connected to routing for seamless transitions.`,
-    //   2300
-    // );
-
-    // // 🔥 CSS
-    // await this.addTerminal([
-    //   'Creating src/styles/home.css',
-    //   'Applying layout spacing and typography'
-    // ], 1700, 1900);
-
-    // await this.addCodeBlock(this.getHomeCSS());
-
-    // await this.addParagraphBlock(
-    //   `Basic styling is added to ensure visual consistency across the application. Focus is on spacing, typography, and layout clarity.`,
-    //   2300
-    // );
-
-    // // 🔍 FINAL CHECK
-    // await this.addTerminal([
-    //   'Reviewing generated files',
-    //   'Validating routing and structure'
-    // ], 1600, 2100);
-
-    // await this.addParagraphBlock(
-    //   `All core pieces are now in place — routing, pages, layout, and styling. The project is structured in a scalable way and ready for further feature expansion like APIs, workflows, dashboards, or domain-specific modules.`,
-    //   2600
-    // );
-
-    // await this.addParagraphBlock(
-    //   `The foundation is ready. I'm building the first preview now so you can review the generated template in the workspace.`,
-    //   1800
-    // );
-
-    this.setBuildFlow('initial');
-    this.setBuildStep(1);
-    await this.addTerminal([
-      'Installing dependencies',
-      'Preparing preview build'
-    ], 1200, 1300);
-
-
-
-    this.setBuildStep(2);
-    await this.addTerminal([
-      'Building React application',
-      'Bundling generated UI assets'
-    ], 1200, 1300);
-
-    this.setBuildStep(3);
-    await this.addTerminal([
-      'Deploying preview',
-      'Opening project'
-    ], 1200, 1500);
-
-    // 🔹 SUMMARY
-    await this.addSummary({
-      time: '2m 42s',
-      description: 'Generated complete React frontend with routing, reusable layout, and core pages',
-      highlights: [
-        'App.js (routing)',
-        `${previewPages.slice(0, 3).join(', ')} pages`,
-        'Header component',
-        'Base CSS styling'
-      ]
-    });
-
-
-    // this.startPreview(null);
-
-    this.appendBuildActionPrompt();
   }
 
   private async addFileActivityBlock(file: string, summary: string, waitAfter = 320, title = 'Updated file') {
@@ -2103,125 +1793,6 @@ export class ReactBuildPreviewComponent {
     this.buildLogCursor = new Date('2026-04-27T19:45:01.607');
   }
 
-  private buildPm2Info(module: string, message: string, advanceSeconds = 0): string {
-    this.buildLogCursor = new Date(this.buildLogCursor.getTime() + (advanceSeconds * 1000));
-    return `14|creative-ai-python  | ${this.formatBuildLogTimestamp(this.buildLogCursor)} | INFO     | ${module} | ${message}`;
-  }
-
-  private formatBuildLogTimestamp(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-    const millis = String(date.getMilliseconds()).padStart(3, '0');
-
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds},${millis}`;
-  }
-
-  getAppJs() {
-    return {
-      file: 'src/App.js',
-      added: 35,
-      removed: 0,
-      content: [
-        { line: 1, text: 'import { Routes, Route } from "react-router-dom";' },
-        { line: 2, text: 'import Home from "./pages/home";' },
-        { line: 3, text: 'import Login from "./pages/login";' },
-        { line: 4, text: 'import Signup from "./pages/signup";' },
-        { line: 6, text: 'function App() {' },
-        { line: 7, text: '  return (' },
-        { line: 8, text: '    <Routes>' },
-        { line: 9, text: '      <Route path="/" element={<Home />} />' },
-        { line: 10, text: '      <Route path="/login" element={<Login />} />' },
-        { line: 11, text: '      <Route path="/signup" element={<Signup />} />' },
-        { line: 12, text: '    </Routes>' },
-        { line: 13, text: '  );' },
-        { line: 14, text: '}' },
-        { line: 16, text: 'export default App;' }
-      ]
-    };
-  }
-
-  getHomePage() {
-    const projectTypeName = this.getProjectTypeDisplayName();
-    return {
-      file: 'src/pages/home.jsx',
-      added: 40,
-      removed: 0,
-      content: [
-        { line: 1, text: 'import "../styles/home.css";' },
-        { line: 3, text: 'export default function Home() {' },
-        { line: 4, text: '  return (' },
-        { line: 5, text: '    <div className="home">' },
-        { line: 6, text: `      <h1>Welcome to Your ${projectTypeName} Project</h1>` },
-        { line: 7, text: '      <p>Start with a flexible foundation tailored to your goals</p>' },
-        { line: 8, text: '    </div>' },
-        { line: 9, text: '  );' },
-        { line: 10, text: '}' }
-      ]
-    };
-  }
-
-  getLoginPage() {
-    return {
-      file: 'src/pages/login.jsx',
-      added: 45,
-      removed: 0,
-      content: [
-        { line: 1, text: 'export default function Login() {' },
-        { line: 2, text: '  return (' },
-        { line: 3, text: '    <div>' },
-        { line: 4, text: '      <h2>Login</h2>' },
-        { line: 5, text: '      <input placeholder="Email" />' },
-        { line: 6, text: '      <input placeholder="Password" />' },
-        { line: 7, text: '      <button>Login</button>' },
-        { line: 8, text: '    </div>' },
-        { line: 9, text: '  );' },
-        { line: 10, text: '}' }
-      ]
-    };
-  }
-
-  getSignupPage() {
-    return {
-      file: 'src/pages/signup.jsx',
-      added: 50,
-      removed: 0,
-      content: [
-        { line: 1, text: 'export default function Signup() {' },
-        { line: 2, text: '  return (' },
-        { line: 3, text: '    <div>' },
-        { line: 4, text: '      <h2>Signup</h2>' },
-        { line: 5, text: '      <input placeholder="Name" />' },
-        { line: 6, text: '      <input placeholder="Email" />' },
-        { line: 7, text: '      <button>Create Account</button>' },
-        { line: 8, text: '    </div>' },
-        { line: 9, text: '  );' },
-        { line: 10, text: '}' }
-      ]
-    };
-  }
-
-  getHeaderComponent() {
-    const projectTypeName = this.getProjectTypeDisplayName();
-    return {
-      file: 'src/components/header.jsx',
-      added: 30,
-      removed: 0,
-      content: [
-        { line: 1, text: 'export default function Header() {' },
-        { line: 2, text: '  return (' },
-        { line: 3, text: '    <header>' },
-        { line: 4, text: `      <h1>${projectTypeName} App</h1>` },
-        { line: 5, text: '    </header>' },
-        { line: 6, text: '  );' },
-        { line: 7, text: '}' }
-      ]
-    };
-  }
-
   getProjectTypeDisplayName(): string {
     const rawProjectType = this.projectsData?.projectType;
 
@@ -2235,15 +1806,7 @@ export class ReactBuildPreviewComponent {
       .replace(/\b\w/g, (char) => char.toUpperCase());
   }
 
-  private getPreviewPageNames(): string[] {
-    const rawProjectType = String(this.projectsData?.projectType || '').trim().toLowerCase();
 
-    if (!rawProjectType) {
-      return this.genericPreviewPages;
-    }
-
-    return this.projectTypePageMap[rawProjectType] || this.genericPreviewPages;
-  }
 
   getHomeCSS() {
     return {

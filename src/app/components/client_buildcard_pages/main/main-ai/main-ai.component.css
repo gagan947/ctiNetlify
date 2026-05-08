@@ -310,6 +310,17 @@
   color: #d63f58;
 }
 
+.main-ai-voice-toggle-btn.is-starting {
+  width: auto;
+  min-width: 86px;
+  padding: 0 14px;
+  gap: 8px;
+  border-color: rgba(255, 174, 120, 0.34);
+  background: linear-gradient(135deg, rgba(255, 252, 245, 0.98), rgba(255, 241, 224, 0.95));
+  color: #d97706;
+  box-shadow: 0 10px 24px rgba(245, 158, 11, 0.16);
+}
+
 .main-ai-voice-toggle-btn:disabled {
   cursor: default;
   opacity: 0.92;
@@ -342,6 +353,33 @@
   animation: main-ai-voice-pulse 1.4s ease-in-out infinite;
 }
 
+.main-ai-voice-toggle-btn.is-starting .main-ai-voice-toggle-icon {
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.main-ai-voice-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.main-ai-voice-loader span {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.35;
+  animation: main-ai-voice-loader 0.9s ease-in-out infinite;
+}
+
+.main-ai-voice-loader span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.main-ai-voice-loader span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
 .main-ai-voice-toggle-text {
   display: none;
   font-size: 13px;
@@ -349,6 +387,7 @@
   letter-spacing: 0.01em;
 }
 
+.main-ai-voice-toggle-btn.is-starting .main-ai-voice-toggle-text,
 .main-ai-voice-toggle-btn.is-listening .main-ai-voice-toggle-text {
   display: inline;
 }
@@ -361,6 +400,19 @@
 
   50% {
     transform: scale(1.08);
+  }
+}
+
+@keyframes main-ai-voice-loader {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
   }
 }
 
