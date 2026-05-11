@@ -180,6 +180,7 @@ export class ReactBuildPreviewComponent {
   private pendingPreviewFailure = false;
   private hasInitialBuildCompletionUi = false;
   today = new Date();
+  clientProjectList: any[] = [];
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
@@ -249,6 +250,7 @@ export class ReactBuildPreviewComponent {
     );
     if (res.success) {
       this.templateExists = res.data.length > 0;
+      this.clientProjectList = res.data;
       return res.data;
     }
 
@@ -1226,25 +1228,36 @@ export class ReactBuildPreviewComponent {
 
     if (!promptEvent?.value?.trim()) return;
 
-    this.blocks = this.blocks.filter(block => block?.id !== promptEvent.blockId);
+    let payLoad = {
+      prompt: promptEvent.value,
+      templatePublicId: this.clientProjectList.find((p: any) => p.inquiryId === this.selectedProjectId)?.templateId,
+    }
 
-    this.blocks.push({
-      id: `user-message-customize-${Date.now()}`,
-      text: promptEvent.value,
-      done: true,
-      timestamp: new Date()
+    this.apiService.postAPI('api/ai/customization', payLoad).subscribe((res: any) => {
+      if (res.success) {
+        console.log(res);
+      }
     });
 
-    this.blocks.push({
-      id: `inline-cta-customize-${Date.now()}`,
-      text: {
-        message: 'Your current plan does not include direct template customization requests. Upgrade your plan to continue with guided revisions for this template.',
-        buttonLabel: 'Upgrade Plan',
-        actionId: 'upgrade_plan'
-      },
-      done: true,
-      timestamp: new Date()
-    });
+    // this.blocks = this.blocks.filter(block => block?.id !== promptEvent.blockId);
+
+    // this.blocks.push({
+    //   id: `user-message-customize-${Date.now()}`,
+    //   text: promptEvent.value,
+    //   done: true,
+    //   timestamp: new Date()
+    // });
+
+    // this.blocks.push({
+    //   id: `inline-cta-customize-${Date.now()}`,
+    //   text: {
+    //     message: 'Your current plan does not include direct template customization requests. Upgrade your plan to continue with guided revisions for this template.',
+    //     buttonLabel: 'Upgrade Plan',
+    //     actionId: 'upgrade_plan'
+    //   },
+    //   done: true,
+    //   timestamp: new Date()
+    // });
 
     setTimeout(() => this.scrollToBottom(true), 0);
   }
