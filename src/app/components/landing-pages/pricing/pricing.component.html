@@ -32,139 +32,166 @@
       <div class="container">
             <div class="row">
                   <div class="col-md-12">
-                        <h1 class="ct_fs_44 ct_py_70 pt-0 ct_fw_700 text-center">What plan is best for your <span
-                                    class="ct_orange_gredient_text">software
-                                    needs?</span>
+                        <h1 class="ct_fs_44 pt-0 ct_fw_700 text-center">Choose the Perfect Plan for Your
+                              <span class="ct_orange_gredient_text">Next Big Idea
+                              </span>
                         </h1>
 
                   </div>
             </div>
-            <div class="row">
-                  <div class="col-md-6 mb-4 mb-md-0">
-                        <div class="ct_store_white_card active">
-                              <h3 class="ct_fs_38 ct_fw_700 mb-4 ct_dark_blue_text">Studio store
-                              </h3>
-                              <p class="mb-0 ct_fs_18 ct_fw_700">Start selling online fast with off-the-shelf websites
-                                    and
-                                    apps
-                              </p>
-                              <ul class="ct_pricing_list_point mt-4">
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Ecommerce, appointment and restaurant packages
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-xmark ct_red_text"></i>
-                                          <span>Dedicated project manager
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-xmark ct_red_text"></i>
-                                          <span>Project dashboard
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Fixed pricing
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-xmark ct_red_text"></i>
-                                          <span>Free instant prototype
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Limited integrations (Payment, Shipping, Analytics)
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Live in as little as 1 week
-                                          </span>
-                                    </li>
-                              </ul>
-                        </div>
-
-                  </div>
-                  <div class="col-md-6 mb-4 mb-md-0">
-                        <div class="ct_store_white_card">
-                              <h3 class="ct_fs_38 ct_fw_700 mb-4 ct_dark_blue_text">Creative studio
-                              </h3>
-                              <p class="mb-0 ct_fs_18 ct_fw_700">Solve your business challenges with custom software
-                              </p>
-                              <ul class="ct_pricing_list_point mt-4">
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Build whatever type of software your business needs
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-xmark ct_red_text"></i>
-                                          <span>Dedicated project manager
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-xmark ct_red_text"></i>
-                                          <span>Project dashboard
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Pay-per-feature pricing
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-xmark ct_red_text"></i>
-                                          <span>Free instant prototypes
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Unlimited integrations
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Competitive timelines
-                                          </span>
-                                    </li>
-                              </ul>
-                        </div>
-                  </div>
-            </div>
-
-
-            <div class="ct_dark_blue_bg mt-5">
-                  <div class="row align-items-center">
-                        <div class="col-lg-4 mb-3 mb-lg-0">
-                              <div class="ct_small_card">
-                                    <div class="ct_circle_check">
-                                          <i class="fa-solid fa-check"></i>
-                                    </div>
-                                    <span>Maintenance Included</span>
+            <section class="ct_pricing_section">
+                  <div class="container">
+                        <div class="ct_section_heading text-center">
+                              <div class="ct_pricing_toggle">
+                                    <button type="button" [class.active]="billingCycle === 'MONTH'"
+                                          (click)="setBillingCycle('MONTH')">Monthly</button>
+                                    <button type="button" [class.active]="billingCycle === 'YEAR'"
+                                          (click)="setBillingCycle('YEAR')">Annually</button>
                               </div>
                         </div>
-                        <div class="col-lg-4 mb-3 mb-lg-0">
-                              <div class="ct_small_card">
-                                    <div class="ct_circle_check">
-                                          <i class="fa-solid fa-check"></i>
+                        <div class="ct_pricing_grid mt-5">
+                              <div class="ct_price_card" *ngIf="freePlan as plan">
+                                    <div class="ct_price_card_top">
+                                          <span class="ct_price_badge">{{ getPlanBadge(plan) }}</span>
+                                          <h3 class="ct_price_credits">{{ plan.credits_per_cycle }} Credits</h3>
+                                          <div class="ct_price_value">
+                                                <span class="ct_price_current">&#8377;{{ getCurrentPrice(plan) }}</span>
+                                                <span class="ct_price_suffix">{{ getBillingSuffix(plan) }}</span>
+                                          </div>
+                                          <p>{{ getPlanDescription(plan) }}</p>
+                                          <div class="ct_price_offer_slot">
+                                                <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
+                                                      <div class="ct_price_offer">₹{{ plan.intro_amount }}</div>
+                                                </div>
+                                          </div>
+                                          <a routerLink="/login" class="ct_price_cta">{{ getPlanButtonLabel(plan) }}</a>
                                     </div>
-                                    <span>24/7 Support & Monitoring</span>
+                                    <div class="ct_price_card_bottom">
+                                          <h4>{{ getPlanFeaturesTitle(plan) }}</h4>
+                                          <ul>
+                                                <li *ngFor="let feature of getPlanFeatures(plan)">
+                                                      <img src="assets/img/pricing_check_icon.svg" alt="" loading="lazy"
+                                                            width="20" height="20" class="me-2">
+                                                      <span>{{ feature }}</span>
+                                                </li>
+                                          </ul>
+                                          <p class="ct_price_note">{{ getPlanFootnote(plan) }}</p>
+                                    </div>
                               </div>
-                        </div>
-                        <div class="col-lg-4 mb-3 mb-lg-0">
-                              <div class="ct_small_card">
-                                    <div class="ct_circle_check">
-                                          <i class="fa-solid fa-check"></i>
+                              <div class="ct_price_card ct_price_card_featured" *ngIf="selectedProPlan as plan">
+                                    <div class="ct_price_card_top">
+                                          <span class="ct_price_badge">{{ getPlanBadge(plan) }}</span>
+                                          <h3 class="ct_price_credits">{{ plan.credits_per_cycle }} Credits</h3>
+                                          <div class="ct_price_value ct_price_value_compact"
+                                                [class.ct_price_value_with_old]="shouldShowPreviousPrice(plan)">
+                                                <span class="ct_price_previous" *ngIf="shouldShowPreviousPrice(plan)">
+                                                      &#8377;{{ getDisplayAmount(plan) }}{{ getBillingSuffix(plan) }}
+                                                </span>
+                                                <span class="ct_price_current">&#8377;{{ getCurrentPrice(plan) }}</span>
+                                                <span class="ct_price_suffix">{{ getBillingSuffix(plan) }}</span>
+                                          </div>
+                                          <div class="ct_price_offer_slot">
+                                                <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
+                                                      <div class="ct_price_offer">₹{{ plan.intro_amount }}</div>
+                                                </div>
+                                                <div class="ct_price_offer_wrap d-flex align-items-center gap-2  justify-content-center"
+                                                      *ngIf="hasDiscount(plan)">
+                                                      <span *ngIf="billingCycle === 'YEAR'" class=" mb-0"><del>&#8377;{{
+                                                                  plan.display_amount }}</del><span>{{
+                                                                  getBillingSuffix(plan)
+                                                                  }}</span></span>
+                                                      <div class="ct_price_offer">{{ getDiscountLabel(plan) }}</div>
+                                                </div>
+                                          </div>
+                                          <p>{{ getPlanDescription(plan) }}</p>
+                                          <a routerLink="/login" class="ct_price_cta">{{
+                                                getPlanButtonLabel(plan) }}</a>
+                                          <div class="position-relative" *ngIf="proPlans.length > 1"
+                                                (click)="$event.stopPropagation()">
+                                                <button type="button" class="ct_starter_plan"
+                                                      (click)="toggleProDropdown($event)">
+                                                      {{ plan.credits_per_cycle }} credits {{
+                                                      getBillingSuffix(plan) }}
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="ct_show_eye"
+                                                            width="16" height="16" fill="currentColor"
+                                                            viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd"
+                                                                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                                                      </svg>
+                                                </button>
+                                                <ul class="dropdown-menu show" *ngIf="proDropdownOpen">
+                                                      <li *ngFor="let proPlan of proDropdownPlans">
+                                                            <button type="button" class="dropdown-item"
+                                                                  (click)="selectProPlan(proPlan, $event)">
+                                                                  {{ proPlan.credits_per_cycle }} credits - &#8377;{{
+                                                                  getCurrentPrice(proPlan) }}{{
+                                                                  getBillingSuffix(proPlan) }}
+                                                            </button>
+                                                      </li>
+                                                </ul>
+                                          </div>
                                     </div>
-                                    <span>Security & Compliance</span>
+                                    <div class="ct_price_card_bottom">
+                                          <h4>{{ getPlanFeaturesTitle(plan) }}</h4>
+                                          <ul>
+                                                <li *ngFor="let feature of getPlanFeatures(plan)">
+                                                      <img src="assets/img/pricing_check_icon.svg" alt="" loading="lazy"
+                                                            width="20" height="20" class="me-2">
+                                                      <span>{{ feature }}</span>
+                                                </li>
+                                          </ul>
+                                          <p class="ct_price_note">{{ getPlanFootnote(plan) }}</p>
+                                    </div>
+                              </div>
+                              <div class="ct_price_card" *ngIf="businessPlan as plan">
+                                    <div class="ct_price_card_top">
+                                          <span class="ct_price_badge">{{ getPlanBadge(plan) }}</span>
+                                          <h3 class="ct_price_credits">{{ plan.credits_per_cycle }} Credits</h3>
+                                          <div class="ct_price_value">
+                                                <span class="ct_price_current">&#8377;{{ getCurrentPrice(plan) }}</span>
+                                                <span class="ct_price_suffix">{{ getBillingSuffix(plan) }}</span>
+                                          </div>
+                                          <div class="ct_price_offer_slot">
+                                                <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
+                                                      <div class="ct_price_offer">₹{{ plan.intro_amount }}</div>
+                                                </div>
+                                                <div class="ct_price_offer_wrap d-flex align-items-center gap-2  justify-content-center"
+                                                      *ngIf="hasDiscount(plan)">
+                                                      <span *ngIf="billingCycle === 'YEAR'" class=" mb-0"><del>&#8377;{{
+                                                                  plan.display_amount }}</del><span>{{
+                                                                  getBillingSuffix(plan)
+                                                                  }}</span></span>
+                                                      <div class="ct_price_offer">{{ getDiscountLabel(plan) }}</div>
+                                                </div>
+                                                <p>{{ getPlanDescription(plan) }}</p>
+                                          </div>
+                                          <a routerLink="/login" class="ct_price_cta">{{ getPlanButtonLabel(plan) }}</a>
+                                    </div>
+                                    <div class="ct_price_card_bottom">
+                                          <h4>{{ getPlanFeaturesTitle(plan) }}</h4>
+                                          <ul>
+                                                <li *ngFor="let feature of getPlanFeatures(plan)">
+                                                      <img src="assets/img/pricing_check_icon.svg" loading="lazy"
+                                                            width="20" height="20" alt="" class="me-2">
+                                                      <span>{{ feature }}</span>
+                                                </li>
+                                          </ul>
+                                          <p class="ct_price_note">{{ getPlanFootnote(plan) }}</p>
+                                    </div>
                               </div>
                         </div>
 
+                        <div class="ct_pricing_cta">
+                              <div>
+                                    <h4>Stuck or Need Guidance?</h4>
+                                    <p>
+                                          We’re here to help you build your first app.
+                                    </p>
+                              </div>
+                              <a routerLink="/contact" class="ct_blue_btn_fill ">Contact Us</a>
+                        </div>
                   </div>
-            </div>
+            </section>
       </div>
 </section>
 <!-- Software Needs Section E -->
@@ -447,13 +474,11 @@
                                           <div class="ct_helping_group_img">
                                                 <div class="d-flex align-items-center gap-3 justify-content-center">
                                                       <div class="ct_help_img">
-                                                            <img loading="lazy"
-                                                                  src="assets/img/help_img_1.webp"
+                                                            <img loading="lazy" src="assets/img/help_img_1.webp"
                                                                   alt="AI app builder for mobile and web">
                                                       </div>
                                                       <div class="ct_help_img">
-                                                            <img loading="lazy"
-                                                                  src="assets/img/helping_img_2.webp"
+                                                            <img loading="lazy" src="assets/img/helping_img_2.webp"
                                                                   alt="AI app builder for mobile and web">
                                                       </div>
                                                 </div>
