@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, effect, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SafeHtml, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { RouterLink, Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { firstValueFrom } from 'rxjs';
@@ -61,7 +61,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-react-build-preview',
   standalone: true,
-  imports: [CommonModule, NgxIntlTelInputModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, ReactiveFormsModule, RouterLink, AiDevRendererComponent, WorkspaceHeaderComponent],
+  imports: [CommonModule, NgxIntlTelInputModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, ReactiveFormsModule, AiDevRendererComponent, WorkspaceHeaderComponent],
   templateUrl: './react-build-preview.component.html',
   styleUrl: './react-build-preview.component.css'
 })
@@ -197,6 +197,7 @@ export class ReactBuildPreviewComponent {
   }
 
   async ngOnInit() {
+    this.refreshProjectContext();
     this.socket = io(this.apiService.apiUrl, {
       auth: {
         token: localStorage.getItem('tokenCTi'),
@@ -204,7 +205,6 @@ export class ReactBuildPreviewComponent {
       }
     })
     this.getUserSubscriptionPlan();
-    this.refreshProjectContext();
     this.userInfo = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
     this.initializeCallbackRequestForm();
 
