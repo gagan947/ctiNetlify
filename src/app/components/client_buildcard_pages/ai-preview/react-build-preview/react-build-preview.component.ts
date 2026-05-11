@@ -1171,39 +1171,7 @@ export class ReactBuildPreviewComponent {
   }
 
   appendBuildActionPrompt() {
-    if (this.skipBuildPrompt) {
-      return;
-    }
-
     this.blocks = this.blocks.filter(block => block?.id !== 'action-prompt-build');
-
-    this.blocks.push({
-      id: 'action-prompt-build',
-      text: {
-        message: 'Do you want me to continue with the next step? Choose one option below.',
-        options: [
-          // {
-          //   id: 'regenerate_template',
-          //   title: 'Generate New Template',
-          //   description: 'Create another variation with a fresh layout and styling direction.'
-          // },
-          // {
-          //   id: 'customize_template',
-          //   title: 'Customize This Template',
-          //   description: 'Refine this version further based on your preferred changes and requirements.'
-          // },
-          {
-            id: 'Request_callback',
-            title: 'Request a Callback',
-            description: 'Get in touch with our team for personalized assistance.'
-          }
-        ]
-      },
-      done: true,
-      timestamp: new Date()
-    });
-
-    setTimeout(() => this.scrollToBottom(true), 0);
   }
 
   handleChatAction(actionId: string) {
@@ -2033,6 +2001,10 @@ export class ReactBuildPreviewComponent {
 
   get showDeployHeaderButton(): boolean {
     return !!this.safePreviewUrl && !this.isReactBuilding && !this.isIframeLoading;
+  }
+
+  get showSupportCallbackButton(): boolean {
+    return this.showDeployHeaderButton;
   }
 }
 

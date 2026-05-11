@@ -6,6 +6,14 @@
     <section class="ct_project_ai_preview_main">
         @if (!fullScreen) {
         <aside class="ct_project_ai_chat_section" style="height: calc(100vh - 50px);">
+            <div class="ct_preview_support_bar" *ngIf="showSupportCallbackButton">
+                <div class="ct_preview_support_bar__copy">
+                    <span class="ct_preview_support_bar__label">Need help choosing the next step?</span>
+                </div>
+                <button type="button" class="ct_preview_support_bar__btn" (click)="openCallbackModal()">
+                    Request a Callback
+                </button>
+            </div>
             <div #chatScroll class="ct_chat_scroll_wrap" (scroll)="onUserScroll()">
                 <app-ai-dev-renderer [isLoading]="isReactBuilding" [blocks]="blocks"
                     (actionSelected)="handleChatAction($event)" (promptSubmitted)="handlePromptSubmitted($event)">
