@@ -43,6 +43,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   voiceDraftText = '';
   isVoiceDraftActive = false;
   isVoiceUiVisible = false;
+  isVoiceStarting = false;
   isChatMode = false;
   submittedPrompt = '';
   private subscriptionStateSub?: Subscription;
@@ -227,6 +228,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
     this.voiceDraftText = '';
     this.isVoiceDraftActive = false;
     this.isVoiceUiVisible = false;
+    this.isVoiceStarting = false;
     this.activeVoiceSessionId += 1;
     setTimeout(() => this.promptInput?.nativeElement.focus(), 0);
   }
@@ -234,7 +236,12 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
 
   startVoiceTyping(): void {
 
+    if (this.isVoiceStarting) {
+      return;
+    }
+
     if (this.speechService.isListening) {
+      this.cancelVoiceDraft();
       return;
     }
 
@@ -242,9 +249,10 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.voiceDraftText = '';
     this.isVoiceDraftActive = true;
-    this.isVoiceUiVisible = false;
+    this.isVoiceUiVisible = true;
+    this.isVoiceStarting = true;
 
-    this.speechService.start({
+    const didStart = this.speechService.start({
       onText: (text: string) => {
         if (!this.isVoiceDraftActive || sessionId !== this.activeVoiceSessionId) {
           return;
@@ -255,6 +263,13 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       onListeningChange: (isListening: boolean) => {
         if (!this.isVoiceDraftActive || sessionId !== this.activeVoiceSessionId) {
+          return;
+        }
+
+        this.isVoiceStarting = false;
+
+        if (isListening) {
+          this.isVoiceUiVisible = true;
           return;
         }
 
@@ -270,9 +285,17 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.isVoiceDraftActive = false;
         this.isVoiceUiVisible = false;
+        this.isVoiceStarting = false;
         this.voiceDraftText = '';
       }
     });
+
+    if (!didStart && sessionId === this.activeVoiceSessionId) {
+      this.isVoiceDraftActive = false;
+      this.isVoiceUiVisible = false;
+      this.isVoiceStarting = false;
+      this.voiceDraftText = '';
+    }
   }
 
   applyVoiceDraft(): void {
@@ -284,6 +307,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.isVoiceDraftActive = false;
     this.isVoiceUiVisible = false;
+    this.isVoiceStarting = false;
     this.activeVoiceSessionId += 1;
 
     if (this.speechService.isListening) {
@@ -298,6 +322,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   cancelVoiceDraft(): void {
     this.isVoiceDraftActive = false;
     this.isVoiceUiVisible = false;
+    this.isVoiceStarting = false;
     this.activeVoiceSessionId += 1;
 
     if (this.speechService.isListening) {

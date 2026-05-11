@@ -20,21 +20,29 @@
             <button
               type="button"
               class="main-ai-chip-btn main-ai-voice-toggle-btn"
+              [class.is-starting]="isVoiceStarting"
               [class.is-listening]="isVoiceUiVisible"
-              [disabled]="isVoiceDraftActive"
-              [attr.aria-label]="isVoiceUiVisible ? 'Voice input active' : 'Start voice input'"
+              [disabled]="isVoiceStarting || speechService.isListening"
+              [attr.aria-label]="isVoiceUiVisible ? 'Voice input active' : isVoiceStarting ? 'Voice input is starting' : 'Start voice input'"
               (click)="startVoiceTyping()">
               <span class="main-ai-voice-toggle-icon">
                 <i
                   class="fa-solid"
-                  [class.fa-microphone]="!isVoiceUiVisible"
-                  [class.fa-wave-square]="isVoiceUiVisible"></i>
+                  [class.fa-microphone]="!speechService.isListening"
+                  [class.fa-wave-square]="speechService.isListening"></i>
               </span>
+              @if (isVoiceStarting) {
+              <span class="main-ai-voice-loader" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+              }
               <span class="main-ai-voice-toggle-text">
-                {{ isVoiceUiVisible ? 'Listening' : '' }}
+                {{ isVoiceUiVisible && !isVoiceStarting ? 'Listening' : '' }}
               </span>
             </button>
-            @if (isVoiceUiVisible) {
+            @if (isVoiceDraftActive || isVoiceStarting) {
             <button
               type="button"
               class="main-ai-voice-action-btn is-cancel"
@@ -46,7 +54,7 @@
               type="button"
               class="main-ai-voice-action-btn is-apply"
               aria-label="Use voice text"
-              [disabled]="!voiceDraftText.trim()"
+              [disabled]="isVoiceStarting || !voiceDraftText.trim()"
               (click)="applyVoiceDraft()">
               <i class="fa-solid fa-check"></i>
             </button>
