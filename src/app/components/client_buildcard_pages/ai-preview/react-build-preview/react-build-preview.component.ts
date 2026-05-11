@@ -159,6 +159,7 @@ export class ReactBuildPreviewComponent {
   pendingPreviewUrl: string | null = null;
   private hasAutoOpenedCurrentMobilePreview = false;
   private hasDismissedCurrentMobilePreview = false;
+  private deployHeaderActionTimer: ReturnType<typeof setTimeout> | null = null;
   skipBuildPrompt = false;
   finalPrompt: any = null;
   selectedPublishOption: 'creative-ai-domain' | 'custom-domain' = 'creative-ai-domain';
@@ -166,6 +167,7 @@ export class ReactBuildPreviewComponent {
   customDomainTouched = false;
   deploymentSuccessMessage = '';
   successModalAction: 'navigate-dashboard' | 'close-only' = 'navigate-dashboard';
+  showDeployHeaderAction = false;
   buildGenerationErrorMessage = '';
   isBuildGenerationErrorExpanded = false;
   callbackRequestForm!: FormGroup;
@@ -197,6 +199,7 @@ export class ReactBuildPreviewComponent {
   }
 
   async ngOnInit() {
+    this.hideDeployHeaderAction();
     this.refreshProjectContext();
     this.socket = io(this.apiService.apiUrl, {
       auth: {
@@ -219,6 +222,7 @@ export class ReactBuildPreviewComponent {
 
     const templates = await this.getUserTemplates();
     this.route.paramMap.subscribe(async (res: any) => {
+      this.hideDeployHeaderAction();
       this.selectedProjectId = res.params['id'];
       this.refreshProjectContext();
       const latestTemplates = await this.getUserTemplates();
@@ -836,6 +840,7 @@ export class ReactBuildPreviewComponent {
   onIframeLoad() {
     this.clearBuildStepTimers();
     this.isIframeLoading = false;
+    this.scheduleDeployHeaderAction();
 
     if (this.isMobileView() && !this.hasAutoOpenedCurrentMobilePreview && !this.hasDismissedCurrentMobilePreview) {
       this.fullScreen = true;
@@ -931,6 +936,7 @@ export class ReactBuildPreviewComponent {
 
   private preparePreviewLoadState() {
     this.isIframeLoading = true;
+    this.hideDeployHeaderAction();
     this.hasAutoOpenedCurrentMobilePreview = false;
     this.hasDismissedCurrentMobilePreview = false;
   }
@@ -1040,6 +1046,7 @@ export class ReactBuildPreviewComponent {
     if (!templateId) {
       this.safePreviewUrl = null;
       this.pendingPreviewUrl = null;
+      this.hideDeployHeaderAction();
 
       if (this.projectsData?.clientEnquryId === this.selectedProjectId) {
         this.isReactBuilding = true;
@@ -1437,6 +1444,7 @@ export class ReactBuildPreviewComponent {
           } else {
             this.activeDesignId = '';
             this.safePreviewUrl = null;
+            this.hideDeployHeaderAction();
           }
         },
 
@@ -1989,6 +1997,24 @@ export class ReactBuildPreviewComponent {
     this.projectsData = projectData ? JSON.parse(projectData) : null;
   }
 
+  private hideDeployHeaderAction() {
+    this.showDeployHeaderAction = false;
+    if (this.deployHeaderActionTimer) {
+      clearTimeout(this.deployHeaderActionTimer);
+      this.deployHeaderActionTimer = null;
+    }
+  }
+
+  private scheduleDeployHeaderAction() {
+    this.hideDeployHeaderAction();
+    this.deployHeaderActionTimer = setTimeout(() => {
+      if (!!this.safePreviewUrl && !this.isReactBuilding && !this.isIframeLoading) {
+        this.showDeployHeaderAction = true;
+      }
+      this.deployHeaderActionTimer = null;
+    }, 180);
+  }
+
   private initializeCallbackRequestForm() {
     this.callbackRequestForm = this.fb.group({
       fullName: [this.userInfo?.name || '', [Validators.required, Validators.minLength(3), noWhitespaceValidator]],
@@ -1999,12 +2025,8 @@ export class ReactBuildPreviewComponent {
     });
   }
 
-  get showDeployHeaderButton(): boolean {
-    return !!this.safePreviewUrl && !this.isReactBuilding && !this.isIframeLoading;
-  }
-
   get showSupportCallbackButton(): boolean {
-    return this.showDeployHeaderButton;
+    return this.showDeployHeaderAction;
   }
 }
 

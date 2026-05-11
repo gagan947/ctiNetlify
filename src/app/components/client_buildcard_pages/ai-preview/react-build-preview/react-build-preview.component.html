@@ -1,16 +1,17 @@
 <div class="ct_aappp">
     <app-workspace-header [fullScreen]="fullScreen" [selectedDeviceType]="selectedDeviceType"
         [showPreviewControls]="true" (fullScreenToggle)="openFullPreview()"
-        (deviceTypeChange)="onDeviceTypeChange($event)" [showPrimaryHeaderAction]="showDeployHeaderButton"
+        (deviceTypeChange)="onDeviceTypeChange($event)" [showPrimaryHeaderAction]="showDeployHeaderAction"
         [primaryHeaderActionLabel]="'Deploy to Production'" (primaryHeaderActionClick)="openDeployModal()" />
     <section class="ct_project_ai_preview_main">
         @if (!fullScreen) {
         <aside class="ct_project_ai_chat_section" style="height: calc(100vh - 50px);">
             <div class="ct_preview_support_bar" *ngIf="showSupportCallbackButton">
                 <div class="ct_preview_support_bar__copy">
-                    <span class="ct_preview_support_bar__label">Need help choosing the next step?</span>
+                    <span class="ct_preview_support_bar__label">Need help?</span>
                 </div>
                 <button type="button" class="ct_preview_support_bar__btn" (click)="openCallbackModal()">
+                    <i class="fa-solid fa-phone-volume"></i>
                     Request a Callback
                 </button>
             </div>
@@ -68,7 +69,6 @@
                                     <h4 class="ct_fs_24 ct_fw_600 mb-1">
                                         {{ previewOverlayTitle }}
                                     </h4>
-
                                 </div>
                                 <!-- Build progress -->
                                 <div class="build-progress mt-4 text-start">

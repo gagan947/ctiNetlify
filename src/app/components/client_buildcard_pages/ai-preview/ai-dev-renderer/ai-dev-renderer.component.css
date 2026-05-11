@@ -191,6 +191,7 @@
 }
 
 @keyframes ctBuildItemPulse {
+
   0%,
   100% {
     transform: scale(0.88);
@@ -631,7 +632,7 @@ aside.ct_project_ai_chat_section {
 
 .top-line span {
   background-color: #1d1d1d;
-  z-index: 999;
+  z-index: 0;
   position: relative;
   padding-inline: 17px;
 }
