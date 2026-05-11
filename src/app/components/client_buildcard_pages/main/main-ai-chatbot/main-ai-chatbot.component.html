@@ -59,7 +59,8 @@
         <div class="main-ai-thread-stack">
           <div class="main-ai-thread-text main-ai-ai-message">
             <div class="main-ai-thread-content">
-              <p class="text-line ct_fs_14" style="word-break: break-word;">Start describing your idea and I'll pick up from there.</p>
+              <p class="text-line ct_fs_14" style="word-break: break-word;">Start describing your idea and I'll pick up
+                from there.</p>
             </div>
           </div>
         </div>
@@ -127,14 +128,41 @@
             <button type="button" class="main-ai-chip-btn" aria-label="Attach files">
               <i class="fa-solid fa-paperclip"></i>
             </button>
-            <button type="button" class="main-ai-chip-btn" aria-label="Voice input">
-              <i class="fa-solid fa-microphone"></i>
+            <button type="button" class="main-ai-chip-btn main-ai-voice-toggle-btn"
+              [class.is-starting]="isVoiceStarting" [class.is-listening]="isVoiceUiVisible"
+              [disabled]="isVoiceStarting || speechService.isListening"
+              [attr.aria-label]="isVoiceUiVisible ? 'Voice input active' : isVoiceStarting ? 'Voice input is starting' : 'Start voice input'"
+              (click)="startVoiceTyping()">
+              <span class="main-ai-voice-toggle-icon">
+                <i class="fa-solid" [class.fa-microphone]="!speechService.isListening"
+                  [class.fa-wave-square]="speechService.isListening"></i>
+              </span>
+              @if (isVoiceStarting) {
+              <span class="main-ai-voice-loader" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+              }
+              <span class="main-ai-voice-toggle-text">
+                {{ isVoiceUiVisible && !isVoiceStarting ? 'Listening' : '' }}
+              </span>
             </button>
+            @if (isVoiceDraftActive || isVoiceStarting) {
+            <button type="button" class="main-ai-voice-action-btn is-cancel" aria-label="Discard voice text"
+              (click)="cancelVoiceDraft()">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+            <button type="button" class="main-ai-voice-action-btn is-apply" aria-label="Use voice text"
+              [disabled]="isVoiceStarting || !voiceDraftText.trim()" (click)="applyVoiceDraft()">
+              <i class="fa-solid fa-check"></i>
+            </button>
+            }
           </div>
 
           <div class="main-ai-right-actions">
-            <button type="button" class="main-ai-submit-btn" aria-label="Send message" [disabled]="isSubmitting || isRestoringConversation"
-              (click)="submitPrompt()">
+            <button type="button" class="main-ai-submit-btn" aria-label="Send message"
+              [disabled]="isSubmitting || isRestoringConversation" (click)="submitPrompt()">
               <i class="fa-solid fa-arrow-up"></i>
             </button>
           </div>
