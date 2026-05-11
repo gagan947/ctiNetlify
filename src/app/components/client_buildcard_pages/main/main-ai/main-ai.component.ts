@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
 import { ApiService } from '../../../../services/api.service';
 import { io } from 'socket.io-client';
+import { SpeechService } from '../../../../services/speech.service';
 declare let fbq: any;
 
 @Component({
@@ -39,6 +40,9 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   subscriptionPlan!: SubscriptionResponse;
   activePlaceholder = '';
   promptText = '';
+  voiceDraftText = '';
+  isVoiceDraftActive = false;
+  isVoiceUiVisible = false;
   isChatMode = false;
   submittedPrompt = '';
   private subscriptionStateSub?: Subscription;
@@ -47,10 +51,12 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   private resumeProbeTimer: ReturnType<typeof setTimeout> | null = null;
   private resumeProbeSocket: any = null;
   private activePlaceholderIndex = 0;
+  private activeVoiceSessionId = 0;
   constructor(
     private subscriptionService: SubcriptionService,
     private subscriptionModalService: SubscriptionModalService,
     private apiService: ApiService,
+      public speechService: SpeechService,
     private ngZone: NgZone
   ) { }
 
@@ -218,6 +224,87 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isChatMode = false;
     this.submittedPrompt = '';
     this.promptText = '';
+    this.voiceDraftText = '';
+    this.isVoiceDraftActive = false;
+    this.isVoiceUiVisible = false;
+    this.activeVoiceSessionId += 1;
+    setTimeout(() => this.promptInput?.nativeElement.focus(), 0);
+  }
+
+
+  startVoiceTyping(): void {
+
+    if (this.speechService.isListening) {
+      return;
+    }
+
+    const sessionId = ++this.activeVoiceSessionId;
+
+    this.voiceDraftText = '';
+    this.isVoiceDraftActive = true;
+    this.isVoiceUiVisible = false;
+
+    this.speechService.start({
+      onText: (text: string) => {
+        if (!this.isVoiceDraftActive || sessionId !== this.activeVoiceSessionId) {
+          return;
+        }
+
+        this.voiceDraftText = text;
+        this.isVoiceUiVisible = true;
+      },
+      onListeningChange: (isListening: boolean) => {
+        if (!this.isVoiceDraftActive || sessionId !== this.activeVoiceSessionId) {
+          return;
+        }
+
+        if (!isListening && !this.voiceDraftText.trim()) {
+          this.isVoiceDraftActive = false;
+          this.isVoiceUiVisible = false;
+        }
+      },
+      onError: () => {
+        if (sessionId !== this.activeVoiceSessionId) {
+          return;
+        }
+
+        this.isVoiceDraftActive = false;
+        this.isVoiceUiVisible = false;
+        this.voiceDraftText = '';
+      }
+    });
+  }
+
+  applyVoiceDraft(): void {
+    const transcript = this.voiceDraftText.trim().replace(/\s+/g, ' ');
+
+    if (!transcript) {
+      return;
+    }
+
+    this.isVoiceDraftActive = false;
+    this.isVoiceUiVisible = false;
+    this.activeVoiceSessionId += 1;
+
+    if (this.speechService.isListening) {
+      this.speechService.stop();
+    }
+
+    this.promptText = transcript;
+    this.voiceDraftText = '';
+    setTimeout(() => this.promptInput?.nativeElement.focus(), 0);
+  }
+
+  cancelVoiceDraft(): void {
+    this.isVoiceDraftActive = false;
+    this.isVoiceUiVisible = false;
+    this.activeVoiceSessionId += 1;
+
+    if (this.speechService.isListening) {
+      this.speechService.stop();
+    }
+
+    this.voiceDraftText = '';
     setTimeout(() => this.promptInput?.nativeElement.focus(), 0);
   }
 }

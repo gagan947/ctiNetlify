@@ -19,3 +19,9 @@
     transform: translateX(-50%);
     z-index: -1;
 }
+
+@media screen and (max-width:991px){
+    .ct_time_line_verticle_line{
+        display: none;
+    }
+}
