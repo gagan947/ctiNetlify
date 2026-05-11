@@ -128,7 +128,7 @@ aside.ct_project_ai_chat_section {
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-aside.ct_project_ai_chat_section > .ct_chat_scroll_wrap {
+aside.ct_project_ai_chat_section>.ct_chat_scroll_wrap {
   height: calc(100vh - 95px);
   overflow-y: auto;
 }
