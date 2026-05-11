@@ -1187,21 +1187,16 @@ export class ReactBuildPreviewComponent {
           //   title: 'Generate New Template',
           //   description: 'Create another variation with a fresh layout and styling direction.'
           // },
-          {
-            id: 'customize_template',
-            title: 'Customize This Template',
-            description: 'Refine this version further based on your preferred changes and requirements.'
-          },
           // {
-          //   id: 'Request_callback',
-          //   title: 'Request a Callback',
-          //   description: 'Get in touch with our team for personalized assistance.'
+          //   id: 'customize_template',
+          //   title: 'Customize This Template',
+          //   description: 'Refine this version further based on your preferred changes and requirements.'
           // },
-          // {
-          //   id: 'deploy_template',
-          //   title: 'Deploy to Production',
-          //   description: 'Use this template as the final version and continue to deployment.'
-          // }
+          {
+            id: 'Request_callback',
+            title: 'Request a Callback',
+            description: 'Get in touch with our team for personalized assistance.'
+          }
         ]
       },
       done: true,
@@ -2034,6 +2029,10 @@ export class ReactBuildPreviewComponent {
       companyName: [this.userInfo?.companyName || ''],
       description: ['', [Validators.maxLength(1000)]]
     });
+  }
+
+  get showDeployHeaderButton(): boolean {
+    return !!this.safePreviewUrl && !this.isReactBuilding && !this.isIframeLoading;
   }
 }
 

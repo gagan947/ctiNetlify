@@ -1,7 +1,8 @@
 <div class="ct_aappp">
     <app-workspace-header [fullScreen]="fullScreen" [selectedDeviceType]="selectedDeviceType"
         [showPreviewControls]="true" (fullScreenToggle)="openFullPreview()"
-        (deviceTypeChange)="onDeviceTypeChange($event)" />
+        (deviceTypeChange)="onDeviceTypeChange($event)" [showPrimaryHeaderAction]="showDeployHeaderButton"
+        [primaryHeaderActionLabel]="'Deploy to Production'" (primaryHeaderActionClick)="openDeployModal()" />
     <section class="ct_project_ai_preview_main">
         @if (!fullScreen) {
         <aside class="ct_project_ai_chat_section" style="height: calc(100vh - 50px);">
