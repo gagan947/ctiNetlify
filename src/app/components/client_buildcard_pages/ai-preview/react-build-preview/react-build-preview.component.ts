@@ -45,7 +45,7 @@ interface ReactFile {
   fullCode: string;
 }
 
-type BuildFlowType = 'initial' | 'restore' | 'regenerate' | 'switch' | 'repair';
+type BuildFlowType = 'initial' | 'restore' | 'regenerate' | 'switch' | 'repair' | 'customize';
 
 interface BuildProgressStep {
   pendingIconClass: string;
@@ -98,6 +98,7 @@ export class ReactBuildPreviewComponent {
   private aiProcessingPhaseVersion = 0;
   private pendingFinalBuildSection: any = null;
   private repairAttemptVersion = 0;
+  private customizationRequestVersion = 0;
   private initialFlowRunId = 0;
   private hasRepairFlowTakenOver = false;
 
@@ -1006,6 +1007,12 @@ export class ReactBuildPreviewComponent {
           { pendingIconClass: 'fa-solid fa-gear', label: 'Building refreshed React app' },
           { pendingIconClass: 'fa-solid fa-rocket', label: 'Deploying updated preview' }
         ];
+      case 'customize':
+        return [
+          { pendingIconClass: 'fa-solid fa-sliders', label: 'Reviewing requested changes' },
+          { pendingIconClass: 'fa-solid fa-wand-magic-sparkles', label: 'Applying template customization' },
+          { pendingIconClass: 'fa-solid fa-rocket', label: 'Refreshing preview' }
+        ];
       case 'initial':
       default:
         return [
@@ -1225,41 +1232,105 @@ export class ReactBuildPreviewComponent {
 
   handlePromptSubmitted(event: Event | { blockId: string; value: string }) {
     const promptEvent = event as { blockId?: string; value?: string };
+    const prompt = promptEvent?.value?.trim();
 
-    if (!promptEvent?.value?.trim()) return;
+    if (!prompt) return;
 
-    let payLoad = {
-      prompt: promptEvent.value,
-      templatePublicId: this.clientProjectList.find((p: any) => p.inquiryId === this.selectedProjectId)?.templateId,
+    const templatePublicId = this.getSelectedTemplatePublicId();
+    if (!templatePublicId) {
+      this.toster.error('No template is available yet for customization.');
+      return;
     }
 
-    this.apiService.postAPI('api/ai/customization', payLoad).subscribe((res: any) => {
-      if (res.success) {
-        console.log(res);
+    this.blocks = this.blocks.filter(block => block?.id !== promptEvent.blockId);
+    this.blocks.push({
+      id: `user-message-customize-${Date.now()}`,
+      text: prompt,
+      done: true,
+      timestamp: new Date()
+    });
+
+    this.isReactBuilding = true;
+    this.isTyping = true;
+    this.resetBuildGenerationError();
+    const customizationRequestVersion = ++this.customizationRequestVersion;
+    this.startQuickBuildProgress('customize', 1200, 2600);
+    this.showLoader('Reviewing your requested changes...');
+    void this.announceCustomizationProgress(prompt, customizationRequestVersion);
+
+    const payLoad = {
+      prompt,
+      templatePublicId
+    };
+
+    this.apiService.postAPI('api/ai/customization', payLoad).subscribe({
+      next: (res: any) => {
+        if (!res?.success || !res?.data?.templateId) {
+          this.customizationRequestVersion++;
+          this.setBuildGenerationError(res?.data?.message || 'Failed to customize preview');
+          this.queueBuildGenerationFailure();
+          return;
+        }
+
+        this.customizationRequestVersion++;
+        this.hideLoader();
+        this.blocks.push({
+          type: 'summary',
+          data: {
+            time: 'Updated',
+            description: 'Your requested customization has been applied and the refreshed preview is now loading.',
+            highlights: [
+              'Prompt reviewed',
+              'Template updated',
+              'Fresh preview generated'
+            ]
+          }
+        });
+        this.queueGeneratedPreview(res, null);
+      },
+      error: (error: any) => {
+        if (error?.error?.status === 422 && error?.error?.data?.canRepairBuild) {
+          this.customizationRequestVersion++;
+          const repairPayload = {
+            templatePublicId: error.error.data.templatePublicId || templatePublicId,
+            inquiryPublicId: this.projectsData.clientEnquryId,
+            error_message: error.error.message,
+          };
+          void this.attemptBuildRepair(repairPayload, error);
+          return;
+        }
+
+        this.customizationRequestVersion++;
+        this.setBuildGenerationError(error);
+        this.queueBuildGenerationFailure();
       }
     });
 
-    // this.blocks = this.blocks.filter(block => block?.id !== promptEvent.blockId);
-
-    // this.blocks.push({
-    //   id: `user-message-customize-${Date.now()}`,
-    //   text: promptEvent.value,
-    //   done: true,
-    //   timestamp: new Date()
-    // });
-
-    // this.blocks.push({
-    //   id: `inline-cta-customize-${Date.now()}`,
-    //   text: {
-    //     message: 'Your current plan does not include direct template customization requests. Upgrade your plan to continue with guided revisions for this template.',
-    //     buttonLabel: 'Upgrade Plan',
-    //     actionId: 'upgrade_plan'
-    //   },
-    //   done: true,
-    //   timestamp: new Date()
-    // });
-
     setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private getSelectedTemplatePublicId() {
+    return this.clientProjectList.find((project: any) => project.inquiryId === this.selectedProjectId)?.templateId || null;
+  }
+
+  private async announceCustomizationProgress(prompt: string, requestVersion: number) {
+    await this.delay(250);
+    if (requestVersion !== this.customizationRequestVersion) {
+      return;
+    }
+    await this.addParagraphBlock('Applying your requested changes to the current template.', 500, 'phase');
+    if (requestVersion !== this.customizationRequestVersion) {
+      return;
+    }
+    await this.addParagraphBlock(
+      `Customization request: ${prompt.length > 140 ? `${prompt.slice(0, 137)}...` : prompt}`,
+      450,
+      'support'
+    );
+    if (requestVersion !== this.customizationRequestVersion) {
+      return;
+    }
+    this.showLoader('Updating the template and preparing a refreshed preview...');
   }
 
 
