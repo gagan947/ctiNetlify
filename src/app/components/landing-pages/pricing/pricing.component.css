@@ -98,6 +98,10 @@ section {
   color: #111827;
 }
 
+.ct_section_heading {
+  margin: 0 auto 50px;
+}
+
 .ct_price_card_bottom {
   display: flex;
   flex: 1;
@@ -318,6 +322,7 @@ section {
     font-size: 18px;
   }
 }
+
 .logo-slider {
   overflow: hidden;
   position: relative;
@@ -342,6 +347,7 @@ section {
   object-fit: contain;
   display: block;
 }
+
 .ct_build_section,
 .ct_launch_journey_section,
 .ct_pricing_section,
@@ -350,10 +356,12 @@ section {
   content-visibility: auto;
   contain-intrinsic-size: 600px;
 }
+
 @keyframes logoScroll {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
