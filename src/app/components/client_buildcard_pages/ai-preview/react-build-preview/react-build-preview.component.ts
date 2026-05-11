@@ -423,6 +423,7 @@ export class ReactBuildPreviewComponent {
       this.pendingPreviewResponse = { res, socketId };
       return;
     }
+    this.handleChatAction('customize_template');
     this.scrollToBottom();
     this.applyGeneratedPreview(res, socketId);
   }
@@ -1053,6 +1054,7 @@ export class ReactBuildPreviewComponent {
 
     this.startQuickBuildProgress('restore');
     this.setSafePreviewUrl(this.getPreviewProxyUrl(templateId));
+    this.handleChatAction('customize_template')
     this.isReactBuilding = false;
     this.isTyping = false;
   }
@@ -1185,21 +1187,21 @@ export class ReactBuildPreviewComponent {
           //   title: 'Generate New Template',
           //   description: 'Create another variation with a fresh layout and styling direction.'
           // },
-          // {
-          //   id: 'customize_template',
-          //   title: 'Customize This Template',
-          //   description: 'Refine this version further based on your preferred changes and requirements.'
-          // },
           {
-            id: 'Request_callback',
-            title: 'Request a Callback',
-            description: 'Get in touch with our team for personalized assistance.'
+            id: 'customize_template',
+            title: 'Customize This Template',
+            description: 'Refine this version further based on your preferred changes and requirements.'
           },
-          {
-            id: 'deploy_template',
-            title: 'Deploy to Production',
-            description: 'Use this template as the final version and continue to deployment.'
-          }
+          // {
+          //   id: 'Request_callback',
+          //   title: 'Request a Callback',
+          //   description: 'Get in touch with our team for personalized assistance.'
+          // },
+          // {
+          //   id: 'deploy_template',
+          //   title: 'Deploy to Production',
+          //   description: 'Use this template as the final version and continue to deployment.'
+          // }
         ]
       },
       done: true,
@@ -1216,6 +1218,7 @@ export class ReactBuildPreviewComponent {
     }
 
     if (actionId === 'customize_template') {
+
       this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
 
       this.blocks.push({
