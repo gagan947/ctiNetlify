@@ -121,7 +121,8 @@
 
         <textarea #chatPromptInput class="main-ai-prompt-input main-ai-chat-input" rows="2"
           [attr.placeholder]="placeholderText" [disabled]="isRestoringConversation" [(ngModel)]="promptText"
-          (keydown)="handlePromptKeydown($event)"></textarea>
+          (keydown)="handlePromptKeydown($event)">
+        </textarea>
 
         <div class="main-ai-composer-footer">
           <div class="main-ai-left-actions">
