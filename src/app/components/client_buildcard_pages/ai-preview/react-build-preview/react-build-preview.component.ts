@@ -905,9 +905,6 @@ export class ReactBuildPreviewComponent {
   }
 
   // open modal
-  openModal() {
-    this.subscriptionModalService.open(this.selected_template_id);
-  }
 
   openCallbackModal() {
     this.callbackRequestForm.reset({
@@ -1234,6 +1231,22 @@ export class ReactBuildPreviewComponent {
     });
   }
 
+  appendCreditLimitPrompt() {
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
+
+    this.blocks.push({
+      id: `inline-cta-customize-${Date.now()}`,
+      text: {
+        message: `It looks like you are running low on credits. To customize this template, you will need at least 20 credits. Your current balance is ${this.getCurrentCreditBalance()} credits.`,
+        buttonLabel: 'Buy credits',
+        actionId: 'upgrade_plan'
+      },
+      done: true,
+      timestamp: new Date()
+    });
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
   handleChatAction(actionId: string) {
     if (actionId === 'regenerate_template') {
       this.regenerate();
@@ -1252,7 +1265,7 @@ export class ReactBuildPreviewComponent {
     }
 
     if (actionId === 'upgrade_plan') {
-      this.openModal();
+      this.subscriptionModalService.openBuyMoreCreditsModal();
       return;
     }
 
@@ -1267,6 +1280,12 @@ export class ReactBuildPreviewComponent {
     const prompt = promptEvent?.value?.trim();
 
     if (!prompt) return;
+
+    if (this.getCurrentCreditBalance() < 20) {
+      this.appendCreditLimitPrompt();
+      return;
+    }
+
     const templates = await this.getUserTemplates();
     const templatePublicId = templates.find((t: any) => t.inquiryId === this.selectedProjectId).templateId;
 
