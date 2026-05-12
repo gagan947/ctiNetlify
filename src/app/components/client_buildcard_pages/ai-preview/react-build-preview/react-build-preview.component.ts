@@ -181,7 +181,6 @@ export class ReactBuildPreviewComponent {
   private pendingPreviewFailure = false;
   private hasInitialBuildCompletionUi = false;
   today = new Date();
-  clientProjectList: any[] = [];
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
@@ -251,7 +250,6 @@ export class ReactBuildPreviewComponent {
     );
     if (res.success) {
       this.templateExists = res.data.length > 0;
-      this.clientProjectList = res.data;
       return res.data;
     }
 
@@ -406,6 +404,19 @@ export class ReactBuildPreviewComponent {
   }
 
   private handleBuildGenerationFailure() {
+    if (this.hasUsablePreviewState()) {
+      this.isRetryBuildGenerationSubmitting = false;
+      this.repairAttemptVersion++;
+      this.clearBuildStepTimers();
+      this.stopAiProcessingPhase();
+      this.pendingFinalBuildSection = null;
+      this.isReactBuilding = false;
+      this.isIframeLoading = false;
+      this.isTyping = false;
+      this.toster.error('We hit an issue while refreshing the preview. Your last available preview is still loaded.');
+      return;
+    }
+
     this.isRetryBuildGenerationSubmitting = false;
     this.repairAttemptVersion++;
     this.clearBuildStepTimers();
@@ -430,7 +441,8 @@ export class ReactBuildPreviewComponent {
       this.pendingPreviewResponse = { res, socketId };
       return;
     }
-    this.handleChatAction('customize_template');
+    this.resetBuildGenerationError();
+    this.closeBuildGenerationFailureModal();
     this.scrollToBottom();
     this.applyGeneratedPreview(res, socketId);
   }
@@ -443,7 +455,7 @@ export class ReactBuildPreviewComponent {
     this.isReactBuilding = true;
 
     const templateId = res.data.templateId;
-    const proxyUrl = this.getPreviewProxyUrl(templateId);
+    const previewUrl = this.getPreviewUrlFromResponse(res.data, templateId);
 
     if (res.data.variation) {
       this.usedVariations.push(res.data.variation);
@@ -466,7 +478,7 @@ export class ReactBuildPreviewComponent {
 
     this.designOrder.push({
       designId,
-      url: proxyUrl,
+      url: previewUrl,
       user_template_id: res.data.templateId || null,
       variation_no: res.data.variation
     });
@@ -474,15 +486,20 @@ export class ReactBuildPreviewComponent {
     this.activeDesignId = designId;
 
     if (socketId) {
-      this.pendingPreviewUrl = proxyUrl;
+      this.pendingPreviewUrl = previewUrl;
       this.preparePreviewLoadState();
     } else {
-      this.setSafePreviewUrl(proxyUrl);
+      this.setSafePreviewUrl(previewUrl);
     }
 
     this.isReactBuilding = false;
     this.isTyping = false;
-    this.completeInitialBuildUi();
+    if (this.buildFlowType === 'initial') {
+      this.completeInitialBuildUi();
+      return;
+    }
+
+    this.appendBuildActionPrompt();
   }
 
   private queueBuildGenerationFailure() {
@@ -598,6 +615,15 @@ export class ReactBuildPreviewComponent {
     this.isBuildGenerationErrorExpanded = false;
   }
 
+  private closeBuildGenerationFailureModal() {
+    const modalElement = document.getElementById('buildGenerationFailedModal');
+    if (!modalElement) {
+      return;
+    }
+
+    bootstrap.Modal.getOrCreateInstance(modalElement).hide();
+  }
+
   private setBuildGenerationError(source?: any) {
     const message = this.extractBuildGenerationErrorMessage(source);
     this.buildGenerationErrorMessage = message;
@@ -620,6 +646,15 @@ export class ReactBuildPreviewComponent {
       .map((line) => line.replace(/[ \t]+/g, ' ').trimEnd())
       .join('\n')
       .trim();
+  }
+
+  private hasUsablePreviewState(): boolean {
+    return !!this.safePreviewUrl || !!this.pendingPreviewUrl || this.designOrder.length > 0;
+  }
+
+  private getPreviewUrlFromResponse(data: any, templateId: string) {
+    const previewUrl = typeof data?.preview === 'string' ? data.preview.trim() : '';
+    return previewUrl || this.getPreviewProxyUrl(templateId);
   }
 
   private openBootstrapModal(modalId: string, options?: { backdrop?: boolean | 'static'; keyboard?: boolean }) {
@@ -1070,7 +1105,6 @@ export class ReactBuildPreviewComponent {
 
     this.startQuickBuildProgress('restore');
     this.setSafePreviewUrl(this.getPreviewProxyUrl(templateId));
-    this.handleChatAction('customize_template')
     this.isReactBuilding = false;
     this.isTyping = false;
   }
@@ -1187,7 +1221,17 @@ export class ReactBuildPreviewComponent {
   }
 
   appendBuildActionPrompt() {
-    this.blocks = this.blocks.filter(block => block?.id !== 'action-prompt-build');
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
+
+    this.blocks.push({
+      id: `input-prompt-customize-${Date.now()}`,
+      text: {
+        message: 'Share the changes you want in this template, and I will tailor this version around your needs.',
+        placeholder: 'Describe the changes you want in this template',
+      },
+      done: true,
+      timestamp: new Date()
+    });
   }
 
   handleChatAction(actionId: string) {
@@ -1197,19 +1241,7 @@ export class ReactBuildPreviewComponent {
     }
 
     if (actionId === 'customize_template') {
-
-      this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
-
-      this.blocks.push({
-        id: `input-prompt-customize-${Date.now()}`,
-        text: {
-          message: 'Share the changes you want in this template, and I will tailor this version around your needs.',
-          placeholder: 'Describe the changes you want in this template',
-        },
-        done: true,
-        timestamp: new Date()
-      });
-
+      this.appendBuildActionPrompt();
       setTimeout(() => this.scrollToBottom(true), 0);
       return;
     }
@@ -1230,13 +1262,14 @@ export class ReactBuildPreviewComponent {
     }
   }
 
-  handlePromptSubmitted(event: Event | { blockId: string; value: string }) {
+  async handlePromptSubmitted(event: Event | { blockId: string; value: string }) {
     const promptEvent = event as { blockId?: string; value?: string };
     const prompt = promptEvent?.value?.trim();
 
     if (!prompt) return;
+    const templates = await this.getUserTemplates();
+    const templatePublicId = templates.find((t: any) => t.inquiryId === this.selectedProjectId).templateId;
 
-    const templatePublicId = this.getSelectedTemplatePublicId();
     if (!templatePublicId) {
       this.toster.error('No template is available yet for customization.');
       return;
@@ -1307,10 +1340,6 @@ export class ReactBuildPreviewComponent {
     });
 
     setTimeout(() => this.scrollToBottom(true), 0);
-  }
-
-  private getSelectedTemplatePublicId() {
-    return this.clientProjectList.find((project: any) => project.inquiryId === this.selectedProjectId)?.templateId || null;
   }
 
   private async announceCustomizationProgress(prompt: string, requestVersion: number) {
