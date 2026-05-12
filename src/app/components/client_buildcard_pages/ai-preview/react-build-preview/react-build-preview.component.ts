@@ -2071,9 +2071,43 @@ export class ReactBuildPreviewComponent {
   }
 
   get previewOverlayTitle(): string {
-    return this.buildFlowType === 'repair'
-      ? "I'm Repairing the Preview Build."
-      : "I'm Generating the Preview.";
+    switch (this.buildFlowType) {
+      case 'repair':
+        return "I'm Repairing the Preview Build.";
+      case 'restore':
+        return "I'm Loading Your Saved Draft.";
+      case 'customize':
+        return "I'm Customizing the Preview.";
+      case 'regenerate':
+        return "I'm Generating a New Preview Variation.";
+      case 'switch':
+        return "I'm Loading the Selected Preview.";
+      case 'initial':
+      default:
+        return "I'm Generating the Preview.";
+    }
+  }
+
+  get previewOverlayLoaderText(): string {
+    switch (this.buildFlowType) {
+      case 'repair':
+        return 'Repairing...';
+      case 'restore':
+        return 'Restoring...';
+      case 'customize':
+        return 'Customizing...';
+      case 'regenerate':
+        return 'Generating...';
+      case 'switch':
+        return 'Loading...';
+      case 'initial':
+      default:
+        return 'Generating...';
+    }
+  }
+
+  get previewOverlayLoaderLetters(): string[] {
+    return this.previewOverlayLoaderText.split('');
   }
 
   private refreshProjectContext() {
