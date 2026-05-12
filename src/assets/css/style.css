@@ -2564,13 +2564,13 @@ table.table.ct_compare_table {
   width: 100%;
 }
 
-.ct_messanory_grid {
+/* .ct_messanory_grid {
   column-count: 4;
   column-width: 50%;
   height: auto !important;
   column-gap: 15px;
   gap: 15px;
-}
+} */
 
 .ct_social_img {
   margin-bottom: 15px;
@@ -2581,19 +2581,24 @@ table.table.ct_compare_table {
   object-fit: cover;
 }
 
-.ct_messanory_grid .ct_social_img:nth-child(1) img,
+/* .ct_messanory_grid .ct_social_img:nth-child(1) img,
 .ct_messanory_grid .ct_social_img:nth-child(4) img,
 .ct_messanory_grid .ct_social_img:nth-child(5) img {
   height: 494px;
+} */
+.ct_messanory_grid .ct_social_img img {
+    height: 100%;
+    aspect-ratio: 16 / 12;
+    border-radius: 10px;
+    ;
 }
-
-.ct_messanory_grid .ct_social_img:nth-child(2) img {
-  height: 330px;
+/* .ct_messanory_grid .ct_social_img:nth-child(2) img {
+    height: 253px;
 }
 
 .ct_messanory_grid .ct_social_img:nth-child(3) img {
-  height: 149px;
-}
+    height: 226px;
+} */
 
 .ct_heart_value_card {
   text-align: center;
