@@ -856,6 +856,9 @@ export class ReactBuildPreviewComponent {
   ngOnDestroy() {
     this.blocks = [];
     this.stopAiProcessingPhase();
+    this.socket?.off?.('page-created');
+    this.socket?.off?.('pages-generation-complete');
+    this.socket?.disconnect?.();
     this.aiService.stop();
 
   }
@@ -1330,7 +1333,7 @@ export class ReactBuildPreviewComponent {
     }
 
     const templates = await this.getUserTemplates();
-    const templatePublicId = templates.find((t: any) => t.inquiryId === this.selectedProjectId).templateId;
+    const templatePublicId = templates.find((t: any) => t.inquiryId === this.selectedProjectId)?.templateId;
 
     if (!templatePublicId) {
       this.toster.error('No template is available yet for customization.');
@@ -1427,7 +1430,7 @@ export class ReactBuildPreviewComponent {
 
   async checkNDeploy() {
     const templates = await this.getUserTemplates();
-    const activeDesign = templates.find((t: any) => t.inquiryId === this.selectedProjectId).templateId;
+    const activeDesign = templates.find((t: any) => t.inquiryId === this.selectedProjectId)?.templateId;
 
     if (!activeDesign) {
       console.error("No active design found");
@@ -1524,7 +1527,7 @@ export class ReactBuildPreviewComponent {
     this.isCallbackSubmitting = true;
     const raw = this.callbackRequestForm.getRawValue();
     const templates = await this.getUserTemplates();
-    const activeDesign = templates.find((t: any) => t.inquiryId === this.selectedProjectId).templateId;
+    const activeDesign = templates.find((t: any) => t.inquiryId === this.selectedProjectId)?.templateId;
 
     if (!activeDesign) {
       console.error("No active design found");
@@ -2130,15 +2133,13 @@ export class ReactBuildPreviewComponent {
     this.blocks.push(block);
     setTimeout(() => this.scrollToBottom(true), 0);
 
-    if (!this.queuedSocketPages.length) {
-      return;
-    }
+    if (this.queuedSocketPages.length) {
+      const queuedPages = [...this.queuedSocketPages];
+      this.queuedSocketPages = [];
 
-    const queuedPages = [...this.queuedSocketPages];
-    this.queuedSocketPages = [];
-
-    for (const pageLabel of queuedPages) {
-      this.appendSocketPageToBuildSection(pageLabel);
+      for (const pageLabel of queuedPages) {
+        this.appendSocketPageToBuildSection(pageLabel);
+      }
     }
 
     if (this.hasCompletedPageGeneration) {
