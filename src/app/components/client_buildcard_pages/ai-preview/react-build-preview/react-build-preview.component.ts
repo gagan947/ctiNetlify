@@ -1795,7 +1795,7 @@ export class ReactBuildPreviewComponent {
     await this.showLoader('Generating screen-level page code...');
     this.startSocketDrivenBuildSection(
       'Creating pages...',
-      'P'
+      '📄',
     );
     await this.waitForFirstSocketPage();
     if (!this.shouldContinueInitialFlow(flowRunId)) {
