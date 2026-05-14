@@ -1,7 +1,7 @@
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { Component, effect, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { SafeHtml, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -52,7 +52,12 @@ interface BuildProgressStep {
   label: string;
 }
 
-export function noWhitespaceValidator(control: FormControl) {
+interface CallbackPhoneNumber {
+  number?: string;
+  dialCode?: string;
+}
+
+export function noWhitespaceValidator(control: AbstractControl): ValidationErrors | null {
   const value = String(control.value || '');
   return value.trim().length === 0 ? { whitespace: true } : null;
 }
@@ -168,7 +173,13 @@ export class ReactBuildPreviewComponent {
   successModalAction: 'navigate-dashboard' | 'close-only' = 'navigate-dashboard';
   buildGenerationErrorMessage = '';
   isBuildGenerationErrorExpanded = false;
-  callbackRequestForm!: FormGroup;
+  callbackRequestForm = new FormGroup({
+    fullName: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.minLength(3), noWhitespaceValidator] }),
+    businessEmail: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.email, noWhitespaceValidator] }),
+    phoneNumber: new FormControl<CallbackPhoneNumber | string | null>(null, Validators.required),
+    companyName: new FormControl<string>('', { nonNullable: true }),
+    description: new FormControl<string>('', { nonNullable: true, validators: [Validators.maxLength(1000)] })
+  });
   isCallbackSubmitting = false;
   isRetryBuildGenerationSubmitting = false;
   userInfo: any = {};
@@ -197,16 +208,17 @@ export class ReactBuildPreviewComponent {
   }
 
   async ngOnInit() {
-    this.socket = io(this.apiService.apiUrl, {
-      auth: {
-        token: localStorage.getItem('tokenCTi'),
-        inquiryPublicId: this.projectsData.clientEnquryId,
-      }
-    })
-    this.getUserSubscriptionPlan();
     this.refreshProjectContext();
     this.userInfo = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
     this.initializeCallbackRequestForm();
+
+    this.socket = io(this.apiService.apiUrl, {
+      auth: {
+        token: localStorage.getItem('tokenCTi'),
+        inquiryPublicId: this.projectsData?.clientEnquryId ?? null,
+      }
+    })
+    this.getUserSubscriptionPlan();
 
     this.blocks = [];
 
@@ -1383,14 +1395,21 @@ export class ReactBuildPreviewComponent {
       return;
     }
     this.selected_template_id = activeDesign;
+    const phoneValue = raw.phoneNumber;
+    const phoneNumber = typeof phoneValue === 'string'
+      ? phoneValue.trim()
+      : String(phoneValue?.number || '').trim();
+    const countryCode = typeof phoneValue === 'string'
+      ? ''
+      : String(phoneValue?.dialCode || '').trim();
     const callbackPayload = {
       public_template_id: this.selected_template_id,
       date: new Date().toISOString(),
       full_name: String(raw.fullName || '').trim(),
       work_email: String(raw.businessEmail || '').trim(),
       company_name: String(raw.companyName || '').trim(),
-      phone_number: String(raw.phoneNumber.number || '').trim(),
-      country_code: String(raw.phoneNumber.dialCode || '').trim(),
+      phone_number: phoneNumber,
+      country_code: countryCode,
       description: String(raw.description || '').trim(),
     };
 
@@ -1416,7 +1435,7 @@ export class ReactBuildPreviewComponent {
   }
 
   isCallbackFieldInvalid(controlName: string): boolean {
-    const control = this.callbackRequestForm.get(controlName);
+    const control = this.callbackRequestForm?.get(controlName);
     return !!control && control.invalid && (control.touched || control.dirty);
   }
 
@@ -2024,12 +2043,12 @@ export class ReactBuildPreviewComponent {
   }
 
   private initializeCallbackRequestForm() {
-    this.callbackRequestForm = this.fb.group({
-      fullName: [this.userInfo?.name || '', [Validators.required, Validators.minLength(3), noWhitespaceValidator]],
-      businessEmail: [this.userInfo?.email || '', [Validators.required, Validators.email, noWhitespaceValidator]],
-      phoneNumber: [this.userInfo?.phoneNumber || '', Validators.required],
-      companyName: [this.userInfo?.companyName || ''],
-      description: ['', [Validators.maxLength(1000)]]
+    this.callbackRequestForm.reset({
+      fullName: this.userInfo?.name || '',
+      businessEmail: this.userInfo?.email || '',
+      phoneNumber: this.userInfo?.phoneNumber || null,
+      companyName: this.userInfo?.companyName || '',
+      description: ''
     });
   }
 }
