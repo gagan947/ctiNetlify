@@ -193,9 +193,8 @@ export class ReactBuildPreviewComponent {
   private hasInitialBuildCompletionUi = false;
   private activePageBuildSection: { type: 'build-section'; data: { title: string; icon: string; done: boolean; items: Array<{ label: string; status: 'active' | 'done' }> } } | null = null;
   private queuedSocketPages: string[] = [];
-  private hasReceivedSocketPage = false;
-  private firstSocketPageResolver: (() => void) | null = null;
-  private pageBuildWaitReleased = false;
+  private hasCompletedPageGeneration = false;
+  private pageGenerationCompletionResolver: (() => void) | null = null;
   today = new Date();
   // Redirect page for login action
   constructor(
@@ -1797,7 +1796,7 @@ export class ReactBuildPreviewComponent {
       'Creating pages...',
       '📄',
     );
-    await this.waitForFirstSocketPage();
+    await this.waitForPageGenerationCompletion();
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -2083,17 +2082,11 @@ export class ReactBuildPreviewComponent {
     }
 
     this.socket.off?.('page-created');
+    this.socket.off?.('pages-generation-complete');
     this.socket.on('page-created', (data: any) => {
       const pageLabel = this.extractPageLabel(data?.page);
       if (!pageLabel) {
         return;
-      }
-
-      this.hasReceivedSocketPage = true;
-      this.pageBuildWaitReleased = true;
-      if (this.firstSocketPageResolver) {
-        this.firstSocketPageResolver();
-        this.firstSocketPageResolver = null;
       }
 
       if (!this.activePageBuildSection) {
@@ -2102,6 +2095,10 @@ export class ReactBuildPreviewComponent {
       }
 
       this.appendSocketPageToBuildSection(pageLabel);
+    });
+
+    this.socket.on('pages-generation-complete', () => {
+      this.completeActivePageBuildSection();
     });
   }
 
@@ -2143,6 +2140,10 @@ export class ReactBuildPreviewComponent {
     for (const pageLabel of queuedPages) {
       this.appendSocketPageToBuildSection(pageLabel);
     }
+
+    if (this.hasCompletedPageGeneration) {
+      this.completeActivePageBuildSection();
+    }
   }
 
   private appendSocketPageToBuildSection(pageLabel: string) {
@@ -2165,23 +2166,23 @@ export class ReactBuildPreviewComponent {
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
-  private waitForFirstSocketPage(): Promise<void> {
-    if (this.pageBuildWaitReleased || this.hasReceivedSocketPage || this.activePageBuildSection?.data.items.length) {
+  private waitForPageGenerationCompletion(): Promise<void> {
+    if (this.hasCompletedPageGeneration) {
       return Promise.resolve();
     }
 
     return new Promise((resolve) => {
-      this.firstSocketPageResolver = resolve;
+      this.pageGenerationCompletionResolver = resolve;
     });
   }
 
   private completeActivePageBuildSection() {
-    this.pageBuildWaitReleased = true;
+    this.hasCompletedPageGeneration = true;
 
     if (!this.activePageBuildSection) {
-      if (this.firstSocketPageResolver) {
-        this.firstSocketPageResolver();
-        this.firstSocketPageResolver = null;
+      if (this.pageGenerationCompletionResolver) {
+        this.pageGenerationCompletionResolver();
+        this.pageGenerationCompletionResolver = null;
       }
       return;
     }
@@ -2196,9 +2197,9 @@ export class ReactBuildPreviewComponent {
     this.activePageBuildSection.data.done = true;
     this.activePageBuildSection = null;
 
-    if (this.firstSocketPageResolver) {
-      this.firstSocketPageResolver();
-      this.firstSocketPageResolver = null;
+    if (this.pageGenerationCompletionResolver) {
+      this.pageGenerationCompletionResolver();
+      this.pageGenerationCompletionResolver = null;
     }
 
     setTimeout(() => this.scrollToBottom(true), 0);
@@ -2207,9 +2208,8 @@ export class ReactBuildPreviewComponent {
   private resetActivePageBuildSection() {
     this.activePageBuildSection = null;
     this.queuedSocketPages = [];
-    this.hasReceivedSocketPage = false;
-    this.firstSocketPageResolver = null;
-    this.pageBuildWaitReleased = false;
+    this.hasCompletedPageGeneration = false;
+    this.pageGenerationCompletionResolver = null;
   }
 
   async addBuildSectionKeepingLastActive(title: string, icon: string, items: string[], itemDelay = 4200, settleDelay = 1200) {
