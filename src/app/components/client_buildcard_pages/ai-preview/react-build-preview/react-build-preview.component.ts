@@ -95,9 +95,17 @@ export class ReactBuildPreviewComponent {
       support: 'This pass targets stubborn configuration mismatches, invalid references, and deployment preparation issues that may still be blocking the preview.'
     },
     {
-      phase: 'Final repair attempt 5 is in progress before I surface a failure message.',
+      phase: 'Repair attempt 5 is in progress before I surface a failure message.',
       support: 'I am applying one last recovery pass, revalidating the build artifacts, and retrying the preview with the latest fixes.'
-    }
+    },
+    {
+      phase: 'Repair attempt 6 is now running with an extended recovery pass across the preview build pipeline.',
+      support: 'I am tracing deeper build and deployment dependencies, resolving lingering conflicts, and retrying the preview with another stabilization pass.'
+    },
+    {
+      phase: 'Repair attempt 7 is in progress as the final automated recovery pass before I mark the preview as failed.',
+      support: 'I am performing a last end-to-end validation of generated files, build configuration, and deployment output to give the preview one final recovery attempt.'
+    },
   ];
   private buildLogCursor = new Date('2026-04-27T19:45:01.607');
   private aiProcessingInterval?: ReturnType<typeof setInterval>;
@@ -196,6 +204,7 @@ export class ReactBuildPreviewComponent {
   private activePageBuildSection: { type: 'build-section'; data: { title: string; icon: string; done: boolean; items: Array<{ label: string; status: 'active' | 'done' }> } } | null = null;
   private queuedSocketPages: string[] = [];
   private hasCompletedPageGeneration = false;
+  private currentTemplateId: string | null = null;
   private pageGenerationCompletionResolver: (() => void) | null = null;
   today = new Date();
   // Redirect page for login action
@@ -312,6 +321,7 @@ export class ReactBuildPreviewComponent {
               inquiryPublicId: this.projectsData.clientEnquryId,
               error_message: error.error.message,
             }
+            this.currentTemplateId = error.error.data.templatePublicId;
             void this.attemptBuildRepair(repairPayload, error);
             return;
           }
@@ -1339,7 +1349,7 @@ export class ReactBuildPreviewComponent {
     }
 
     const templates = await this.getUserTemplates();
-    const templatePublicId = templates.find((t: any) => t.inquiryId === this.selectedProjectId)?.templateId;
+    const templatePublicId = templates.find((t: any) => t.inquiryId === this.selectedProjectId)?.templateId || this.currentTemplateId;
 
     if (!templatePublicId) {
       this.toster.error('No template is available yet for customization.');
