@@ -52,6 +52,11 @@
     </div>
 
     <div class="main-ai-topbar__right" style="padding-bottom: 6px">
+        <button *ngIf="showPrimaryHeaderAction" type="button" class="main-ai-topbar__deploy"
+            (click)="handlePrimaryHeaderActionClick()">
+            <i class="fa-solid fa-rocket"></i>
+            <span>{{ primaryHeaderActionLabel }}</span>
+        </button>
         <div class="d-none d-lg-block" *ngIf="showPreviewControls">
             <div class="et_reload_icon" (click)="handleFullScreenToggle()">
                 <i class="fa-solid" [ngClass]="fullScreen ? 'fa-minimize' : 'fa-expand'"></i>

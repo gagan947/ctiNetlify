@@ -43,7 +43,7 @@ export class AiDevRendererComponent {
     return typeof block?.id === 'string' && block.id.startsWith('status');
   }
 
- 
+
 
   isActionBlock(block: any): boolean {
     return typeof block?.id === 'string'
@@ -99,6 +99,13 @@ export class AiDevRendererComponent {
 
   getBuildSectionItems(block: any): any[] {
     return Array.isArray(block?.data?.items) ? block.data.items : [];
+  }
+
+  handlePromptKeydown(event: KeyboardEvent, block: any, value: string): void {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.submitPrompt(block, value);
+    }
   }
 
   submitPrompt(block: any, value: string) {

@@ -7,8 +7,7 @@
 
     <div *ngIf="!isStatusBlock(block)" class="ct_legacy_block">
       <p *ngIf="!isArray(block?.text) && !isActionBlock(block) && !isInputBlock(block) && !isInlineCtaBlock(block) && !isUserMessageBlock(block)"
-        class="mb-0 ct_legacy_text"
-        [class.ct_phase_heading]="isPhaseHeadingBlock(block)"
+        class="mb-0 ct_legacy_text" [class.ct_phase_heading]="isPhaseHeadingBlock(block)"
         [class.ct_support_paragraph]="isSupportParagraphBlock(block)">
         {{ block?.text }}
       </p>
@@ -19,7 +18,7 @@
           <span class="pill">{{ item }}</span>
         </li>
       </ul>
-   
+
       <div *ngIf="isActionBlock(block) && !isLoading" class="ct_ai_action_box">
         <p class="mb-2 ct_legacy_text">{{ block?.text?.message }}</p>
         <div class="ct_ai_action_list">
@@ -35,7 +34,8 @@
         <p class="mb-2 ct_legacy_text">{{ block?.text?.message }}</p>
         <div class="ct_ai_input_shell">
           <textarea #customizeInput class="ct_ai_textarea" rows="3"
-            [placeholder]="block?.text?.placeholder || 'Share your changes here'"></textarea>
+            [placeholder]="block?.text?.placeholder || 'Share your changes here'"
+            (keydown)="handlePromptKeydown($event, block, customizeInput.value)"></textarea>
           <button type="button" class="ct_ai_input_submit"
             (click)="submitPrompt(block, customizeInput.value); customizeInput.value = ''">
             <i class="fa-solid fa-arrow-up"></i>
@@ -45,9 +45,16 @@
 
       <div *ngIf="isInlineCtaBlock(block)" class="ct_inline_cta_strip">
         <span class="ct_inline_cta_text">{{ block?.text?.message }}</span>
-        <button type="button" class="ct_inline_cta_btn" (click)="actionSelected.emit(block?.text?.actionId)">
-          {{ block?.text?.buttonLabel }}
-        </button>
+        <span *ngIf="block?.text?.message2" class="ct_inline_cta_text">{{ block?.text?.message2 }}</span>
+        <div class="d-flex gap-2 justify-content-center">
+          <button type="button" class="ct_inline_cta_btn" (click)="actionSelected.emit(block?.text?.actionId)">
+            {{ block?.text?.buttonLabel }}
+          </button>
+          <button *ngIf="block?.text?.actionId2" type="button" class="ct_inline_cta_btn"
+            (click)="actionSelected.emit(block?.text?.actionId2)">
+            {{ block?.text?.buttonLabel2 }}
+          </button>
+        </div>
       </div>
 
       <div *ngIf="isUserMessageBlock(block)" class="ct_user_message_row">
@@ -60,13 +67,13 @@
 
   <div *ngIf="block?.type === 'terminal'" class="terminal" [class.is-running]="block?.data?.done === false">
     <div *ngFor="let line of getTerminalLines(block); let lineIndex = index; trackBy: trackByIndex" class="line pe-3"
-      [class.running]="isTerminalRunningLine(block, lineIndex)"
-      [ngClass]="getTerminalLineClass(line)"
+      [class.running]="isTerminalRunningLine(block, lineIndex)" [ngClass]="getTerminalLineClass(line)"
       [innerHTML]="formatTerminalLine(line)">
     </div>
   </div>
 
-  <div *ngIf="isBuildSectionBlock(block)" class="ct_build_section pe-3" [class.is-running]="block?.data?.done === false">
+  <div *ngIf="isBuildSectionBlock(block)" class="ct_build_section pe-3"
+    [class.is-running]="block?.data?.done === false">
     <div class="ct_build_section__header">
       <span class="ct_build_section__icon">{{ block?.data?.icon }}</span>
       <span class="ct_build_section__title">{{ block?.data?.title }}</span>

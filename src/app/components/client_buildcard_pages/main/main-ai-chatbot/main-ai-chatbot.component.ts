@@ -6,6 +6,7 @@ import { Subscription, filter } from 'rxjs';
 import { ApiService } from '../../../../services/api.service';
 import { io } from 'socket.io-client';
 import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
+import { SpeechService } from '../../../../services/speech.service';
 declare var bootstrap: any;
 interface ChatMessage {
   sender: 'user' | 'ai';
@@ -96,6 +97,10 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   socket: any;
   readonly placeholderText = "Type your idea... we'll build it for you";
   promptText = '';
+  voiceDraftText = '';
+  isVoiceDraftActive = false;
+  isVoiceUiVisible = false;
+  isVoiceStarting = false;
   isSubmitting = false;
   isBuildActionLoading = false;
   isRestoringConversation = true;
@@ -111,12 +116,14 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   private pendingInitialPrompt = '';
   private resumeFallbackTimer: ReturnType<typeof setTimeout> | null = null;
   private navigationSubscription?: Subscription;
+  private activeVoiceSessionId = 0;
   projectMatchPayload?: ProjectMatchPayload;
   constructor(
     private apiService: ApiService,
     private router: Router,
     private ngZone: NgZone,
-    public subscriptionModalService: SubscriptionModalService
+    public subscriptionModalService: SubscriptionModalService,
+    public speechService: SpeechService
   ) { }
 
   ngOnInit(): void {
@@ -134,6 +141,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.navigationSubscription?.unsubscribe();
+    this.cancelVoiceDraft();
     this.disconnectSocket();
   }
 
@@ -171,6 +179,10 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.matchedProjectName = 'My Creative Project';
     this.matchedProject = null;
     this.matchedProjectScore = null;
+    this.voiceDraftText = '';
+    this.isVoiceDraftActive = false;
+    this.isVoiceUiVisible = false;
+    this.isVoiceStarting = false;
     sessionStorage.removeItem('publicEnquiryId');
     this.promptText = '';
     this.scrollChatToBottom();
@@ -587,6 +599,104 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
 
   private focusInput(): void {
     setTimeout(() => this.chatPromptInput?.nativeElement.focus(), 0);
+  }
+
+  startVoiceTyping(): void {
+    if (this.isVoiceStarting || this.isRestoringConversation) {
+      return;
+    }
+
+    if (this.speechService.isListening) {
+      this.cancelVoiceDraft();
+      return;
+    }
+
+    const sessionId = ++this.activeVoiceSessionId;
+
+    this.voiceDraftText = '';
+    this.isVoiceDraftActive = true;
+    this.isVoiceUiVisible = true;
+    this.isVoiceStarting = true;
+
+    const didStart = this.speechService.start({
+      onText: (text: string) => {
+        if (!this.isVoiceDraftActive || sessionId !== this.activeVoiceSessionId) {
+          return;
+        }
+
+        this.voiceDraftText = text;
+        this.isVoiceUiVisible = true;
+      },
+      onListeningChange: (isListening: boolean) => {
+        if (!this.isVoiceDraftActive || sessionId !== this.activeVoiceSessionId) {
+          return;
+        }
+
+        this.isVoiceStarting = false;
+
+        if (isListening) {
+          this.isVoiceUiVisible = true;
+          return;
+        }
+
+        if (!isListening && !this.voiceDraftText.trim()) {
+          this.isVoiceDraftActive = false;
+          this.isVoiceUiVisible = false;
+        }
+      },
+      onError: () => {
+        if (sessionId !== this.activeVoiceSessionId) {
+          return;
+        }
+
+        this.isVoiceDraftActive = false;
+        this.isVoiceUiVisible = false;
+        this.isVoiceStarting = false;
+        this.voiceDraftText = '';
+      }
+    });
+
+    if (!didStart && sessionId === this.activeVoiceSessionId) {
+      this.isVoiceDraftActive = false;
+      this.isVoiceUiVisible = false;
+      this.isVoiceStarting = false;
+      this.voiceDraftText = '';
+    }
+  }
+
+  applyVoiceDraft(): void {
+    const transcript = this.voiceDraftText.trim().replace(/\s+/g, ' ');
+
+    if (!transcript) {
+      return;
+    }
+
+    this.isVoiceDraftActive = false;
+    this.isVoiceUiVisible = false;
+    this.isVoiceStarting = false;
+    this.activeVoiceSessionId += 1;
+
+    if (this.speechService.isListening) {
+      this.speechService.stop();
+    }
+
+    this.promptText = transcript;
+    this.voiceDraftText = '';
+    this.focusInput();
+  }
+
+  cancelVoiceDraft(): void {
+    this.isVoiceDraftActive = false;
+    this.isVoiceUiVisible = false;
+    this.isVoiceStarting = false;
+    this.activeVoiceSessionId += 1;
+
+    if (this.speechService.isListening) {
+      this.speechService.stop();
+    }
+
+    this.voiceDraftText = '';
+    this.focusInput();
   }
 
   formatMessage(text: string): FormattedMessageLine[] {

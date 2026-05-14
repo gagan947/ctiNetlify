@@ -18,4 +18,11 @@
     background: #0064ff;
     transform: translateX(-50%);
     z-index: -1;
+    display: none;
+}
+
+@media screen and (max-width:991px){
+    .ct_time_line_verticle_line{
+        display: none;
+    }
 }

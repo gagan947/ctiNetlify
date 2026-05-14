@@ -2,555 +2,642 @@
       <app-header />
 </div>
 
-<!-- Inner Hero Content S -->
-<section class="ct_py_70 ct_inner_hero_bg">
+
+<section class="ct_pricing_section ct_py_70">
       <div class="container">
-            <div class="row">
-                  <div class="col-md-8 mx-auto">
-                        <div class="ct_inner_banner_w_bg">
-                              <h1 class="ct_fs_44 ct_fw_700 mb-4 text-center">Your app project. 100% transparency.
-                              </h1>
-                              <p class="ct_fs_18 mb-0 text-center mb-3">When you build your app or website with us, you
-                                    have
-                                    limitless possibilities. <br>Tell us what you need and we’ll create it.</p>
-                              <a routerLink="/login"
-                                    class="ct_link_green ct_link_blue ct_fs_16 text-center d-block ct_width_fit mx-auto">How
-                                    cost
-                                    effective is
-                                    Creative AI?</a>
+            <div class="ct_section_heading text-center">
+                  <h2 class="ct_fw_600 ct_fs_40 mb-2">
+                        Choose the Perfect Plan for <span class="ct_orange_gredient_text">Your Next Big Idea
+                        </span>
+                  </h2>
+                  <p class="mx-auto" style="max-width: 716px">
+                        Flexible pricing built for startups, agencies, and growing businesses.
+                  </p>
+                  <div class="ct_pricing_toggle">
+                        <button type="button" [class.active]="billingCycle === 'MONTH'"
+                              (click)="setBillingCycle('MONTH')">Monthly</button>
+                        <button type="button" [class.active]="billingCycle === 'YEAR'"
+                              (click)="setBillingCycle('YEAR')">Annually</button>
+                  </div>
+            </div>
+            <div class="ct_pricing_grid mt-5">
+                  <div class="ct_price_card" *ngIf="freePlan as plan">
+                        <div class="ct_price_card_top">
+                              <span class="ct_price_badge">{{ getPlanBadge(plan) }}</span>
+                              <h3 class="ct_price_credits">{{ plan.credits_per_cycle }}
+                                    Credits</h3>
+                              <div class="ct_price_value">
+                                    <span class="ct_price_current">&#8377;{{
+                                          getCurrentPrice(plan) }}</span>
+                                    <span class="ct_price_suffix">{{
+                                          getBillingSuffix(plan) }}</span>
+                              </div>
+                              <p>{{ getPlanDescription(plan) }}</p>
+                              <div class="ct_price_offer_slot">
+                                    <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
+                                          <div class="ct_price_offer">₹{{
+                                                plan.intro_amount }}</div>
+                                    </div>
+                              </div>
+                              <a routerLink="/login" class="ct_price_cta">{{
+                                    getPlanButtonLabel(plan) }}</a>
                         </div>
-
-                  </div>
-
-            </div>
-
-      </div>
-</section>
-<!-- Inner Hero Content E -->
-<!-- Software Needs Section S -->
-<section class="ct_drop_grey_bg ct_py_70">
-      <div class="container">
-            <div class="row">
-                  <div class="col-md-12">
-                        <h1 class="ct_fs_44 ct_py_70 pt-0 ct_fw_700 text-center">What plan is best for your <span
-                                    class="ct_orange_gredient_text">software
-                                    needs?</span>
-                        </h1>
-
-                  </div>
-            </div>
-            <div class="row">
-                  <div class="col-md-6 mb-4 mb-md-0">
-                        <div class="ct_store_white_card active">
-                              <h3 class="ct_fs_38 ct_fw_700 mb-4 ct_dark_blue_text">Studio store
-                              </h3>
-                              <p class="mb-0 ct_fs_18 ct_fw_700">Start selling online fast with off-the-shelf websites
-                                    and
-                                    apps
-                              </p>
-                              <ul class="ct_pricing_list_point mt-4">
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Ecommerce, appointment and restaurant packages
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-xmark ct_red_text"></i>
-                                          <span>Dedicated project manager
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-xmark ct_red_text"></i>
-                                          <span>Project dashboard
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Fixed pricing
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-xmark ct_red_text"></i>
-                                          <span>Free instant prototype
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Limited integrations (Payment, Shipping, Analytics)
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Live in as little as 1 week
-                                          </span>
+                        <div class="ct_price_card_bottom">
+                              <h4>{{ getPlanFeaturesTitle(plan) }}</h4>
+                              <ul>
+                                    <li *ngFor="let feature of getPlanFeatures(plan)">
+                                          <img src="assets/img/pricing_check_icon.svg" alt="" loading="lazy" width="20"
+                                                height="20" class="me-2">
+                                          <span>{{ feature }}</span>
                                     </li>
                               </ul>
+                              <p class="ct_price_note">{{ getPlanFootnote(plan) }}</p>
                         </div>
-
                   </div>
-                  <div class="col-md-6 mb-4 mb-md-0">
-                        <div class="ct_store_white_card">
-                              <h3 class="ct_fs_38 ct_fw_700 mb-4 ct_dark_blue_text">Creative studio
-                              </h3>
-                              <p class="mb-0 ct_fs_18 ct_fw_700">Solve your business challenges with custom software
-                              </p>
-                              <ul class="ct_pricing_list_point mt-4">
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Build whatever type of software your business needs
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-xmark ct_red_text"></i>
-                                          <span>Dedicated project manager
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-xmark ct_red_text"></i>
-                                          <span>Project dashboard
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Pay-per-feature pricing
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-xmark ct_red_text"></i>
-                                          <span>Free instant prototypes
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Unlimited integrations
-                                          </span>
-                                    </li>
-                                    <li>
-                                          <i class="fa-solid fa-check ct_check_green"></i>
-                                          <span>Competitive timelines
-                                          </span>
+                  <div class="ct_price_card ct_price_card_featured" *ngIf="selectedProPlan as plan">
+                        <div class="ct_price_card_top">
+                              <span class="ct_price_badge">{{ getPlanBadge(plan) }}</span>
+                              <h3 class="ct_price_credits">{{ plan.credits_per_cycle }}
+                                    Credits</h3>
+                              <div class="ct_price_value ct_price_value_compact"
+                                    [class.ct_price_value_with_old]="shouldShowPreviousPrice(plan)">
+                                    <span class="ct_price_previous" *ngIf="shouldShowPreviousPrice(plan)">
+                                          &#8377;{{ getDisplayAmount(plan) }}{{
+                                          getBillingSuffix(plan) }}
+                                    </span>
+                                    <span class="ct_price_current">&#8377;{{
+                                          getCurrentPrice(plan) }}</span>
+                                    <span class="ct_price_suffix">{{
+                                          getBillingSuffix(plan) }}</span>
+                              </div>
+                              <div class="ct_price_offer_slot">
+                                    <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
+                                          <div class="ct_price_offer">₹{{
+                                                plan.intro_amount }}</div>
+                                    </div>
+                                    <div class="ct_price_offer_wrap d-flex align-items-center gap-2  justify-content-center"
+                                          *ngIf="hasDiscount(plan)">
+                                          <span *ngIf="billingCycle === 'YEAR'" class=" mb-0"><del>&#8377;{{
+                                                      plan.display_amount }}</del><span>{{
+                                                      getBillingSuffix(plan)
+                                                      }}</span></span>
+                                          <div class="ct_price_offer">{{
+                                                getDiscountLabel(plan) }}</div>
+                                    </div>
+                              </div>
+                              <p>{{ getPlanDescription(plan) }}</p>
+                              <a routerLink="/login" class="ct_price_cta">{{
+                                    getPlanButtonLabel(plan) }}</a>
+                              <div class="position-relative" *ngIf="proPlans.length > 1"
+                                    (click)="$event.stopPropagation()">
+                                    <button type="button" class="ct_starter_plan" (click)="toggleProDropdown($event)">
+                                          {{ plan.credits_per_cycle }} credits {{
+                                          getBillingSuffix(plan) }}
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="ct_show_eye" width="16"
+                                                height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd"
+                                                      d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                                          </svg>
+                                    </button>
+                                    <ul class="dropdown-menu show" *ngIf="proDropdownOpen">
+                                          <li *ngFor="let proPlan of proDropdownPlans">
+                                                <button type="button" class="dropdown-item"
+                                                      (click)="selectProPlan(proPlan, $event)">
+                                                      {{ proPlan.credits_per_cycle }}
+                                                      credits - &#8377;{{
+                                                      getCurrentPrice(proPlan) }}{{
+                                                      getBillingSuffix(proPlan) }}
+                                                </button>
+                                          </li>
+                                    </ul>
+                              </div>
+                        </div>
+                        <div class="ct_price_card_bottom">
+                              <h4>{{ getPlanFeaturesTitle(plan) }}</h4>
+                              <ul>
+                                    <li *ngFor="let feature of getPlanFeatures(plan)">
+                                          <img src="assets/img/pricing_check_icon.svg" alt="" loading="lazy" width="20"
+                                                height="20" class="me-2">
+                                          <span>{{ feature }}</span>
                                     </li>
                               </ul>
+                              <p class="ct_price_note">{{ getPlanFootnote(plan) }}</p>
+                        </div>
+                  </div>
+                  <div class="ct_price_card" *ngIf="businessPlan as plan">
+                        <div class="ct_price_card_top">
+                              <span class="ct_price_badge">{{ getPlanBadge(plan) }}</span>
+                              <h3 class="ct_price_credits">{{ plan.credits_per_cycle }}
+                                    Credits</h3>
+                              <div class="ct_price_value">
+                                    <span class="ct_price_current">&#8377;{{
+                                          getCurrentPrice(plan) }}</span>
+                                    <span class="ct_price_suffix">{{
+                                          getBillingSuffix(plan) }}</span>
+                              </div>
+                              <div class="ct_price_offer_slot">
+                                    <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
+                                          <div class="ct_price_offer">₹{{
+                                                plan.intro_amount }}</div>
+                                    </div>
+                                    <div class="ct_price_offer_wrap d-flex align-items-center gap-2  justify-content-center"
+                                          *ngIf="hasDiscount(plan)">
+                                          <span *ngIf="billingCycle === 'YEAR'" class=" mb-0"><del>&#8377;{{
+                                                      plan.display_amount }}</del><span>{{
+                                                      getBillingSuffix(plan)
+                                                      }}</span></span>
+                                          <div class="ct_price_offer">{{
+                                                getDiscountLabel(plan) }}</div>
+                                    </div>
+                              </div>
+                              <p>{{ getPlanDescription(plan) }}</p>
+                              <a routerLink="/login" class="ct_price_cta">{{
+                                    getPlanButtonLabel(plan) }}</a>
+                        </div>
+                        <div class="ct_price_card_bottom">
+                              <h4>{{ getPlanFeaturesTitle(plan) }}</h4>
+                              <ul>
+                                    <li *ngFor="let feature of getPlanFeatures(plan)">
+                                          <img src="assets/img/pricing_check_icon.svg" loading="lazy" width="20"
+                                                height="20" alt="" class="me-2">
+                                          <span>{{ feature }}</span>
+                                    </li>
+                              </ul>
+                              <p class="ct_price_note">{{ getPlanFootnote(plan) }}</p>
                         </div>
                   </div>
             </div>
 
-
-            <div class="ct_dark_blue_bg mt-5">
-                  <div class="row align-items-center">
-                        <div class="col-lg-4 mb-3 mb-lg-0">
-                              <div class="ct_small_card">
-                                    <div class="ct_circle_check">
-                                          <i class="fa-solid fa-check"></i>
-                                    </div>
-                                    <span>Maintenance Included</span>
-                              </div>
-                        </div>
-                        <div class="col-lg-4 mb-3 mb-lg-0">
-                              <div class="ct_small_card">
-                                    <div class="ct_circle_check">
-                                          <i class="fa-solid fa-check"></i>
-                                    </div>
-                                    <span>24/7 Support & Monitoring</span>
-                              </div>
-                        </div>
-                        <div class="col-lg-4 mb-3 mb-lg-0">
-                              <div class="ct_small_card">
-                                    <div class="ct_circle_check">
-                                          <i class="fa-solid fa-check"></i>
-                                    </div>
-                                    <span>Security & Compliance</span>
-                              </div>
-                        </div>
-
+            <div class="ct_pricing_cta">
+                  <div>
+                        <h4>Stuck or Need Guidance?</h4>
+                        <p>
+                              We’re here to help you build your first app.
+                        </p>
                   </div>
+                  <a routerLink="/contact" class="ct_blue_btn_fill ">Contact Us</a>
             </div>
       </div>
 </section>
+
 <!-- Software Needs Section E -->
 <hr class="ct_break_line">
 
-<!-- A Large Business Section S -->
-<section class="ct_pt_50 ct_pb_50">
+<section class="ct_grey_bg ct_py_70 pb-0 ct_olw_nav_show_main">
       <div class="container">
             <div class="row">
                   <div class="col-md-12">
-                        <h1 class="ct_fw_700 ct_fs_44 text-center">Are you
-                              a
-                              large
-                              business, we have an option <br> <span class="ct_orange_gredient_text">for you
-                                    too</span>
-                        </h1>
-                        <div class="ct_out_line_2_line_bg w-100 mt-5 ct_border_radius_20">
-                              <div class="row align-items-center">
-                                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <div class="ct_section_heading text-center ">
+                              <h2 class="ct_fs_40 ct_fw_600 mb-2">See How <span
+                                          class="ct_orange_gredient_text ct_ff_figtree">Creative AI
+                                          Works</span></h2>
+                              <p>Watch how your idea turns into a real app in minutes.</p>
+                        </div>
+                        <div class="owl-carousel owl-theme ct_testimonial_slider mt-4">
+                              <div class="item">
+                                    <div class="ct_testimonial_main">
                                           <div>
-                                                <h4 class="ct_fs_32 ct_fw_700">Enterprise apps</h4>
-                                                <p class="ct_fs_18 ct_fw_600">We do the heavy lifting on the dev side so
-                                                      you get
-                                                      apps
-                                                      faster
+                                                <img src="assets/img/i_white.webp"
+                                                      alt="AI app builder for mobile and web" loading="lazy">
+                                                <p>
+                                                      Working with Creative AI has been a game changer for us. Their
+                                                      AI-powered platform helped us design
+                                                      and launch our app in record timewithout the usual hassle of long
+                                                      development cycles. What impressed
+                                                      us most was the ease of use, flexibility, and the professional
+                                                      support provided by the team. Within
+                                                      days, we had a functional prototype ready to test with our users,
+                                                      and the final product exceeded
+                                                      expectations. Creative AI not only saved us time and costs but
+                                                      also gave us the confidence to scale
+                                                      quickly. Highly recommended for startups and enterprises looking
+                                                      to build apps smarter and faster.
                                                 </p>
-                                                <h3 class="ct_fw_700 ct_orange_gredient_text ct_fs_34">Pay per feature
-                                                </h3>
-                                                <div class="ct_btn_group mt-4 gap-3">
-                                                      <a routerLink="/free-demo" class="ct_blue_btn_fill">Request a
-                                                            quote</a>
-                                                      <a routerLink="/enterprise"
-                                                            class="ct_blue_outline_btn ct_dark_blue_text">Learn
-                                                            more</a>
+                                          </div>
+
+                                          <div class="mt-auto">
+                                                <div class="ct_testimonial_user_img">
+                                                      <img src="assets/img/sam.webp"
+                                                            alt="AI app builder for mobile and web" loading="lazy">
+                                                </div>
+                                                <div class="text-center mt-2">
+                                                      <h5 class="ct_fs_20 ct_fw_600 mb-0">Sam Buah</h5>
+                                                      <p class="mb-0">Our Happy Client</p>
                                                 </div>
                                           </div>
-
                                     </div>
-                                    <div class="col-lg-6 mb-4 mb-lg-0">
-                                          <div class="">
-                                                <img loading="lazy" src="assets/img/risk.webp"
-                                                      alt="AI app builder for mobile and web" class="w-100">
+                              </div>
+                              <div class="item">
+                                    <div class="ct_testimonial_main">
+                                          <div>
+                                                <img src="assets/img/jameslogo.webp"
+                                                      alt="AI app builder for mobile and web" loading="lazy">
+                                                <p>
+                                                      Creative AI helped us build a robust financial and insurance
+                                                      platform faster than we imagined. Their
+                                                      AI-powered system made the entire process seamless from
+                                                      prototyping to deployment. We were able to
+                                                      integrate secure payment options, compliance-ready features, and
+                                                      track progress at every stage. What
+                                                      really stood out was how intuitive the platform was, saving us
+                                                      both time and cost while ensuring
+                                                      enterprise-level quality.
+                                                </p>
                                           </div>
 
+                                          <div class="mt-auto">
+                                                <div class="ct_testimonial_user_img">
+                                                      <img src="assets/img/james.webp"
+                                                            alt="AI app builder for mobile and web" loading="lazy">
+                                                </div>
+                                                <div class="text-center mt-2">
+                                                      <h5 class="ct_fs_20 ct_fw_600 mb-0">James Pollard</h5>
+                                                      <p class="mb-0">Our Happy Client</p>
+                                                </div>
+                                          </div>
                                     </div>
+                              </div>
+                              <div class="item">
+                                    <div class="ct_testimonial_main">
+                                          <div>
+                                                <img src="assets/img/paullogo.svg"
+                                                      alt="AI app builder for mobile and web" loading="lazy">
+                                                <p>
+                                                      Creative AI makes app building so simple! The platform is super
+                                                      easy to use, even for someone with no
+                                                      coding background. I could design, make payments, and track
+                                                      progress all in one place without any
+                                                      hassle. The transparency and smooth workflow really set it apart
+                                                      from other tools I’ve tried.
+                                                </p>
+                                          </div>
 
+                                          <div class="mt-auto">
+                                                <div class="ct_testimonial_user_img">
+                                                      <img src="assets/img/paul.webp"
+                                                            alt="AI app builder for mobile and web" loading="lazy">
+                                                </div>
+                                                <div class="text-center mt-2">
+                                                      <h5 class="ct_fs_20 ct_fw_600 mb-0">Paul Calleja</h5>
+                                                      <p class="mb-0">Our Happy Client</p>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                              <div class="item">
+                                    <div class="ct_testimonial_main">
+                                          <div>
+                                                <img src="assets/img/nirdeshlogo.webp"
+                                                      alt="AI app builder for mobile and web" loading="lazy">
+                                                <p>
+                                                      We initially partnered with Builder.ai to create our
+                                                      sustainability solution platform but were left
+                                                      midway through the project. Creative AI stepped in at a critical
+                                                      moment and exceeded our expectations.
+                                                      Their team not only salvaged the project but also brought in fresh
+                                                      ideas and an AI-powered approach
+                                                      that streamlined the entire development process. The level of
+                                                      professionalism, transparency, and
+                                                      continuous support we received was outstanding. Thanks to Creative
+                                                      AI, we were able to launch a
+                                                      robust, scalable platform on time, and with greater confidence in
+                                                      our technology partner. Their
+                                                      dedication to client success truly sets them apart.
+                                                </p>
+                                          </div>
+
+                                          <div class="mt-auto">
+                                                <div class="ct_testimonial_user_img">
+                                                      <img src="assets/img/nirdesh.webp"
+                                                            alt="AI app builder for mobile and web" loading="lazy">
+                                                </div>
+                                                <div class="text-center mt-2">
+                                                      <h5 class="ct_fs_20 ct_fw_600 mb-0">Nirdesh Badjatiya</h5>
+                                                      <p class="mb-0">Our Happy Client</p>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                              <div class="item">
+                                    <div class="ct_testimonial_main">
+                                          <div>
+                                                <img src="assets/img/clinet_logo-1.webp"
+                                                      alt="AI app builder for mobile and web" loading="lazy">
+                                                <p>
+                                                      Very nice people! they become like family for me. They helped me
+                                                      with my website and they delivered
+                                                      good work. The communication is great. You always get a fast
+                                                      responds. I definitely recommend them.
+                                                </p>
+                                          </div>
+
+                                          <div class="mt-auto">
+                                                <div class="ct_testimonial_user_img">
+                                                      <img src="assets/img/client_2.webp"
+                                                            alt="AI app builder for mobile and web" loading="lazy">
+                                                </div>
+                                                <div class="text-center mt-2">
+                                                      <h5 class="ct_fs_20 ct_fw_600 mb-0">Justine Pogroske</h5>
+                                                      <p class="mb-0">Our Happy Client</p>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                              <div class="item">
+                                    <div class="ct_testimonial_main">
+                                          <div>
+                                                <img src="assets/img/clinet_logo-2.webp"
+                                                      alt="AI app builder for mobile and web" loading="lazy">
+                                                <p>
+                                                      They did an amazing work on a very large and challenging project.
+                                                      We do appreciate the great effort
+                                                      and creativity their team put in creating the base for our social
+                                                      marketplace. CTIS is an amazing and
+                                                      very professional fellow. Keep up the great work folks!
+                                                </p>
+                                          </div>
+
+                                          <div class="mt-auto">
+                                                <div class="ct_testimonial_user_img">
+                                                      <img src="assets/img/client_1.webp"
+                                                            alt="AI app builder for mobile and web" loading="lazy">
+                                                </div>
+                                                <div class="text-center mt-2">
+                                                      <h5 class="ct_fs_20 ct_fw_600 mb-0">Ady Bui </h5>
+                                                      <p class="mb-0">Our Happy Client</p>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                              <div class="item">
+                                    <div class="ct_testimonial_main">
+                                          <div>
+                                                <img src="assets/img/clinet_logo-3.svg"
+                                                      alt="AI app builder for mobile and web" loading="lazy">
+                                                <p>
+                                                      I would recommend this company for any upcoming projects and I
+                                                      will use them in the future. They were
+                                                      very much in contact during the whole process and kept me up to
+                                                      date with the progress of work. This
+                                                      was my first time using this platform and I'd say I'm pleased with
+                                                      the work in general.
+                                                </p>
+                                          </div>
+
+                                          <div class="mt-auto">
+                                                <div class="ct_testimonial_user_img">
+                                                      <img src="assets/img/client_3.webp"
+                                                            alt="AI app builder for mobile and web" loading="lazy">
+                                                </div>
+                                                <div class="text-center mt-2">
+                                                      <h5 class="ct_fs_20 ct_fw_600 mb-0">Phillipe Dastous </h5>
+                                                      <p class="mb-0">Our Happy Client</p>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+
+                              <div class="item">
+                                    <div class="ct_testimonial_main">
+                                          <div>
+                                                <img src="assets/img/SmartLoanCalc.webp"
+                                                      alt="AI app builder for mobile and web" loading="lazy">
+                                                <p>
+                                                      Outstanding experience working with this team. They delivered our
+                                                      custom software on time, with
+                                                      exceptional quality and attention to detail. Communication was
+                                                      smooth throughout the project. Highly
+                                                      recommended!
+                                                </p>
+                                          </div>
+
+                                          <div class="mt-auto">
+                                                <div class="ct_testimonial_user_img">
+                                                      <img src="assets/img/client_4.webp"
+                                                            alt="AI app builder for mobile and web" loading="lazy">
+                                                </div>
+                                                <div class="text-center mt-2">
+                                                      <h5 class="ct_fs_20 ct_fw_600 mb-0">Stefan Roger </h5>
+                                                      <p class="mb-0">Our Happy Client</p>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                              <div class="item">
+                                    <div class="ct_testimonial_main">
+                                          <div>
+                                                <img src="assets/img/life_moment.webp"
+                                                      alt="AI app builder for mobile and web" loading="lazy">
+                                                <p>
+                                                      We hired them for a complete website redesign and were impressed
+                                                      with their professionalism and
+                                                      technical expertise. Our new site is fast, modern, and
+                                                      user-friendly. We've already seen an increase
+                                                      in traffic and leads!
+                                                </p>
+                                          </div>
+
+                                          <div class="mt-auto">
+                                                <div class="ct_testimonial_user_img">
+                                                      <img src="assets/img/client_5.webp"
+                                                            alt="AI app builder for mobile and web" loading="lazy">
+                                                </div>
+                                                <div class="text-center mt-2">
+                                                      <h5 class="ct_fs_20 ct_fw_600 mb-0">Eric J. </h5>
+                                                      <p class="mb-0">Our Happy Client</p>
+                                                </div>
+                                          </div>
+                                    </div>
                               </div>
 
                         </div>
-
                   </div>
-
             </div>
-
       </div>
 </section>
-<!-- A Large Business Section E -->
-<!-- Support and hosting Section S -->
-<section>
+<section class="ct_grey_bg ct_py_70">
       <div class="container">
-            <div class="row">
-                  <div class="col-md-12">
-                        <div class="ct_light_blue_bg">
-                              <h1 class="ct_fs_44 ct_fw_700 text-center">
-                                    Here
-                                    are
-                                    your <span class="ct_orange_gredient_text">support and
-                                          hosting options</span> <br> to
-                                    help you
-                                    along the way
-                              </h1>
-                              <div class="row ct_py_70 pb-0">
-                                    <div class="col-md-6 mb-4">
-                                          <div class="ct_white_card">
-                                                <img loading="lazy" src="assets/img/cti_cloud.png"
-                                                      alt="AI app builder for mobile and web">
-                                                <p class="mt-4 text-center ct_fw_600">Your complete hosting solution by
-                                                      combining
-                                                      any
-                                                      of the big
-                                                      cloud
-                                                      providers at the
-                                                      best price
-                                                </p>
-                                                <h4 class="ct_fs_28 text-center ct_fw_700">Price based on usage
-                                                </h4>
-                                                <div class="mt-5 text-center">
-                                                      <a routerLink="/free-demo"
-                                                            class="ct_blue_btn_fill ct_border_corner_0 w-100">Learn
-                                                            more</a>
+            <div class="row mt-4 align-items-start">
+                  <div class="col-md-4 mb-4 mb-md-0">
+                        <h2 class="ct_fs_44  ct_fw_700"> Got Questions? We've <span class="ct_orange_gredient_text">Got
+                                    You</span>
+                        </h2>
+                        <p> Everything you need to know about building apps with our AI app builder</p>
+                  </div>
+                  <div class="col-md-7 offset-md-1 mb-4 mb-md-0">
+                        <div class="ct_how_works_collapse">
+                              <div id="ct_how_works_accordion" class="accordion">
+                                    <div class="accordion-item">
+                                          <h2 id="faq_one" class="accordion-header"><button type="button"
+                                                      data-bs-toggle="collapse" data-bs-target="#collapsefaq_one"
+                                                      aria-expanded="true" aria-controls="collapsefaq_one"
+                                                      class="accordion-button"> What is an AI app builder?</button></h2>
+                                          <div id="collapsefaq_one" aria-labelledby="faq_one"
+                                                data-bs-parent="#ct_how_works_accordion"
+                                                class="accordion-collapse collapse show">
+                                                <div class="accordion-body">
+                                                      <p class="ct_fs_16 mb-0 ct_line_h_30">An AI app builder is a tool
+                                                            that lets you create apps just by
+                                                            describing your idea. It automatically builds the design,
+                                                            features, and backend for you.</p>
                                                 </div>
                                           </div>
                                     </div>
-                                    <div class="col-md-6 mb-4">
-                                          <div class="ct_white_card">
-                                                <img loading="lazy" src="assets/img/cti_studio.png"
-                                                      alt="AI app builder for mobile and web">
-                                                <p class="mt-4 text-center ct_fw_600">Your app price includes Studio One
-                                                      for 1 year
-                                                      –
-                                                      offering updates, support and protection
-                                                </p>
-                                                <h4 class="ct_fs_28 text-center ct_fw_700">Subscription service
-                                                </h4>
-                                                <div class="mt-5 text-center">
-                                                      <a routerLink="/free-demo"
-                                                            class="ct_blue_btn_fill ct_border_corner_0 w-100">Learn
-                                                            more</a>
+                                    <div class="accordion-item">
+                                          <h2 id="faqtwo" class="accordion-header"><button type="button"
+                                                      data-bs-toggle="collapse" data-bs-target="#collapsefaq_Two"
+                                                      aria-expanded="false" aria-controls="collapseTwo"
+                                                      class="accordion-button collapsed">How does this AI app builder
+                                                      work? </button></h2>
+                                          <div id="collapsefaq_Two" aria-labelledby="faqtwo"
+                                                data-bs-parent="#ct_how_works_accordion"
+                                                class="accordion-collapse collapse">
+                                                <div class="accordion-body">
+                                                      <p class="ct_fs_16 mb-0 ct_line_h_30">You simply type what you
+                                                            want to build, and the AI turns it
+                                                            into a working app step by step, in minutes.</p>
                                                 </div>
-
                                           </div>
                                     </div>
-
+                                    <div class="accordion-item">
+                                          <h2 id="faqthree" class="accordion-header"><button type="button"
+                                                      data-bs-toggle="collapse" data-bs-target="#collapsefaq_Three"
+                                                      aria-expanded="false" aria-controls="collapsefaq_Three"
+                                                      class="accordion-button collapsed"> Do I need coding to build an
+                                                      app?</button></h2>
+                                          <div id="collapsefaq_Three" aria-labelledby="faqthree"
+                                                data-bs-parent="#ct_how_works_accordion"
+                                                class="accordion-collapse collapse">
+                                                <div class="accordion-body">
+                                                      <p class="ct_fs_16 mb-0 ct_line_h_30"> No, you don’t need any
+                                                            coding skills. The AI handles
+                                                            everything; you just focus on your idea.</p>
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <div class="accordion-item">
+                                          <h2 id="faqfour" class="accordion-header"><button type="button"
+                                                      data-bs-toggle="collapse" data-bs-target="#collapsefaq_four"
+                                                      aria-expanded="false" aria-controls="collapsefaq_four"
+                                                      class="accordion-button collapsed"> What kind of apps can I
+                                                      build?</button></h2>
+                                          <div id="collapsefaq_four" aria-labelledby="faqfour"
+                                                data-bs-parent="#ct_how_works_accordion"
+                                                class="accordion-collapse collapse">
+                                                <div class="accordion-body">
+                                                      <p class="ct_fs_16 mb-1 ct_line_h_30"> You can build web apps,
+                                                            mobile apps, dashboards, tools, and
+                                                            more. If you can describe it, you can build it.
+                                                      </p>
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <div class="accordion-item">
+                                          <h2 id="faqfive" class="accordion-header"><button type="button"
+                                                      data-bs-toggle="collapse" data-bs-target="#collapsefaq_five"
+                                                      aria-expanded="false" aria-controls="collapsefaq_five"
+                                                      class="accordion-button collapsed"> How fast can I launch my app?
+                                                </button></h2>
+                                          <div id="collapsefaq_five" aria-labelledby="faqfive"
+                                                data-bs-parent="#ct_how_works_accordion"
+                                                class="accordion-collapse collapse">
+                                                <div class="accordion-body">
+                                                      <p class="ct_fs_16 mb-0 ct_line_h_30">You can create and launch
+                                                            your app in just a few minutes,
+                                                            depending on your idea.</p>
+                                                </div>
+                                          </div>
+                                    </div>
                               </div>
                         </div>
-
                   </div>
-
             </div>
-
       </div>
 </section>
-<!-- Support and hosting Section E -->
 
-<!-- Prcing Work Section S -->
 <section class="ct_py_70">
-      <div class="container">
-            <div class="row">
-                  <div class="col-md-12">
-                        <h2 class="ct_fw_700 text-center ct_fs_44">How pricing <span
-                                    class="ct_orange_gredient_text">works</span>
-                        </h2>
-                        <p class="mb-0 text-center ct_fs_18ct_fw_600">At Creative AI, we think you should only pay for
-                              what
-                              you
-                              need. That’s why
-                              you won’t
-                              find price lists
-                              on our site. Instead, we have a fully transparent, feature-based pricing model no hidden
-                              fees,
-                              no
-                              nasty surprises.
-                        </p>
-                  </div>
-            </div>
-            <div class="row ct_mt_100 align-items-center">
-                  <div class="col-md-6 mb-4 mb-md-0">
-                        <h6 class="ct_fs_18 ct_dark_blue_text ct_fw_700">
-                              Step <span id="counter"></span>
-                        </h6>
-                        <div class="owl-carousel owl-theme ct_pricing_works">
-                              <div class="item">
-                                    <div>
-                                          <h4 class="mb-2 ct_fs_28 ct_fw_700">Choose Base</h4>
-                                          <h6 class="ct_fs_18 ct_fw_600 mb-3 ct_line_h_25">
-                                                Vanya, Your AI Product Manager.
-                                          </h6>
-                                          <p class="ct_fs_16 mb-4 ct_line_h_25">
-                                                Share your app or website idea by typing, chatting, recording,
-                                                or uploading or pick a ready-made template that matches your
-                                                vision. Vanya instantly turns it into the perfect project base
-                                                so you can build exactly what you imagine.
-                                          </p>
-                                    </div>
-                              </div>
-                              <div class="item">
-                                    <div>
-                                          <h4 class="mb-2 ct_fs_28 ct_fw_700">Make It Mine</h4>
-                                          <h6 class="ct_fs_18 ct_fw_600 mb-3 ct_line_h_25">
-                                                Vanya, Your Personalization Hub.
-                                          </h6>
-                                          <p class="ct_fs_16 mb-4 ct_line_h_25">
-                                                In this step, you can easily upload your logo, choose your app
-                                                name, and add your website URL. Instantly see a live preview of
-                                                how your app or website will look on both desktop and mobile.
-                                                Make it truly yours before moving to the next stage of your
-                                                project journey!
-                                          </p>
-                                    </div>
-                              </div>
-                              <div class="item">
-                                    <div>
-                                          <h4 class="mb-2 ct_fs_28 ct_fw_700">Refine Idea</h4>
-                                          <h6 class="ct_fs_18 ct_fw_600 mb-3 ct_line_h_25">
-                                                Vanya, Your Smart Feature Planner.
-                                          </h6>
-                                          <p class="ct_fs_16 mb-4 ct_line_h_25">
-                                                In this step, Vanya shows you all the features included in your
-                                                app or website, along with the cost and estimated time to
-                                                develop each one. You can customize the features, add or remove
-                                                what you need, and see real-time updates on pricing and
-                                                timelines. Refine your idea until it fits your vision and budget
-                                                perfectly!
-                                          </p>
-                                    </div>
-                              </div>
-                              <div class="item">
-                                    <div>
-                                          <h4 class="mb-2 ct_fs_28 ct_fw_700">Plan Delivery</h4>
-                                          <h6 class="ct_fs_18 ct_fw_600 mb-3 ct_line_h_25">
-                                                Vanya, Your Project Roadmap Guide.
-                                          </h6>
-                                          <p class="ct_fs_16 mb-4 ct_line_h_25">
-                                                Vanya helps you confirm all the important details choose your
-                                                target platforms like Android, iOS, web, or mobile site. Pick
-                                                your development speed: standard, fast, or super-fast, depending
-                                                on your needs. Set project phases, delivery milestones, and get
-                                                a clickable prototype to see exactly how your app or website
-                                                will work before development begins.
-                                          </p>
-                                    </div>
-                              </div>
-                              <div class="item">
-                                    <div>
-                                          <h4 class="mb-2 ct_fs_28 ct_fw_700">Review Build Card</h4>
-                                          <h6 class="ct_fs_22 ct_fw_600 mb-3 ct_line_h_25">
-                                                Vanya, Your Project Snapshot.
-                                          </h6>
-                                          <p class="ct_fs_16 mb-4 ct_line_h_25">
-                                                In this step, Vanya shows you a clear build summary with your
-                                                chosen platforms Android, iOS, web, or mobile site along
-                                                with the total project cost, number of features, and estimated
-                                                delivery date. Get a final overview before you move ahead with
-                                                full confidence.
-                                          </p>
-                                    </div>
-                              </div>
-                              <div class="item">
-                                    <div>
-                                          <h4 class="mb-2 ct_fs_28 ct_fw_700">Billing Details</h4>
-                                          <h6 class="ct_fs_18 ct_fw_600 mb-3 ct_line_h_25">
-                                                Vanya, Your Secure Checkout.
-                                          </h6>
-                                          <p class="ct_fs_16 mb-0 ct_line_h_25">
-                                                Here, you’ll enter your billing details and confirm your contact
-                                                information. Vanya keeps your data safe and makes sure your
-                                                payment and project information are accurate before you start
-                                                building.
-                                          </p>
-                                    </div>
-                              </div>
-                              <div class="item">
-                                    <div>
-                                          <h4 class="mb-2 ct_fs_28 ct_fw_700">Payment Plan</h4>
-                                          <h6 class="ct_fs_18 ct_fw_600 mb-3 ct_line_h_25">
-                                                Vanya, Your Flexible Payment Partner.
-                                          </h6>
-                                          <p class="ct_fs_16 mb-0 ct_line_h_25">
-                                                No need to pay everything upfront choose what works for you.
-                                                Click to pick a weekly or monthly payment option, and Vanya
-                                                shows you clear plans to match your budget and timeline.
-                                          </p>
-                                    </div>
-                              </div>
-                        </div>
-                  </div>
-                  <div class="col-md-6 mb-4 mb-md-0">
-                        <div class="ct_pricing_works_img">
-                              <img loading="lazy" src="assets/img/chat_with_ai.webp"
-                                    alt="AI app builder for mobile and web">
-                        </div>
-                  </div>
-            </div>
-      </div>
-</section>
-<!-- Prcing Work Section E -->
-<!-- Helping Your Apps Section S -->
-<section class="ct_py_70 pt-0">
-      <div class="container">
-            <div class="row">
-                  <div class="col-md-12">
-                        <div class="ct_helping_bg_grey">
-                              <h1 class="ct_fs_44 ct_fw_700 text-center ct_py_70 pt-0">Helping your apps <span
-                                          class="ct_orange_gredient_text">to
-                                          succeed</span> (and
-                                    scalex)
-                              </h1>
-                              <div class="row align-items-center">
-                                    <div class="col-lg-5 mb-4 mb-md-0">
-                                          <div class="ct_helping_group_img">
-                                                <div class="d-flex align-items-center gap-3 justify-content-center">
-                                                      <div class="ct_help_img">
-                                                            <img loading="lazy"
-                                                                  src="assets/img/help_img_1.webp"
-                                                                  alt="AI app builder for mobile and web">
-                                                      </div>
-                                                      <div class="ct_help_img">
-                                                            <img loading="lazy"
-                                                                  src="assets/img/helping_img_2.webp"
-                                                                  alt="AI app builder for mobile and web">
-                                                      </div>
-                                                </div>
-                                                <div class="ct_help_img">
-                                                      <img loading="lazy" src="assets/img/helping_img_3.webp"
-                                                            alt="AI app builder for mobile and web">
-                                                </div>
-                                          </div>
-                                    </div>
-                                    <div class="col-lg-7 mb-4 mb-md-0">
-                                          <div>
-                                                <h4 class="ct_fs_22 ct_fw_700 mb-3">Our Customer Success team gives you
-                                                      personalised
-                                                      guidance to
-                                                      ensure you get the
-                                                      most out of our products and services.
-                                                </h4>
-                                                <p class="ct_fs_16 mb-0 ct_line_h_25">"Our Customer Success team
-                                                      provides
-                                                      personalized guidance,
-                                                      helping you maximize
-                                                      the potential of our products and services. Meanwhile, our app
-                                                      maintenance
-                                                      proactively fixes bugs, handles software updates, and ensures
-                                                      99.9% uptime.
-                                                      Powered by advanced AI, we predict and prevent issues before they
-                                                      arise, keeping
-                                                      your app running smoothly and efficiently."</p>
-                                                <div class="ct_btn_group ct_mt_40">
-                                                      <a routerLink="/contact" class="ct_btn_style_2_yellow">Get a
-                                                            free demo</a>
-                                                      <a routerLink="/free-demo"
-                                                            class="ct_btn_style_2_yellow ct_btn_style_2_purple">Try
-                                                            Creative AI
-                                                            for
-                                                            free</a>
-                                                </div>
-                                          </div>
-                                    </div>
 
-                              </div>
-                              <div class="text-center mt-5">
-                                    <a routerLink="/our-story" class="ct_blue_btn_fill">Learn how we
-                                          ensure
-                                          success</a>
-                              </div>
-                        </div>
+      <div class="logo-slider">
+            <div class="logo-slider__track">
 
+                  <!-- ORIGINAL -->
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_1.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_2.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_3.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_4.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_5.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_6.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_7.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_8.png" alt="" loading="lazy">
+                  </div>
+
+                  <!-- DUPLICATE -->
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_1.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_2.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_3.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_4.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_5.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_6.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_7.png" alt="" loading="lazy">
+                  </div>
+                  <div class="logo-slider__item">
+                        <img src="assets/img/brand_logo_8.png" alt="" loading="lazy">
                   </div>
 
             </div>
       </div>
 </section>
-<!-- Helping Your Apps Section E -->
-
-
-
-
-<!-- Related Article Section S -->
-<section class="ct_py_70 pt-0">
+<section class="ct_ai_cta_section">
       <div class="container">
-            <div class="row">
-                  <div class="col-md-12">
-                        <h3 class="ct_fs_44 ct_fw_700 text-center  pt-0">Related <span
-                                    class="ct_orange_gredient_text">Articles</span>
-                        </h3>
+            <div class="ct_ai_cta_card row align-items-center">
+                  <div class="col-md-7 mb-4 mb-md-0">
+                        <div class="ct_ai_cta_content">
+                              <h2 class="ct_fs_40 ct_fw_600"> From Idea to App Made Simple.</h2>
+                              <p>Fast, easy, and no coding needed</p>
+                              <a routerLink="/free-demo" class="ct_blue_outline_btn ct_white_btn"> Launch Your App
+                                    Today</a>
+                        </div>
                   </div>
-            </div>
-            <div class="row pt-4">
-                  <div class="col-md-12">
-                        <app-blog-cards />
-
-                  </div>
-
-            </div>
-      </div>
-</section>
-<!-- Related Article Section E -->
-<hr class="ct_break_line">
-<!-- free demo Section S -->
-<section class="ct_pt_50 ct_pb_50">
-      <div class="container">
-            <div class="col-md-12">
-                  <div class="ct_free_demo_bg">
-                        <h3 class="ct_fs_20 text-white text-center mb-2 ct_fw_6 00">
-                              Struggling to Choose?
-                        </h3>
-                        <h2 class="ct_fs_38 text-center text-white ct_fw_700 mb-2">
-                              Discover Your Ideal Development Plan in Minutes
-                        </h2>
-                        <p class="ct_fs_17 mb-0 text-center text-white">Quick & Easy Assessment</p>
-                        <div class="text-center mt-4">
-                              <a routerLink="/free-demo" class="ct_blue_btn_fill ct_white_btn ">Find My Perfect Plan</a>
+                  <div class="col-md-5 mb-4 mb-md-0">
+                        <div class="ct_ai_cta_image">
+                              <img src="assets/img/thumb_img_news.webp" alt="Creative AI app preview on mobile"
+                                    loading="lazy" width="471" height="315" />
                         </div>
                   </div>
             </div>
       </div>
 </section>
-<!-- free demo Section S -->
+
+
+
+
+
 <app-footer />

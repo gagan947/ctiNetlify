@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, effect, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { SafeHtml, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { RouterLink, Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { firstValueFrom } from 'rxjs';
@@ -45,7 +45,7 @@ interface ReactFile {
   fullCode: string;
 }
 
-type BuildFlowType = 'initial' | 'restore' | 'regenerate' | 'switch' | 'repair';
+type BuildFlowType = 'initial' | 'restore' | 'regenerate' | 'switch' | 'repair' | 'customize';
 
 interface BuildProgressStep {
   pendingIconClass: string;
@@ -66,7 +66,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-react-build-preview',
   standalone: true,
-  imports: [CommonModule, NgxIntlTelInputModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, ReactiveFormsModule, RouterLink, AiDevRendererComponent, WorkspaceHeaderComponent],
+  imports: [CommonModule, NgxIntlTelInputModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, ReactiveFormsModule, AiDevRendererComponent, WorkspaceHeaderComponent],
   templateUrl: './react-build-preview.component.html',
   styleUrl: './react-build-preview.component.css'
 })
@@ -103,6 +103,7 @@ export class ReactBuildPreviewComponent {
   private aiProcessingPhaseVersion = 0;
   private pendingFinalBuildSection: any = null;
   private repairAttemptVersion = 0;
+  private customizationRequestVersion = 0;
   private initialFlowRunId = 0;
   private hasRepairFlowTakenOver = false;
 
@@ -164,6 +165,7 @@ export class ReactBuildPreviewComponent {
   pendingPreviewUrl: string | null = null;
   private hasAutoOpenedCurrentMobilePreview = false;
   private hasDismissedCurrentMobilePreview = false;
+  private deployHeaderActionTimer: ReturnType<typeof setTimeout> | null = null;
   skipBuildPrompt = false;
   finalPrompt: any = null;
   selectedPublishOption: 'creative-ai-domain' | 'custom-domain' = 'creative-ai-domain';
@@ -171,6 +173,7 @@ export class ReactBuildPreviewComponent {
   customDomainTouched = false;
   deploymentSuccessMessage = '';
   successModalAction: 'navigate-dashboard' | 'close-only' = 'navigate-dashboard';
+  showDeployHeaderAction = false;
   buildGenerationErrorMessage = '';
   isBuildGenerationErrorExpanded = false;
   callbackRequestForm = new FormGroup({
@@ -188,6 +191,11 @@ export class ReactBuildPreviewComponent {
   private pendingPreviewResponse: { res: any; socketId: string | null } | null = null;
   private pendingPreviewFailure = false;
   private hasInitialBuildCompletionUi = false;
+  private activePageBuildSection: { type: 'build-section'; data: { title: string; icon: string; done: boolean; items: Array<{ label: string; status: 'active' | 'done' }> } } | null = null;
+  private queuedSocketPages: string[] = [];
+  private hasReceivedSocketPage = false;
+  private firstSocketPageResolver: (() => void) | null = null;
+  private pageBuildWaitReleased = false;
   today = new Date();
   // Redirect page for login action
   constructor(
@@ -209,15 +217,19 @@ export class ReactBuildPreviewComponent {
 
   async ngOnInit() {
     this.refreshProjectContext();
-    this.userInfo = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
-    this.initializeCallbackRequestForm();
-
+    this.hideDeployHeaderAction();
+    this.refreshProjectContext();
     this.socket = io(this.apiService.apiUrl, {
       auth: {
         token: localStorage.getItem('tokenCTi'),
-        inquiryPublicId: this.projectsData?.clientEnquryId ?? null,
+        inquiryPublicId: this.projectsData.clientEnquryId,
       }
-    })
+    });
+    this.registerBuildSocketListeners();
+    this.getUserSubscriptionPlan();
+    this.userInfo = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
+    this.initializeCallbackRequestForm();
+
     this.getUserSubscriptionPlan();
 
     this.blocks = [];
@@ -231,6 +243,7 @@ export class ReactBuildPreviewComponent {
 
     const templates = await this.getUserTemplates();
     this.route.paramMap.subscribe(async (res: any) => {
+      this.hideDeployHeaderAction();
       this.selectedProjectId = res.params['id'];
       this.refreshProjectContext();
       const latestTemplates = await this.getUserTemplates();
@@ -411,6 +424,19 @@ export class ReactBuildPreviewComponent {
   }
 
   private handleBuildGenerationFailure() {
+    if (this.hasUsablePreviewState()) {
+      this.isRetryBuildGenerationSubmitting = false;
+      this.repairAttemptVersion++;
+      this.clearBuildStepTimers();
+      this.stopAiProcessingPhase();
+      this.pendingFinalBuildSection = null;
+      this.isReactBuilding = false;
+      this.isIframeLoading = false;
+      this.isTyping = false;
+      this.toster.error('We hit an issue while refreshing the preview. Your last available preview is still loaded.');
+      return;
+    }
+
     this.isRetryBuildGenerationSubmitting = false;
     this.repairAttemptVersion++;
     this.clearBuildStepTimers();
@@ -431,10 +457,13 @@ export class ReactBuildPreviewComponent {
   }
 
   private queueGeneratedPreview(res: any, socketId: string | null) {
+    this.completeActivePageBuildSection();
     if (this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
       this.pendingPreviewResponse = { res, socketId };
       return;
     }
+    this.resetBuildGenerationError();
+    this.closeBuildGenerationFailureModal();
     this.scrollToBottom();
     this.applyGeneratedPreview(res, socketId);
   }
@@ -447,7 +476,7 @@ export class ReactBuildPreviewComponent {
     this.isReactBuilding = true;
 
     const templateId = res.data.templateId;
-    const proxyUrl = this.getPreviewProxyUrl(templateId);
+    const previewUrl = this.getPreviewUrlFromResponse(res.data, templateId);
 
     if (res.data.variation) {
       this.usedVariations.push(res.data.variation);
@@ -470,7 +499,7 @@ export class ReactBuildPreviewComponent {
 
     this.designOrder.push({
       designId,
-      url: proxyUrl,
+      url: previewUrl,
       user_template_id: res.data.templateId || null,
       variation_no: res.data.variation
     });
@@ -478,18 +507,24 @@ export class ReactBuildPreviewComponent {
     this.activeDesignId = designId;
 
     if (socketId) {
-      this.pendingPreviewUrl = proxyUrl;
+      this.pendingPreviewUrl = previewUrl;
       this.preparePreviewLoadState();
     } else {
-      this.setSafePreviewUrl(proxyUrl);
+      this.setSafePreviewUrl(previewUrl);
     }
 
     this.isReactBuilding = false;
     this.isTyping = false;
-    this.completeInitialBuildUi();
+    if (this.buildFlowType === 'initial') {
+      this.completeInitialBuildUi();
+      return;
+    }
+
+    this.appendBuildActionPrompt();
   }
 
   private queueBuildGenerationFailure() {
+    this.completeActivePageBuildSection();
     if (this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
       this.pendingPreviewFailure = true;
       return;
@@ -602,6 +637,15 @@ export class ReactBuildPreviewComponent {
     this.isBuildGenerationErrorExpanded = false;
   }
 
+  private closeBuildGenerationFailureModal() {
+    const modalElement = document.getElementById('buildGenerationFailedModal');
+    if (!modalElement) {
+      return;
+    }
+
+    bootstrap.Modal.getOrCreateInstance(modalElement).hide();
+  }
+
   private setBuildGenerationError(source?: any) {
     const message = this.extractBuildGenerationErrorMessage(source);
     this.buildGenerationErrorMessage = message;
@@ -624,6 +668,15 @@ export class ReactBuildPreviewComponent {
       .map((line) => line.replace(/[ \t]+/g, ' ').trimEnd())
       .join('\n')
       .trim();
+  }
+
+  private hasUsablePreviewState(): boolean {
+    return !!this.safePreviewUrl || !!this.pendingPreviewUrl || this.designOrder.length > 0;
+  }
+
+  private getPreviewUrlFromResponse(data: any, templateId: string) {
+    const previewUrl = typeof data?.preview === 'string' ? data.preview.trim() : '';
+    return previewUrl || this.getPreviewProxyUrl(templateId);
   }
 
   private openBootstrapModal(modalId: string, options?: { backdrop?: boolean | 'static'; keyboard?: boolean }) {
@@ -847,6 +900,7 @@ export class ReactBuildPreviewComponent {
   onIframeLoad() {
     this.clearBuildStepTimers();
     this.isIframeLoading = false;
+    this.scheduleDeployHeaderAction();
 
     if (this.isMobileView() && !this.hasAutoOpenedCurrentMobilePreview && !this.hasDismissedCurrentMobilePreview) {
       this.fullScreen = true;
@@ -873,9 +927,6 @@ export class ReactBuildPreviewComponent {
   }
 
   // open modal
-  openModal() {
-    this.subscriptionModalService.open(this.selected_template_id);
-  }
 
   openCallbackModal() {
     this.callbackRequestForm.reset({
@@ -942,6 +993,7 @@ export class ReactBuildPreviewComponent {
 
   private preparePreviewLoadState() {
     this.isIframeLoading = true;
+    this.hideDeployHeaderAction();
     this.hasAutoOpenedCurrentMobilePreview = false;
     this.hasDismissedCurrentMobilePreview = false;
   }
@@ -1009,6 +1061,12 @@ export class ReactBuildPreviewComponent {
           { pendingIconClass: 'fa-solid fa-gear', label: 'Building refreshed React app' },
           { pendingIconClass: 'fa-solid fa-rocket', label: 'Deploying updated preview' }
         ];
+      case 'customize':
+        return [
+          { pendingIconClass: 'fa-solid fa-sliders', label: 'Reviewing requested changes' },
+          { pendingIconClass: 'fa-solid fa-wand-magic-sparkles', label: 'Applying template customization' },
+          { pendingIconClass: 'fa-solid fa-rocket', label: 'Refreshing preview' }
+        ];
       case 'initial':
       default:
         return [
@@ -1051,6 +1109,7 @@ export class ReactBuildPreviewComponent {
     if (!templateId) {
       this.safePreviewUrl = null;
       this.pendingPreviewUrl = null;
+      this.hideDeployHeaderAction();
 
       if (this.projectsData?.clientEnquryId === this.selectedProjectId) {
         this.isReactBuilding = true;
@@ -1181,42 +1240,49 @@ export class ReactBuildPreviewComponent {
   }
 
   appendBuildActionPrompt() {
-    if (this.skipBuildPrompt) {
-      return;
-    }
-
-    this.blocks = this.blocks.filter(block => block?.id !== 'action-prompt-build');
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
 
     this.blocks.push({
-      id: 'action-prompt-build',
+      id: `input-prompt-customize-${Date.now()}`,
       text: {
-        message: 'Do you want me to continue with the next step? Choose one option below.',
-        options: [
-          // {
-          //   id: 'regenerate_template',
-          //   title: 'Generate New Template',
-          //   description: 'Create another variation with a fresh layout and styling direction.'
-          // },
-          // {
-          //   id: 'customize_template',
-          //   title: 'Customize This Template',
-          //   description: 'Refine this version further based on your preferred changes and requirements.'
-          // },
-          {
-            id: 'Request_callback',
-            title: 'Request a Callback',
-            description: 'Get in touch with our team for personalized assistance.'
-          },
-          {
-            id: 'deploy_template',
-            title: 'Deploy to Production',
-            description: 'Use this template as the final version and continue to deployment.'
-          }
-        ]
+        message: 'Share the changes you want in this template, and I will tailor this version around your needs.',
+        placeholder: 'Describe the changes you want in this template',
       },
       done: true,
       timestamp: new Date()
     });
+  }
+
+  appendCreditLimitPrompt() {
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
+
+    if (this.subscriptionPlan.planType === 'FREE') {
+      this.blocks.push({
+        id: `inline-cta-customize-${Date.now()}`,
+        text: {
+          message: `It looks like you are running low on credits. To customize this template, you will need at least 20 credits. Your current balance is ${this.getCurrentCreditBalance()} credits.`,
+          message2: `Upgrade your plan or purchase more credits to unlock uninterrupted customization, AI generation, and deployment features.`,
+          buttonLabel: 'Upgrade plan',
+          actionId: 'upgrade_plan',
+        },
+        done: true,
+        timestamp: new Date()
+      });
+
+    } else {
+      this.blocks.push({
+        id: `inline-cta-customize-${Date.now()}`,
+        text: {
+          message: `It looks like you are running low on credits. To customize this template, you will need at least 20 credits. Your current balance is ${this.getCurrentCreditBalance()} credits.`,
+          buttonLabel: 'Buy credits',
+          actionId: 'buy_credits',
+          buttonLabel2: 'Upgrade plan',
+          actionId2: 'upgrade_plan'
+        },
+        done: true,
+        timestamp: new Date()
+      });
+    }
 
     setTimeout(() => this.scrollToBottom(true), 0);
   }
@@ -1228,18 +1294,7 @@ export class ReactBuildPreviewComponent {
     }
 
     if (actionId === 'customize_template') {
-      this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
-
-      this.blocks.push({
-        id: `input-prompt-customize-${Date.now()}`,
-        text: {
-          message: 'Share the changes you want in this template, and I will tailor this version around your needs.',
-          placeholder: 'Describe the changes you want in this template',
-        },
-        done: true,
-        timestamp: new Date()
-      });
-
+      this.appendBuildActionPrompt();
       setTimeout(() => this.scrollToBottom(true), 0);
       return;
     }
@@ -1250,7 +1305,12 @@ export class ReactBuildPreviewComponent {
     }
 
     if (actionId === 'upgrade_plan') {
-      this.openModal();
+      this.subscriptionModalService.open();
+      return;
+    }
+
+    if (actionId === 'buy_credits') {
+      this.subscriptionModalService.openBuyMoreCreditsModal();
       return;
     }
 
@@ -1260,32 +1320,110 @@ export class ReactBuildPreviewComponent {
     }
   }
 
-  handlePromptSubmitted(event: Event | { blockId: string; value: string }) {
+  async handlePromptSubmitted(event: Event | { blockId: string; value: string }) {
     const promptEvent = event as { blockId?: string; value?: string };
+    const prompt = promptEvent?.value?.trim();
 
-    if (!promptEvent?.value?.trim()) return;
+    if (!prompt) return;
+
+    if (this.getCurrentCreditBalance() < 20) {
+      this.appendCreditLimitPrompt();
+      return;
+    }
+
+    const templates = await this.getUserTemplates();
+    const templatePublicId = templates.find((t: any) => t.inquiryId === this.selectedProjectId).templateId;
+
+    if (!templatePublicId) {
+      this.toster.error('No template is available yet for customization.');
+      return;
+    }
 
     this.blocks = this.blocks.filter(block => block?.id !== promptEvent.blockId);
-
     this.blocks.push({
       id: `user-message-customize-${Date.now()}`,
-      text: promptEvent.value,
+      text: prompt,
       done: true,
       timestamp: new Date()
     });
 
-    this.blocks.push({
-      id: `inline-cta-customize-${Date.now()}`,
-      text: {
-        message: 'Your current plan does not include direct template customization requests. Upgrade your plan to continue with guided revisions for this template.',
-        buttonLabel: 'Upgrade Plan',
-        actionId: 'upgrade_plan'
+    this.isReactBuilding = true;
+    this.isTyping = true;
+    this.resetBuildGenerationError();
+    const customizationRequestVersion = ++this.customizationRequestVersion;
+    this.startQuickBuildProgress('customize', 1200, 2600);
+    this.showLoader('Reviewing your requested changes...');
+    void this.announceCustomizationProgress(prompt, customizationRequestVersion);
+
+    const payLoad = {
+      prompt,
+      templatePublicId
+    };
+
+    this.apiService.postAPI('api/ai/customization', payLoad).subscribe({
+      next: (res: any) => {
+        if (!res?.success || !res?.data?.templateId) {
+          this.customizationRequestVersion++;
+          this.setBuildGenerationError(res?.data?.message || 'Failed to customize preview');
+          this.queueBuildGenerationFailure();
+          return;
+        }
+
+        this.customizationRequestVersion++;
+        this.hideLoader();
+        this.blocks.push({
+          type: 'summary',
+          data: {
+            time: 'Updated',
+            description: 'Your requested customization has been applied and the refreshed preview is now loading.',
+            highlights: [
+              'Prompt reviewed',
+              'Template updated',
+              'Fresh preview generated'
+            ]
+          }
+        });
+        this.queueGeneratedPreview(res, null);
       },
-      done: true,
-      timestamp: new Date()
+      error: (error: any) => {
+        if (error?.error?.status === 422 && error?.error?.data?.canRepairBuild) {
+          this.customizationRequestVersion++;
+          const repairPayload = {
+            templatePublicId: error.error.data.templatePublicId || templatePublicId,
+            inquiryPublicId: this.projectsData.clientEnquryId,
+            error_message: error.error.message,
+          };
+          void this.attemptBuildRepair(repairPayload, error);
+          return;
+        }
+
+        this.customizationRequestVersion++;
+        this.setBuildGenerationError(error);
+        this.queueBuildGenerationFailure();
+      }
     });
 
     setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private async announceCustomizationProgress(prompt: string, requestVersion: number) {
+    await this.delay(250);
+    if (requestVersion !== this.customizationRequestVersion) {
+      return;
+    }
+    await this.addParagraphBlock('Applying your requested changes to the current template.', 500, 'phase');
+    if (requestVersion !== this.customizationRequestVersion) {
+      return;
+    }
+    await this.addParagraphBlock(
+      `Customization request: ${prompt.length > 140 ? `${prompt.slice(0, 137)}...` : prompt}`,
+      450,
+      'support'
+    );
+    if (requestVersion !== this.customizationRequestVersion) {
+      return;
+    }
+    this.showLoader('Updating the template and preparing a refreshed preview...');
   }
 
 
@@ -1490,6 +1628,7 @@ export class ReactBuildPreviewComponent {
           } else {
             this.activeDesignId = '';
             this.safePreviewUrl = null;
+            this.hideDeployHeaderAction();
           }
         },
 
@@ -1504,6 +1643,7 @@ export class ReactBuildPreviewComponent {
   async startFlow() {
     const flowRunId = ++this.initialFlowRunId;
     this.blocks = [];
+    this.resetActivePageBuildSection();
 
     this.setBuildFlow('initial');
     this.setBuildStep(1);
@@ -1654,17 +1794,11 @@ export class ReactBuildPreviewComponent {
       return;
     }
     await this.showLoader('Generating screen-level page code...');
-    await this.addBuildSection(
+    this.startSocketDrivenBuildSection(
       'Creating pages...',
-      '📄',
-      [
-        'HomePage.jsx',
-        'AboutPage.jsx',
-        'ContactPage.jsx'
-      ],
-      4500,
-      1800
+      'P'
     );
+    await this.waitForFirstSocketPage();
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -1944,6 +2078,141 @@ export class ReactBuildPreviewComponent {
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
+  private registerBuildSocketListeners() {
+    if (!this.socket?.on) {
+      return;
+    }
+
+    this.socket.off?.('page-created');
+    this.socket.on('page-created', (data: any) => {
+      const pageLabel = this.extractPageLabel(data?.page);
+      if (!pageLabel) {
+        return;
+      }
+
+      this.hasReceivedSocketPage = true;
+      this.pageBuildWaitReleased = true;
+      if (this.firstSocketPageResolver) {
+        this.firstSocketPageResolver();
+        this.firstSocketPageResolver = null;
+      }
+
+      if (!this.activePageBuildSection) {
+        this.queuedSocketPages.push(pageLabel);
+        return;
+      }
+
+      this.appendSocketPageToBuildSection(pageLabel);
+    });
+  }
+
+  private extractPageLabel(page: any): string {
+    if (typeof page === 'string') {
+      return page.trim();
+    }
+
+    if (page && typeof page === 'object') {
+      const candidate = page.name || page.fileName || page.pageName || page.title;
+      return typeof candidate === 'string' ? candidate.trim() : '';
+    }
+
+    return '';
+  }
+
+  private startSocketDrivenBuildSection(title: string, icon: string) {
+    const block = {
+      type: 'build-section' as const,
+      data: {
+        title,
+        icon,
+        done: false,
+        items: [] as Array<{ label: string; status: 'active' | 'done' }>
+      }
+    };
+
+    this.activePageBuildSection = block;
+    this.blocks.push(block);
+    setTimeout(() => this.scrollToBottom(true), 0);
+
+    if (!this.queuedSocketPages.length) {
+      return;
+    }
+
+    const queuedPages = [...this.queuedSocketPages];
+    this.queuedSocketPages = [];
+
+    for (const pageLabel of queuedPages) {
+      this.appendSocketPageToBuildSection(pageLabel);
+    }
+  }
+
+  private appendSocketPageToBuildSection(pageLabel: string) {
+    if (!this.activePageBuildSection || !pageLabel) {
+      return;
+    }
+
+    const items = this.activePageBuildSection.data.items;
+    const lastItem = items[items.length - 1];
+
+    if (lastItem?.status === 'active') {
+      lastItem.status = 'done';
+    }
+
+    items.push({
+      label: pageLabel,
+      status: 'active'
+    });
+
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private waitForFirstSocketPage(): Promise<void> {
+    if (this.pageBuildWaitReleased || this.hasReceivedSocketPage || this.activePageBuildSection?.data.items.length) {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve) => {
+      this.firstSocketPageResolver = resolve;
+    });
+  }
+
+  private completeActivePageBuildSection() {
+    this.pageBuildWaitReleased = true;
+
+    if (!this.activePageBuildSection) {
+      if (this.firstSocketPageResolver) {
+        this.firstSocketPageResolver();
+        this.firstSocketPageResolver = null;
+      }
+      return;
+    }
+
+    const items = this.activePageBuildSection.data.items;
+    const lastItem = items[items.length - 1];
+
+    if (lastItem?.status === 'active') {
+      lastItem.status = 'done';
+    }
+
+    this.activePageBuildSection.data.done = true;
+    this.activePageBuildSection = null;
+
+    if (this.firstSocketPageResolver) {
+      this.firstSocketPageResolver();
+      this.firstSocketPageResolver = null;
+    }
+
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private resetActivePageBuildSection() {
+    this.activePageBuildSection = null;
+    this.queuedSocketPages = [];
+    this.hasReceivedSocketPage = false;
+    this.firstSocketPageResolver = null;
+    this.pageBuildWaitReleased = false;
+  }
+
   async addBuildSectionKeepingLastActive(title: string, icon: string, items: string[], itemDelay = 4200, settleDelay = 1200) {
     const block = {
       type: 'build-section',
@@ -2032,14 +2301,66 @@ export class ReactBuildPreviewComponent {
   }
 
   get previewOverlayTitle(): string {
-    return this.buildFlowType === 'repair'
-      ? "I'm Repairing the Preview Build."
-      : "I'm Generating the Preview.";
+    switch (this.buildFlowType) {
+      case 'repair':
+        return "I'm Repairing the Preview Build.";
+      case 'restore':
+        return "I'm Loading Your Saved Draft.";
+      case 'customize':
+        return "I'm Customizing the Preview.";
+      case 'regenerate':
+        return "I'm Generating a New Preview Variation.";
+      case 'switch':
+        return "I'm Loading the Selected Preview.";
+      case 'initial':
+      default:
+        return "I'm Generating the Preview.";
+    }
+  }
+
+  get previewOverlayLoaderText(): string {
+    switch (this.buildFlowType) {
+      case 'repair':
+        return 'Repairing...';
+      case 'restore':
+        return 'Restoring...';
+      case 'customize':
+        return 'Customizing...';
+      case 'regenerate':
+        return 'Generating...';
+      case 'switch':
+        return 'Loading...';
+      case 'initial':
+      default:
+        return 'Generating...';
+    }
+  }
+
+  get previewOverlayLoaderLetters(): string[] {
+    return this.previewOverlayLoaderText.split('');
   }
 
   private refreshProjectContext() {
     const projectData = sessionStorage.getItem('projectData');
     this.projectsData = projectData ? JSON.parse(projectData) : null;
+  }
+
+  private hideDeployHeaderAction() {
+    this.showDeployHeaderAction = false;
+    if (this.deployHeaderActionTimer) {
+      clearTimeout(this.deployHeaderActionTimer);
+      this.deployHeaderActionTimer = null;
+    }
+  }
+
+  private scheduleDeployHeaderAction() {
+    this.hideDeployHeaderAction();
+    this.deployHeaderActionTimer = setTimeout(() => {
+      if (!!this.safePreviewUrl && !this.isReactBuilding && !this.isIframeLoading) {
+        this.showDeployHeaderAction = true;
+      }
+      this.deployHeaderActionTimer = null;
+    }, 180);
   }
 
   private initializeCallbackRequestForm() {
@@ -2050,6 +2371,10 @@ export class ReactBuildPreviewComponent {
       companyName: this.userInfo?.companyName || '',
       description: ''
     });
+  }
+
+  get showSupportCallbackButton(): boolean {
+    return this.showDeployHeaderAction;
   }
 }
 

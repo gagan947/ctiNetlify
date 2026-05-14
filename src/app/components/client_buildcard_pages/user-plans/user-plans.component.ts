@@ -287,7 +287,7 @@ export class UserPlansComponent {
     const delta = Number(entry.credit_delta ?? entry.credits ?? 0);
     const transactionType = (entry.transaction_type || '').toLowerCase();
     const sourceKey = (entry.source_key || '').toLowerCase();
-    const actionName = entry.action_name || this.toTitleCase(entry.source_key || 'Credit Update');
+    const actionName = entry.action_name;
     const meta = entry.meta_json || {};
     const title = this.resolveTransactionTitle(actionName, transactionType, sourceKey);
 
@@ -316,8 +316,11 @@ export class UserPlansComponent {
       return 'Asset Edit';
     }
 
-    if (sourceKey.includes('project') || actionName.toLowerCase().includes('project')) {
+    if (sourceKey.includes('project_generation') && actionName.toLowerCase().includes('Project Generation')) {
       return 'Project Generation';
+    }
+    if (sourceKey.includes('project_customization') || actionName.toLowerCase().includes('Project Customization')) {
+      return 'Project Customization';
     }
 
     return actionName;

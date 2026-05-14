@@ -1,10 +1,20 @@
 <div class="ct_aappp">
     <app-workspace-header [fullScreen]="fullScreen" [selectedDeviceType]="selectedDeviceType"
         [showPreviewControls]="true" (fullScreenToggle)="openFullPreview()"
-        (deviceTypeChange)="onDeviceTypeChange($event)" />
+        (deviceTypeChange)="onDeviceTypeChange($event)" [showPrimaryHeaderAction]="showDeployHeaderAction"
+        [primaryHeaderActionLabel]="'Deploy to Production'" (primaryHeaderActionClick)="openDeployModal()" />
     <section class="ct_project_ai_preview_main">
         @if (!fullScreen) {
         <aside class="ct_project_ai_chat_section" style="height: calc(100vh - 50px);">
+            <div class="ct_preview_support_bar" *ngIf="showSupportCallbackButton">
+                <div class="ct_preview_support_bar__copy">
+                    <span class="ct_preview_support_bar__label">Need help?</span>
+                </div>
+                <button type="button" class="ct_preview_support_bar__btn" (click)="openCallbackModal()">
+                    <i class="fa-solid fa-phone-volume"></i>
+                    Request a Callback
+                </button>
+            </div>
             <div #chatScroll class="ct_chat_scroll_wrap" (scroll)="onUserScroll()">
                 <app-ai-dev-renderer [isLoading]="isReactBuilding" [blocks]="blocks"
                     (actionSelected)="handleChatAction($event)" (promptSubmitted)="handlePromptSubmitted($event)">
@@ -38,19 +48,8 @@
                             <div class="ct_ai_thiking_loader2 d-flex">
                                 <div class="rgt_loader" id="rgt_loader">
                                     <div class="rgt_loader-wrapper">
-                                        <span class="rgt_loader-letter">G</span>
-                                        <span class="rgt_loader-letter">e</span>
-                                        <span class="rgt_loader-letter">n</span>
-                                        <span class="rgt_loader-letter">e</span>
-                                        <span class="rgt_loader-letter">r</span>
-                                        <span class="rgt_loader-letter">a</span>
-                                        <span class="rgt_loader-letter">t</span>
-                                        <span class="rgt_loader-letter">i</span>
-                                        <span class="rgt_loader-letter">n</span>
-                                        <span class="rgt_loader-letter">g</span>
-                                        <span class="rgt_loader-letter">.</span>
-                                        <span class="rgt_loader-letter">.</span>
-                                        <span class="rgt_loader-letter">.</span>
+                                        <span *ngFor="let letter of previewOverlayLoaderLetters"
+                                            class="rgt_loader-letter">{{ letter }}</span>
                                         <div class="rgt_loader-circle"></div>
                                     </div>
                                 </div>
@@ -59,7 +58,6 @@
                                     <h4 class="ct_fs_24 ct_fw_600 mb-1">
                                         {{ previewOverlayTitle }}
                                     </h4>
-
                                 </div>
                                 <!-- Build progress -->
                                 <div class="build-progress mt-4 text-start">

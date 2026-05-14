@@ -2,7 +2,7 @@ export interface SubscriptionResponse {
   success: boolean;
   access?: boolean;
   allowProjectCreate: boolean;
-  availableCredits?: number;
+  availableCredits: number;
   creditBalance?: number;
   creditsPerCycle?: number;
   creditGrantInterval?: string;
