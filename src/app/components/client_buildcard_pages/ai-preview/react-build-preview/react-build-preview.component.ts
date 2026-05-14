@@ -1324,7 +1324,7 @@ export class ReactBuildPreviewComponent {
 
     if (!prompt) return;
 
-    if (this.getCurrentCreditBalance() < 20) {
+    if (this.getCurrentCreditBalance() < 5) {
       this.appendCreditLimitPrompt();
       return;
     }
