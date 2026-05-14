@@ -1263,8 +1263,8 @@ export class ReactBuildPreviewComponent {
     this.blocks.push({
       id: `input-prompt-customize-${Date.now()}`,
       text: {
-        message: 'Share the changes you want in this template, and I will tailor this version around your needs.',
-        placeholder: 'Describe the changes you want in this template',
+        message: 'Shape This Template Your Way',
+        placeholder: 'Type your custom requirements, design ideas, or functionality...',
       },
       done: true,
       timestamp: new Date()
