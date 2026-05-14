@@ -1260,8 +1260,7 @@ export class ReactBuildPreviewComponent {
       this.blocks.push({
         id: `inline-cta-customize-${Date.now()}`,
         text: {
-          message: `It looks like you are running low on credits. To customize this template, you will need at least 20 credits. Your current balance is ${this.getCurrentCreditBalance()} credits.`,
-          message2: `Upgrade your plan or purchase more credits to unlock uninterrupted customization, AI generation, and deployment features.`,
+          message: `Hi! You’ve used all your free credits for now. Upgrade to the Standard Plan to get more monthly credits and continue customizing, generating, and deploying without interruptions. You can also purchase additional credits anytime whenever you need them.`,
           buttonLabel: 'Upgrade plan',
           actionId: 'upgrade_plan',
         },
@@ -1273,7 +1272,7 @@ export class ReactBuildPreviewComponent {
       this.blocks.push({
         id: `inline-cta-customize-${Date.now()}`,
         text: {
-          message: `It looks like you are running low on credits. To customize this template, you will need at least 20 credits. Your current balance is ${this.getCurrentCreditBalance()} credits.`,
+          message: `Hi! You’re running low on credits. Buy more credits to continue customizing, generating, and deploying without interruptions. Want higher monthly limits and more included credits? You can upgrade your plan anytime.`,
           buttonLabel: 'Buy credits',
           actionId: 'buy_credits',
           buttonLabel2: 'Upgrade plan',
