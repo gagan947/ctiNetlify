@@ -506,7 +506,7 @@
 }
 
 .ct_inline_cta_strip {
-  display: flex;
+  display: grid;
   align-items: center;
   justify-content: space-between;
   gap: 12px;

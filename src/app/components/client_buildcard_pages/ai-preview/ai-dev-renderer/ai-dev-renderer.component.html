@@ -45,9 +45,16 @@
 
       <div *ngIf="isInlineCtaBlock(block)" class="ct_inline_cta_strip">
         <span class="ct_inline_cta_text">{{ block?.text?.message }}</span>
-        <button type="button" class="ct_inline_cta_btn" (click)="actionSelected.emit(block?.text?.actionId)">
-          {{ block?.text?.buttonLabel }}
-        </button>
+        <span *ngIf="block?.text?.message2" class="ct_inline_cta_text">{{ block?.text?.message2 }}</span>
+        <div class="d-flex gap-2 justify-content-center">
+          <button type="button" class="ct_inline_cta_btn" (click)="actionSelected.emit(block?.text?.actionId)">
+            {{ block?.text?.buttonLabel }}
+          </button>
+          <button *ngIf="block?.text?.actionId2" type="button" class="ct_inline_cta_btn"
+            (click)="actionSelected.emit(block?.text?.actionId2)">
+            {{ block?.text?.buttonLabel2 }}
+          </button>
+        </div>
       </div>
 
       <div *ngIf="isUserMessageBlock(block)" class="ct_user_message_row">

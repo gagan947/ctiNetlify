@@ -1234,16 +1234,34 @@ export class ReactBuildPreviewComponent {
   appendCreditLimitPrompt() {
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
 
-    this.blocks.push({
-      id: `inline-cta-customize-${Date.now()}`,
-      text: {
-        message: `It looks like you are running low on credits. To customize this template, you will need at least 20 credits. Your current balance is ${this.getCurrentCreditBalance()} credits.`,
-        buttonLabel: 'Buy credits',
-        actionId: 'upgrade_plan'
-      },
-      done: true,
-      timestamp: new Date()
-    });
+    if (this.subscriptionPlan.planType === 'FREE') {
+      this.blocks.push({
+        id: `inline-cta-customize-${Date.now()}`,
+        text: {
+          message: `It looks like you are running low on credits. To customize this template, you will need at least 20 credits. Your current balance is ${this.getCurrentCreditBalance()} credits.`,
+          message2: `Upgrade your plan or purchase more credits to unlock uninterrupted customization, AI generation, and deployment features.`,
+          buttonLabel: 'Upgrade plan',
+          actionId: 'upgrade_plan',
+        },
+        done: true,
+        timestamp: new Date()
+      });
+
+    } else {
+      this.blocks.push({
+        id: `inline-cta-customize-${Date.now()}`,
+        text: {
+          message: `It looks like you are running low on credits. To customize this template, you will need at least 20 credits. Your current balance is ${this.getCurrentCreditBalance()} credits.`,
+          buttonLabel: 'Buy credits',
+          actionId: 'buy_credits',
+          buttonLabel2: 'Upgrade plan',
+          actionId2: 'upgrade_plan'
+        },
+        done: true,
+        timestamp: new Date()
+      });
+    }
+
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
@@ -1265,6 +1283,11 @@ export class ReactBuildPreviewComponent {
     }
 
     if (actionId === 'upgrade_plan') {
+      this.subscriptionModalService.open();
+      return;
+    }
+
+    if (actionId === 'buy_credits') {
       this.subscriptionModalService.openBuyMoreCreditsModal();
       return;
     }
