@@ -75,6 +75,7 @@ export class ReactBuildPreviewComponent {
   private readonly mobileBreakpoint = 991;
   private readonly buildErrorPreviewLineLimit = 6;
   private readonly buildErrorPreviewCharLimit = 700;
+  private readonly generateProjectFailureGraceMs = 45000;
   private readonly maxBuildRepairAttempts = 7;
   private readonly buildRepairAttemptMessages = [
     {
@@ -191,6 +192,7 @@ export class ReactBuildPreviewComponent {
   private pendingPreviewResponse: { res: any; socketId: string | null } | null = null;
   private pendingPreviewFailure = false;
   private hasInitialBuildCompletionUi = false;
+  private generateProjectFailureTimer: ReturnType<typeof setTimeout> | null = null;
   private activePageBuildSection: { type: 'build-section'; data: { title: string; icon: string; done: boolean; items: Array<{ label: string; status: 'active' | 'done' }> } } | null = null;
   private queuedSocketPages: string[] = [];
   private hasCompletedPageGeneration = false;
@@ -294,16 +296,17 @@ export class ReactBuildPreviewComponent {
       .subscribe({
         next: (res: any) => {
           if (!res?.success || !res?.data?.templateId) {
-            this.setBuildGenerationError(res.data?.message || 'Failed to generate preview');
-            this.queueBuildGenerationFailure();
+            this.deferGenerateProjectFailure(res?.data?.message || 'Failed to generate preview');
             return;
           }
 
+          this.clearGenerateProjectFailureTimer();
           this.queueGeneratedPreview(res, socket_id);
           return;
         },
         error: (error: any) => {
           if (error.error.status === 422 && error.error.data.canRepairBuild) {
+            this.clearGenerateProjectFailureTimer();
             let repairPayload = {
               templatePublicId: error.error.data.templatePublicId,
               inquiryPublicId: this.projectsData.clientEnquryId,
@@ -312,8 +315,7 @@ export class ReactBuildPreviewComponent {
             void this.attemptBuildRepair(repairPayload, error);
             return;
           }
-          this.setBuildGenerationError(error);
-          this.queueBuildGenerationFailure();
+          this.deferGenerateProjectFailure(error);
         }
       });
   }
@@ -456,6 +458,7 @@ export class ReactBuildPreviewComponent {
   }
 
   private queueGeneratedPreview(res: any, socketId: string | null) {
+    this.clearGenerateProjectFailureTimer();
     this.completeActivePageBuildSection();
     if (this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
       this.pendingPreviewResponse = { res, socketId };
@@ -523,6 +526,7 @@ export class ReactBuildPreviewComponent {
   }
 
   private queueBuildGenerationFailure() {
+    this.clearGenerateProjectFailureTimer();
     this.completeActivePageBuildSection();
     if (this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
       this.pendingPreviewFailure = true;
@@ -554,6 +558,7 @@ export class ReactBuildPreviewComponent {
     this.pendingPreviewFailure = false;
     this.hasInitialBuildCompletionUi = false;
     this.hasRepairFlowTakenOver = false;
+    this.clearGenerateProjectFailureTimer();
     this.stopAiProcessingPhase();
 
     this.startPreview(null);
@@ -855,6 +860,7 @@ export class ReactBuildPreviewComponent {
 
   ngOnDestroy() {
     this.blocks = [];
+    this.clearGenerateProjectFailureTimer();
     this.stopAiProcessingPhase();
     this.socket?.off?.('page-created');
     this.socket?.off?.('pages-generation-complete');
@@ -2087,6 +2093,7 @@ export class ReactBuildPreviewComponent {
     this.socket.off?.('page-created');
     this.socket.off?.('pages-generation-complete');
     this.socket.on('page-created', (data: any) => {
+      this.clearGenerateProjectFailureTimer();
       const pageLabel = this.extractPageLabel(data?.page);
       if (!pageLabel) {
         return;
@@ -2101,8 +2108,36 @@ export class ReactBuildPreviewComponent {
     });
 
     this.socket.on('pages-generation-complete', () => {
+      this.clearGenerateProjectFailureTimer();
       this.completeActivePageBuildSection();
     });
+  }
+
+  private deferGenerateProjectFailure(source?: any) {
+    this.setBuildGenerationError(source);
+
+    if (this.buildFlowType !== 'initial' || this.hasInitialFlowCompleted) {
+      this.queueBuildGenerationFailure();
+      return;
+    }
+
+    if (this.generateProjectFailureTimer) {
+      return;
+    }
+
+    this.generateProjectFailureTimer = setTimeout(() => {
+      this.generateProjectFailureTimer = null;
+      this.queueBuildGenerationFailure();
+    }, this.generateProjectFailureGraceMs);
+  }
+
+  private clearGenerateProjectFailureTimer() {
+    if (!this.generateProjectFailureTimer) {
+      return;
+    }
+
+    clearTimeout(this.generateProjectFailureTimer);
+    this.generateProjectFailureTimer = null;
   }
 
   private extractPageLabel(page: any): string {
