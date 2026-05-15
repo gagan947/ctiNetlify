@@ -94,6 +94,10 @@ ul.iti__country-list {
       border: 1px solid #e6e6e6;
       border-radius: 5px;
 }
+.ct_currency_input.custom_currency_input  nz-select-top-control.ant-select-selector.ng-tns-c2110204387-0:focus{
+      border-color: #5D5CFF !important;
+      box-shadow: unset !important;
+}
 
 .ct_currency_input .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
       box-shadow: unset !important;
@@ -455,4 +459,46 @@ aside.ct_project_ai_chat_section {
 }
 .ant-modal-content{
       border-radius: 30px !important;
+      background-color: #252425 !important;
+}
+.ant-modal-close-x{
+      color: #fff !important;
+}
+
+.custom_phone_input  {
+    background-color: transparent !important;
+    color: #fff !important;
+    padding-left: 60px !important;
+}
+.custom_currency_input{
+      background-color: transparent !important;
+      color: #fff !important;
+}
+.custom_phone_input::placeholder{
+      color: #fff;
+      opacity: 0.7;
+}
+.custom_currency_input nz-select-top-control {
+    background-color: transparent !important;
+    border-width: 0px !important;
+}
+.custom_currency_input .ant-select-arrow{
+      color: #fff !important;
+}
+.custom_phone_input:focus, .custom_currency_input:focus {
+    border-color: #5D5CFF !important;
+    box-shadow: unset !important;
+}
+.ant-select-dropdown{
+      background-color: #323232 !important;
+}
+.ant-select-item{
+      color: #d8d8d8 !important;
+}
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled){
+      background-color: #000 !important;
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-disabled){
+      background-color: #111 !important;
 }

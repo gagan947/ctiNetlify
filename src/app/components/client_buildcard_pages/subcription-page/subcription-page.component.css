@@ -382,26 +382,27 @@ section {
   display: inline-flex;
   padding: 8px 12px;
   margin-bottom: 20px;
-  border-radius: 10px;
-  background: #fff;
+  border-radius: 20px;
+  background: #323232;
   box-shadow: 0px 0px 24px 0px #0064FF26;
   gap: 25px;
 }
 
 .ct_pricing_toggle button {
   border: 0;
-  border-radius: 8px;
+  border-radius: 100px;
   background: transparent;
-  color: #0064FF;
+  color: #fff;
   font-size: 14px;
   font-weight: 500;
   padding: 5px 20px;
 }
 
 .ct_pricing_toggle button.active {
-  background: linear-gradient(90deg, #1454ff 0%, #2b79ff 100%);
+  background: #5D5CFF;
   color: #ffffff;
-  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
+  box-shadow: 0px 0px 15.6px 0px #5D5CFF;
+
 }
 
 
@@ -479,12 +480,18 @@ section {
 .ct_price_card {
   position: relative;
   border-radius: 24px;
-  background: #ffffff;
-  border: 1px solid #d8dde7;
+  background: #323232;
+  border: 1px solid #d8dde736;
   box-shadow: 0 8px 28px rgba(16, 24, 40, 0.08);
   min-height: 100%;
   display: flex;
   flex-direction: column;
+  transition: 0.4s ease all;
+}
+
+.ct_price_card:hover {
+ box-shadow: 0px 0px 15.6px 0px #5D5CFF;
+
 }
 
 .inner-div {
@@ -591,10 +598,10 @@ section {
   align-items: center;
   justify-content: center;
   margin-bottom: 18px;
-  padding: 8px 18px;
+  padding: 6px 18px;
   border-radius: 100px;
   max-width: max-content;
-  background: #0064FF;
+  background: #5D5CFF;
   color: #ffffff;
   width: auto;
   font-size: 15px;
@@ -612,7 +619,7 @@ section {
 
 .ct_price_credits {
   margin-bottom: 6px;
-  color: #111827;
+  color: #fff;
   font-size: 22px;
   text-align: center;
   line-height: 1.3;
@@ -644,7 +651,7 @@ section {
 }
 
 .ct_price_previous {
-  color: #7b8496;
+  color: #687086;
   font-size: 15px;
   font-weight: 500;
   text-decoration: line-through;
@@ -678,9 +685,9 @@ section {
   min-height: 50px;
   margin-top: auto;
   border-radius: 12px;
-  border: 2px solid #0064FF;
-  background: #ffffff;
-  color: #0064FF;
+  border: 2px solid #5D5CFF;
+  background: transparent;
+  color: #5D5CFF;
   text-decoration: none;
   font-size: 15px;
   font-weight: 700;
@@ -703,7 +710,7 @@ section {
 .ct_price_card h4,
 .ct_price_card h5 {
   margin-bottom: 18px;
-  color: #111827;
+  color: #fff;
   font-size: 16px;
   font-weight: 600;
 }
@@ -717,9 +724,9 @@ section {
 .ct_price_card li {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 5px;
   margin-bottom: 14px;
-  color: #454545;
+  color: #B4B4B4;
   font-size: 14px;
   line-height: 1.6;
   font-weight: 500;
@@ -732,14 +739,16 @@ section {
 .ct_price_note {
   margin-top: auto;
   padding-top: 22px;
-  color: #7b8496;
+  color: #687086;
   font-size: 13px;
   line-height: 1.5;
 }
-
+.ct_section_heading  h4{
+  color: #fff;
+}
 .ct_price_card_featured {
-  border: 2px solid #2b79ff;
-  box-shadow: 0 12px 30px rgba(20, 84, 255, 0.16);
+  box-shadow: 0px 0px 15.6px 0px #5D5CFF;
+
 }
 
 

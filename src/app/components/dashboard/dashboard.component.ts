@@ -78,7 +78,7 @@ export class DashboardComponent {
           return;
         }
 
-        this.originalProjectsList = res.data || [];
+        // this.originalProjectsList = res.data || [];
         this.applyFilters();
       },
       error: () => {
