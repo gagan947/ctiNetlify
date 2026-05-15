@@ -19,38 +19,34 @@
                 <app-ai-dev-renderer [isLoading]="isReactBuilding" [blocks]="blocks"
                     (actionSelected)="handleChatAction($event)" (promptSubmitted)="handlePromptSubmitted($event)">
                 </app-ai-dev-renderer>
-
-                
-
-
             </div>
             <div class="ct_ai_input_box mt-auto pe-0">
-        <!-- <p class="mb-2 ct_legacy_text">{{ block?.text?.message }}</p> -->
-        <div class="d-flex align-items-center gap-2 justify-content-between ct_code_companion_header">
-          <h6 class="mb-0 ct_legacy_text ct_fs_14 ct_fw_600 text-white">Code Companion</h6>
-        <a class="ct_fs_12 text-white opacity-75">Clear chat</a>
-        </div>
-        <div class="ct_chat_user_input_main">
-          <p class="ct_chat_user_right">Can you add a forgot password link below the
-password input field?</p>
- <p class="ct_chat_user_left">Sure! I've added a "Forgot password?" link below the
-password input field with proper styling.</p>
-        </div>
-         
-        <div class="ct_ai_input_shell">
-          <textarea #customizeInput class="ct_ai_textarea" rows="3"
-            placeholder="Share your changes here"></textarea>
-          <button type="button" class="ct_ai_input_submit"
-           >
-            <i class="fa-solid fa-arrow-up"></i>
-          </button>
-        </div>
-      </div>
+                <!-- <p class="mb-2 ct_legacy_text">{{ block?.text?.message }}</p> -->
+                <!-- <div class="d-flex align-items-center gap-2 justify-content-between ct_code_companion_header">
+                    <h6 class="mb-0 ct_legacy_text ct_fs_14 ct_fw_600 text-white">Code Companion</h6>
+                    <a class="ct_fs_12 text-white opacity-75">Clear chat</a>
+                </div>
+                <div class="ct_chat_user_input_main">
+                    <p class="ct_chat_user_right">Can you add a forgot password link below the
+                        password input field?</p>
+                    <p class="ct_chat_user_left">Sure! I've added a "Forgot password?" link below the
+                        password input field with proper styling.</p>
+                </div> -->
+
+                <div class="ct_ai_input_shell">
+                    <textarea #customizeInput class="ct_ai_textarea" rows="3" placeholder="Share your changes here"
+                        (keydown)="handlePromptKeydown($event, 'customize_template', customizeInput.value)"></textarea>
+                    <button type="button" class="ct_ai_input_submit"
+                        (click)="handlePromptSubmitted({'blockId': 'customize_template', 'value': customizeInput.value}); customizeInput.value = ''">
+                        <i class="fa-solid fa-arrow-up"></i>
+                    </button>
+                </div>
+            </div>
 
         </aside>
         }
 
-        <!-- @if (!isMobileView() || fullScreen) { -->
+        @if (!isMobileView() || fullScreen) {
         <div class="ct_ai_project_preview_right">
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
@@ -61,11 +57,11 @@ password input field with proper styling.</p>
                             (dragstart)="blockPreviewInteraction($event)"
                             (selectstart)="blockPreviewInteraction($event)">
 
-                            <!-- <iframe *ngIf="safePreviewUrl" #previewFrame class="preview-iframe mx-auto w-100 "
+                            <iframe *ngIf="safePreviewUrl" #previewFrame class="preview-iframe mx-auto w-100 "
                                 [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100" [src]="safePreviewUrl"
                                 sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-downloads"
                                 referrerpolicy="no-referrer" (load)="onIframeLoad()">
-                            </iframe> -->
+                            </iframe>
 
                         </div>
                         <!-- <iframe #previewFrame class="preview-iframe mx-auto w-100"
@@ -73,7 +69,7 @@ password input field with proper styling.</p>
                         </iframe> -->
                         <div class="preview-overlay show" [class.show]="isReactBuilding || isIframeLoading">
                             <div class="ct_ai_thiking_loader2 d-flex">
-                             
+
                                 <div class="rgt_loader" id="rgt_loader">
                                     <div class="rgt_loader-wrapper">
                                         <span *ngFor="let letter of previewOverlayLoaderLetters"
@@ -99,16 +95,15 @@ password input field with proper styling.</p>
                                             <i *ngIf="buildStep < i + 1" [class]="step.pendingIconClass"></i>
                                         </span>
 
-                                       <div>
-                                        <div class="ct_text_clr_DFE1F6 ct_fw_600">
-                                             {{ step.label }}
-                                        <span *ngIf="buildStep === i + 1" class="typing-dots"></span>
+                                        <div>
+                                            <div class="ct_text_clr_DFE1F6 ct_fw_600">
+                                                {{ step.label }}
+                                                <span *ngIf="buildStep === i + 1" class="typing-dots"></span>
+                                            </div>
+                                            <p class="mb-0 mt-1 ct_fs_10">COMPLETED</p>
                                         </div>
-                                         <p class="mb-0 mt-1 ct_fs_10">COMPLETED</p>
-                                       </div>
-                                     
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -121,7 +116,7 @@ password input field with proper styling.</p>
                 </div>
             </div>
         </div>
-        <!-- } -->
+        }
     </section>
 
     @if (isMobileView() && safePreviewUrl) {

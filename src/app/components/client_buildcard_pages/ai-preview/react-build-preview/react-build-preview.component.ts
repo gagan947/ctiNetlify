@@ -1337,6 +1337,14 @@ export class ReactBuildPreviewComponent {
     }
   }
 
+  handlePromptKeydown(event: KeyboardEvent, block: any, value: string): void {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      debugger
+      event.preventDefault();
+      this.handlePromptSubmitted({ blockId: block, value });
+    }
+  }
+
   async handlePromptSubmitted(event: Event | { blockId: string; value: string }) {
     const promptEvent = event as { blockId?: string; value?: string };
     const prompt = promptEvent?.value?.trim();
