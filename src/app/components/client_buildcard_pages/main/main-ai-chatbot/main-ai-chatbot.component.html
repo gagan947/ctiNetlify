@@ -1,4 +1,5 @@
-<div class="main-ai-chat-shell ">
+<div style="background-color: #000;">
+  <div class="main-ai-chat-shell ">
   <div class="main-ai-chat-card w-100">
     <div #chatScroll class="main-ai-chat-scroll">
       @for(message of chatMessages; track $index){
@@ -115,8 +116,8 @@
       </div>
       }
     </div>
-
-    <div class="main-ai-chat-composer">
+    <div class="ct_lightblue_shape_new_12 position-relative">
+    <div class="main-ai-chat-composer ">
       <div class="main-ai-composer main-ai-chat-composer-box">
 
         <textarea #chatPromptInput class="main-ai-prompt-input main-ai-chat-input" rows="2"
@@ -170,6 +171,7 @@
         </div>
       </div>
     </div>
+    </div>
   </div>
 
   <div class="modal fade" id="insufficientCreditsModal" tabindex="-1" aria-hidden="true">
@@ -191,4 +193,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>

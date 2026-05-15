@@ -16,9 +16,8 @@
   padding: 55px 38px 55px;
   border-radius: 32px;
   background:
-    radial-gradient(circle at top center, rgba(255, 255, 255, 0.88), transparent 30%),
-    linear-gradient(135deg, #f2f0ff 0%, #eef1ff 52%, #f6f2ff 100%);
-  color: #101828;
+    #252425;
+  color: #fff;
   font-family: inherit;
   overflow: hidden;
 }
@@ -70,10 +69,10 @@
   min-height: 100%;
   padding: 0 12px 26px;
   border-radius: 10px;
-  border: 1px solid #6870861A;
-  background: #ffffff;
-  box-shadow: 0px 0px 44px 0px #0000000A;
-
+  border: 1px solid #6870864D;
+  background: #323232;
+ box-shadow: 0px 1px 4px 0px #00000040;
+ transition: 0.4s ease all;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -81,8 +80,11 @@
 }
 
 .ct_credit_card__featured {
-  border-color: #d9def5;
-  box-shadow: 0 14px 34px rgba(109, 121, 203, 0.14);
+box-shadow: 0px 0px 15.6px 0px #5D5CFF;
+
+}
+.ct_credit_card:hover{
+  box-shadow: 0px 0px 15.6px 0px #5D5CFF;
 }
 
 .ct_credit_card__offer {
@@ -92,8 +94,8 @@
   min-height: 30px;
   padding: 8px 10px;
   border-radius: 0 0 10px 10px;
-  background: #FFCC00;
-  color: #121212;
+  background: #5D5CFF;
+  color: #fff;
   font-size: 12px;
   font-weight: 600;
   line-height: 1.2;
@@ -111,7 +113,7 @@
 
 .ct_credit_card h4 {
   margin: 0;
-  color: #161616;
+  color: #fff;
   font-size: 18px;
   font-weight: 700;
   line-height: 1.2;
@@ -150,7 +152,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #454545;
+  color: #B4B4B4;
   font-size: 14px;
   font-weight: 500;
   line-height: 1.45;
@@ -173,9 +175,9 @@
 
 .ct_credit_card button {
   width: 100%;
-  border: 1px solid transparent;
-  background: #0064FF1C;
-  color: #0064FF;
+  border: 1px solid #5D5CFF;
+  background: transparent;
+  color: #5D5CFF;
   margin-top: 24px;
 }
 
@@ -199,8 +201,8 @@
   margin-top: 18px;
   padding: 18px 20px 20px;
   border-radius: 18px;
-  border: 1px solid rgba(220, 226, 248, 0.9);
-  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid #323232;
+  background: #323232;
   backdrop-filter: blur(8px);
 }
 
@@ -211,7 +213,7 @@
 .ct_buy_credits__custom label {
   display: inline-block;
   margin-bottom: 4px;
-  color: #202531;
+  color: #fff;
   font-size: 15px;
   font-weight: 600;
 }
@@ -237,7 +239,8 @@
   padding: 0 14px;
   border-radius: 12px;
   border: 1px solid #d8e2f1;
-  background: #ffffff;
+  background: #333;
+  color: #fff;
 }
 
 .ct_buy_credits__input_wrap span {
@@ -251,7 +254,7 @@
   border: 0;
   outline: 0;
   background: transparent;
-  color: #101828;
+  color: #fff;
   font-size: 15px;
   font-weight: 600;
 }
@@ -264,9 +267,10 @@
   min-width: 180px;
   padding: 0 18px;
   border: 0;
-  background: #1454ff;
+  background: #5D5CFF;
   color: #ffffff;
 }
+
 
 @media (max-width: 991px) {
   .ct_buy_credits__grid {

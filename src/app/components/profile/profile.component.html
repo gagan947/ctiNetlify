@@ -4,7 +4,7 @@
             <div class="container-fluid pt-4">
                   <div class="row">
                         <div class="col-md-12">
-                              <h4 class="mb-5 ct_fw_600">{{user?.profile_visited == 1 ? 'Update Profile' :
+                              <h4 class="mb-5 ct_fw_600 text-white">{{user?.profile_visited == 1 ? 'Update Profile' :
                                     'Complete Your Profile'}}
                               </h4>
                               <div class="ct_profile_page_main ct_py_70 pt-0">
@@ -22,13 +22,13 @@
                                                       </div>
                                                 </label>
                                           </div>
-                                          <h4 class="ct_fs_22 ct_fw_700 text-center">{{user?.name}}</h4>
+                                          <h4 class="ct_fs_22 ct_fw_700 text-center text-white">{{user?.name}}</h4>
                                     </div>
 
                                     <div class="row" *ngIf="user">
                                           <div class="col-lg-6 mb-4">
                                                 <div class="ct_profile_main_bg_123">
-                                                      <h4 class="ct_fs_24 ct_fw_700 mb-4">Personal Details</h4>
+                                                      <h4 class="ct_fs_24 ct_fw_700 mb-4 text-white">Personal Details</h4>
                                                       <div class="form-group mb-4">
                                                             <label for="" class="ct_fw_500 mb-2">Full Name</label>
                                                             <input type="text" class="form-control ct_input"
@@ -83,7 +83,7 @@
                                                                   <div class="position-relative">
                                                                         <ngx-intl-tel-input #phoneInput="ngModel"
                                                                               name="phone" [(ngModel)]="phone" required
-                                                                              [cssClass]="'form-control ct_input w-full ps-5 ct_pe_90'"
+                                                                              [cssClass]="'form-control ct_input w-full ps-5 ct_pe_90 custom_phone_input'"
                                                                               [enableAutoCountrySelect]="true"
                                                                               [enablePlaceholder]="true"
                                                                               [searchCountryFlag]="true"
@@ -113,7 +113,7 @@
                                           </div>
                                           <div class="col-lg-6  mb-4">
                                                 <div class="ct_profile_main_bg_123 ">
-                                                      <h4 class="ct_fs_24 ct_fw_700 mb-4">Company Details</h4>
+                                                      <h4 class="ct_fs_24 ct_fw_700 mb-4 text-white">Company Details</h4>
                                                       <div class="form-group mb-4">
                                                             <label for="" class="ct_fw_500 mb-2">Company Name</label>
                                                             <input type="text" class="form-control ct_input"
@@ -182,7 +182,7 @@
 
                                                       <div class="form-group mb-4">
                                                             <label for="" class="ct_fw_500 mb-2">Currency Format</label>
-                                                            <nz-select class="form-control  ct_currency_input"
+                                                            <nz-select class="form-control ct_currency_input custom_currency_input"
                                                                   [(ngModel)]="user.currency"
                                                                   nzPlaceHolder="Select Currency"
                                                                   [nzDropdownMatchSelectWidth]="false"

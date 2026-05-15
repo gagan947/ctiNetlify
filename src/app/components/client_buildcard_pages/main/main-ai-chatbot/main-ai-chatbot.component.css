@@ -14,7 +14,7 @@
   margin: 0 auto;
 }
 
-.main-ai-chat-shell::before {
+/* .main-ai-chat-shell::before {
   top: -90px;
   left: 0px;
   width: 260px;
@@ -32,7 +32,7 @@
   border-radius: 999px;
   background: radial-gradient(circle, rgba(255, 196, 232, 0.48), transparent 70%);
   filter: blur(12px);
-}
+} */
 
 
 .main-ai-chat-card::before {
@@ -48,7 +48,7 @@
 .main-ai-chat-scroll {
   flex: 1 1 auto;
   min-height: 0;
-  height: calc(100vh - 220px);
+  height: calc(100vh - 215px);
   padding: 20px 28px 14px;
   overflow-y: auto;
   scrollbar-gutter: stable;
@@ -90,14 +90,14 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ffb96b 5%, #f77ecf 52%, #6ea6ff 100%);
+  background: linear-gradient(135deg, #5D5CFF 5%, #321B89 52%, #17151F 100%);
   box-shadow: 0 10px 24px rgba(231, 138, 198, 0.28);
 }
 
 .main-ai-thread-avatar span::before {
   inset: 8px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.72), transparent 58%);
+  background: radial-gradient(circle at 30% 30%, rgba(250, 250, 250, 1), transparent 58%);
 }
 
 .main-ai-thread-stack {
@@ -131,7 +131,7 @@
   /* width: 100%; */
   padding: 8px 15px;
   border-radius: 24px;
-  background: linear-gradient(90deg, #df4a9a 0%, #8bb7ff 100%);
+  background: #c3c3c333;
   box-shadow: 0 10px 30px rgba(129, 157, 234, 0.26);
   color: #ffffff;
 }
@@ -161,7 +161,7 @@
 }
 
 .main-ai-thread-row.is-ai .text-line {
-  color: #171a24;
+  color: #fff;
   font-size: 15px;
 }
 
@@ -425,13 +425,16 @@
   position: relative;
   padding: 12px 18px;
   border-radius: 18px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.72));
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  box-shadow: 0 16px 32px rgba(165, 176, 218, 0.12);
+     box-shadow: 0px 0px 34px 0px #321B89, 0px 20px 34px 0px #321B89;
+    background-color: #17151F;
+    text-align: left;
+    margin-top: 0px;
+    position: relative;
+    z-index: 1;
+    border: 1px solid #ffffff26;
 }
 
-.main-ai-composer::before {
+/* .main-ai-composer::before {
   inset: 0;
   border-radius: inherit;
   padding: 2px;
@@ -439,7 +442,8 @@
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-}
+} */
+
 
 .main-ai-composer-title {
   display: inline-flex;
@@ -469,7 +473,7 @@
   outline: 0;
   resize: none;
   background: transparent;
-  color: #1c2233;
+  color: #fff;
   font-size: 15px;
   line-height: 1.5;
   caret-color: #df4a9a;
@@ -496,19 +500,19 @@
 
 .main-ai-chip-btn {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 46px;
-  height: 46px;
-  min-height: 46px;
-  padding: 0;
-  border: 1px solid rgba(208, 213, 232, 0.65);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.68);
-  color: #6d7386;
-  font-size: 16px;
-  line-height: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 46px;
+    height: 46px;
+    min-height: 46px;
+    padding: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: #fff;
+    border: 1px solid #5D5CFF;
+    font-size: 16px;
+    line-height: 1;
 }
 
 .main-ai-voice-action-btn {
@@ -553,13 +557,13 @@
   min-width: 46px;
   padding: 0;
   gap: 0;
-  border-color: rgba(255, 110, 110, 0.18);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 242, 242, 0.92));
+     border-color: #5D5CFF;
+    background: transparent;
 }
 
 .main-ai-voice-toggle-btn:hover {
   border-color: rgba(255, 110, 110, 0.32);
-  color: #d63f58;
+  /* color: #d63f58; */
 }
 
 .main-ai-voice-toggle-btn.is-starting {
@@ -589,7 +593,7 @@
   color: #ffffff;
 }
 
-.main-ai-voice-toggle-icon {
+/* .main-ai-voice-toggle-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -598,7 +602,7 @@
   border-radius: 999px;
   background: rgba(255, 107, 129, 0.12);
   transition: background 0.2s ease, transform 0.2s ease;
-}
+} */
 
 .main-ai-voice-toggle-btn.is-listening .main-ai-voice-toggle-icon {
   background: rgba(255, 255, 255, 0.18);

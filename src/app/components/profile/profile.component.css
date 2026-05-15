@@ -1,8 +1,10 @@
 .ct_profile_main_bg_123 {
     padding: 30px 30px;
     margin-top: 30px;
-    background: linear-gradient(346deg, rgba(0, 100, 255, 0.10) 0%, rgba(182, 12, 254, 0.10) 50%, rgba(250, 187, 0, 0.10) 100%);
+    background: #323232;
     height: 100%;
+    color: #fff;
+    border-radius: 10px;
 }
 .ct_eye_show{
     position: absolute;
@@ -19,4 +21,27 @@
 }
 .ct_pe_90{
     padding-right: 90px !important;
+}
+.ct_white_bg_page {
+    background-color: #000;
+}
+
+.form-control.ct_input{
+    background-color: transparent !important;
+    color: #fff;
+}
+.ct_input::placeholder{
+    color: #fff;
+    opacity: 0.7;
+}
+.ct_input:focus ,.form-control.ct_input:focus{
+    border-color: #5D5CFF;
+}
+
+.ct_blue_btn_fill{
+    background-color: #5D5CFF;
+}
+.ct_profile_user img {
+  
+    border: 1px solid #ffffff40;
 }

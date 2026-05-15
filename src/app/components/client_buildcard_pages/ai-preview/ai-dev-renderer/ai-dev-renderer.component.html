@@ -31,8 +31,19 @@
         </div>
       </div>
 
-      <div *ngIf="isInputBlock(block)" class="ct_ai_input_box">
-        <p class="mb-2 ct_legacy_text">{{ block?.text?.message }}</p>
+      <!-- <div *ngIf="isInputBlock(block)" class="ct_ai_input_box">
+        <p class="mb-2 ct_legacy_text d-none">{{ block?.text?.message }}</p>
+        <div class="d-flex align-items-center gap-2 justify-content-between ct_code_companion_header">
+          <h6 class="mb-0 ct_legacy_text ct_fs_14 ct_fw_600 text-white">Code Companion</h6>
+        <a class="ct_fs_12 text-white opacity-75">Clear chat</a>
+        </div>
+        <div class="ct_chat_user_input_main">
+          <p class="ct_chat_user_right">Can you add a forgot password link below the
+password input field?</p>
+ <p class="ct_chat_user_left">Sure! I've added a "Forgot password?" link below the
+password input field with proper styling.</p>
+        </div>
+         
         <div class="ct_ai_input_shell">
           <textarea #customizeInput class="ct_ai_textarea" rows="3"
             [placeholder]="block?.text?.placeholder || 'Share your changes here'"></textarea>
@@ -41,7 +52,7 @@
             <i class="fa-solid fa-arrow-up"></i>
           </button>
         </div>
-      </div>
+      </div> -->
 
       <div *ngIf="isInlineCtaBlock(block)" class="ct_inline_cta_strip">
         <span class="ct_inline_cta_text">{{ block?.text?.message }}</span>
