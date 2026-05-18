@@ -1,237 +1,268 @@
 <section class="ct_dash_board_main d-block">
       <app-workspace-header></app-workspace-header>
       <div class="ct_dash_right_content ct_white_bg_page pt-5 h-auto">
-            <div class="container-fluid pt-4">
+            <div class="container-fluid">
                   <div class="row">
                         <div class="col-md-12">
-                              <h4 class="mb-5 ct_fw_600 text-white">{{user?.profile_visited == 1 ? 'Update Profile' :
-                                    'Complete Your Profile'}}
-                              </h4>
-                              <div class="ct_profile_page_main ct_py_70 pt-0">
-                                   
+                              <div class="ct_profile_page_main">
                                     <div class="row" *ngIf="user">
                                           <div class="col-lg-12 mb-4">
                                                 <div class="ct_profile_main_bg_123">
-                                                      <h4 class="ct_fs_24 ct_fw_700 mb-4 text-white">Personal Details</h4>
+                                                      <h4 class="ct_fs_24 ct_fw_700 mb-4 text-white">
+                                                            {{user.profile_visited == 1 ? 'Personal Details' :
+                                                            'Tell us about yourself'}}
+                                                      </h4>
 
-                                                       <div class="d-flex align-items-center gap-3 ct_mb_30">
-                                          <div class="ct_profile_user">
-                                                <img loading="lazy"
-                                                      [src]="imagePreview ? imagePreview : user?.profile_image ? apiService.imageUrl + user?.profile_image : 'assets/img/np_pro.png'"
-                                                      alt="AI app builder for mobile and web">
-                                                <label for="ct_profile_img_icon"  class="ct_edit_profile_icon">
-                                                      <input type="file" class="d-none" id="ct_profile_img_icon"
-                                                            accept="image/*" (change)="onFileSelected($event)">
-                                                      <div>
-                                                           <svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M6.5625 7.5C7.59803 7.5 8.4375 6.66053 8.4375 5.625C8.4375 4.58947 7.59803 3.75 6.5625 3.75C5.52697 3.75 4.6875 4.58947 4.6875 5.625C4.6875 6.66053 5.52697 7.5 6.5625 7.5Z" fill="white"/>
-<path d="M11.7188 1.875H9.99019C9.90234 1.875 9.79331 1.81816 9.70837 1.72852L8.94844 0.529102C8.94243 0.519584 8.93607 0.510302 8.92938 0.501257C8.92268 0.492211 8.91565 0.483427 8.9083 0.474902C8.6458 0.16875 8.29102 0 7.91016 0H5.21484C4.83398 0 4.4792 0.16875 4.2167 0.474902C4.20935 0.483427 4.20232 0.492211 4.19562 0.501257C4.18893 0.510303 4.18257 0.519584 4.17656 0.529102L3.4166 1.73027C3.35156 1.80117 3.26016 1.87675 3.16406 1.87675V1.64238C3.16406 1.51294 3.11829 1.40245 3.02677 1.31093C2.93524 1.2194 2.82475 1.17363 2.69531 1.17363H1.99219C1.86275 1.17363 1.75226 1.2194 1.66073 1.31093C1.56921 1.40245 1.52344 1.51294 1.52344 1.64238V1.87675H1.40625C1.01809 1.87717 0.686779 2.01459 0.41231 2.28907C0.137841 2.56354 0.000403747 2.89485 0 3.283V8.90625C0.000403523 9.29441 0.13784 9.62569 0.412309 9.90019C0.686779 10.1747 1.01809 10.3121 1.40625 10.3125H11.7188C12.1069 10.3121 12.4382 10.1747 12.7127 9.90019C12.9872 9.62569 13.1246 9.2944 13.125 8.90625V3.28125C13.1246 2.89309 12.9872 2.56177 12.7127 2.28731C12.4382 2.01284 12.1069 1.8754 11.7188 1.875ZM6.5625 8.4375C5.78585 8.4375 5.12294 8.16292 4.57376 7.61374C4.02458 7.06456 3.75 6.40165 3.75 5.625C3.75 4.84835 4.02458 4.18544 4.57376 3.63626C5.12294 3.08708 5.78585 2.8125 6.5625 2.8125C7.33915 2.8125 8.00206 3.08708 8.55124 3.63626C9.10042 4.18544 9.375 4.84835 9.375 5.625C9.37411 6.40128 9.09921 7.06388 8.55029 7.6128C8.00138 8.16171 7.33878 8.43661 6.5625 8.4375Z" fill="white"/>
-</svg>
+                                                      <div class="d-flex align-items-center gap-3 ct_mb_30">
+                                                            <div class="ct_profile_user">
+                                                                  <img loading="lazy"
+                                                                        [src]="imagePreview ? imagePreview : user.profile_image ? apiService.imageUrl + user.profile_image : 'assets/img/np_pro.png'"
+                                                                        alt="AI app builder for mobile and web">
+                                                                  <label for="ct_profile_img_icon"
+                                                                        class="ct_edit_profile_icon">
+                                                                        <input type="file" class="d-none"
+                                                                              id="ct_profile_img_icon" accept="image/*"
+                                                                              (change)="onFileSelected($event)">
+                                                                        <div>
+                                                                              <svg width="14" height="11"
+                                                                                    viewBox="0 0 14 11" fill="none"
+                                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path d="M6.5625 7.5C7.59803 7.5 8.4375 6.66053 8.4375 5.625C8.4375 4.58947 7.59803 3.75 6.5625 3.75C5.52697 3.75 4.6875 4.58947 4.6875 5.625C4.6875 6.66053 5.52697 7.5 6.5625 7.5Z"
+                                                                                          fill="white" />
+                                                                                    <path d="M11.7188 1.875H9.99019C9.90234 1.875 9.79331 1.81816 9.70837 1.72852L8.94844 0.529102C8.94243 0.519584 8.93607 0.510302 8.92938 0.501257C8.92268 0.492211 8.91565 0.483427 8.9083 0.474902C8.6458 0.16875 8.29102 0 7.91016 0H5.21484C4.83398 0 4.4792 0.16875 4.2167 0.474902C4.20935 0.483427 4.20232 0.492211 4.19562 0.501257C4.18893 0.510303 4.18257 0.519584 4.17656 0.529102L3.4166 1.73027C3.35156 1.80117 3.26016 1.87675 3.16406 1.87675V1.64238C3.16406 1.51294 3.11829 1.40245 3.02677 1.31093C2.93524 1.2194 2.82475 1.17363 2.69531 1.17363H1.99219C1.86275 1.17363 1.75226 1.2194 1.66073 1.31093C1.56921 1.40245 1.52344 1.51294 1.52344 1.64238V1.87675H1.40625C1.01809 1.87717 0.686779 2.01459 0.41231 2.28907C0.137841 2.56354 0.000403747 2.89485 0 3.283V8.90625C0.000403523 9.29441 0.13784 9.62569 0.412309 9.90019C0.686779 10.1747 1.01809 10.3121 1.40625 10.3125H11.7188C12.1069 10.3121 12.4382 10.1747 12.7127 9.90019C12.9872 9.62569 13.1246 9.2944 13.125 8.90625V3.28125C13.1246 2.89309 12.9872 2.56177 12.7127 2.28731C12.4382 2.01284 12.1069 1.8754 11.7188 1.875ZM6.5625 8.4375C5.78585 8.4375 5.12294 8.16292 4.57376 7.61374C4.02458 7.06456 3.75 6.40165 3.75 5.625C3.75 4.84835 4.02458 4.18544 4.57376 3.63626C5.12294 3.08708 5.78585 2.8125 6.5625 2.8125C7.33915 2.8125 8.00206 3.08708 8.55124 3.63626C9.10042 4.18544 9.375 4.84835 9.375 5.625C9.37411 6.40128 9.09921 7.06388 8.55029 7.6128C8.00138 8.16171 7.33878 8.43661 6.5625 8.4375Z"
+                                                                                          fill="white" />
+                                                                              </svg>
 
 
+                                                                        </div>
+                                                                  </label>
+                                                            </div>
+                                                            <div>
+                                                                  <h4 class="ct_fs_16 ct_fw_700 text-white">
+                                                                        {{user.name}}</h4>
+                                                                  <p class="mb-0">{{user.email}}</p>
+                                                            </div>
                                                       </div>
-                                                </label>
-                                          </div>
-                                          <div>
-                                                  <h4 class="ct_fs_16 ct_fw_700 text-white">{{user?.name}}</h4>
-                                          <p class="mb-0">mish234skgmail.com</p>
-                                          </div>
-                                    </div>
 
                                                       <div class="row">
                                                             <div class="col-md-6">
                                                                   <div class="form-group mb-4">
-                                                            <label for="" class="ct_fw_500 mb-2">Full Name</label>
-                                                            <input type="text" class="form-control ct_input"
-                                                                  placeholder="Enter Full Name" [(ngModel)]="user.name"
-                                                                  name="name" [ngModelOptions]="{standalone: true}"
-                                                                  #nameModel="ngModel">
-                                                            <small class="text-danger"
-                                                                  *ngIf="nameModel.touched && (!user.name || user.name.trim().length < 3)">
-                                                                  Name is required (min 3 characters)
-                                                            </small>
-                                                      </div>
-
-                                                            </div>
-                                                             <div class="col-md-6">
-                                                                   <div class="form-group mb-4">
-                                                            <label for="" class="ct_fw_500 mb-2">Email Address</label>
-                                                            <div class="d-flex">
-                                                                  <div class="position-relative w-100">
-                                                                        <input type="text"
-                                                                              class="form-control ct_input pe-5 "
-                                                                              placeholder="Enter Email Address"
-                                                                              [(ngModel)]="user.email" name="email"
+                                                                        <label for="" class="ct_fw_500 mb-2">Full
+                                                                              Name</label>
+                                                                        <input type="text" class="form-control ct_input"
+                                                                              placeholder="Enter Full Name"
+                                                                              [(ngModel)]="user.name" name="name"
                                                                               [ngModelOptions]="{standalone: true}"
-                                                                              [disabled]="user.is_email_verified ===1">
-                                                                        @if(user.is_email_verified){
-                                                                        <svg width="24" height="24" class="ct_eye_show"
-                                                                              viewBox="0 0 24 24" fill="none"
-                                                                              xmlns="http://www.w3.org/2000/svg">
-                                                                              <path d="M8.6 22.5L6.7 19.3L3.1 18.5L3.45 14.8L1 12L3.45 9.2L3.1 5.5L6.7 4.7L8.6 1.5L12 2.95L15.4 1.5L17.3 4.7L20.9 5.5L20.55 9.2L23 12L20.55 14.8L20.9 18.5L17.3 19.3L15.4 22.5L12 21.05L8.6 22.5ZM10.95 15.55L16.6 9.9L15.2 8.45L10.95 12.7L8.8 10.6L7.4 12L10.95 15.55Z"
-                                                                                    fill="#2C96FF" />
-                                                                        </svg>
-
-                                                                        }@else {
-                                                                        <button class="ct_green_btn ct_eye_show"
-                                                                              (click)="verifyEmail()"
-                                                                              [disabled]="isLoading2">
-                                                                              <span *ngIf="isLoading2"
-                                                                                    class="spinner-border spinner-border-sm me-2"
-                                                                                    role="status"
-                                                                                    aria-hidden="true"></span>
-                                                                              {{ isLoading2 ? '' : 'Verify' }}
-                                                                        </button>
-
-                                                                        }
-                                                                  </div>
-                                                                  <div>
-                                                                  </div>
-                                                            </div>
-                                                      </div>
-                                                             </div>
-                                                             <div class="col-md-6">
-                                                                   <form #profilePhoneForm="ngForm"
-                                                            (ngSubmit)="verifySendOtp(profilePhoneForm)">
-                                                            <div class="form-group mb-4">
-                                                                  <label for="" class="ct_fw_500 mb-2">Phone
-                                                                        Number</label>
-                                                                  <div class="position-relative">
-                                                                        <ngx-intl-tel-input #phoneInput="ngModel"
-                                                                              name="phone" [(ngModel)]="phone" required
-                                                                              [cssClass]="'form-control ct_input w-full ps-5 ct_pe_90 custom_phone_input'"
-                                                                              [enableAutoCountrySelect]="true"
-                                                                              [enablePlaceholder]="true"
-                                                                              [searchCountryFlag]="true"
-                                                                              [customPlaceholder]="'Enter Number'"
-                                                                              [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
-                                                                              [selectFirstCountry]="false"
-                                                                              [selectedCountryISO]="selectedCountry"
-                                                                              [maxLength]="15" [phoneValidation]="true"
-                                                                              [disabled]="user.is_phone_verified ===1">
-                                                                        </ngx-intl-tel-input>
-
-                                                                  </div>
-                                                                  <div *ngIf="profilePhoneForm.submitted && phoneInput.invalid || submitted"
-                                                                        class="text-danger">
-                                                                        <span *ngIf="phoneInput.errors?.['required']">Phone
-                                                                              number is required.</span>
-                                                                        <span
-                                                                              *ngIf="phoneInput.errors?.['validatePhoneNumber']">Invalid
-                                                                              phone number.</span>
+                                                                              #nameModel="ngModel">
+                                                                        <small class="text-danger"
+                                                                              *ngIf="nameModel.touched && (!user.name || user.name.trim().length < 3)">
+                                                                              Name is required (min 3 characters)
+                                                                        </small>
                                                                   </div>
 
                                                             </div>
-                                                      </form>
-                                                             </div>
+                                                            <div class="col-md-6">
+                                                                  <div class="form-group mb-4">
+                                                                        <label for="" class="ct_fw_500 mb-2">Email
+                                                                              Address</label>
+                                                                        <div class="d-flex">
+                                                                              <div class="position-relative w-100">
+                                                                                    <input type="text"
+                                                                                          class="form-control ct_input pe-5 "
+                                                                                          placeholder="Enter Email Address"
+                                                                                          [(ngModel)]="user.email"
+                                                                                          name="email"
+                                                                                          [ngModelOptions]="{standalone: true}"
+                                                                                          [disabled]="user.is_email_verified ===1">
+                                                                                    @if(user.is_email_verified){
+                                                                                    <svg width="24" height="24"
+                                                                                          class="ct_eye_show"
+                                                                                          viewBox="0 0 24 24"
+                                                                                          fill="none"
+                                                                                          xmlns="http://www.w3.org/2000/svg">
+                                                                                          <path d="M8.6 22.5L6.7 19.3L3.1 18.5L3.45 14.8L1 12L3.45 9.2L3.1 5.5L6.7 4.7L8.6 1.5L12 2.95L15.4 1.5L17.3 4.7L20.9 5.5L20.55 9.2L23 12L20.55 14.8L20.9 18.5L17.3 19.3L15.4 22.5L12 21.05L8.6 22.5ZM10.95 15.55L16.6 9.9L15.2 8.45L10.95 12.7L8.8 10.6L7.4 12L10.95 15.55Z"
+                                                                                                fill="#2C96FF" />
+                                                                                    </svg>
+
+                                                                                    }@else {
+                                                                                    <button
+                                                                                          class="ct_green_btn ct_eye_show"
+                                                                                          (click)="verifyEmail()"
+                                                                                          [disabled]="isLoading2">
+                                                                                          <span *ngIf="isLoading2"
+                                                                                                class="spinner-border spinner-border-sm me-2"
+                                                                                                role="status"
+                                                                                                aria-hidden="true"></span>
+                                                                                          {{ isLoading2 ? '' : 'Verify'
+                                                                                          }}
+                                                                                    </button>
+
+                                                                                    }
+                                                                              </div>
+                                                                              <div>
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                  <form #profilePhoneForm="ngForm"
+                                                                        (ngSubmit)="verifySendOtp(profilePhoneForm)">
+                                                                        <div class="form-group mb-4">
+                                                                              <label for="" class="ct_fw_500 mb-2">Phone
+                                                                                    Number</label>
+                                                                              <div class="position-relative">
+                                                                                    <ngx-intl-tel-input
+                                                                                          #phoneInput="ngModel"
+                                                                                          name="phone"
+                                                                                          [(ngModel)]="phone" required
+                                                                                          [cssClass]="'form-control ct_input w-full ps-5 ct_pe_90 custom_phone_input'"
+                                                                                          [enableAutoCountrySelect]="true"
+                                                                                          [enablePlaceholder]="true"
+                                                                                          [searchCountryFlag]="true"
+                                                                                          [customPlaceholder]="'Enter Number'"
+                                                                                          [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                                                                          [selectFirstCountry]="false"
+                                                                                          [selectedCountryISO]="selectedCountry"
+                                                                                          [maxLength]="15"
+                                                                                          [phoneValidation]="true"
+                                                                                          [disabled]="user.is_phone_verified ===1">
+                                                                                    </ngx-intl-tel-input>
+
+                                                                              </div>
+                                                                              <div *ngIf="profilePhoneForm.submitted && phoneInput.invalid || submitted"
+                                                                                    class="text-danger">
+                                                                                    <span
+                                                                                          *ngIf="phoneInput.errors?.['required']">Phone
+                                                                                          number is required.</span>
+                                                                                    <span
+                                                                                          *ngIf="phoneInput.errors?.['validatePhoneNumber']">Invalid
+                                                                                          phone number.</span>
+                                                                              </div>
+
+                                                                        </div>
+                                                                  </form>
+                                                            </div>
 
                                                       </div>
-                                                     
-                                                     
+
+
 
                                                 </div>
 
                                           </div>
                                           <div class="col-lg-12  mb-4">
                                                 <div class="ct_profile_main_bg_123 ">
-                                                      <h4 class="ct_fs_24 ct_fw_700 mb-4 text-white">Company Details</h4>
+                                                      <h4 class="ct_fs_24 ct_fw_700 mb-4 text-white">Company Details
+                                                      </h4>
                                                       <div class="row">
                                                             <div class="col-md-12">
-                                                                    <div class="form-group mb-4">
-                                                            <label for="" class="ct_fw_500 mb-2">Company Name</label>
-                                                            <input type="text" class="form-control ct_input"
-                                                                  placeholder="Enter Company Name"
-                                                                  [(ngModel)]="user.companyName"
-                                                                  [ngModelOptions]="{standalone: true}">
-                                                      </div>
+                                                                  <div class="form-group mb-4">
+                                                                        <label for="" class="ct_fw_500 mb-2">Company
+                                                                              Name</label>
+                                                                        <input type="text" class="form-control ct_input"
+                                                                              placeholder="Enter Company Name"
+                                                                              [(ngModel)]="user.companyName"
+                                                                              [ngModelOptions]="{standalone: true}">
+                                                                  </div>
 
                                                             </div>
                                                             <div class="col-md-12">
-                                                                    <div class="form-group mb-4 d-flex gap-3 flex-wrap">
-                                                            <div class="form-check">
-                                                                  <input class="form-check-input" type="radio"
-                                                                        name="taxType" id="gst"
-                                                                        [(ngModel)]="selectedType" value="GST"
-                                                                        [ngModelOptions]="{standalone: true}">
-                                                                  <label class="form-check-label ct_fw_500"
-                                                                        for="gst">GST
-                                                                        Number</label>
-                                                            </div>
+                                                                  <div class="form-group mb-4 d-flex gap-3 flex-wrap">
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input"
+                                                                                    type="radio" name="taxType" id="gst"
+                                                                                    [(ngModel)]="selectedType"
+                                                                                    value="GST"
+                                                                                    [ngModelOptions]="{standalone: true}">
+                                                                              <label class="form-check-label ct_fw_500"
+                                                                                    for="gst">GST
+                                                                                    Number</label>
+                                                                        </div>
 
-                                                            <div class="form-check">
-                                                                  <input class="form-check-input" type="radio"
-                                                                        name="taxType" id="vat"
-                                                                        [(ngModel)]="selectedType" value="VAT"
-                                                                        [ngModelOptions]="{standalone: true}">
-                                                                  <label class="form-check-label ct_fw_500"
-                                                                        for="vat">VAT
-                                                                        Number</label>
-                                                            </div>
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input"
+                                                                                    type="radio" name="taxType" id="vat"
+                                                                                    [(ngModel)]="selectedType"
+                                                                                    value="VAT"
+                                                                                    [ngModelOptions]="{standalone: true}">
+                                                                              <label class="form-check-label ct_fw_500"
+                                                                                    for="vat">VAT
+                                                                                    Number</label>
+                                                                        </div>
 
-                                                            <div class="form-check">
-                                                                  <input class="form-check-input" type="radio"
-                                                                        name="taxType" id="tan"
-                                                                        [(ngModel)]="selectedType" value="TAN"
-                                                                        [ngModelOptions]="{standalone: true}">
-                                                                  <label class="form-check-label ct_fw_500"
-                                                                        for="tan">TAN
-                                                                        Number</label>
-                                                            </div>
-                                                      </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                  
-                                                      <!-- GST -->
-                                                      <div class="form-group mb-4" *ngIf="selectedType === 'GST'">
-                                                            <label class="ct_fw_500 mb-2">GST Number</label>
-                                                            <input type="text" class="form-control ct_input"
-                                                                  placeholder="Enter GST Number"
-                                                                  [(ngModel)]="user.gst_number" name="gst_number"
-                                                                  [ngModelOptions]="{standalone: true}">
-                                                      </div>
-
-                                                      <!-- VAT -->
-                                                      <div class="form-group mb-4" *ngIf="selectedType === 'VAT'">
-                                                            <label class="ct_fw_500 mb-2">VAT Number</label>
-                                                            <input type="text" class="form-control ct_input"
-                                                                  placeholder="Enter VAT Number"
-                                                                  [(ngModel)]="user.vat_number" name="vat_number"
-                                                                  [ngModelOptions]="{standalone: true}">
-                                                      </div>
-
-                                                      <!-- TAN -->
-                                                      <div class="form-group mb-4" *ngIf="selectedType === 'TAN'">
-                                                            <label class="ct_fw_500 mb-2">TAN Number</label>
-                                                            <input type="text" class="form-control ct_input"
-                                                                  placeholder="Enter TAN Number"
-                                                                  [(ngModel)]="user.tan_number" name="tan_number"
-                                                                  [ngModelOptions]="{standalone: true}">
-                                                      </div> 
-
+                                                                        <div class="form-check">
+                                                                              <input class="form-check-input"
+                                                                                    type="radio" name="taxType" id="tan"
+                                                                                    [(ngModel)]="selectedType"
+                                                                                    value="TAN"
+                                                                                    [ngModelOptions]="{standalone: true}">
+                                                                              <label class="form-check-label ct_fw_500"
+                                                                                    for="tan">TAN
+                                                                                    Number</label>
+                                                                        </div>
+                                                                  </div>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                   <div class="form-group mb-4">
-                                                            <label for="" class="ct_fw_500 mb-2">Currency Format</label>
-                                                            <nz-select class="form-control ct_currency_input custom_currency_input"
-                                                                  [(ngModel)]="user.currency"
-                                                                  nzPlaceHolder="Select Currency"
-                                                                  [nzDropdownMatchSelectWidth]="false"
-                                                                  [ngModelOptions]="{standalone: true}">
 
-                                                                  @for (item of currencies; track $index) {
-                                                                  <nz-option [nzValue]="item.code"
-                                                                        [nzLabel]="item.name"></nz-option>
-                                                                  }
-                                                            </nz-select>
-                                                      </div>
+                                                                  <!-- GST -->
+                                                                  <div class="form-group mb-4"
+                                                                        *ngIf="selectedType === 'GST'">
+                                                                        <label class="ct_fw_500 mb-2">GST Number</label>
+                                                                        <input type="text" class="form-control ct_input"
+                                                                              placeholder="Enter GST Number"
+                                                                              [(ngModel)]="user.gst_number"
+                                                                              name="gst_number"
+                                                                              [ngModelOptions]="{standalone: true}">
+                                                                  </div>
+
+                                                                  <!-- VAT -->
+                                                                  <div class="form-group mb-4"
+                                                                        *ngIf="selectedType === 'VAT'">
+                                                                        <label class="ct_fw_500 mb-2">VAT Number</label>
+                                                                        <input type="text" class="form-control ct_input"
+                                                                              placeholder="Enter VAT Number"
+                                                                              [(ngModel)]="user.vat_number"
+                                                                              name="vat_number"
+                                                                              [ngModelOptions]="{standalone: true}">
+                                                                  </div>
+
+                                                                  <!-- TAN -->
+                                                                  <div class="form-group mb-4"
+                                                                        *ngIf="selectedType === 'TAN'">
+                                                                        <label class="ct_fw_500 mb-2">TAN Number</label>
+                                                                        <input type="text" class="form-control ct_input"
+                                                                              placeholder="Enter TAN Number"
+                                                                              [(ngModel)]="user.tan_number"
+                                                                              name="tan_number"
+                                                                              [ngModelOptions]="{standalone: true}">
+                                                                  </div>
+
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                  <div class="form-group mb-4">
+                                                                        <label for="" class="ct_fw_500 mb-2">Currency
+                                                                              Format</label>
+                                                                        <nz-select
+                                                                              class="form-control ct_currency_input custom_currency_input"
+                                                                              [(ngModel)]="user.currency"
+                                                                              nzPlaceHolder="Select Currency"
+                                                                              [nzDropdownMatchSelectWidth]="false"
+                                                                              [ngModelOptions]="{standalone: true}">
+
+                                                                              @for (item of currencies; track $index) {
+                                                                              <nz-option [nzValue]="item.code"
+                                                                                    [nzLabel]="item.name"></nz-option>
+                                                                              }
+                                                                        </nz-select>
+                                                                  </div>
                                                             </div>
 
                                                       </div>
-                                                    
-                                                    
 
 
-                                                     
+
+
+
                                                 </div>
                                           </div>
                                     </div>
@@ -303,7 +334,7 @@
                               <h4 class="ct_fs_20 ct_fw_600 mb-1">OTP Verification</h4>
                               <p class="mb-0 ct_text_op_5">Enter OTP code sent to
                                     @if(verificationType === 'E'){
-                                    {{ user?.email}}
+                                    {{ user.email}}
                                     }@else{
                                     {{phone?.dialCode}} {{phone?.number}}
                                     }
