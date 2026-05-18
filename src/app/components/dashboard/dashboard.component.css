@@ -138,11 +138,11 @@
 }
 
 .ct_dashboard_card__hero {
-    position: relative;
-    padding: 22px 22px 20px;
-    background: #04041c;
-    z-index: 1;
-    border-bottom: 1px solid #ffffff33;
+  position: relative;
+  padding: 22px 22px 20px;
+  background: #04041c;
+  z-index: 1;
+  border-bottom: 1px solid #ffffff33;
 }
 
 .ct_dashboard_card__top {
@@ -304,7 +304,7 @@
   padding: 64px 24px;
   border: 1px solid #e2e8f02e;
   border-radius: 28px;
-  background: #323232;
+  background: #04041c;
   display: grid;
   place-items: center;
   text-align: center;
