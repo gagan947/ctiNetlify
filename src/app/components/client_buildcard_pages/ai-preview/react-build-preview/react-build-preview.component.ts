@@ -1339,7 +1339,12 @@ export class ReactBuildPreviewComponent {
   }
 
   handlePromptKeydown(event: KeyboardEvent, block: any, value: string): void {
+
     if (event.key === 'Enter' && !event.shiftKey) {
+      if (this.isReactBuilding) {
+        event.preventDefault();
+        return;
+      }
       this.customizeInput.nativeElement.value = '';
       event.preventDefault();
       this.handlePromptSubmitted({ blockId: block, value });
