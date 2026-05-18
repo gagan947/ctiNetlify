@@ -204,22 +204,26 @@
     padding-inline: 14px 16px;
 }
 
-.main-ai-topbar__home.main-ai-topbar__tab--active{
-     background: linear-gradient(180deg, #06080D 0%, #240F6B 100%);
+.main-ai-topbar__home.main-ai-topbar__tab--active {
+    /* background: linear-gradient(180deg, #06080D 0%, #240F6B 100%); */
     border: 2px solid #2F2D66;
     box-shadow: inset 0px -2px #8267FA;
 }
-.main-ai-topbar__home.main-ai-topbar__tab--active:before ,button.main-ai-topbar__tab.main-ai-topbar__tab--active:before{
+
+/* 
+.main-ai-topbar__home.main-ai-topbar__tab--active:before,
+button.main-ai-topbar__tab.main-ai-topbar__tab--active:before {
     content: "";
     position: absolute;
     bottom: 2px;
-      bottom: 2px;
+    bottom: 2px;
     background-color: #6644FF;
     height: 3px;
     width: 100%;
     left: 0px;
     filter: blur(4px);
-}
+} */
+
 /* .main-ai-topbar__tab:not(.main-ai-topbar__tab--active)::before {
     content: '';
     position: absolute;
@@ -236,8 +240,8 @@
     margin-left: 10px;
     margin-top: 0;
     padding-inline: 18px 14px;
-    background:transparent;
-    border:none;
+    background: transparent;
+    border: none;
     border-bottom-color: transparent;
     border-radius: 12px 12px 0 0;
     /* box-shadow:
@@ -254,8 +258,8 @@
     height: 2px;
     background: #151515;
 } */
- button.main-ai-topbar__tab.main-ai-topbar__tab--active {
-    background: linear-gradient(180deg, #06080D 0%, #240F6B 100%);
+button.main-ai-topbar__tab.main-ai-topbar__tab--active {
+    /* background: linear-gradient(180deg, #06080D 0%, #240F6B 100%); */
     border: 2px solid #2F2D66;
     box-shadow: inset 0px -2px #8267FA;
 }
@@ -346,7 +350,7 @@
     background: #525252;
 }
 
-.main-ai-topbar__tabs-viewport > .main-ai-topbar__add {
+.main-ai-topbar__tabs-viewport>.main-ai-topbar__add {
     flex: 0 0 auto;
 }
 
@@ -1262,11 +1266,13 @@
     background-color: #e6e6e6;
     color: #000;
 }
+
 .ct_ai_cti_logo_short_fav {
     flex-shrink: 0;
     padding-right: 20px;
     border-right: 1px solid #393A45;
 }
+
 .ct_ai_cti_logo_short_fav img {
     width: 94px;
     height: 26px;

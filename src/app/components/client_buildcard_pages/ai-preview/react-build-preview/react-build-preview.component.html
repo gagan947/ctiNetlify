@@ -34,7 +34,8 @@
                 </div> -->
 
                 <div class="ct_ai_input_shell">
-                    <textarea #customizeInput class="ct_ai_textarea" rows="3" placeholder="Shape This Template Your Way"
+                    <textarea [disabled]="isReactBuilding" #customizeInput class="ct_ai_textarea" rows="3"
+                        placeholder="Shape This Template Your Way"
                         (keydown)="handlePromptKeydown($event, 'customize_template', customizeInput.value)"></textarea>
                     <button type="button" class="ct_ai_input_submit" [disabled]="isReactBuilding"
                         (click)="handlePromptSubmitted({'blockId': 'customize_template', 'value': customizeInput.value}); customizeInput.value = ''">
