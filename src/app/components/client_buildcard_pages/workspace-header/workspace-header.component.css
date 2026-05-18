@@ -367,7 +367,7 @@
     padding: 0 14px;
     border: 0;
     border-radius: 999px;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    background: #5D5CFF;
     color: #ffffff;
     font-size: 13px;
     font-weight: 700;
@@ -417,24 +417,24 @@
     box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.32);
 } */
 
-.main-ai-topbar__home:hover,
+/* .main-ai-topbar__home:hover,
 .main-ai-topbar__add:hover,
 .main-ai-topbar__icon:hover,
 .main-ai-topbar__tab:hover {
     border-color: transparent;
-}
+} */
 
-.main-ai-topbar__home:hover {
+/* .main-ai-topbar__home:hover {
     color: #ffffff;
-}
+} */
 
 .main-ai-topbar__tab:hover {
     color: #ffffff;
 }
 
-.main-ai-topbar__tab--active:hover {
+/* .main-ai-topbar__tab--active:hover {
     background: linear-gradient(180deg, #191919 0%, #151515 100%);
-}
+} */
 
 .main-ai-topbar__add:hover {
     color: #c8c8cb;

@@ -741,7 +741,7 @@
 }
 
 .btn-confirm {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: #5D5CFF;
   color: white;
   box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
 }

@@ -37,7 +37,7 @@
 
 .ct_dashboard_subtitle {
   margin: 10px 0 0;
-  color: #687086;
+  color: #BEBFC2;
   font-size: 15px;
   line-height: 1.55;
 }
@@ -73,7 +73,7 @@
   height: 24px;
   padding: 0 6px;
   border-radius: 999px;
-  background: #333;
+  background: #04041c;
   color: #fff;
   font-size: 12px;
 }
@@ -101,7 +101,7 @@
   overflow: hidden;
   border-radius: 28px;
   background:
-    #323232;
+    #04041c;
   border: 1px solid #6870864D;
   box-shadow: 0px 1px 4px 0px #00000040;
 
@@ -138,11 +138,11 @@
 }
 
 .ct_dashboard_card__hero {
-  position: relative;
-  padding: 22px 22px 20px;
-  background:
-    #333;
-  z-index: 1;
+    position: relative;
+    padding: 22px 22px 20px;
+    background: #04041c;
+    z-index: 1;
+    border-bottom: 1px solid #ffffff33;
 }
 
 .ct_dashboard_card__top {
@@ -240,7 +240,7 @@
 .ct_dashboard_meta span {
   display: block;
   margin-bottom: 6px;
-  color: #687086;
+  color: #BEBFC2;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -250,7 +250,7 @@
 .ct_dashboard_meta {
   padding: 14px 14px 12px;
   border-radius: 18px;
-  background: #333;
+  background: #04041c;
   border: 1px solid #ffffff2e;
 }
 

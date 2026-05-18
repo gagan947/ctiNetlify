@@ -228,15 +228,15 @@
     </div>
   </div>
   <!-- MODAL -->
-  <div class="modal-content rounded-4" *ngIf="billingSummaryModalOpen">
+  <div class="modal-content rounded-4 ct_confirl_plan_main_div" *ngIf="billingSummaryModalOpen">
     <!-- HEADER -->
     <div class="modal-header">
-      <h5 class="modal-title mt-2 ps-4">Confirm Your Plan</h5>
+      <h5 class="modal-title mt-2 ps-4 text-white">Confirm Your Plan</h5>
       <!-- <button type="button" class="btn-close" (click)="closeModal()"></button> -->
     </div>
 
     <!-- BODY -->
-    <div class="modal-body pt-2 px-4">
+    <div class="modal-body pt-4 px-4">
       <!-- ================= ORDER SUMMARY ================= -->
       <div class="bg-light rounded p-3 mb-4">
         <h6 class="mb-3">Order Summary</h6>
@@ -276,7 +276,7 @@
           <span>{{ billedNowAmount(selectedPlanData) }}</span>
         </div>
 
-        <small class="text-muted d-block mt-2">
+        <small class=" d-block mt-2">
           <ng-container *ngIf="selectedPlanData && showIntroOffer(selectedPlanData); else standardRenewal">
             Renews at {{ formatCurrency(selectedPlanData.amount, selectedPlanData.currency) }}
             {{ billingCycle() === "YEAR" ? "yearly" : "monthly" }}
@@ -289,22 +289,22 @@
 
       <!-- ================= BILLING FORM ================= -->
       <form [formGroup]="billingForm">
-        <h6 class="mb-3">Billing details</h6>
+        <h6 class="mb-3 text-white">Billing details</h6>
 
         <div class="mb-3">
-          <label class="form-label">Name *</label>
+          <label class="form-label text-white">Name *</label>
           <input type="text" class="form-control" formControlName="name" [class.is-invalid]="isInvalid('name')" />
           <div class="invalid-feedback">Name is required</div>
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Email *</label>
+          <label class="form-label text-white">Email *</label>
           <input type="email" class="form-control" formControlName="email" [class.is-invalid]="isInvalid('email')" />
           <div class="invalid-feedback">Enter a valid email</div>
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Phone *</label>
+          <label class="form-label text-white">Phone *</label>
 
           <ngx-intl-tel-input [cssClass]="'form-control ct_input ct_input_phone_number'"
             [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
@@ -326,11 +326,11 @@
 
     <!-- FOOTER -->
     <div class="modal-footer px-4 pb-4">
-      <button class="btn btn-outline-secondary" (click)="closeModal()">
+      <button class="btn-cancel button-deploy" (click)="closeModal()">
         Cancel
       </button>
 
-      <button class="btn btn-primary ms-2" [disabled]="billingForm.invalid" (click)="confirmAndPay()">
+      <button class="btn-confirm button-deploy ms-2" [disabled]="billingForm.invalid" (click)="confirmAndPay()">
         Subscribe & Pay {{ billedNowAmount(selectedPlanData) }}
       </button>
     </div>

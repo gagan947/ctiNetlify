@@ -1,7 +1,8 @@
 .ct_profile_main_bg_123 {
     padding: 30px 30px;
     margin-top: 30px;
-    background: #323232;
+    background: #04041c;
+    border: 1PX solid #FFFFFF66;
     height: 100%;
     color: #fff;
     border-radius: 10px;
@@ -27,8 +28,9 @@
 }
 
 .form-control.ct_input{
-    background-color: transparent !important;
+    background-color: #FFFFFF12 !important;
     color: #fff;
+    border: 1px solid #ffffff4d;
 }
 .ct_input::placeholder{
     color: #fff;
