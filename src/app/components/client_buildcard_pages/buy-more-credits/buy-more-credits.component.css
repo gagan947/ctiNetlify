@@ -71,8 +71,8 @@
   border-radius: 10px;
   border: 1px solid #6870864D;
   background: #323232;
- box-shadow: 0px 1px 4px 0px #00000040;
- transition: 0.4s ease all;
+  box-shadow: 0px 1px 4px 0px #00000040;
+  transition: 0.4s ease all;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -80,10 +80,11 @@
 }
 
 .ct_credit_card__featured {
-box-shadow: 0px 0px 15.6px 0px #5D5CFF;
+  box-shadow: 0px 0px 15.6px 0px #5D5CFF;
 
 }
-.ct_credit_card:hover{
+
+.ct_credit_card:hover {
   box-shadow: 0px 0px 15.6px 0px #5D5CFF;
 }
 

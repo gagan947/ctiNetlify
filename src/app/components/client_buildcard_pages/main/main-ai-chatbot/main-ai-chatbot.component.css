@@ -124,7 +124,7 @@
 
 .main-ai-thread-text {
   position: relative;
-  color: #1a1d29;
+  color: #8f929e;
 }
 
 .main-ai-thread-row.is-user .main-ai-thread-text {
@@ -425,13 +425,13 @@
   position: relative;
   padding: 12px 18px;
   border-radius: 18px;
-     box-shadow: 0px 0px 34px 0px #321B89, 0px 20px 34px 0px #321B89;
-    background-color: #17151F;
-    text-align: left;
-    margin-top: 0px;
-    position: relative;
-    z-index: 1;
-    border: 1px solid #ffffff26;
+  box-shadow: 0px 0px 34px 0px #321B89, 0px 20px 34px 0px #321B89;
+  background-color: #17151F;
+  text-align: left;
+  margin-top: 0px;
+  position: relative;
+  z-index: 1;
+  border: 1px solid #ffffff26;
 }
 
 /* .main-ai-composer::before {
@@ -500,19 +500,19 @@
 
 .main-ai-chip-btn {
   display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 46px;
-    height: 46px;
-    min-height: 46px;
-    padding: 0;
-    border-radius: 12px;
-    background: transparent;
-    color: #fff;
-    border: 1px solid #5D5CFF;
-    font-size: 16px;
-    line-height: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 46px;
+  height: 46px;
+  min-height: 46px;
+  padding: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid #5D5CFF;
+  font-size: 16px;
+  line-height: 1;
 }
 
 .main-ai-voice-action-btn {
@@ -557,8 +557,8 @@
   min-width: 46px;
   padding: 0;
   gap: 0;
-     border-color: #5D5CFF;
-    background: transparent;
+  border-color: #5D5CFF;
+  background: transparent;
 }
 
 .main-ai-voice-toggle-btn:hover {
@@ -649,6 +649,7 @@
 }
 
 @keyframes main-ai-voice-pulse {
+
   0%,
   100% {
     transform: scale(1);
@@ -660,6 +661,7 @@
 }
 
 @keyframes main-ai-voice-loader {
+
   0%,
   100% {
     opacity: 0.35;

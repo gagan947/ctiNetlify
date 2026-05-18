@@ -120,6 +120,7 @@ export class ReactBuildPreviewComponent {
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
   @ViewChild('chatScroll') chatScroll!: ElementRef<HTMLDivElement>;
   @ViewChild('codeEditor') codeEditor!: ReactCodeEditorComponent;
+  @ViewChild('customizeInput') customizeInput!: ElementRef<HTMLTextAreaElement>;
   previewWidth = 1366; // desktop default
   @ViewChild('preview', { static: false }) iframe!: ElementRef<HTMLIFrameElement>;
   blocks: any[] = [];
@@ -1339,7 +1340,7 @@ export class ReactBuildPreviewComponent {
 
   handlePromptKeydown(event: KeyboardEvent, block: any, value: string): void {
     if (event.key === 'Enter' && !event.shiftKey) {
-      debugger
+      this.customizeInput.nativeElement.value = '';
       event.preventDefault();
       this.handlePromptSubmitted({ blockId: block, value });
     }
