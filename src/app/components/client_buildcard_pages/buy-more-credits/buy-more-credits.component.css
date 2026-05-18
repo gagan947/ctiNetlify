@@ -176,15 +176,18 @@
 
 .ct_credit_card button {
   width: 100%;
-  border: 1px solid #5D5CFF;
-  background: transparent;
+  border: 1px solid #fff;
+  background: #fff;
   color: #5D5CFF;
   margin-top: 24px;
+  transition: 0.4s ease all;
 }
 
 .ct_credit_card button:hover,
 .ct_buy_credits__custom_btn:hover {
-  transform: translateY(-1px);
+  background-color: #5D5CFF;
+  color: #fff;
+  border-color: #5D5CFF;
 }
 
 .ct_buy_credits__empty {

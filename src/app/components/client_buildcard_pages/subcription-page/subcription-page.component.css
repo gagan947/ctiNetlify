@@ -691,19 +691,25 @@ section {
 }
 
 .ct_price_cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 50px;
-  margin-top: auto;
-  border-radius: 12px;
-  border: 2px solid #5D5CFF;
-  background: transparent;
-  color: #5D5CFF;
-  text-decoration: none;
-  font-size: 15px;
-  font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 50px;
+    margin-top: auto;
+    border-radius: 12px;
+    border: 2px solid #fff;
+    background: #ffffff;
+    color: #5D5CFF;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    transition: 0.4s ease all;
+}
+.ct_price_cta:hover{
+  background-color:#5D5CFF;
+  color: #fff;
+  border-color: #5D5CFF;
 }
 
 .ct_price_cta_filled {

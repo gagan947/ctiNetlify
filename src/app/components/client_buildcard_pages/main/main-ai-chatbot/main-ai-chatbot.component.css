@@ -385,20 +385,20 @@
   padding: 12px 18px;
   border-radius: 16px;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .main-ai-build-btn {
   border: 0;
-  background: linear-gradient(90deg, #df4a9a 0%, #8bb7ff 100%);
+  background: #5D5CFF;
   color: #fff;
   box-shadow: 0 12px 28px rgba(135, 160, 236, 0.26);
 }
 
 .main-ai-skip-btn {
   border: 1px solid rgba(175, 182, 212, 0.5);
-  background: rgba(255, 255, 255, 0.74);
-  color: #5d6784;
+  background: rgba(255, 255, 255, 0.100);
+  color: #e6e6e6;
 }
 
 .main-ai-build-btn:hover:not(:disabled),

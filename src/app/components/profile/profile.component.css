@@ -43,7 +43,22 @@
 .ct_blue_btn_fill{
     background-color: #5D5CFF;
 }
+
 .ct_profile_user img {
   
     border: 1px solid #ffffff40;
+    width: 75px !important;
+    height: 75px !important;
+}
+.ct_profile_user{
+    margin: 0px;
+}
+.ct_edit_profile_icon{
+    width: 30px;
+    height: 30px;
+    background-color: #5D5CFF;
+    bottom: -5px;
+}
+.ct_mb_30{
+    margin-bottom: 30px;
 }
