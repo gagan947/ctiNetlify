@@ -2,7 +2,9 @@
     <app-workspace-header [fullScreen]="fullScreen" [selectedDeviceType]="selectedDeviceType"
         [showPreviewControls]="true" (fullScreenToggle)="openFullPreview()"
         (deviceTypeChange)="onDeviceTypeChange($event)" [showPrimaryHeaderAction]="showDeployHeaderAction"
-        [primaryHeaderActionLabel]="'Deploy to Production'" (primaryHeaderActionClick)="openDeployModal()" />
+        [primaryHeaderActionLabel]="'Deploy'" (primaryHeaderActionClick)="openDeployModal()"
+        [showSecondaryHeaderAction]="showDeployHeaderAction" [secondaryHeaderActionLabel]="'Code'"
+        (secondaryHeaderActionClick)="openDownloadCodeModal()" />
     <section class="ct_project_ai_preview_main">
         @if (!fullScreen) {
         <aside class="ct_project_ai_chat_section" style="height: calc(100vh - 50px);">
@@ -137,6 +139,31 @@
         </button>
     </div>
     }
+</div>
+
+<div class="modal fade" id="downloadCodeConfirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content mb-2 ct_deploy_confirm_modal">
+            <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="ct_deploy_confirm_modal__badge">
+                <i class="fa-solid fa-download"></i>
+            </div>
+            <div class="ct_deploy_confirm_modal__header">
+                <h2>Download Code?</h2>
+                <p class="mb-0">
+                    The download charges is 100 credits. Do you want to proceed?
+                </p>
+            </div>
+            <div class="actions">
+                <button class="btn-cancel button-deploy" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn-confirm button-deploy" (click)="confirmDownloadCode()">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -328,7 +355,8 @@
                 <i class="fa-solid fa-wallet"></i>
             </div>
             <h2>Insufficient Credit Balance</h2>
-            <p>You need at least 60 credits to continue with project publishing. Your current balance is {{
+            <p>You need at least {{ insufficientCreditsRequired }} credits to continue with {{
+                insufficientCreditsActionLabel }}. Your current balance is {{
                 getCurrentCreditBalance() }} credits.</p>
             <div class="actions">
                 <button class="btn-confirm button-deploy w-100" data-bs-dismiss="modal"

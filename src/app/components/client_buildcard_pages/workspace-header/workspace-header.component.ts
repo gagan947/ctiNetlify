@@ -45,9 +45,14 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   @Input() showPreviewControls = false;
   @Input() showPrimaryHeaderAction = false;
   @Input() primaryHeaderActionLabel = 'Deploy to Production';
+  @Input() primaryHeaderActionIconClass = 'fa-solid fa-rocket';
+  @Input() showSecondaryHeaderAction = false;
+  @Input() secondaryHeaderActionLabel = 'Download Code';
+  @Input() secondaryHeaderActionIconClass = 'fa-solid fa-download';
   @Output() fullScreenToggle = new EventEmitter<void>();
   @Output() deviceTypeChange = new EventEmitter<'desktop' | 'tablet' | 'mobile'>();
   @Output() primaryHeaderActionClick = new EventEmitter<void>();
+  @Output() secondaryHeaderActionClick = new EventEmitter<void>();
   allProjectsList: UserProjectTab[] = [];
   selectedProjectId = '';
   profileImage = '';
@@ -256,6 +261,10 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
 
   handlePrimaryHeaderActionClick(): void {
     this.primaryHeaderActionClick.emit();
+  }
+
+  handleSecondaryHeaderActionClick(): void {
+    this.secondaryHeaderActionClick.emit();
   }
 
   removeProjectFromTab(projectId: string): void {

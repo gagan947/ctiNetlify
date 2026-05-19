@@ -71,6 +71,8 @@ declare var bootstrap: any;
   styleUrl: './react-build-preview.component.css'
 })
 export class ReactBuildPreviewComponent {
+  private readonly deployCreditsRequired = 60;
+  private readonly downloadCodeCreditsRequired = 100;
   socket: any;
   private readonly mobileBreakpoint = 991;
   private readonly buildErrorPreviewLineLimit = 6;
@@ -184,6 +186,8 @@ export class ReactBuildPreviewComponent {
   deploymentSuccessMessage = '';
   successModalAction: 'navigate-dashboard' | 'close-only' = 'navigate-dashboard';
   showDeployHeaderAction = false;
+  insufficientCreditsRequired = this.deployCreditsRequired;
+  insufficientCreditsActionLabel = 'project publishing';
   buildGenerationErrorMessage = '';
   isBuildGenerationErrorExpanded = false;
   callbackRequestForm = new FormGroup({
@@ -717,6 +721,47 @@ export class ReactBuildPreviewComponent {
 
   getCurrentCreditBalance(): number {
     return Number((this.subscriptionPlan as any)?.creditBalance || 0);
+  }
+
+  private openInsufficientCreditsModal(requiredCredits: number, actionLabel: string) {
+    this.insufficientCreditsRequired = requiredCredits;
+    this.insufficientCreditsActionLabel = actionLabel;
+    this.openBootstrapModal('insufficientCreditsModal', { backdrop: 'static', keyboard: true });
+  }
+
+  openDownloadCodeModal() {
+    this.openBootstrapModal('downloadCodeConfirmModal', { backdrop: 'static', keyboard: true });
+  }
+
+  confirmDownloadCode() {
+    this.closeBootstrapModal('downloadCodeConfirmModal');
+
+    this.openInsufficientCreditsModal(this.downloadCodeCreditsRequired, 'downloading code');
+    // if (this.getCurrentCreditBalance() < this.downloadCodeCreditsRequired) {
+    //   return;
+    // }
+
+    // this.downloadCurrentCodeFiles();
+  }
+
+  private downloadCurrentCodeFiles() {
+    if (!this.files.length) {
+      this.toster.error('No code files are available to download right now.');
+      return;
+    }
+
+    this.files.forEach((file) => {
+      const blob = new Blob([file.fullCode], { type: 'text/plain;charset=utf-8' });
+      const downloadUrl = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = downloadUrl;
+      anchor.download = file.name;
+      anchor.rel = 'noopener';
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      URL.revokeObjectURL(downloadUrl);
+    });
   }
 
   onCustomDomainInput(event: Event) {
@@ -1470,12 +1515,12 @@ export class ReactBuildPreviewComponent {
     this.selected_template_id = activeDesign;
     this.closeBootstrapModal('deployConfirmModal');
 
-    if (this.getCurrentCreditBalance() >= 60) {
+    if (this.getCurrentCreditBalance() >= this.deployCreditsRequired) {
       this.openBootstrapModal('publishProjectModal', { backdrop: 'static', keyboard: true });
       return;
     }
 
-    this.openBootstrapModal('insufficientCreditsModal', { backdrop: 'static', keyboard: true });
+    this.openInsufficientCreditsModal(this.deployCreditsRequired, 'project publishing');
 
   }
 
