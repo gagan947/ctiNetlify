@@ -1,5 +1,5 @@
 <div class="ct_subscription_modal_root">
-  <div class="modal-content p-4 rounded-4 pt-4" *ngIf="!billingSummaryModalOpen">
+  <div class="modal-content p-lg-4 rounded-4 py-4" *ngIf="!billingSummaryModalOpen">
     <div class="container">
       <div class="ct_subscription_topbar">
         <div class="ct_section_heading text-center">
@@ -104,8 +104,7 @@
                 </div>
               </div>
               <p>{{ planDescription(plan) }}</p>
-              <a (click)="handlePlanAction(plan)" class="ct_price_cta"
-                [class.disable_btn]="isPlanActionDisabled(plan)"
+              <a (click)="handlePlanAction(plan)" class="ct_price_cta" [class.disable_btn]="isPlanActionDisabled(plan)"
                 [attr.aria-disabled]="isPlanActionDisabled(plan)">
                 {{ getPlanButtonLabel(plan) }}
               </a>
@@ -186,8 +185,7 @@
                 </div>
                 <p class="plan_description">{{ planDescription(plan) }}</p>
               </div>
-              <a (click)="handlePlanAction(plan)" class="ct_price_cta"
-                [class.disable_btn]="isPlanActionDisabled(plan)"
+              <a (click)="handlePlanAction(plan)" class="ct_price_cta" [class.disable_btn]="isPlanActionDisabled(plan)"
                 [attr.aria-disabled]="isPlanActionDisabled(plan)">
                 {{ getPlanButtonLabel(plan) }}
               </a>

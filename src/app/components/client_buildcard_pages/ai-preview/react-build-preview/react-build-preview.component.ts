@@ -140,13 +140,13 @@ export class ReactBuildPreviewComponent {
   builds: any[] = [];
   currentBuildId = 1;
   parentBlock = []
+  files: ReactFile[] = [];
   isTyping = true;
   private buildStepTimeouts: ReturnType<typeof setTimeout>[] = [];
   designMap = new Map<string, DesignSnapshot>();
   designOrder: any[] = [];   // keeps tab order
   activeDesignId!: string;
   hasMarkedFirstBlock = false;
-  files: ReactFile[] = [];
   activeFileIndex = 0;
   activeFile!: ReactFile;
   fullScreen: boolean = false;
@@ -736,31 +736,36 @@ export class ReactBuildPreviewComponent {
   confirmDownloadCode() {
     this.closeBootstrapModal('downloadCodeConfirmModal');
 
-    this.openInsufficientCreditsModal(this.downloadCodeCreditsRequired, 'downloading code');
-    // if (this.getCurrentCreditBalance() < this.downloadCodeCreditsRequired) {
-    //   return;
-    // }
-
-    // this.downloadCurrentCodeFiles();
-  }
-
-  private downloadCurrentCodeFiles() {
-    if (!this.files.length) {
-      this.toster.error('No code files are available to download right now.');
+    if (this.getCurrentCreditBalance() < this.downloadCodeCreditsRequired) {
+      this.openInsufficientCreditsModal(this.downloadCodeCreditsRequired, 'downloading code');
       return;
     }
 
-    this.files.forEach((file) => {
-      const blob = new Blob([file.fullCode], { type: 'text/plain;charset=utf-8' });
-      const downloadUrl = URL.createObjectURL(blob);
-      const anchor = document.createElement('a');
-      anchor.href = downloadUrl;
-      anchor.download = file.name;
-      anchor.rel = 'noopener';
-      document.body.appendChild(anchor);
-      anchor.click();
-      document.body.removeChild(anchor);
-      URL.revokeObjectURL(downloadUrl);
+    this.downloadCurrentCodeFiles();
+  }
+
+  private async downloadCurrentCodeFiles() {
+
+    const templates = await this.getUserTemplates();
+    const activeDesign = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
+
+    if (!activeDesign.templateId) {
+      console.error("No active design found");
+      return;
+    }
+
+    this.apiService.getBlob('api/ai/download-project', { templatePublicId: activeDesign.templateId }).subscribe(res => {
+      console.log('Download response:', res);
+      if (!res) {
+        this.toster.error('Failed to download code files. Please try again later.');
+        return;
+      }
+      const pdfUrl = window.URL.createObjectURL(res);
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.download = `${activeDesign.projectName}.zip`;
+      link.click();
+      window.URL.revokeObjectURL(pdfUrl);
     });
   }
 
