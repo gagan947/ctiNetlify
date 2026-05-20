@@ -264,6 +264,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
         this.applyProjectMatch(data);
         this.showBuildProjectButton = true;
         this.isBuildActionLoading = false;
+        this.completeLoadingState();
       });
     });
 
@@ -287,12 +288,12 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     //   });
     // });
 
-    this.socket.on('showBuildButton', (_show: boolean) => {
-      this.ngZone.run(() => {
-        this.showBuildProjectButton = true;
-        this.completeLoadingState();
-      });
-    });
+    // this.socket.on('showBuildButton', (_show: boolean) => {
+    //   this.ngZone.run(() => {
+    //     this.showBuildProjectButton = true;
+    //     this.completeLoadingState();
+    //   });
+    // });
 
     this.socket.on('botDone', () => {
       this.ngZone.run(() => {
