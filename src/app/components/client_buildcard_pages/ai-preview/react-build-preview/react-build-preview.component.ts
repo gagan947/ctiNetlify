@@ -69,7 +69,6 @@ declare var bootstrap: any;
   styleUrl: './react-build-preview.component.css'
 })
 export class ReactBuildPreviewComponent {
-  private readonly pendingWorkspaceTabStorageKey = 'pendingWorkspaceProjectTab';
   private readonly deployCreditsRequired = 60;
   private readonly downloadCodeCreditsRequired = 100;
   socket: any;
@@ -243,7 +242,7 @@ export class ReactBuildPreviewComponent {
       this.loadDraftTemplates(latestTemplates);
     });
 
-    const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
+    const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId && t.projectStatus !== 4);
     if (existingTemplate) {
       await this.showDraftWelcomeMessages(false);
       await this.loadDraftTemplates(templates);
@@ -310,8 +309,14 @@ export class ReactBuildPreviewComponent {
       .postAPI<any, any>('api/ai/generateProject', payload)
       .subscribe({
         next: (res: any) => {
-          if (!res?.success || !res?.data?.jobId) {
+          if (!res?.success) {
             this.deferGenerateProjectFailure(res?.data?.message || 'Failed to generate preview');
+            return;
+          }
+
+          if (res.success && res.data?.templateId) {
+            this.clearGenerateProjectFailureTimer();
+            this.queueGeneratedPreview(res, null, true);
             return;
           }
 
@@ -650,9 +655,9 @@ export class ReactBuildPreviewComponent {
     this.runInitialBuildSequence();
   }
 
+
   closeBuildGenerationFailedModal() {
     localStorage.removeItem('active_project_job_id');
-    sessionStorage.removeItem(this.pendingWorkspaceTabStorageKey);
     sessionStorage.removeItem('projectData');
     // sessionStorage.removeItem('finalPrompt');
   }
