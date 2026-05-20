@@ -15,7 +15,6 @@ interface UserProjectTab {
   project_deployed?: number;
   createdAt?: string;
   is_header_available?: number;
-  isPending?: boolean;
 }
 
 interface UserProfileSummary {
@@ -23,12 +22,6 @@ interface UserProfileSummary {
   name?: string;
   companyName?: string | null;
   profile_image?: string | null;
-}
-
-interface PendingWorkspaceProjectTab {
-  inquiryId: string;
-  projectId?: string;
-  projectName: string;
 }
 
 @Component({
@@ -39,7 +32,6 @@ interface PendingWorkspaceProjectTab {
   styleUrl: './workspace-header.component.css'
 })
 export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
-  private readonly pendingWorkspaceTabStorageKey = 'pendingWorkspaceProjectTab';
   @Input() fullScreen = false;
   @Input() selectedDeviceType = '<i class="fa-solid fa-display"></i>';
   @Input() showPreviewControls = false;
@@ -85,7 +77,6 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe(() => {
         this.syncSelectedProjectFromRoute();
-        this.syncPendingWorkspaceTab();
         this.queueTabOverflowCheck();
       });
   }
@@ -107,7 +98,6 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
       (res) => {
         if (res.success) {
           this.allProjectsList = (res.data || []).filter((project: UserProjectTab) => project.is_header_available === 1);
-          this.syncPendingWorkspaceTab();
           this.syncSelectedProjectFromRoute();
           this.queueTabOverflowCheck();
           this.queueActiveTabIntoView();
@@ -123,57 +113,6 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
 
     this.selectedProjectId = inquiryId;
     this.queueActiveTabIntoView();
-  }
-
-  private syncPendingWorkspaceTab(): void {
-    const pendingTab = this.getPendingWorkspaceTab();
-    if (!pendingTab?.inquiryId) {
-      return;
-    }
-
-    const existingSavedProject = this.allProjectsList.find(
-      (project) => project.inquiryId === pendingTab.inquiryId && !project.isPending
-    );
-    if (existingSavedProject) {
-      this.clearPendingWorkspaceTab();
-      return;
-    }
-
-    const existingPendingProject = this.allProjectsList.find(
-      (project) => project.inquiryId === pendingTab.inquiryId && project.isPending
-    );
-    if (existingPendingProject) {
-      return;
-    }
-
-    this.allProjectsList = [
-      {
-        inquiryId: pendingTab.inquiryId,
-        projectId: Number(pendingTab.projectId || 0),
-        projectName: pendingTab.projectName || 'New Project',
-        is_header_available: 1,
-        isPending: true
-      },
-      ...this.allProjectsList
-    ];
-  }
-
-  private getPendingWorkspaceTab(): PendingWorkspaceProjectTab | null {
-    const rawPendingTab = sessionStorage.getItem(this.pendingWorkspaceTabStorageKey);
-    if (!rawPendingTab) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(rawPendingTab) as PendingWorkspaceProjectTab;
-    } catch {
-      this.clearPendingWorkspaceTab();
-      return null;
-    }
-  }
-
-  private clearPendingWorkspaceTab(): void {
-    sessionStorage.removeItem(this.pendingWorkspaceTabStorageKey);
   }
 
   private loadUserSummary(): void {
@@ -282,10 +221,6 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
           null;
 
         this.allProjectsList = this.allProjectsList.filter((project) => project.inquiryId !== projectId);
-
-        if (this.getPendingWorkspaceTab()?.inquiryId === projectId) {
-          this.clearPendingWorkspaceTab();
-        }
 
         if (!isClosingActiveTab) {
           return;

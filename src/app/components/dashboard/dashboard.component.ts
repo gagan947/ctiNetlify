@@ -63,6 +63,7 @@ export class DashboardComponent {
   ) { }
 
   ngOnInit(): void {
+    sessionStorage.clear();
     this.getProjects();
     this.subscriptionService.loadSubscription();
     this.getUserSubscriptionPlan();

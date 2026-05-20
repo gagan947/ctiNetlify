@@ -69,7 +69,6 @@ declare var bootstrap: any;
   styleUrl: './react-build-preview.component.css'
 })
 export class ReactBuildPreviewComponent {
-  private readonly pendingWorkspaceTabStorageKey = 'pendingWorkspaceProjectTab';
   private readonly deployCreditsRequired = 60;
   private readonly downloadCodeCreditsRequired = 100;
   socket: any;
@@ -243,7 +242,7 @@ export class ReactBuildPreviewComponent {
       this.loadDraftTemplates(latestTemplates);
     });
 
-    const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
+    const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId && t.projectStatus !== 4);
     if (existingTemplate) {
       await this.showDraftWelcomeMessages(false);
       await this.loadDraftTemplates(templates);
@@ -322,6 +321,7 @@ export class ReactBuildPreviewComponent {
           }
 
           localStorage.setItem('active_project_job_id', res.data.jobId);
+          this.continueProjectGeneration(res.data.jobId);
           return;
         },
         error: (error: any) => {
@@ -656,7 +656,6 @@ export class ReactBuildPreviewComponent {
 
   closeBuildGenerationFailedModal() {
     localStorage.removeItem('active_project_job_id');
-    sessionStorage.removeItem(this.pendingWorkspaceTabStorageKey);
     sessionStorage.removeItem('projectData');
     // sessionStorage.removeItem('finalPrompt');
   }

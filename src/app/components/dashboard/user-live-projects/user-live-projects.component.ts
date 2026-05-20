@@ -23,8 +23,9 @@ export class UserLiveProjectsComponent {
   constructor(private apiService: ApiService, private message: NzMessageService, private router: Router) {
   }
   ngOnInit(): void {
-    // sessionStorage.clear();
+    sessionStorage.clear();
     this.getProjects();
+
   }
 
   getProjects() {

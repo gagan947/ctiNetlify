@@ -72,12 +72,6 @@ interface ConversationResumePayload {
   messages?: any[];
 }
 
-interface PendingWorkspaceProjectTab {
-  inquiryId: string;
-  projectId?: string;
-  projectName: string;
-}
-
 @Component({
   selector: 'app-main-ai-chatbot',
   standalone: true,
@@ -87,7 +81,6 @@ interface PendingWorkspaceProjectTab {
 })
 export class MainAiChatbotComponent implements OnInit, OnDestroy {
   private readonly conversationStorageKey = 'conversationId';
-  private readonly pendingWorkspaceTabStorageKey = 'pendingWorkspaceProjectTab';
   private readonly resumeFallbackDelayMs = 1500;
   @Input() initialPrompt = '';
   @Input() subsriptionPlan: any | null = null;
@@ -480,12 +473,6 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
         };
 
         sessionStorage.setItem('projectData', JSON.stringify(projectData));
-        this.storePendingWorkspaceTab({
-          inquiryId: publicId,
-          projectId: this.matchedProjectId,
-          projectName: projectData.projectName
-        });
-
         sessionStorage.removeItem('conversationId');
         this.router.navigate(['/bd_loader'], {
           queryParams: {
@@ -509,14 +496,6 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   private persistMatchedProjectData(projectId: string, publicEnquiryId?: string): void {
     const projectData = this.buildProjectData(projectId, publicEnquiryId);
     sessionStorage.setItem('projectData', JSON.stringify(projectData));
-
-    if (publicEnquiryId) {
-      this.storePendingWorkspaceTab({
-        inquiryId: publicEnquiryId,
-        projectId,
-        projectName: projectData.projectName
-      });
-    }
   }
 
   private buildProjectData(projectId: string, publicEnquiryId?: string) {
@@ -549,10 +528,6 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       projectMatchScore: this.matchedProjectScore,
       matchedProject: project
     };
-  }
-
-  private storePendingWorkspaceTab(tab: PendingWorkspaceProjectTab): void {
-    sessionStorage.setItem(this.pendingWorkspaceTabStorageKey, JSON.stringify(tab));
   }
 
   private applyProjectMatch(payload?: ProjectMatchPayload | null): void {
