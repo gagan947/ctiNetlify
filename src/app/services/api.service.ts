@@ -7,14 +7,16 @@ import { Subject, Observable, BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  // apiUrl = 'http://192.168.1.27:4500/'
+  private readonly activeProjectJobStorageKey = 'active_project_job_id';
+  private readonly pendingWorkspaceTabStorageKey = 'pendingWorkspaceProjectTab';
+  apiUrl = 'http://192.168.1.36:4500/'
   // imageUrl = 'http://192.168.29.241:4500/'
   // apiUrl = 'http://192.168.1.40:4500/';
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
   // apiUrl = 'https://api.creativethoughts.ai/';
-  // imageUrl = 'https://api.creativethoughts.ai';
-  apiUrl = 'https://dev-api.creativethoughts.ai/';
-  imageUrl = 'https://dev-api.creativethoughts.ai';
+  imageUrl = 'https://api.creativethoughts.ai';
+  // apiUrl = 'https://dev-api.creativethoughts.ai/';
+  // imageUrl = 'https://dev-api.creativethoughts.ai';
   // apiUrl = 'http://localhost:4500/';
   // reactBuildURl = 'http://localhost:4500';
   reactBuildURl = 'https://api.creativethoughts.ai';
@@ -164,11 +166,17 @@ export class ApiService {
     sessionStorage.removeItem('conversationId');
   }
 
+  private hasActiveProjectGenerationJob(): boolean {
+    return !!localStorage.getItem(this.activeProjectJobStorageKey)?.trim();
+  }
+
   resetWorkspaceChatState() {
     sessionStorage.removeItem('conversationId');
     sessionStorage.removeItem('publicEnquiryId');
     sessionStorage.removeItem('projectData');
-    sessionStorage.removeItem('pendingWorkspaceProjectTab');
+    if (!this.hasActiveProjectGenerationJob()) {
+      sessionStorage.removeItem(this.pendingWorkspaceTabStorageKey);
+    }
     this.triggerClearInput();
     this.triggerNewChat();
   }

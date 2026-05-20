@@ -53,7 +53,7 @@
         <div class="ct_ai_project_preview_right">
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                    <div class="preview-wrapper d-flex w-100" id="topScrollDiv">
+                    <div class="preview-wrapper d-flex w-100">
                         <!-- ðŸ”¥ FADE CONTAINER -->
                         <div class="iframe-container d-flex align-items-center justify-content-center preview-guard"
                             [class.loading]="isIframeLoading" (contextmenu)="blockPreviewInteraction($event)"
@@ -76,7 +76,7 @@
                                     <div class="ct_preview_build_card__glow"></div>
                                     <!-- <img class="ct_rotate_all_dir" src="../../../../../assets/img/AI_Generation.png"
                                         alt=""> -->
-                                    <div class="rgt_loader" id="rgt_loader">
+                                    <div class="rgt_loader">
                                         <div class="rgt_loader-wrapper">
                                             <span *ngFor="let letter of previewOverlayLoaderLetters"
                                                 class="rgt_loader-letter">{{ letter }}</span>
@@ -122,8 +122,7 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                    <app-react-code-editor #codeEditor *ngIf="files.length >0" [files]="files"
-                        [templateExists]="templateExists">
+                    <app-react-code-editor *ngIf="files.length >0" [files]="files" [templateExists]="templateExists">
                     </app-react-code-editor>
                 </div>
             </div>
@@ -153,7 +152,8 @@
             <div class="ct_deploy_confirm_modal__header">
                 <h2>Download Code?</h2>
                 <p class="mb-0">
-                    Downloading your project source code will use 100 credits from your available balance. If you'd like to continue, click Continue below.
+                    Downloading your project source code will use 100 credits from your available balance. If you'd like
+                    to continue, click Continue below.
                 </p>
             </div>
             <div class="actions">
@@ -369,7 +369,8 @@
 <div class="modal fade" id="buildGenerationFailedModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content ct_build_failed_modal">
-            <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close">
+            <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close"
+                (click)="closeBuildGenerationFailedModal()">
                 <i class="fa-solid fa-xmark"></i>
             </button>
             <div class="ct_build_failed_modal__icon">
