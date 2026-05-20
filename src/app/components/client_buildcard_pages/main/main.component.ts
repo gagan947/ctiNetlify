@@ -21,6 +21,8 @@ declare var Calendly: any;
   styleUrl: './main.component.css'
 })
 export class MainComponent {
+  private readonly activeProjectJobStorageKey = 'active_project_job_id';
+  private readonly pendingWorkspaceTabStorageKey = 'pendingWorkspaceProjectTab';
   @ViewChild('anchor', { static: false }) anchor!: ElementRef;
   @ViewChild('SearchInput', { static: false }) SearchInput!: ElementRef;
   private observer!: IntersectionObserver;
@@ -58,12 +60,25 @@ export class MainComponent {
       this.apiservice.getRates(user?.currency);
     }
     this.getProjects();
-    sessionStorage.clear();
+    this.clearSessionStorageForMainPage();
     this.apiservice._htmlCode.set(null);
 
     this.getUserSubscriptionPlan();
     // this.socket = io(this.apiservice.apiUrl);
     let currentBotMsg = "";
+  }
+
+  private clearSessionStorageForMainPage(): void {
+    const shouldPreservePendingWorkspaceTab = !!localStorage.getItem(this.activeProjectJobStorageKey)?.trim();
+    const pendingWorkspaceTab = shouldPreservePendingWorkspaceTab
+      ? sessionStorage.getItem(this.pendingWorkspaceTabStorageKey)
+      : null;
+
+    sessionStorage.clear();
+
+    if (pendingWorkspaceTab) {
+      sessionStorage.setItem(this.pendingWorkspaceTabStorageKey, pendingWorkspaceTab);
+    }
   }
 
   receiveData(data: any) {
