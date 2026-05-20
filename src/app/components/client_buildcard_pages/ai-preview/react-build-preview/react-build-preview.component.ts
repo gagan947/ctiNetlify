@@ -310,8 +310,14 @@ export class ReactBuildPreviewComponent {
       .postAPI<any, any>('api/ai/generateProject', payload)
       .subscribe({
         next: (res: any) => {
-          if (!res?.success || !res?.data?.jobId) {
+          if (!res?.success) {
             this.deferGenerateProjectFailure(res?.data?.message || 'Failed to generate preview');
+            return;
+          }
+
+          if (res.success && res.data?.templateId) {
+            this.clearGenerateProjectFailureTimer();
+            this.queueGeneratedPreview(res, null, true);
             return;
           }
 
@@ -646,6 +652,7 @@ export class ReactBuildPreviewComponent {
     this.isReactBuilding = true
     this.runInitialBuildSequence();
   }
+
 
   closeBuildGenerationFailedModal() {
     localStorage.removeItem('active_project_job_id');

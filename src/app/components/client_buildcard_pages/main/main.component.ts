@@ -73,7 +73,7 @@ export class MainComponent {
       ? sessionStorage.getItem(this.pendingWorkspaceTabStorageKey)
       : null;
 
-    sessionStorage.clear();
+    // sessionStorage.clear();
 
     if (pendingWorkspaceTab) {
       sessionStorage.setItem(this.pendingWorkspaceTabStorageKey, pendingWorkspaceTab);

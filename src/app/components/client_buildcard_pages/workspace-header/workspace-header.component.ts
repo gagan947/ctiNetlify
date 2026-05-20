@@ -219,7 +219,7 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   }
   LogOut() {
     localStorage.clear()
-    sessionStorage.clear()
+    // sessionStorage.clear()
     this.router.navigate(['/'])
   }
 
