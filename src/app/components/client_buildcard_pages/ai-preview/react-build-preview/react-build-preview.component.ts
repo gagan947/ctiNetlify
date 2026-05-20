@@ -69,6 +69,7 @@ declare var bootstrap: any;
   styleUrl: './react-build-preview.component.css'
 })
 export class ReactBuildPreviewComponent {
+  private readonly pendingWorkspaceTabStorageKey = 'pendingWorkspaceProjectTab';
   private readonly deployCreditsRequired = 60;
   private readonly downloadCodeCreditsRequired = 100;
   socket: any;
@@ -249,16 +250,21 @@ export class ReactBuildPreviewComponent {
       return;
     }
 
-    this.continueProjectGenerationInterval = setInterval(() => {
-      const activeJobId = localStorage.getItem('active_project_job_id');
+    const activeJobId = localStorage.getItem('active_project_job_id');
+    if (activeJobId) {
+      this.continueProjectGeneration(activeJobId);
+      this.continueProjectGenerationInterval = setInterval(() => {
+        const latestActiveJobId = localStorage.getItem('active_project_job_id');
 
-      if (activeJobId) {
-        this.continueProjectGeneration(activeJobId);
-        return;
-      } else {
+        if (latestActiveJobId) {
+          this.continueProjectGeneration(latestActiveJobId);
+          return;
+        }
+
         this.clearContinueProjectGenerationInterval();
-      }
-    }, this.generateProjectInternal);
+      }, this.generateProjectInternal);
+      return;
+    }
 
     await this.runInitialBuildSequence();
   }
@@ -643,6 +649,7 @@ export class ReactBuildPreviewComponent {
 
   closeBuildGenerationFailedModal() {
     localStorage.removeItem('active_project_job_id');
+    sessionStorage.removeItem(this.pendingWorkspaceTabStorageKey);
     sessionStorage.removeItem('projectData');
     // sessionStorage.removeItem('finalPrompt');
   }
@@ -937,6 +944,7 @@ export class ReactBuildPreviewComponent {
 
   ngOnDestroy() {
     this.blocks = [];
+    this.clearContinueProjectGenerationInterval();
     this.clearGenerateProjectFailureTimer();
     this.stopAiProcessingPhase();
     this.socket?.off?.('page-created');
