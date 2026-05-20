@@ -1,11 +1,9 @@
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { Component, effect, ElementRef, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { SafeHtml, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzSelectModule } from 'ng-zorro-antd/select';
 import { firstValueFrom } from 'rxjs';
 import { SubscriptionResponse } from '../../../../models/subcription';
 import { AiSocketService } from '../../../../services/ai-socket.service';
@@ -66,7 +64,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-react-build-preview',
   standalone: true,
-  imports: [CommonModule, NgxIntlTelInputModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, ReactiveFormsModule, AiDevRendererComponent, WorkspaceHeaderComponent],
+  imports: [CommonModule, NgxIntlTelInputModule, ReactCodeEditorComponent, FormsModule, ReactiveFormsModule, AiDevRendererComponent, WorkspaceHeaderComponent],
   templateUrl: './react-build-preview.component.html',
   styleUrl: './react-build-preview.component.css'
 })
@@ -77,7 +75,8 @@ export class ReactBuildPreviewComponent {
   private readonly mobileBreakpoint = 991;
   private readonly buildErrorPreviewLineLimit = 6;
   private readonly buildErrorPreviewCharLimit = 700;
-  private readonly generateProjectFailureGraceMs = 45000;
+  private readonly generateProjectFailureGraceMs = 100;
+  private readonly generateProjectInternal = 3000;
   private readonly maxBuildRepairAttempts = 7;
   private readonly buildRepairAttemptMessages = [
     {
@@ -121,25 +120,11 @@ export class ReactBuildPreviewComponent {
   safePreviewUrl: SafeResourceUrl | null = null;
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
   @ViewChild('chatScroll') chatScroll!: ElementRef<HTMLDivElement>;
-  @ViewChild('codeEditor') codeEditor!: ReactCodeEditorComponent;
   @ViewChild('customizeInput') customizeInput!: ElementRef<HTMLTextAreaElement>;
   previewWidth = 1366; // desktop default
-  @ViewChild('preview', { static: false }) iframe!: ElementRef<HTMLIFrameElement>;
   blocks: any[] = [];
-  pages: any = {};                 // Full response from backend
-  currentHTML: SafeHtml = "";       // Current page HTML
-  currentCSS: string = "";          // Current page CSS
-  styleTag!: HTMLStyleElement;
-  activeJsKeys: string[] = [];      // js_keys for current page
   loginRedirect: any = "";
-  activeMenuKey: string | null = null;
   projectsData: any;
-  socket_id: any;
-  previewShow = false;
-  previewCodeShow = false;
-  builds: any[] = [];
-  currentBuildId = 1;
-  parentBlock = []
   files: ReactFile[] = [];
   isTyping = true;
   private buildStepTimeouts: ReturnType<typeof setTimeout>[] = [];
@@ -147,10 +132,7 @@ export class ReactBuildPreviewComponent {
   designOrder: any[] = [];   // keeps tab order
   activeDesignId!: string;
   hasMarkedFirstBlock = false;
-  activeFileIndex = 0;
-  activeFile!: ReactFile;
   fullScreen: boolean = false;
-  showCodeButton = false;
   userHasScrolled = false;
   designCount = 0;
   selected_template_id = '';
@@ -158,11 +140,8 @@ export class ReactBuildPreviewComponent {
   subscriptionPlan!: SubscriptionResponse;
   isIframeLoading = true;
   selectedDeviceType: string = '<i class="fa-solid fa-display"></i>';
-  SearchCountryField = SearchCountryField
-  CountryISO = CountryISO;
+  SearchCountryField = SearchCountryField;
   selectedCountry = CountryISO.India;
-  baseURl: any;
-  previewUrl: any = null;
   isReactBuilding = true;
   buildStep = 0;
   templateExists = false;
@@ -172,13 +151,11 @@ export class ReactBuildPreviewComponent {
     { pendingIconClass: 'fa-solid fa-gear', label: 'Building React app' },
     { pendingIconClass: 'fa-solid fa-rocket', label: 'Deploying preview' }
   ];
-  planName = 'Free Plan';
   usedVariations: any[] = [];
   pendingPreviewUrl: string | null = null;
   private hasAutoOpenedCurrentMobilePreview = false;
   private hasDismissedCurrentMobilePreview = false;
   private deployHeaderActionTimer: ReturnType<typeof setTimeout> | null = null;
-  skipBuildPrompt = false;
   finalPrompt: any = null;
   selectedPublishOption: 'creative-ai-domain' | 'custom-domain' = 'creative-ai-domain';
   customDomain = '';
@@ -211,6 +188,8 @@ export class ReactBuildPreviewComponent {
   private hasCompletedPageGeneration = false;
   private currentTemplateId: string | null = null;
   private pageGenerationCompletionResolver: (() => void) | null = null;
+  private continueProjectGenerationInterval: ReturnType<typeof setInterval> | null = null;
+  private isContinueProjectGenerationRequestInFlight = false;
   today = new Date();
   // Redirect page for login action
   constructor(
@@ -221,10 +200,8 @@ export class ReactBuildPreviewComponent {
     private toster: NzMessageService,
     public subscriptionModalService: SubscriptionModalService,
     private subscriptionService: SubcriptionService,
-    private route: ActivatedRoute,
-    private fb: FormBuilder
+    private route: ActivatedRoute
   ) {
-    this.baseURl = this.apiService.apiUrl;
     effect(() => {
       this.finalPrompt = this.apiService._finalPrompt() || sessionStorage.getItem('finalPrompt');
     });
@@ -273,8 +250,27 @@ export class ReactBuildPreviewComponent {
       return;
     }
 
+    this.continueProjectGenerationInterval = setInterval(() => {
+      const activeJobId = localStorage.getItem('active_project_job_id');
+
+      if (activeJobId) {
+        this.continueProjectGeneration(activeJobId);
+        return;
+      } else {
+        this.clearContinueProjectGenerationInterval();
+      }
+    }, this.generateProjectInternal);
 
     await this.runInitialBuildSequence();
+  }
+
+  clearContinueProjectGenerationInterval() {
+    if (!this.continueProjectGenerationInterval) {
+      return;
+    }
+
+    clearInterval(this.continueProjectGenerationInterval);
+    this.continueProjectGenerationInterval = null;
   }
 
   async getUserTemplates(): Promise<any[]> {
@@ -309,16 +305,49 @@ export class ReactBuildPreviewComponent {
       .postAPI<any, any>('api/ai/generateProject', payload)
       .subscribe({
         next: (res: any) => {
-          if (!res?.success || !res?.data?.templateId) {
+          if (!res?.success || !res?.data?.jobId) {
             this.deferGenerateProjectFailure(res?.data?.message || 'Failed to generate preview');
             return;
           }
 
-          this.clearGenerateProjectFailureTimer();
-          this.queueGeneratedPreview(res, socket_id);
+          localStorage.setItem('active_project_job_id', res.data.jobId);
           return;
         },
         error: (error: any) => {
+          this.deferGenerateProjectFailure(error);
+        }
+      });
+  }
+
+  continueProjectGeneration(jobId: string) {
+    if (!jobId || this.isContinueProjectGenerationRequestInFlight) {
+      return;
+    }
+
+    this.isContinueProjectGenerationRequestInFlight = true;
+    this.apiService
+      .getApi<any>(`api/ai/generateProject/status/${jobId}`)
+      .subscribe({
+        next: (res: any) => {
+          this.isContinueProjectGenerationRequestInFlight = false;
+          const statusCode = Number(res?.status ?? res?.data?.statusCode ?? res?.data?.status ?? 200);
+          if (statusCode === 202) {
+            return;
+          }
+
+          this.finalizeContinueProjectGenerationPolling();
+          if (!res?.success) {
+            this.setBuildGenerationError(res?.data?.message || 'Failed to generate preview');
+            this.queueBuildGenerationFailure(true);
+            return;
+          }
+          this.clearGenerateProjectFailureTimer();
+          this.queueGeneratedPreview(res, null, true);
+          return;
+        },
+        error: (error: any) => {
+          this.isContinueProjectGenerationRequestInFlight = false;
+          this.finalizeContinueProjectGenerationPolling();
           if (error.error.status === 422 && error.error.data.canRepairBuild) {
             this.clearGenerateProjectFailureTimer();
             let repairPayload = {
@@ -330,9 +359,16 @@ export class ReactBuildPreviewComponent {
             void this.attemptBuildRepair(repairPayload, error);
             return;
           }
-          this.deferGenerateProjectFailure(error);
+          this.setBuildGenerationError(error);
+          this.queueBuildGenerationFailure(true);
         }
       });
+
+  }
+
+  private finalizeContinueProjectGenerationPolling() {
+    this.clearContinueProjectGenerationInterval();
+    localStorage.removeItem('active_project_job_id');
   }
 
   private buildPreviewPayload(socketId: string | null) {
@@ -440,6 +476,7 @@ export class ReactBuildPreviewComponent {
   }
 
   private handleBuildGenerationFailure() {
+
     if (this.hasUsablePreviewState()) {
       this.isRetryBuildGenerationSubmitting = false;
       this.repairAttemptVersion++;
@@ -472,10 +509,10 @@ export class ReactBuildPreviewComponent {
     modalInstance.show();
   }
 
-  private queueGeneratedPreview(res: any, socketId: string | null) {
+  private queueGeneratedPreview(res: any, socketId: string | null, forceImmediate = false) {
     this.clearGenerateProjectFailureTimer();
     this.completeActivePageBuildSection();
-    if (this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
+    if (!forceImmediate && this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
       this.pendingPreviewResponse = { res, socketId };
       return;
     }
@@ -540,10 +577,11 @@ export class ReactBuildPreviewComponent {
     this.appendBuildActionPrompt();
   }
 
-  private queueBuildGenerationFailure() {
+  private queueBuildGenerationFailure(forceImmediate = false) {
+
     this.clearGenerateProjectFailureTimer();
     this.completeActivePageBuildSection();
-    if (this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
+    if (!forceImmediate && this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
       this.pendingPreviewFailure = true;
       return;
     }
@@ -602,6 +640,12 @@ export class ReactBuildPreviewComponent {
     this.resetBuildGenerationError();
     this.isReactBuilding = true
     this.runInitialBuildSequence();
+  }
+
+  closeBuildGenerationFailedModal() {
+    localStorage.removeItem('active_project_job_id');
+    sessionStorage.removeItem('projectData');
+    // sessionStorage.removeItem('finalPrompt');
   }
 
   get hasBuildGenerationErrorMessage(): boolean {
@@ -801,8 +845,6 @@ export class ReactBuildPreviewComponent {
     this.clearFirstBlockMinHeight();
     this.isTyping = true;
 
-    this.currentBuildId++;
-
     this.blocks = this.blocks.filter(block => block?.id !== 'action-prompt-build');
 
     await this.addParagraphBlock(
@@ -894,31 +936,6 @@ export class ReactBuildPreviewComponent {
     this.blocks = this.blocks.filter(b => b.id !== 'status');
   }
 
-  async playStatusSequence(lines: string[], lineDelay = 700, finishDelay = 500) {
-    if (!lines.length) return;
-
-    this.showLoader(lines[0]);
-    setTimeout(() => this.scrollToBottom(true), 0);
-    await this.delay(lineDelay);
-
-    for (let index = 1; index < lines.length; index++) {
-      const loaderBlock = this.blocks.find(block => block.id === 'status');
-      if (!loaderBlock) break;
-
-      loaderBlock.text = lines[index];
-      setTimeout(() => this.scrollToBottom(true), 0);
-      await this.delay(lineDelay);
-    }
-
-    await this.delay(finishDelay);
-    this.hideLoader();
-    setTimeout(() => this.scrollToBottom(true), 0);
-  }
-
-  saveDesign() {
-    this.router.navigate([`plan-delivery/${this.projectsData.clientEnquryId}`])
-  }
-
   ngOnDestroy() {
     this.blocks = [];
     this.clearGenerateProjectFailureTimer();
@@ -991,7 +1008,6 @@ export class ReactBuildPreviewComponent {
       }
 
       this.subscriptionPlan = res;
-      this.planName = res.planName;
     });
   }
 
@@ -1019,13 +1035,6 @@ export class ReactBuildPreviewComponent {
     );
     modal.show();
   };
-
-
-
-  startTyping() {
-    // this.codeEditor.startTyping();
-  }
-
 
 
 
@@ -1072,10 +1081,6 @@ export class ReactBuildPreviewComponent {
     this.safePreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
-
-  isArray(value: any): boolean {
-    return Array.isArray(value);
-  }
 
   onDeviceTypeChange(deviceType: string) {
     switch (deviceType) {
@@ -1557,10 +1562,6 @@ export class ReactBuildPreviewComponent {
     this.deployProject(this.selected_template_id, 'custom', this.customDomain);
   }
 
-  setPreviewUrl(url: string) {
-    this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-  }
-
   getPreviewProxyUrl(templateId: string) {
     const apiBaseUrl = this.apiService.apiUrl.replace(/\/$/, '');
     return `${apiBaseUrl}/api/user/generate/${templateId}`;
@@ -2040,24 +2041,6 @@ export class ReactBuildPreviewComponent {
       .replace(/\b\w/g, (char) => char.toUpperCase());
   }
 
-
-
-  getHomeCSS() {
-    return {
-      file: 'src/styles/home.css',
-      added: 25,
-      removed: 0,
-      content: [
-        { line: 1, text: '.home {' },
-        { line: 2, text: '  padding: 20px;' },
-        { line: 3, text: '}' },
-        { line: 5, text: 'h1 {' },
-        { line: 6, text: '  font-size: 24px;' },
-        { line: 7, text: '}' }
-      ]
-    };
-  }
-
   async addTerminal(lines: string[], lineDelay = 650, finishDelay = 1100) {
     const terminalBlock = {
       type: 'terminal',
@@ -2188,6 +2171,7 @@ export class ReactBuildPreviewComponent {
   }
 
   private deferGenerateProjectFailure(source?: any) {
+
     this.setBuildGenerationError(source);
 
     if (this.buildFlowType !== 'initial' || this.hasInitialFlowCompleted) {
@@ -2353,47 +2337,6 @@ export class ReactBuildPreviewComponent {
     }
 
     await this.delay(settleDelay);
-  }
-
-  async addCodeBlock(fileData: any) {
-    const block = {
-      type: 'code',
-      data: {
-        file: fileData.file,
-        added: fileData.added,
-        removed: fileData.removed,
-        content: [] as any[]
-      }
-    };
-
-    this.blocks.push(block);
-    setTimeout(() => this.scrollToBottom(true), 0);
-
-    await this.delay(fileData.initialDelay ?? 900);
-
-    for (let row of fileData.content) {
-      const nextRow = {
-        ...row,
-        text: ''
-      };
-
-      block.data.content.push(nextRow);
-      setTimeout(() => this.scrollToBottom(true), 0);
-
-      for (const char of row.text) {
-        nextRow.text += char;
-        if (char === '\n' || nextRow.text.length % 6 === 0) {
-          setTimeout(() => this.scrollToBottom(true), 0);
-        }
-        await this.delay(char === ' ' ? 10 : (fileData.lineDelay ?? 16));
-      }
-
-      setTimeout(() => this.scrollToBottom(true), 0);
-      await this.delay(fileData.rowDelay ?? 180);
-    }
-
-    await this.delay(fileData.finishDelay ?? 1400);
-    setTimeout(() => this.scrollToBottom(true), 0);
   }
 
   async addSummary(data: any) {
