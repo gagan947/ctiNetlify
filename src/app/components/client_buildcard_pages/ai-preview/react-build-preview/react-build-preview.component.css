@@ -116,7 +116,7 @@ aside.ct_project_ai_chat_section {
   padding: 0 12px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgb(31 82 220);
+  background: #5D5CFF;
   color: #ffffff;
   font-size: 11px;
   font-weight: 700;
@@ -1047,18 +1047,19 @@ p {
   padding: 16px;
   border-radius: 16px;
   background: #eff6ff;
-  border: 1px solid #bfdbfe;
+  border: 1px solid #5d5cff99;
   margin: 18px 0;
 }
 
+
 .info-icon {
   font-size: 20px;
-  color: #2563eb;
+  color: #BEBFC2;
 }
 
 .info-text {
   font-size: 14px;
-  color: #1e3a8a;
+  color: #BEBFC2;
   line-height: 1.5;
 }
 
@@ -1074,9 +1075,8 @@ p {
   padding: 32px;
   border: 0;
   border-radius: 26px;
-  background:
-    radial-gradient(circle at top, rgba(37, 99, 235, 0.14), transparent 34%),
-    linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  background:#04041c;
+   border: 1px solid #FFFFFF66;
 }
 
 .ct_deploy_confirm_modal__badge {
@@ -1086,21 +1086,24 @@ p {
   display: grid;
   place-items: center;
   margin-bottom: 18px;
-  background: linear-gradient(135deg, #dbeafe, #eff6ff);
-  color: #1d4ed8;
+  background: #FFFFFF12;
+  color: #5D5CFF;
   font-size: 26px;
   box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.08);
 }
-
+.ct_deploy_confirm_modal__header h2{
+  color: #fff;
+}
 .ct_deploy_confirm_modal__header p {
   max-width: 470px;
   margin-top: 10px;
   line-height: 1.65;
+  color: #BEBFC2;
 }
 
 .ct_deploy_confirm_modal__info {
   margin-top: 20px;
-  background: #f8fbff;
+  background: #FFFFFF12;
 }
 
 .ct_deploy_confirm_modal__summary {
@@ -1113,7 +1116,7 @@ p {
 .ct_deploy_confirm_modal__summary>div {
   padding: 16px 18px;
   border-radius: 16px;
-  border: 1px solid #dbe5f3;
+  border: 1px solid #ffffff4d;
   background: #ffffff;
 }
 
@@ -1138,7 +1141,8 @@ p {
   padding: 30px 30px 24px;
   border: 0;
   border-radius: 28px;
-  background: #ffffff;
+  background: #04041c;
+   border: 1px solid #FFFFFF66;
   overflow: hidden;
 }
 
@@ -1155,11 +1159,12 @@ p {
   font-size: 24px;
   font-weight: 700;
   font-family: "Figtree", sans-serif;
+  color: #fff;
 }
 
 .ct_publish_project_modal__header p {
   margin: 0;
-  color: #434655;
+  color: #BEBFC2;
 }
 
 .ct_publish_project_modal__close {
@@ -1172,7 +1177,7 @@ p {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: #475569;
+  color: #fff;
   font-size: 18px;
 }
 
@@ -1186,7 +1191,7 @@ p {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: #475569;
+  color: #fff;
   font-size: 18px;
 }
 
@@ -1198,20 +1203,20 @@ p {
   padding: 20px;
   margin-bottom: 16px;
   border-radius: 16px;
-  border: 2px solid #00000000;
-  background: #F3F4F6;
+  border: 2px solid #d8dde736;
+  background: #FFFFFF12;
   text-align: left;
   transition: all 0.2s ease;
   justify-content: space-between;
 }
 
 .ct_publish_option--active {
-  border-color: #2563EB;
+  border-color: #5D5CFF;
   background: #004AC60D;
 }
 
 .ct_publish_option--active .ct_publish_option__body span {
-  color: #004AC6;
+  color: #5D5CFF;
 
 }
 
@@ -1226,7 +1231,7 @@ p {
 }
 
 .ct_publish_option__icon--blue {
-  background: #2563EB;
+  background: #5D5CFF;
   color: #ffffff;
 }
 
@@ -1243,12 +1248,12 @@ p {
   margin: 0 0 4px;
   font-size: 17px;
   font-weight: 700;
-  color: #111827;
+  color: #fff;
 }
 
 .ct_publish_option__body p {
   margin: 0 0 10px;
-  color: #475569;
+  color: #BEBFC2;
   font-size: 14px;
 }
 
@@ -1267,13 +1272,13 @@ p {
   height: 24px;
   margin-top: 2px;
   border-radius: 999px;
-  border: 2px solid #c7d2fe;
+  border: 2px solid #ffffff7d;
   position: relative;
   flex: 0 0 auto;
 }
 
 .ct_publish_option__radio--active {
-  border-color: #2563eb;
+  border-color: #5D5CFF;
 }
 
 .ct_publish_option__radio--active::after {
@@ -1281,7 +1286,7 @@ p {
   position: absolute;
   inset: 4px;
   border-radius: 999px;
-  background: #2563eb;
+  background: #5D5CFF;
 }
 
 .ct_publish_project_modal__tip {
@@ -1292,7 +1297,7 @@ p {
   margin-top: 12px;
   border-radius: 32px;
   background: #0062420D;
-  color: #006242;
+  color: #5D5CFF;
 }
 
 .ct_publish_project_modal__tip i {
@@ -1301,12 +1306,12 @@ p {
 
 .ct_publish_project_modal__tip p {
   margin: 0;
-  color: #475569;
+  color: #BEBFC2;
   line-height: 1.5;
 }
 
 .ct_publish_project_modal__tip strong {
-  color: #15803d;
+  color: #5D5CFF;
 }
 
 .ct_px_30_new {
@@ -1323,14 +1328,15 @@ p {
   gap: 12px;
   margin-top: 40px;
   padding: 24px 32px;
-  background-color: #F3F4F6;
+  background-color: #04041c;
 }
 
 .ct_custom_domain_modal {
   padding: 30px 30px 24px;
   border: 0;
   border-radius: 28px;
-  background: #ffffff;
+  background: #04041c;
+   border: 1px solid #FFFFFF66;
   overflow: hidden;
 }
 
@@ -1345,18 +1351,19 @@ p {
 .ct_custom_domain_modal__header h2 {
   margin-bottom: 8px;
   font-size: 24px;
+  color: #fff;
 }
 
 .ct_custom_domain_modal__header p {
   margin: 0;
-  color: #434655;
+  color: #BEBFC2;
   font-family: "Figtree", sans-serif;
 }
 
 .ct_custom_domain_modal__field label {
   display: inline-block;
   margin-bottom: 8px;
-  color: #434655;
+  color: #BEBFC2;
   font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -1370,7 +1377,7 @@ p {
   gap: 12px;
   padding: 12px 16px;
   border-radius: 32px;
-  background: #F3F4F6;
+  background: #FFFFFF12;
 }
 
 .ct_custom_domain_modal__input_row input {
@@ -1379,7 +1386,7 @@ p {
   border: 0;
   outline: 0;
   background: transparent;
-  color: #0f172a;
+  color: #fff;
   font-size: 16px;
   font-weight: 500;
 }
@@ -1400,6 +1407,7 @@ p {
   font-size: 13px;
   font-weight: 700;
   white-space: nowrap;
+  line-height: 34px;
 }
 
 .ct_custom_domain_modal__status.is-valid {
@@ -1418,7 +1426,7 @@ p {
 
 .ct_custom_domain_modal__hint {
   margin: 8px 0 0;
-  color: #434655CC;
+  color: #BEBFC2;
   font-size: 14px;
   line-height: 1.6;
 }
@@ -1430,7 +1438,7 @@ p {
   margin-top: 24px;
   padding: 20px;
   border-radius: 32px;
-  background: #F3F4F6;
+  background: #FFFFFF12;
 }
 
 .ct_custom_domain_modal__help_icon {
@@ -1439,7 +1447,7 @@ p {
   border-radius: 6px;
   display: grid;
   place-items: center;
-  background: #ffffff;
+  background: #ffffff1f;
   color: #64748b;
   box-shadow: 0px 1px 2px 0px #0000000D;
 
@@ -1451,12 +1459,12 @@ p {
   margin: 0 0 6px;
   font-size: 16px;
   font-weight: 700;
-  color: #111827;
+  color: #fff;
 }
 
 .ct_custom_domain_modal__help p {
   margin: 0;
-  color: #475569;
+  color: #BEBFC2;
   line-height: 1.6;
 }
 
@@ -1471,6 +1479,8 @@ p {
   border: 0;
   border-radius: 24px;
   text-align: center;
+  background-color: #04041c;
+   border: 1px solid #FFFFFF66;
 }
 
 .ct_build_failed_modal__icon {
@@ -1493,8 +1503,11 @@ p {
 .ct_build_failed_modal p {
   max-width: 360px;
   margin: 10px auto 0;
+  color: #BEBFC2;
 }
-
+.ct_build_failed_modal h2{
+  color: #fff;
+}
 .ct_build_failed_modal__error {
   margin: 18px auto 0;
   padding: 12px 14px;
@@ -1550,8 +1563,8 @@ p {
   border: 0;
   border-radius: 28px;
   background:
-    radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 32%),
-    linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+   #04041c;
+   border: 1px solid #FFFFFF66;
   overflow: hidden;
 }
 
@@ -1567,10 +1580,11 @@ p {
   margin-bottom: 6px;
   font-size: 24px;
   font-family: "Figtree", sans-serif;
+  color: #fff;
 }
 
 .ct_callback_modal__hero p {
-  color: #475569;
+  color: #BEBFC2;
   line-height: 1.65;
 }
 
@@ -1597,14 +1611,14 @@ p {
 .ct_callback_modal__meta>div {
   padding: 16px 18px;
   border-radius: 18px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #FFFFFF12;
+  border: 1px solid #ffffff4d;
 }
 
 .ct_callback_modal__meta span {
   display: block;
   margin-bottom: 6px;
-  color: #64748b;
+  color: #BEBFC2;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -1612,7 +1626,7 @@ p {
 }
 
 .ct_callback_modal__meta strong {
-  color: #0f172a;
+  color: #fff;
   font-size: 15px;
   font-weight: 700;
 }
@@ -1636,7 +1650,7 @@ p {
 }
 
 .ct_callback_field label {
-  color: #0f172a;
+  color: #fff;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -1650,10 +1664,10 @@ p {
 .ct_callback_field input,
 .ct_callback_field textarea {
   width: 100%;
-  border: 1px solid #dbe5f3;
+  border: 1px solid #ffffff4d;
   border-radius: 5px;
-  background: #ffffff;
-  color: #0f172a;
+  background: #FFFFFF12;
+  color: #fff;
   padding: 14px 16px;
   font-size: 14px;
   line-height: 1.5;
@@ -1694,10 +1708,11 @@ p {
   border: none;
   cursor: pointer;
   padding: 11px 20px;
-  border-radius: 14px;
+  border-radius: 14px !important;
   font-size: 14px;
   font-weight: 600;
   transition: 0.25s;
+  background-color: #5D5CFF;
 }
 
 .btn-cancel {
@@ -1710,9 +1725,8 @@ p {
 }
 
 .btn-confirm {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: #5D5CFF;
   color: white;
-  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
 }
 
 .btn-confirm:hover {

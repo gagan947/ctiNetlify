@@ -44,10 +44,15 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   @Input() selectedDeviceType = '<i class="fa-solid fa-display"></i>';
   @Input() showPreviewControls = false;
   @Input() showPrimaryHeaderAction = false;
-  @Input() primaryHeaderActionLabel = 'Deploy to Production';
+  @Input() primaryHeaderActionLabel = 'Deploy';
+  @Input() primaryHeaderActionIconClass = 'fa-solid fa-rocket';
+  @Input() showSecondaryHeaderAction = false;
+  @Input() secondaryHeaderActionLabel = 'Code';
+  @Input() secondaryHeaderActionIconClass = 'fa-solid fa-download';
   @Output() fullScreenToggle = new EventEmitter<void>();
   @Output() deviceTypeChange = new EventEmitter<'desktop' | 'tablet' | 'mobile'>();
   @Output() primaryHeaderActionClick = new EventEmitter<void>();
+  @Output() secondaryHeaderActionClick = new EventEmitter<void>();
   allProjectsList: UserProjectTab[] = [];
   selectedProjectId = '';
   profileImage = '';
@@ -256,6 +261,10 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
 
   handlePrimaryHeaderActionClick(): void {
     this.primaryHeaderActionClick.emit();
+  }
+
+  handleSecondaryHeaderActionClick(): void {
+    this.secondaryHeaderActionClick.emit();
   }
 
   removeProjectFromTab(projectId: string): void {

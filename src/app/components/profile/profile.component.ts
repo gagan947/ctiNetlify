@@ -26,7 +26,7 @@ export class ProfileComponent {
   @ViewChild('closeBtn') closeBtn!: ElementRef;
   @ViewChild('closeBtn2') closeBtn2!: ElementRef<HTMLButtonElement>
   selectedType: string = 'GST';
-  user: UserProfile | null = null;
+  user: UserProfile = {} as UserProfile;
   SearchCountryField = SearchCountryField
   CountryISO = CountryISO;
   selectedCountry = CountryISO.India;

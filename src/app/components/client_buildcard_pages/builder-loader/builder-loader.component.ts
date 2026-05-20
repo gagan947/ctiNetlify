@@ -51,7 +51,7 @@ export class BuilderLoaderComponent implements OnDestroy {
       this.finalSummary = params['finalSummary'];
       this.finalPrompt = params['finalPrompt'];
       if (this.finalPrompt) {
-        this.apiService._finalPrompt.set(this.finalPrompt || this.finalSummary );
+        this.apiService._finalPrompt.set(this.finalPrompt || this.finalSummary);
         sessionStorage.setItem('finalPrompt', this.finalPrompt || '');
       }
       this.startMessageRotation();
@@ -156,7 +156,7 @@ export class BuilderLoaderComponent implements OnDestroy {
 
       this.ctx.beginPath();
       this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      this.ctx.fillStyle = '#38bdf8';
+      this.ctx.fillStyle = '#5D5CFF';
       this.ctx.fill();
 
       for (let j = i + 1; j < this.particles.length; j++) {
@@ -166,7 +166,7 @@ export class BuilderLoaderComponent implements OnDestroy {
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < 120) {
           this.ctx.beginPath();
-          this.ctx.strokeStyle = `rgba(56, 223, 248, ${1 - dist / 120})`;
+          this.ctx.strokeStyle = `rgba(93, 92, 255, ${1 - dist / 120})`;
           this.ctx.lineWidth = 0.5;
           this.ctx.moveTo(p.x, p.y);
           this.ctx.lineTo(p2.x, p2.y);

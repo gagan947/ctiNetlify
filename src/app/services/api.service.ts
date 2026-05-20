@@ -108,6 +108,9 @@ export class ApiService {
     return this.http.post<T>(this.apiUrl + url, data)
   };
 
+  getBlob(url: string, payload: any): Observable<Blob> {
+    return this.http.post<Blob>(this.apiUrl + url, payload, { responseType: 'blob' as 'json' });
+  };
 
   setToken(token: string) {
     localStorage.setItem('tokenCTi', token);

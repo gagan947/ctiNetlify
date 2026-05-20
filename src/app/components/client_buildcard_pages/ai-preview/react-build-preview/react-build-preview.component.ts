@@ -71,6 +71,8 @@ declare var bootstrap: any;
   styleUrl: './react-build-preview.component.css'
 })
 export class ReactBuildPreviewComponent {
+  private readonly deployCreditsRequired = 60;
+  private readonly downloadCodeCreditsRequired = 100;
   socket: any;
   private readonly mobileBreakpoint = 991;
   private readonly buildErrorPreviewLineLimit = 6;
@@ -138,13 +140,13 @@ export class ReactBuildPreviewComponent {
   builds: any[] = [];
   currentBuildId = 1;
   parentBlock = []
+  files: ReactFile[] = [];
   isTyping = true;
   private buildStepTimeouts: ReturnType<typeof setTimeout>[] = [];
   designMap = new Map<string, DesignSnapshot>();
   designOrder: any[] = [];   // keeps tab order
   activeDesignId!: string;
   hasMarkedFirstBlock = false;
-  files: ReactFile[] = [];
   activeFileIndex = 0;
   activeFile!: ReactFile;
   fullScreen: boolean = false;
@@ -184,6 +186,8 @@ export class ReactBuildPreviewComponent {
   deploymentSuccessMessage = '';
   successModalAction: 'navigate-dashboard' | 'close-only' = 'navigate-dashboard';
   showDeployHeaderAction = false;
+  insufficientCreditsRequired = this.deployCreditsRequired;
+  insufficientCreditsActionLabel = 'project publishing';
   buildGenerationErrorMessage = '';
   isBuildGenerationErrorExpanded = false;
   callbackRequestForm = new FormGroup({
@@ -717,6 +721,52 @@ export class ReactBuildPreviewComponent {
 
   getCurrentCreditBalance(): number {
     return Number((this.subscriptionPlan as any)?.creditBalance || 0);
+  }
+
+  private openInsufficientCreditsModal(requiredCredits: number, actionLabel: string) {
+    this.insufficientCreditsRequired = requiredCredits;
+    this.insufficientCreditsActionLabel = actionLabel;
+    this.openBootstrapModal('insufficientCreditsModal', { backdrop: 'static', keyboard: true });
+  }
+
+  openDownloadCodeModal() {
+    this.openBootstrapModal('downloadCodeConfirmModal', { backdrop: 'static', keyboard: true });
+  }
+
+  confirmDownloadCode() {
+    this.closeBootstrapModal('downloadCodeConfirmModal');
+
+    if (this.getCurrentCreditBalance() < this.downloadCodeCreditsRequired) {
+      this.openInsufficientCreditsModal(this.downloadCodeCreditsRequired, 'downloading code');
+      return;
+    }
+
+    this.downloadCurrentCodeFiles();
+  }
+
+  private async downloadCurrentCodeFiles() {
+
+    const templates = await this.getUserTemplates();
+    const activeDesign = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
+
+    if (!activeDesign.templateId) {
+      console.error("No active design found");
+      return;
+    }
+
+    this.apiService.getBlob('api/ai/download-project', { templatePublicId: activeDesign.templateId }).subscribe(res => {
+      console.log('Download response:', res);
+      if (!res) {
+        this.toster.error('Failed to download code files. Please try again later.');
+        return;
+      }
+      const pdfUrl = window.URL.createObjectURL(res);
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.download = `${activeDesign.projectName}.zip`;
+      link.click();
+      window.URL.revokeObjectURL(pdfUrl);
+    });
   }
 
   onCustomDomainInput(event: Event) {
@@ -1339,7 +1389,12 @@ export class ReactBuildPreviewComponent {
   }
 
   handlePromptKeydown(event: KeyboardEvent, block: any, value: string): void {
+
     if (event.key === 'Enter' && !event.shiftKey) {
+      if (this.isReactBuilding) {
+        event.preventDefault();
+        return;
+      }
       this.customizeInput.nativeElement.value = '';
       event.preventDefault();
       this.handlePromptSubmitted({ blockId: block, value });
@@ -1465,12 +1520,12 @@ export class ReactBuildPreviewComponent {
     this.selected_template_id = activeDesign;
     this.closeBootstrapModal('deployConfirmModal');
 
-    if (this.getCurrentCreditBalance() >= 60) {
+    if (this.getCurrentCreditBalance() >= this.deployCreditsRequired) {
       this.openBootstrapModal('publishProjectModal', { backdrop: 'static', keyboard: true });
       return;
     }
 
-    this.openBootstrapModal('insufficientCreditsModal', { backdrop: 'static', keyboard: true });
+    this.openInsufficientCreditsModal(this.deployCreditsRequired, 'project publishing');
 
   }
 

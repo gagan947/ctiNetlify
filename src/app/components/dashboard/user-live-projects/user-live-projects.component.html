@@ -9,20 +9,18 @@
 
                     <div class="row align-items-center">
 
-                        <div class="col-md-auto">
-                            <div class="project-thumb">
+                        <div class="col-md-12 mb-3 mb-md-0">
+                            <div class="d-flex align-items-center gap-4 ct_flex_col_767">
+                                <div class="project-thumb">
                                 <img loading="lazy" [src]="imagebaseUrl + projectData.clientProjectLogo"
                                     alt="AI-powered app and web development" class="w-auto mx-auto d-block ct_img_80 ">
                             </div>
-                        </div>
-
-                        <div class="col">
-
-                            <h4 class="fw-semibold mb-2">
+                            <div style="flex: 1;">
+                                <h4 class="fw-semibold mb-2">
                                 {{projectData.clientProjectName}}
                             </h4>
 
-                            <div class="meta d-flex flex-wrap gap-4 mb-3">
+                            <div class="meta d-flex flex-wrap gap-3 mb-3 justify-content-between align-items-center">
 
                                 <small>Client: <strong>{{projectData.clientName}}</strong></small>
                                 <small>Created: {{projectData.createdAt | date : "MMM d, y, h:mm a"}}</small>
@@ -32,16 +30,19 @@
                                 </span>
 
                             </div>
-
-                            <div>
+                             <div>
 
                                 <a [href]="baseUrl + projectData.deployed_url" target="_blank"
-                                    class="btn btn-primary btn-sm me-2">
+                                    class="main-ai-topbar__credits py-2 px-4">
                                     View Live
                                 </a>
                             </div>
-
+                            </div>
+                            </div>
+                              
                         </div>
+
+                       
 
                     </div>
 

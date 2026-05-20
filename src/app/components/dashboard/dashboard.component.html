@@ -25,8 +25,9 @@
                   @if (allProjectsList.length > 0) {
                   <div class="ct_dashboard_grid">
                         @for (project of allProjectsList; track trackByInquiryId($index, project)) {
-                        <article class="ct_dashboard_card">
-                              <div class="ct_dashboard_card__hero">
+                        <article class="ct_dashboard_card d-grid h-100">
+                             <div>
+                               <div class="ct_dashboard_card__hero">
                                     <div class="ct_dashboard_card__top">
                                           <h2 class="mb-0">{{ project.projectName || 'Untitled Project' }}</h2>
                                           <span class="ct_dashboard_status_badge" [ngClass]="getStatusClass(project)">
@@ -34,7 +35,7 @@
                                           </span>
                                     </div>
                               </div>
-                              <div class="ct_dashboard_card__body">
+                              <div class="ct_dashboard_card__body pb-0">
                                     <div class="ct_dashboard_meta_grid">
                                           <div class="ct_dashboard_meta">
                                                 <span>Created</span>
@@ -61,7 +62,11 @@
                                           }
                                     </div>
 
-                                    <button type="button" class="ct_dashboard_card__action" (click)="navigate(project)">
+                                  
+                              </div>
+                             </div>
+                              <div class="mt-auto" style="padding-inline: 22px; padding-bottom: 22px;">
+                                      <button type="button" class="ct_dashboard_card__action " (click)="navigate(project)">
                                           {{ getActionLabel(project) }}
                                     </button>
                               </div>
