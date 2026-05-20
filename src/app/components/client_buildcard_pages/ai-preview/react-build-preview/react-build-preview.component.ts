@@ -247,7 +247,7 @@ export class ReactBuildPreviewComponent {
     if (existingTemplate) {
       await this.showDraftWelcomeMessages(false);
       await this.loadDraftTemplates(templates);
-      return;
+      // return;
     }
 
     const activeJobId = localStorage.getItem('active_project_job_id');
@@ -316,6 +316,9 @@ export class ReactBuildPreviewComponent {
           }
 
           localStorage.setItem('active_project_job_id', res.data.jobId);
+          this.continueProjectGenerationInterval = setInterval(() => {
+            this.continueProjectGeneration(res.data.jobId);
+          }, this.generateProjectInternal);
           return;
         },
         error: (error: any) => {
