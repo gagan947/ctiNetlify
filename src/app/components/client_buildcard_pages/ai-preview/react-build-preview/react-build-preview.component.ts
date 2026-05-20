@@ -242,7 +242,7 @@ export class ReactBuildPreviewComponent {
       this.loadDraftTemplates(latestTemplates);
     });
 
-    const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId && t.projectStatus !== 4);
+    const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
     if (existingTemplate) {
       await this.showDraftWelcomeMessages(false);
       await this.loadDraftTemplates(templates);
