@@ -972,6 +972,7 @@ export class ReactBuildPreviewComponent {
 
   closeBuildGenerationFailedModal() {
     this.resetBuildGenerationError();
+    this.closeFailedGenerationWorkspaceAndNavigateHome();
   }
 
   get hasBuildGenerationErrorMessage(): boolean {
@@ -2790,6 +2791,20 @@ export class ReactBuildPreviewComponent {
     if (generatedProjectState?.finalPrompt?.trim()) {
       this.finalPrompt = generatedProjectState.finalPrompt.trim();
     }
+  }
+
+  private closeFailedGenerationWorkspaceAndNavigateHome() {
+    const inquiryId = this.selectedProjectId?.trim();
+    const generationTab = this.projectGenerationTabState.getTabState(inquiryId);
+
+    if (inquiryId && generationTab && (!generationTab.previewData?.templateId || generationTab.projectName === 'New Project')) {
+      this.projectGenerationTabState.clearTab(inquiryId);
+    }
+
+    this.projectGenerationTabState.setActiveInquiryId(null);
+    this.selectedProjectId = '';
+    this.apiService.resetWorkspaceChatState();
+    this.router.navigate(['/main']);
   }
 
   private hideDeployHeaderAction() {

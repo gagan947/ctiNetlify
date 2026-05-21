@@ -21,7 +21,8 @@
         </a>
 
         <div class="main-ai-topbar__tabs-shell">
-            <button type="button" class="main-ai-topbar__scroll-btn main-ai-topbar__scroll-btn--left"
+            <button *ngIf="canScrollTabsLeft" type="button"
+                class="main-ai-topbar__scroll-btn main-ai-topbar__scroll-btn--left"
                 [class.main-ai-topbar__scroll-btn--visible]="canScrollTabsLeft" (click)="scrollTabs('left')"
                 aria-label="Scroll tabs left">
                 <i class="fa-solid fa-chevron-left"></i>
@@ -52,7 +53,8 @@
                 <!-- } -->
             </div>
 
-            <button type="button" class="main-ai-topbar__scroll-btn main-ai-topbar__scroll-btn--right"
+            <button *ngIf="canScrollTabsRight" type="button"
+                class="main-ai-topbar__scroll-btn main-ai-topbar__scroll-btn--right"
                 [class.main-ai-topbar__scroll-btn--visible]="canScrollTabsRight" (click)="scrollTabs('right')"
                 aria-label="Scroll tabs right">
                 <i class="fa-solid fa-chevron-right"></i>
