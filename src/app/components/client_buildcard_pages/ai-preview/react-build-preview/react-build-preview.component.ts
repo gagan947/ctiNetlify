@@ -289,6 +289,7 @@ export class ReactBuildPreviewComponent {
 
     if (generationTab?.jobId) {
       this.projectGenerationTabState.markGenerating(inquiryId);
+      this.restoreRunningBuildBlocks();
       this.startContinueProjectGenerationPolling(inquiryId, generationTab.jobId);
       return;
     }
@@ -847,6 +848,109 @@ export class ReactBuildPreviewComponent {
     if (!this.hasRepairFlowTakenOver && !this.hasInitialBuildCompletionUi && this.isReactBuilding) {
       await this.showRealAiProcessingPhase();
     }
+  }
+
+  private restoreRunningBuildBlocks(): void {
+    this.stopAiProcessingPhase();
+    this.blocks = [];
+    this.resetActivePageBuildSection();
+    this.pendingFinalBuildSection = null;
+    this.hasInitialBuildCompletionUi = false;
+    this.hasRepairFlowTakenOver = false;
+    this.isReactBuilding = true;
+    this.isTyping = true;
+    this.isIframeLoading = true;
+    this.setBuildFlow('initial');
+    this.setBuildStep(3);
+
+    this.blocks.push(this.createCompletedParagraphBlock('Analyzing your prompt...', 'phase'));
+    this.blocks.push(this.createCompletedBuildSection(
+      'Analyzing your prompt...',
+      '🧠',
+      [
+        'Understanding project direction',
+        'Mapping the main screens and user flow',
+        'Defining overall product specification'
+      ]
+    ));
+    this.blocks.push(this.createCompletedParagraphBlock(
+      'The scope is clear now, so I’m moving into the actual build flow with structure first and code generation right after that.',
+      'support'
+    ));
+    this.blocks.push(this.createCompletedParagraphBlock('Initializing project...', 'phase'));
+    this.blocks.push(this.createCompletedBuildSection(
+      'Initializing project...',
+      '⚙️',
+      [
+        'Preparing workspace',
+        'Initializing React project shell',
+        'Setting up the base environment'
+      ]
+    ));
+    this.blocks.push(this.createCompletedParagraphBlock('Creating structure...', 'phase'));
+    this.blocks.push(this.createCompletedBuildSection(
+      'Creating structure...',
+      '📁',
+      [
+        'src/',
+        'components/',
+        'pages/',
+        'services/',
+        'hooks/',
+        'context/'
+      ]
+    ));
+    this.setBuildStep(2);
+    this.blocks.push(this.createCompletedParagraphBlock('Creating core files...', 'phase'));
+    this.blocks.push(this.createCompletedBuildSection(
+      'Creating core files...',
+      '📦',
+      [
+        'package.json',
+        'vite.config.js',
+        'index.html',
+        'src/main.jsx',
+        'src/App.jsx'
+      ]
+    ));
+    this.blocks.push(this.createCompletedParagraphBlock('Building UI...', 'phase'));
+    this.blocks.push(this.createCompletedBuildSection(
+      'Building UI...',
+      '🧩',
+      [
+        'Navbar.jsx',
+        'Footer.jsx',
+        'AppContext.jsx',
+        'useProjectData.js',
+        'api.js'
+      ]
+    ));
+    this.blocks.push(this.createCompletedParagraphBlock('Creating pages...', 'phase'));
+    this.blocks.push(this.createCompletedBuildSection(
+      'Creating pages...',
+      '📄',
+      this.getRestoredPageGenerationItems()
+    ));
+
+    this.blocks.push(this.createCompletedParagraphBlock('Finalizing...', 'phase'));
+
+    const finalBuildSection = this.createActiveBuildSection(
+      'Finalizing...',
+      '🚀',
+      [
+        { label: 'Installing dependencies', status: 'done' },
+        { label: 'Building preview bundle', status: 'done' },
+        { label: 'Deploying preview', status: 'active' }
+      ]
+    );
+
+    this.pendingFinalBuildSection = finalBuildSection;
+    this.blocks.push(finalBuildSection);
+    this.blocks.push(this.createCompletedParagraphBlock('Final preview processing is still running...', 'phase'));
+    this.blocks.push(this.createCompletedParagraphBlock('This may take 2–5 minutes depending on project complexity.', 'support'));
+
+    this.startAiProcessingPhase();
+    setTimeout(() => this.scrollToBottom(true), 0);
   }
 
   retryBuildGeneration() {
@@ -2316,6 +2420,19 @@ export class ReactBuildPreviewComponent {
     await this.delay(waitAfter);
   }
 
+  private createCompletedParagraphBlock(
+    text: string,
+    variant: 'default' | 'phase' | 'support' = 'default'
+  ) {
+    return {
+      id: `paragraph-${Date.now()}-${this.blocks.length}`,
+      text,
+      variant,
+      done: true,
+      timestamp: new Date()
+    };
+  }
+
   async addListBlock(items: string[], waitAfter = 1200) {
     this.blocks.push({
       id: `list-${Date.now()}-${this.blocks.length}`,
@@ -2365,6 +2482,48 @@ export class ReactBuildPreviewComponent {
     await this.delay(finishDelay);
     block.data.done = true;
     setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private createCompletedBuildSection(title: string, icon: string, items: string[]) {
+    return {
+      type: 'build-section',
+      data: {
+        title,
+        icon,
+        done: true,
+        items: items.map((label) => ({
+          label,
+          status: 'done' as const
+        }))
+      }
+    };
+  }
+
+  private createActiveBuildSection(
+    title: string,
+    icon: string,
+    items: Array<{ label: string; status: 'active' | 'done' }>
+  ) {
+    return {
+      type: 'build-section' as const,
+      data: {
+        title,
+        icon,
+        done: false,
+        items
+      }
+    };
+  }
+
+  private getRestoredPageGenerationItems(): string[] {
+    const pageItems = [
+      ...this.queuedSocketPages,
+      ...this.designOrder.map((designId) => this.designMap.get(designId)?.label || '')
+    ]
+      .map((label) => String(label || '').trim())
+      .filter((label, index, items) => !!label && items.indexOf(label) === index);
+
+    return pageItems.length ? pageItems : ['Generating page screens'];
   }
 
   private registerBuildSocketListeners() {
