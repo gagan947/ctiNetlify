@@ -8,6 +8,7 @@ import { firstValueFrom } from 'rxjs';
 import { SubscriptionResponse } from '../../../../models/subcription';
 import { AiSocketService } from '../../../../services/ai-socket.service';
 import { ApiService } from '../../../../services/api.service';
+import { ProjectGenerationPreviewData, ProjectGenerationTabStateService } from '../../../../services/project-generation-tab-state.service';
 import { ReactCodeEditorComponent } from '../react-code-editor/react-code-editor.component';
 import { AiDevRendererComponent } from '../ai-dev-renderer/ai-dev-renderer.component';
 import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
@@ -190,12 +191,15 @@ export class ReactBuildPreviewComponent {
   private pageGenerationCompletionResolver: (() => void) | null = null;
   private continueProjectGenerationInterval: ReturnType<typeof setInterval> | null = null;
   private isContinueProjectGenerationRequestInFlight = false;
+  private routeChangeVersion = 0;
+  private socketInquiryId = '';
   today = new Date();
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
     private sanitizer: DomSanitizer,
     private aiService: AiSocketService,
+    private projectGenerationTabState: ProjectGenerationTabStateService,
     private router: Router,
     private toster: NzMessageService,
     public subscriptionModalService: SubscriptionModalService,
@@ -208,16 +212,7 @@ export class ReactBuildPreviewComponent {
   }
 
   async ngOnInit() {
-    this.refreshProjectContext();
     this.hideDeployHeaderAction();
-    this.refreshProjectContext();
-    this.socket = io(this.apiService.apiUrl, {
-      auth: {
-        token: localStorage.getItem('tokenCTi'),
-        inquiryPublicId: this.projectsData.clientEnquryId,
-      }
-    });
-    this.registerBuildSocketListeners();
     this.getUserSubscriptionPlan();
     this.userInfo = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
     this.initializeCallbackRequestForm();
@@ -233,39 +228,178 @@ export class ReactBuildPreviewComponent {
     // ✅ 1. LOAD DRAFT TEMPLATES FIRST
     // ============================================
 
-    const templates = await this.getUserTemplates();
     this.route.paramMap.subscribe(async (res: any) => {
-      this.hideDeployHeaderAction();
-      this.selectedProjectId = res.params['id'];
-      this.refreshProjectContext();
-      const latestTemplates = await this.getUserTemplates();
-      this.loadDraftTemplates(latestTemplates);
+      const inquiryId = String(res.params['id'] || '').trim();
+      await this.handleProjectRouteChange(inquiryId);
     });
 
-    const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
-    if (existingTemplate) {
-      await this.showDraftWelcomeMessages(false);
-      await this.loadDraftTemplates(templates);
-      // return;
-    }
+  }
 
-    const activeJobId = localStorage.getItem('active_project_job_id');
-    if (activeJobId) {
-      this.continueProjectGeneration(activeJobId);
-      this.continueProjectGenerationInterval = setInterval(() => {
-        const latestActiveJobId = localStorage.getItem('active_project_job_id');
+  private async handleProjectRouteChange(inquiryId: string) {
+    const routeChangeVersion = ++this.routeChangeVersion;
 
-        if (latestActiveJobId) {
-          this.continueProjectGeneration(latestActiveJobId);
-          return;
-        }
-
-        this.clearContinueProjectGenerationInterval();
-      }, this.generateProjectInternal);
+    this.prepareForProjectRouteChange(inquiryId);
+    if (!inquiryId) {
       return;
     }
 
-    await this.runInitialBuildSequence();
+    this.selectedProjectId = inquiryId;
+    this.projectGenerationTabState.setActiveInquiryId(inquiryId);
+    this.refreshProjectContext(inquiryId);
+    this.ensureBuildSocket(inquiryId);
+
+    const templates = await this.getUserTemplates();
+    if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
+      return;
+    }
+
+    const existingTemplate = templates.find((template: any) => template.inquiryId === inquiryId);
+    if (existingTemplate) {
+      await this.showDraftWelcomeMessages(false);
+      if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
+        return;
+      }
+
+      await this.loadDraftTemplates(templates);
+      if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
+        return;
+      }
+
+      this.projectGenerationTabState.markCompleted(inquiryId, {
+        templateId: existingTemplate.templateId,
+        pages: existingTemplate.pages,
+        login_redirect: existingTemplate.login_redirect,
+        reactBuildUrl: existingTemplate.reactBuildUrl,
+        variation: existingTemplate.variation
+      });
+      return;
+    }
+
+    const generationTab = this.projectGenerationTabState.getTabState(inquiryId);
+    if (generationTab?.status === 'completed' && generationTab.previewData?.templateId) {
+      this.applyStoredCompletedPreview(generationTab.previewData);
+      return;
+    }
+
+    if (generationTab?.status === 'error') {
+      this.setBuildGenerationError(generationTab.errorMessage || 'Failed to generate preview');
+      this.queueBuildGenerationFailure(true);
+      return;
+    }
+
+    if (generationTab?.jobId) {
+      this.projectGenerationTabState.markGenerating(inquiryId);
+      this.startContinueProjectGenerationPolling(inquiryId, generationTab.jobId);
+      return;
+    }
+
+    if (this.shouldStartInitialGeneration(inquiryId, generationTab)) {
+      await this.runInitialBuildSequence();
+      return;
+    }
+
+    this.isReactBuilding = false;
+    this.isIframeLoading = false;
+  }
+
+  private prepareForProjectRouteChange(inquiryId: string) {
+    this.clearContinueProjectGenerationInterval();
+    this.clearGenerateProjectFailureTimer();
+    this.stopAiProcessingPhase();
+    this.clearBuildStepTimers();
+    this.resetActivePageBuildSection();
+    this.pendingFinalBuildSection = null;
+    this.pendingPreviewResponse = null;
+    this.pendingPreviewFailure = false;
+    this.hasInitialFlowCompleted = false;
+    this.shouldDeferPreviewApply = false;
+    this.hasInitialBuildCompletionUi = false;
+    this.hasRepairFlowTakenOver = false;
+    this.repairAttemptVersion++;
+    this.customizationRequestVersion++;
+    this.initialFlowRunId++;
+    this.isContinueProjectGenerationRequestInFlight = false;
+    this.blocks = [];
+    this.designMap.clear();
+    this.designOrder = [];
+    this.designCount = 0;
+    this.usedVariations = [];
+    this.activeDesignId = '';
+    this.currentTemplateId = null;
+    this.selected_template_id = '';
+    this.pendingPreviewUrl = null;
+    this.safePreviewUrl = null;
+    this.hasAutoOpenedCurrentMobilePreview = false;
+    this.hasDismissedCurrentMobilePreview = false;
+    this.resetBuildGenerationError();
+    this.closeBuildGenerationFailureModal();
+    this.hideDeployHeaderAction();
+    this.isTyping = !!inquiryId;
+    this.isReactBuilding = !!inquiryId;
+    this.isIframeLoading = !!inquiryId;
+  }
+
+  private isCurrentRouteChange(routeChangeVersion: number, inquiryId: string): boolean {
+    return this.routeChangeVersion === routeChangeVersion && this.selectedProjectId === inquiryId;
+  }
+
+  private shouldStartInitialGeneration(inquiryId: string, generationTab: any): boolean {
+    return this.projectsData?.clientEnquryId === inquiryId
+      || !!generationTab;
+  }
+
+  private ensureBuildSocket(inquiryId: string) {
+    if (!inquiryId || this.socketInquiryId === inquiryId) {
+      return;
+    }
+
+    this.socket?.off?.('page-created');
+    this.socket?.off?.('pages-generation-complete');
+    this.socket?.disconnect?.();
+
+    this.socket = io(this.apiService.apiUrl, {
+      auth: {
+        token: localStorage.getItem('tokenCTi'),
+        inquiryPublicId: inquiryId,
+      }
+    });
+    this.socketInquiryId = inquiryId;
+    this.registerBuildSocketListeners();
+  }
+
+  private applyStoredCompletedPreview(previewData: ProjectGenerationPreviewData) {
+    if (!previewData?.templateId) {
+      return;
+    }
+
+    this.queueGeneratedPreview({ data: previewData }, null, true);
+  }
+
+  private startContinueProjectGenerationPolling(inquiryId: string, jobId: string) {
+    if (!jobId || !this.isInquiryActive(inquiryId)) {
+      return;
+    }
+
+    this.clearContinueProjectGenerationInterval();
+    this.continueProjectGeneration(jobId, inquiryId);
+    this.continueProjectGenerationInterval = setInterval(() => {
+      if (!this.isInquiryActive(inquiryId)) {
+        this.clearContinueProjectGenerationInterval();
+        return;
+      }
+
+      const latestJobId = this.projectGenerationTabState.getTabState(inquiryId)?.jobId?.trim();
+      if (!latestJobId) {
+        this.clearContinueProjectGenerationInterval();
+        return;
+      }
+
+      this.continueProjectGeneration(latestJobId, inquiryId);
+    }, this.generateProjectInternal);
+  }
+
+  private isInquiryActive(inquiryId: string): boolean {
+    return !!inquiryId && this.selectedProjectId === inquiryId;
   }
 
   clearContinueProjectGenerationInterval() {
@@ -298,42 +432,63 @@ export class ReactBuildPreviewComponent {
   }
 
   startPreview(socket_id: string | null) {
+    const inquiryId = this.selectedProjectId;
+    if (!inquiryId) {
+      return;
+    }
 
     if (socket_id) {
       this.setBuildFlow('initial');
       this.startBuildProgressTimers();
     }
+    this.projectGenerationTabState.markGenerating(inquiryId);
     const payload = this.buildPreviewPayload(socket_id);
 
     this.apiService
       .postAPI<any, any>('api/ai/generateProject', payload)
       .subscribe({
         next: (res: any) => {
+          const shouldApplyUi = this.isSelectedProjectContext(inquiryId);
+
           if (!res?.success) {
-            this.deferGenerateProjectFailure(res?.data?.message || 'Failed to generate preview');
+            const errorMessage = res?.data?.message || 'Failed to generate preview';
+            this.projectGenerationTabState.markError(inquiryId, errorMessage);
+            if (!shouldApplyUi) {
+              return;
+            }
+            this.deferGenerateProjectFailure(errorMessage);
             return;
           }
 
           if (res.success && res.data?.templateId) {
+            this.persistCompletedGeneration(inquiryId, res?.data);
+            if (!shouldApplyUi) {
+              return;
+            }
             this.clearGenerateProjectFailureTimer();
             this.queueGeneratedPreview(res, null, true);
             return;
           }
 
-          localStorage.setItem('active_project_job_id', res.data.jobId);
-          this.continueProjectGenerationInterval = setInterval(() => {
-            this.continueProjectGeneration(res.data.jobId);
-          }, this.generateProjectInternal);
+          this.projectGenerationTabState.setJobId(inquiryId, res.data.jobId);
+          if (!shouldApplyUi) {
+            return;
+          }
+          this.startContinueProjectGenerationPolling(inquiryId, res.data.jobId);
           return;
         },
         error: (error: any) => {
+          this.projectGenerationTabState.markError(inquiryId, this.extractBuildGenerationErrorMessage(error));
+          if (!this.isSelectedProjectContext(inquiryId)) {
+            return;
+          }
           this.deferGenerateProjectFailure(error);
         }
       });
   }
 
-  continueProjectGeneration(jobId: string) {
-    if (!jobId || this.isContinueProjectGenerationRequestInFlight) {
+  continueProjectGeneration(jobId: string, inquiryId: string) {
+    if (!jobId || !inquiryId || this.isContinueProjectGenerationRequestInFlight) {
       return;
     }
 
@@ -343,15 +498,26 @@ export class ReactBuildPreviewComponent {
       .subscribe({
         next: (res: any) => {
           this.isContinueProjectGenerationRequestInFlight = false;
+          const shouldApplyUi = this.isSelectedProjectContext(inquiryId);
+
           const statusCode = Number(res?.status ?? res?.data?.statusCode ?? res?.data?.status ?? 200);
           if (statusCode === 202) {
             return;
           }
 
-          this.finalizeContinueProjectGenerationPolling();
+          this.finalizeContinueProjectGenerationPolling(inquiryId);
           if (!res?.success) {
-            this.setBuildGenerationError(res?.data?.message || 'Failed to generate preview');
+            const errorMessage = res?.data?.message || 'Failed to generate preview';
+            this.projectGenerationTabState.markError(inquiryId, errorMessage);
+            if (!shouldApplyUi) {
+              return;
+            }
+            this.setBuildGenerationError(errorMessage);
             this.queueBuildGenerationFailure(true);
+            return;
+          }
+          this.persistCompletedGeneration(inquiryId, res?.data);
+          if (!shouldApplyUi) {
             return;
           }
           this.clearGenerateProjectFailureTimer();
@@ -360,9 +526,14 @@ export class ReactBuildPreviewComponent {
         },
         error: (error: any) => {
           this.isContinueProjectGenerationRequestInFlight = false;
-          this.finalizeContinueProjectGenerationPolling();
+          this.finalizeContinueProjectGenerationPolling(inquiryId);
+          const shouldApplyUi = this.isSelectedProjectContext(inquiryId);
           if (error.error.status === 422 && error.error.data.canRepairBuild) {
             this.clearGenerateProjectFailureTimer();
+            this.projectGenerationTabState.markRepairing(inquiryId, this.extractBuildGenerationErrorMessage(error));
+            if (!shouldApplyUi) {
+              return;
+            }
             let repairPayload = {
               templatePublicId: error.error.data.templatePublicId,
               inquiryPublicId: this.projectsData.clientEnquryId,
@@ -372,6 +543,10 @@ export class ReactBuildPreviewComponent {
             void this.attemptBuildRepair(repairPayload, error);
             return;
           }
+          this.projectGenerationTabState.markError(inquiryId, this.extractBuildGenerationErrorMessage(error));
+          if (!shouldApplyUi) {
+            return;
+          }
           this.setBuildGenerationError(error);
           this.queueBuildGenerationFailure(true);
         }
@@ -379,9 +554,27 @@ export class ReactBuildPreviewComponent {
 
   }
 
-  private finalizeContinueProjectGenerationPolling() {
+  private finalizeContinueProjectGenerationPolling(inquiryId: string) {
     this.clearContinueProjectGenerationInterval();
-    localStorage.removeItem('active_project_job_id');
+    this.projectGenerationTabState.clearJobId(inquiryId);
+  }
+
+  private persistCompletedGeneration(inquiryId: string, data: any) {
+    if (!inquiryId || !data?.templateId) {
+      return;
+    }
+
+    this.projectGenerationTabState.markCompleted(inquiryId, {
+      templateId: data.templateId,
+      pages: data.pages,
+      login_redirect: data.login_redirect,
+      reactBuildUrl: data.reactBuildUrl,
+      variation: data.variation
+    });
+  }
+
+  private isSelectedProjectContext(inquiryId: string): boolean {
+    return !!inquiryId && this.selectedProjectId === inquiryId;
   }
 
   private buildPreviewPayload(socketId: string | null) {
@@ -396,6 +589,12 @@ export class ReactBuildPreviewComponent {
 
   private async attemptBuildRepair(payload: any, buildFailureSource?: any, attemptNumber = 1) {
     this.setBuildGenerationError(buildFailureSource);
+    if (this.selectedProjectId) {
+      this.projectGenerationTabState.markRepairing(
+        this.selectedProjectId,
+        this.extractBuildGenerationErrorMessage(buildFailureSource)
+      );
+    }
     this.clearBuildStepTimers();
     this.hasRepairFlowTakenOver = true;
     this.hideLoader();
@@ -415,10 +614,16 @@ export class ReactBuildPreviewComponent {
               this.appendBuildActionPrompt();
             }
             this.setBuildGenerationError(res.data?.message || 'Failed to generate preview');
+            if (this.selectedProjectId) {
+              this.projectGenerationTabState.markError(this.selectedProjectId, res.data?.message || 'Failed to generate preview');
+            }
             this.queueBuildGenerationFailure();
             return;
           }
 
+          if (this.selectedProjectId) {
+            this.persistCompletedGeneration(this.selectedProjectId, res?.data);
+          }
           this.appendBuildActionPrompt();
           this.queueGeneratedPreview(res, payload.socket_id ?? null);
         },
@@ -433,6 +638,9 @@ export class ReactBuildPreviewComponent {
           }
           if (attemptNumber >= this.maxBuildRepairAttempts) {
             this.appendBuildActionPrompt();
+          }
+          if (this.selectedProjectId) {
+            this.projectGenerationTabState.markError(this.selectedProjectId, this.extractBuildGenerationErrorMessage(error));
           }
           this.setBuildGenerationError(error);
           this.queueBuildGenerationFailure();
@@ -543,6 +751,8 @@ export class ReactBuildPreviewComponent {
     this.isReactBuilding = true;
 
     const templateId = res.data.templateId;
+    this.currentTemplateId = templateId;
+    this.selected_template_id = templateId;
     const previewUrl = this.getPreviewUrlFromResponse(res.data, templateId);
 
     if (res.data.variation) {
@@ -657,9 +867,7 @@ export class ReactBuildPreviewComponent {
 
 
   closeBuildGenerationFailedModal() {
-    localStorage.removeItem('active_project_job_id');
-    sessionStorage.removeItem('projectData');
-    // sessionStorage.removeItem('finalPrompt');
+    this.resetBuildGenerationError();
   }
 
   get hasBuildGenerationErrorMessage(): boolean {
@@ -1212,6 +1420,8 @@ export class ReactBuildPreviewComponent {
     }
 
     this.startQuickBuildProgress('restore');
+    this.currentTemplateId = templateId;
+    this.selected_template_id = templateId;
     this.setSafePreviewUrl(this.getPreviewProxyUrl(templateId));
     this.isReactBuilding = false;
     this.isTyping = false;
@@ -2407,9 +2617,20 @@ export class ReactBuildPreviewComponent {
     return this.previewOverlayLoaderText.split('');
   }
 
-  private refreshProjectContext() {
-    const projectData = sessionStorage.getItem('projectData');
-    this.projectsData = projectData ? JSON.parse(projectData) : null;
+  private refreshProjectContext(inquiryId?: string) {
+    const storedProjectData = sessionStorage.getItem('projectData');
+    const parsedStoredProjectData = storedProjectData ? JSON.parse(storedProjectData) : null;
+    const generatedProjectState = this.projectGenerationTabState.getTabState(inquiryId || this.selectedProjectId);
+    const resolvedProjectData = generatedProjectState?.projectData || parsedStoredProjectData;
+
+    this.projectsData = resolvedProjectData;
+    if (resolvedProjectData) {
+      sessionStorage.setItem('projectData', JSON.stringify(resolvedProjectData));
+    }
+
+    if (generatedProjectState?.finalPrompt?.trim()) {
+      this.finalPrompt = generatedProjectState.finalPrompt.trim();
+    }
   }
 
   private hideDeployHeaderAction() {
