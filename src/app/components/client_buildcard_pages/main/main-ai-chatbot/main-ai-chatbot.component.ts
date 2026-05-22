@@ -8,6 +8,7 @@ import { ProjectGenerationTabStateService } from '../../../../services/project-g
 import { io } from 'socket.io-client';
 import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
 import { SpeechService } from '../../../../services/speech.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 declare var bootstrap: any;
 interface ChatMessage {
   sender: 'user' | 'ai';
@@ -55,6 +56,7 @@ interface TriggerBuildProjectPayload {
 
 interface GenerateInquiryResponse {
   success?: boolean;
+  message?: string;
   data?: {
     public_id?: string;
   };
@@ -118,7 +120,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     private router: Router,
     private ngZone: NgZone,
     public subscriptionModalService: SubscriptionModalService,
-    public speechService: SpeechService
+    public speechService: SpeechService,
+    public toaster : NzMessageService
   ) { }
 
   ngOnInit(): void {
@@ -464,6 +467,11 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       user_prompt: this.lastUserPrompt
     }).subscribe({
       next: (response) => {
+        if(!response?.success) {
+          this.isBuildActionLoading = false;
+              this.toaster.warning(response.message || ''); // instant
+          return;
+        }
         const publicId = response?.data?.public_id;
 
         if (!publicId) {
