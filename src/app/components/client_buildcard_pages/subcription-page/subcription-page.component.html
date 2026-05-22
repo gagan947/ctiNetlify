@@ -1,241 +1,107 @@
 <div class="ct_subscription_modal_root">
-  <div class="modal-content p-lg-4 rounded-4 py-4" *ngIf="!billingSummaryModalOpen">
+  <div class="modal-content ct_subscription_shell rounded-4 py-4 px-lg-4" *ngIf="!billingSummaryModalOpen">
     <div class="container">
-      <div class="ct_subscription_topbar">
-        <div class="ct_section_heading text-center">
-          <h4 class="ct_fw_600 ct_fs_32 mb-3">Choose the perfect plan for you</h4>
-          <div class="ct_pricing_toggle mb-0">
-            <button type="button" [class.active]="billingCycle() === 'MONTH'"
-              (click)="setBillingCycle('MONTH')">Monthly</button>
-            <button type="button" [class.active]="billingCycle() === 'YEAR'"
-              (click)="setBillingCycle('YEAR')">Annually</button>
-          </div>
+      <div class="ct_subscription_intro text-center">
+        <h4>Choose your plan</h4>
+        <p>Pick a plan that best suits you. Upgrade or downgrade at any time.</p>
+
+        <div class="ct_pricing_toggle">
+          <button type="button" [class.active]="billingCycle() === 'MONTH'" (click)="setBillingCycle('MONTH')">
+            Monthly
+          </button>
+          <button type="button" [class.active]="billingCycle() === 'YEAR'" (click)="setBillingCycle('YEAR')">
+            Annually
+          </button>
+          <span class="ct_toggle_hint">Save 17%</span>
+        </div>
+
+        <span class="ct_promo_caption">HAVE A PROMO CODE?</span>
+
+        <div class="ct_offer_banner">
+          <span>FLAT 70% off on Standard monthly plan.</span>
+          <span class="ct_offer_badge">DISCOUNT AUTO APPLIED</span>
         </div>
       </div>
 
-      <div class="ct_pricing_grid mt-1 pt-4">
-        <div class="ct_price_card" *ngIf="freePlan as plan">
-          <div class="inner-div">
-            <div class="ct_plan_status_group" *ngIf="getPlanBadges(plan).length">
-              <span class="ct_plan_status_badge" *ngFor="let badge of getPlanBadges(plan)"
-                [class.ct_plan_status_badge__active]="badge === 'Active'">
-                {{ badge }}
-              </span>
-            </div>
-            <div class="ct_price_card_top">
-              <span class="ct_price_badge">{{ getPlanBadge(plan) }}</span>
-              <h3 class="ct_price_credits">{{ plan.credits_per_cycle }} Credits</h3>
-              <div class="ct_price_value">
-                <span class="ct_price_current">&#8377;{{ getCurrentPrice(plan) }}</span>
-                <span class="ct_price_suffix">{{ getBillingSuffix(plan) }}</span>
-              </div>
+      <div class="ct_pricing_grid">
+        <article class="ct_price_card" *ngFor="let plan of getVisiblePlanCards()"
+          [class.ct_price_card_standard]="getCardTheme(plan) === 'standard'"
+          [class.ct_price_card_enterprise]="getCardTheme(plan) === 'enterprise'">
+          <span class="ct_card_ribbon" *ngIf="getCardTheme(plan) === 'standard'">Best Value</span>
+
+          <div class="ct_card_header">
+            <div>
+              <h3>{{ getCardTitle(plan) }}</h3>
               <p>{{ planDescription(plan) }}</p>
-              <div class="ct_price_offer_slot">
-                <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
-                  <div class="ct_price_offer">{{ introOfferLabel(plan) }}</div>
-                </div>
-              </div>
-              <a aria-disabled="true" class="disable_btn ct_price_cta">{{ getPlanButtonLabel(plan) }}</a>
             </div>
-            <div class="ct_price_card_bottom">
-              <h4>{{ getPlanFeaturesTitle(plan) }}</h4>
-              <ul>
-                <li *ngFor="let feature of planFeatures(plan)">
-                  <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <g clip-path="url(#clip0_222_5114)">
-                      <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                        width="20" height="20">
-                        <path
-                          d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                          fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                        <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                          stroke-linecap="round" stroke-linejoin="round" />
-                      </mask>
-                      <g mask="url(#mask0_222_5114)">
-                        <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                      </g>
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_222_5114">
-                        <rect width="20" height="20" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                  <span>{{ feature }}</span>
-                </li>
-              </ul>
-              <p class="ct_price_note">{{ getPlanFootnote(plan) }}</p>
+            <span class="ct_active_chip" *ngIf="isActivePaidPlan(plan)">Active</span>
+          </div>
+
+          <div class="ct_price_wrap">
+            <span class="ct_price_previous" *ngIf="shouldShowPreviousPrice(plan)">₹{{ getOriginalPriceValue(plan)
+              }}</span>
+            <div class="ct_price_row">
+              <span class="ct_price_value">₹{{ getCurrentPriceValue(plan) }}</span>
+              <span class="ct_price_suffix">/ month</span>
+              <span class="ct_price_save" *ngIf="getSaveText(plan)">{{ getSaveText(plan) }}</span>
             </div>
           </div>
-        </div>
-        <div class="ct_price_card ct_price_card_featured" *ngIf="selectedProPlan as plan">
-          <div class="inner-div">
-            <div class="ct_plan_status_group" *ngIf="getPlanBadges(plan).length">
-              <span class="ct_plan_status_badge" *ngFor="let badge of getPlanBadges(plan)"
-                [class.ct_plan_status_badge__active]="badge === 'Active'">
-                {{ badge }}
-              </span>
-            </div>
 
-            <div class="ct_price_card_top">
+          <div class="ct_plan_selector"
+            [class.ct_plan_selector_clickable]="getCardTheme(plan) === 'standard' && proPlans.length > 1"
+            *ngIf="getCardTheme(plan) === 'standard'; else enterpriseCredits">
+            <button type="button" class="ct_starter_plan" [class.ct_starter_plan_disabled]="proPlans.length <= 1"
+              (click)="proPlans.length > 1 && toggleProDropdown($event)">
+              <span class="ct_credit_dot"></span>
+              <span>{{ getCreditsLabel(plan) }}</span>
+              <i class="fa-solid fa-angle-down" *ngIf="proPlans.length > 1"></i>
+            </button>
 
-              <span class="ct_price_badge">{{ getPlanBadge(plan) }}</span>
-              <h3 class="ct_price_credits">{{ plan.credits_per_cycle }} Credits</h3>
-              <div class="ct_price_value ct_price_value_compact"
-                [class.ct_price_value_with_old]="shouldShowPreviousPrice(plan)">
-                <span class="ct_price_previous" *ngIf="shouldShowPreviousPrice(plan)">
-                  &#8377;{{ getDisplayAmount(plan) }}{{ getBillingSuffix(plan) }}
-                </span>
-                <span class="ct_price_current">&#8377;{{ getCurrentPrice(plan) }}</span>
-                <span class="ct_price_suffix">{{ getBillingSuffix(plan) }}</span>
-              </div>
-              <div class="ct_price_offer_slot">
-                <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
-                  <div class="ct_price_offer">{{ introOfferLabel(plan) }}</div>
-                </div>
-                <div class="ct_price_offer_wrap d-flex align-items-center gap-2 justify-content-center"
-                  *ngIf="hasDiscount(plan)">
-                  <span *ngIf="billingCycle() === 'YEAR'" class="mb-0"><del>&#8377;{{ plan.display_amount
-                      }}</del><span>{{
-                      getBillingSuffix(plan)
-                      }}</span></span>
-                  <div class="ct_price_offer">{{ getDiscountLabel(plan) }}</div>
-                </div>
-              </div>
-              <p>{{ planDescription(plan) }}</p>
-              <a (click)="handlePlanAction(plan)" class="ct_price_cta" [class.disable_btn]="isPlanActionDisabled(plan)"
-                [attr.aria-disabled]="isPlanActionDisabled(plan)">
-                {{ getPlanButtonLabel(plan) }}
-              </a>
-              <div class="position-relative" *ngIf="proPlans.length > 1" (click)="$event.stopPropagation()">
-                <button type="button" class="ct_starter_plan" (click)="toggleProDropdown($event)">
-                  {{ plan.credits_per_cycle }} credits {{
-                  getBillingSuffix(plan) }}
-                  <i class="fa-solid fa-angle-down ct_show_eye"></i>
+            <ul class="dropdown-menu show" *ngIf="proDropdownOpen && proPlans.length > 1">
+              <li *ngFor="let proPlan of proDropdownPlans">
+                <button type="button" class="dropdown-item" (click)="selectProPlan(proPlan, $event)">
+                  {{ proPlan.credits_per_cycle }} credits / {{ proPlan.billing_interval.toLowerCase() }} - ₹{{
+                  getCurrentPriceValue(proPlan) }}
                 </button>
-                <ul class="dropdown-menu show" *ngIf="proDropdownOpen">
-                  <li *ngFor="let proPlan of proDropdownPlans">
-                    <button type="button" class="dropdown-item" (click)="selectProPlan(proPlan, $event)">
-                      {{ proPlan.credits_per_cycle }} credits - &#8377;{{ getCurrentPrice(proPlan) }}{{
-                      getBillingSuffix(proPlan) }}
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="ct_price_card_bottom">
-              <h4>{{ getPlanFeaturesTitle(plan) }}</h4>
-              <ul>
-                <li *ngFor="let feature of planFeatures(plan)">
-                  <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <g clip-path="url(#clip0_222_5114)">
-                      <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                        width="20" height="20">
-                        <path
-                          d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                          fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                        <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                          stroke-linecap="round" stroke-linejoin="round" />
-                      </mask>
-                      <g mask="url(#mask0_222_5114)">
-                        <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                      </g>
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_222_5114">
-                        <rect width="20" height="20" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                  <span>{{ feature }}</span>
-                </li>
-              </ul>
-              <p class="ct_price_note">{{ getPlanFootnote(plan) }}</p>
-            </div>
+              </li>
+            </ul>
           </div>
-        </div>
-        <div class="ct_price_card" *ngIf="businessPlan as plan">
-          <div class="inner-div">
-            <div class="ct_plan_status_group" *ngIf="getPlanBadges(plan).length">
-              <span class="ct_plan_status_badge" *ngFor="let badge of getPlanBadges(plan)"
-                [class.ct_plan_status_badge__active]="badge === 'Active'">
-                {{ badge }}
-              </span>
-            </div>
-            <div class="ct_price_card_top">
-              <span class="ct_price_badge">{{ getPlanBadge(plan) }}</span>
-              <h3 class="ct_price_credits">{{ plan.credits_per_cycle }} Credits</h3>
-              <div class="ct_price_value">
-                <span class="ct_price_current">&#8377;{{ getCurrentPrice(plan) }}</span>
-                <span class="ct_price_suffix">{{ getBillingSuffix(plan) }}</span>
+
+          <ng-template #enterpriseCredits>
+            <div class="ct_plan_selector">
+              <div class="ct_starter_plan ct_starter_plan_disabled">
+                <span class="ct_credit_dot"></span>
+                <span>{{ getCreditsLabel(plan) }}</span>
               </div>
-              <div class="ct_price_offer_slot">
-                <div class="ct_price_offer_wrap d-flex align-items-center gap-2 justify-content-center"
-                  *ngIf="hasDiscount(plan)">
-                  <span *ngIf="billingCycle() === 'YEAR'" class="mb-0"><del>&#8377;{{ plan.display_amount
-                      }}</del><span>{{
-                      getBillingSuffix(plan)
-                      }}</span></span>
-                  <div class="ct_price_offer">{{ getDiscountLabel(plan) }}</div>
-                </div>
-                <div class="ct_price_offer_wrap" *ngIf="showIntroOffer(plan)">
-                  <div class="ct_price_offer">{{ introOfferLabel(plan) }}</div>
-                </div>
-                <p class="plan_description">{{ planDescription(plan) }}</p>
+            </div>
+          </ng-template>
+
+          <a (click)="handlePlanAction(plan)" class="ct_price_cta" [class.disable_btn]="isPlanActionDisabled(plan)"
+            [attr.aria-disabled]="isPlanActionDisabled(plan)">
+            {{ getPlanButtonLabel(plan) }}
+          </a>
+
+          <ul class="ct_feature_list">
+            <li *ngFor="let feature of planFeatures(plan)">
+              <div class="ct_feature_left">
+                <i class="fa-solid fa-check"></i>
+                <span>{{ feature.label }}</span>
+                <span class="ct_feature_badge" *ngIf="feature.badge">{{ feature.badge }}</span>
               </div>
-              <a (click)="handlePlanAction(plan)" class="ct_price_cta" [class.disable_btn]="isPlanActionDisabled(plan)"
-                [attr.aria-disabled]="isPlanActionDisabled(plan)">
-                {{ getPlanButtonLabel(plan) }}
-              </a>
-            </div>
-            <div class="ct_price_card_bottom">
-              <h4>{{ getPlanFeaturesTitle(plan) }}</h4>
-              <ul>
-                <li *ngFor="let feature of planFeatures(plan)">
-                  <svg class="me-2" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <g clip-path="url(#clip0_222_5114)">
-                      <mask id="mask0_222_5114" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                        width="20" height="20">
-                        <path
-                          d="M10.0003 18.3334C11.0949 18.3347 12.1789 18.1198 13.1901 17.7009C14.2014 17.282 15.1198 16.6675 15.8928 15.8925C16.6678 15.1195 17.2823 14.201 17.7012 13.1898C18.1201 12.1786 18.335 11.0946 18.3337 10C18.335 8.90548 18.1201 7.82146 17.7012 6.81023C17.2823 5.79901 16.6678 4.88051 15.8928 4.10753C15.1198 3.33259 14.2014 2.71803 13.1901 2.29916C12.1789 1.88028 11.0949 1.66534 10.0003 1.66669C8.90579 1.66534 7.82176 1.88028 6.81054 2.29916C5.79931 2.71803 4.88082 3.33259 4.10783 4.10753C3.3329 4.88051 2.71834 5.79901 2.29946 6.81023C1.88059 7.82146 1.66565 8.90548 1.667 10C1.66565 11.0946 1.88059 12.1786 2.29946 13.1898C2.71834 14.201 3.3329 15.1195 4.10783 15.8925C4.88082 16.6675 5.79931 17.282 6.81054 17.7009C7.82176 18.1198 8.90579 18.3347 10.0003 18.3334Z"
-                          fill="white" stroke="white" stroke-width="2" stroke-linejoin="round" />
-                        <path d="M6.66699 10L9.16699 12.5L14.167 7.5" stroke="black" stroke-width="2"
-                          stroke-linecap="round" stroke-linejoin="round" />
-                      </mask>
-                      <g mask="url(#mask0_222_5114)">
-                        <path d="M0 0H20V20H0V0Z" fill="#35BE3A" />
-                      </g>
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_222_5114">
-                        <rect width="20" height="20" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                  <span>{{ feature }}</span>
-                </li>
-              </ul>
-              <p class="ct_price_note">{{ getPlanFootnote(plan) }}</p>
-            </div>
-          </div>
-        </div>
+              <i class="fa-solid fa-plus ct_feature_plus"></i>
+            </li>
+          </ul>
+        </article>
       </div>
     </div>
   </div>
-  <!-- MODAL -->
+
   <div class="modal-content rounded-4 ct_confirl_plan_main_div" *ngIf="billingSummaryModalOpen">
-    <!-- HEADER -->
     <div class="modal-header">
       <h5 class="modal-title mt-2 ps-4 text-white">Confirm Your Plan</h5>
-      <!-- <button type="button" class="btn-close" (click)="closeModal()"></button> -->
     </div>
 
-    <!-- BODY -->
     <div class="modal-body pt-4 px-4">
-      <!-- ================= ORDER SUMMARY ================= -->
       <div class="bg-light rounded p-3 mb-4">
         <h6 class="mb-3">Order Summary</h6>
 
@@ -257,10 +123,6 @@
             / {{ billingCycle() == 'MONTH' ? 'month' : 'year' }}
           </strong>
         </div>
-        <!-- <div class="d-flex justify-content-between mb-2">
-          <span>{{ selectedPlanData && showIntroOffer(selectedPlanData) ? 'First payment' : 'Charged as' }}</span>
-          <strong> {{ billedNowAmount(selectedPlanData) }} </strong>
-        </div> -->
         <div class="d-flex justify-content-between mb-2" *ngIf="selectedPlanData && showIntroOffer(selectedPlanData)">
           <span>Renews at</span>
           <strong>{{ formatCurrency(selectedPlanData.amount, selectedPlanData.currency) }} / {{ billingCycle() ==
@@ -285,7 +147,6 @@
         </small>
       </div>
 
-      <!-- ================= BILLING FORM ================= -->
       <form [formGroup]="billingForm">
         <h6 class="mb-3 text-white">Billing details</h6>
 
@@ -322,7 +183,6 @@
       </form>
     </div>
 
-    <!-- FOOTER -->
     <div class="modal-footer px-4 pb-4">
       <button class="btn-cancel button-deploy" (click)="closeModal()">
         Cancel
