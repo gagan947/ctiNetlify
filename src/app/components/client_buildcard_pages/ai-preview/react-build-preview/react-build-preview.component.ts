@@ -500,9 +500,13 @@ export class ReactBuildPreviewComponent {
         next: (res: any) => {
           this.isContinueProjectGenerationRequestInFlight = false;
           const shouldApplyUi = this.isSelectedProjectContext(inquiryId);
+          const runningPages = Array.isArray(res?.data?.pages) ? res.data.pages : [];
 
           const statusCode = Number(res?.status ?? res?.data?.statusCode ?? res?.data?.status ?? 200);
           if (statusCode === 202) {
+            if (shouldApplyUi) {
+              this.syncRunningBuildBlocks(runningPages);
+            }
             return;
           }
 
@@ -926,12 +930,21 @@ export class ReactBuildPreviewComponent {
       ]
     ));
     this.blocks.push(this.createCompletedParagraphBlock('Creating pages...', 'phase'));
+    this.showLoader('Generating screen-level page code...');
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private syncRunningBuildBlocks(pages: any[] = []): void {
+    if (!pages.length || this.pendingFinalBuildSection) {
+      return;
+    }
+
+    this.hideLoader();
     this.blocks.push(this.createCompletedBuildSection(
       'Creating pages...',
       '📄',
-      this.getRestoredPageGenerationItems()
+      this.getRestoredPageGenerationItems(pages)
     ));
-
     this.blocks.push(this.createCompletedParagraphBlock('Finalizing...', 'phase'));
 
     const finalBuildSection = this.createActiveBuildSection(
@@ -948,7 +961,6 @@ export class ReactBuildPreviewComponent {
     this.blocks.push(finalBuildSection);
     this.blocks.push(this.createCompletedParagraphBlock('Final preview processing is still running...', 'phase'));
     this.blocks.push(this.createCompletedParagraphBlock('This may take 2–5 minutes depending on project complexity.', 'support'));
-
     this.startAiProcessingPhase();
     setTimeout(() => this.scrollToBottom(true), 0);
   }
@@ -2516,8 +2528,9 @@ export class ReactBuildPreviewComponent {
     };
   }
 
-  private getRestoredPageGenerationItems(): string[] {
+  private getRestoredPageGenerationItems(pages: any[] = []): string[] {
     const pageItems = [
+      ...pages.map((page) => this.extractPageLabel(page)),
       ...this.queuedSocketPages,
       ...this.designOrder.map((designId) => this.designMap.get(designId)?.label || '')
     ]
