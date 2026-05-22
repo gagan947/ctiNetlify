@@ -77,9 +77,9 @@ export class ReactBuildPreviewComponent {
   private readonly buildErrorPreviewLineLimit = 6;
   private readonly buildErrorPreviewCharLimit = 700;
   private readonly generateProjectFailureGraceMs = 100;
-  private readonly generateProjectInternal = 3000;
-  private readonly maxBuildRepairAttempts = 7;
-  private readonly buildRepairAttemptMessages = [
+  private readonly generateProjectInternal = 12000;
+  private readonly maxBuildRepairAttempts = 10;
+  private readonly buildRepairAttemptMessages = [ 
     {
       phase: 'Initial preview build hit an issue. Starting automated repair attempt 1.',
       support: 'I am reviewing the failed build output, correcting the most likely file and configuration issues, and preparing a clean retry.'
