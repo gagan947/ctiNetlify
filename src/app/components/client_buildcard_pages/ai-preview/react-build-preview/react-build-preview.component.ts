@@ -117,6 +117,8 @@ export class ReactBuildPreviewComponent {
   private customizationRequestVersion = 0;
   private initialFlowRunId = 0;
   private hasRepairFlowTakenOver = false;
+  private runningBuildResumeVersion = 0;
+  private isRunningBuildSyncInProgress = false;
 
   safePreviewUrl: SafeResourceUrl | null = null;
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
@@ -304,6 +306,8 @@ export class ReactBuildPreviewComponent {
   }
 
   private prepareForProjectRouteChange(inquiryId: string) {
+    this.runningBuildResumeVersion++;
+    this.isRunningBuildSyncInProgress = false;
     this.clearContinueProjectGenerationInterval();
     this.clearGenerateProjectFailureTimer();
     this.stopAiProcessingPhase();
@@ -934,17 +938,61 @@ export class ReactBuildPreviewComponent {
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
-  private syncRunningBuildBlocks(pages: any[] = []): void {
-    if (!pages.length || this.pendingFinalBuildSection) {
+  private async syncRunningBuildBlocks(pages: any[] = []): Promise<void> {
+    if (!pages.length || this.pendingFinalBuildSection || this.isRunningBuildSyncInProgress) {
       return;
     }
 
+    const resumeVersion = this.runningBuildResumeVersion;
+    this.isRunningBuildSyncInProgress = true;
     this.hideLoader();
-    this.blocks.push(this.createCompletedBuildSection(
-      'Creating pages...',
-      '📄',
-      this.getRestoredPageGenerationItems(pages)
-    ));
+
+    const pagesBlock = {
+      type: 'build-section' as const,
+      data: {
+        title: 'Creating pages...',
+        icon: '📄',
+        done: false,
+        items: [] as Array<{ label: string; status: 'active' | 'done' }>
+      }
+    };
+
+    this.blocks.push(pagesBlock);
+    setTimeout(() => this.scrollToBottom(true), 0);
+
+    const restoredPages = this.getRestoredPageGenerationItems(pages);
+    for (const pageLabel of restoredPages) {
+      if (!this.shouldContinueRunningBuildResume(resumeVersion)) {
+        this.isRunningBuildSyncInProgress = false;
+        return;
+      }
+
+      pagesBlock.data.items.push({
+        label: pageLabel,
+        status: 'active'
+      });
+      setTimeout(() => this.scrollToBottom(true), 0);
+      await this.delay(320);
+
+      pagesBlock.data.items[pagesBlock.data.items.length - 1].status = 'done';
+      setTimeout(() => this.scrollToBottom(true), 0);
+      await this.delay(180);
+    }
+
+    if (!this.shouldContinueRunningBuildResume(resumeVersion)) {
+      this.isRunningBuildSyncInProgress = false;
+      return;
+    }
+
+    pagesBlock.data.done = true;
+    setTimeout(() => this.scrollToBottom(true), 0);
+    await this.delay(250);
+
+    if (!this.shouldContinueRunningBuildResume(resumeVersion)) {
+      this.isRunningBuildSyncInProgress = false;
+      return;
+    }
+
     this.blocks.push(this.createCompletedParagraphBlock('Finalizing...', 'phase'));
 
     const finalBuildSection = this.createActiveBuildSection(
@@ -962,6 +1010,7 @@ export class ReactBuildPreviewComponent {
     this.blocks.push(this.createCompletedParagraphBlock('Final preview processing is still running...', 'phase'));
     this.blocks.push(this.createCompletedParagraphBlock('This may take 2–5 minutes depending on project complexity.', 'support'));
     this.startAiProcessingPhase();
+    this.isRunningBuildSyncInProgress = false;
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
@@ -2748,6 +2797,10 @@ export class ReactBuildPreviewComponent {
 
   private shouldContinueInitialFlow(flowRunId: number): boolean {
     return !this.hasRepairFlowTakenOver && flowRunId === this.initialFlowRunId;
+  }
+
+  private shouldContinueRunningBuildResume(resumeVersion: number): boolean {
+    return resumeVersion === this.runningBuildResumeVersion && this.isReactBuilding;
   }
 
   get previewOverlayTitle(): string {
