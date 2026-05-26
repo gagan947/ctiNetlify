@@ -513,7 +513,7 @@ export class SubcriptionPageComponent {
       return '';
     }
 
-    return `${plan.credits_per_cycle} credits / ${plan.billing_interval.toLowerCase()}`;
+    return `${plan.credits_per_cycle} credits / month`;
   }
 
   getCurrentPriceValue(plan: Plan | null): string {
