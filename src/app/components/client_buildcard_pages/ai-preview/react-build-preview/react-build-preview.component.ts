@@ -562,11 +562,7 @@ export class ReactBuildPreviewComponent {
             if (!shouldApplyUi) {
               return;
             }
-            let repairPayload = {
-              templatePublicId: error.error.data.templatePublicId,
-              inquiryPublicId: this.projectsData.clientEnquryId,
-              error_message: error.error.message,
-            }
+            const repairPayload = this.buildRepairPayload(error);
             this.currentTemplateId = error.error.data.templatePublicId;
             void this.attemptBuildRepair(repairPayload, error);
             return;
@@ -615,6 +611,17 @@ export class ReactBuildPreviewComponent {
     };
   }
 
+  private buildRepairPayload(error: any, fallbackTemplatePublicId?: string) {
+    const buildStage = error?.error?.data?.buildStage ?? null;
+    return {
+      templatePublicId: error?.error?.data?.templatePublicId || fallbackTemplatePublicId,
+      inquiryPublicId: this.projectsData.clientEnquryId,
+      errorsMessage: error?.error?.data?.errorsMessage ?? error?.error?.message,
+      buildStage,
+      isPreBuild: buildStage === 'system_scan',
+    };
+  }
+
   private async attemptBuildRepair(payload: any, buildFailureSource?: any, attemptNumber = 1) {
     this.setBuildGenerationError(buildFailureSource);
     if (this.selectedProjectId) {
@@ -659,7 +666,9 @@ export class ReactBuildPreviewComponent {
           console.log('Build repair attempt failed:', error);
           if (error.error.status === 422 && error.error.data.canRepairBuild) {
             if (attemptNumber < this.maxBuildRepairAttempts) {
-              payload.error_message = error.error.message;
+              payload.errorsMessage = error?.error?.data?.errorsMessage ?? error?.error?.message;
+              payload.buildStage = error?.error?.data?.buildStage ?? null;
+              payload.isPreBuild = payload.buildStage === 'system_scan';
               void this.attemptBuildRepair(payload, error, attemptNumber + 1);
               return;
             }
@@ -2065,11 +2074,7 @@ export class ReactBuildPreviewComponent {
       error: (error: any) => {
         if (error?.error?.status === 422 && error?.error?.data?.canRepairBuild) {
           this.customizationRequestVersion++;
-          const repairPayload = {
-            templatePublicId: error.error.data.templatePublicId || templatePublicId,
-            inquiryPublicId: this.projectsData.clientEnquryId,
-            error_message: error.error.message,
-          };
+          const repairPayload = this.buildRepairPayload(error, templatePublicId);
           void this.attemptBuildRepair(repairPayload, error);
           return;
         }
