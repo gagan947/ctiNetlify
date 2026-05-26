@@ -40,7 +40,7 @@
             <div class="ct_price_row">
               <span class="ct_price_value">₹{{ getCurrentPriceValue(plan) }}</span>
               <span class="ct_price_suffix">/ {{ getBillingUnit(plan) }}</span>
-              <span class="ct_price_save" *ngIf="getSaveText(plan)">{{ getSaveText(plan) }}</span>
+              <span class="ct_price_save" *ngIf="getDiscountText(plan)">{{ getDiscountText(plan) }}</span>
             </div>
           </div>
 
@@ -137,14 +137,13 @@
         <div class="d-flex justify-content-between mb-2">
           <span>Price</span>
           <strong>
-            {{ formatCurrency(selectedPlanData?.display_amount || selectedPlanData?.amount || 0,
-            selectedPlanData?.display_currency || selectedPlanData?.currency) }}
+            {{ getOrderSummaryPrice(selectedPlanData) }}
             / {{ billingCycle() == 'MONTH' ? 'month' : 'year' }}
           </strong>
         </div>
         <div class="d-flex justify-content-between mb-2" *ngIf="selectedPlanData && showIntroOffer(selectedPlanData)">
           <span>Renews at</span>
-          <strong>{{ formatCurrency(selectedPlanData.amount, selectedPlanData.currency) }} / {{ billingCycle() ==
+          <strong>{{ getRenewalAmount(selectedPlanData) }} / {{ billingCycle() ==
             'MONTH' ? 'month' : 'year' }}</strong>
         </div>
 
@@ -157,7 +156,7 @@
 
         <small class=" d-block mt-2">
           <ng-container *ngIf="selectedPlanData && showIntroOffer(selectedPlanData); else standardRenewal">
-            Renews at {{ formatCurrency(selectedPlanData.amount, selectedPlanData.currency) }}
+            Renews at {{ getRenewalAmount(selectedPlanData) }}
             {{ billingCycle() === "YEAR" ? "yearly" : "monthly" }}
           </ng-container>
           <ng-template #standardRenewal>

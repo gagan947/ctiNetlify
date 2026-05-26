@@ -221,8 +221,7 @@ export class SubcriptionPageComponent {
       return this.formatCurrency(0, 'INR');
     }
 
-    const amount = this.showIntroOffer(plan) ? plan.intro_amount : plan.amount;
-    return this.formatCurrency(amount, plan.currency);
+    return this.formatCurrency(this.getEffectiveCurrentAmount(plan), plan.currency);
   }
 
   formatCurrency(amount: string | number, currency?: string): string {
@@ -372,7 +371,11 @@ export class SubcriptionPageComponent {
   }
 
   shouldShowPreviousPrice(plan: Plan | null): boolean {
-    return !!plan && plan.plan_type === 'PRO' && this.showIntroOffer(plan);
+    if (!plan) {
+      return false;
+    }
+
+    return this.getOriginalAmount(plan) > this.getEffectiveCurrentAmount(plan);
   }
 
   getCurrentPrice(plan: Plan | null): string {
@@ -380,11 +383,7 @@ export class SubcriptionPageComponent {
       return '0.00';
     }
 
-    if (this.shouldShowPreviousPrice(plan)) {
-      return String(plan.intro_amount || '0.00');
-    }
-
-    return this.getDisplayAmount(plan);
+    return String(this.getEffectiveCurrentAmount(plan).toFixed(2));
   }
 
   handlePlanAction(plan: Plan): void {
@@ -433,7 +432,7 @@ export class SubcriptionPageComponent {
       return '0';
     }
 
-    const amount = Number(this.shouldShowPreviousPrice(plan) ? plan.intro_amount : plan.display_amount || plan.amount || 0);
+    const amount = this.getEffectiveCurrentAmount(plan);
     return amount.toLocaleString('en-IN', {
       maximumFractionDigits: 0
     });
@@ -444,9 +443,42 @@ export class SubcriptionPageComponent {
       return '';
     }
 
-    return Number(plan.display_amount || plan.amount || 0).toLocaleString('en-IN', {
+    return this.getOriginalAmount(plan).toLocaleString('en-IN', {
       maximumFractionDigits: 0
     });
+  }
+
+  getDiscountText(plan: Plan | null): string {
+    if (!plan) {
+      return '';
+    }
+
+    const savings = this.getOriginalAmount(plan) - this.getEffectiveCurrentAmount(plan);
+    if (savings > 0) {
+      return `Save ₹${savings.toLocaleString('en-IN')}`;
+    }
+
+    if (Number(plan.discount_percent || 0) > 0 && !this.shouldShowPreviousPrice(plan)) {
+      return `Save ${Number(plan.discount_percent)}%`;
+    }
+
+    return '';
+  }
+
+  getOrderSummaryPrice(plan: Plan | null): string {
+    if (!plan) {
+      return this.formatCurrency(0, 'INR');
+    }
+
+    return this.formatCurrency(this.getEffectiveCurrentAmount(plan), plan.currency);
+  }
+
+  getRenewalAmount(plan: Plan | null): string {
+    if (!plan) {
+      return this.formatCurrency(0, 'INR');
+    }
+
+    return this.formatCurrency(this.getRenewalNumericAmount(plan), plan.currency);
   }
 
   getSaveText(plan: Plan | null): string {
@@ -545,5 +577,47 @@ export class SubcriptionPageComponent {
     }
 
     return null;
+  }
+
+  private getEffectiveCurrentAmount(plan: Plan | null): number {
+    if (!plan) {
+      return 0;
+    }
+
+    return this.showIntroOffer(plan)
+      ? Number(plan.intro_amount || 0)
+      : Number(plan.amount || 0);
+  }
+
+  private getOriginalAmount(plan: Plan | null): number {
+    if (!plan) {
+      return 0;
+    }
+
+    return Number(plan.display_amount || plan.amount || 0);
+  }
+
+  private getRenewalNumericAmount(plan: Plan | null): number {
+    if (!plan) {
+      return 0;
+    }
+
+    if (!this.showIntroOffer(plan)) {
+      return this.getEffectiveCurrentAmount(plan);
+    }
+
+    const currentAmount = this.getEffectiveCurrentAmount(plan);
+    const regularAmount = Number(plan.amount || 0);
+    const originalAmount = this.getOriginalAmount(plan);
+
+    if (regularAmount > currentAmount) {
+      return regularAmount;
+    }
+
+    if (originalAmount > currentAmount) {
+      return originalAmount;
+    }
+
+    return regularAmount;
   }
 }

@@ -57,6 +57,13 @@ interface CallbackPhoneNumber {
   dialCode?: string;
 }
 
+interface CustomizationHistoryEntry {
+  id: number;
+  prompt: string;
+  build_status: number;
+  created_at: string;
+}
+
 export function noWhitespaceValidator(control: AbstractControl): ValidationErrors | null {
   const value = String(control.value || '');
   return value.trim().length === 0 ? { whitespace: true } : null;
@@ -265,6 +272,11 @@ export class ReactBuildPreviewComponent {
     const existingTemplate = templates.find((template: any) => template.inquiryId === inquiryId);
     if (existingTemplate) {
       await this.showDraftWelcomeMessages(false);
+      if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
+        return;
+      }
+
+      await this.appendCustomizationHistory(inquiryId, routeChangeVersion);
       if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
         return;
       }
@@ -1678,6 +1690,84 @@ export class ReactBuildPreviewComponent {
     this.setSafePreviewUrl(this.getPreviewProxyUrl(templateId));
     this.isReactBuilding = false;
     this.isTyping = false;
+  }
+
+  private async appendCustomizationHistory(inquiryPublicId: string, routeChangeVersion: number): Promise<void> {
+    const history = await this.fetchCustomizationHistory(inquiryPublicId);
+
+    if (!this.isCurrentRouteChange(routeChangeVersion, inquiryPublicId) || !history.length) {
+      return;
+    }
+
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
+
+    for (const item of history) {
+      this.blocks.push({
+        id: `user-message-history-${item.id}`,
+        text: item.prompt,
+        done: true,
+        timestamp: new Date(item.created_at)
+      });
+
+      this.blocks.push({
+        id: `paragraph-history-phase-${item.id}`,
+        text: 'Applying your requested changes to the current template.',
+        done: true,
+        timestamp: new Date(item.created_at),
+        variant: 'phase'
+      });
+
+      this.blocks.push({
+        id: `paragraph-history-support-${item.id}`,
+        text: `Customization request: ${item.prompt.length > 140 ? `${item.prompt.slice(0, 137)}...` : item.prompt}`,
+        done: true,
+        timestamp: new Date(item.created_at),
+        variant: 'support'
+      });
+
+      if (item.build_status === 0) {
+        this.blocks.push({
+          type: 'summary',
+          data: {
+            time: 'Updated',
+            description: 'Your requested customization has been applied and the refreshed preview is now loading.',
+            highlights: [
+              'Prompt reviewed',
+              'Template updated',
+              'Fresh preview generated'
+            ]
+          }
+        });
+      }
+    }
+
+    this.appendBuildActionPrompt();
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private async fetchCustomizationHistory(inquiryPublicId: string): Promise<CustomizationHistoryEntry[]> {
+    if (!inquiryPublicId) {
+      return [];
+    }
+
+    try {
+      const response = await firstValueFrom(
+        this.apiService.getApi<any>(
+          `api/ai/customization/history?inquiryPublicId=${encodeURIComponent(inquiryPublicId)}`
+        )
+      );
+
+      const history = Array.isArray(response?.data?.history) ? response.data.history : [];
+
+      return history
+        .filter((item: CustomizationHistoryEntry) => typeof item?.prompt === 'string' && item.prompt.trim().length > 0)
+        .sort((a: CustomizationHistoryEntry, b: CustomizationHistoryEntry) =>
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+    } catch (error) {
+      console.error('Failed to fetch customization history', error);
+      return [];
+    }
   }
 
   async showDraftWelcomeMessages(streamMessages = true) {
