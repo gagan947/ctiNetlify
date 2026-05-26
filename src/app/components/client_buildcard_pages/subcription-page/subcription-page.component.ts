@@ -459,9 +459,9 @@ export class SubcriptionPageComponent {
       case 'FREE':
         return 'FREE PLAN';
       case 'PRO':
-        return 'STANDARD PLAN';
+        return 'Standard';
       case 'BUSINESS':
-        return 'ENTERPRISE PLAN';
+        return 'Enterprise Plan';
       default:
         return '';
     }
@@ -513,11 +513,11 @@ export class SubcriptionPageComponent {
     }
 
     if (this.isActivePaidPlan(plan)) {
-      return 'Active';
+      return 'Upgrade to Standard';
     }
 
     if (this.hasActivePaidPlan()) {
-      return 'Upgrade';
+      return 'Upgrade to Enterprise';
     }
 
     switch (plan?.plan_type) {

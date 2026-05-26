@@ -179,7 +179,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #df4a9a, #8bb7ff);
+  background: #5D5CFF;
   box-shadow: 0 0 0 6px rgba(139, 183, 255, 0.08);
   animation: ctBuildItemPulse 1.15s ease-in-out infinite;
 }

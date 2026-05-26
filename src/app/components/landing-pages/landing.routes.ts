@@ -51,7 +51,7 @@ export const LandingRoutes: Routes = [
             path: 'smbs', loadComponent: () => import('./smbs/smbs.component').then(c => c.SmbsComponent)
       },
       {
-            path: 'why-we-use-ai', loadComponent: () => import('./why-we-use-ai/why-we-use-ai.component').then(c => c.WhyWeUseAiComponent)
+            path: 'why-choose-creative-ai', loadComponent: () => import('./why-we-use-ai/why-we-use-ai.component').then(c => c.WhyWeUseAiComponent)
       },
       {
             path: 'dedicated-customers', loadComponent: () => import('./dedicated-customer/dedicated-customer.component').then(c => c.DedicatedCustomerComponent)

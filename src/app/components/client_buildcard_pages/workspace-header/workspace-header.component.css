@@ -355,7 +355,7 @@
     padding: 4px 12px;
     border: 0;
     border-radius: 5px;
-    background: #5D5CFF;
+    background: #4140B2;
     color: #fff;
     font-size: 13px;
     font-weight: 600;
@@ -367,7 +367,7 @@
     padding: 0 14px;
     border: 0;
     border-radius: 999px;
-    background: #5D5CFF;
+    background: #4140B2;
     color: #ffffff;
     font-size: 13px;
     font-weight: 700;
@@ -592,11 +592,15 @@
     height: 42px;
     border: 0;
     border-radius: 10px;
-    background: #5D5CFF;
+    background: #4140B2;
     color: #fff;
     font-size: 15px;
     font-weight: 800;
     /* box-shadow: 0 0 22px rgba(255, 216, 76, 0.35); */
+    transition: 0.4s ease all;
+}
+.main-ai-profile-menu__upgrade:hover{
+    transform: translateY(-3px);
 }
 
 .main-ai-profile-menu__actions {
@@ -782,7 +786,7 @@
     padding: 8px;
     border: none;
     border-radius: 10px;
-    background: #5D5CFF;
+    background: #4140B2;
     color: #fff;
     font-weight: 600;
     cursor: pointer;
@@ -1239,7 +1243,7 @@
 
 .ct_dropdown_device_preview123 ul a.dropdown-item:focus,
 .ct_dropdown_device_preview123 ul a.dropdown-item:hover {
-    background-color: #5D5CFF;
+    background-color: #4140B2;
     color: #fff;
 }
 

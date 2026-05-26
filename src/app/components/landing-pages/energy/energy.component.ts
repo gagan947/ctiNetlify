@@ -3,11 +3,12 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { BlogCardsComponent } from '../blog-cards/blog-cards.component';
 import { Meta, Title } from '@angular/platform-browser';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-energy',
   standalone: true,
-  imports: [HeaderComponent, FooterComponent, BlogCardsComponent],
+  imports: [HeaderComponent, FooterComponent, BlogCardsComponent ,RouterLink],
   templateUrl: './energy.component.html',
   styleUrl: './energy.component.css'
 })

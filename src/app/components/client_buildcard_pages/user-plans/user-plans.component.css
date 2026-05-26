@@ -120,7 +120,7 @@
 
 .ct_upgrade_btn {
   color: #fff;
-  background: #5D5CFF;
+  background: #4140B2;
   /* box-shadow: 0 12px 24px rgba(22, 85, 192, 0.2); */
 }
 
@@ -581,7 +581,7 @@ box-shadow: 0px 0px 33px 0px #5D5CFF33;
   justify-content: center;
   color: #FFF;
   font-size: 18px;
-  box-shadow: 0px 0px 11px 0px #5D5CFF inset;
+  box-shadow: 0px 0px 11px 0px #4140B2 inset;
 
 }
 

@@ -49,6 +49,7 @@
     border-radius: 15px;
     border: 1px solid #e6e6e6;
     transition: 0.4s linear all;
+    height: 100%;
 }
 .ct_value_card ul li{
     display: flex;

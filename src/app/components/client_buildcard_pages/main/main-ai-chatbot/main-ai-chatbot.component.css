@@ -90,7 +90,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, #5D5CFF 5%, #321B89 52%, #17151F 100%);
+  background: linear-gradient(135deg, #4140B2 5%, #321B89 52%, #17151F 100%);
   box-shadow: 0 10px 24px rgba(231, 138, 198, 0.28);
 }
 
@@ -313,7 +313,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #df4a9a, #8bb7ff);
+  background: #4140B2;
   animation: main-ai-typing 1.25s infinite ease-in-out;
   opacity: 0.55;
 }
@@ -390,7 +390,7 @@
 
 .main-ai-build-btn {
   border: 0;
-  background: #5D5CFF;
+  background: #4140B2;
   color: #fff;
   box-shadow: 0 12px 28px rgba(135, 160, 236, 0.26);
 }
@@ -510,7 +510,7 @@
   border-radius: 12px;
   background: transparent;
   color: #fff;
-  border: 1px solid #5D5CFF;
+  border: 1px solid #4140B2;
   font-size: 16px;
   line-height: 1;
 }
@@ -557,7 +557,7 @@
   min-width: 46px;
   padding: 0;
   gap: 0;
-  border-color: #5D5CFF;
+  border-color: #4140B2;
   background: transparent;
 }
 
@@ -741,7 +741,7 @@
 }
 
 .btn-confirm {
-  background: #5D5CFF;
+  background: #4140B2;
   color: white;
   box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
 }

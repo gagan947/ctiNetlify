@@ -238,7 +238,7 @@
 
                                     <div class=" pt-5">
                                           <div class="d-flex align-items-center justify-content-end gap-3">
-                                                <button class="ct_blue_btn_fill" (click)="updateProfile()">Update &
+                                                <button class="ct_upgrade_btn" (click)="updateProfile()">Update &
                                                       Save</button>
                                           </div>
                                     </div>
@@ -281,7 +281,7 @@
                                     class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center">
                                     <button class="ct_blue_outline_btn  justify-content-center"
                                           data-bs-dismiss="modal">Cancel</button>
-                                    <button class="ct_blue_btn_fill  justify-content-center" data-bs-dismiss="modal"
+                                    <button class="ct_upgrade_btn  justify-content-center" data-bs-dismiss="modal"
                                           routerLink="/main">Proceed</button>
                               </div>
                         </div>
@@ -335,7 +335,7 @@
                         <div class="mt-4 text-center d-flex align-items-center flex-wrap gap-3 justify-content-center">
                               <button class="ct_blue_outline_btn  justify-content-center" data-bs-dismiss="modal"
                                     (click)="isLoading2 = false" #closeBtn>Cancel</button>
-                              <button class="ct_blue_btn_fill  justify-content-center" [disabled]="isLoading"
+                              <button class="ct_upgrade_btn  justify-content-center" [disabled]="isLoading"
                                     (click)="verifyOtpNumber()">
                                     <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"
                                           aria-hidden="true"></span>
@@ -360,7 +360,7 @@
                   <div class="modal-footer">
                         <button type="button" class="ct_blue_outline_btn" data-bs-dismiss="modal"
                               #closeBtn2>Cancel</button>
-                        <button type="button" class="ct_blue_btn_fill" (click)="onDone()">Done</button>
+                        <button type="button" class="ct_upgrade_btn" (click)="onDone()">Done</button>
                   </div>
             </div>
       </div>

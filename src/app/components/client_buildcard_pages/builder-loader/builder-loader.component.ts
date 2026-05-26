@@ -156,7 +156,7 @@ export class BuilderLoaderComponent implements OnDestroy {
 
       this.ctx.beginPath();
       this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      this.ctx.fillStyle = '#5D5CFF';
+      this.ctx.fillStyle = '#4140B2';
       this.ctx.fill();
 
       for (let j = i + 1; j < this.particles.length; j++) {

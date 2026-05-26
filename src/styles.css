@@ -95,7 +95,7 @@ ul.iti__country-list {
       border-radius: 5px;
 }
 .ct_currency_input.custom_currency_input  nz-select-top-control.ant-select-selector.ng-tns-c2110204387-0:focus{
-      border-color: #5D5CFF !important;
+      border-color: #4140B2 !important;
       box-shadow: unset !important;
 }
 
@@ -459,8 +459,7 @@ aside.ct_project_ai_chat_section {
 }
 .ant-modal-content{
       border-radius: 30px !important;
-      background-color: #04041c !important;
-      border: 1px solid #FFFFFF66 !important;
+      background-color: #18181A !important;
 }
 .ant-modal-close-x{
       color: #fff !important;
@@ -489,7 +488,7 @@ aside.ct_project_ai_chat_section {
       color: #fff !important;
 }
 .custom_phone_input:focus, .custom_currency_input:focus {
-    border-color: #5D5CFF !important;
+    border-color: #4140B2 !important;
     box-shadow: unset !important;
 }
 .ant-select-dropdown{
