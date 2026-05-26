@@ -35,29 +35,31 @@
 
 .ct_pricing_toggle {
   display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px;
-  margin: 26px 0 16px;
-  border-radius: 999px;
-  background: #202127;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  background: transparent;
+  border: 1px solid #27272A;
+  gap: 0px;
+
+}
+.ct_text_clr_71717A{
+  color: #71717A;
 }
 .ct_pricing_toggle button {
   border: 0;
-  min-width: 102px;
-  min-height: 36px;
-  border-radius: 999px;
+  border-radius: 100px;
   background: transparent;
-  color: #d1d5db;
-  font-size: 13px;
-  font-weight: 600;
-  transition: 0.2s ease;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 8px 24px;
 }
 
 .ct_pricing_toggle button.active {
-  background: #2a2d35;
-  color: #fff;
+  background: #27272A;
+  color: #ffffff;
+
 }
 
 .ct_toggle_hint {
@@ -71,9 +73,10 @@
 .ct_promo_caption {
   display: block;
   margin-bottom: 16px;
-  color: #7c818c;
-  font-size: 11px;
-  font-weight: 700;
+  color: #71717A;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 500;
   letter-spacing: 0.08em;
 }
 
@@ -92,16 +95,14 @@
 }
 
 .ct_offer_badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.8);
-  color: rgba(34, 197, 94, 1);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
+    padding:5px 14px;
+    border-radius:8px;
+    border: 1.31px solid #FFFFFF33;
+    color:#22C55E;
+    font-size:13px;
+    font-weight:400;
+    text-transform:uppercase;
+    background:#000000CC;
 }
 
 .ct_pricing_grid {
@@ -134,12 +135,12 @@
   top: -1px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 6px 12px;
-  border-radius: 0 0 10px 10px;
+  padding: 4px 14px;
+  border-radius: 0 0 5px 5px;
   background: #facc15;
   color: #111827;
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
@@ -154,8 +155,8 @@
 
 .ct_card_header h3 {
   margin: 0 0 6px;
-  font-size: 30px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 600;
   line-height: 1.1;
 }
 
@@ -221,10 +222,10 @@
 .ct_price_save {
   margin-left: auto;
   margin-bottom: 8px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  background: rgba(34, 197, 94, 0.18);
-  color: #4ade80;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: #22C55E33;
+  color: #4ADE80;
   font-size: 11px;
   font-weight: 700;
 }
@@ -314,12 +315,14 @@
 }
 
 .ct_price_card_standard .ct_price_cta {
-  background: linear-gradient(180deg, #facc15 0%, #d89a00 100%);
-  color: #111827;
+  background: linear-gradient(90deg, #FACC15 0%, #CA8A04 100%);
+
+  color: #000000;
 }
 
 .ct_price_card_enterprise .ct_price_cta {
-  background: linear-gradient(90deg, #6b6bff 0%, #3730a3 100%);
+  background: linear-gradient(90deg, #5D5CFF 0%, #333288 100%);
+
   color: #fff;
 }
 
@@ -334,9 +337,9 @@
 }
 
 .ct_feature_list li {
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; */
   gap: 12px;
   padding: 10px 0;
   color: #d1d5db;
@@ -352,12 +355,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 0;
+
 }
 
-.ct_feature_left span {
-  min-width: 0;
-}
+
 
 .ct_feature_left .fa-check {
   color: #9ca3af;
@@ -468,3 +469,45 @@
     flex-wrap: wrap;
   }
 /* } */
+
+
+ct_parant_list .card.card-body {
+    background-color: transparent;
+    padding: 5px 0px 0px;
+}
+.ct_parant_list{
+  padding: 6px;
+      border-radius: 10px;
+      position: relative;
+}
+.ct_parant_list:before{
+  content: "";
+  position: absolute;
+  right: 5px;
+  transform: translateY(-50%);
+  top: 17px;
+  width: 10px;
+  height: 2px;
+  background-color: #a1a1a1;
+    pointer-events: none;
+    transition: 0.4s ease all;
+}
+.ct_parant_list:after{
+  content: "";
+  position: absolute;
+  right: 9px;
+  transform: translateY(-50%);
+  top: 17px;
+  width: 2px;
+  height: 10px;
+  background-color: #a1a1a1;
+  transition: 0.2s ease all;
+  pointer-events: none;
+}
+.ct_parant_list:has(.show):after{
+transform: scale(0);
+}
+.ct_parant_list:has(.show){
+    background:#27272A;
+
+}
