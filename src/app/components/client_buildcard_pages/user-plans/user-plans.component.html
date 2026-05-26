@@ -8,7 +8,7 @@
           <div class="ct_plan_shell">
             <div class="ct_plan_hero">
               <div class="ct_plan_hero_copy">
-                <div class="d-flex justify-content-between align-items-start">
+                <div class="d-block d-md-flex justify-content-between align-items-start">
                   <div>
                     <h1>{{ subscriptionPlan.planName }} overview and credit wallet</h1>
                     <p>
@@ -129,6 +129,7 @@
                                 <i class="fa-solid fa-plus" *ngIf="item.icon === 'plus'"></i>
                                 <i class="fa-solid fa-pen-to-square" *ngIf="item.icon === 'edit'"></i>
                                 <i class="fa-solid fa-wallet" *ngIf="item.icon === 'wallet'"></i>
+                                <i class="fa-solid fa-download" *ngIf="item.icon === 'download'"></i>
                               </div>
 
                               <div class="ct_credit_history_copy">

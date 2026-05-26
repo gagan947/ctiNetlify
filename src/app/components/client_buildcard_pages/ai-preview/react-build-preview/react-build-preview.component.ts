@@ -1,15 +1,14 @@
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { Component, effect, ElementRef, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { SafeHtml, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzSelectModule } from 'ng-zorro-antd/select';
 import { firstValueFrom } from 'rxjs';
 import { SubscriptionResponse } from '../../../../models/subcription';
 import { AiSocketService } from '../../../../services/ai-socket.service';
 import { ApiService } from '../../../../services/api.service';
+import { ProjectGenerationPreviewData, ProjectGenerationTabStateService } from '../../../../services/project-generation-tab-state.service';
 import { ReactCodeEditorComponent } from '../react-code-editor/react-code-editor.component';
 import { AiDevRendererComponent } from '../ai-dev-renderer/ai-dev-renderer.component';
 import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
@@ -66,18 +65,21 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-react-build-preview',
   standalone: true,
-  imports: [CommonModule, NgxIntlTelInputModule, ScrollingModule, ReactCodeEditorComponent, NzSelectModule, FormsModule, ReactiveFormsModule, AiDevRendererComponent, WorkspaceHeaderComponent],
+  imports: [CommonModule, NgxIntlTelInputModule, ReactCodeEditorComponent, FormsModule, ReactiveFormsModule, AiDevRendererComponent, WorkspaceHeaderComponent],
   templateUrl: './react-build-preview.component.html',
   styleUrl: './react-build-preview.component.css'
 })
 export class ReactBuildPreviewComponent {
+  private readonly deployCreditsRequired = 60;
+  private readonly downloadCodeCreditsRequired = 100;
   socket: any;
   private readonly mobileBreakpoint = 991;
   private readonly buildErrorPreviewLineLimit = 6;
   private readonly buildErrorPreviewCharLimit = 700;
-  private readonly generateProjectFailureGraceMs = 45000;
-  private readonly maxBuildRepairAttempts = 7;
-  private readonly buildRepairAttemptMessages = [
+  private readonly generateProjectFailureGraceMs = 100;
+  private readonly generateProjectInternal = 12000;
+  private readonly maxBuildRepairAttempts = 10;
+  private readonly buildRepairAttemptMessages = [ 
     {
       phase: 'Initial preview build hit an issue. Starting automated repair attempt 1.',
       support: 'I am reviewing the failed build output, correcting the most likely file and configuration issues, and preparing a clean retry.'
@@ -115,40 +117,25 @@ export class ReactBuildPreviewComponent {
   private customizationRequestVersion = 0;
   private initialFlowRunId = 0;
   private hasRepairFlowTakenOver = false;
+  private runningBuildResumeVersion = 0;
+  private isRunningBuildSyncInProgress = false;
 
   safePreviewUrl: SafeResourceUrl | null = null;
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
   @ViewChild('chatScroll') chatScroll!: ElementRef<HTMLDivElement>;
-  @ViewChild('codeEditor') codeEditor!: ReactCodeEditorComponent;
   @ViewChild('customizeInput') customizeInput!: ElementRef<HTMLTextAreaElement>;
   previewWidth = 1366; // desktop default
-  @ViewChild('preview', { static: false }) iframe!: ElementRef<HTMLIFrameElement>;
   blocks: any[] = [];
-  pages: any = {};                 // Full response from backend
-  currentHTML: SafeHtml = "";       // Current page HTML
-  currentCSS: string = "";          // Current page CSS
-  styleTag!: HTMLStyleElement;
-  activeJsKeys: string[] = [];      // js_keys for current page
   loginRedirect: any = "";
-  activeMenuKey: string | null = null;
   projectsData: any;
-  socket_id: any;
-  previewShow = false;
-  previewCodeShow = false;
-  builds: any[] = [];
-  currentBuildId = 1;
-  parentBlock = []
+  files: ReactFile[] = [];
   isTyping = true;
   private buildStepTimeouts: ReturnType<typeof setTimeout>[] = [];
   designMap = new Map<string, DesignSnapshot>();
   designOrder: any[] = [];   // keeps tab order
   activeDesignId!: string;
   hasMarkedFirstBlock = false;
-  files: ReactFile[] = [];
-  activeFileIndex = 0;
-  activeFile!: ReactFile;
   fullScreen: boolean = false;
-  showCodeButton = false;
   userHasScrolled = false;
   designCount = 0;
   selected_template_id = '';
@@ -156,11 +143,8 @@ export class ReactBuildPreviewComponent {
   subscriptionPlan!: SubscriptionResponse;
   isIframeLoading = true;
   selectedDeviceType: string = '<i class="fa-solid fa-display"></i>';
-  SearchCountryField = SearchCountryField
-  CountryISO = CountryISO;
+  SearchCountryField = SearchCountryField;
   selectedCountry = CountryISO.India;
-  baseURl: any;
-  previewUrl: any = null;
   isReactBuilding = true;
   buildStep = 0;
   templateExists = false;
@@ -170,13 +154,11 @@ export class ReactBuildPreviewComponent {
     { pendingIconClass: 'fa-solid fa-gear', label: 'Building React app' },
     { pendingIconClass: 'fa-solid fa-rocket', label: 'Deploying preview' }
   ];
-  planName = 'Free Plan';
   usedVariations: any[] = [];
   pendingPreviewUrl: string | null = null;
   private hasAutoOpenedCurrentMobilePreview = false;
   private hasDismissedCurrentMobilePreview = false;
   private deployHeaderActionTimer: ReturnType<typeof setTimeout> | null = null;
-  skipBuildPrompt = false;
   finalPrompt: any = null;
   selectedPublishOption: 'creative-ai-domain' | 'custom-domain' = 'creative-ai-domain';
   customDomain = '';
@@ -184,6 +166,8 @@ export class ReactBuildPreviewComponent {
   deploymentSuccessMessage = '';
   successModalAction: 'navigate-dashboard' | 'close-only' = 'navigate-dashboard';
   showDeployHeaderAction = false;
+  insufficientCreditsRequired = this.deployCreditsRequired;
+  insufficientCreditsActionLabel = 'project publishing';
   buildGenerationErrorMessage = '';
   isBuildGenerationErrorExpanded = false;
   callbackRequestForm = new FormGroup({
@@ -207,36 +191,30 @@ export class ReactBuildPreviewComponent {
   private hasCompletedPageGeneration = false;
   private currentTemplateId: string | null = null;
   private pageGenerationCompletionResolver: (() => void) | null = null;
+  private continueProjectGenerationInterval: ReturnType<typeof setInterval> | null = null;
+  private isContinueProjectGenerationRequestInFlight = false;
+  private routeChangeVersion = 0;
+  private socketInquiryId = '';
   today = new Date();
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
     private sanitizer: DomSanitizer,
     private aiService: AiSocketService,
+    private projectGenerationTabState: ProjectGenerationTabStateService,
     private router: Router,
     private toster: NzMessageService,
     public subscriptionModalService: SubscriptionModalService,
     private subscriptionService: SubcriptionService,
-    private route: ActivatedRoute,
-    private fb: FormBuilder
+    private route: ActivatedRoute
   ) {
-    this.baseURl = this.apiService.apiUrl;
     effect(() => {
       this.finalPrompt = this.apiService._finalPrompt() || sessionStorage.getItem('finalPrompt');
     });
   }
 
   async ngOnInit() {
-    this.refreshProjectContext();
     this.hideDeployHeaderAction();
-    this.refreshProjectContext();
-    this.socket = io(this.apiService.apiUrl, {
-      auth: {
-        token: localStorage.getItem('tokenCTi'),
-        inquiryPublicId: this.projectsData.clientEnquryId,
-      }
-    });
-    this.registerBuildSocketListeners();
     this.getUserSubscriptionPlan();
     this.userInfo = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
     this.initializeCallbackRequestForm();
@@ -252,25 +230,190 @@ export class ReactBuildPreviewComponent {
     // ✅ 1. LOAD DRAFT TEMPLATES FIRST
     // ============================================
 
-    const templates = await this.getUserTemplates();
     this.route.paramMap.subscribe(async (res: any) => {
-      this.hideDeployHeaderAction();
-      this.selectedProjectId = res.params['id'];
-      this.refreshProjectContext();
-      const latestTemplates = await this.getUserTemplates();
-      this.loadDraftTemplates(latestTemplates);
+      const inquiryId = String(res.params['id'] || '').trim();
+      await this.handleProjectRouteChange(inquiryId);
     });
 
-    const existingTemplate = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
+  }
 
-    if (existingTemplate) {
-      await this.showDraftWelcomeMessages(false);
-      await this.loadDraftTemplates(templates);
+  private async handleProjectRouteChange(inquiryId: string) {
+    const routeChangeVersion = ++this.routeChangeVersion;
+
+    this.prepareForProjectRouteChange(inquiryId);
+    if (!inquiryId) {
       return;
     }
 
+    this.selectedProjectId = inquiryId;
+    this.projectGenerationTabState.setActiveInquiryId(inquiryId);
+    this.refreshProjectContext(inquiryId);
+    this.ensureBuildSocket(inquiryId);
 
-    await this.runInitialBuildSequence();
+    const templates = await this.getUserTemplates();
+    if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
+      return;
+    }
+
+    const existingTemplate = templates.find((template: any) => template.inquiryId === inquiryId);
+    if (existingTemplate) {
+      await this.showDraftWelcomeMessages(false);
+      if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
+        return;
+      }
+
+      await this.loadDraftTemplates(templates);
+      if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
+        return;
+      }
+
+      this.projectGenerationTabState.markCompleted(inquiryId, {
+        templateId: existingTemplate.templateId,
+        pages: existingTemplate.pages,
+        login_redirect: existingTemplate.login_redirect,
+        reactBuildUrl: existingTemplate.reactBuildUrl,
+        variation: existingTemplate.variation
+      });
+      return;
+    }
+
+    const generationTab = this.projectGenerationTabState.getTabState(inquiryId);
+    if (generationTab?.status === 'completed' && generationTab.previewData?.templateId) {
+      this.applyStoredCompletedPreview(generationTab.previewData);
+      return;
+    }
+
+    if (generationTab?.status === 'error') {
+      this.setBuildGenerationError(generationTab.errorMessage || 'Failed to generate preview');
+      this.queueBuildGenerationFailure(true);
+      return;
+    }
+
+    if (generationTab?.jobId) {
+      this.projectGenerationTabState.markGenerating(inquiryId);
+      this.restoreRunningBuildBlocks();
+      this.startContinueProjectGenerationPolling(inquiryId, generationTab.jobId);
+      return;
+    }
+
+    if (this.shouldStartInitialGeneration(inquiryId, generationTab)) {
+      await this.runInitialBuildSequence();
+      return;
+    }
+
+    this.isReactBuilding = false;
+    this.isIframeLoading = false;
+  }
+
+  private prepareForProjectRouteChange(inquiryId: string) {
+    this.runningBuildResumeVersion++;
+    this.isRunningBuildSyncInProgress = false;
+    this.clearContinueProjectGenerationInterval();
+    this.clearGenerateProjectFailureTimer();
+    this.stopAiProcessingPhase();
+    this.clearBuildStepTimers();
+    this.resetActivePageBuildSection();
+    this.pendingFinalBuildSection = null;
+    this.pendingPreviewResponse = null;
+    this.pendingPreviewFailure = false;
+    this.hasInitialFlowCompleted = false;
+    this.shouldDeferPreviewApply = false;
+    this.hasInitialBuildCompletionUi = false;
+    this.hasRepairFlowTakenOver = false;
+    this.repairAttemptVersion++;
+    this.customizationRequestVersion++;
+    this.initialFlowRunId++;
+    this.isContinueProjectGenerationRequestInFlight = false;
+    this.blocks = [];
+    this.designMap.clear();
+    this.designOrder = [];
+    this.designCount = 0;
+    this.usedVariations = [];
+    this.activeDesignId = '';
+    this.currentTemplateId = null;
+    this.selected_template_id = '';
+    this.pendingPreviewUrl = null;
+    this.safePreviewUrl = null;
+    this.hasAutoOpenedCurrentMobilePreview = false;
+    this.hasDismissedCurrentMobilePreview = false;
+    this.resetBuildGenerationError();
+    this.closeBuildGenerationFailureModal();
+    this.hideDeployHeaderAction();
+    this.isTyping = !!inquiryId;
+    this.isReactBuilding = !!inquiryId;
+    this.isIframeLoading = !!inquiryId;
+  }
+
+  private isCurrentRouteChange(routeChangeVersion: number, inquiryId: string): boolean {
+    return this.routeChangeVersion === routeChangeVersion && this.selectedProjectId === inquiryId;
+  }
+
+  private shouldStartInitialGeneration(inquiryId: string, generationTab: any): boolean {
+    return this.projectsData?.clientEnquryId === inquiryId
+      || !!generationTab;
+  }
+
+  private ensureBuildSocket(inquiryId: string) {
+    if (!inquiryId || this.socketInquiryId === inquiryId) {
+      return;
+    }
+
+    this.socket?.off?.('page-created');
+    this.socket?.off?.('pages-generation-complete');
+    this.socket?.disconnect?.();
+
+    this.socket = io(this.apiService.apiUrl, {
+      auth: {
+        token: localStorage.getItem('tokenCTi'),
+        inquiryPublicId: inquiryId,
+      }
+    });
+    this.socketInquiryId = inquiryId;
+    this.registerBuildSocketListeners();
+  }
+
+  private applyStoredCompletedPreview(previewData: ProjectGenerationPreviewData) {
+    if (!previewData?.templateId) {
+      return;
+    }
+
+    this.queueGeneratedPreview({ data: previewData }, null, true);
+  }
+
+  private startContinueProjectGenerationPolling(inquiryId: string, jobId: string) {
+    if (!jobId || !this.isInquiryActive(inquiryId)) {
+      return;
+    }
+
+    this.clearContinueProjectGenerationInterval();
+    this.continueProjectGeneration(jobId, inquiryId);
+    this.continueProjectGenerationInterval = setInterval(() => {
+      if (!this.isInquiryActive(inquiryId)) {
+        this.clearContinueProjectGenerationInterval();
+        return;
+      }
+
+      const latestJobId = this.projectGenerationTabState.getTabState(inquiryId)?.jobId?.trim();
+      if (!latestJobId) {
+        this.clearContinueProjectGenerationInterval();
+        return;
+      }
+
+      this.continueProjectGeneration(latestJobId, inquiryId);
+    }, this.generateProjectInternal);
+  }
+
+  private isInquiryActive(inquiryId: string): boolean {
+    return !!inquiryId && this.selectedProjectId === inquiryId;
+  }
+
+  clearContinueProjectGenerationInterval() {
+    if (!this.continueProjectGenerationInterval) {
+      return;
+    }
+
+    clearInterval(this.continueProjectGenerationInterval);
+    this.continueProjectGenerationInterval = null;
   }
 
   async getUserTemplates(): Promise<any[]> {
@@ -294,29 +437,112 @@ export class ReactBuildPreviewComponent {
   }
 
   startPreview(socket_id: string | null) {
+    const inquiryId = this.selectedProjectId;
+    if (!inquiryId) {
+      return;
+    }
 
     if (socket_id) {
       this.setBuildFlow('initial');
       this.startBuildProgressTimers();
     }
+    this.projectGenerationTabState.markGenerating(inquiryId);
     const payload = this.buildPreviewPayload(socket_id);
 
     this.apiService
       .postAPI<any, any>('api/ai/generateProject', payload)
       .subscribe({
         next: (res: any) => {
-          if (!res?.success || !res?.data?.templateId) {
-            this.deferGenerateProjectFailure(res?.data?.message || 'Failed to generate preview');
+          const shouldApplyUi = this.isSelectedProjectContext(inquiryId);
+
+          if (!res?.success) {
+            const errorMessage = res?.data?.message || 'Failed to generate preview';
+            this.projectGenerationTabState.markError(inquiryId, errorMessage);
+            if (!shouldApplyUi) {
+              return;
+            }
+            this.deferGenerateProjectFailure(errorMessage);
             return;
           }
 
-          this.clearGenerateProjectFailureTimer();
-          this.queueGeneratedPreview(res, socket_id);
+          if (res.success && res.data?.templateId) {
+            this.persistCompletedGeneration(inquiryId, res?.data);
+            if (!shouldApplyUi) {
+              return;
+            }
+            this.clearGenerateProjectFailureTimer();
+            this.queueGeneratedPreview(res, null, true);
+            return;
+          }
+
+          this.projectGenerationTabState.setJobId(inquiryId, res.data.jobId);
+          if (!shouldApplyUi) {
+            return;
+          }
+          this.startContinueProjectGenerationPolling(inquiryId, res.data.jobId);
           return;
         },
         error: (error: any) => {
+          this.projectGenerationTabState.markError(inquiryId, this.extractBuildGenerationErrorMessage(error));
+          if (!this.isSelectedProjectContext(inquiryId)) {
+            return;
+          }
+          this.deferGenerateProjectFailure(error);
+        }
+      });
+  }
+
+  continueProjectGeneration(jobId: string, inquiryId: string) {
+    if (!jobId || !inquiryId || this.isContinueProjectGenerationRequestInFlight) {
+      return;
+    }
+
+    this.isContinueProjectGenerationRequestInFlight = true;
+    this.apiService
+      .getApi<any>(`api/ai/generateProject/status/${jobId}`)
+      .subscribe({
+        next: (res: any) => {
+          this.isContinueProjectGenerationRequestInFlight = false;
+          const shouldApplyUi = this.isSelectedProjectContext(inquiryId);
+          const runningPages = Array.isArray(res?.data?.pages) ? res.data.pages : [];
+
+          const statusCode = Number(res?.status ?? res?.data?.statusCode ?? res?.data?.status ?? 200);
+          if (statusCode === 202) {
+            if (shouldApplyUi) {
+              this.syncRunningBuildBlocks(runningPages);
+            }
+            return;
+          }
+
+          this.finalizeContinueProjectGenerationPolling(inquiryId);
+          if (!res?.success) {
+            const errorMessage = res?.data?.message || 'Failed to generate preview';
+            this.projectGenerationTabState.markError(inquiryId, errorMessage);
+            if (!shouldApplyUi) {
+              return;
+            }
+            this.setBuildGenerationError(errorMessage);
+            this.queueBuildGenerationFailure(true);
+            return;
+          }
+          this.persistCompletedGeneration(inquiryId, res?.data);
+          if (!shouldApplyUi) {
+            return;
+          }
+          this.clearGenerateProjectFailureTimer();
+          this.queueGeneratedPreview(res, null, true);
+          return;
+        },
+        error: (error: any) => {
+          this.isContinueProjectGenerationRequestInFlight = false;
+          this.finalizeContinueProjectGenerationPolling(inquiryId);
+          const shouldApplyUi = this.isSelectedProjectContext(inquiryId);
           if (error.error.status === 422 && error.error.data.canRepairBuild) {
             this.clearGenerateProjectFailureTimer();
+            this.projectGenerationTabState.markRepairing(inquiryId, this.extractBuildGenerationErrorMessage(error));
+            if (!shouldApplyUi) {
+              return;
+            }
             let repairPayload = {
               templatePublicId: error.error.data.templatePublicId,
               inquiryPublicId: this.projectsData.clientEnquryId,
@@ -326,9 +552,38 @@ export class ReactBuildPreviewComponent {
             void this.attemptBuildRepair(repairPayload, error);
             return;
           }
-          this.deferGenerateProjectFailure(error);
+          this.projectGenerationTabState.markError(inquiryId, this.extractBuildGenerationErrorMessage(error));
+          if (!shouldApplyUi) {
+            return;
+          }
+          this.setBuildGenerationError(error);
+          this.queueBuildGenerationFailure(true);
         }
       });
+
+  }
+
+  private finalizeContinueProjectGenerationPolling(inquiryId: string) {
+    this.clearContinueProjectGenerationInterval();
+    this.projectGenerationTabState.clearJobId(inquiryId);
+  }
+
+  private persistCompletedGeneration(inquiryId: string, data: any) {
+    if (!inquiryId || !data?.templateId) {
+      return;
+    }
+
+    this.projectGenerationTabState.markCompleted(inquiryId, {
+      templateId: data.templateId,
+      pages: data.pages,
+      login_redirect: data.login_redirect,
+      reactBuildUrl: data.reactBuildUrl,
+      variation: data.variation
+    });
+  }
+
+  private isSelectedProjectContext(inquiryId: string): boolean {
+    return !!inquiryId && this.selectedProjectId === inquiryId;
   }
 
   private buildPreviewPayload(socketId: string | null) {
@@ -343,6 +598,12 @@ export class ReactBuildPreviewComponent {
 
   private async attemptBuildRepair(payload: any, buildFailureSource?: any, attemptNumber = 1) {
     this.setBuildGenerationError(buildFailureSource);
+    if (this.selectedProjectId) {
+      this.projectGenerationTabState.markRepairing(
+        this.selectedProjectId,
+        this.extractBuildGenerationErrorMessage(buildFailureSource)
+      );
+    }
     this.clearBuildStepTimers();
     this.hasRepairFlowTakenOver = true;
     this.hideLoader();
@@ -362,10 +623,16 @@ export class ReactBuildPreviewComponent {
               this.appendBuildActionPrompt();
             }
             this.setBuildGenerationError(res.data?.message || 'Failed to generate preview');
+            if (this.selectedProjectId) {
+              this.projectGenerationTabState.markError(this.selectedProjectId, res.data?.message || 'Failed to generate preview');
+            }
             this.queueBuildGenerationFailure();
             return;
           }
 
+          if (this.selectedProjectId) {
+            this.persistCompletedGeneration(this.selectedProjectId, res?.data);
+          }
           this.appendBuildActionPrompt();
           this.queueGeneratedPreview(res, payload.socket_id ?? null);
         },
@@ -380,6 +647,9 @@ export class ReactBuildPreviewComponent {
           }
           if (attemptNumber >= this.maxBuildRepairAttempts) {
             this.appendBuildActionPrompt();
+          }
+          if (this.selectedProjectId) {
+            this.projectGenerationTabState.markError(this.selectedProjectId, this.extractBuildGenerationErrorMessage(error));
           }
           this.setBuildGenerationError(error);
           this.queueBuildGenerationFailure();
@@ -436,6 +706,7 @@ export class ReactBuildPreviewComponent {
   }
 
   private handleBuildGenerationFailure() {
+
     if (this.hasUsablePreviewState()) {
       this.isRetryBuildGenerationSubmitting = false;
       this.repairAttemptVersion++;
@@ -468,10 +739,10 @@ export class ReactBuildPreviewComponent {
     modalInstance.show();
   }
 
-  private queueGeneratedPreview(res: any, socketId: string | null) {
+  private queueGeneratedPreview(res: any, socketId: string | null, forceImmediate = false) {
     this.clearGenerateProjectFailureTimer();
     this.completeActivePageBuildSection();
-    if (this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
+    if (!forceImmediate && this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
       this.pendingPreviewResponse = { res, socketId };
       return;
     }
@@ -489,6 +760,8 @@ export class ReactBuildPreviewComponent {
     this.isReactBuilding = true;
 
     const templateId = res.data.templateId;
+    this.currentTemplateId = templateId;
+    this.selected_template_id = templateId;
     const previewUrl = this.getPreviewUrlFromResponse(res.data, templateId);
 
     if (res.data.variation) {
@@ -536,10 +809,11 @@ export class ReactBuildPreviewComponent {
     this.appendBuildActionPrompt();
   }
 
-  private queueBuildGenerationFailure() {
+  private queueBuildGenerationFailure(forceImmediate = false) {
+
     this.clearGenerateProjectFailureTimer();
     this.completeActivePageBuildSection();
-    if (this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
+    if (!forceImmediate && this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
       this.pendingPreviewFailure = true;
       return;
     }
@@ -584,6 +858,162 @@ export class ReactBuildPreviewComponent {
     }
   }
 
+  private restoreRunningBuildBlocks(): void {
+    this.stopAiProcessingPhase();
+    this.blocks = [];
+    this.resetActivePageBuildSection();
+    this.pendingFinalBuildSection = null;
+    this.hasInitialBuildCompletionUi = false;
+    this.hasRepairFlowTakenOver = false;
+    this.isReactBuilding = true;
+    this.isTyping = true;
+    this.isIframeLoading = true;
+    this.setBuildFlow('initial');
+    this.setBuildStep(3);
+
+    this.blocks.push(this.createCompletedParagraphBlock('Analyzing your prompt...', 'phase'));
+    this.blocks.push(this.createCompletedBuildSection(
+      'Analyzing your prompt...',
+      '🧠',
+      [
+        'Understanding project direction',
+        'Mapping the main screens and user flow',
+        'Defining overall product specification'
+      ]
+    ));
+    this.blocks.push(this.createCompletedParagraphBlock(
+      'The scope is clear now, so I’m moving into the actual build flow with structure first and code generation right after that.',
+      'support'
+    ));
+    this.blocks.push(this.createCompletedParagraphBlock('Initializing project...', 'phase'));
+    this.blocks.push(this.createCompletedBuildSection(
+      'Initializing project...',
+      '⚙️',
+      [
+        'Preparing workspace',
+        'Initializing React project shell',
+        'Setting up the base environment'
+      ]
+    ));
+    this.blocks.push(this.createCompletedParagraphBlock('Creating structure...', 'phase'));
+    this.blocks.push(this.createCompletedBuildSection(
+      'Creating structure...',
+      '📁',
+      [
+        'src/',
+        'components/',
+        'pages/',
+        'services/',
+        'hooks/',
+        'context/'
+      ]
+    ));
+    this.setBuildStep(2);
+    this.blocks.push(this.createCompletedParagraphBlock('Creating core files...', 'phase'));
+    this.blocks.push(this.createCompletedBuildSection(
+      'Creating core files...',
+      '📦',
+      [
+        'package.json',
+        'vite.config.js',
+        'index.html',
+        'src/main.jsx',
+        'src/App.jsx'
+      ]
+    ));
+    this.blocks.push(this.createCompletedParagraphBlock('Building UI...', 'phase'));
+    this.blocks.push(this.createCompletedBuildSection(
+      'Building UI...',
+      '🧩',
+      [
+        'Navbar.jsx',
+        'Footer.jsx',
+        'AppContext.jsx',
+        'useProjectData.js',
+        'api.js'
+      ]
+    ));
+    this.blocks.push(this.createCompletedParagraphBlock('Creating pages...', 'phase'));
+    this.showLoader('Generating screen-level page code...');
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private async syncRunningBuildBlocks(pages: any[] = []): Promise<void> {
+    if (!pages.length || this.pendingFinalBuildSection || this.isRunningBuildSyncInProgress) {
+      return;
+    }
+
+    const resumeVersion = this.runningBuildResumeVersion;
+    this.isRunningBuildSyncInProgress = true;
+    this.hideLoader();
+
+    const pagesBlock = {
+      type: 'build-section' as const,
+      data: {
+        title: 'Creating pages...',
+        icon: '📄',
+        done: false,
+        items: [] as Array<{ label: string; status: 'active' | 'done' }>
+      }
+    };
+
+    this.blocks.push(pagesBlock);
+    setTimeout(() => this.scrollToBottom(true), 0);
+
+    const restoredPages = this.getRestoredPageGenerationItems(pages);
+    for (const pageLabel of restoredPages) {
+      if (!this.shouldContinueRunningBuildResume(resumeVersion)) {
+        this.isRunningBuildSyncInProgress = false;
+        return;
+      }
+
+      pagesBlock.data.items.push({
+        label: pageLabel,
+        status: 'active'
+      });
+      setTimeout(() => this.scrollToBottom(true), 0);
+      await this.delay(320);
+
+      pagesBlock.data.items[pagesBlock.data.items.length - 1].status = 'done';
+      setTimeout(() => this.scrollToBottom(true), 0);
+      await this.delay(180);
+    }
+
+    if (!this.shouldContinueRunningBuildResume(resumeVersion)) {
+      this.isRunningBuildSyncInProgress = false;
+      return;
+    }
+
+    pagesBlock.data.done = true;
+    setTimeout(() => this.scrollToBottom(true), 0);
+    await this.delay(250);
+
+    if (!this.shouldContinueRunningBuildResume(resumeVersion)) {
+      this.isRunningBuildSyncInProgress = false;
+      return;
+    }
+
+    this.blocks.push(this.createCompletedParagraphBlock('Finalizing...', 'phase'));
+
+    const finalBuildSection = this.createActiveBuildSection(
+      'Finalizing...',
+      '🚀',
+      [
+        { label: 'Installing dependencies', status: 'done' },
+        { label: 'Building preview bundle', status: 'done' },
+        { label: 'Deploying preview', status: 'active' }
+      ]
+    );
+
+    this.pendingFinalBuildSection = finalBuildSection;
+    this.blocks.push(finalBuildSection);
+    this.blocks.push(this.createCompletedParagraphBlock('Final preview processing is still running...', 'phase'));
+    this.blocks.push(this.createCompletedParagraphBlock('This may take 2–5 minutes depending on project complexity.', 'support'));
+    this.startAiProcessingPhase();
+    this.isRunningBuildSyncInProgress = false;
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
   retryBuildGeneration() {
     if (this.isRetryBuildGenerationSubmitting) {
       return;
@@ -598,6 +1028,12 @@ export class ReactBuildPreviewComponent {
     this.resetBuildGenerationError();
     this.isReactBuilding = true
     this.runInitialBuildSequence();
+  }
+
+
+  closeBuildGenerationFailedModal() {
+    this.resetBuildGenerationError();
+    this.closeFailedGenerationWorkspaceAndNavigateHome();
   }
 
   get hasBuildGenerationErrorMessage(): boolean {
@@ -719,6 +1155,52 @@ export class ReactBuildPreviewComponent {
     return Number((this.subscriptionPlan as any)?.creditBalance || 0);
   }
 
+  private openInsufficientCreditsModal(requiredCredits: number, actionLabel: string) {
+    this.insufficientCreditsRequired = requiredCredits;
+    this.insufficientCreditsActionLabel = actionLabel;
+    this.openBootstrapModal('insufficientCreditsModal', { backdrop: 'static', keyboard: true });
+  }
+
+  openDownloadCodeModal() {
+    this.openBootstrapModal('downloadCodeConfirmModal', { backdrop: 'static', keyboard: true });
+  }
+
+  confirmDownloadCode() {
+    this.closeBootstrapModal('downloadCodeConfirmModal');
+
+    if (this.getCurrentCreditBalance() < this.downloadCodeCreditsRequired) {
+      this.openInsufficientCreditsModal(this.downloadCodeCreditsRequired, 'downloading code');
+      return;
+    }
+
+    this.downloadCurrentCodeFiles();
+  }
+
+  private async downloadCurrentCodeFiles() {
+
+    const templates = await this.getUserTemplates();
+    const activeDesign = templates.find((t: any) => t.inquiryId === this.selectedProjectId);
+
+    if (!activeDesign.templateId) {
+      console.error("No active design found");
+      return;
+    }
+
+    this.apiService.getBlob('api/ai/download-project', { templatePublicId: activeDesign.templateId }).subscribe(res => {
+      console.log('Download response:', res);
+      if (!res) {
+        this.toster.error('Failed to download code files. Please try again later.');
+        return;
+      }
+      const pdfUrl = window.URL.createObjectURL(res);
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.download = `${activeDesign.projectName}.zip`;
+      link.click();
+      window.URL.revokeObjectURL(pdfUrl);
+    });
+  }
+
   onCustomDomainInput(event: Event) {
     const input = event.target as HTMLInputElement | null;
     this.customDomain = (input?.value || '').trim();
@@ -750,8 +1232,6 @@ export class ReactBuildPreviewComponent {
 
     this.clearFirstBlockMinHeight();
     this.isTyping = true;
-
-    this.currentBuildId++;
 
     this.blocks = this.blocks.filter(block => block?.id !== 'action-prompt-build');
 
@@ -844,33 +1324,9 @@ export class ReactBuildPreviewComponent {
     this.blocks = this.blocks.filter(b => b.id !== 'status');
   }
 
-  async playStatusSequence(lines: string[], lineDelay = 700, finishDelay = 500) {
-    if (!lines.length) return;
-
-    this.showLoader(lines[0]);
-    setTimeout(() => this.scrollToBottom(true), 0);
-    await this.delay(lineDelay);
-
-    for (let index = 1; index < lines.length; index++) {
-      const loaderBlock = this.blocks.find(block => block.id === 'status');
-      if (!loaderBlock) break;
-
-      loaderBlock.text = lines[index];
-      setTimeout(() => this.scrollToBottom(true), 0);
-      await this.delay(lineDelay);
-    }
-
-    await this.delay(finishDelay);
-    this.hideLoader();
-    setTimeout(() => this.scrollToBottom(true), 0);
-  }
-
-  saveDesign() {
-    this.router.navigate([`plan-delivery/${this.projectsData.clientEnquryId}`])
-  }
-
   ngOnDestroy() {
     this.blocks = [];
+    this.clearContinueProjectGenerationInterval();
     this.clearGenerateProjectFailureTimer();
     this.stopAiProcessingPhase();
     this.socket?.off?.('page-created');
@@ -941,7 +1397,6 @@ export class ReactBuildPreviewComponent {
       }
 
       this.subscriptionPlan = res;
-      this.planName = res.planName;
     });
   }
 
@@ -969,13 +1424,6 @@ export class ReactBuildPreviewComponent {
     );
     modal.show();
   };
-
-
-
-  startTyping() {
-    // this.codeEditor.startTyping();
-  }
-
 
 
 
@@ -1022,10 +1470,6 @@ export class ReactBuildPreviewComponent {
     this.safePreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
-
-  isArray(value: any): boolean {
-    return Array.isArray(value);
-  }
 
   onDeviceTypeChange(deviceType: string) {
     switch (deviceType) {
@@ -1142,6 +1586,8 @@ export class ReactBuildPreviewComponent {
     }
 
     this.startQuickBuildProgress('restore');
+    this.currentTemplateId = templateId;
+    this.selected_template_id = templateId;
     this.setSafePreviewUrl(this.getPreviewProxyUrl(templateId));
     this.isReactBuilding = false;
     this.isTyping = false;
@@ -1339,7 +1785,12 @@ export class ReactBuildPreviewComponent {
   }
 
   handlePromptKeydown(event: KeyboardEvent, block: any, value: string): void {
+
     if (event.key === 'Enter' && !event.shiftKey) {
+      if (this.isReactBuilding) {
+        event.preventDefault();
+        return;
+      }
       this.customizeInput.nativeElement.value = '';
       event.preventDefault();
       this.handlePromptSubmitted({ blockId: block, value });
@@ -1465,12 +1916,12 @@ export class ReactBuildPreviewComponent {
     this.selected_template_id = activeDesign;
     this.closeBootstrapModal('deployConfirmModal');
 
-    if (this.getCurrentCreditBalance() >= 60) {
+    if (this.getCurrentCreditBalance() >= this.deployCreditsRequired) {
       this.openBootstrapModal('publishProjectModal', { backdrop: 'static', keyboard: true });
       return;
     }
 
-    this.openBootstrapModal('insufficientCreditsModal', { backdrop: 'static', keyboard: true });
+    this.openInsufficientCreditsModal(this.deployCreditsRequired, 'project publishing');
 
   }
 
@@ -1500,10 +1951,6 @@ export class ReactBuildPreviewComponent {
 
     this.closeBootstrapModal('customDomainModal');
     this.deployProject(this.selected_template_id, 'custom', this.customDomain);
-  }
-
-  setPreviewUrl(url: string) {
-    this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   getPreviewProxyUrl(templateId: string) {
@@ -1985,24 +2432,6 @@ export class ReactBuildPreviewComponent {
       .replace(/\b\w/g, (char) => char.toUpperCase());
   }
 
-
-
-  getHomeCSS() {
-    return {
-      file: 'src/styles/home.css',
-      added: 25,
-      removed: 0,
-      content: [
-        { line: 1, text: '.home {' },
-        { line: 2, text: '  padding: 20px;' },
-        { line: 3, text: '}' },
-        { line: 5, text: 'h1 {' },
-        { line: 6, text: '  font-size: 24px;' },
-        { line: 7, text: '}' }
-      ]
-    };
-  }
-
   async addTerminal(lines: string[], lineDelay = 650, finishDelay = 1100) {
     const terminalBlock = {
       type: 'terminal',
@@ -2051,6 +2480,19 @@ export class ReactBuildPreviewComponent {
     setTimeout(() => this.scrollToBottom(true), 0);
 
     await this.delay(waitAfter);
+  }
+
+  private createCompletedParagraphBlock(
+    text: string,
+    variant: 'default' | 'phase' | 'support' = 'default'
+  ) {
+    return {
+      id: `paragraph-${Date.now()}-${this.blocks.length}`,
+      text,
+      variant,
+      done: true,
+      timestamp: new Date()
+    };
   }
 
   async addListBlock(items: string[], waitAfter = 1200) {
@@ -2104,6 +2546,49 @@ export class ReactBuildPreviewComponent {
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
+  private createCompletedBuildSection(title: string, icon: string, items: string[]) {
+    return {
+      type: 'build-section',
+      data: {
+        title,
+        icon,
+        done: true,
+        items: items.map((label) => ({
+          label,
+          status: 'done' as const
+        }))
+      }
+    };
+  }
+
+  private createActiveBuildSection(
+    title: string,
+    icon: string,
+    items: Array<{ label: string; status: 'active' | 'done' }>
+  ) {
+    return {
+      type: 'build-section' as const,
+      data: {
+        title,
+        icon,
+        done: false,
+        items
+      }
+    };
+  }
+
+  private getRestoredPageGenerationItems(pages: any[] = []): string[] {
+    const pageItems = [
+      ...pages.map((page) => this.extractPageLabel(page)),
+      ...this.queuedSocketPages,
+      ...this.designOrder.map((designId) => this.designMap.get(designId)?.label || '')
+    ]
+      .map((label) => String(label || '').trim())
+      .filter((label, index, items) => !!label && items.indexOf(label) === index);
+
+    return pageItems.length ? pageItems : ['Generating page screens'];
+  }
+
   private registerBuildSocketListeners() {
     if (!this.socket?.on) {
       return;
@@ -2133,6 +2618,7 @@ export class ReactBuildPreviewComponent {
   }
 
   private deferGenerateProjectFailure(source?: any) {
+
     this.setBuildGenerationError(source);
 
     if (this.buildFlowType !== 'initial' || this.hasInitialFlowCompleted) {
@@ -2300,47 +2786,6 @@ export class ReactBuildPreviewComponent {
     await this.delay(settleDelay);
   }
 
-  async addCodeBlock(fileData: any) {
-    const block = {
-      type: 'code',
-      data: {
-        file: fileData.file,
-        added: fileData.added,
-        removed: fileData.removed,
-        content: [] as any[]
-      }
-    };
-
-    this.blocks.push(block);
-    setTimeout(() => this.scrollToBottom(true), 0);
-
-    await this.delay(fileData.initialDelay ?? 900);
-
-    for (let row of fileData.content) {
-      const nextRow = {
-        ...row,
-        text: ''
-      };
-
-      block.data.content.push(nextRow);
-      setTimeout(() => this.scrollToBottom(true), 0);
-
-      for (const char of row.text) {
-        nextRow.text += char;
-        if (char === '\n' || nextRow.text.length % 6 === 0) {
-          setTimeout(() => this.scrollToBottom(true), 0);
-        }
-        await this.delay(char === ' ' ? 10 : (fileData.lineDelay ?? 16));
-      }
-
-      setTimeout(() => this.scrollToBottom(true), 0);
-      await this.delay(fileData.rowDelay ?? 180);
-    }
-
-    await this.delay(fileData.finishDelay ?? 1400);
-    setTimeout(() => this.scrollToBottom(true), 0);
-  }
-
   async addSummary(data: any) {
     await this.delay(600);
     this.blocks.push({
@@ -2352,6 +2797,10 @@ export class ReactBuildPreviewComponent {
 
   private shouldContinueInitialFlow(flowRunId: number): boolean {
     return !this.hasRepairFlowTakenOver && flowRunId === this.initialFlowRunId;
+  }
+
+  private shouldContinueRunningBuildResume(resumeVersion: number): boolean {
+    return resumeVersion === this.runningBuildResumeVersion && this.isReactBuilding;
   }
 
   get previewOverlayTitle(): string {
@@ -2394,9 +2843,34 @@ export class ReactBuildPreviewComponent {
     return this.previewOverlayLoaderText.split('');
   }
 
-  private refreshProjectContext() {
-    const projectData = sessionStorage.getItem('projectData');
-    this.projectsData = projectData ? JSON.parse(projectData) : null;
+  private refreshProjectContext(inquiryId?: string) {
+    const storedProjectData = sessionStorage.getItem('projectData');
+    const parsedStoredProjectData = storedProjectData ? JSON.parse(storedProjectData) : null;
+    const generatedProjectState = this.projectGenerationTabState.getTabState(inquiryId || this.selectedProjectId);
+    const resolvedProjectData = generatedProjectState?.projectData || parsedStoredProjectData;
+
+    this.projectsData = resolvedProjectData;
+    if (resolvedProjectData) {
+      sessionStorage.setItem('projectData', JSON.stringify(resolvedProjectData));
+    }
+
+    if (generatedProjectState?.finalPrompt?.trim()) {
+      this.finalPrompt = generatedProjectState.finalPrompt.trim();
+    }
+  }
+
+  private closeFailedGenerationWorkspaceAndNavigateHome() {
+    const inquiryId = this.selectedProjectId?.trim();
+    const generationTab = this.projectGenerationTabState.getTabState(inquiryId);
+
+    if (inquiryId && generationTab && (!generationTab.previewData?.templateId || generationTab.projectName === 'New Project')) {
+      this.projectGenerationTabState.clearTab(inquiryId);
+    }
+
+    this.projectGenerationTabState.setActiveInquiryId(null);
+    this.selectedProjectId = '';
+    this.apiService.resetWorkspaceChatState();
+    this.router.navigate(['/main']);
   }
 
   private hideDeployHeaderAction() {

@@ -2,7 +2,9 @@
     <app-workspace-header [fullScreen]="fullScreen" [selectedDeviceType]="selectedDeviceType"
         [showPreviewControls]="true" (fullScreenToggle)="openFullPreview()"
         (deviceTypeChange)="onDeviceTypeChange($event)" [showPrimaryHeaderAction]="showDeployHeaderAction"
-        [primaryHeaderActionLabel]="'Deploy to Production'" (primaryHeaderActionClick)="openDeployModal()" />
+        [primaryHeaderActionLabel]="'Deploy'" (primaryHeaderActionClick)="openDeployModal()"
+        [showSecondaryHeaderAction]="showDeployHeaderAction" [secondaryHeaderActionLabel]="'Code'"
+        (secondaryHeaderActionClick)="openDownloadCodeModal()" />
     <section class="ct_project_ai_preview_main">
         @if (!fullScreen) {
         <aside class="ct_project_ai_chat_section" style="height: calc(100vh - 50px);">
@@ -34,7 +36,8 @@
                 </div> -->
 
                 <div class="ct_ai_input_shell">
-                    <textarea #customizeInput class="ct_ai_textarea" rows="3" placeholder="Share your changes here"
+                    <textarea [disabled]="isReactBuilding" #customizeInput class="ct_ai_textarea" rows="3"
+                        placeholder="Shape This Template Your Way"
                         (keydown)="handlePromptKeydown($event, 'customize_template', customizeInput.value)"></textarea>
                     <div class="d-flex align-items-center justify-content-between gap-2">
                         <div class="d-flex align-items-center gap-2">
@@ -68,13 +71,13 @@
                         </div>
                           <button type="button" class="ct_ai_input_submit"
                         (click)="handlePromptSubmitted({'blockId': 'customize_template', 'value': customizeInput.value}); customizeInput.value = ''">
-                        <i class="fa-solid fa-arrow-up"></i>
+                        <i class="fa-solid"
+                            [ngClass]="{'fa-stop': isReactBuilding, 'fa-arrow-right': !isReactBuilding}"></i>
                     </button>
 
                     </div>
                 </div>
             </div>
-
         </aside>
         }
 
@@ -82,7 +85,7 @@
         <div class="ct_ai_project_preview_right">
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                    <div class="preview-wrapper d-flex w-100" id="topScrollDiv">
+                    <div class="preview-wrapper d-flex w-100">
                         <!-- ðŸ”¥ FADE CONTAINER -->
                         <div class="iframe-container d-flex align-items-center justify-content-center preview-guard"
                             [class.loading]="isIframeLoading" (contextmenu)="blockPreviewInteraction($event)"
@@ -105,7 +108,7 @@
                                     <div class="ct_preview_build_card__glow"></div>
                                     <!-- <img class="ct_rotate_all_dir" src="../../../../../assets/img/AI_Generation.png"
                                         alt=""> -->
-                                    <div class="rgt_loader" id="rgt_loader">
+                                    <div class="rgt_loader">
                                         <div class="rgt_loader-wrapper">
                                             <span *ngFor="let letter of previewOverlayLoaderLetters"
                                                 class="rgt_loader-letter">{{ letter }}</span>
@@ -151,8 +154,7 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                    <app-react-code-editor #codeEditor *ngIf="files.length >0" [files]="files"
-                        [templateExists]="templateExists">
+                    <app-react-code-editor *ngIf="files.length >0" [files]="files" [templateExists]="templateExists">
                     </app-react-code-editor>
                 </div>
             </div>
@@ -168,6 +170,32 @@
         </button>
     </div>
     }
+</div>
+
+<div class="modal fade" id="downloadCodeConfirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content mb-2 ct_deploy_confirm_modal">
+            <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="ct_deploy_confirm_modal__badge">
+                <i class="fa-solid fa-download"></i>
+            </div>
+            <div class="ct_deploy_confirm_modal__header">
+                <h2>Download Code?</h2>
+                <p class="mb-0">
+                    Downloading your project source code will use 100 credits from your available balance. If you'd like
+                    to continue, click Continue below.
+                </p>
+            </div>
+            <div class="actions">
+                <button class="btn-cancel button-deploy" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn-confirm button-deploy" (click)="confirmDownloadCode()">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -268,7 +296,7 @@
                 </button>
 
                 <div class="ct_publish_project_modal__tip align-items-start">
-                    <svg width="17"  height="17" class="flex-shrink-0 mt-1" viewBox="0 0 17 17" fill="none"
+                    <svg width="17" height="17" class="flex-shrink-0 mt-1" viewBox="0 0 17 17" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M15.375 7.5L14.9062 6.46875L13.875 6L14.9062 5.53125L15.375 4.5L15.8438 5.53125L16.875 6L15.8438 6.46875L15.375 7.5ZM13.125 4.5L12.4125 2.9625L10.875 2.25L12.4125 1.5375L13.125 0L13.8375 1.5375L15.375 2.25L13.8375 2.9625L13.125 4.5ZM5.625 16.5C5.2125 16.5 4.85938 16.3531 4.56563 16.0594C4.27188 15.7656 4.125 15.4125 4.125 15H7.125C7.125 15.4125 6.97812 15.7656 6.68437 16.0594C6.39062 16.3531 6.0375 16.5 5.625 16.5ZM2.625 14.25V12.75H8.625V14.25H2.625ZM2.8125 12C1.95 11.4875 1.26562 10.8 0.759375 9.9375C0.253125 9.075 0 8.1375 0 7.125C0 5.5625 0.546875 4.23438 1.64062 3.14062C2.73438 2.04688 4.0625 1.5 5.625 1.5C7.1875 1.5 8.51562 2.04688 9.60938 3.14062C10.7031 4.23438 11.25 5.5625 11.25 7.125C11.25 8.1375 10.9969 9.075 10.4906 9.9375C9.98438 10.8 9.3 11.4875 8.4375 12H2.8125ZM3.2625 10.5H7.9875C8.55 10.1 8.98438 9.60625 9.29062 9.01875C9.59687 8.43125 9.75 7.8 9.75 7.125C9.75 5.975 9.35 5 8.55 4.2C7.75 3.4 6.775 3 5.625 3C4.475 3 3.5 3.4 2.7 4.2C1.9 5 1.5 5.975 1.5 7.125C1.5 7.8 1.65313 8.43125 1.95938 9.01875C2.26562 9.60625 2.7 10.1 3.2625 10.5Z"
@@ -282,8 +310,7 @@
 
             <div class="ct_publish_project_modal__footer pt-0">
                 <button type="button" class="btn-cancel button-deploy" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn-confirm button-deploy rounded "
-                    (click)="continuePublishProject()">
+                <button type="button" class="btn-confirm button-deploy rounded " (click)="continuePublishProject()">
                     Continue
                 </button>
             </div>
@@ -360,7 +387,8 @@
                 <i class="fa-solid fa-wallet"></i>
             </div>
             <h2>Insufficient Credit Balance</h2>
-            <p>You need at least 60 credits to continue with project publishing. Your current balance is {{
+            <p>You need at least {{ insufficientCreditsRequired }} credits to continue with {{
+                insufficientCreditsActionLabel }}. Your current balance is {{
                 getCurrentCreditBalance() }} credits.</p>
             <div class="actions">
                 <button class="btn-confirm button-deploy w-100" data-bs-dismiss="modal"
@@ -370,10 +398,11 @@
     </div>
 </div>
 
-<div class="modal fade" id="buildGenerationFailedModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="buildGenerationFailedModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content ct_build_failed_modal">
-            <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close">
+            <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close"
+                (click)="closeBuildGenerationFailedModal()">
                 <i class="fa-solid fa-xmark"></i>
             </button>
             <div class="ct_build_failed_modal__icon">
@@ -483,7 +512,7 @@
                             Number</label>
                         <div class="position-relative">
                             <ngx-intl-tel-input id="callbackPhoneNumber" formControlName="phoneNumber"
-                                [cssClass]="'form-control ct_input w-full ps-5 ct_pe_90'"
+                                [cssClass]="'form-control ct_input w-full ps-5 ct_pe_90 custom_phone_input '"
                                 [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
                                 [customPlaceholder]="'Enter your phone number'"
                                 [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"

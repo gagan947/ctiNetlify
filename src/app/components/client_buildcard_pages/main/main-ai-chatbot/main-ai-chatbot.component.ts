@@ -4,9 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { NavigationStart, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 import { ApiService } from '../../../../services/api.service';
+import { ProjectGenerationTabStateService } from '../../../../services/project-generation-tab-state.service';
 import { io } from 'socket.io-client';
 import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
 import { SpeechService } from '../../../../services/speech.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 declare var bootstrap: any;
 interface ChatMessage {
   sender: 'user' | 'ai';
@@ -54,6 +56,7 @@ interface TriggerBuildProjectPayload {
 
 interface GenerateInquiryResponse {
   success?: boolean;
+  message?: string;
   data?: {
     public_id?: string;
   };
@@ -72,12 +75,6 @@ interface ConversationResumePayload {
   messages?: any[];
 }
 
-interface PendingWorkspaceProjectTab {
-  inquiryId: string;
-  projectId?: string;
-  projectName: string;
-}
-
 @Component({
   selector: 'app-main-ai-chatbot',
   standalone: true,
@@ -87,7 +84,6 @@ interface PendingWorkspaceProjectTab {
 })
 export class MainAiChatbotComponent implements OnInit, OnDestroy {
   private readonly conversationStorageKey = 'conversationId';
-  private readonly pendingWorkspaceTabStorageKey = 'pendingWorkspaceProjectTab';
   private readonly resumeFallbackDelayMs = 1500;
   @Input() initialPrompt = '';
   @Input() subsriptionPlan: any | null = null;
@@ -120,10 +116,12 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   projectMatchPayload?: ProjectMatchPayload;
   constructor(
     private apiService: ApiService,
+    private projectGenerationTabState: ProjectGenerationTabStateService,
     private router: Router,
     private ngZone: NgZone,
     public subscriptionModalService: SubscriptionModalService,
-    public speechService: SpeechService
+    public speechService: SpeechService,
+    public toaster : NzMessageService
   ) { }
 
   ngOnInit(): void {
@@ -264,6 +262,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
         this.applyProjectMatch(data);
         this.showBuildProjectButton = true;
         this.isBuildActionLoading = false;
+        this.completeLoadingState();
       });
     });
 
@@ -287,12 +286,12 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     //   });
     // });
 
-    this.socket.on('showBuildButton', (_show: boolean) => {
-      this.ngZone.run(() => {
-        this.showBuildProjectButton = true;
-        this.completeLoadingState();
-      });
-    });
+    // this.socket.on('showBuildButton', (_show: boolean) => {
+    //   this.ngZone.run(() => {
+    //     this.showBuildProjectButton = true;
+    //     this.completeLoadingState();
+    //   });
+    // });
 
     this.socket.on('botDone', () => {
       this.ngZone.run(() => {
@@ -468,6 +467,11 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       user_prompt: this.lastUserPrompt
     }).subscribe({
       next: (response) => {
+        if(!response?.success) {
+          this.isBuildActionLoading = false;
+              this.toaster.warning(response.message || ''); // instant
+          return;
+        }
         const publicId = response?.data?.public_id;
 
         if (!publicId) {
@@ -480,11 +484,15 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
         };
 
         sessionStorage.setItem('projectData', JSON.stringify(projectData));
-        this.storePendingWorkspaceTab({
+        this.projectGenerationTabState.createOrUpdateTab({
           inquiryId: publicId,
           projectId: this.matchedProjectId,
-          projectName: projectData.projectName
+          projectName: projectData.projectName,
+          projectData,
+          finalPrompt: this.projectMatchPayload?.finalPrompt ?? this.lastUserPrompt,
+          status: 'generating'
         });
+        this.projectGenerationTabState.setActiveInquiryId(publicId);
 
         sessionStorage.removeItem('conversationId');
         this.router.navigate(['/bd_loader'], {
@@ -511,11 +519,15 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     sessionStorage.setItem('projectData', JSON.stringify(projectData));
 
     if (publicEnquiryId) {
-      this.storePendingWorkspaceTab({
+      this.projectGenerationTabState.createOrUpdateTab({
         inquiryId: publicEnquiryId,
         projectId,
-        projectName: projectData.projectName
+        projectName: projectData.projectName,
+        projectData,
+        finalPrompt: this.projectMatchPayload?.finalPrompt ?? this.lastUserPrompt,
+        status: 'generating'
       });
+      this.projectGenerationTabState.setActiveInquiryId(publicEnquiryId);
     }
   }
 
@@ -549,10 +561,6 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       projectMatchScore: this.matchedProjectScore,
       matchedProject: project
     };
-  }
-
-  private storePendingWorkspaceTab(tab: PendingWorkspaceProjectTab): void {
-    sessionStorage.setItem(this.pendingWorkspaceTabStorageKey, JSON.stringify(tab));
   }
 
   private applyProjectMatch(payload?: ProjectMatchPayload | null): void {

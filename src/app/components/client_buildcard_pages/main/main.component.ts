@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { Project, ProjectResponse } from '../../../models/projects';
-import { ChatbotComponent } from "../chatbot/chatbot.component";
 import { BdLoaderComponent } from "../../shared/bd-loader/bd-loader.component";
 import { CalendlyDirective } from '../../../helper/directives/calendly.directive';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -16,7 +15,7 @@ declare var Calendly: any;
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule, FormsModule, ChatbotComponent, BdLoaderComponent, CalendlyDirective, WorkspaceHeaderComponent],
+  imports: [CommonModule, FormsModule, BdLoaderComponent, CalendlyDirective, WorkspaceHeaderComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
@@ -58,12 +57,19 @@ export class MainComponent {
       this.apiservice.getRates(user?.currency);
     }
     this.getProjects();
-    sessionStorage.clear();
+    this.clearSessionStorageForMainPage();
     this.apiservice._htmlCode.set(null);
 
     this.getUserSubscriptionPlan();
     // this.socket = io(this.apiservice.apiUrl);
     let currentBotMsg = "";
+  }
+
+  private clearSessionStorageForMainPage(): void {
+    sessionStorage.removeItem('conversationId');
+    sessionStorage.removeItem('publicEnquiryId');
+    sessionStorage.removeItem('projectData');
+    sessionStorage.removeItem('finalPrompt');
   }
 
   receiveData(data: any) {

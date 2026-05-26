@@ -11,7 +11,12 @@ import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
 import { Router } from '@angular/router';
 import { SubscriptionModalData, SubscriptionModalResult } from '../../../services/subscription-modal.service';
 type BillingCycle = 'MONTH' | 'YEAR';
-type PlanType = 'free' | 'personal' | 'creative' | 'booster' | 'pro' | 'business';
+type PlanType = 'pro' | 'business';
+
+interface PlanFeatureItem {
+  label: string;
+  badge?: string;
+}
 
 interface Plan {
   id: number;
@@ -60,41 +65,8 @@ export class SubcriptionPageComponent {
   projectsData: any;
   SearchCountryField = SearchCountryField
   CountryISO = CountryISO
-  selectedPlan = signal<PlanType>('creative');
+  selectedPlan = signal<PlanType>('pro');
   subscriptionPlan!: SubscriptionResponse;
-  freePlans: Plan[] = [
-    {
-      "id": 1,
-      "plan_key": "free_plan",
-      "plan_name": "Free Plan",
-      "cashfree_plan_id": "",
-      "amount": 0,
-      "currency": "INR",
-      "display_amount": "0.00",
-      "display_currency": "INR",
-      "billing_interval": "MONTH",
-      "created_at": "2026-04-16T07:51:13.000Z",
-      "plan_type": "FREE",
-      "is_active": 1,
-      "test_mode": 0,
-      "has_intro_offer": 0,
-      "intro_amount": "0.00",
-      "discount_percent": 0,
-      "credits_per_cycle": 50,
-      "credit_grant_interval": "MONTH",
-      "max_projects": 1,
-      "max_pages": 5,
-      "topup_allowed": 0,
-      "can_deploy": 0,
-      "support_type": "NONE",
-      "github_integration": 0,
-      "custom_features": 0,
-      "can_delete": 0,
-      "credit_plan_key": "credit_free_plan",
-      "is_plan_used": true,
-      "is_current_plan": false
-    }
-  ];
   proPlans: Plan[] = [
     {
       "id": 2,
@@ -192,7 +164,6 @@ export class SubcriptionPageComponent {
   ];
   businessPlans: Plan[] = [];
   private plansCache: Partial<Record<BillingCycle, {
-    free: Plan[];
     pro: Plan[];
     business: Plan[];
   }>> = {};
@@ -249,10 +220,6 @@ export class SubcriptionPageComponent {
 
   setBillingCycle(cycle: BillingCycle) {
     this.setBilling(cycle);
-  }
-
-  get freePlan(): Plan | null {
-    return this.freePlans[0] || null;
   }
 
   get businessPlan(): Plan | null {
@@ -407,7 +374,6 @@ export class SubcriptionPageComponent {
     const cachedPlans = this.plansCache[cycle];
 
     if (cachedPlans) {
-      this.freePlans = cachedPlans.free;
       this.proPlans = cachedPlans.pro;
       this.businessPlans = cachedPlans.business;
       this.selectedProPlan = this.resolveSelectedProPlan();
@@ -417,11 +383,9 @@ export class SubcriptionPageComponent {
     this.apiService.getAllPlans<any>(this.billingCycle())
       .subscribe({
         next: (res: any) => {
-          this.freePlans = res?.data?.free || [];
           this.proPlans = res?.data?.pro || [];
           this.businessPlans = res?.data?.business || [];
           this.plansCache[cycle] = {
-            free: this.freePlans,
             pro: this.proPlans,
             business: this.businessPlans
           };
@@ -439,8 +403,6 @@ export class SubcriptionPageComponent {
 
   planDescription(plan: Plan): string {
     switch (plan?.plan_type) {
-      case 'FREE':
-        return 'Best for exploring the platform';
       case 'PRO':
         return 'Perfect to build your first real product';
       case 'BUSINESS':
@@ -454,49 +416,25 @@ export class SubcriptionPageComponent {
     return `/${(plan?.billing_interval || this.billingCycle()).toLowerCase()}`;
   }
 
-  getPlanBadge(plan: Plan | null): string {
+  planFeatures(plan: Plan): PlanFeatureItem[] {
     switch (plan?.plan_type) {
-      case 'FREE':
-        return 'FREE PLAN';
-      case 'PRO':
-        return 'Standard';
-      case 'BUSINESS':
-        return 'Enterprise Plan';
-      default:
-        return '';
-    }
-  }
-
-  getPlanFeaturesTitle(plan: Plan | null): string {
-    return plan?.plan_type === 'BUSINESS' ? 'Pro Features and you will get:' : 'Features you will get:';
-  }
-
-  planFeatures(plan: Plan): string[] {
-    switch (plan?.plan_type) {
-      case 'FREE':
-        return [
-          'Create your first project (at 25 credits)',
-          'Use remaining credits for minor edits & tweaks',
-          'Access to basic AI generation',
-          'Single agent processing',
-          'Chat-based interaction only'
-        ];
       case 'PRO':
         return [
-          'Create full-scale projects',
-          'Basic deployment access',
-          'Standard customization (credit-based)',
-          'Faster generation vs free plan',
-          'Clean production-ready outputs'
+          { label: 'Mobile App Development' },
+          { label: 'Private project hosting' },
+          { label: 'Github integration' },
+          { label: 'Fork tasks' },
+          { label: 'Ability to buy additional credits' }
         ];
       case 'BUSINESS':
         return [
-          'Unlimited scale project creation',
-          'Enterprise-grade deployment infrastructure',
-          'Full customization freedom (no limitations)',
-          'Chat + Email + Phone Support',
-          'Maximum speed & priority processing',
-          'Optimized for large-scale automation'
+          { label: 'E-3 Agent', badge: 'NEW' },
+          { label: 'Free deployment', badge: 'NEW' },
+          { label: 'Free custom domain', badge: 'NEW' },
+          { label: 'Analytics dashboard', badge: 'NEW' },
+          { label: 'Full project memory' },
+          { label: 'Beast Thinking' },
+          { label: 'Ability to build Custom Agents' }
         ];
       default:
         return [];
@@ -508,38 +446,17 @@ export class SubcriptionPageComponent {
       return 'Get Started';
     }
 
-    if (plan.plan_type === 'FREE') {
-      return 'Start Free';
-    }
-
     if (this.isActivePaidPlan(plan)) {
-      return 'Upgrade to Standard';
-    }
-
-    if (this.hasActivePaidPlan()) {
-      return 'Upgrade to Enterprise';
+      return 'Active';
     }
 
     switch (plan?.plan_type) {
       case 'PRO':
-        return 'Get Started';
+        return 'Upgrade to Standard';
       case 'BUSINESS':
-        return 'Get Started';
+        return 'Upgrade to Enterprise';
       default:
         return 'Get Started';
-    }
-  }
-
-  getPlanFootnote(plan: Plan | null): string {
-    switch (plan?.plan_type) {
-      case 'FREE':
-        return 'Upgrade anytime or buy credits directly';
-      case 'PRO':
-        return 'Auto-upgrades to Standard plan next month.';
-      case 'BUSINESS':
-        return 'Tailored for high-end business workflows';
-      default:
-        return '';
     }
   }
 
@@ -560,39 +477,15 @@ export class SubcriptionPageComponent {
   }
 
   handlePlanAction(plan: Plan): void {
-    if (plan.plan_type === 'FREE' || this.isPlanActionDisabled(plan)) {
+    if (this.isPlanActionDisabled(plan)) {
       return;
     }
 
     this.getStarted(plan);
   }
 
-  hasDiscount(plan: Plan | null): boolean {
-    return !!plan && Number(plan.discount_percent || 0) > 0;
-  }
-
-  getDiscountLabel(plan: Plan | null): string {
-    return `${Number(plan?.discount_percent || 0)}% Off`;
-  }
-
-  getPlanBadges(plan: Plan): string[] {
-    if (plan.is_current_plan) {
-      return ['Active'];
-    }
-
-    if (plan.is_plan_used && plan.plan_key == 'free_plan') {
-      return ['Used'];
-    }
-
-    return [];
-  }
-
-  hasActivePaidPlan(): boolean {
-    return [...this.proPlans, ...this.businessPlans].some((plan) => this.isActivePaidPlan(plan));
-  }
-
   isActivePaidPlan(plan: Plan | null): boolean {
-    return !!plan && plan.plan_type !== 'FREE' && !!plan.is_current_plan;
+    return !!plan && !!plan.is_current_plan;
   }
 
   isPlanActionDisabled(plan: Plan | null): boolean {
@@ -600,12 +493,67 @@ export class SubcriptionPageComponent {
       return true;
     }
 
-    if (plan.plan_type === 'FREE') {
-      return true;
-    }
-
     return this.isActivePaidPlan(plan);
   }
+
+  getVisiblePlanCards(): Plan[] {
+    return [this.selectedProPlan, this.businessPlan].filter((plan): plan is Plan => !!plan);
+  }
+
+  getCardTitle(plan: Plan | null): string {
+    return plan?.plan_type === 'BUSINESS' ? 'Enterprise Plan' : 'Standard';
+  }
+
+  getCardTheme(plan: Plan | null): 'standard' | 'enterprise' {
+    return plan?.plan_type === 'BUSINESS' ? 'enterprise' : 'standard';
+  }
+
+  getCreditsLabel(plan: Plan | null): string {
+    if (!plan) {
+      return '';
+    }
+
+    return `${plan.credits_per_cycle} credits / ${plan.billing_interval.toLowerCase()}`;
+  }
+
+  getCurrentPriceValue(plan: Plan | null): string {
+    if (!plan) {
+      return '0';
+    }
+
+    const amount = Number(this.shouldShowPreviousPrice(plan) ? plan.intro_amount : plan.display_amount || plan.amount || 0);
+    return amount.toLocaleString('en-IN', {
+      maximumFractionDigits: 0
+    });
+  }
+
+  getOriginalPriceValue(plan: Plan | null): string {
+    if (!plan) {
+      return '';
+    }
+
+    return Number(plan.display_amount || plan.amount || 0).toLocaleString('en-IN', {
+      maximumFractionDigits: 0
+    });
+  }
+
+  getSaveText(plan: Plan | null): string {
+    if (!plan) {
+      return '';
+    }
+
+    if (this.shouldShowPreviousPrice(plan)) {
+      const savings = Number(plan.amount || 0) - Number(plan.intro_amount || 0);
+      return savings > 0 ? `Save ₹${savings.toLocaleString('en-IN')}` : '';
+    }
+
+    if (Number(plan.discount_percent || 0) > 0) {
+      return `Save ${Number(plan.discount_percent)}%`;
+    }
+
+    return '';
+  }
+
 
   formatMessageWithLocalDate(message: string): string {
 
@@ -642,14 +590,12 @@ export class SubcriptionPageComponent {
     const normalizedType = (plan?.plan_type || '').toUpperCase();
 
     switch (normalizedType) {
-      case 'FREE':
-        return 'free';
       case 'PRO':
         return 'pro';
       case 'BUSINESS':
         return 'business';
       default:
-        return 'creative';
+        return 'pro';
     }
   }
 

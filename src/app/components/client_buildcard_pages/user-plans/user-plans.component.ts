@@ -46,7 +46,7 @@ interface CreditTransactionItem {
   subtitle: string;
   delta: number;
   time: string;
-  icon: 'bolt' | 'comment' | 'plus' | 'edit' | 'wallet';
+  icon: 'bolt' | 'comment' | 'plus' | 'edit' | 'wallet' | 'download';
   iconClass: 'positive' | 'negative';
   balanceAfter: number;
 }
@@ -367,6 +367,10 @@ export class UserPlansComponent {
 
     if (sourceKey.includes('edit') || title === 'Asset Edit') {
       return 'edit';
+    }
+
+    if (sourceKey.includes('download') || title === 'Download Project') {
+      return 'download';
     }
 
     if (sourceKey.includes('project') || title === 'Project Generation') {

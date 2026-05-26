@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
+import { ProjectGenerationTabStateService } from '../../../services/project-generation-tab-state.service';
 import { SubscriptionModalService } from '../../../services/subscription-modal.service';
 import { SubcriptionService } from '../../../services/subcription.service';
 import { CommonModule } from '@angular/common';
@@ -15,7 +16,7 @@ interface UserProjectTab {
   project_deployed?: number;
   createdAt?: string;
   is_header_available?: number;
-  isPending?: boolean;
+  isGenerating?: boolean;
 }
 
 interface UserProfileSummary {
@@ -23,12 +24,6 @@ interface UserProfileSummary {
   name?: string;
   companyName?: string | null;
   profile_image?: string | null;
-}
-
-interface PendingWorkspaceProjectTab {
-  inquiryId: string;
-  projectId?: string;
-  projectName: string;
 }
 
 @Component({
@@ -39,15 +34,19 @@ interface PendingWorkspaceProjectTab {
   styleUrl: './workspace-header.component.css'
 })
 export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
-  private readonly pendingWorkspaceTabStorageKey = 'pendingWorkspaceProjectTab';
   @Input() fullScreen = false;
   @Input() selectedDeviceType = '<i class="fa-solid fa-display"></i>';
   @Input() showPreviewControls = false;
   @Input() showPrimaryHeaderAction = false;
-  @Input() primaryHeaderActionLabel = 'Deploy to Production';
+  @Input() primaryHeaderActionLabel = 'Deploy';
+  @Input() primaryHeaderActionIconClass = 'fa-solid fa-rocket';
+  @Input() showSecondaryHeaderAction = false;
+  @Input() secondaryHeaderActionLabel = 'Code';
+  @Input() secondaryHeaderActionIconClass = 'fa-solid fa-download';
   @Output() fullScreenToggle = new EventEmitter<void>();
   @Output() deviceTypeChange = new EventEmitter<'desktop' | 'tablet' | 'mobile'>();
   @Output() primaryHeaderActionClick = new EventEmitter<void>();
+  @Output() secondaryHeaderActionClick = new EventEmitter<void>();
   allProjectsList: UserProjectTab[] = [];
   selectedProjectId = '';
   profileImage = '';
@@ -56,6 +55,8 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   companyName = "Creative's Project";
   isProfileMenuOpen = false;
   private routeSubscription?: Subscription;
+  private generationTabsSubscription?: Subscription;
+  private backendProjectsList: UserProjectTab[] = [];
   @ViewChild('profileMenu') profileMenu?: ElementRef<HTMLDivElement>;
   @ViewChild('tabsScroller') tabsScroller?: ElementRef<HTMLDivElement>;
   subsCriptionData: any;
@@ -63,6 +64,7 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   canScrollTabsRight = false;
   constructor(
     private apiService: ApiService,
+    private projectGenerationTabState: ProjectGenerationTabStateService,
     private router: Router,
     private subscriptionModalService: SubscriptionModalService,
     private subscriptionService: SubcriptionService,
@@ -76,17 +78,22 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
     this.getUserProfile();
     this.getProjects();
     this.syncSelectedProjectFromRoute();
+    this.generationTabsSubscription = this.projectGenerationTabState.state$.subscribe(() => {
+      this.rebuildProjectsList();
+      this.queueTabOverflowCheck();
+      this.queueActiveTabIntoView();
+    });
     this.routeSubscription = this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe(() => {
         this.syncSelectedProjectFromRoute();
-        this.syncPendingWorkspaceTab();
         this.queueTabOverflowCheck();
       });
   }
 
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
+    this.generationTabsSubscription?.unsubscribe();
   }
 
   get profileImageUrl(): string {
@@ -101,8 +108,8 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
     this.apiService.getApi<any>('api/user/fetchClientAllProjects').subscribe(
       (res) => {
         if (res.success) {
-          this.allProjectsList = (res.data || []).filter((project: UserProjectTab) => project.is_header_available === 1);
-          this.syncPendingWorkspaceTab();
+          this.backendProjectsList = (res.data || []).filter((project: UserProjectTab) => project.is_header_available === 1);
+          this.rebuildProjectsList();
           this.syncSelectedProjectFromRoute();
           this.queueTabOverflowCheck();
           this.queueActiveTabIntoView();
@@ -117,58 +124,24 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
       this.route.snapshot.queryParamMap.get('publicEnquiryId') || '';
 
     this.selectedProjectId = inquiryId;
+    this.projectGenerationTabState.setActiveInquiryId(inquiryId || null);
     this.queueActiveTabIntoView();
   }
 
-  private syncPendingWorkspaceTab(): void {
-    const pendingTab = this.getPendingWorkspaceTab();
-    if (!pendingTab?.inquiryId) {
-      return;
-    }
-
-    const existingSavedProject = this.allProjectsList.find(
-      (project) => project.inquiryId === pendingTab.inquiryId && !project.isPending
-    );
-    if (existingSavedProject) {
-      this.clearPendingWorkspaceTab();
-      return;
-    }
-
-    const existingPendingProject = this.allProjectsList.find(
-      (project) => project.inquiryId === pendingTab.inquiryId && project.isPending
-    );
-    if (existingPendingProject) {
-      return;
-    }
-
-    this.allProjectsList = [
-      {
-        inquiryId: pendingTab.inquiryId,
-        projectId: Number(pendingTab.projectId || 0),
-        projectName: pendingTab.projectName || 'New Project',
+  private rebuildProjectsList(): void {
+    const backendInquiryIds = new Set(this.backendProjectsList.map((project) => project.inquiryId));
+    const generatedProjects = this.projectGenerationTabState
+      .getAllTabs()
+      .filter((tab) => !backendInquiryIds.has(tab.inquiryId))
+      .map((tab) => ({
+        inquiryId: tab.inquiryId,
+        projectId: Number(tab.projectId || 0),
+        projectName: tab.projectName || 'New Project',
         is_header_available: 1,
-        isPending: true
-      },
-      ...this.allProjectsList
-    ];
-  }
+        isGenerating: true
+      }));
 
-  private getPendingWorkspaceTab(): PendingWorkspaceProjectTab | null {
-    const rawPendingTab = sessionStorage.getItem(this.pendingWorkspaceTabStorageKey);
-    if (!rawPendingTab) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(rawPendingTab) as PendingWorkspaceProjectTab;
-    } catch {
-      this.clearPendingWorkspaceTab();
-      return null;
-    }
-  }
-
-  private clearPendingWorkspaceTab(): void {
-    sessionStorage.removeItem(this.pendingWorkspaceTabStorageKey);
+    this.allProjectsList = [...generatedProjects, ...this.backendProjectsList];
   }
 
   private loadUserSummary(): void {
@@ -206,13 +179,21 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   }
   selectProjectTab(project: UserProjectTab): void {
     this.selectedProjectId = project.inquiryId;
-    sessionStorage.setItem('projectData', JSON.stringify({ projectName: project.projectName, clientEnquryId: project.inquiryId }));
+    this.projectGenerationTabState.setActiveInquiryId(project.inquiryId);
+    const generatedProjectState = this.projectGenerationTabState.getTabState(project.inquiryId);
+    const projectData = generatedProjectState?.projectData || {
+      projectName: project.projectName,
+      projectId: project.projectId,
+      clientEnquryId: project.inquiryId
+    };
+    sessionStorage.setItem('projectData', JSON.stringify(projectData));
     this.apiService.deleteConversationID();
     this.router.navigate(['/code-generator', project.inquiryId]);
     this.queueTabOverflowCheck();
     this.queueActiveTabIntoView();
   }
   LogOut() {
+    this.projectGenerationTabState.clearAll();
     localStorage.clear()
     sessionStorage.clear()
     this.router.navigate(['/'])
@@ -220,6 +201,7 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
 
   openNewTab(): void {
     this.apiService.resetWorkspaceChatState();
+    this.projectGenerationTabState.setActiveInquiryId(null);
     this.selectedProjectId = '';
     this.router.navigate(['/main']);
   }
@@ -258,7 +240,17 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
     this.primaryHeaderActionClick.emit();
   }
 
+  handleSecondaryHeaderActionClick(): void {
+    this.secondaryHeaderActionClick.emit();
+  }
+
   removeProjectFromTab(projectId: string): void {
+    const isGeneratedOnlyTab = !this.backendProjectsList.some((project) => project.inquiryId === projectId);
+    if (isGeneratedOnlyTab) {
+      this.handleRemovedLocalOnlyTab(projectId);
+      return;
+    }
+
     this.apiService.postAPI('api/user/projectRemovedHeader', { inquiryId: projectId }).subscribe((res: any) => {
       if (res.success) {
         const currentIndex = this.allProjectsList.findIndex((project) => project.inquiryId === projectId);
@@ -272,11 +264,9 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
           this.allProjectsList[currentIndex - 1] ||
           null;
 
+        this.backendProjectsList = this.backendProjectsList.filter((project) => project.inquiryId !== projectId);
         this.allProjectsList = this.allProjectsList.filter((project) => project.inquiryId !== projectId);
-
-        if (this.getPendingWorkspaceTab()?.inquiryId === projectId) {
-          this.clearPendingWorkspaceTab();
-        }
+        this.projectGenerationTabState.clearTab(projectId);
 
         if (!isClosingActiveTab) {
           return;
@@ -294,6 +284,38 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
         this.queueTabOverflowCheck();
       }
     });
+  }
+
+  private handleRemovedLocalOnlyTab(projectId: string): void {
+    const currentIndex = this.allProjectsList.findIndex((project) => project.inquiryId === projectId);
+    if (currentIndex === -1) {
+      return;
+    }
+
+    const isClosingActiveTab = this.selectedProjectId === projectId;
+    const nextActiveProject =
+      this.allProjectsList[currentIndex + 1] ||
+      this.allProjectsList[currentIndex - 1] ||
+      null;
+
+    this.projectGenerationTabState.clearTab(projectId);
+
+    if (!isClosingActiveTab) {
+      return;
+    }
+
+    if (nextActiveProject?.inquiryId) {
+      this.selectedProjectId = nextActiveProject.inquiryId;
+      this.projectGenerationTabState.setActiveInquiryId(nextActiveProject.inquiryId);
+      this.router.navigate(['/code-generator', nextActiveProject.inquiryId]);
+      this.queueActiveTabIntoView();
+      return;
+    }
+
+    this.selectedProjectId = '';
+    this.projectGenerationTabState.setActiveInquiryId(null);
+    this.router.navigate(['/main']);
+    this.queueTabOverflowCheck();
   }
 
   scrollTabs(direction: 'left' | 'right'): void {

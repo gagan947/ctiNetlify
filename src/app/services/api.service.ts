@@ -7,7 +7,7 @@ import { Subject, Observable, BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  // apiUrl = 'http://192.168.1.27:4500/'
+  // apiUrl = 'http://192.168.1.10:4500/'
   // imageUrl = 'http://192.168.29.241:4500/'
   // apiUrl = 'http://192.168.1.40:4500/';
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
@@ -108,6 +108,9 @@ export class ApiService {
     return this.http.post<T>(this.apiUrl + url, data)
   };
 
+  getBlob(url: string, payload: any): Observable<Blob> {
+    return this.http.post<Blob>(this.apiUrl + url, payload, { responseType: 'blob' as 'json' });
+  };
 
   setToken(token: string) {
     localStorage.setItem('tokenCTi', token);
@@ -165,7 +168,6 @@ export class ApiService {
     sessionStorage.removeItem('conversationId');
     sessionStorage.removeItem('publicEnquiryId');
     sessionStorage.removeItem('projectData');
-    sessionStorage.removeItem('pendingWorkspaceProjectTab');
     this.triggerClearInput();
     this.triggerNewChat();
   }
