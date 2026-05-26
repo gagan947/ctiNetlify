@@ -13,6 +13,7 @@ import { ReactCodeEditorComponent } from '../react-code-editor/react-code-editor
 import { AiDevRendererComponent } from '../ai-dev-renderer/ai-dev-renderer.component';
 import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
 import { SubcriptionService } from '../../../../services/subcription.service';
+import { SpeechService } from '../../../../services/speech.service';
 import { WorkspaceHeaderComponent } from "../../workspace-header/workspace-header.component";
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { io } from 'socket.io-client';
@@ -180,6 +181,10 @@ export class ReactBuildPreviewComponent {
   isCallbackSubmitting = false;
   isRetryBuildGenerationSubmitting = false;
   userInfo: any = {};
+  voiceDraftText = '';
+  isVoiceDraftActive = false;
+  isVoiceUiVisible = false;
+  isVoiceStarting = false;
   private shouldDeferPreviewApply = false;
   private hasInitialFlowCompleted = false;
   private pendingPreviewResponse: { res: any; socketId: string | null } | null = null;
@@ -195,6 +200,7 @@ export class ReactBuildPreviewComponent {
   private isContinueProjectGenerationRequestInFlight = false;
   private routeChangeVersion = 0;
   private socketInquiryId = '';
+  private activeVoiceSessionId = 0;
   today = new Date();
   // Redirect page for login action
   constructor(
@@ -205,6 +211,7 @@ export class ReactBuildPreviewComponent {
     private router: Router,
     private toster: NzMessageService,
     public subscriptionModalService: SubscriptionModalService,
+    public speechService: SpeechService,
     private subscriptionService: SubcriptionService,
     private route: ActivatedRoute
   ) {
@@ -1325,6 +1332,7 @@ export class ReactBuildPreviewComponent {
   }
 
   ngOnDestroy() {
+    this.cancelVoiceDraft();
     this.blocks = [];
     this.clearContinueProjectGenerationInterval();
     this.clearGenerateProjectFailureTimer();
@@ -1451,6 +1459,85 @@ export class ReactBuildPreviewComponent {
 
   isMobileView(): boolean {
     return typeof window !== 'undefined' && window.innerWidth <= this.mobileBreakpoint;
+  }
+
+  startVoiceTyping(): void {
+    if (this.isVoiceStarting || this.isReactBuilding) {
+      return;
+    }
+
+    if (this.speechService.isListening) {
+      this.cancelVoiceDraft();
+      return;
+    }
+
+    const sessionId = ++this.activeVoiceSessionId;
+
+    this.voiceDraftText = '';
+    this.isVoiceDraftActive = true;
+    this.isVoiceUiVisible = true;
+    this.isVoiceStarting = true;
+
+    const didStart = this.speechService.start({
+      onText: (text: string) => {
+        if (!this.isVoiceDraftActive || sessionId !== this.activeVoiceSessionId) {
+          return;
+        }
+
+        this.voiceDraftText = text;
+        this.syncVoiceDraftToTextarea(text);
+      },
+      onListeningChange: (isListening: boolean) => {
+        if (!this.isVoiceDraftActive || sessionId !== this.activeVoiceSessionId) {
+          return;
+        }
+
+        this.isVoiceStarting = false;
+
+        if (isListening) {
+          this.isVoiceUiVisible = true;
+          return;
+        }
+
+        if (!this.voiceDraftText.trim()) {
+          this.isVoiceDraftActive = false;
+          this.isVoiceUiVisible = false;
+        }
+      },
+      onError: () => {
+        if (sessionId !== this.activeVoiceSessionId) {
+          return;
+        }
+
+        this.isVoiceDraftActive = false;
+        this.isVoiceUiVisible = false;
+        this.isVoiceStarting = false;
+        this.voiceDraftText = '';
+        this.syncVoiceDraftToTextarea('');
+      }
+    });
+
+    if (!didStart && sessionId === this.activeVoiceSessionId) {
+      this.isVoiceDraftActive = false;
+      this.isVoiceUiVisible = false;
+      this.isVoiceStarting = false;
+      this.voiceDraftText = '';
+      this.syncVoiceDraftToTextarea('');
+    }
+  }
+
+  cancelVoiceDraft(): void {
+    this.isVoiceDraftActive = false;
+    this.isVoiceUiVisible = false;
+    this.isVoiceStarting = false;
+    this.activeVoiceSessionId += 1;
+
+    if (this.speechService.isListening) {
+      this.speechService.stop();
+    }
+
+    this.voiceDraftText = '';
+    this.focusCustomizeInput();
   }
 
   showChatSection() {
@@ -1797,11 +1884,32 @@ export class ReactBuildPreviewComponent {
     }
   }
 
+  private syncVoiceDraftToTextarea(text: string): void {
+    if (!this.customizeInput?.nativeElement) {
+      return;
+    }
+
+    this.customizeInput.nativeElement.value = text;
+  }
+
+  private focusCustomizeInput(): void {
+    setTimeout(() => this.customizeInput?.nativeElement.focus(), 0);
+  }
+
   async handlePromptSubmitted(event: Event | { blockId: string; value: string }) {
     const promptEvent = event as { blockId?: string; value?: string };
     const prompt = promptEvent?.value?.trim();
 
     if (!prompt) return;
+
+    if (this.speechService.isListening) {
+      this.speechService.stop();
+    }
+
+    this.isVoiceDraftActive = false;
+    this.isVoiceUiVisible = false;
+    this.isVoiceStarting = false;
+    this.voiceDraftText = '';
 
     if (this.getCurrentCreditBalance() < 5) {
       this.appendCreditLimitPrompt();
