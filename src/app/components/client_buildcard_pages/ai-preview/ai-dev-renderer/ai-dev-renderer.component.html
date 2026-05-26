@@ -119,15 +119,18 @@ password input field with proper styling.</p>
     </div>
   </div>
 
-  <div *ngIf="block?.type === 'summary' && !isLoading" class="card-dark pe-3">
-    <div class="top-line">
-      <span>Worked for {{ block?.data?.time }}</span>
+  <div *ngIf="block?.type === 'summary' && !isLoading" class="card-dark pe-3"
+    [class.card-dark--ai]="block?.data?.meta || block?.data?.title">
+    <div class="top-line" *ngIf="block?.data?.time || block?.data?.meta">
+      <span>{{ block?.data?.meta || ('Worked for ' + block?.data?.time) }}</span>
     </div>
+
+    <div *ngIf="block?.data?.title" class="card-dark__title">{{ block?.data?.title }}</div>
 
     <p>{{ block?.data?.description }}</p>
 
     <p *ngIf="(block?.data?.highlights?.length || 0) > 0">
-      Key updates include improvements in
+      {{ block?.data?.highlightsLabel || 'Key updates include' }}
       <span *ngFor="let item of block?.data?.highlights; let last = last" class="highlight">
         {{ item }}<span *ngIf="!last">, </span>
       </span>.

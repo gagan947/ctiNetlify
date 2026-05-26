@@ -1683,14 +1683,14 @@ export class ReactBuildPreviewComponent {
   async showDraftWelcomeMessages(streamMessages = true) {
 
     const now = new Date();
-    const introMessage = `I found previously generated templates for this project, and I'm restoring them into the workspace so you can continue review without starting over.`;
-    const closingMessage = `Your saved variations are now ready. You can review each template, request a fresh variation, customize the current direction, or move ahead when you're ready to deploy.`;
+    const introMessage = `I found saved design directions for this project, and I'm bringing them back into your workspace so you can pick up exactly where you left off.`;
+    const closingMessage = `Everything is back in place now. You can review each saved direction, request a new variation, refine the current one with AI, or move ahead when you're ready to deploy.`;
     const restoredWorkspaceBlock = {
       type: 'file',
       data: {
-        title: 'Restored workspace',
-        file: 'workspace session',
-        summary: 'Recovered saved template variations, restored the active preview, and prepared the workspace state.'
+        title: 'AI workspace restored',
+        file: 'saved creative session',
+        summary: 'Recovered your saved variations, reopened the active preview, and rebuilt the workspace context for continued review.'
       }
     };
 
@@ -1711,21 +1711,21 @@ export class ReactBuildPreviewComponent {
         {
           type: 'terminal',
           data: {
-            lines: ['Fetching saved templates'],
+            lines: ['Scanning saved design history'],
             done: true
           }
         },
         {
           type: 'terminal',
           data: {
-            lines: ['Loading draft previews'],
+            lines: ['Rehydrating saved preview directions'],
             done: true
           }
         },
         {
           type: 'terminal',
           data: {
-            lines: ['Restoring template tabs in the workspace'],
+            lines: ['Rebuilding your AI workspace view'],
             done: true
           }
         },
@@ -1739,9 +1739,10 @@ export class ReactBuildPreviewComponent {
         {
           type: 'summary',
           data: {
-            time: '24s',
-            description: 'Restored your saved template workspace and reloaded the available preview variations.',
-            highlights: ['Saved template restore', 'Draft previews loaded', 'Workspace ready']
+            meta: 'Restore completed',
+            title: 'Your saved workspace is ready to explore again.',
+            description: 'I reconnected the available preview directions, restored the active view, and prepared the session so you can continue iterating without starting over.',
+            highlights: ['Saved directions reloaded', 'Preview set restored', 'Workspace ready for AI edits']
           }
         }
       ];
@@ -1757,17 +1758,17 @@ export class ReactBuildPreviewComponent {
     );
 
     await this.addTerminal([
-      'Fetching saved templates'
+      'Scanning saved design history'
     ], 1300, 1500);
 
     this.setBuildStep(2);
     await this.addTerminal([
-      'Loading draft previews'
+      'Rehydrating saved preview directions'
     ], 1300, 1500);
 
     this.setBuildStep(3);
     await this.addTerminal([
-      'Restoring template tabs in the workspace'
+      'Rebuilding your AI workspace view'
     ], 1300, 1600);
 
     this.blocks.push(restoredWorkspaceBlock);
@@ -1780,9 +1781,10 @@ export class ReactBuildPreviewComponent {
     );
 
     await this.addSummary({
-      time: '24s',
-      description: 'Restored your saved template workspace and reloaded the available preview variations.',
-      highlights: ['Saved template restore', 'Draft previews loaded', 'Workspace ready']
+      meta: 'Restore completed',
+      title: 'Your saved workspace is ready to explore again.',
+      description: 'I reconnected the available preview directions, restored the active view, and prepared the session so you can continue iterating without starting over.',
+      highlights: ['Saved directions reloaded', 'Preview set restored', 'Workspace ready for AI edits']
     });
 
     this.appendBuildActionPrompt();
