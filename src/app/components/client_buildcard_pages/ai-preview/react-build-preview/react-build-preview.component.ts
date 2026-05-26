@@ -13,6 +13,7 @@ import { ReactCodeEditorComponent } from '../react-code-editor/react-code-editor
 import { AiDevRendererComponent } from '../ai-dev-renderer/ai-dev-renderer.component';
 import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
 import { SubcriptionService } from '../../../../services/subcription.service';
+import { SpeechService } from '../../../../services/speech.service';
 import { WorkspaceHeaderComponent } from "../../workspace-header/workspace-header.component";
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { io } from 'socket.io-client';
@@ -54,6 +55,13 @@ interface BuildProgressStep {
 interface CallbackPhoneNumber {
   number?: string;
   dialCode?: string;
+}
+
+interface CustomizationHistoryEntry {
+  id: number;
+  prompt: string;
+  build_status: number;
+  created_at: string;
 }
 
 export function noWhitespaceValidator(control: AbstractControl): ValidationErrors | null {
@@ -180,6 +188,10 @@ export class ReactBuildPreviewComponent {
   isCallbackSubmitting = false;
   isRetryBuildGenerationSubmitting = false;
   userInfo: any = {};
+  voiceDraftText = '';
+  isVoiceDraftActive = false;
+  isVoiceUiVisible = false;
+  isVoiceStarting = false;
   private shouldDeferPreviewApply = false;
   private hasInitialFlowCompleted = false;
   private pendingPreviewResponse: { res: any; socketId: string | null } | null = null;
@@ -195,6 +207,7 @@ export class ReactBuildPreviewComponent {
   private isContinueProjectGenerationRequestInFlight = false;
   private routeChangeVersion = 0;
   private socketInquiryId = '';
+  private activeVoiceSessionId = 0;
   today = new Date();
   // Redirect page for login action
   constructor(
@@ -205,6 +218,7 @@ export class ReactBuildPreviewComponent {
     private router: Router,
     private toster: NzMessageService,
     public subscriptionModalService: SubscriptionModalService,
+    public speechService: SpeechService,
     private subscriptionService: SubcriptionService,
     private route: ActivatedRoute
   ) {
@@ -258,6 +272,11 @@ export class ReactBuildPreviewComponent {
     const existingTemplate = templates.find((template: any) => template.inquiryId === inquiryId);
     if (existingTemplate) {
       await this.showDraftWelcomeMessages(false);
+      if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
+        return;
+      }
+
+      await this.appendCustomizationHistory(inquiryId, routeChangeVersion);
       if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
         return;
       }
@@ -543,11 +562,7 @@ export class ReactBuildPreviewComponent {
             if (!shouldApplyUi) {
               return;
             }
-            let repairPayload = {
-              templatePublicId: error.error.data.templatePublicId,
-              inquiryPublicId: this.projectsData.clientEnquryId,
-              error_message: error.error.message,
-            }
+            const repairPayload = this.buildRepairPayload(error);
             this.currentTemplateId = error.error.data.templatePublicId;
             void this.attemptBuildRepair(repairPayload, error);
             return;
@@ -596,6 +611,17 @@ export class ReactBuildPreviewComponent {
     };
   }
 
+  private buildRepairPayload(error: any, fallbackTemplatePublicId?: string) {
+    const buildStage = error?.error?.data?.buildStage ?? null;
+    return {
+      templatePublicId: error?.error?.data?.templatePublicId || fallbackTemplatePublicId,
+      inquiryPublicId: this.projectsData.clientEnquryId,
+      errorsMessage: error?.error?.data?.errorsMessage ?? error?.error?.message,
+      buildStage,
+      isPreBuild: buildStage === 'system_scan',
+    };
+  }
+
   private async attemptBuildRepair(payload: any, buildFailureSource?: any, attemptNumber = 1) {
     this.setBuildGenerationError(buildFailureSource);
     if (this.selectedProjectId) {
@@ -640,7 +666,9 @@ export class ReactBuildPreviewComponent {
           console.log('Build repair attempt failed:', error);
           if (error.error.status === 422 && error.error.data.canRepairBuild) {
             if (attemptNumber < this.maxBuildRepairAttempts) {
-              payload.error_message = error.error.message;
+              payload.errorsMessage = error?.error?.data?.errorsMessage ?? error?.error?.message;
+              payload.buildStage = error?.error?.data?.buildStage ?? null;
+              payload.isPreBuild = payload.buildStage === 'system_scan';
               void this.attemptBuildRepair(payload, error, attemptNumber + 1);
               return;
             }
@@ -1325,6 +1353,7 @@ export class ReactBuildPreviewComponent {
   }
 
   ngOnDestroy() {
+    this.cancelVoiceDraft();
     this.blocks = [];
     this.clearContinueProjectGenerationInterval();
     this.clearGenerateProjectFailureTimer();
@@ -1451,6 +1480,85 @@ export class ReactBuildPreviewComponent {
 
   isMobileView(): boolean {
     return typeof window !== 'undefined' && window.innerWidth <= this.mobileBreakpoint;
+  }
+
+  startVoiceTyping(): void {
+    if (this.isVoiceStarting || this.isReactBuilding) {
+      return;
+    }
+
+    if (this.speechService.isListening) {
+      this.cancelVoiceDraft();
+      return;
+    }
+
+    const sessionId = ++this.activeVoiceSessionId;
+
+    this.voiceDraftText = '';
+    this.isVoiceDraftActive = true;
+    this.isVoiceUiVisible = true;
+    this.isVoiceStarting = true;
+
+    const didStart = this.speechService.start({
+      onText: (text: string) => {
+        if (!this.isVoiceDraftActive || sessionId !== this.activeVoiceSessionId) {
+          return;
+        }
+
+        this.voiceDraftText = text;
+        this.syncVoiceDraftToTextarea(text);
+      },
+      onListeningChange: (isListening: boolean) => {
+        if (!this.isVoiceDraftActive || sessionId !== this.activeVoiceSessionId) {
+          return;
+        }
+
+        this.isVoiceStarting = false;
+
+        if (isListening) {
+          this.isVoiceUiVisible = true;
+          return;
+        }
+
+        if (!this.voiceDraftText.trim()) {
+          this.isVoiceDraftActive = false;
+          this.isVoiceUiVisible = false;
+        }
+      },
+      onError: () => {
+        if (sessionId !== this.activeVoiceSessionId) {
+          return;
+        }
+
+        this.isVoiceDraftActive = false;
+        this.isVoiceUiVisible = false;
+        this.isVoiceStarting = false;
+        this.voiceDraftText = '';
+        this.syncVoiceDraftToTextarea('');
+      }
+    });
+
+    if (!didStart && sessionId === this.activeVoiceSessionId) {
+      this.isVoiceDraftActive = false;
+      this.isVoiceUiVisible = false;
+      this.isVoiceStarting = false;
+      this.voiceDraftText = '';
+      this.syncVoiceDraftToTextarea('');
+    }
+  }
+
+  cancelVoiceDraft(): void {
+    this.isVoiceDraftActive = false;
+    this.isVoiceUiVisible = false;
+    this.isVoiceStarting = false;
+    this.activeVoiceSessionId += 1;
+
+    if (this.speechService.isListening) {
+      this.speechService.stop();
+    }
+
+    this.voiceDraftText = '';
+    this.focusCustomizeInput();
   }
 
   showChatSection() {
@@ -1593,17 +1701,95 @@ export class ReactBuildPreviewComponent {
     this.isTyping = false;
   }
 
+  private async appendCustomizationHistory(inquiryPublicId: string, routeChangeVersion: number): Promise<void> {
+    const history = await this.fetchCustomizationHistory(inquiryPublicId);
+
+    if (!this.isCurrentRouteChange(routeChangeVersion, inquiryPublicId) || !history.length) {
+      return;
+    }
+
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
+
+    for (const item of history) {
+      this.blocks.push({
+        id: `user-message-history-${item.id}`,
+        text: item.prompt,
+        done: true,
+        timestamp: new Date(item.created_at)
+      });
+
+      this.blocks.push({
+        id: `paragraph-history-phase-${item.id}`,
+        text: 'Applying your requested changes to the current template.',
+        done: true,
+        timestamp: new Date(item.created_at),
+        variant: 'phase'
+      });
+
+      this.blocks.push({
+        id: `paragraph-history-support-${item.id}`,
+        text: `Customization request: ${item.prompt.length > 140 ? `${item.prompt.slice(0, 137)}...` : item.prompt}`,
+        done: true,
+        timestamp: new Date(item.created_at),
+        variant: 'support'
+      });
+
+      if (item.build_status === 0) {
+        this.blocks.push({
+          type: 'summary',
+          data: {
+            time: 'Updated',
+            description: 'Your requested customization has been applied and the refreshed preview is now loading.',
+            highlights: [
+              'Prompt reviewed',
+              'Template updated',
+              'Fresh preview generated'
+            ]
+          }
+        });
+      }
+    }
+
+    this.appendBuildActionPrompt();
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private async fetchCustomizationHistory(inquiryPublicId: string): Promise<CustomizationHistoryEntry[]> {
+    if (!inquiryPublicId) {
+      return [];
+    }
+
+    try {
+      const response = await firstValueFrom(
+        this.apiService.getApi<any>(
+          `api/ai/customization/history?inquiryPublicId=${encodeURIComponent(inquiryPublicId)}`
+        )
+      );
+
+      const history = Array.isArray(response?.data?.history) ? response.data.history : [];
+
+      return history
+        .filter((item: CustomizationHistoryEntry) => typeof item?.prompt === 'string' && item.prompt.trim().length > 0)
+        .sort((a: CustomizationHistoryEntry, b: CustomizationHistoryEntry) =>
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+    } catch (error) {
+      console.error('Failed to fetch customization history', error);
+      return [];
+    }
+  }
+
   async showDraftWelcomeMessages(streamMessages = true) {
 
     const now = new Date();
-    const introMessage = `I found previously generated templates for this project, and I'm restoring them into the workspace so you can continue review without starting over.`;
-    const closingMessage = `Your saved variations are now ready. You can review each template, request a fresh variation, customize the current direction, or move ahead when you're ready to deploy.`;
+    const introMessage = `I found saved design directions for this project, and I'm bringing them back into your workspace so you can pick up exactly where you left off.`;
+    const closingMessage = `Everything is back in place now. You can review each saved direction, request a new variation, refine the current one with AI, or move ahead when you're ready to deploy.`;
     const restoredWorkspaceBlock = {
       type: 'file',
       data: {
-        title: 'Restored workspace',
-        file: 'workspace session',
-        summary: 'Recovered saved template variations, restored the active preview, and prepared the workspace state.'
+        title: 'AI workspace restored',
+        file: 'saved creative session',
+        summary: 'Recovered your saved variations, reopened the active preview, and rebuilt the workspace context for continued review.'
       }
     };
 
@@ -1624,21 +1810,21 @@ export class ReactBuildPreviewComponent {
         {
           type: 'terminal',
           data: {
-            lines: ['Fetching saved templates'],
+            lines: ['Scanning saved design history'],
             done: true
           }
         },
         {
           type: 'terminal',
           data: {
-            lines: ['Loading draft previews'],
+            lines: ['Rehydrating saved preview directions'],
             done: true
           }
         },
         {
           type: 'terminal',
           data: {
-            lines: ['Restoring template tabs in the workspace'],
+            lines: ['Rebuilding your AI workspace view'],
             done: true
           }
         },
@@ -1652,9 +1838,10 @@ export class ReactBuildPreviewComponent {
         {
           type: 'summary',
           data: {
-            time: '24s',
-            description: 'Restored your saved template workspace and reloaded the available preview variations.',
-            highlights: ['Saved template restore', 'Draft previews loaded', 'Workspace ready']
+            meta: 'Restore completed',
+            title: 'Your saved workspace is ready to explore again.',
+            description: 'I reconnected the available preview directions, restored the active view, and prepared the session so you can continue iterating without starting over.',
+            highlights: ['Saved directions reloaded', 'Preview set restored', 'Workspace ready for AI edits']
           }
         }
       ];
@@ -1670,17 +1857,17 @@ export class ReactBuildPreviewComponent {
     );
 
     await this.addTerminal([
-      'Fetching saved templates'
+      'Scanning saved design history'
     ], 1300, 1500);
 
     this.setBuildStep(2);
     await this.addTerminal([
-      'Loading draft previews'
+      'Rehydrating saved preview directions'
     ], 1300, 1500);
 
     this.setBuildStep(3);
     await this.addTerminal([
-      'Restoring template tabs in the workspace'
+      'Rebuilding your AI workspace view'
     ], 1300, 1600);
 
     this.blocks.push(restoredWorkspaceBlock);
@@ -1693,9 +1880,10 @@ export class ReactBuildPreviewComponent {
     );
 
     await this.addSummary({
-      time: '24s',
-      description: 'Restored your saved template workspace and reloaded the available preview variations.',
-      highlights: ['Saved template restore', 'Draft previews loaded', 'Workspace ready']
+      meta: 'Restore completed',
+      title: 'Your saved workspace is ready to explore again.',
+      description: 'I reconnected the available preview directions, restored the active view, and prepared the session so you can continue iterating without starting over.',
+      highlights: ['Saved directions reloaded', 'Preview set restored', 'Workspace ready for AI edits']
     });
 
     this.appendBuildActionPrompt();
@@ -1797,11 +1985,32 @@ export class ReactBuildPreviewComponent {
     }
   }
 
+  private syncVoiceDraftToTextarea(text: string): void {
+    if (!this.customizeInput?.nativeElement) {
+      return;
+    }
+
+    this.customizeInput.nativeElement.value = text;
+  }
+
+  private focusCustomizeInput(): void {
+    setTimeout(() => this.customizeInput?.nativeElement.focus(), 0);
+  }
+
   async handlePromptSubmitted(event: Event | { blockId: string; value: string }) {
     const promptEvent = event as { blockId?: string; value?: string };
     const prompt = promptEvent?.value?.trim();
 
     if (!prompt) return;
+
+    if (this.speechService.isListening) {
+      this.speechService.stop();
+    }
+
+    this.isVoiceDraftActive = false;
+    this.isVoiceUiVisible = false;
+    this.isVoiceStarting = false;
+    this.voiceDraftText = '';
 
     if (this.getCurrentCreditBalance() < 5) {
       this.appendCreditLimitPrompt();
@@ -1865,11 +2074,7 @@ export class ReactBuildPreviewComponent {
       error: (error: any) => {
         if (error?.error?.status === 422 && error?.error?.data?.canRepairBuild) {
           this.customizationRequestVersion++;
-          const repairPayload = {
-            templatePublicId: error.error.data.templatePublicId || templatePublicId,
-            inquiryPublicId: this.projectsData.clientEnquryId,
-            error_message: error.error.message,
-          };
+          const repairPayload = this.buildRepairPayload(error, templatePublicId);
           void this.attemptBuildRepair(repairPayload, error);
           return;
         }

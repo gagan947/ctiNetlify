@@ -6,11 +6,11 @@
         <p>Pick a plan that best suits you. Upgrade or downgrade at any time.</p>
 
         <div class="ct_pricing_toggle my-4">
-            <button type="button" [class.active]="billingCycle() === 'MONTH'"
-              (click)="setBillingCycle('MONTH')">Monthly</button>
-            <button type="button" [class.active]="billingCycle() === 'YEAR'"
-              (click)="setBillingCycle('YEAR')">Annually <span class="ct_green_text ct_fw_600"> • Save 17%</span></button>
-          </div>
+          <button type="button" [class.active]="billingCycle() === 'MONTH'"
+            (click)="setBillingCycle('MONTH')">Monthly</button>
+          <button type="button" [class.active]="billingCycle() === 'YEAR'" (click)="setBillingCycle('YEAR')">Annually
+            <span class="ct_green_text ct_fw_600"> • Save 17%</span></button>
+        </div>
 
         <span class="ct_promo_caption mb-4">HAVE A PROMO CODE?</span>
 
@@ -39,8 +39,8 @@
               }}</span>
             <div class="ct_price_row">
               <span class="ct_price_value">₹{{ getCurrentPriceValue(plan) }}</span>
-              <span class="ct_price_suffix">/ month</span>
-              <span class="ct_price_save" *ngIf="getSaveText(plan)">{{ getSaveText(plan) }}</span>
+              <span class="ct_price_suffix">/ {{ getBillingUnit(plan) }}</span>
+              <span class="ct_price_save" *ngIf="getDiscountText(plan)">{{ getDiscountText(plan) }}</span>
             </div>
           </div>
 
@@ -49,23 +49,23 @@
             *ngIf="getCardTheme(plan) === 'standard'; else enterpriseCredits">
             <button type="button" class="ct_starter_plan" [class.ct_starter_plan_disabled]="proPlans.length <= 1"
               (click)="proPlans.length > 1 && toggleProDropdown($event)">
-             
-             <div>
-                <svg width="20" class="me-2" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="0.599352" y="0.599352" width="17.9806" height="17.9806" rx="8.99028" stroke="#71717A" stroke-width="1.1987"/>
-<rect x="5.99316" y="5.99353" width="7.19222" height="7.19222" rx="3.59611" fill="white"/>
-</svg>
-               <span>{{ getCreditsLabel(plan) }}</span>
-             </div>
+
+              <div>
+                <svg width="20" class="me-2" height="20" viewBox="0 0 20 20" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.599352" y="0.599352" width="17.9806" height="17.9806" rx="8.99028" stroke="#71717A"
+                    stroke-width="1.1987" />
+                  <rect x="5.99316" y="5.99353" width="7.19222" height="7.19222" rx="3.59611" fill="white" />
+                </svg>
+                <span>{{ getCreditsLabel(plan) }}</span>
+              </div>
               <i class="fa-solid fa-angle-down" *ngIf="proPlans.length > 1"></i>
             </button>
-            
 
             <ul class="dropdown-menu show" *ngIf="proDropdownOpen && proPlans.length > 1">
               <li *ngFor="let proPlan of proDropdownPlans">
                 <button type="button" class="dropdown-item" (click)="selectProPlan(proPlan, $event)">
-                  {{ proPlan.credits_per_cycle }} credits / {{ proPlan.billing_interval.toLowerCase() }} - ₹{{
-                  getCurrentPriceValue(proPlan) }}
+                  {{ getCreditsLabel(proPlan) }} - ₹{{ getCurrentPriceValue(proPlan) }}
                 </button>
               </li>
             </ul>
@@ -74,13 +74,15 @@
           <ng-template #enterpriseCredits>
             <div class="ct_plan_selector">
               <div class="ct_starter_plan ct_starter_plan_disabled">
-                 <div>
-                   <svg width="20" class="me-2" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="0.599352" y="0.599352" width="17.9806" height="17.9806" rx="8.99028" stroke="#71717A" stroke-width="1.1987"/>
-<rect x="5.99316" y="5.99353" width="7.19222" height="7.19222" rx="3.59611" fill="white"/>
-</svg>
-                <span>{{ getCreditsLabel(plan) }}</span>
-                 </div>
+                <div>
+                  <svg width="20" class="me-2" height="20" viewBox="0 0 20 20" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0.599352" y="0.599352" width="17.9806" height="17.9806" rx="8.99028" stroke="#71717A"
+                      stroke-width="1.1987" />
+                    <rect x="5.99316" y="5.99353" width="7.19222" height="7.19222" rx="3.59611" fill="white" />
+                  </svg>
+                  <span>{{ getCreditsLabel(plan) }}</span>
+                </div>
               </div>
             </div>
           </ng-template>
@@ -93,17 +95,19 @@
           <ul class="ct_feature_list">
             <li *ngFor="let feature of planFeatures(plan)" class="ct_parant_list">
               <div>
-                 <div class="ct_feature_left" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                <i class="fa-solid fa-check"></i>
-                <span>{{ feature.label }}</span>
-                <span class="ct_feature_badge" *ngIf="feature.badge">{{ feature.badge }}</span>
+                <div class="ct_feature_left" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                  aria-expanded="false" aria-controls="collapseExample">
+                  <i class="fa-solid fa-check"></i>
+                  <span>{{ feature.label }}</span>
+                  <span class="ct_feature_badge" *ngIf="feature.badge">{{ feature.badge }}</span>
+                </div>
               </div>
+              <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil
+                  anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                </div>
               </div>
-               <div class="collapse" id="collapseExample">
-  <div class="card card-body">
-    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-  </div>
-</div>
             </li>
           </ul>
         </article>
@@ -133,14 +137,13 @@
         <div class="d-flex justify-content-between mb-2">
           <span>Price</span>
           <strong>
-            {{ formatCurrency(selectedPlanData?.display_amount || selectedPlanData?.amount || 0,
-            selectedPlanData?.display_currency || selectedPlanData?.currency) }}
+            {{ getOrderSummaryPrice(selectedPlanData) }}
             / {{ billingCycle() == 'MONTH' ? 'month' : 'year' }}
           </strong>
         </div>
         <div class="d-flex justify-content-between mb-2" *ngIf="selectedPlanData && showIntroOffer(selectedPlanData)">
           <span>Renews at</span>
-          <strong>{{ formatCurrency(selectedPlanData.amount, selectedPlanData.currency) }} / {{ billingCycle() ==
+          <strong>{{ getRenewalAmount(selectedPlanData) }} / {{ billingCycle() ==
             'MONTH' ? 'month' : 'year' }}</strong>
         </div>
 
@@ -153,7 +156,7 @@
 
         <small class=" d-block mt-2">
           <ng-container *ngIf="selectedPlanData && showIntroOffer(selectedPlanData); else standardRenewal">
-            Renews at {{ formatCurrency(selectedPlanData.amount, selectedPlanData.currency) }}
+            Renews at {{ getRenewalAmount(selectedPlanData) }}
             {{ billingCycle() === "YEAR" ? "yearly" : "monthly" }}
           </ng-container>
           <ng-template #standardRenewal>
@@ -180,9 +183,8 @@
         <div class="mb-3">
           <label class="form-label text-white">Phone *</label>
 
-          <ngx-intl-tel-input [cssClass]="'form-control ct_input ct_input_phone_number'"
-            [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
-            [separateDialCode]="true" [searchCountryField]="[
+          <ngx-intl-tel-input [cssClass]="'form-control ct_input w-full ps-5 ct_pe_90 custom_phone_input'"
+            [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[
                 SearchCountryField.Iso2,
                 SearchCountryField.Name
               ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.India" [maxLength]="15"
