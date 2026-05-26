@@ -39,7 +39,7 @@
               }}</span>
             <div class="ct_price_row">
               <span class="ct_price_value">₹{{ getCurrentPriceValue(plan) }}</span>
-              <span class="ct_price_suffix">/ month</span>
+              <span class="ct_price_suffix">/ {{ getBillingUnit(plan) }}</span>
               <span class="ct_price_save" *ngIf="getSaveText(plan)">{{ getSaveText(plan) }}</span>
             </div>
           </div>
@@ -62,12 +62,10 @@
               <i class="fa-solid fa-angle-down" *ngIf="proPlans.length > 1"></i>
             </button>
 
-
             <ul class="dropdown-menu show" *ngIf="proDropdownOpen && proPlans.length > 1">
               <li *ngFor="let proPlan of proDropdownPlans">
                 <button type="button" class="dropdown-item" (click)="selectProPlan(proPlan, $event)">
-                  {{ proPlan.credits_per_cycle }} credits / month - ₹{{
-                  getCurrentPriceValue(proPlan) }}
+                  {{ getCreditsLabel(proPlan) }} - ₹{{ getCurrentPriceValue(proPlan) }}
                 </button>
               </li>
             </ul>
@@ -186,9 +184,8 @@
         <div class="mb-3">
           <label class="form-label text-white">Phone *</label>
 
-          <ngx-intl-tel-input [cssClass]="'form-control ct_input ct_input_phone_number'"
-            [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
-            [separateDialCode]="true" [searchCountryField]="[
+          <ngx-intl-tel-input [cssClass]="'form-control ct_input w-full ps-5 ct_pe_90 custom_phone_input'"
+            [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[
                 SearchCountryField.Iso2,
                 SearchCountryField.Name
               ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.India" [maxLength]="15"

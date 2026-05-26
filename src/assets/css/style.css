@@ -2461,8 +2461,9 @@ table.table.ct_compare_table {
   color: #fff;
   padding: 13px 17px;
 }
+
 .ct_project_count_overlay h4 {
-    color: #fff;
+  color: #fff;
 }
 
 /*✨✨ Faq Section E ✨✨*/
@@ -2587,11 +2588,12 @@ table.table.ct_compare_table {
   height: 494px;
 } */
 .ct_messanory_grid .ct_social_img img {
-    height: 100%;
-    aspect-ratio: 16 / 12;
-    border-radius: 10px;
-    ;
+  height: 100%;
+  aspect-ratio: 16 / 12;
+  border-radius: 10px;
+  ;
 }
+
 /* .ct_messanory_grid .ct_social_img:nth-child(2) img {
     height: 253px;
 }

@@ -67,101 +67,7 @@ export class SubcriptionPageComponent {
   CountryISO = CountryISO
   selectedPlan = signal<PlanType>('pro');
   subscriptionPlan!: SubscriptionResponse;
-  proPlans: Plan[] = [
-    {
-      "id": 2,
-      "plan_key": "pro_starter_monthly",
-      "plan_name": "Pro Starter Monthly",
-      "cashfree_plan_id": "pro_starter_monthly",
-      "amount": 999,
-      "currency": "INR",
-      "display_amount": "999.00",
-      "display_currency": "INR",
-      "billing_interval": "MONTH",
-      "created_at": "2026-04-16T07:51:13.000Z",
-      "plan_type": "PRO",
-      "is_active": 1,
-      "test_mode": 0,
-      "has_intro_offer": 1,
-      "intro_amount": "49.00",
-      "discount_percent": 0,
-      "credits_per_cycle": 100,
-      "credit_grant_interval": "MONTH",
-      "max_projects": 1,
-      "max_pages": 1,
-      "topup_allowed": 1,
-      "can_deploy": 1,
-      "support_type": "CHAT",
-      "github_integration": 0,
-      "custom_features": 0,
-      "can_delete": 0,
-      "credit_plan_key": "credit_pro_starter_monthly",
-      "is_plan_used": true,
-      "is_current_plan": true
-    },
-    {
-      "id": 3,
-      "plan_key": "pro_growth_monthly",
-      "plan_name": "Pro Growth Monthly",
-      "cashfree_plan_id": "pro_growth_monthly",
-      "amount": 1796,
-      "currency": "INR",
-      "display_amount": "1796.00",
-      "display_currency": "INR",
-      "billing_interval": "MONTH",
-      "created_at": "2026-04-16T07:51:13.000Z",
-      "plan_type": "PRO",
-      "is_active": 1,
-      "test_mode": 0,
-      "has_intro_offer": 1,
-      "intro_amount": "49.00",
-      "discount_percent": 0,
-      "credits_per_cycle": 275,
-      "credit_grant_interval": "MONTH",
-      "max_projects": 1,
-      "max_pages": 1,
-      "topup_allowed": 1,
-      "can_deploy": 1,
-      "support_type": "CHAT",
-      "github_integration": 0,
-      "custom_features": 0,
-      "can_delete": 1,
-      "credit_plan_key": "credit_pro_growth_monthly",
-      "is_plan_used": false,
-      "is_current_plan": false
-    },
-    {
-      "id": 4,
-      "plan_key": "pro_scale_monthly",
-      "plan_name": "Pro Scale Monthly",
-      "cashfree_plan_id": "pro_scale_monthly",
-      "amount": 5089,
-      "currency": "INR",
-      "display_amount": "5089.00",
-      "display_currency": "INR",
-      "billing_interval": "MONTH",
-      "created_at": "2026-04-16T07:51:13.000Z",
-      "plan_type": "PRO",
-      "is_active": 1,
-      "test_mode": 0,
-      "has_intro_offer": 1,
-      "intro_amount": "69.00",
-      "discount_percent": 0,
-      "credits_per_cycle": 500,
-      "credit_grant_interval": "MONTH",
-      "max_projects": 1,
-      "max_pages": 1,
-      "topup_allowed": 1,
-      "can_deploy": 1,
-      "support_type": "PRIORITY",
-      "github_integration": 1,
-      "custom_features": 1,
-      "can_delete": 1,
-      "credit_plan_key": "credit_pro_scale_monthly",
-      "is_plan_used": false,
-      "is_current_plan": false
-    }
-  ];
+  proPlans: Plan[] = [];
   businessPlans: Plan[] = [];
   private plansCache: Partial<Record<BillingCycle, {
     pro: Plan[];
@@ -195,11 +101,11 @@ export class SubcriptionPageComponent {
     this.selectedTemplateId = this.selectedTemplateId || this.modalData?.selectedTemplateId || '';
     this.updateModalWidth(1250);
     this.subscriptionService.loadSubscription();
-    this.getAllPlans();
     this.subscriptionService.subscription$.subscribe(subscription => {
       if (subscription) {
         this.subscriptionPlan = subscription;
         this.applyActiveSubscriptionDefaults(subscription);
+        this.getAllPlans();
       }
     });
 
@@ -416,6 +322,11 @@ export class SubcriptionPageComponent {
     return `/${(plan?.billing_interval || this.billingCycle()).toLowerCase()}`;
   }
 
+  getBillingUnit(plan: Plan | null): 'month' | 'year' {
+    const cycle = plan?.billing_interval || this.billingCycle();
+    return cycle === 'YEAR' ? 'year' : 'month';
+  }
+
   planFeatures(plan: Plan): PlanFeatureItem[] {
     switch (plan?.plan_type) {
       case 'PRO':
@@ -513,7 +424,8 @@ export class SubcriptionPageComponent {
       return '';
     }
 
-    return `${plan.credits_per_cycle} credits / month`;
+    const creditInterval = plan.credit_grant_interval || plan.billing_interval || this.billingCycle();
+    return `${plan.credits_per_cycle} credits / ${creditInterval === 'YEAR' ? 'year' : 'month'}`;
   }
 
   getCurrentPriceValue(plan: Plan | null): string {
