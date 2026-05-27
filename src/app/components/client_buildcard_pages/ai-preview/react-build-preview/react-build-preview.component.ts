@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, ElementRef, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -77,9 +77,11 @@ declare var bootstrap: any;
   templateUrl: './react-build-preview.component.html',
   styleUrl: './react-build-preview.component.css'
 })
-export class ReactBuildPreviewComponent {
+export class ReactBuildPreviewComponent implements OnDestroy {
   private readonly deployCreditsRequired = 60;
   private readonly downloadCodeCreditsRequired = 100;
+  private readonly minChatPanelWidth = 320;
+  private readonly maxChatPanelWidth = 720;
   socket: any;
   private readonly mobileBreakpoint = 991;
   private readonly buildErrorPreviewLineLimit = 6;
@@ -209,6 +211,9 @@ export class ReactBuildPreviewComponent {
   private socketInquiryId = '';
   private activeVoiceSessionId = 0;
   today = new Date();
+  chatSectionWidth = 420;
+  isChatResizing = false;
+  private removeResizeListeners: Array<() => void> = [];
   // Redirect page for login action
   constructor(
     private apiService: ApiService,
@@ -1352,7 +1357,55 @@ export class ReactBuildPreviewComponent {
     this.blocks = this.blocks.filter(b => b.id !== 'status');
   }
 
+  startChatResize(event: MouseEvent): void {
+    if (this.isMobileView() || this.fullScreen) {
+      return;
+    }
+
+    event.preventDefault();
+    this.stopChatResize();
+    this.isChatResizing = true;
+
+    const onMouseMove = (moveEvent: MouseEvent) => this.resizeChatSection(moveEvent);
+    const onMouseUp = () => this.stopChatResize();
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+
+    this.removeResizeListeners = [
+      () => window.removeEventListener('mousemove', onMouseMove),
+      () => window.removeEventListener('mouseup', onMouseUp)
+    ];
+
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+  }
+
+  resizeChatSection(event: MouseEvent): void {
+    if (!this.isChatResizing || typeof window === 'undefined') {
+      return;
+    }
+
+    const viewportWidth = window.innerWidth || 0;
+    const dynamicMaxWidth = Math.max(this.minChatPanelWidth, viewportWidth - 320);
+    const nextWidth = Math.min(
+      this.maxChatPanelWidth,
+      Math.max(this.minChatPanelWidth, Math.min(event.clientX, dynamicMaxWidth))
+    );
+
+    this.chatSectionWidth = nextWidth;
+  }
+
+  stopChatResize(): void {
+    this.isChatResizing = false;
+    this.removeResizeListeners.forEach(removeListener => removeListener());
+    this.removeResizeListeners = [];
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  }
+
   ngOnDestroy() {
+    this.stopChatResize();
     this.cancelVoiceDraft();
     this.blocks = [];
     this.clearContinueProjectGenerationInterval();

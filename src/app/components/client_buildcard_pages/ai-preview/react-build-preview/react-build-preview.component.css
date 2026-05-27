@@ -37,6 +37,15 @@
 section.ct_project_ai_preview_main {
   display: flex;
   align-items: start;
+  position: relative;
+}
+
+.ct_chat_resize_overlay {
+  position: fixed;
+  inset: 50px 0 0 0;
+  z-index: 9;
+  cursor: col-resize;
+  background: transparent;
 }
 
 .ct_ai_project_preview_right {
@@ -53,8 +62,9 @@ section.ct_project_ai_preview_main {
 
 aside.ct_project_ai_chat_section {
   /* height: 100vh; */
-  width: 100%;
-  max-width: 25vw;
+  width: 420px;
+  min-width: 320px;
+  max-width: 720px;
   background-color: #202020;
   padding: 20px;
   position: sticky;
@@ -63,7 +73,43 @@ aside.ct_project_ai_chat_section {
   flex: 0 0 auto;
   color: #fff;
   padding-right: 0px;
+  overflow: hidden;
+}
 
+.ct_project_ai_chat_section.is-resizing {
+  cursor: col-resize;
+}
+
+.ct_chat_resize_handle {
+  position: absolute;
+  top: 0;
+  right: -8px;
+  width: 16px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: col-resize;
+  z-index: 10;
+}
+
+.ct_chat_resize_handle::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 64px;
+  border-radius: 999px;
+  background: rgba(126, 145, 255, 0.3);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ct_chat_resize_handle:hover::before,
+.ct_project_ai_chat_section.is-resizing .ct_chat_resize_handle::before {
+  background: rgba(126, 145, 255, 0.75);
+  box-shadow: 0 0 14px rgba(126, 145, 255, 0.28);
 }
 
 .ct_preview_support_bar {
@@ -125,8 +171,6 @@ aside.ct_project_ai_chat_section>.ct_chat_scroll_wrap {
 .ct_ai_input_box {
   padding-right: 20px !important;
   box-shadow: 0px 0px 20.1px 0px #321B89CC;
-
-
 }
 
 .ct_chat_scroll_wrap {
@@ -157,6 +201,23 @@ aside.ct_project_ai_chat_section>.ct_chat_scroll_wrap {
 
 .preview-wrapper iframe.preview-iframe {
   height: calc(100vh - 38px) !important;
+}
+
+@media screen and (max-width: 991px) {
+  .ct_chat_resize_overlay {
+    display: none;
+  }
+
+  .ct_chat_resize_handle {
+    display: none;
+  }
+
+  aside.ct_project_ai_chat_section {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    overflow: auto;
+  }
 }
 
 .rgt_loader {
@@ -1516,7 +1577,8 @@ p {
   display: block;
   object-position: center;
 }
-.ct_mic_icon_30{
+
+.ct_mic_icon_30 {
   width: 30px;
   height: 30px;
   display: flex;
