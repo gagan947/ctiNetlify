@@ -1,7 +1,9 @@
 .iti.iti--allow-dropdown {
       width: 100%;
 }
-
+*{
+      word-break: break-word;
+}
 .iti {
       display: block !important;
 }

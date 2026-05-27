@@ -40,8 +40,8 @@
                         password input field with proper styling.</p>
                 </div> -->
 
-                <div class="ct_ai_input_shell">
-                    <textarea [disabled]="isReactBuilding" #customizeInput class="ct_ai_textarea" rows="3"
+                <div class="ct_ai_input_shell pe-0">
+                    <textarea [disabled]="isReactBuilding" #customizeInput class="ct_ai_textarea pe-3" rows="3"
                         placeholder="Shape This Template Your Way"
                         (keydown)="handlePromptKeydown($event, 'customize_template', customizeInput.value)"></textarea>
                     <div class="d-flex align-items-center justify-content-between gap-2">
