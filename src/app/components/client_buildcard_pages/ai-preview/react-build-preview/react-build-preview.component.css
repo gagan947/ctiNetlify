@@ -89,28 +89,10 @@ aside.ct_project_ai_chat_section {
   padding: 0;
   border: 0;
   background: transparent;
-  cursor: col-resize;
+  cursor: ew-resize;
   z-index: 10;
 }
 
-.ct_chat_resize_handle::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 6px;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 64px;
-  border-radius: 999px;
-  background: rgba(126, 145, 255, 0.3);
-  transition: background 0.2s ease, box-shadow 0.2s ease;
-}
-
-.ct_chat_resize_handle:hover::before,
-.ct_project_ai_chat_section.is-resizing .ct_chat_resize_handle::before {
-  background: rgba(126, 145, 255, 0.75);
-  box-shadow: 0 0 14px rgba(126, 145, 255, 0.28);
-}
 
 .ct_preview_support_bar {
   /* position: sticky; */
