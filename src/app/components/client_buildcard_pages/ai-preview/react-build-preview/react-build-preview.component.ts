@@ -1720,7 +1720,7 @@ export class ReactBuildPreviewComponent {
 
       this.blocks.push({
         id: `paragraph-history-phase-${item.id}`,
-        text: 'Applying your requested changes to the current template.',
+        text: 'I’m updating the current template based on your request.',
         done: true,
         timestamp: new Date(item.created_at),
         variant: 'phase'
@@ -1728,26 +1728,22 @@ export class ReactBuildPreviewComponent {
 
       this.blocks.push({
         id: `paragraph-history-support-${item.id}`,
-        text: `Customization request: ${item.prompt.length > 140 ? `${item.prompt.slice(0, 137)}...` : item.prompt}`,
+        text: `"${item.prompt.length > 140 ? `${item.prompt.slice(0, 137)}...` : item.prompt}"`,
         done: true,
         timestamp: new Date(item.created_at),
         variant: 'support'
       });
 
       if (item.build_status === 0) {
-        this.blocks.push({
-          type: 'summary',
-          data: {
-            time: 'Updated',
-            description: 'Your requested customization has been applied and the refreshed preview is now loading.',
-            highlights: [
-              'Prompt reviewed',
-              'Template updated',
-              'Fresh preview generated'
-            ]
-          }
-        });
+        this.blocks.push(
+          this.createCompletedParagraphBlock(
+            this.buildCustomizationReply(item.prompt),
+            'default',
+            new Date(item.created_at)
+          )
+        );
       }
+
     }
 
     this.appendBuildActionPrompt();
@@ -2038,7 +2034,7 @@ export class ReactBuildPreviewComponent {
     this.resetBuildGenerationError();
     const customizationRequestVersion = ++this.customizationRequestVersion;
     this.startQuickBuildProgress('customize', 1200, 2600);
-    this.showLoader('Reviewing your requested changes...');
+    this.showLoader('Reviewing your update...');
     void this.announceCustomizationProgress(prompt, customizationRequestVersion);
 
     const payLoad = {
@@ -2057,18 +2053,12 @@ export class ReactBuildPreviewComponent {
 
         this.customizationRequestVersion++;
         this.hideLoader();
-        this.blocks.push({
-          type: 'summary',
-          data: {
-            time: 'Updated',
-            description: 'Your requested customization has been applied and the refreshed preview is now loading.',
-            highlights: [
-              'Prompt reviewed',
-              'Template updated',
-              'Fresh preview generated'
-            ]
-          }
-        });
+        this.blocks.push(
+          this.createCompletedParagraphBlock(
+            this.buildCustomizationReply(prompt),
+            'default'
+          )
+        );
         this.queueGeneratedPreview(res, null);
       },
       error: (error: any) => {
@@ -2093,19 +2083,19 @@ export class ReactBuildPreviewComponent {
     if (requestVersion !== this.customizationRequestVersion) {
       return;
     }
-    await this.addParagraphBlock('Applying your requested changes to the current template.', 500, 'phase');
+    await this.addParagraphBlock('I’m working those changes into the current template now.', 500, 'phase');
     if (requestVersion !== this.customizationRequestVersion) {
       return;
     }
     await this.addParagraphBlock(
-      `Customization request: ${prompt.length > 140 ? `${prompt.slice(0, 137)}...` : prompt}`,
+      `"${prompt.length > 140 ? `${prompt.slice(0, 137)}...` : prompt}"`,
       450,
       'support'
     );
     if (requestVersion !== this.customizationRequestVersion) {
       return;
     }
-    this.showLoader('Updating the template and preparing a refreshed preview...');
+    this.showLoader('Updating the template and loading a refreshed preview...');
   }
 
 
@@ -2689,15 +2679,46 @@ export class ReactBuildPreviewComponent {
 
   private createCompletedParagraphBlock(
     text: string,
-    variant: 'default' | 'phase' | 'support' = 'default'
+    variant: 'default' | 'phase' | 'support' = 'default',
+    timestamp: Date = new Date()
   ) {
     return {
       id: `paragraph-${Date.now()}-${this.blocks.length}`,
       text,
       variant,
       done: true,
-      timestamp: new Date()
+      timestamp
     };
+  }
+
+  private buildCustomizationReply(prompt: string): string {
+    const normalizedPrompt = prompt.trim().toLowerCase();
+
+    if (/(logo|brand mark|branding)/i.test(normalizedPrompt)) {
+      return 'I updated the branding-related part of the preview. Check the refreshed version and see if the logo placement looks right now.';
+    }
+
+    if (/(image|photo|banner|hero|picture|visual)/i.test(normalizedPrompt)) {
+      return 'I applied the visual update and refreshed the preview. Have a quick look to see if the image section now feels right.';
+    }
+
+    if (/(color|colour|theme|palette|background)/i.test(normalizedPrompt)) {
+      return 'I adjusted the styling based on your request. The refreshed preview is ready for you to review.';
+    }
+
+    if (/(text|copy|heading|title|content|label)/i.test(normalizedPrompt)) {
+      return 'I updated the content in the preview. Review the latest version and let me know if you want the wording refined further.';
+    }
+
+    if (/(button|cta|link|form|input|field)/i.test(normalizedPrompt)) {
+      return 'I made the UI update you asked for and refreshed the preview. Check that area and see if it matches what you had in mind.';
+    }
+
+    if (/(layout|spacing|alignment|section|header|footer|card)/i.test(normalizedPrompt)) {
+      return 'I applied the layout change and refreshed the preview. Take a look and see whether the structure feels better now.';
+    }
+
+    return 'I applied your latest change and refreshed the preview. Take a look, and we can keep refining it from here.';
   }
 
   async addListBlock(items: string[], waitAfter = 1200) {

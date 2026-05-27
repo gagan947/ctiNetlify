@@ -77,6 +77,18 @@ export class AiDevRendererComponent {
     return this.isLegacyBlock(block) && block?.variant === 'support';
   }
 
+  getSummaryEyebrow(block: any): string {
+    if (typeof block?.data?.meta === 'string' && block.data.meta.trim()) {
+      return block.data.meta;
+    }
+
+    if (typeof block?.data?.time === 'string' && block.data.time.trim()) {
+      return `Worked for ${block.data.time}`;
+    }
+
+    return 'Update';
+  }
+
   isBuildSectionBlock(block: any): boolean {
     return block?.type === 'build-section';
   }

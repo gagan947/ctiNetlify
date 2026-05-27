@@ -9,6 +9,7 @@
       <p *ngIf="!isArray(block?.text) && !isActionBlock(block) && !isInputBlock(block) && !isInlineCtaBlock(block) && !isUserMessageBlock(block)"
         class="mb-0 ct_legacy_text" [class.ct_phase_heading]="isPhaseHeadingBlock(block)"
         [class.ct_support_paragraph]="isSupportParagraphBlock(block)">
+        <span *ngIf="isSupportParagraphBlock(block)" class="ct_support_label">Requested change</span>
         {{ block?.text }}
       </p>
 
@@ -72,6 +73,9 @@ password input field with proper styling.</p>
         <div class="ct_user_message_card">
           {{ block?.text }}
         </div>
+        <div class="ct_user_message_meta">
+          <span *ngIf="block?.timestamp">{{ block?.timestamp | date : 'medium' }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -119,10 +123,9 @@ password input field with proper styling.</p>
     </div>
   </div>
 
-  <div *ngIf="block?.type === 'summary' && !isLoading" class="card-dark pe-3"
-    [class.card-dark--ai]="block?.data?.meta || block?.data?.title">
-    <div class="top-line" *ngIf="block?.data?.time || block?.data?.meta">
-      <span>{{ block?.data?.meta || ('Worked for ' + block?.data?.time) }}</span>
+  <div *ngIf="block?.type === 'summary' && !isLoading" class="ct_assistant_summary pe-3">
+    <div class="ct_assistant_summary__meta" *ngIf="block?.data?.time || block?.data?.meta">
+      {{ getSummaryEyebrow(block) }}
     </div>
 
     <div *ngIf="block?.data?.title" class="card-dark__title">{{ block?.data?.title }}</div>
@@ -135,12 +138,5 @@ password input field with proper styling.</p>
         {{ item }}<span *ngIf="!last">, </span>
       </span>.
     </p>
-
-    <ul *ngIf="(block?.data?.highlights?.length || 0) > 0" class="ct_listed_pointed">
-      <li *ngFor="let item of block?.data?.highlights; trackBy: trackByIndex" class="bullet">
-        <span class="ct_bullet_dot_outline"></span>
-        <span class="pill">{{ item }}</span>
-      </li>
-    </ul>
   </div>
 </ng-container>
