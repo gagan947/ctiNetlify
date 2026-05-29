@@ -589,6 +589,9 @@
   .ct_px_80 {
     padding-inline: 15px;
   }
+  .ct_lightblue_shape_new_12:before{
+    top: 96% !important;
+  }
 
   .ct_footer_brand_img img {
     width: 50px;
