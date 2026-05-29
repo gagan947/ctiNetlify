@@ -144,7 +144,7 @@ aside.ct_project_ai_chat_section {
 }
 
 aside.ct_project_ai_chat_section>.ct_chat_scroll_wrap {
-  height: calc(100vh - 275px);
+  height: calc(100vh - 355px);
   /* height: calc(100vh - 445px); */
   overflow-y: auto;
   padding-right: 20px;
