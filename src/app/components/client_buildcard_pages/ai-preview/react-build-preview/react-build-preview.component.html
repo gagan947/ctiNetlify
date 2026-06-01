@@ -40,12 +40,12 @@
                         password input field with proper styling.</p>
                 </div> -->
 
-                <div class="ct_ai_input_shell pe-0">
-                    <textarea [disabled]="isReactBuilding" #customizeInput class="ct_ai_textarea pe-3" rows="3"
+                <div class="ct_ai_input_shell px-0">
+                    <textarea [disabled]="isReactBuilding" #customizeInput class="ct_ai_textarea px-3" rows="3"
                         placeholder="Shape This Template Your Way"
                         (keydown)="handlePromptKeydown($event, 'customize_template', customizeInput.value)"></textarea>
-                    <div class="d-flex align-items-center justify-content-between gap-2">
-                        <div class="d-flex align-items-center gap-2">
+                    <div class="d-flex align-items-center justify-content-between gap-2 px-3">
+                        <div class="d-flex align-items-center gap-2 ">
                             <button type="button" class="ct_mic_icon_30 ct_mic_icon_30_voice">
                                 <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -89,7 +89,7 @@
                         <button type="button" class="ct_ai_input_submit"
                             (click)="handlePromptSubmitted({'blockId': 'customize_template', 'value': customizeInput.value}); customizeInput.value = ''">
                             <i class="fa-solid"
-                                [ngClass]="{'fa-stop': isReactBuilding, 'fa-arrow-right': !isReactBuilding}"></i>
+                                [ngClass]="{'fa-stop': isReactBuilding, 'fa-arrow-up': !isReactBuilding}"></i>
                         </button>
                     </div>
                 </div>

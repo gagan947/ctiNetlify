@@ -5,7 +5,7 @@
 
 .main-ai-wrap {
   min-height: 100%;
-  height: calc(100vh - 54px);
+  height: calc(100vh - 50px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,7 +21,7 @@
 
 .main-ai-stage {
   width: 100%;
-  max-width: 920px;
+  max-width: 900px;
   text-align: center;
 }
 
@@ -142,7 +142,7 @@
   color: #FFFFFFA8;
   font-size: 15px;
   line-height: 1.6;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .main-ai-prompt-input::placeholder {
