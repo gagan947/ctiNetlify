@@ -108,11 +108,11 @@
                             (dragstart)="blockPreviewInteraction($event)"
                             (selectstart)="blockPreviewInteraction($event)">
 
-                            <iframe *ngIf="safePreviewUrl" #previewFrame class="preview-iframe mx-auto w-100 "
+                            <!-- <iframe *ngIf="safePreviewUrl" #previewFrame class="preview-iframe mx-auto w-100 "
                                 [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100" [src]="safePreviewUrl"
                                 sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-downloads"
                                 referrerpolicy="no-referrer" (load)="onIframeLoad()">
-                            </iframe>
+                            </iframe> -->
 
                         </div>
                         <!-- <iframe #previewFrame class="preview-iframe mx-auto w-100"
@@ -139,7 +139,7 @@
                                         <p class="mb-0 ct_fs_12 ct_text_clr_C7C4D8">This may take a few seconds</p>
                                     </div>
 
-                                    <div class="build-progress mt-4 text-start ms-5">
+                                    <div class="build-progress mt-4 text-start  d-grid justify-content-center">
                                         <div class="build-step" *ngFor="let step of buildSteps; let i = index"
                                             [class.done]="buildStep > i + 1" [class.running]="buildStep === i + 1"
                                             [class.pending]="buildStep < i + 1">
@@ -157,7 +157,7 @@
                                                     {{ step.label }}
                                                     <span *ngIf="buildStep === i + 1" class="typing-dots"></span>
                                                 </div>
-                                                <p class="mb-0 mt-1 ct_fs_10 build-step__status">
+                                                <p class="mb-0 mt-1 ct_fs_10 build-step__status ct_fw_500">
                                                     {{ buildStep > i + 1 ? 'COMPLETED' : buildStep === i + 1 ?
                                                     'IN PROGRESS' : 'PENDING' }}
                                                 </p>
