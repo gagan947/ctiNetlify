@@ -89,7 +89,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   private readonly generateProjectFailureGraceMs = 100;
   private readonly generateProjectInternal = 12000;
   private readonly maxBuildRepairAttempts = 10;
-  private readonly buildRepairAttemptMessages = [ 
+  private readonly buildRepairAttemptMessages = [
     {
       phase: 'Initial preview build hit an issue. Starting automated repair attempt 1.',
       support: 'I am reviewing the failed build output, correcting the most likely file and configuration issues, and preparing a clean retry.'
@@ -623,7 +623,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       inquiryPublicId: this.projectsData.clientEnquryId,
       errorsMessage: error?.error?.data?.errorsMessage ?? error?.error?.message,
       buildStage,
-      isPreBuild: buildStage === 'system_scan',
+      isPreBuild: buildStage === 'syntax_scan',
     };
   }
 
@@ -673,7 +673,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
             if (attemptNumber < this.maxBuildRepairAttempts) {
               payload.errorsMessage = error?.error?.data?.errorsMessage ?? error?.error?.message;
               payload.buildStage = error?.error?.data?.buildStage ?? null;
-              payload.isPreBuild = payload.buildStage === 'system_scan';
+              payload.isPreBuild = payload.buildStage === 'syntax_scan';
               void this.attemptBuildRepair(payload, error, attemptNumber + 1);
               return;
             }
