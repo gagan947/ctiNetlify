@@ -64,6 +64,14 @@ interface CustomizationHistoryEntry {
   created_at: string;
 }
 
+interface PendingCustomizationRequest {
+  prompt: string;
+  requestVersion: number;
+  templatePublicId: string;
+  botReplyReceived: boolean;
+  restTriggered: boolean;
+}
+
 export function noWhitespaceValidator(control: AbstractControl): ValidationErrors | null {
   const value = String(control.value || '');
   return value.trim().length === 0 ? { whitespace: true } : null;
@@ -125,6 +133,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   private pendingFinalBuildSection: any = null;
   private repairAttemptVersion = 0;
   private customizationRequestVersion = 0;
+  private pendingCustomizationRequest: PendingCustomizationRequest | null = null;
   private initialFlowRunId = 0;
   private hasRepairFlowTakenOver = false;
   private runningBuildResumeVersion = 0;
@@ -340,6 +349,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.pendingFinalBuildSection = null;
     this.pendingPreviewResponse = null;
     this.pendingPreviewFailure = false;
+    this.pendingCustomizationRequest = null;
     this.hasInitialFlowCompleted = false;
     this.shouldDeferPreviewApply = false;
     this.hasInitialBuildCompletionUi = false;
@@ -1413,6 +1423,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.stopAiProcessingPhase();
     this.socket?.off?.('page-created');
     this.socket?.off?.('pages-generation-complete');
+    this.socket?.off?.('botReply');
+    this.socket?.off?.('triggerCustomizationAPI');
     this.socket?.disconnect?.();
     this.aiService.stop();
 
@@ -1770,33 +1782,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         done: true,
         timestamp: new Date(item.created_at)
       });
-
-      this.blocks.push({
-        id: `paragraph-history-phase-${item.id}`,
-        text: 'I’m updating the current template based on your request.',
-        done: true,
-        timestamp: new Date(item.created_at),
-        variant: 'phase'
-      });
-
-      this.blocks.push({
-        id: `paragraph-history-support-${item.id}`,
-        text: `"${item.prompt.length > 140 ? `${item.prompt.slice(0, 137)}...` : item.prompt}"`,
-        done: true,
-        timestamp: new Date(item.created_at),
-        variant: 'support'
-      });
-
-      if (item.build_status === 0) {
-        this.blocks.push(
-          this.createCompletedParagraphBlock(
-            this.buildCustomizationReply(item.prompt),
-            'default',
-            new Date(item.created_at)
-          )
-        );
-      }
-
     }
 
     this.appendBuildActionPrompt();
@@ -2082,14 +2067,110 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       timestamp: new Date()
     });
 
-    this.isReactBuilding = true;
     this.isTyping = true;
     this.resetBuildGenerationError();
     const customizationRequestVersion = ++this.customizationRequestVersion;
-    this.startQuickBuildProgress('customize', 1200, 2600);
-    this.showLoader('Reviewing your update...');
-    void this.announceCustomizationProgress(prompt, customizationRequestVersion);
+    this.pendingCustomizationRequest = {
+      prompt,
+      requestVersion: customizationRequestVersion,
+      templatePublicId,
+      botReplyReceived: false,
+      restTriggered: false
+    };
+    this.showLoader('Thinking...');
+    const socketPayload = {
+      prompt,
+      templatePublicId
+    };
+    if (!this.socket?.emit) {
+      this.pendingCustomizationRequest = null;
+      this.customizationRequestVersion++;
+      this.toster.error('Customization chat is not connected right now. Please try again.');
+      return;
+    }
 
+    this.socket?.emit?.('customizationChatMessage', socketPayload, (response: any) => {
+      this.handleCustomizationChatResponse(response);
+    });
+
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private async announceCustomizationProgress(prompt: string, requestVersion: number) {
+    await this.delay(250);
+    if (requestVersion !== this.customizationRequestVersion) {
+      return;
+    }
+    this.showLoader('Updating the template and loading a refreshed preview...');
+  }
+
+  private handleCustomizationBotReply(payload: any) {
+    if (!this.pendingCustomizationRequest || !this.isCustomizationChatPayload(payload)) {
+      return;
+    }
+
+    const reply = this.extractCustomizationBotReply(payload);
+    if (!reply) {
+      return;
+    }
+
+    this.pendingCustomizationRequest.botReplyReceived = true;
+    this.hideLoader();
+    this.blocks.push(
+      this.createCompletedParagraphBlock(
+        reply,
+        'default'
+      )
+    );
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private handleCustomizationChatResponse(response: any) {
+    if (!response || !this.pendingCustomizationRequest) {
+      return;
+    }
+
+    const normalizedResponse = typeof response === 'string'
+      ? { botReply: response }
+      : response;
+
+    if (this.isCustomizationChatPayload(normalizedResponse) && this.extractCustomizationBotReply(normalizedResponse)) {
+      this.handleCustomizationBotReply(normalizedResponse);
+    }
+
+    const shouldTriggerApi = !!(
+      normalizedResponse?.triggerCustomizationAPI
+      || normalizedResponse?.data?.triggerCustomizationAPI
+    );
+
+    if (shouldTriggerApi) {
+      void this.handleCustomizationApiTrigger(normalizedResponse);
+    }
+  }
+
+  private async handleCustomizationApiTrigger(payload: any) {
+    const pendingRequest = this.pendingCustomizationRequest;
+    if (!pendingRequest || pendingRequest.restTriggered) {
+      return;
+    }
+
+    const triggerPrompt = this.extractCustomizationPrompt(payload) || pendingRequest.prompt;
+    const triggerTemplatePublicId = this.extractCustomizationTemplateId(payload) || pendingRequest.templatePublicId;
+
+    pendingRequest.restTriggered = true;
+    this.isReactBuilding = true;
+    this.startQuickBuildProgress('customize', 1200, 2600);
+    if (pendingRequest.botReplyReceived) {
+      this.showLoader('Updating the template and loading a refreshed preview...');
+    }
+    this.runCustomizationApiRequest(
+      triggerPrompt,
+      triggerTemplatePublicId,
+      pendingRequest.requestVersion
+    );
+  }
+
+  private runCustomizationApiRequest(prompt: string, templatePublicId: string, requestVersion: number) {
     const payLoad = {
       prompt,
       templatePublicId
@@ -2097,24 +2178,29 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
     this.apiService.postAPI('api/ai/customization', payLoad).subscribe({
       next: (res: any) => {
+        if (requestVersion !== this.customizationRequestVersion) {
+          return;
+        }
+
         if (!res?.success || !res?.data?.templateId) {
           this.customizationRequestVersion++;
+          this.pendingCustomizationRequest = null;
           this.setBuildGenerationError(res?.data?.message || 'Failed to customize preview');
           this.queueBuildGenerationFailure();
           return;
         }
 
         this.customizationRequestVersion++;
+        this.pendingCustomizationRequest = null;
         this.hideLoader();
-        this.blocks.push(
-          this.createCompletedParagraphBlock(
-            this.buildCustomizationReply(prompt),
-            'default'
-          )
-        );
         this.queueGeneratedPreview(res, null);
       },
       error: (error: any) => {
+        if (requestVersion !== this.customizationRequestVersion) {
+          return;
+        }
+
+        this.pendingCustomizationRequest = null;
         if (error?.error?.status === 422 && error?.error?.data?.canRepairBuild) {
           this.customizationRequestVersion++;
           const repairPayload = this.buildRepairPayload(error, templatePublicId);
@@ -2127,28 +2213,57 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         this.queueBuildGenerationFailure();
       }
     });
-
-    setTimeout(() => this.scrollToBottom(true), 0);
   }
 
-  private async announceCustomizationProgress(prompt: string, requestVersion: number) {
-    await this.delay(250);
-    if (requestVersion !== this.customizationRequestVersion) {
-      return;
+  private extractCustomizationBotReply(payload: any): string {
+    if (typeof payload === 'string') {
+      return payload.trim();
     }
-    await this.addParagraphBlock('I’m working those changes into the current template now.', 500, 'phase');
-    if (requestVersion !== this.customizationRequestVersion) {
-      return;
+
+    if (payload && typeof payload === 'object') {
+      const candidate = payload.botReply ?? payload.message ?? payload.reply;
+      return typeof candidate === 'string' ? candidate.trim() : '';
     }
-    await this.addParagraphBlock(
-      `"${prompt.length > 140 ? `${prompt.slice(0, 137)}...` : prompt}"`,
-      450,
-      'support'
-    );
-    if (requestVersion !== this.customizationRequestVersion) {
-      return;
+
+    return '';
+  }
+
+  private extractCustomizationPrompt(payload: any): string {
+    if (!payload || typeof payload !== 'object') {
+      return '';
     }
-    this.showLoader('Updating the template and loading a refreshed preview...');
+
+    const candidate = payload.prompt ?? payload.data?.prompt;
+    return typeof candidate === 'string' ? candidate.trim() : '';
+  }
+
+  private extractCustomizationTemplateId(payload: any): string {
+    if (!payload || typeof payload !== 'object') {
+      return '';
+    }
+
+    const candidate = payload.templatePublicId ?? payload.data?.templatePublicId;
+    return typeof candidate === 'string' ? candidate.trim() : '';
+  }
+
+  private isCustomizationChatPayload(payload: any): boolean {
+    if (typeof payload === 'string') {
+      return true;
+    }
+
+    if (!payload || typeof payload !== 'object') {
+      return false;
+    }
+
+    if (typeof payload.isCustomizationChat === 'boolean') {
+      return payload.isCustomizationChat;
+    }
+
+    if (typeof payload.data?.isCustomizationChat === 'boolean') {
+      return payload.data.isCustomizationChat;
+    }
+
+    return true;
   }
 
 
@@ -2744,36 +2859,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     };
   }
 
-  private buildCustomizationReply(prompt: string): string {
-    const normalizedPrompt = prompt.trim().toLowerCase();
-
-    if (/(logo|brand mark|branding)/i.test(normalizedPrompt)) {
-      return 'I updated the branding-related part of the preview. Check the refreshed version and see if the logo placement looks right now.';
-    }
-
-    if (/(image|photo|banner|hero|picture|visual)/i.test(normalizedPrompt)) {
-      return 'I applied the visual update and refreshed the preview. Have a quick look to see if the image section now feels right.';
-    }
-
-    if (/(color|colour|theme|palette|background)/i.test(normalizedPrompt)) {
-      return 'I adjusted the styling based on your request. The refreshed preview is ready for you to review.';
-    }
-
-    if (/(text|copy|heading|title|content|label)/i.test(normalizedPrompt)) {
-      return 'I updated the content in the preview. Review the latest version and let me know if you want the wording refined further.';
-    }
-
-    if (/(button|cta|link|form|input|field)/i.test(normalizedPrompt)) {
-      return 'I made the UI update you asked for and refreshed the preview. Check that area and see if it matches what you had in mind.';
-    }
-
-    if (/(layout|spacing|alignment|section|header|footer|card)/i.test(normalizedPrompt)) {
-      return 'I applied the layout change and refreshed the preview. Take a look and see whether the structure feels better now.';
-    }
-
-    return 'I applied your latest change and refreshed the preview. Take a look, and we can keep refining it from here.';
-  }
-
   async addListBlock(items: string[], waitAfter = 1200) {
     this.blocks.push({
       id: `list-${Date.now()}-${this.blocks.length}`,
@@ -2875,6 +2960,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
     this.socket.off?.('page-created');
     this.socket.off?.('pages-generation-complete');
+    this.socket.off?.('botReply');
+    this.socket.off?.('triggerCustomizationAPI');
     this.socket.on('page-created', (data: any) => {
       this.clearGenerateProjectFailureTimer();
       const pageLabel = this.extractPageLabel(data?.page);
@@ -2893,6 +2980,14 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.socket.on('pages-generation-complete', () => {
       this.clearGenerateProjectFailureTimer();
       this.completeActivePageBuildSection();
+    });
+
+    this.socket.on('botReply', (payload: any) => {
+      this.handleCustomizationBotReply(payload);
+    });
+
+    this.socket.on('triggerCustomizationAPI', (payload: any) => {
+      void this.handleCustomizationApiTrigger(payload);
     });
   }
 
