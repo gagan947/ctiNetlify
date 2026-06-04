@@ -41,7 +41,7 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   @Input() primaryHeaderActionLabel = 'Deploy';
   @Input() primaryHeaderActionIconClass = 'fa-solid fa-rocket';
   @Input() showSecondaryHeaderAction = false;
-  @Input() secondaryHeaderActionLabel = 'Code';
+  @Input() secondaryHeaderActionLabel = 'Download';
   @Input() secondaryHeaderActionIconClass = 'fa-solid fa-download';
   @Output() fullScreenToggle = new EventEmitter<void>();
   @Output() deviceTypeChange = new EventEmitter<'desktop' | 'tablet' | 'mobile'>();
