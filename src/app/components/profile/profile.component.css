@@ -7,12 +7,14 @@
     color: #fff;
     border-radius: 10px;
 }
-.ct_eye_show{
+
+.ct_eye_show {
     position: absolute;
     top: 50%;
     right: 10px;
-    transform: translateY(-50%);    
+    transform: translateY(-50%);
 }
+
 .ct_green_btn {
     background-color: #38ad48;
     border: 0px;
@@ -20,72 +22,80 @@
     border-radius: 4px;
     color: #fff;
 }
-.ct_pe_90{
+
+.ct_pe_90 {
     padding-right: 90px !important;
 }
+
 .ct_white_bg_page {
     background-color: #000;
 }
 
-.form-control.ct_input{
+.form-control.ct_input {
     background-color: #FFFFFF12 !important;
     color: #fff;
     border: 1px solid #ffffff4d;
 }
-.ct_input::placeholder{
+
+.ct_input::placeholder {
     color: #fff;
     opacity: 0.7;
 }
-.ct_input:focus ,.form-control.ct_input:focus{
+
+.ct_input:focus,
+.form-control.ct_input:focus {
     border-color: #4140B2;
 }
 
-.ct_blue_btn_fill{
+.ct_blue_btn_fill {
     background-color: #4140B2;
 }
 
 .ct_profile_user img {
-  
+
     border: 1px solid #ffffff40;
     width: 75px !important;
     height: 75px !important;
 }
-.ct_profile_user{
+
+.ct_profile_user {
     margin: 0px;
 }
-.ct_edit_profile_icon{
+
+.ct_edit_profile_icon {
     width: 30px;
     height: 30px;
     background-color: #4140B2;
     bottom: -5px;
 }
-.ct_mb_30{
+
+.ct_mb_30 {
     margin-bottom: 30px;
 }
 
 
-.ct_upgrade_btn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 40px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  font-size: 13px;
-  font-weight: 700;
-  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
+.ct_upgrade_btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-size: 13px;
+    font-weight: 400;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
 }
 
 .ct_upgrade_btn {
-  color: #fff;
-  background: #4140B2;
-  /* box-shadow: 0 12px 24px rgba(22, 85, 192, 0.2); */
+    color: #fff;
+    background: #4140B2;
+    /* box-shadow: 0 12px 24px rgba(22, 85, 192, 0.2); */
 }
 
 .ct_upgrade_btn:hover,
 .remove-btn:hover {
-  transform: translateY(-1px);
+    transform: translateY(-1px);
 }

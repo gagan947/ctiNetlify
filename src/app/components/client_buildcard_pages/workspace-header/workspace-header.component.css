@@ -363,7 +363,7 @@ button.main-ai-topbar__tab.main-ai-topbar__tab--active {
     background: #4140B2;
     color: #fff;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 400;
     /* box-shadow: 0 0 18px rgba(248, 206, 87, 0.45); */
 }
 
@@ -375,7 +375,7 @@ button.main-ai-topbar__tab.main-ai-topbar__tab--active {
     background: #4140B2;
     color: #ffffff;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 400;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -600,11 +600,12 @@ button.main-ai-topbar__tab.main-ai-topbar__tab--active {
     background: #4140B2;
     color: #fff;
     font-size: 15px;
-    font-weight: 800;
+    font-weight: 400;
     /* box-shadow: 0 0 22px rgba(255, 216, 76, 0.35); */
     transition: 0.4s ease all;
 }
-.main-ai-profile-menu__upgrade:hover{
+
+.main-ai-profile-menu__upgrade:hover {
     transform: translateY(-3px);
 }
 
@@ -622,7 +623,7 @@ button.main-ai-topbar__tab.main-ai-topbar__tab--active {
     background: transparent;
     color: #f3f3f4;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 400;
     text-align: left;
 }
 

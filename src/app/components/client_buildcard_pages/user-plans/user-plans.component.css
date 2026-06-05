@@ -16,7 +16,7 @@
   padding: 18px 0 36px;
 }
 
-.ct_dash_right_content{
+.ct_dash_right_content {
   background: #000;
 }
 
@@ -113,7 +113,7 @@
   border-radius: 999px;
   border: 1px solid transparent;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 400;
   transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
 }
@@ -144,11 +144,11 @@
 
 .ct_hero_metric {
   background: linear-gradient(0deg, rgba(93, 92, 255, 0.2), rgba(93, 92, 255, 0.2)),
-linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+    linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
 
   border: 1px solid #5D5CFF99;
   border-radius: 16px;
-box-shadow: 0px 0px 33px 0px #5D5CFF33;
+  box-shadow: 0px 0px 33px 0px #5D5CFF33;
 
   padding: 12px 14px;
   min-height: 82px;

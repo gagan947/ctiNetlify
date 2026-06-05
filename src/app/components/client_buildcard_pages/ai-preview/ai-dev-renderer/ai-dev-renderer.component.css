@@ -550,19 +550,20 @@
 .ct_user_message_row {
   display: grid;
   justify-content: flex-end;
-  margin-block: 35px;
+  margin-block: 15px;
 }
 
 .ct_user_message_card {
   max-width: min(290px, 100%);
   padding: 12px 14px;
   margin-left: auto;
-  border-radius: 16px 16px 4px 16px;
-  background: linear-gradient(210deg, #1d1d358f 0%, #1a192987 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px 16px 0px 16px;
+  background: rgba(93, 92, 255, 0.2);
   color: #f3f4f6;
   font-size: 14px;
+  border: 1px solid rgba(193, 193, 255, 0.1);
   line-height: 1.6;
+  font-weight: 300;
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
 }
 
@@ -698,6 +699,14 @@ aside.ct_project_ai_chat_section {
   to {
     transform: rotate(360deg);
   }
+}
+
+.ct_side_ai_chat_left_box12 {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 16px 16px 16px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 300;
 }
 
 

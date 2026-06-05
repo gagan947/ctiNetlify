@@ -5,9 +5,9 @@
       <span class="ct_codex_thinking_text">{{ block?.text || 'Thinking' }}</span>
     </div>
 
-    <div *ngIf="!isStatusBlock(block)" class="ct_legacy_block">
+    <div *ngIf="!isStatusBlock(block)" class="ct_legacy_block ">
       <p *ngIf="!isArray(block?.text) && !isActionBlock(block) && !isInputBlock(block) && !isInlineCtaBlock(block) && !isUserMessageBlock(block)"
-        class="mb-0 ct_legacy_text" [class.ct_phase_heading]="isPhaseHeadingBlock(block)"
+        class="mb-0 ct_legacy_text ct_side_ai_chat_left_box12" [class.ct_phase_heading]="isPhaseHeadingBlock(block)"
         [class.ct_support_paragraph]="isSupportParagraphBlock(block)">
         <span *ngIf="isSupportParagraphBlock(block)" class="ct_support_label">Requested change</span>
         {{ block?.text }}
@@ -73,9 +73,9 @@ password input field with proper styling.</p>
         <div class="ct_user_message_card">
           {{ block?.text }}
         </div>
-        <div class="ct_user_message_meta">
-          <span *ngIf="block?.timestamp">{{ block?.timestamp | date : 'medium' }}</span>
-        </div>
+        <!-- <div class="ct_user_message_meta">
+          <span *ngIf="block?.timestamp">{{ block?.timestamp | date : 'dd MMM, HH:mm a' }}</span>
+        </div> -->
       </div>
     </div>
   </div>

@@ -60,6 +60,7 @@ interface CallbackPhoneNumber {
 interface CustomizationHistoryEntry {
   id: number;
   prompt: string;
+  ai_response?: string | null;
   build_status: number;
   created_at: string;
 }
@@ -1782,6 +1783,17 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         done: true,
         timestamp: new Date(item.created_at)
       });
+
+      const aiResponse = typeof item.ai_response === 'string' ? item.ai_response.trim() : '';
+      if (aiResponse) {
+        this.blocks.push(
+          this.createCompletedParagraphBlock(
+            aiResponse,
+            'default',
+            new Date(item.created_at)
+          )
+        );
+      }
     }
 
     this.appendBuildActionPrompt();
@@ -2983,10 +2995,12 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     });
 
     this.socket.on('botReply', (payload: any) => {
+      console.log('Received bot reply:', payload);
       this.handleCustomizationBotReply(payload);
     });
 
     this.socket.on('triggerCustomizationAPI', (payload: any) => {
+      console.log('Received triggerCustomizationAPI event:', payload);
       void this.handleCustomizationApiTrigger(payload);
     });
   }
