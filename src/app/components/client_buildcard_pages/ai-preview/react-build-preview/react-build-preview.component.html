@@ -86,7 +86,7 @@
                                 </svg>
                             </button>
                         </div>
-                        <button type="button" class="ct_ai_input_submit"
+                        <button type="button" class="ct_ai_input_submit" style="width: 30px; height: 30px; flex: 0 0 30px;"
                             (click)="handlePromptSubmitted({'blockId': 'customize_template', 'value': customizeInput.value}); customizeInput.value = ''">
                             <i class="fa-solid"
                                 [ngClass]="{'fa-stop': isReactBuilding, 'fa-arrow-up': !isReactBuilding}"></i>

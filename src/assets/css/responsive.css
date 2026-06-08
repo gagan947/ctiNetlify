@@ -358,6 +358,13 @@
   .ct_testimonial_slider .owl-nav button.owl-next {
     right: 0px;
   }
+  .ct_project_ai_chat_section{
+    width: 100% !important;
+  }
+  .ct_preview_support_bar{
+    flex-direction: row !important;
+    align-items: center !important;
+  }
 }
 
 @media screen and (max-width: 767px) {
