@@ -6,7 +6,7 @@
         </label>
 
         <div class="ct_ai_cti_logo_short_fav">
-            <img src="../../../../assets/img/creative_ai_log_white.png" alt="">
+            <img src="assets/img/creative_ai_log_white.png" alt="">
         </div>
 
         <a class="main-ai-topbar__home" [class.main-ai-topbar__tab--active]="selectedProjectId === ''"
@@ -68,8 +68,8 @@
             <i [class]="secondaryHeaderActionIconClass"></i>
             <span>{{ secondaryHeaderActionLabel }}</span>
         </button>
-        <button *ngIf="showPrimaryHeaderAction" type="button" class="main-ai-topbar__deploy"
-            (click)="handlePrimaryHeaderActionClick()">
+        <button *ngIf="showPrimaryHeaderAction && isProjectNotDeployed(selectedProjectId)" type="button"
+            class="main-ai-topbar__deploy" (click)="handlePrimaryHeaderActionClick()">
             <i [class]="primaryHeaderActionIconClass"></i>
             <span>{{ primaryHeaderActionLabel }}</span>
         </button>

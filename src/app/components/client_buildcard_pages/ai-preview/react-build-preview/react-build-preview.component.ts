@@ -144,7 +144,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
   @ViewChild('chatScroll') chatScroll!: ElementRef<HTMLDivElement>;
   @ViewChild('customizeInput') customizeInput!: ElementRef<HTMLTextAreaElement>;
-  previewWidth = 1366; // desktop default
+  previewWidth = 100; // desktop default
   blocks: any[] = [];
   loginRedirect: any = "";
   projectsData: any;
@@ -1649,7 +1649,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     switch (deviceType) {
       case 'desktop':
         this.selectedDeviceType = '<i class="fa-solid fa-display"></i>';
-        this.previewWidth = 1366
+        this.previewWidth = 100
         break;
       case 'tablet':
         this.selectedDeviceType = '<i class="fa-solid fa-tablet-screen-button"></i>';

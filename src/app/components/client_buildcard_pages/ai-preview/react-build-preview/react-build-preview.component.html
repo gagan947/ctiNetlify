@@ -86,7 +86,8 @@
                                 </svg>
                             </button>
                         </div>
-                        <button type="button" class="ct_ai_input_submit" style="width: 30px; height: 30px; flex: 0 0 30px;"
+                        <button type="button" class="ct_ai_input_submit"
+                            style="width: 30px; height: 30px; flex: 0 0 30px;"
                             (click)="handlePromptSubmitted({'blockId': 'customize_template', 'value': customizeInput.value}); customizeInput.value = ''">
                             <i class="fa-solid"
                                 [ngClass]="{'fa-stop': isReactBuilding, 'fa-arrow-up': !isReactBuilding}"></i>
@@ -109,7 +110,8 @@
                             (selectstart)="blockPreviewInteraction($event)">
 
                             <iframe *ngIf="safePreviewUrl" #previewFrame class="preview-iframe mx-auto w-100 "
-                                [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100" [src]="safePreviewUrl"
+                                [style.maxWidth]="previewWidth === 100 ? '100%' : previewWidth + 'px'"
+                                [style.height.%]="100" [src]="safePreviewUrl"
                                 sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-downloads"
                                 referrerpolicy="no-referrer" (load)="onIframeLoad()">
                             </iframe>

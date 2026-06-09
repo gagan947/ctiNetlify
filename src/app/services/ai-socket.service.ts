@@ -4,7 +4,7 @@ import { ApiService } from "./api.service";
 import { BehaviorSubject } from "rxjs";
 @Injectable({ providedIn: 'root' })
 export class AiSocketService {
-    socket;
+  socket;
   blocks: any[] = [];
   socketId!: any;
   socketReady$ = new BehaviorSubject<string | undefined>(undefined);
@@ -20,7 +20,7 @@ export class AiSocketService {
     });
 
   }
-  
+
 
   listen(cb: (blocks: any[]) => void) {
 
@@ -37,11 +37,11 @@ export class AiSocketService {
       let block = this.blocks.find(b => b.id === data.blockId);
 
       if (!block) {
-        block = { id: data.blockId, text: "", done: false,timestamp: new Date() };
+        block = { id: data.blockId, text: "", done: false, timestamp: new Date() };
 
         if (this.blocks.length > 0) {
           // this.blocks = this.blocks.filter(item => item.id !== 'loader');
-          this.blocks = this.blocks.filter(item => !item.id.startsWith('status'));  
+          this.blocks = this.blocks.filter(item => !item.id.startsWith('status'));
         }
 
         this.blocks.push(block);
@@ -58,12 +58,12 @@ export class AiSocketService {
     });
   }
 
- getSocketId(): string | null {
+  getSocketId(): string | null {
     return this.socketId;
   }
 
-   /** 🔥 cleanup hook */
-   stop() {
+  /** 🔥 cleanup hook */
+  stop() {
     console.log("stopeed");
     this.socket.off('ai:stream');
     this.socket.off('ai:done');
@@ -75,8 +75,8 @@ export class AiSocketService {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
- 
-  
+
+
 
   getRegenCommands(buildId: number): string[] {
     const variants = [
@@ -101,9 +101,9 @@ export class AiSocketService {
         style: 'refine'
       }
     ];
-  
+
     const v = variants[buildId % variants.length];
-  
+
     return [
       `$ ai theme --switch=${v.theme}`,
       `$ ai layout --optimize=${v.layout}`,
@@ -112,23 +112,16 @@ export class AiSocketService {
   }
   emitCodeDone() {
     console.log('emit done');
-  
+
     if (this.socket.connected) {
       console.log('already connected', this.socket.id);
       this.socket.emit('ai:code:done');
       return;
     }
-  
+
     this.socket.once('connect', () => {
       console.log('connected later', this.socket.id);
       this.socket.emit('ai:code:done');
     });
   }
-  
-  
-  
-
-
-  
-  
 }

@@ -46,8 +46,10 @@ type DashboardFilter = 'all' | 'draft' | 'live' | 'expired';
 export class DashboardComponent {
   allProjectsList: DashboardProject[] = [];
   originalProjectsList: DashboardProject[] = [];
+  isProjectsLoading = true;
   activePlan = '';
   activeFilter: DashboardFilter = 'all';
+  readonly skeletonCards = Array.from({ length: 6 });
 
   readonly filters: Array<{ key: DashboardFilter; label: string }> = [
     { key: 'all', label: 'All' },
@@ -70,21 +72,25 @@ export class DashboardComponent {
   }
 
   getProjects() {
+    this.isProjectsLoading = true;
     this.apiService.getApi<any>('api/user/fetchClientAllProjects').subscribe({
       next: (res) => {
         if (!res?.success) {
           this.allProjectsList = [];
           this.originalProjectsList = [];
+          this.isProjectsLoading = false;
           return;
         }
 
         this.originalProjectsList = res.data || [];
         this.applyFilters();
+        this.isProjectsLoading = false;
       },
       error: () => {
         this.message.error('Unable to load your projects right now.');
         this.allProjectsList = [];
         this.originalProjectsList = [];
+        this.isProjectsLoading = false;
       }
     });
   }

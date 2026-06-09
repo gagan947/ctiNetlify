@@ -331,6 +331,11 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
     });
   }
 
+  isProjectNotDeployed(projectId: string): boolean {
+    const project = this.allProjectsList.find((p) => p.inquiryId === projectId);
+    return !!project && project.project_deployed !== 1;
+  }
+
   updateTabOverflowState(): void {
     const scroller = this.tabsScroller?.nativeElement;
     if (!scroller) {

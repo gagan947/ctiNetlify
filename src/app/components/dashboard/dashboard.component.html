@@ -22,7 +22,40 @@
                         }
                   </div>
 
-                  @if (allProjectsList.length > 0) {
+                  @if (isProjectsLoading) {
+                  <div class="ct_dashboard_grid" aria-label="Loading projects">
+                        @for (_ of skeletonCards; track $index) {
+                        <article class="ct_dashboard_card ct_dashboard_skeleton_card" aria-hidden="true">
+                              <div class="ct_dashboard_card__hero">
+                                    <div class="ct_dashboard_card__top">
+                                          <span class="ct_dashboard_skeleton ct_dashboard_skeleton--title"></span>
+                                          <span class="ct_dashboard_skeleton ct_dashboard_skeleton--badge"></span>
+                                    </div>
+                              </div>
+                              <div class="ct_dashboard_card__body pb-0">
+                                    <div class="ct_dashboard_meta_grid">
+                                          <div class="ct_dashboard_meta ct_dashboard_skeleton_meta">
+                                                <span class="ct_dashboard_skeleton ct_dashboard_skeleton--label"></span>
+                                                <span class="ct_dashboard_skeleton ct_dashboard_skeleton--value"></span>
+                                          </div>
+
+                                          <div class="ct_dashboard_meta ct_dashboard_skeleton_meta">
+                                                <span class="ct_dashboard_skeleton ct_dashboard_skeleton--label"></span>
+                                                <span class="ct_dashboard_skeleton ct_dashboard_skeleton--value"></span>
+                                          </div>
+                                    </div>
+                                    <div class="ct_dashboard_meta ct_dashboard_skeleton_meta mt-3">
+                                          <span class="ct_dashboard_skeleton ct_dashboard_skeleton--label"></span>
+                                          <span class="ct_dashboard_skeleton ct_dashboard_skeleton--wide"></span>
+                                    </div>
+                              </div>
+                              <div class="mt-auto" style="padding-inline: 22px; padding-bottom: 22px;">
+                                    <span class="ct_dashboard_skeleton ct_dashboard_skeleton--button"></span>
+                              </div>
+                        </article>
+                        }
+                  </div>
+                  } @else if (allProjectsList.length > 0) {
                   <div class="ct_dashboard_grid">
                         @for (project of allProjectsList; track trackByInquiryId($index, project)) {
                         <article class="ct_dashboard_card d-grid h-100">
