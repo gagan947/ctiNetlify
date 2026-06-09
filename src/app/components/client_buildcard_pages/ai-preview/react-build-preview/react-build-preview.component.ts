@@ -63,6 +63,7 @@ interface CustomizationHistoryEntry {
   ai_response?: string | null;
   build_status: number;
   created_at: string;
+  updated_at?: string;
 }
 
 interface PendingCustomizationRequest {
@@ -1425,6 +1426,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.socket?.off?.('page-created');
     this.socket?.off?.('pages-generation-complete');
     this.socket?.off?.('botReply');
+    this.socket?.off?.('customization-progress');
     this.socket?.off?.('triggerCustomizationAPI');
     this.socket?.disconnect?.();
     this.aiService.stop();
@@ -1776,7 +1778,14 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
 
+    let previousHistoryItem: CustomizationHistoryEntry | null = null;
+
     for (const item of history) {
+      if (this.shouldSkipDuplicateHistoryPrompt(item, previousHistoryItem)) {
+        previousHistoryItem = item;
+        continue;
+      }
+
       this.blocks.push({
         id: `user-message-history-${item.id}`,
         text: item.prompt,
@@ -1784,8 +1793,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         timestamp: new Date(item.created_at)
       });
 
-      const aiResponse = typeof item.ai_response === 'string' ? item.ai_response.trim() : '';
-      if (aiResponse) {
+      const aiResponses = this.extractCustomizationHistoryResponses(item.ai_response);
+      for (const aiResponse of aiResponses) {
         this.blocks.push(
           this.createCompletedParagraphBlock(
             aiResponse,
@@ -1794,6 +1803,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
           )
         );
       }
+
+      previousHistoryItem = item;
     }
 
     this.appendBuildActionPrompt();
@@ -1823,6 +1834,46 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       console.error('Failed to fetch customization history', error);
       return [];
     }
+  }
+
+  private extractCustomizationHistoryResponses(aiResponse: string | null | undefined): string[] {
+    const response = typeof aiResponse === 'string' ? aiResponse.trim() : '';
+    if (!response) {
+      return [];
+    }
+
+    try {
+      const parsedResponse = JSON.parse(response);
+      if (parsedResponse && typeof parsedResponse === 'object' && !Array.isArray(parsedResponse)) {
+        return ['started', 'ai_processing', 'compiling', 'deploying', 'completed', 'failed']
+          .map((key) => parsedResponse[key])
+          .filter((message): message is string => typeof message === 'string' && message.trim().length > 0)
+          .map((message) => message.trim());
+      }
+    } catch {
+      return [response];
+    }
+
+    return [response];
+  }
+
+  private shouldSkipDuplicateHistoryPrompt(
+    item: CustomizationHistoryEntry,
+    previousItem: CustomizationHistoryEntry | null
+  ): boolean {
+    if (!previousItem || item.ai_response) {
+      return false;
+    }
+
+    const currentPrompt = item.prompt.trim().toLowerCase();
+    const previousPrompt = previousItem.prompt.trim().toLowerCase();
+    if (currentPrompt !== previousPrompt || !previousItem.ai_response) {
+      return false;
+    }
+
+    const currentCreatedAt = new Date(item.created_at).getTime();
+    const previousUpdatedAt = new Date(previousItem.updated_at || previousItem.created_at).getTime();
+    return Math.abs(currentCreatedAt - previousUpdatedAt) <= 5 * 60 * 1000;
   }
 
   async showDraftWelcomeMessages(streamMessages = true) {
@@ -2135,6 +2186,18 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       )
     );
     setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private handleCustomizationProgressReply(payload: any) {
+    const message = typeof payload?.message === 'string' ? payload.message.trim() : '';
+    if (!message) {
+      return;
+    }
+
+    this.handleCustomizationBotReply({
+      botReply: message,
+      isCustomizationChat: true
+    });
   }
 
   private handleCustomizationChatResponse(response: any) {
@@ -2974,6 +3037,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.socket.off?.('pages-generation-complete');
     this.socket.off?.('botReply');
     this.socket.off?.('triggerCustomizationAPI');
+    this.socket.off?.('customization-progress');
     this.socket.on('page-created', (data: any) => {
       this.clearGenerateProjectFailureTimer();
       const pageLabel = this.extractPageLabel(data?.page);
@@ -3002,6 +3066,11 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.socket.on('triggerCustomizationAPI', (payload: any) => {
       console.log('Received triggerCustomizationAPI event:', payload);
       void this.handleCustomizationApiTrigger(payload);
+    });
+
+    this.socket.on('customization-progress', (payload: any) => {
+      console.log('Received customization-progress event:', payload);
+      this.handleCustomizationProgressReply(payload);
     });
   }
 

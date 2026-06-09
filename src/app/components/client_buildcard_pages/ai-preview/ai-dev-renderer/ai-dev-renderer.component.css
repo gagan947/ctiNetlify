@@ -550,7 +550,7 @@
 .ct_user_message_row {
   display: grid;
   justify-content: flex-end;
-  margin-block: 15px;
+  margin-block: 30px;
 }
 
 .ct_user_message_card {
@@ -558,10 +558,10 @@
   padding: 12px 14px;
   margin-left: auto;
   border-radius: 16px 16px 0px 16px;
-  background: rgba(93, 92, 255, 0.2);
-  color: #f3f4f6;
+  background: rgb(93 92 255 / 15%);
+  color: #fff;
   font-size: 14px;
-  border: 1px solid rgba(193, 193, 255, 0.1);
+  /* border: 1px solid rgba(193, 193, 255, 0.1); */
   line-height: 1.6;
   font-weight: 300;
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
@@ -702,11 +702,13 @@ aside.ct_project_ai_chat_section {
 }
 
 .ct_side_ai_chat_left_box12 {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgb(255 255 255 / 1%);
   padding: 10px;
   border-radius: 16px 16px 16px 4px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
   font-weight: 300;
+  width: fit-content;
+  color: #fff;
 }
 
 
