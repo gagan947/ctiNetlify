@@ -1,5 +1,5 @@
 <ng-container *ngFor="let block of blocks; let i = index; trackBy: trackByIndex">
-  <div *ngIf="isLegacyBlock(block)" class="pe-3 mb-3">
+  <div *ngIf="isLegacyBlock(block)" class="mb-3">
     <div *ngIf="isStatusBlock(block)" class="ct_codex_thinking_loader">
       <span class="ct_codex_thinking_orb"></span>
       <span class="ct_codex_thinking_text">{{ block?.text || 'Thinking' }}</span>
