@@ -23,12 +23,39 @@ export class AiDevRendererComponent {
   @Output() promptSubmitted = new EventEmitter<{ blockId: string; value: string }>();
   @Input() isLoading = false;
 
+  expandedRows = new Set<string>();
+
   constructor() {
     console.log(this.isLoading);
   }
 
   trackByIndex(index: number) {
     return index;
+  }
+
+  toggleRow(key: string): void {
+    if (this.expandedRows.has(key)) {
+      this.expandedRows.delete(key);
+    } else {
+      this.expandedRows.add(key);
+    }
+  }
+
+  isRowExpanded(key: string): boolean {
+    return this.expandedRows.has(key);
+  }
+
+  hasNewerProgressBlock(currentIndex: number): boolean {
+    if (!this.blocks) {
+      return false;
+    }
+    for (let j = currentIndex + 1; j < this.blocks.length; j++) {
+      const nextBlock = this.blocks[j];
+      if (nextBlock && nextBlock.type === 'ai-progress') {
+        return true;
+      }
+    }
+    return false;
   }
 
   isLegacyBlock(block: any): boolean {
@@ -113,7 +140,7 @@ export class AiDevRendererComponent {
   getAiProgressCommand(block: any): string {
     // const step = String(block?.data?.step || 'ai_processing').trim();
     const message = String(block?.data?.message || 'Working on requested changes').trim();
-    return `${message})`;
+    return `${message}`;
   }
 
   getAiProgressMeta(block: any): string {
