@@ -234,6 +234,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   private routeChangeVersion = 0;
   private socketInquiryId = '';
   private activeVoiceSessionId = 0;
+  draftMessages: any[] = []
   today = new Date();
   chatSectionWidth = 420;
   isChatResizing = false;
@@ -286,6 +287,25 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.prepareForProjectRouteChange(inquiryId);
     if (!inquiryId) {
       return;
+    }
+
+    if (this.selectedProjectId) {
+      const existingDraftIndex = this.draftMessages.findIndex((msg: any) => msg.id === this.selectedProjectId);
+      const currentInput = this.customizeInput?.nativeElement?.value || "";
+      
+      if (existingDraftIndex > -1) {
+        this.draftMessages[existingDraftIndex].message = currentInput;
+      } else {
+        this.draftMessages.push({
+          message: currentInput,
+          id: this.selectedProjectId,
+        });
+      }
+    }
+
+    const draftMsg = this.draftMessages.find((msg: any) => msg.id === inquiryId);
+    if (this.customizeInput?.nativeElement) {
+      this.customizeInput.nativeElement.value = draftMsg?.message || "";
     }
 
     this.selectedProjectId = inquiryId;
@@ -2456,9 +2476,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   private completeActiveCustomizationProgress() {
     const logs = this.activeCustomizationProgressBlock
       ? [
-          ...this.activeCustomizationProgressBlock.data.logs,
-          'Customization complete. Refreshing preview...'
-        ].slice(-5)
+        ...this.activeCustomizationProgressBlock.data.logs,
+        'Customization complete. Refreshing preview...'
+      ].slice(-5)
       : ['Customization complete. Refreshing preview...'];
 
     const historyId = this.activeCustomizationProgressBlock?.data?.historyId || null;
