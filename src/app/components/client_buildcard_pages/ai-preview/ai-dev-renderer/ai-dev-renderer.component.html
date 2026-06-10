@@ -6,7 +6,8 @@
     </div>
 
     <div *ngIf="!isStatusBlock(block)" class="ct_legacy_block ">
-      <div *ngIf="!isArray(block?.text) && !isActionBlock(block) && !isInputBlock(block) && !isInlineCtaBlock(block) && !isUserMessageBlock(block)"
+      <div
+        *ngIf="!isArray(block?.text) && !isActionBlock(block) && !isInputBlock(block) && !isInlineCtaBlock(block) && !isUserMessageBlock(block)"
         class="ct_agent_activity mb-3">
         <div class="ct_agent_activity__avatar">
           <i class="fa-solid fa-robot"></i>
@@ -89,17 +90,21 @@ password input field with proper styling.</p>
 
   <div *ngIf="block?.type === 'terminal'" class="terminal" [class.is-running]="block?.data?.done === false">
     <div *ngFor="let line of getTerminalLines(block); let lineIndex = index; trackBy: trackByIndex"
-      class="ct_agent_activity terminal__agent_row"
-      [class.running]="isTerminalRunningLine(block, lineIndex)" [ngClass]="getTerminalLineClass(line)">
-      <div class="ct_agent_activity__avatar">
+      class="ct_agent_activity__log terminal__agent_row" [class.running]="isTerminalRunningLine(block, lineIndex)"
+      [ngClass]="getTerminalLineClass(line)">
+      <div class="ct_agent_activity__avatar ct_agent_activity__avatar--small">
         <i class="fa-solid fa-robot"></i>
       </div>
-      <div class="ct_agent_activity__body line pe-3" [innerHTML]="formatTerminalLine(line)"></div>
+      <div class="ct_agent_activity__row ct_agent_activity__row--sub line">
+        <span class="ct_agent_activity__mini_icon">
+          <i class="fa-regular fa-window-restore"></i>
+        </span>
+        <span class="ct_agent_activity__log_text" [innerHTML]="formatTerminalLine(line)"></span>
+      </div>
     </div>
   </div>
 
-  <div *ngIf="isBuildSectionBlock(block)" class="ct_build_section pe-3"
-    [class.is-running]="block?.data?.done === false">
+  <div *ngIf="isBuildSectionBlock(block)" class="ct_build_section" [class.is-running]="block?.data?.done === false">
     <div class="ct_build_section__header">
       <span class="ct_build_section__icon">{{ block?.data?.icon }}</span>
       <span class="ct_build_section__title">{{ block?.data?.title }}</span>
