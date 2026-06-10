@@ -88,9 +88,13 @@ password input field with proper styling.</p>
   </div>
 
   <div *ngIf="block?.type === 'terminal'" class="terminal" [class.is-running]="block?.data?.done === false">
-    <div *ngFor="let line of getTerminalLines(block); let lineIndex = index; trackBy: trackByIndex" class="line pe-3"
-      [class.running]="isTerminalRunningLine(block, lineIndex)" [ngClass]="getTerminalLineClass(line)"
-      [innerHTML]="formatTerminalLine(line)">
+    <div *ngFor="let line of getTerminalLines(block); let lineIndex = index; trackBy: trackByIndex"
+      class="ct_agent_activity terminal__agent_row"
+      [class.running]="isTerminalRunningLine(block, lineIndex)" [ngClass]="getTerminalLineClass(line)">
+      <div class="ct_agent_activity__avatar">
+        <i class="fa-solid fa-robot"></i>
+      </div>
+      <div class="ct_agent_activity__body line pe-3" [innerHTML]="formatTerminalLine(line)"></div>
     </div>
   </div>
 
