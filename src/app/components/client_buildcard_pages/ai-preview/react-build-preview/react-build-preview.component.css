@@ -408,6 +408,59 @@ aside.ct_project_ai_chat_section>.ct_chat_scroll_wrap {
   font-size: 14px;
 }
 
+.ct_preview_ai_progress {
+  position: relative;
+  z-index: 1;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ct_preview_ai_progress__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #DFE1F6;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ct_preview_ai_progress__top span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ct_preview_ai_progress__top strong {
+  color: #fff;
+  font-size: 13px;
+}
+
+.ct_preview_ai_progress__bar {
+  height: 7px;
+  margin: 10px 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.09);
+  overflow: hidden;
+}
+
+.ct_preview_ai_progress__bar span {
+  display: block;
+  height: 100%;
+  min-width: 8px;
+  border-radius: inherit;
+  background: #7775ff;
+  transition: width 0.35s ease;
+}
+
+.ct_preview_ai_progress p {
+  color: #C7C4D8;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .ct_preview_build_card__footer {
   display: flex;
   align-items: flex-start;

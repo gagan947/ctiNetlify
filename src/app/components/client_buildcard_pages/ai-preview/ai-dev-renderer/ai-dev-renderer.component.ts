@@ -93,6 +93,51 @@ export class AiDevRendererComponent {
     return block?.type === 'build-section';
   }
 
+  isAiProgressBlock(block: any): boolean {
+    return block?.type === 'ai-progress';
+  }
+
+  getAiProgressLogs(block: any): string[] {
+    return Array.isArray(block?.data?.logs) ? block.data.logs : [];
+  }
+
+  getAiProgressPercentage(block: any): number {
+    const percentage = Number(block?.data?.percentage ?? 0);
+    if (!Number.isFinite(percentage)) {
+      return 0;
+    }
+
+    return Math.max(0, Math.min(100, Math.round(percentage)));
+  }
+
+  getAiProgressCommand(block: any): string {
+    // const step = String(block?.data?.step || 'ai_processing').trim();
+    const message = String(block?.data?.message || 'Working on requested changes').trim();
+    return `${message})`;
+  }
+
+  getAiProgressMeta(block: any): string {
+    const logsCount = this.getAiProgressLogs(block).length;
+    if (!logsCount) {
+      return 'Agent is preparing updates';
+    }
+
+    return `${logsCount} AI agent message${logsCount === 1 ? '' : 's'}`;
+  }
+
+  getAiProgressLogTitle(log: string): string {
+    const text = String(log || '').trim();
+    if (!text) {
+      return 'Running task';
+    }
+
+    if (/rewriting|updating|applying|generated|created/i.test(text)) {
+      return text.replace(/\.$/, '');
+    }
+
+    return text.replace(/\.$/, '');
+  }
+
   isFileActivityBlock(block: any): boolean {
     return block?.type === 'file' || block?.type === 'code';
   }

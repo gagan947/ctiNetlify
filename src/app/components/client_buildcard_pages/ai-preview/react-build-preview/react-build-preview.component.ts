@@ -74,6 +74,18 @@ interface PendingCustomizationRequest {
   restTriggered: boolean;
 }
 
+interface CustomizationProgressBlock {
+  type: 'ai-progress';
+  data: {
+    historyId: number | null;
+    step: string;
+    stepLabel: string;
+    message: string;
+    percentage: number;
+    logs: string[];
+  };
+}
+
 export function noWhitespaceValidator(control: AbstractControl): ValidationErrors | null {
   const value = String(control.value || '');
   return value.trim().length === 0 ? { whitespace: true } : null;
@@ -136,6 +148,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   private repairAttemptVersion = 0;
   private customizationRequestVersion = 0;
   private pendingCustomizationRequest: PendingCustomizationRequest | null = null;
+  private activeCustomizationProgressBlock: CustomizationProgressBlock | null = null;
   private initialFlowRunId = 0;
   private hasRepairFlowTakenOver = false;
   private runningBuildResumeVersion = 0;
@@ -352,6 +365,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.pendingPreviewResponse = null;
     this.pendingPreviewFailure = false;
     this.pendingCustomizationRequest = null;
+    this.activeCustomizationProgressBlock = null;
     this.hasInitialFlowCompleted = false;
     this.shouldDeferPreviewApply = false;
     this.hasInitialBuildCompletionUi = false;
@@ -1793,15 +1807,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         timestamp: new Date(item.created_at)
       });
 
-      const aiResponses = this.extractCustomizationHistoryResponses(item.ai_response);
-      for (const aiResponse of aiResponses) {
-        this.blocks.push(
-          this.createCompletedParagraphBlock(
-            aiResponse,
-            'default',
-            new Date(item.created_at)
-          )
-        );
+      const aiResponseBlocks = this.extractCustomizationHistoryResponseBlocks(item);
+      for (const aiResponseBlock of aiResponseBlocks) {
+        this.blocks.push(aiResponseBlock);
       }
 
       previousHistoryItem = item;
@@ -1836,7 +1844,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     }
   }
 
-  private extractCustomizationHistoryResponses(aiResponse: string | null | undefined): string[] {
+  private extractCustomizationHistoryResponseBlocks(item: CustomizationHistoryEntry): any[] {
+    const aiResponse = item.ai_response;
     const response = typeof aiResponse === 'string' ? aiResponse.trim() : '';
     if (!response) {
       return [];
@@ -1845,16 +1854,102 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     try {
       const parsedResponse = JSON.parse(response);
       if (parsedResponse && typeof parsedResponse === 'object' && !Array.isArray(parsedResponse)) {
-        return ['started', 'ai_processing', 'compiling', 'deploying', 'completed', 'failed']
-          .map((key) => parsedResponse[key])
-          .filter((message): message is string => typeof message === 'string' && message.trim().length > 0)
-          .map((message) => message.trim());
+        return this.createCustomizationHistoryProgressBlocks(parsedResponse, item);
       }
     } catch {
-      return [response];
+      return [
+        this.createCompletedParagraphBlock(
+          response,
+          'default',
+          new Date(item.created_at)
+        )
+      ];
     }
 
-    return [response];
+    return [
+      this.createCompletedParagraphBlock(
+        response,
+        'default',
+        new Date(item.created_at)
+      )
+    ];
+  }
+
+  private createCustomizationHistoryProgressBlocks(parsedResponse: any, item: CustomizationHistoryEntry): CustomizationProgressBlock[] {
+    const phaseKeys = this.getCustomizationHistoryPhaseKeys(item.build_status);
+
+    return phaseKeys
+      .map((phaseKey) => this.createCustomizationHistoryProgressBlock(phaseKey, parsedResponse?.[phaseKey], item))
+      .filter((block): block is CustomizationProgressBlock => !!block);
+  }
+
+  private getCustomizationHistoryPhaseKeys(buildStatus: number): string[] {
+    const basePhases = ['started', 'ai_processing', 'compiling', 'deploying'];
+
+    if (buildStatus === 0) {
+      return [...basePhases, 'completed'];
+    }
+
+    return [...basePhases, 'failed'];
+  }
+
+  private createCustomizationHistoryProgressBlock(
+    phaseKey: string,
+    phaseResponse: any,
+    item: CustomizationHistoryEntry
+  ): CustomizationProgressBlock | null {
+    if (!phaseResponse) {
+      return null;
+    }
+
+    const message = typeof phaseResponse === 'string'
+      ? phaseResponse.trim()
+      : String(phaseResponse?.message || '').trim();
+
+    if (!message) {
+      return null;
+    }
+
+    const percentage = this.normalizeCustomizationHistoryPercentage(phaseResponse?.percentage, phaseKey);
+    const logs = Array.isArray(phaseResponse?.console_logs)
+      ? phaseResponse.console_logs.map((log: any) => String(log || '').trim()).filter(Boolean).slice(-5)
+      : [];
+
+    return {
+      type: 'ai-progress',
+      data: {
+        historyId: item.id,
+        step: phaseKey,
+        stepLabel: this.getCustomizationProgressStepLabel(phaseKey),
+        message,
+        percentage,
+        logs
+      }
+    };
+  }
+
+  private normalizeCustomizationHistoryPercentage(value: any, phaseKey: string): number {
+    const percentage = Number(value);
+    if (Number.isFinite(percentage)) {
+      return Math.max(0, Math.min(100, Math.round(percentage)));
+    }
+
+    switch (phaseKey) {
+      case 'started':
+        return 10;
+      case 'ai_processing':
+        return 40;
+      case 'compiling':
+        return 70;
+      case 'deploying':
+        return 90;
+      case 'completed':
+        return 100;
+      case 'failed':
+        return 0;
+      default:
+        return 0;
+    }
   }
 
   private shouldSkipDuplicateHistoryPrompt(
@@ -2140,6 +2235,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       botReplyReceived: false,
       restTriggered: false
     };
+    this.activeCustomizationProgressBlock = null;
     this.showLoader('Thinking...');
     const socketPayload = {
       prompt,
@@ -2194,10 +2290,76 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       return;
     }
 
-    this.handleCustomizationBotReply({
-      botReply: message,
-      isCustomizationChat: true
-    });
+    this.isReactBuilding = true;
+    this.isTyping = true;
+    this.hideLoader();
+    this.setBuildFlow('customize');
+
+    const percentage = this.normalizeCustomizationPercentage(payload?.percentage);
+    this.setBuildStep(this.getCustomizationBuildStep(percentage));
+
+    const progressData = {
+      historyId: Number.isFinite(Number(payload?.historyId)) ? Number(payload.historyId) : null,
+      step: typeof payload?.step === 'string' ? payload.step : 'ai_processing',
+      stepLabel: this.getCustomizationProgressStepLabel(payload?.step),
+      message,
+      percentage,
+      logs: this.normalizeCustomizationLogs(payload?.console_logs)
+    };
+
+    if (!this.activeCustomizationProgressBlock) {
+      this.activeCustomizationProgressBlock = {
+        type: 'ai-progress',
+        data: progressData
+      };
+      this.blocks.push(this.activeCustomizationProgressBlock);
+    } else {
+      this.activeCustomizationProgressBlock.data = progressData;
+    }
+
+    this.showLoader(message);
+    setTimeout(() => this.scrollToBottom(true), 0);
+  }
+
+  private normalizeCustomizationPercentage(value: any): number {
+    const percentage = Number(value);
+    if (!Number.isFinite(percentage)) {
+      return this.activeCustomizationProgressBlock?.data?.percentage ?? 0;
+    }
+
+    return Math.max(0, Math.min(100, Math.round(percentage)));
+  }
+
+  private normalizeCustomizationLogs(value: any): string[] {
+    if (!Array.isArray(value)) {
+      return this.activeCustomizationProgressBlock?.data?.logs ?? [];
+    }
+
+    return value
+      .map((log) => String(log || '').trim())
+      .filter(Boolean)
+      .slice(-5);
+  }
+
+  private getCustomizationProgressStepLabel(step: any): string {
+    const normalizedStep = String(step || '').trim().replace(/[_-]+/g, ' ');
+    if (!normalizedStep) {
+      return 'Customizing your preview';
+    }
+
+    return normalizedStep.replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
+  private getCustomizationBuildStep(percentage: number): number {
+    if (percentage >= 75) {
+      return 3;
+    }
+
+    if (percentage >= 35) {
+      return 2;
+    }
+
+    return 1;
   }
 
   private handleCustomizationChatResponse(response: any) {
@@ -2267,6 +2429,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
         this.customizationRequestVersion++;
         this.pendingCustomizationRequest = null;
+        this.completeActiveCustomizationProgress();
         this.hideLoader();
         this.queueGeneratedPreview(res, null);
       },
@@ -2288,6 +2451,26 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         this.queueBuildGenerationFailure();
       }
     });
+  }
+
+  private completeActiveCustomizationProgress() {
+    if (!this.activeCustomizationProgressBlock) {
+      return;
+    }
+
+    this.activeCustomizationProgressBlock.data = {
+      ...this.activeCustomizationProgressBlock.data,
+      step: 'preview_ready',
+      stepLabel: 'Preview Ready',
+      message: 'Customization complete. Loading your refreshed preview...',
+      percentage: 100,
+      logs: [
+        ...this.activeCustomizationProgressBlock.data.logs,
+        'Customization complete. Refreshing preview...'
+      ].slice(-5)
+    };
+    this.setBuildStep(3);
+    setTimeout(() => this.scrollToBottom(true), 0);
   }
 
   private extractCustomizationBotReply(payload: any): string {
@@ -3276,6 +3459,32 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       default:
         return "I'm Generating the Preview.";
     }
+  }
+
+  get previewOverlaySubtitle(): string {
+    if (this.buildFlowType === 'customize' && this.activeCustomizationProgressBlock?.data?.message) {
+      return this.activeCustomizationProgressBlock.data.message;
+    }
+
+    return 'This may take a few seconds';
+  }
+
+  get showPreviewOverlayProgressDetails(): boolean {
+    return this.buildFlowType === 'customize' && !!this.activeCustomizationProgressBlock;
+  }
+
+  get activeCustomizationProgressPercentage(): number {
+    return this.activeCustomizationProgressBlock?.data?.percentage ?? 0;
+  }
+
+  get activeCustomizationProgressLabel(): string {
+    return this.activeCustomizationProgressBlock?.data?.stepLabel || 'AI Processing';
+  }
+
+  get activeCustomizationProgressMessage(): string {
+    return this.activeCustomizationProgressBlock?.data?.logs?.slice(-1)[0]
+      || this.activeCustomizationProgressBlock?.data?.message
+      || 'Applying your requested changes...';
   }
 
   get previewOverlayLoaderText(): string {

@@ -190,6 +190,124 @@
   text-shadow: 0 0 14px rgba(166, 184, 255, 0.14);
 }
 
+.ct_ai_progress_timeline {
+  margin: 18px 0 28px;
+}
+
+.ct_agent_activity {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.ct_agent_activity__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #f5f5f5;
+  font-size: 13px;
+}
+
+.ct_agent_activity__body {
+  min-width: 0;
+}
+
+.ct_agent_activity__row {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 10px 0 12px;
+  border-radius: 10px;
+  background: #181818;
+  color: #d8dde7;
+  border: 1px solid rgba(255, 255, 255, 0.035);
+}
+
+.ct_agent_activity__check {
+  color: #8fa4b4;
+  font-size: 12px;
+}
+
+.ct_agent_activity__command,
+.ct_agent_activity__log_text {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ct_agent_activity__command {
+  color: #8da1ad;
+}
+
+.ct_agent_activity__percent {
+  margin-left: auto;
+  color: #d7d7df;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.ct_agent_activity__chevron {
+  color: #6e747c;
+  font-size: 12px;
+}
+
+.ct_agent_activity__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 22px 12px;
+  color: #b2b4c1;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ct_agent_activity__logs {
+  display: grid;
+  gap: 26px;
+}
+
+.ct_agent_activity__log {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 12px;
+  margin-left: -48px;
+}
+
+.ct_agent_activity__avatar--small {
+  width: 32px;
+  height: 32px;
+  font-size: 12px;
+}
+
+.ct_agent_activity__row--sub {
+  background: #1e1e1e;
+}
+
+.ct_agent_activity__mini_icon {
+  color: #cbd5df;
+  font-size: 13px;
+}
+
+.ct_agent_activity__log_text {
+  color: #f08cff;
+}
+
+.ct_ai_progress_timeline.is-complete .ct_agent_activity__check {
+  color: #9fb4c5;
+}
+
 @keyframes ctBuildItemPulse {
 
   0%,
