@@ -2307,7 +2307,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       logs: this.normalizeCustomizationLogs(payload?.console_logs)
     };
 
-    if (!this.activeCustomizationProgressBlock) {
+    if (!this.activeCustomizationProgressBlock || this.activeCustomizationProgressBlock.data.step !== progressData.step) {
       this.activeCustomizationProgressBlock = {
         type: 'ai-progress',
         data: progressData
@@ -2454,21 +2454,27 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   }
 
   private completeActiveCustomizationProgress() {
-    if (!this.activeCustomizationProgressBlock) {
-      return;
-    }
+    const logs = this.activeCustomizationProgressBlock
+      ? [
+          ...this.activeCustomizationProgressBlock.data.logs,
+          'Customization complete. Refreshing preview...'
+        ].slice(-5)
+      : ['Customization complete. Refreshing preview...'];
 
-    this.activeCustomizationProgressBlock.data = {
-      ...this.activeCustomizationProgressBlock.data,
-      step: 'preview_ready',
-      stepLabel: 'Preview Ready',
-      message: 'Customization complete. Loading your refreshed preview...',
-      percentage: 100,
-      logs: [
-        ...this.activeCustomizationProgressBlock.data.logs,
-        'Customization complete. Refreshing preview...'
-      ].slice(-5)
+    const historyId = this.activeCustomizationProgressBlock?.data?.historyId || null;
+
+    this.activeCustomizationProgressBlock = {
+      type: 'ai-progress',
+      data: {
+        historyId,
+        step: 'preview_ready',
+        stepLabel: 'Preview Ready',
+        message: 'Customization complete. Loading your refreshed preview...',
+        percentage: 100,
+        logs: logs
+      }
     };
+    this.blocks.push(this.activeCustomizationProgressBlock);
     this.setBuildStep(3);
     setTimeout(() => this.scrollToBottom(true), 0);
   }

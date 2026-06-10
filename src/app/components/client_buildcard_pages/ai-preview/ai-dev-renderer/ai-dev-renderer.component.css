@@ -231,6 +231,10 @@
   transition: background-color 0.2s ease, border-color 0.2s ease, align-items 0.2s ease, padding 0.2s ease;
 }
 
+.ct_agent_activity__row--sub {
+  width: fit-content;
+}
+
 .ct_agent_activity__row:hover {
   background: #202020;
   border-color: rgba(255, 255, 255, 0.08);
@@ -692,7 +696,7 @@
 }
 
 .ct_user_message_card {
-  max-width: min(290px, 100%);
+  max-width: 80%;
   padding: 12px 14px;
   margin-left: auto;
   border-radius: 16px 16px 0px 16px;
@@ -840,9 +844,9 @@ aside.ct_project_ai_chat_section {
 }
 
 .ct_side_ai_chat_left_box12 {
-  background: rgb(255 255 255 / 1%);
-  padding: 10px;
-  border-radius: 16px 16px 16px 4px;
+  /* background: rgb(255 255 255 / 1%); */
+  /* padding: 10px; */
+  /* border-radius: 16px 16px 16px 4px; */
   /* border: 1px solid rgba(255, 255, 255, 0.1); */
   font-weight: 300;
   width: fit-content;
