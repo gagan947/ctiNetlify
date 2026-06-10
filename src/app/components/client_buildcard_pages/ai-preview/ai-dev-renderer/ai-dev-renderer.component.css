@@ -226,14 +226,11 @@
   border-radius: 10px;
   background: #181818;
   color: #d8dde7;
-  border: 1px solid rgba(255, 255, 255, 0.035);
+  /* border: 1px solid rgba(255, 255, 255, 0.035); */
   cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s ease, align-items 0.2s ease, padding 0.2s ease;
 }
 
-.ct_agent_activity__row--sub {
-  width: fit-content;
-}
 
 .ct_agent_activity__row:hover {
   background: #202020;
@@ -299,7 +296,7 @@
 
 .ct_agent_activity__logs {
   display: grid;
-  gap: 26px;
+  gap: 15px;
 }
 
 .ct_agent_activity__log {
@@ -316,7 +313,7 @@
 }
 
 .ct_agent_activity__row--sub {
-  background: #1e1e1e;
+  background: #1e1e1ec7;
 }
 
 .ct_agent_activity__mini_icon {
