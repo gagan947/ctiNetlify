@@ -1,7 +1,7 @@
 export const chatbotFlow: any = {
   welcome: {
     step: "welcome",
-    message: `Welcome to Creative AI \nI’m your AI Assistant Vanya 🤖, here to help you bring your next app or website idea to life.\nI can help you build your next app or website.\n\n👉 Please select an option below to get started.:`,
+    message: `Welcome to Creative AI \nI’m your AI Assistant Creative.ai 🤖, here to help you bring your next app or website idea to life.\nI can help you build your next app or website.\n\n👉 Please select an option below to get started.:`,
     options: [
       { label: "Build an App", next: "projectNameApp", logo: 'assets/img/app.svg' },
       { label: "Build a Website", next: "projectNameWebsite", logo : 'assets/img/websie.svg' },
