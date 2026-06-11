@@ -292,7 +292,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     if (this.selectedProjectId) {
       const existingDraftIndex = this.draftMessages.findIndex((msg: any) => msg.id === this.selectedProjectId);
       const currentInput = this.customizeInput?.nativeElement?.value || "";
-      
+
       if (existingDraftIndex > -1) {
         this.draftMessages[existingDraftIndex].message = currentInput;
       } else {
@@ -2571,31 +2571,29 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.isDeployApiSuccess = false;
     this.updateDeployTimerDisplay();
     clearInterval(this.deployTimerInterval);
-    
+
     this.deployTimerInterval = setInterval(() => {
       if (this.deployTimerSeconds > 0) {
         this.deployTimerSeconds--;
       }
-      
+
       if (this.deployTimerSeconds === 0) {
         if (this.currentDeployStep < 5) {
           this.currentDeployStep++;
           this.deployTimerSeconds = this.deployStepDurations[this.currentDeployStep - 1];
         } else {
-          // Countdown finished
+          // Countdown finished, call the API now
           clearInterval(this.deployTimerInterval);
-          if (this.isDeployApiSuccess) {
-            this.showDeploymentSuccess();
-          }
+          this.deployProject(this.selected_template_id, 'creativeai');
         }
       }
       this.updateDeployTimerDisplay();
-    }, 1000);
+    }, 100);
   }
 
   showDeploymentSuccess() {
     this.closeBootstrapModal('deploymentProgressModal');
-    this.openBootstrapModal('deploymentSuccessModal', { backdrop: 'static', keyboard: false });
+    this.router.navigate(['/user-live-projects', this.selectedProjectId]);
   }
 
   updateDeployTimerDisplay() {
@@ -2624,7 +2622,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     if (this.getCurrentCreditBalance() >= this.deployCreditsRequired) {
       this.openBootstrapModal('deploymentProgressModal', { backdrop: 'static', keyboard: false });
       this.startDeploySteps();
-      this.deployProject(this.selected_template_id, 'creativeai');
       return;
     }
 
@@ -2681,15 +2678,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       .subscribe((res: any) => {
         if (res.success) {
           this.isDeployApiSuccess = true;
-          this.successModalAction = 'navigate-dashboard';
-          this.deploymentSuccessMessage = deploymentDomainType === 'custom'
-            ? 'Your domain request has been saved successfully. Our team will reach out to you shortly if we need any additional details.'
-            : 'Your project has been deployed successfully. We will take you to the dashboard once you confirm.';
-            
-          // If countdown is already finished (currentDeployStep === 5 and seconds === 0), show success immediately
-          if (this.currentDeployStep === 5 && this.deployTimerSeconds === 0) {
-             this.showDeploymentSuccess();
-          }
+          this.showDeploymentSuccess();
         }
       });
   }
