@@ -607,3 +607,52 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="deploymentProgressModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
+    data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ct_publish_project_modal px-0 pb-0"
+            style="background: #04041c; border-radius: 16px; border: 1px solid #FFFFFF66;">
+            <div class="ct_px_30_new pt-3 pb-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-cloud-arrow-up text-white"></i>
+                        <span class="text-white ct_fs_14 ct_fw_600">Deployment in progress...</span>
+                    </div>
+                    <button type="button" class="ct_publish_project_modal__close"
+                        style="position: relative; top: 0; right: 0; background: #ffffff12; width: 28px; height: 28px; font-size: 14px;"
+                        data-bs-dismiss="modal" aria-label="Close" (click)="closeDeploymentProgress()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="text-center mb-4">
+                    <h2 class="text-white mb-2" style="font-size: 20px; font-weight: 600;">Your app will be live soon!
+                    </h2>
+                    <p style="color: #BEBFC2; font-size: 13px;">It takes around 5-7 mins. We'll notify you once done.
+                    </p>
+                </div>
+
+                <div class="ct_deployment_steps mb-2"
+                    style="border: 1px solid #ffffff12; border-radius: 12px; padding: 16px;">
+                    <ng-container *ngFor="let step of deployProgressSteps; let i = index">
+                        <div class="d-flex align-items-center justify-content-between py-3 px-3 rounded"
+                            [class.bg-active-step]="currentDeployStep === i + 1"
+                            [class.opacity-50]="currentDeployStep < i + 1">
+                            <div class="d-flex align-items-center gap-3">
+                                <i *ngIf="currentDeployStep === i + 1" class="fa-solid fa-spinner fa-spin"
+                                    style="color: #60A5FA;"></i>
+                                <i *ngIf="currentDeployStep > i + 1" class="fa-solid fa-check text-success"></i>
+                                <i *ngIf="currentDeployStep < i + 1" class="fa-regular fa-circle"
+                                    style="color: #434655;"></i>
+                                <span class="text-white ct_fs_14" [class.ct_fw_600]="currentDeployStep === i + 1"
+                                    style="font-family: monospace;">{{ step }}</span>
+                            </div>
+                            <!-- <span class="text-white ct_fs_13" style="font-family: monospace;" *ngIf="currentDeployStep === i + 1">{{ deployTimerDisplay }}</span> -->
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

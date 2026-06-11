@@ -68,8 +68,8 @@
             <i [class]="secondaryHeaderActionIconClass"></i>
             <span>{{ secondaryHeaderActionLabel }}</span>
         </button>
-        <button *ngIf="showPrimaryHeaderAction && isProjectNotDeployed(selectedProjectId)" type="button"
-            class="main-ai-topbar__deploy" (click)="handlePrimaryHeaderActionClick()">
+        <button *ngIf="showPrimaryHeaderAction" type="button" class="main-ai-topbar__deploy"
+            (click)="handlePrimaryHeaderActionClick()">
             <i [class]="primaryHeaderActionIconClass"></i>
             <span>{{ primaryHeaderActionLabel }}</span>
         </button>

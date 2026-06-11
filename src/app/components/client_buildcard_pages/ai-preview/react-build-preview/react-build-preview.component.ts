@@ -2551,6 +2551,64 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   }
 
 
+  deployProgressSteps = [
+    'Building Package...',
+    'Migrate Database',
+    'Export Secrets',
+    'Deploy',
+    'Run Health Check'
+  ];
+  deployStepDurations = [61, 15, 10, 45, 10]; // seconds per step (61s -> 01:01)
+  currentDeployStep = 1;
+  deployTimerDisplay = '01:01';
+  deployTimerInterval: any;
+  deployTimerSeconds = 61;
+  isDeployApiSuccess = false;
+
+  startDeploySteps() {
+    this.currentDeployStep = 1;
+    this.deployTimerSeconds = this.deployStepDurations[0];
+    this.isDeployApiSuccess = false;
+    this.updateDeployTimerDisplay();
+    clearInterval(this.deployTimerInterval);
+    
+    this.deployTimerInterval = setInterval(() => {
+      if (this.deployTimerSeconds > 0) {
+        this.deployTimerSeconds--;
+      }
+      
+      if (this.deployTimerSeconds === 0) {
+        if (this.currentDeployStep < 5) {
+          this.currentDeployStep++;
+          this.deployTimerSeconds = this.deployStepDurations[this.currentDeployStep - 1];
+        } else {
+          // Countdown finished
+          clearInterval(this.deployTimerInterval);
+          if (this.isDeployApiSuccess) {
+            this.showDeploymentSuccess();
+          }
+        }
+      }
+      this.updateDeployTimerDisplay();
+    }, 1000);
+  }
+
+  showDeploymentSuccess() {
+    this.closeBootstrapModal('deploymentProgressModal');
+    this.openBootstrapModal('deploymentSuccessModal', { backdrop: 'static', keyboard: false });
+  }
+
+  updateDeployTimerDisplay() {
+    const m = Math.floor(this.deployTimerSeconds / 60).toString().padStart(2, '0');
+    const s = (this.deployTimerSeconds % 60).toString().padStart(2, '0');
+    this.deployTimerDisplay = `${m}:${s}`;
+  }
+
+  closeDeploymentProgress() {
+    clearInterval(this.deployTimerInterval);
+    this.closeBootstrapModal('deploymentProgressModal');
+  }
+
   async checkNDeploy() {
     const templates = await this.getUserTemplates();
     const activeDesign = templates.find((t: any) => t.inquiryId === this.selectedProjectId)?.templateId;
@@ -2564,7 +2622,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.closeBootstrapModal('deployConfirmModal');
 
     if (this.getCurrentCreditBalance() >= this.deployCreditsRequired) {
-      this.openBootstrapModal('publishProjectModal', { backdrop: 'static', keyboard: true });
+      this.openBootstrapModal('deploymentProgressModal', { backdrop: 'static', keyboard: false });
+      this.startDeploySteps();
+      this.deployProject(this.selected_template_id, 'creativeai');
       return;
     }
 
@@ -2620,11 +2680,16 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       .postAPI('api/user/tempalteDeployed', payload)
       .subscribe((res: any) => {
         if (res.success) {
+          this.isDeployApiSuccess = true;
           this.successModalAction = 'navigate-dashboard';
           this.deploymentSuccessMessage = deploymentDomainType === 'custom'
             ? 'Your domain request has been saved successfully. Our team will reach out to you shortly if we need any additional details.'
             : 'Your project has been deployed successfully. We will take you to the dashboard once you confirm.';
-          this.openBootstrapModal('deploymentSuccessModal', { backdrop: 'static', keyboard: false });
+            
+          // If countdown is already finished (currentDeployStep === 5 and seconds === 0), show success immediately
+          if (this.currentDeployStep === 5 && this.deployTimerSeconds === 0) {
+             this.showDeploymentSuccess();
+          }
         }
       });
   }
