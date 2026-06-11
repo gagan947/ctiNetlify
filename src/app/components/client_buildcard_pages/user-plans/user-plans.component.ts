@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, ViewEncapsulation } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ApiService } from '../../../services/api.service';
@@ -68,7 +68,8 @@ interface CreditBalanceSummary {
   standalone: true,
   imports: [CommonModule, WorkspaceHeaderComponent],
   templateUrl: './user-plans.component.html',
-  styleUrl: './user-plans.component.css'
+  styleUrls: ['./user-plans.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class UserPlansComponent {
   planName = 'Free Plan';

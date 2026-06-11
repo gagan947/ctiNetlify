@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { WorkspaceHeaderComponent } from '../client_buildcard_pages/workspace-header/workspace-header.component';
@@ -41,7 +41,8 @@ type DashboardFilter = 'all' | 'draft' | 'live' | 'expired';
   standalone: true,
   imports: [RouterLink, CommonModule, WorkspaceHeaderComponent],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrls: ['./dashboard.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent {
   allProjectsList: DashboardProject[] = [];

@@ -18,8 +18,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://dv-c3e594c6d429469e90b54478358619c3.ecs.us-east-1.on.aws" crossorigin>
+  <link rel="preconnect" href="https://api.creativethoughts.ai" crossorigin>
+  <link rel="preconnect" href="https://dev-api.creativethoughts.ai" crossorigin>
 
   <link rel="preload" as="style" href="assets/css/figtree.css" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="https://fonts.gstatic.com/s/figtree/v9/_Xms-HUzqDCFdgfMm4S9DQ.woff2">
 
 
   <style>
@@ -112,32 +117,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   </noscript>
 
-  <script>
-    !function (f, b, e, v, n, t, s) {
-      if (f.fbq) return; n = f.fbq = function () {
-        n.callMethod ?
-          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-      };
-      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-      n.queue = []; t = b.createElement(e); t.async = !0;
-      t.src = v; s = b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t, s)
-    }(window, document, 'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1584284446204535');
-    fbq('track', 'PageView');
-  </script>
+  <!-- Tracking scripts have been moved to bottom of body to lazy-load on interaction -->
   <!-- <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/responsive.css">
   <link rel="stylesheet" href="/assets/css/user-dashboard.css"> -->
 
   <base href="/">
-  <!-- Google tag (gtag.js) event -->
-  <script>
-    gtag('event', 'conversion_event_signup', {
-      // <event_parameters>
-    });
-  </script>
 
 </head>
 
@@ -160,7 +145,8 @@
     integrity="sha512-Ysw1DcK1P+uYLqprEAzNQJP+J4hTx4t/3X2nbVwszao8wD+9afLjBQYjz7Uk4ADP+Er++mJoScI42ueGtQOzEA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
   <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
-  <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+  <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js" async
+    defer></script>
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
     {
@@ -275,17 +261,44 @@
 }
 </script>
 
-  <!-- Defer non-critical JS -->
-  <script defer src="https://connect.facebook.net/en_US/fbevents.js"></script>
-  <script defer src="https://www.googletagmanager.com/gtm.js?id=GTM-PF873KR8"></script>
+  <!-- Lazy Load Heavy Tracking Scripts (Lighthouse Optimization) -->
+  <script>
+    let scriptsLoaded = false;
+    function loadHeavyScripts() {
+      if (scriptsLoaded) return;
+      scriptsLoaded = true;
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CP6K3WHHN4"></script>
-  <script defer>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-CP6K3WHHN4');
+      // Load GA
+      const gaScript = document.createElement('script');
+      gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-CP6K3WHHN4';
+      gaScript.async = true;
+      document.head.appendChild(gaScript);
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { window.dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', 'G-CP6K3WHHN4');
+      gtag('event', 'conversion_event_signup', {});
+
+      // Load GTM
+      const gtmScript = document.createElement('script');
+      gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-PF873KR8';
+      gtmScript.defer = true;
+      document.head.appendChild(gtmScript);
+
+      // Load FB Pixel
+      !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '1584284446204535');
+      fbq('track', 'PageView');
+    }
+
+    // Trigger on any meaningful interaction
+    ['scroll', 'mousemove', 'touchstart', 'keydown'].forEach(event => {
+      window.addEventListener(event, loadHeavyScripts, { once: true, passive: true });
+    });
+    // Fallback: If no interaction after 5 seconds, load anyway
+    setTimeout(loadHeavyScripts, 5000);
   </script>
 
   <!-- Facebook Pixel noscript -->
