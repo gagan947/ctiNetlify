@@ -1657,3 +1657,56 @@ p {
     transform: rotate(360deg);
   }
 }
+
+.ct_take_live_modal {
+    background: #04041c;
+    padding: 32px;
+    border-radius: 26px;
+    border: 1px solid #FFFFFF66;
+}
+.ct_take_live_header h2 {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.ct_take_live_header p {
+    color: #BEBFC2;
+    font-size: 14px;
+    max-width: 470px;
+    margin: 0 auto;
+}
+.ct_take_live_plan_card {
+    background: #FFFFFF12;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 20px;
+    max-width: 420px;
+    width: 100%;
+}
+.ct_plan_icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+}
+.ct_action_card {
+    background: #FFFFFF12;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: left;
+}
+.ct_action_card .btn-outline-success {
+    color: #4ade80;
+    border-color: #4ade80;
+}
+.ct_action_card .btn-outline-success:hover {
+    background: rgba(74, 222, 128, 0.1);
+    color: #4ade80;
+}

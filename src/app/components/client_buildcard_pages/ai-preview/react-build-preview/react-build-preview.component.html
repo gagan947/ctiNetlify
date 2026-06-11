@@ -218,34 +218,79 @@
 
 
 <div class="modal fade" id="deployConfirmModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content mb-2 ct_deploy_confirm_modal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content mb-2 ct_take_live_modal position-relative">
             <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <div class="ct_deploy_confirm_modal__badge">
-                <i class="fa-solid fa-rocket"></i>
-            </div>
-            <div class="ct_deploy_confirm_modal__header">
-                <h2>Deploy This Template?</h2>
-                <p class="mb-0">
-                    You are about to move this preview into deployment for your project. Once you continue, this
-                    becomes the final selected template for the current project.
+
+            <div class="ct_take_live_header text-center pt-3">
+                <h2>Take your app live!</h2>
+                <p>Deploy to an Creative.ai hosted production-ready environment and get a live URL for your application.
                 </p>
             </div>
-            <div class="info-box mb-0 ct_deploy_confirm_modal__info">
-                <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
-                <div class="info-text">
-                    This is a one-time deployment decision. Please make sure you are happy with this version, because
-                    you will not be able to switch to another template variation after deployment.
+
+            <div class="ct_take_live_plan_card mx-auto mt-4 mb-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="ct_plan_icon">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-0 text-white ct_fs_14 ct_fw_600">Starter</h4>
+                            <p class="mb-0 ct_fs_12" style="color: #BEBFC2;">0.05 vCPU · 200 MB RAM</p>
+                        </div>
+                    </div>
+                </div>
+                <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 16px 0;">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-2 text-white">
+                        <i class="fa-solid fa-wand-magic-sparkles" style="color: #BEBFC2;"></i>
+                        <span class="ct_fs_13" style="color: #BEBFC2;">Get 2 months free on annual</span>
+                    </div>
+                    <div class="form-check form-switch mb-0">
+                        <input class="form-check-input" type="checkbox" role="switch">
+                    </div>
                 </div>
             </div>
-            <div class="actions">
-                <button class="btn-cancel button-deploy" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn-confirm button-deploy" (click)="checkNDeploy()">
-                    Continue
+
+            <div class="text-center mt-3 mb-3">
+                <div class="d-inline-flex align-items-center gap-2">
+                    <span class="text-white ct_fs_13"><span style="color: #FACC15;">🪙</span> 60 credits / month</span>
+                    <span class="badge"
+                        style="background: rgba(255, 255, 255, 0.1); color: #F8B4B4; border-radius: 4px; padding: 4px 8px; font-weight: 500;">⚡
+                        Free with PRO</span>
+                </div>
+            </div>
+
+            <div class="text-center mb-5">
+                <button class="btn btn-light ct_fw_600 w-100"
+                    style="max-width: 320px; border-radius: 8px; padding: 10px;" (click)="checkNDeploy()">
+                    Start deployment
                 </button>
             </div>
+
+            <!-- <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="ct_action_card h-100">
+                        <h5 class="text-white ct_fs_14 ct_fw_600 mb-2"><i
+                                class="fa-solid fa-code text-success me-2"></i> Improve code quality</h5>
+                        <p class="ct_fs_13 mb-3" style="color: #BEBFC2;">Clean up and strengthen your code</p>
+                        <button class="btn btn-outline-success btn-sm w-auto"
+                            style="border-radius: 6px; padding: 4px 12px;">Run Code Review</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="ct_action_card h-100">
+                        <h5 class="text-white ct_fs_14 ct_fw_600 mb-2"><i
+                                class="fa-solid fa-shield-halved text-success me-2"></i> Check deployment readiness</h5>
+                        <p class="ct_fs_13 mb-3" style="color: #BEBFC2;">Catch blockers before you ship</p>
+                        <button class="btn btn-outline-success btn-sm w-auto"
+                            style="border-radius: 6px; padding: 4px 12px;">Run Health Check</button>
+                    </div>
+                </div>
+            </div> -->
+
         </div>
     </div>
 </div>
