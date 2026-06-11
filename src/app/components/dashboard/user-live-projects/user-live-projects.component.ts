@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SidebarComponent } from "../../client_buildcard_pages/sidebar/sidebar.component";
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { WorkspaceHeaderComponent } from "../../client_buildcard_pages/workspace-header/workspace-header.component";
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-live-projects',
@@ -13,15 +14,22 @@ import { WorkspaceHeaderComponent } from "../../client_buildcard_pages/workspace
   templateUrl: './user-live-projects.component.html',
   styleUrl: './user-live-projects.component.css'
 })
-export class UserLiveProjectsComponent {
-  @Input() id: any
+export class UserLiveProjectsComponent implements OnInit {
+  @Input() id: any;
   projectData: any;
   baseUrl = this.apiService.reactBuildURl;
   imagebaseUrl = this.apiService.imageUrl;
   projectFeatures: any = [];
   addedFeatures: any = [];
-  constructor(private apiService: ApiService, private message: NzMessageService, private router: Router) {
-  }
+  safeUrl: SafeResourceUrl | null = null;
+
+  constructor(
+    private apiService: ApiService,
+    private message: NzMessageService,
+    private router: Router,
+    private sanitizer: DomSanitizer
+  ) { }
+
   ngOnInit(): void {
     sessionStorage.clear();
     this.getProjects();
@@ -33,11 +41,13 @@ export class UserLiveProjectsComponent {
       (res: any) => {
         if (res.success) {
           this.projectData = res.data[0];
-          this.projectFeatures = JSON.parse(res.data[0].projectFeatures);
-          this.addedFeatures = JSON.parse(res.data[0].additionalFeatures);
-
-
-          // sessionStorage.setItem('projectData', JSON.stringify(res.data));
+          if (this.projectData.deployed_url) {
+            let url = this.projectData.deployed_url;
+            if (!url.startsWith('http')) {
+              url = 'https://' + url;
+            }
+            this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+          }
         } else {
           this.router.navigate(['/dashboard']);
           this.message.error(res.message);

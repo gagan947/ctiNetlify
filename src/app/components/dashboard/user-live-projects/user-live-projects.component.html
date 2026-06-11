@@ -2,170 +2,111 @@
     <app-workspace-header></app-workspace-header>
     <div class="ct_dash_right_content ct_white_bg_page ">
         @if(projectData){
-        <div class="container">
-            <!-- HEADER -->
+        <div class="container mt-4">
+            <!-- HEADER TITLE -->
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <i class="fa-solid fa-cloud text-white" style="font-size: 20px;"></i>
+                <h4 class="text-white mb-0" style="font-size: 20px; font-weight: 600;">Manage Deployments</h4>
+            </div>
+
+            <!-- DEPLOYMENT INFO CARD -->
             <div class="card project-card mb-4">
                 <div class="card-body">
-
-                    <div class="row align-items-center">
-
-                        <div class="col-md-12 mb-3 mb-md-0">
-                            <div class="d-flex align-items-center gap-4 ct_flex_col_767">
-                                <div class="project-thumb">
-                                <img loading="lazy" [src]="imagebaseUrl + projectData.clientProjectLogo"
-                                    alt="AI-powered app and web development" class="w-auto mx-auto d-block ct_img_80 ">
+                    <div class="d-flex align-items-center gap-4 ct_flex_col_767">
+                        <div class="project-thumb position-relative overflow-hidden"
+                            style="flex-shrink: 0; width: 180px; height: 130px; background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                            @if (safeUrl) {
+                            <iframe [src]="safeUrl"
+                                style="width: 1440px; height: 1040px; border: none; pointer-events: none; transform: scale(0.125); transform-origin: top left; position: absolute; top: 0; left: 0;"></iframe>
+                            } @else if (projectData.clientProjectLogo) {
+                            <img loading="lazy" [src]="imagebaseUrl + projectData.clientProjectLogo"
+                                alt="Project thumbnail" class="w-100 h-100"
+                                style="object-fit: cover; border-radius: 12px;">
+                            } @else {
+                            <div class="text-center px-2">
+                                <div
+                                    style="width: 48px; height: 48px; background: rgba(65, 64, 178, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+                                    <i class="fa-solid fa-laptop-code" style="font-size: 20px; color: #4140B2;"></i>
+                                </div>
+                                <div
+                                    style="color: #BEBFC2; font-size: 13px; font-weight: 500; max-width: 150px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+                                    {{ projectData.clientProjectName || 'Project' }}
+                                </div>
                             </div>
-                            <div style="flex: 1;">
-                                <h4 class="fw-semibold mb-2">
-                                {{projectData.clientProjectName}}
-                            </h4>
+                            }
+                        </div>
 
-                            <div class="meta d-flex flex-wrap gap-3 mb-3 justify-content-between align-items-center">
-
-                                <small>Client: <strong>{{projectData.clientName}}</strong></small>
-                                <small>Created: {{projectData.createdAt | date : "MMM d, y, h:mm a"}}</small>
-
-                                <span class="badge bg-success-subtle text-success">
-                                    Active
+                        <div style="flex: 1;">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <span
+                                    class="badge bg-success-subtle text-success d-flex align-items-center gap-2 py-2 px-3 rounded-pill"
+                                    style="font-size: 13px;">
+                                    <span
+                                        style="width: 8px; height: 8px; background: currentColor; border-radius: 50%; display: inline-block;"></span>
+                                    Live
                                 </span>
-
+                                <span class="badge d-flex align-items-center gap-2 py-2 px-3 rounded-pill"
+                                    style="background: rgba(255,255,255,0.1); color: #BEBFC2; font-size: 13px; border: 1px solid rgba(255,255,255,0.1);">
+                                    <i class="fa-solid fa-coins text-white"></i> 60 / month
+                                </span>
                             </div>
-                             <div>
 
-                                <a [href]="baseUrl + projectData.deployed_url" target="_blank"
-                                    class="main-ai-topbar__credits py-2 px-4">
-                                    View Live
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <a [href]="projectData.deployed_url" target="_blank"
+                                    class="text-white text-decoration-underline"
+                                    style="font-size: 16px; font-weight: 500;">
+                                    {{ projectData.deployed_url || 'clipper-studio-3.emergent.host' }}
                                 </a>
+                                <button class="btn btn-link text-white p-0 text-decoration-none">
+                                    <i class="fa-regular fa-copy" style="color: #BEBFC2;"></i>
+                                </button>
                             </div>
+
+                            <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <a [href]="projectData.deployed_url" target="_blank"
+                                    class="main-ai-topbar__credits d-flex align-items-center gap-2 py-2 px-4 text-decoration-none"
+                                    style="height: auto;">
+                                    <i class="fa-solid fa-globe"></i> Visit
+                                </a>
+                                <!-- <button class="btn btn-outline-light d-flex align-items-center gap-2 py-2 px-4"
+                                    style="border-radius: 5px; font-size: 13px; font-weight: 500; border-color: rgba(255,255,255,0.2);">
+                                    <i class="fa-solid fa-chart-line"></i> Analytics
+                                </button> -->
+                                <button class="btn btn-outline-light d-flex align-items-center gap-2 py-2 px-4"
+                                    style="border-radius: 5px; font-size: 13px; font-weight: 500; border-color: rgba(255,255,255,0.2);">
+                                    <i class="fa-solid fa-plus"></i> Add your Domain
+                                </button>
                             </div>
-                            </div>
-                              
                         </div>
-
-                       
-
                     </div>
-
                 </div>
             </div>
 
-            <!-- FEATURES -->
-            <div class="card project-card mb-4">
+            <!-- ANNUAL PLAN BANNER -->
+            <div class="card project-card mb-5">
                 <div class="card-body">
-
-                    <h6 class="fw-semibold mb-3">Main Features</h6>
-
-                    <div class="main-feature-content">
-                        @for (item of projectFeatures; track $index) {
-                        <div>
-                            <h5 class="main-feature-head">{{item.featureName}}</h5>
-                            <ul class="main-feature-list">
-                                @for (sub_item of item.subFeatures; track $index) {
-                                <li class="feature-badge">{{sub_item.subFeatureName}}</li>
-                                }
-                            </ul>
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="d-flex align-items-center justify-content-center"
+                                style="width: 46px; height: 46px; background: rgba(65, 64, 178, 0.2); border: 1px solid #4140B2; border-radius: 12px; transform: rotate(45deg);">
+                                <i class="fa-solid fa-percent"
+                                    style="color: #4140B2; font-size: 20px; font-weight: bold; transform: rotate(-45deg);"></i>
+                            </div>
+                            <div class="ms-2">
+                                <h5 class="text-white mb-1" style="font-size: 15px; font-weight: 600;">Keep your app
+                                    live for a full year</h5>
+                                <p class="mb-0" style="color: #8c8e98; font-size: 13px;">500 Credits / year • 2 months
+                                    free</p>
+                            </div>
                         </div>
-
-                        }
-
-
+                        <button class="main-ai-topbar__credits d-flex align-items-center gap-2 py-2 px-4"
+                            style="height: auto;">
+                            <i class="fa-solid fa-tag"></i> Switch to annual
+                        </button>
                     </div>
-
                 </div>
             </div>
-
-            @if (addedFeatures.length) {
-            <div class="card project-card mb-4">
-                <div class="card-body">
-
-                    <h6 class="fw-semibold mb-3">Additional Features</h6>
-
-                    <div class="main-feature-content">
-                        @for (item of addedFeatures; track $index) {
-                        <div>
-                            <h5 class="main-feature-head">{{item.featureName}}</h5>
-                            <ul class="main-feature-list">
-                                @for (sub_item of item.subFeatures; track $index) {
-                                <li class="feature-badge">{{sub_item.subFeatureName}}</li>
-                                }
-
-
-                            </ul>
-
-                        </div>
-
-                        }
-                        <div>
-                            <h5 class="main-feature-head">Product Listing</h5>
-                            <ul class="main-feature-list">
-                                <li class="feature-badge">Select</li>
-                                <li class="feature-badge">Select</li>
-                            </ul>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-            }
-
-
-
-            <!-- TECH STACK -->
-            <div class="card project-card mb-4">
-                <div class="card-body">
-
-                    <h6 class="fw-semibold mb-3">Tech Stack</h6>
-
-                    <div>
-
-                        <span class="tech-pill">React JS</span>
-                        <span class="tech-pill">Node JS</span>
-                        <span class="tech-pill">MYSQL</span>
-                        <span class="tech-pill">AWS</span>
-
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- TIMELINE -->
-            <!-- <div class="card project-card">
-                    <div class="card-body">
-    
-                        <h6 class="fw-semibold mb-3">
-                            Project Activity Timeline
-                        </h6>
-    
-                        <div class="timeline">
-    
-                            <div class="timeline-item">
-                                <strong>Project Created</strong><br>
-                                <small>12 Jan 2026</small>
-                            </div>
-    
-                            <div class="timeline-item">
-                                <strong>UI Approved</strong><br>
-                                <small>25 Jan 2026</small>
-                            </div>
-    
-                            <div class="timeline-item">
-                                <strong>Beta Version Released</strong><br>
-                                <small>20 Feb 2026</small>
-                            </div>
-    
-                            <div class="timeline-item">
-                                <strong>Deployment Scheduled</strong><br>
-                                <small>15 March 2026</small>
-                            </div>
-    
-                        </div>
-    
-                    </div>
-                </div> -->
         </div>
-
         }
     </div>
 </section>
