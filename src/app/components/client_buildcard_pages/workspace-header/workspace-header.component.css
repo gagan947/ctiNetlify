@@ -845,13 +845,8 @@ button.main-ai-topbar__tab.main-ai-topbar__tab--active {
 
 @media (max-width: 991px) {
 
-    .main-ai-topbar {
-        padding-block: 4px;
-    }
-
-    .main-ai-topbar__home {
-        border-radius: 10px;
-    }
+    
+ 
 
     .main-ai-topbar__left {
         display: flex;

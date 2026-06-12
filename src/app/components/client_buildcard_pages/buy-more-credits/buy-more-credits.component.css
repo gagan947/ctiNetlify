@@ -1,3 +1,10 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.5.15,
+* Autoprefixer: v10.5.0
+* Browsers: last 4 version
+*/
+
 .ct_buy_credits_modal_root {
   width: 100%;
 }
@@ -5,9 +12,15 @@
 .ct_buy_credits {
   min-height: auto;
   /* padding: 28px; */
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   background: transparent;
 }
 
@@ -55,7 +68,9 @@
 }
 
 .ct_buy_credits__grid {
+  display: -ms-grid;
   display: grid;
+  -ms-grid-columns: minmax(0, 1fr) 14px minmax(0, 1fr) 14px minmax(0, 1fr);
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
@@ -71,25 +86,41 @@
   border-radius: 10px;
   border: 1px solid #6870864D;
   background: #FFFFFF12;
-  box-shadow: 0px 1px 4px 0px #00000040;
+  -webkit-box-shadow: 0px 1px 4px 0px #00000040;
+          box-shadow: 0px 1px 4px 0px #00000040;
+  -webkit-transition: 0.4s ease all;
   transition: 0.4s ease all;
   text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .ct_credit_card__featured {
-  box-shadow: 0px 0px 15.6px 0px #4140B2;
+  -webkit-box-shadow: 0px 0px 15.6px 0px #4140B2;
+          box-shadow: 0px 0px 15.6px 0px #4140B2;
 
 }
 
 
 
 .ct_credit_card__offer {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   min-height: 30px;
   padding: 8px 10px;
   border-radius: 0 0 10px 10px;
@@ -103,11 +134,18 @@
 }
 
 .ct_credit_card__body {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 0px;
   margin-bottom: 16px;
-  flex: 1;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
 }
 
 .ct_credit_card h4 {
@@ -123,10 +161,19 @@
 }
 
 .ct_credit_card__price {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   gap: 4px;
   margin-bottom: 0;
 }
@@ -142,14 +189,19 @@
   list-style: none;
   padding: 0;
   margin: 25px 0 0;
+  display: -ms-grid;
   display: grid;
   gap: 10px;
   text-align: left;
 }
 
 .ct_credit_card__benefits li {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 8px;
   color: #BEBFC2;
   font-size: 14px;
@@ -169,6 +221,7 @@
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
+  -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
 }
 
@@ -178,6 +231,7 @@
   background: #fff;
   color: #4140B2;
   margin-top: 24px;
+  -webkit-transition: 0.4s ease all;
   transition: 0.4s ease all;
 }
 
@@ -228,15 +282,21 @@
 }
 
 .ct_buy_credits__custom_row {
+  display: -ms-grid;
   display: grid;
+  -ms-grid-columns: 1fr 12px auto;
   grid-template-columns: 1fr auto;
   gap: 12px;
 }
 
 .ct_buy_credits__input_wrap {
   min-height: 48px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 10px;
   padding: 0 14px;
   border-radius: 12px;
@@ -259,6 +319,22 @@
   color: #fff;
   font-size: 15px;
   font-weight: 600;
+}
+
+.ct_buy_credits__input_wrap input::-webkit-input-placeholder {
+  color: #98a2b3;
+}
+
+.ct_buy_credits__input_wrap input::-moz-placeholder {
+  color: #98a2b3;
+}
+
+.ct_buy_credits__input_wrap input:-ms-input-placeholder {
+  color: #98a2b3;
+}
+
+.ct_buy_credits__input_wrap input::-ms-input-placeholder {
+  color: #98a2b3;
 }
 
 .ct_buy_credits__input_wrap input::placeholder {
@@ -295,6 +371,7 @@
 
   .ct_buy_credits__grid,
   .ct_buy_credits__custom_row {
+    -ms-grid-columns: 1fr;
     grid-template-columns: 1fr;
   }
 }
