@@ -29,6 +29,7 @@
   /* background-position: center;
   background-size: cover;
   background-repeat: no-repeat; */
+  min-height: calc(100vh - 120px);
 
 }
 
