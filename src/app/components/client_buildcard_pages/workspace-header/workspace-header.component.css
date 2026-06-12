@@ -910,7 +910,7 @@ button.main-ai-topbar__tab.main-ai-topbar__tab--active {
         top: 0;
         left: -100%;
         width: min(320px, 86vw);
-        height: 100vh;
+        height: 100dvh;
         padding: 18px 14px;
         background: #0b1018;
         border-right: 1px solid rgba(255, 255, 255, 0.08);

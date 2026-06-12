@@ -6,7 +6,7 @@ body{
     .ct_dash_right_content{
         background: #000;
     color-scheme: dark;
-    height: calc(100vh - 50px);
+    height: calc(100dvh - 50px);
     overflow-y: auto;
     }
     

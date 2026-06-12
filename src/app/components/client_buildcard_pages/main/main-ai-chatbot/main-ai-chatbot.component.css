@@ -48,7 +48,7 @@
 .main-ai-chat-scroll {
   flex: 1 1 auto;
   min-height: 0;
-  height: calc(100vh - 215px);
+  height: calc(100dvh - 215px);
   padding: 20px 28px 14px;
   overflow-y: auto;
   scrollbar-gutter: stable;
@@ -758,7 +758,7 @@
   }
 
   .main-ai-chat-card {
-    min-height: calc(100vh - 110px);
+    min-height: calc(100dvh - 110px);
   }
 
   .main-ai-chat-scroll {
@@ -791,12 +791,12 @@
   }
 
   .main-ai-chat-card {
-    min-height: calc(100vh - 66px);
+    min-height: calc(100dvh - 66px);
     border-radius: 22px;
   }
 
   .main-ai-chat-scroll {
-    height: calc(100vh - 250px);
+    height: calc(100dvh - 250px);
     padding: 18px 14px 8px;
   }
 

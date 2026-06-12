@@ -1,7 +1,7 @@
 @import '../../../assets/css/user-dashboard.css';
 
 .ct_dashboard_shell {
-  min-height: 100vh;
+  min-height: 100dvh;
   background:
     radial-gradient(circle at top left, rgba(255, 214, 160, 0.18), transparent 26%),
     radial-gradient(circle at top right, rgba(196, 181, 253, 0.2), transparent 24%),
@@ -12,7 +12,7 @@
   padding: 20px 0 34px;
   background: #000;
   color-scheme: dark;
-  height: calc(100vh - 50px);
+  height: calc(100dvh - 50px);
   overflow-y: auto;
 }
 

@@ -16,7 +16,7 @@ nu-monaco-editor {
 }
 
 .ai-code-wrapper {
-  height: calc(100vh - 88px) !important;
+  height: calc(100dvh - 88px) !important;
 }
 
 .code-header {

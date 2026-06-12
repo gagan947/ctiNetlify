@@ -41,7 +41,7 @@
     padding: 80px 20px;
     align-items: flex-start;
     background: var(--light_blue);
-    height: 100vh;
+    height: 100dvh;
     transition: 0.6s ease all;
     transform: scaleX(0);
     z-index: 99;
@@ -379,7 +379,7 @@
 
   .ct_chat_item_left {
 
-    height: calc(100vh - 60px) !important;
+    height: calc(100dvh - 60px) !important;
     margin-top: 30px;
   }
 

@@ -4,7 +4,7 @@ body,
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100dvh;
   margin: 0;
   font-family: "Poppins", sans-serif;
   background: radial-gradient(circle at top right, #6a11cb, #2575fc);

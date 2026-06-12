@@ -9,7 +9,7 @@
   background-color: #edf7fe;
   width: 180px;
   padding-block: 23px;
-  height: 100vh;
+  height: 100dvh;
   position: fixed;
   top: 0px;
   overflow-y: auto;
@@ -623,7 +623,7 @@ p {
 
 /* Calender css S */
 .ct_meeting_empy_box {
-  height: calc(100vh - 104px);
+  height: calc(100dvh - 104px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1208,7 +1208,7 @@ span.et_green {
   max-width: 450px;
   width: 100%;
   top: 0px !important;
-  height: 100vh;
+  height: 100dvh;
   background-color: #fff;
   margin-top: 0px;
 }
@@ -1219,7 +1219,7 @@ span.et_green {
 }
 
 .et_raise_support_1 .modal-body {
-  height: calc(100vh - 75px);
+  height: calc(100dvh - 75px);
   overflow-y: auto;
   /* padding-bottom: 50px; */
 }
@@ -1446,5 +1446,5 @@ span.et_document_badge_1 {
     border-radius: 0px 12px 12px;
     display: grid
 ;
-    height: calc(100vh - 30px);
+    height: calc(100dvh - 30px);
 }
