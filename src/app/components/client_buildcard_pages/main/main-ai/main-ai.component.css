@@ -6,7 +6,7 @@
 */
 
 .main-ai-page-shell {
-  min-height: 100dvh;
+  min-height: calc(100dvh - 0px);
   background: #fff;
 }
 
@@ -379,11 +379,7 @@
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
   }
-  .main-ai-wrap{
-    height: auto;
-    min-height: calc(100dvh - 50px);
-    overflow-y: auto;
-  }
+
 }
 
 .main-ai-build-btn,

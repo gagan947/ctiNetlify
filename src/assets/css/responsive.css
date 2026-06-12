@@ -726,6 +726,14 @@
   .ct_build_visual.ct_build_visual_mobile img + img {
     display: none;
 }
+
+.main-ai-topbar__home span {
+    display: none;
+}
+.main-ai-topbar__home svg {
+  width: 16px;
+  height: 16px;
+}
 }
 
 

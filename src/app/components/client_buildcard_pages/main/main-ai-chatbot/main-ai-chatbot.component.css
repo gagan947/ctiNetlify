@@ -53,6 +53,7 @@
   overflow-y: auto;
   scrollbar-gutter: stable;
 }
+/* width */
 
 .main-ai-thread-row {
   display: flex;
@@ -790,7 +791,7 @@
   }
 
   .main-ai-chat-card {
-    min-height: calc(100vh - 92px);
+    min-height: calc(100vh - 66px);
     border-radius: 22px;
   }
 

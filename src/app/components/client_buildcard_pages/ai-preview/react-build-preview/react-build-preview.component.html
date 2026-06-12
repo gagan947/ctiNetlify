@@ -9,7 +9,7 @@
         <div *ngIf="isChatResizing" class="ct_chat_resize_overlay" (mousemove)="resizeChatSection($event)"
             (mouseup)="stopChatResize()"></div>
         @if (!fullScreen) {
-        <aside class="ct_project_ai_chat_section" style="height: calc(100vh - 50px);"
+        <aside class="ct_project_ai_chat_section"
             [style.width.px]="chatSectionWidth" [class.is-resizing]="isChatResizing">
             <button type="button" class="ct_chat_resize_handle" aria-label="Resize chat panel"
                 (mousedown)="startChatResize($event)"></button>

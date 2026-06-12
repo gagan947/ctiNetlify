@@ -518,3 +518,23 @@ aside.ct_project_ai_chat_section {
 .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
       background-color: #111 !important;
 }
+
+
+.main-ai-chat-scroll::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+/* Track */
+.main-ai-chat-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+.main-ai-chat-scroll::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+.main-ai-chat-scroll::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
