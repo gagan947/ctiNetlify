@@ -538,3 +538,8 @@ aside.ct_project_ai_chat_section {
 .main-ai-chat-scroll::-webkit-scrollbar-thumb:hover {
   background: #555; 
 }
+html,
+body {
+  
+  overscroll-behavior: none;
+}
