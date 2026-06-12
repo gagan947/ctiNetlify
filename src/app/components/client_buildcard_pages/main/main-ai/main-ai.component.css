@@ -6,13 +6,13 @@
 */
 
 .main-ai-page-shell {
-  min-height: 100vh;
+  min-height: 100dvh;
   background: #fff;
 }
 
 .main-ai-wrap {
   min-height: 100%;
-  height: calc(100vh - 50px);
+  height: calc(100dvh - 50px);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -29,7 +29,7 @@
   /* background-position: center;
   background-size: cover;
   background-repeat: no-repeat; */
-  min-height: calc(100vh - 120px);
+  min-height: calc(100dvh - 120px);
 
 }
 
@@ -381,7 +381,7 @@
   }
   .main-ai-wrap{
     height: auto;
-    min-height: calc(100vh - 50px);
+    min-height: calc(100dvh - 50px);
     overflow-y: auto;
   }
 }
@@ -667,7 +667,7 @@
 
 .preview-wrapper {
   width: 100%;
-  height: calc(100vh - 38px);
+  height: calc(100dvh - 38px);
   overflow-y: auto;
   position: relative;
 }
@@ -720,7 +720,7 @@ section.ct_project_ai_preview_main {
 
 .ct_ai_project_preview_right {
   padding: 0px;
-  height: calc(100vh - 38px);
+  height: calc(100dvh - 38px);
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
@@ -746,12 +746,12 @@ aside.ct_project_ai_chat_section {
 }
 
 aside.ct_project_ai_chat_section>div:first-child {
-  height: calc(100vh - 126px);
+  height: calc(100dvh - 126px);
   overflow-y: auto;
 }
 
 .ct_chat_scroll_wrap {
-  height: calc(100vh - 126px);
+  height: calc(100dvh - 126px);
   overflow-y: auto;
   min-height: 0;
 }
@@ -777,12 +777,12 @@ aside.ct_project_ai_chat_section>div:first-child {
 }
 
 .preview-wrapper iframe.preview-iframe {
-  height: calc(100vh - 44px) !important;
+  height: calc(100dvh - 44px) !important;
 }
 
 aside.ct_project_ai_chat_section ul {
   /* overflow-y: auto; */
-  /* height: calc(100vh - 102px); */
+  /* height: calc(100dvh - 102px); */
 }
 
 .ct_ai_project_lefr {
@@ -956,7 +956,7 @@ li.ct_ai_project_right {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  height: calc(100vh - 30px);
+  height: calc(100dvh - 30px);
   gap: 20px;
 }
 
@@ -969,7 +969,7 @@ li.ct_ai_project_right {
 /* From Uiverse.io by dexter-st */
 
 .ct_dash_right_content_side_ai_loader {
-  height: calc(100vh - 108px);
+  height: calc(100dvh - 108px);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1321,7 +1321,7 @@ li.ct_ai_project_right {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  height: calc(100vh - 39px);
+  height: calc(100dvh - 39px);
   z-index: 9999;
   position: absolute;
   top: 50%;
@@ -1590,7 +1590,7 @@ li.ct_ai_project_right {
 
 
 .ct_first_regen_block {
-  min-height: calc(-100px + 100vh);
+  min-height: calc(-100px + 100dvh);
 
 }
 
@@ -1784,11 +1784,7 @@ li.ct_ai_project_right {
         -ms-flex: 1 1 auto;
             flex: 1 1 auto;
   }
-   .main-ai-wrap{
-    height: auto;
-    min-height: calc(100vh - 120px);
-    overflow-y: auto;
-  }
+
 
 
 
