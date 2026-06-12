@@ -335,7 +335,7 @@
   }
 
   .ct_login_left_bg {
-    display: block;
+    display: flex;
     max-width: 75%;
     margin-inline: auto;
     width: 100%;
@@ -590,6 +590,12 @@
 @media screen and (max-width: 575px) {
   .ct_w_100_575 {
     width: 100%;
+  }
+  .ct_login_left_bg{
+    padding-inline: 0px !important;
+  }
+  .ct_login_form{
+    padding-inline: 10px !important;
   }
 
   header,

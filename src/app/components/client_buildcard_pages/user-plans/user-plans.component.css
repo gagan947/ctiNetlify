@@ -648,9 +648,7 @@
     padding-left: 50px;
   }
 
-  .ct_credit_history_item_right {
-    grid-row: 1 / 2;
-  }
+
 }
 
 @media screen and (max-width: 767px) {
