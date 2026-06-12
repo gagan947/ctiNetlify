@@ -183,10 +183,13 @@ aside.ct_project_ai_chat_section {
 }
 
 aside.ct_project_ai_chat_section>.ct_chat_scroll_wrap {
-  height: calc(100dvh - 318px);
+  height: calc(100dvh - 309px);
   /* height: calc(100dvh - 445px); */
   overflow-y: auto;
   padding-right: 20px;
+}
+aside.ct_project_ai_chat_section>.ct_chat_scroll_wrap.ct_chat_scroll_without_btn{
+height: calc(100dvh - 267px);
 }
 
 .ct_ai_input_box {
@@ -1762,7 +1765,7 @@ p {
 
   aside.ct_project_ai_chat_section {
     max-width: 100%;
-    padding-bottom: 70px;
+    padding-bottom: 62px;
   }
 
   .ct_preview_support_bar {
