@@ -379,6 +379,11 @@
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
   }
+  .main-ai-wrap{
+    height: auto;
+    min-height: calc(100vh - 50px);
+    overflow-y: auto;
+  }
 }
 
 .main-ai-build-btn,
@@ -1778,6 +1783,11 @@ li.ct_ai_project_right {
     -webkit-box-flex: 1;
         -ms-flex: 1 1 auto;
             flex: 1 1 auto;
+  }
+   .main-ai-wrap{
+    height: auto;
+    min-height: calc(100vh - 120px);
+    overflow-y: auto;
   }
 
 
