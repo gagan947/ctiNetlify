@@ -18,9 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-  <link rel="preconnect" href="https://dv-c3e594c6d429469e90b54478358619c3.ecs.us-east-1.on.aws" crossorigin>
-  <link rel="preconnect" href="https://api.creativethoughts.ai" crossorigin>
-  <link rel="preconnect" href="https://dev-api.creativethoughts.ai" crossorigin>
+  <link rel="preconnect" href="https://dv-c3e594c6d429469e90b54478358619c3.ecs.us-east-1.on.aws">
 
   <link rel="preload" as="style" href="assets/css/figtree.css" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="preload" as="font" type="font/woff2" crossorigin
@@ -298,7 +296,7 @@
       window.addEventListener(event, loadHeavyScripts, { once: true, passive: true });
     });
     // Fallback: If no interaction after 5 seconds, load anyway
-    setTimeout(loadHeavyScripts, 5000);
+    setTimeout(loadHeavyScripts, 1000);
   </script>
 
   <!-- Facebook Pixel noscript -->
