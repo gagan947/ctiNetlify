@@ -99,8 +99,7 @@
         </aside>
         }
 
-        @if (!isMobileView() || fullScreen) {
-        <div class="ct_ai_project_preview_right">
+        <div class="ct_ai_project_preview_right" [class.d-none]="isMobileView() && !fullScreen">
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                     <div class="preview-wrapper d-flex w-100">
@@ -178,7 +177,6 @@
                 </div>
             </div>
         </div>
-        }
     </section>
 
     @if (isMobileView() && safePreviewUrl) {

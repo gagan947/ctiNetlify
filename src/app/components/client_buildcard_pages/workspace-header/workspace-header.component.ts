@@ -59,6 +59,7 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   private backendProjectsList: UserProjectTab[] = [];
   @ViewChild('profileMenu') profileMenu?: ElementRef<HTMLDivElement>;
   @ViewChild('tabsScroller') tabsScroller?: ElementRef<HTMLDivElement>;
+  @ViewChild('closeBtn') closeBtn?: ElementRef<HTMLLabelElement>;
   subsCriptionData: any;
   canScrollTabsLeft = false;
   canScrollTabsRight = false;
@@ -178,6 +179,7 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
     });
   }
   selectProjectTab(project: UserProjectTab): void {
+    this.closeBtn?.nativeElement.click();
     this.selectedProjectId = project.inquiryId;
     this.projectGenerationTabState.setActiveInquiryId(project.inquiryId);
     const generatedProjectState = this.projectGenerationTabState.getTabState(project.inquiryId);
