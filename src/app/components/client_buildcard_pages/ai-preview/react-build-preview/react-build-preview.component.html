@@ -47,8 +47,7 @@
                         (keydown)="handlePromptKeydown($event, 'customize_template', customizeInput.value)"></textarea>
                     <div class="d-flex align-items-center justify-content-between gap-2 px-3">
                         <div class="d-flex align-items-center gap-2 ">
-                            <!-- Full screen overlay -->
-                            <div *ngIf="isModelDropdownOpen" (click)="isModelDropdownOpen = false" class="position-fixed top-0 start-0 w-100 h-100" style="z-index: 999;"></div>
+                            <!-- <div *ngIf="isModelDropdownOpen" (click)="isModelDropdownOpen = false" class="position-fixed top-0 start-0 w-100 h-100" style="z-index: 999;"></div>
 
                             <div class="position-relative me-1" style="z-index: 1000;">
                                 <button type="button" class="ct_mic_icon_30 d-flex align-items-center justify-content-between gap-2 px-3 text-white" 
@@ -68,7 +67,7 @@
                                        [style.background-color]="selectedAiModel === 'claude' ? 'rgba(0,0,0,0.3)' : 'transparent'" 
                                        (click)="selectedAiModel = 'claude'; isModelDropdownOpen = false;">Claude</a>
                                 </div>
-                            </div>
+                            </div> -->
                             <button type="button" class="ct_mic_icon_30 ct_mic_icon_30_voice">
                                 <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
