@@ -109,6 +109,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   lastUserPrompt = '';
   matchedProject: ProjectMatchPayload['project'] | null = null;
   matchedProjectScore: number | null = null;
+  isModelDropdownOpen = false;
   private pendingInitialPrompt = '';
   private resumeFallbackTimer: ReturnType<typeof setTimeout> | null = null;
   private navigationSubscription?: Subscription;
@@ -123,6 +124,14 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     public speechService: SpeechService,
     public toaster : NzMessageService
   ) { }
+
+  get selectedAiModel(): string {
+    return this.apiService._aiModel();
+  }
+
+  set selectedAiModel(value: string) {
+    this.apiService.setAiModel(value);
+  }
 
   ngOnInit(): void {
     this.pendingInitialPrompt = this.initialPrompt.trim();

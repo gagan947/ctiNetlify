@@ -46,6 +46,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   isVoiceStarting = false;
   isChatMode = false;
   submittedPrompt = '';
+  isModelDropdownOpen = false;
   private subscriptionStateSub?: Subscription;
   private newChatSubscription?: Subscription;
   private placeholderTimer: ReturnType<typeof setTimeout> | null = null;
@@ -60,6 +61,14 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
       public speechService: SpeechService,
     private ngZone: NgZone
   ) { }
+
+  get selectedAiModel(): string {
+    return this.apiService._aiModel();
+  }
+
+  set selectedAiModel(value: string) {
+    this.apiService.setAiModel(value);
+  }
 
   ngOnInit(): void {
     if (typeof fbq === 'function') {

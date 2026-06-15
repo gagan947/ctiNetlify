@@ -240,6 +240,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   isChatResizing = false;
   private removeResizeListeners: Array<() => void> = [];
   // Redirect page for login action
+
+  isModelDropdownOpen = false;
+
   constructor(
     private apiService: ApiService,
     private sanitizer: DomSanitizer,
@@ -255,6 +258,14 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     effect(() => {
       this.finalPrompt = this.apiService._finalPrompt() || sessionStorage.getItem('finalPrompt');
     });
+  }
+
+  get selectedAiModel(): string {
+    return this.apiService._aiModel();
+  }
+
+  set selectedAiModel(value: string) {
+    this.apiService.setAiModel(value);
   }
 
   async ngOnInit() {
@@ -508,7 +519,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
   startPreview(socket_id: string | null) {
     const inquiryId = this.selectedProjectId;
-    const ai_model = 'openai';
+    const ai_model = this.apiService._aiModel();
     if (!inquiryId) {
       return;
     }
@@ -653,7 +664,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     return !!inquiryId && this.selectedProjectId === inquiryId;
   }
 
-  private buildPreviewPayload(socketId: string | null, ai_model = "openai") {
+  private buildPreviewPayload(socketId: string | null, ai_model: string) {
     return {
       prompt: this.finalPrompt,
       project_id: this.projectsData.projectId,

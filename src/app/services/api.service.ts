@@ -7,7 +7,7 @@ import { Subject, Observable, BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  // apiUrl = 'http://192.168.1.10:4500/'
+  apiUrl = 'http://192.168.1.27:4500/'
   // imageUrl = 'http://192.168.29.241:4500/'
   // apiUrl = 'http://192.168.1.40:4500/';
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
@@ -15,9 +15,9 @@ export class ApiService {
   // imageUrl = 'https://api.creativethoughts.ai';
   // apiUrl = 'https://dev-api.creativethoughts.ai/';
   imageUrl = 'https://dev-api.creativethoughts.ai';
-  apiUrl = 'http://localhost:4500/';
-  reactBuildURl = 'http://localhost:4500';
-  // reactBuildURl = 'https://api.creativethoughts.ai';
+  // apiUrl = 'http://localhost:4500/';
+  // reactBuildURl = 'https://dev-api.creativethoughts.ai';
+  reactBuildURl = 'https://api.creativethoughts.ai';
 
 
   private clearInputSubject = new Subject<void>();
@@ -26,6 +26,12 @@ export class ApiService {
   _imagePreview = signal<any>(null);
   _htmlCode = signal<any>(null);
   _finalPrompt = signal<any>(null);
+  _aiModel = signal<string>(localStorage.getItem('selectedAiModel') || 'openai');
+
+  setAiModel(model: string) {
+    this._aiModel.set(model);
+    localStorage.setItem('selectedAiModel', model);
+  }
   constructor(private http: HttpClient, private route: Router) {
     const data: any = localStorage.getItem('userDetailCTI')
     if (data !== 'undefined') {
