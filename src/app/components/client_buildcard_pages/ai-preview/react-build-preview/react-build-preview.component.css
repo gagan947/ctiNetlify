@@ -1823,7 +1823,7 @@ p {
     right: 0;
     bottom: 0;
     z-index: 25;
-    padding: 0px 14px calc(12px + env(safe-area-inset-bottom, 0px));
+    padding: 14px 14px calc(12px + env(safe-area-inset-bottom, 0px));
   }
 
   .ct_mobile_preview_cta_wrap--global {

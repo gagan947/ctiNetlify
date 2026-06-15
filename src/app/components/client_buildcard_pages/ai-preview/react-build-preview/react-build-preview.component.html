@@ -9,7 +9,7 @@
         <div *ngIf="isChatResizing" class="ct_chat_resize_overlay" (mousemove)="resizeChatSection($event)"
             (mouseup)="stopChatResize()"></div>
         @if (!fullScreen) {
-        <aside class="ct_project_ai_chat_section"
+        <aside class="ct_project_ai_chat_section" style="height: calc(100dvh - 50px);"
             [style.width.px]="chatSectionWidth" [class.is-resizing]="isChatResizing">
             <button type="button" class="ct_chat_resize_handle" aria-label="Resize chat panel"
                 (mousedown)="startChatResize($event)"></button>
@@ -22,7 +22,8 @@
                     Request a Callback
                 </button>
             </div>
-            <div #chatScroll class="ct_chat_scroll_wrap" [class.ct_chat_scroll_without_btn]="!showSupportCallbackButton" (scroll)="onUserScroll()">
+            <div #chatScroll class="ct_chat_scroll_wrap" [class.ct_chat_scroll_without_btn]="!showSupportCallbackButton"
+                (scroll)="onUserScroll()">
                 <app-ai-dev-renderer [isLoading]="isReactBuilding" [blocks]="blocks"
                     (actionSelected)="handleChatAction($event)" (promptSubmitted)="handlePromptSubmitted($event)">
                 </app-ai-dev-renderer>
@@ -98,8 +99,7 @@
         </aside>
         }
 
-        @if (!isMobileView() || fullScreen) {
-        <div class="ct_ai_project_preview_right">
+        <div class="ct_ai_project_preview_right" [class.d-none]="isMobileView() && !fullScreen">
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                     <div class="preview-wrapper d-flex w-100">
@@ -177,7 +177,6 @@
                 </div>
             </div>
         </div>
-        }
     </section>
 
     @if (isMobileView() && safePreviewUrl) {
