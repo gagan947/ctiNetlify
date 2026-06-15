@@ -508,6 +508,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
   startPreview(socket_id: string | null) {
     const inquiryId = this.selectedProjectId;
+    const ai_model = 'openai';
     if (!inquiryId) {
       return;
     }
@@ -517,7 +518,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       this.startBuildProgressTimers();
     }
     this.projectGenerationTabState.markGenerating(inquiryId);
-    const payload = this.buildPreviewPayload(socket_id);
+    const payload = this.buildPreviewPayload(socket_id, ai_model);
 
     this.apiService
       .postAPI<any, any>('api/ai/generateProject', payload)
@@ -652,12 +653,13 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     return !!inquiryId && this.selectedProjectId === inquiryId;
   }
 
-  private buildPreviewPayload(socketId: string | null) {
+  private buildPreviewPayload(socketId: string | null, ai_model = "openai") {
     return {
       prompt: this.finalPrompt,
       project_id: this.projectsData.projectId,
       inquiryPublicId: this.projectsData.clientEnquryId,
       socket_id: socketId,
+      ai_model: ai_model,
       excludeVariations: this.usedVariations
     };
   }

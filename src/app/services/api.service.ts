@@ -13,11 +13,11 @@ export class ApiService {
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
   // apiUrl = 'https://api.creativethoughts.ai/';
   // imageUrl = 'https://api.creativethoughts.ai';
-  apiUrl = 'https://dev-api.creativethoughts.ai/';
+  // apiUrl = 'https://dev-api.creativethoughts.ai/';
   imageUrl = 'https://dev-api.creativethoughts.ai';
-  // apiUrl = 'http://localhost:4500/';
-  // reactBuildURl = 'http://localhost:4500';
-  reactBuildURl = 'https://api.creativethoughts.ai';
+  apiUrl = 'http://localhost:4500/';
+  reactBuildURl = 'http://localhost:4500';
+  // reactBuildURl = 'https://api.creativethoughts.ai';
 
 
   private clearInputSubject = new Subject<void>();
