@@ -4,10 +4,49 @@
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
-  font-family: "IBM Plex Sans", sans-serif;
-  scroll-behavior: smooth;
+    font-family: Satoshi-Regular;
+  scroll-behavior: auto;
+}
+html {
+  scroll-behavior: auto;
 }
 
+@font-face {
+    font-family: delight-regular;
+    src: url(../fonts/delight-regular.otf);
+}
+@font-face {
+    font-family: delight-medium;
+    src: url(../fonts/delight-medium.otf);
+}
+@font-face {
+    font-family: delight-semibold;
+    src: url(../fonts/delight-semibold.otf);
+}
+
+
+@font-face {
+    font-family: Satoshi-Regular;
+    src: url(../fonts/Satoshi-Regular.woff);
+}
+@font-face {
+    font-family: Satoshi-medium;
+    src: url(../fonts/Satoshi-Medium.woff);
+}
+@font-face {
+    font-family: Satoshi-bold;
+    src: url(../fonts/Satoshi-Bold.woff);
+}
+.ct_satoshi_bold{
+      font-family: Satoshi-bold;
+
+}
+.ct_satoshi_medium{
+    font-family: Satoshi-medium;
+}
+.ct_delight_medium{
+  font-family: delight-medium;
+}
 ul {
   margin-bottom: 0px;
 }
@@ -38,6 +77,7 @@ p {
   --grey: #f8fafc;
   --dark_grey: #333333;
   --red: #e02424;
+  --purple: #5D5CFF
 }
 
 .ct_yellow_badge_bg {
@@ -528,20 +568,23 @@ header {
   /* padding: 28px 21px; */
   border-radius: 10px;
   position: absolute;
-  top: 40px;
-  transform: rotateX(22deg);
-  transform: perspective(1000px) rotateX(-90deg);
-  transition: 0.4s ease all;
+  top: 26px;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: 0.4s ease-in-out all;
   perspective-origin: bottom;
   transform-origin: top;
   z-index: 999;
+  height: 0;
   overflow: hidden;
   max-width: 400px;
   width: 100%;
 }
 
 .ct_middle_navbar ul li:hover .ct_custom_dropdown {
-  transform: perspective(1000px) rotateX(0deg);
+  transform: scale(1);
+  opacity: 1;
+  height: auto
 }
 
 .ct_dropdown_items ol,
@@ -581,10 +624,12 @@ header {
 .ct_drop_title_icon {
   width: 28px;
   height: 28px;
-  border: 1px solid var(--dark_blue);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.ct_drop_title_icon svg{
+  fill: #000;
 }
 
 .ct_grid_2_flex {
@@ -598,7 +643,7 @@ header {
   width: 100%;
   top: 0px;
   z-index: 9;
-  animation: slideDown 0.35s ease-out;
+  animation: slideDown 0.3s ease-out;
   left: 0px;
   right: 0px;
   z-index: 999;

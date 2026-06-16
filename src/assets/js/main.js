@@ -39,8 +39,6 @@ $(document).ready(function () {
     $(".et_dashbaord_main").toggleClass("et_dash_show");
   });
 
- 
-
   $(".ct_featured_slider").owlCarousel({
     loop: true,
     margin: 10,
@@ -242,7 +240,7 @@ $(document).ready(function () {
       },
     },
   });
- 
+
   $(window).on("load", function () {
     AOS.init();
     $(".ct_loader_main").fadeOut("slow");
@@ -311,9 +309,6 @@ $(window).scroll(function () {
   }
 }); //missing );
 
-
-
-
 $(document).ready(function () {
   $(".et_buildcard_collapse_icon").click(function () {
     $("#ct_collapse_build_first").addClass("d-none");
@@ -323,5 +318,33 @@ $(document).ready(function () {
     $("#ct_collapse_build").addClass("d-none");
     $("#ct_collapse_build_first").removeClass("d-none");
   });
+
+  $(".cti_testimonial_slider").owlCarousel({
+    loop: true,
+    margin: 40,
+    nav: false,
+    dots: false,
+    autoplay: true,
+    autoplayTimeout: 4000,
+    smartSpeed: 800,
+
+    /* Side cards visible like screenshot */
+
+    responsive: {
+      0: {
+        items: 1,
+      },
+      768: {
+        items: 2,
+      },
+      1400: {
+        items: 3,
+      },
+      1600: {
+        items: 5,
+      },
+    },
+  });
 });
+
 

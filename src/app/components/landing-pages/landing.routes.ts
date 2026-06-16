@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const LandingRoutes: Routes = [
       {
-            path: '', loadComponent: () => import('./home/home.component').then(c => c.HomeComponent),
+            path: '', loadComponent: () => import('./new-home/new-home.component').then(c => c.NewHomeComponent),
             data: { preload: true }
       },
       {

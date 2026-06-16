@@ -543,3 +543,7 @@ body {
   
   overscroll-behavior: none;
 }
+
+.cti_testimonial_slider .owl-nav{
+      display: none;
+}

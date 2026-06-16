@@ -1,0 +1,163 @@
+header {
+    padding: 14px 16px;
+    border-radius: 50px;
+    background-color: #02020263;
+    -webkit-backdrop-filter: blur(20px);
+    height: auto;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 10px 40px rgba(0, 0, 0, 0.35);
+    position: relative;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    z-index: 9999999999;
+    border: 1px solid rgba(255, 255, 255, 0.17);
+}
+.ct_header_main{
+  padding-top: 40px;
+}
+/* header::after{
+    content:"";
+    position:absolute;
+
+    left:50%;
+    bottom:-60px;
+
+    width:70%;
+    height:120px;
+
+    transform:translateX(-50%);
+
+    background:#243cff;
+    filter:blur(90px);
+
+    opacity:.18;
+
+    pointer-events:none;
+} */
+
+.ct_buider_img_23 img {
+  width: 100%;
+}
+
+.ct_close_modal {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  width: 15px;
+  height: 15px;
+  background-color: #fff;
+  opacity: 1;
+  z-index: 888;
+}
+
+.ct_hamburger i.fa-solid.fa-bars {
+  font-size: 20px;
+}
+
+
+.ct_middle_navbar ul li a ,.ct_middle_navbar ul li span{
+color: #fff;
+}
+
+.ct_middle_navbar ul li a, .ct_middle_navbar ul li span, .ct_right_menu ul li a{
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.ct_get_started_btn{
+    padding: 8.5px 18px;
+    border-radius: 100px;
+    background-color: #FFFFFF;
+    border: 1px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #000;
+    font-family: Satoshi-medium;
+    position: relative;
+    transition: 0.4s ease all;
+    z-index: 1;
+    font-size: 16px;
+    overflow: hidden;
+}
+.ct_get_started_btn:before{
+    content: "";
+    position: absolute;
+    inset: 0px;
+    background-color: #5D5CFF;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: 0.4s ease all;
+    z-index: -1;
+}
+.ct_get_started_btn:hover:before{
+    transform: scale(1);
+}
+.ct_get_started_btn:hover{
+    color: #fff;
+}
+.ct_get_started_btn:hover svg rect{
+    fill: #fff;
+}
+.ct_get_started_btn:hover svg path{
+    fill: #000;
+}
+
+.ct_header_main.ct_sticky_menu{
+  background-color: transparent;
+  top: 0px ;
+}
+.ct_dropdown_items ol li a{
+  font-weight: 500;
+      font-family: Satoshi-medium;
+display: flex;
+justify-content: space-between;
+align-items: center;
+  color: #fff;
+}
+.ct_custom_dropdown h4 ,.ct_dropdown_items ol li p{
+  color: #fff !important;
+}
+.ct_custom_dropdown h4 {
+      font-family: Satoshi-bold;
+
+}
+.ct_dropdown_items ol li p{
+  font-size:13px
+}
+.ct_custom_dropdown{
+ background: linear-gradient(180deg, #111130 0%, #010104 100%);
+
+}
+.ct_drop_grey_bg{
+background: linear-gradient(180deg, #111130 0%, #010104 100%);
+
+}
+.ct_drop_title_icon svg path{
+  fill: #fff;
+}
+@media screen and (max-width:1199px){
+    .ct_hamburger{
+    color: #fff;
+    display: flex;
+}
+
+
+.ct_close_bar{
+  color: #fff;
+}
+header{
+  backdrop-filter: unset;
+}
+.ct_middle_navbar ul{
+  background-color: #01010280;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    height: auto;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 10px 40px rgba(0, 0, 0, 0.35);
+}
+
+}
