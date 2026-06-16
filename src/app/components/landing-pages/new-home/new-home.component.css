@@ -13,7 +13,7 @@
     border-radius: 10px;
     background: #FFFFFF1A;
     box-shadow: 0 0 24px #0064ff26;
-    gap: 25px;
+    gap: 0px;
     margin-inline: auto;
     width: fit-content;
 }
@@ -182,7 +182,7 @@ font-weight: 500;
 width: fit-content;
 padding: 9px 19px;
 line-height: 100%;
-margin-bottom: 22px;
+margin-bottom: 16px;
 }
 .ct_home_titles_cnt h2{
     font-size: 75px;
@@ -224,7 +224,7 @@ margin-bottom: 10px;
    flex: 1;
     width: 100%;
     position: relative;
-    padding: 20px;
+    padding: 32px;
     
 }
 
@@ -249,7 +249,7 @@ margin-bottom: 10px;
     color: #1A1A1A;
     margin-bottom: 24px;
     
-    max-width: 699px;
+    max-width: 469px;
 }
 
 .cti_desc {
@@ -306,6 +306,7 @@ margin-bottom: 10px;
     justify-content: center;
     align-items: center;
     max-width: 100%;
+    width: 100%;
     height: 100%;
     display: flex;
     position: relative;
@@ -744,29 +745,29 @@ height: 100%;
 
 .cti_plan_title {
     color: #fff;
-    font-size: 40px;
-    line-height: 48px;
+    font-size: 32px;
+    line-height: 38.97px;
     font-weight: 500;
         font-family: delight-medium;
 
-    margin-bottom: 7px;
+    margin-bottom: 5px;
     letter-spacing: -1%;
 }
 
 .cti_plan_desc {
     color: #C8C4D5;
-    font-size: 16px;
-    line-height: 22.4px;
-    margin-bottom: 30px;
+    font-size: 13px;
+    line-height: 18.19px;
+    margin-bottom: 24px;
 }
 
 .cti_price_wrap {
-    margin-bottom: 30px;
+    margin-bottom: 24px;
 }
 
 .cti_price_wrap h2 {
     color: #fff;
-    font-size: 40px;
+    font-size: 32px;
     font-weight: 500;
     line-height: 100%;
     letter-spacing: -1%;
@@ -777,7 +778,7 @@ height: 100%;
 
 .cti_price_wrap span {
     color: #35BE3A;
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 500;
      line-height: 100%;
     letter-spacing: -1%;
@@ -788,15 +789,15 @@ height: 100%;
 .cti_feature_list {
     list-style: none;
     padding: 0;
-    margin: 0 0 35px;
+    margin: 0 0 24px;
 }
 
 .cti_feature_list li {
     position: relative;
     color: #C8C4D5;
-    font-size: 14px;
-    line-height: 25.6px;
-    margin-bottom: 24px;
+    font-size: 12px;
+    line-height: 20.79px;
+    margin-bottom: 19px;
     display: flex;
     align-items: center;
         font-family: Satoshi-medium;
@@ -822,7 +823,27 @@ font-size: 18px;
     text-decoration: none;
     font-weight: 500;
 
-    transition: all .3s ease;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+.cti_pricing_btn:before{
+    content: "";
+    position: absolute;
+    inset: 0px;
+    background-color: var(--purple);
+    transform: scaleX(0);
+      transition: all 0.4s ease;
+      z-index: -1;
+      transform-origin: left;
+
+}
+.cti_pricing_btn.cti_pricing_btn_white:hover{
+    color: #fff  !important;
+}
+.cti_pricing_btn:hover:before{
+    transform: scaleX(1);
 }
 
 .cti_pricing_btn:hover {
@@ -1396,10 +1417,19 @@ border: 1px solid;
          100% { bottom: 100%; opacity:0.3; }
          }
 /* css E */
-.cti_sass_card_reverse .cti_content{
-    order: 1;
+.cti_sass_card_reverse{
+    grid-template-columns: 1fr auto;
 }
 
+
+@media screen and (max-width:1399px){
+    .ct_sass_card_img img{
+        height: auto;
+    }
+    .ct_sass_card_img{
+        padding: 10px;
+    }
+}
 @media screen and (max-width:1199px){
     .cti_saas_card{
         grid-template-columns: auto auto;
