@@ -6,6 +6,34 @@
     background-position: center;
     padding-bottom: 239px;
 }
+.ct_pricing_toggle {
+    display: flex;
+    padding: 7px 13px;
+    margin-top: 33px;
+    border-radius: 10px;
+    background: #FFFFFF1A;
+    box-shadow: 0 0 24px #0064ff26;
+    gap: 25px;
+    margin-inline: auto;
+    width: fit-content;
+}
+.ct_pricing_toggle button {
+    min-height: 42px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #5D5CFF;
+    font-size: 18px;
+        font-family: Satoshi-medium;
+
+    font-weight: 500;
+    padding: 8px 27px;
+}
+.ct_pricing_toggle button.active {
+    background: #5D5CFF;
+    color: #fff;
+    box-shadow: 0 10px 20px #2563eb2e;
+}
 .cti_home_banner_cnt{
     padding-top: 78px;
     padding-inline: 20px;
