@@ -278,12 +278,12 @@ margin-bottom: 10px;
 .cti_stat_box h3 {
     font-size: 36px;
     font-weight: 700;
-    letter-spacing: -2px;
+    letter-spacing: 1px;
     color: #1A1A1A;
     line-height: 40px;
     font-family: Satoshi-bold;
-
     margin: 0;
+    font-family: 'delight-regular';
 }
 
 /* Right Side */
@@ -1012,7 +1012,8 @@ box-shadow: 0px 4px 6px -4px #0000001A,0px 10px 15px -3px #0000001A;
     margin: 0;
     font-size: 18px;
     font-weight: 500;
-            font-family: Satoshi-medium;
+      font-family: 'delight-regular';
+
 
     color: #7233FF;
 }
