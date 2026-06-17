@@ -547,3 +547,16 @@ body {
 .cti_testimonial_slider .owl-nav{
       display: none;
 }
+
+html {
+  scroll-behavior: auto !important;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
