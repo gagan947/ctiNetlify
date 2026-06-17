@@ -19,7 +19,27 @@ padding-bottom: 0px;
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
+            transition: 0.4s ease all;
+            z-index: 1;
+            overflow: hidden;
          }
+         .social-icon li:before{
+            content: "";
+            position: absolute;
+            inset: 0px;
+            background-color: var(--purple);
+            transition: 0.4s ease all;
+            z-index: -1;
+            transform: scale(0);
+               border-radius: 100%;
+         }
+          .social-icon li:hover:before{
+            transform: scale(1);
+          }
+          .social-icon li:hover{
+            transform: rotate(360deg);
+          }
          .all-link-block{
             list-style: none;
             padding: 0;
@@ -32,6 +52,10 @@ padding-bottom: 0px;
            font-weight: 400;
            color: #fff;
            text-transform: capitalize;
+           transition: 0.4s ease all;
+         }
+         .all-link-block li a:hover{
+            opacity: 0.8;
          }
          .ct_mt_60{
             margin-top: 60px;

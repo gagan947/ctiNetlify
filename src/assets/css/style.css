@@ -7,6 +7,10 @@
     font-family: Satoshi-Regular;
   scroll-behavior: auto;
 }
+html,
+body {
+  touch-action: manipulation;
+}
 html {
   scroll-behavior: auto;
 }

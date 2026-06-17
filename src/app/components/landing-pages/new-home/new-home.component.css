@@ -84,6 +84,7 @@
     background-color: transparent;
     border: 0px;
     padding: 0px;
+    color: #fff;
     resize: none;
 }
 .cti_prompt_main textarea::placeholder{
@@ -520,7 +521,7 @@ html.w-mod-touch * {
     margin-top: 60px;
 }
 
-.ct_video_banner img {
+.ct_video_banner img,.ct_video_banner video {
     width: 100%;
     display: block;
     aspect-ratio: 16/6;
@@ -1490,6 +1491,9 @@ width: 360px !important;
     font-size: 60px;
     max-width: 498px;
    
+}
+.ct_video_banner img,.ct_video_banner video{
+    aspect-ratio: unset;
 }
 .ct_home_titles_cnt h2 {
     font-size: 60px;
