@@ -47,6 +47,27 @@
                         (keydown)="handlePromptKeydown($event, 'customize_template', customizeInput.value)"></textarea>
                     <div class="d-flex align-items-center justify-content-between gap-2 px-3">
                         <div class="d-flex align-items-center gap-2 ">
+                            <!-- <div *ngIf="isModelDropdownOpen" (click)="isModelDropdownOpen = false" class="position-fixed top-0 start-0 w-100 h-100" style="z-index: 999;"></div>
+
+                            <div class="position-relative me-1" style="z-index: 1000;">
+                                <button type="button" class="ct_mic_icon_30 d-flex align-items-center justify-content-between gap-2 px-3 text-white" 
+                                        style="background-color: #4140B2; width: auto; font-size: 13px; border-radius: 20px; white-space: nowrap; border: 1px solid rgba(255,255,255,0.2);"
+                                        (click)="isModelDropdownOpen = !isModelDropdownOpen">
+                                    {{ selectedAiModel === 'openai' ? 'OpenAI' : 'Claude' }}
+                                    <i class="fa-solid fa-chevron-up" style="font-size: 10px;" *ngIf="isModelDropdownOpen"></i>
+                                    <i class="fa-solid fa-chevron-down" style="font-size: 10px;" *ngIf="!isModelDropdownOpen"></i>
+                                </button>
+                                <div class="position-absolute rounded shadow-lg overflow-hidden py-1" 
+                                     style="bottom: 100%; left: 0; margin-bottom: 8px; background-color: #4140B2; border: 1px solid rgba(255,255,255,0.2); min-width: 120px;" 
+                                     *ngIf="isModelDropdownOpen">
+                                    <a href="javascript:void(0)" class="d-flex align-items-center px-3 py-2 text-white text-decoration-none" style="font-size: 13px;"
+                                       [style.background-color]="selectedAiModel === 'openai' ? 'rgba(0,0,0,0.3)' : 'transparent'" 
+                                       (click)="selectedAiModel = 'openai'; isModelDropdownOpen = false;">OpenAI</a>
+                                    <a href="javascript:void(0)" class="d-flex align-items-center px-3 py-2 text-white text-decoration-none" style="font-size: 13px;"
+                                       [style.background-color]="selectedAiModel === 'claude' ? 'rgba(0,0,0,0.3)' : 'transparent'" 
+                                       (click)="selectedAiModel = 'claude'; isModelDropdownOpen = false;">Claude</a>
+                                </div>
+                            </div> -->
                             <button type="button" class="ct_mic_icon_30 ct_mic_icon_30_voice">
                                 <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">

@@ -127,6 +127,28 @@
 
         <div class="main-ai-composer-footer">
           <div class="main-ai-left-actions">
+            <div *ngIf="isModelDropdownOpen" (click)="isModelDropdownOpen = false" class="position-fixed top-0 start-0 w-100 h-100" style="z-index: 999;"></div>
+            
+            <div class="position-relative me-2" style="z-index: 1000;">
+              <button class="main-ai-chip-btn d-flex align-items-center justify-content-between gap-2 px-3 text-white" type="button" 
+                      style="width: max-content; font-size: 13px;" 
+                      (click)="isModelDropdownOpen = !isModelDropdownOpen">
+                {{ selectedAiModel === 'openai' ? 'OpenAI' : 'Claude' }}
+                <i class="fa-solid fa-chevron-up" style="font-size: 10px;" *ngIf="isModelDropdownOpen"></i>
+                <i class="fa-solid fa-chevron-down" style="font-size: 10px;" *ngIf="!isModelDropdownOpen"></i>
+              </button>
+              
+              <div class="position-absolute rounded shadow-lg overflow-hidden py-1" 
+                   style="bottom: 100%; left: 0; margin-bottom: 8px; background-color: #1a1a2e; border: 1px solid rgba(255,255,255,0.1); min-width: 120px;" 
+                   *ngIf="isModelDropdownOpen">
+                <a href="javascript:void(0)" class="d-block px-3 py-2 text-white text-decoration-none" style="font-size: 13px;"
+                   [style.background-color]="selectedAiModel === 'openai' ? 'rgba(255,255,255,0.1)' : 'transparent'" 
+                   (click)="selectedAiModel = 'openai'; isModelDropdownOpen = false;">OpenAI</a>
+                <a href="javascript:void(0)" class="d-block px-3 py-2 text-white text-decoration-none" style="font-size: 13px;"
+                   [style.background-color]="selectedAiModel === 'claude' ? 'rgba(255,255,255,0.1)' : 'transparent'" 
+                   (click)="selectedAiModel = 'claude'; isModelDropdownOpen = false;">Claude</a>
+              </div>
+            </div>
             <button type="button" class="main-ai-chip-btn" aria-label="Attach files">
               <i class="fa-solid fa-paperclip"></i>
             </button>
