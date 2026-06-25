@@ -60,7 +60,7 @@ export const routes: Routes = [
             path: 'contact', loadComponent: () => import('./components/contactus/contactus.component').then(c => c.ContactusComponent)
       },
       {
-            path: '', loadChildren: () => import('./components/landing-pages/landing.routes').then(r => r.LandingRoutes), canActivate: [loginGuard]
+            path: '', redirectTo: 'login', pathMatch: 'full'
       },
       {
             path: '**', loadComponent: () => import('./components/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent)
