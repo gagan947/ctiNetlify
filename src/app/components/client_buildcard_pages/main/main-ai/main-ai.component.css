@@ -373,14 +373,14 @@ background: rgba(15, 15, 25, .75);
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, -webkit-transform 0.2s ease, -webkit-box-shadow 0.2s ease;
 }
 
-.main-ai-submit-btn:hover {
+/* .main-ai-submit-btn:hover {
   -webkit-transform: translateY(-1px);
       -ms-transform: translateY(-1px);
           transform: translateY(-1px);
   background: #1a1a1a;
   -webkit-box-shadow: 0 12px 24px rgba(6, 6, 6, 0.28);
           box-shadow: 0 12px 24px rgba(6, 6, 6, 0.28);
-}
+} */
 
 @media screen and (max-width: 767px) {
 
