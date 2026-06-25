@@ -441,18 +441,18 @@ button.main-ai-topbar__tab.main-ai-topbar__tab--active {
     background: linear-gradient(180deg, #191919 0%, #151515 100%);
 } */
 
-.main-ai-topbar__add:hover {
+/* .main-ai-topbar__add:hover {
     color: #c8c8cb;
-}
+} */
 
 .main-ai-topbar__tab-close:hover {
     background: rgba(255, 255, 255, 0.06);
     color: #fff;
 }
 
-.main-ai-topbar__credits:hover {
+/* .main-ai-topbar__credits:hover {
     transform: translateY(-1px);
-}
+} */
 
 .main-ai-topbar__icon {
     width: 30px;
