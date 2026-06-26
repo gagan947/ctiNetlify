@@ -48,7 +48,7 @@
 .main-ai-chat-scroll {
   flex: 1 1 auto;
   min-height: 0;
-  height: calc(100dvh - 251.5px);
+  height: calc(100dvh - 243px);
   padding: 20px 28px 14px;
   overflow-y: auto;
   scrollbar-gutter: stable;
@@ -525,6 +525,7 @@
   font-size: 14px;
   cursor: pointer;
 }
+
 .main-ai-chip-btn:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.1);
