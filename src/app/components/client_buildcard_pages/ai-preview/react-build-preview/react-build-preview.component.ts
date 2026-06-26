@@ -587,7 +587,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
           this.isContinueProjectGenerationRequestInFlight = false;
           const shouldApplyUi = this.isSelectedProjectContext(inquiryId);
           const runningPages = Array.isArray(res?.data?.pages) ? res.data.pages : [];
-
           const statusCode = Number(res?.status ?? res?.data?.statusCode ?? res?.data?.status ?? 200);
           if (statusCode === 202) {
             if (shouldApplyUi) {

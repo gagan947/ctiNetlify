@@ -54,13 +54,37 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   private resumeProbeSocket: any = null;
   private activePlaceholderIndex = 0;
   private activeVoiceSessionId = 0;
+  SUGGESTIONS = [
+    {
+      label: "Food Delivery App",
+      prompt: "Create a food delivery app with user authentication, restaurant listings, cart, and order tracking."
+    },
+    {
+      label: "CRM Dashboard",
+      prompt: "Build a CRM dashboard with leads, contacts, deals, and activity tracking."
+    },
+    {
+      label: "AI Chatbot",
+      prompt: "Create an AI chatbot with natural language understanding and a modern UI."
+    },
+    {
+      label: "Fitness Platform",
+      prompt: "Build a fitness platform with workout plans, progress tracking, and user profiles."
+    },
+    {
+      label: "Marketplace App",
+      prompt: "Create a marketplace app with product listings, user profiles, and secure payments."
+    }
+  ];
   constructor(
     private subscriptionService: SubcriptionService,
     private subscriptionModalService: SubscriptionModalService,
     private apiService: ApiService,
-      public speechService: SpeechService,
+    public speechService: SpeechService,
     private ngZone: NgZone
-  ) { }
+  ) {
+    this.promptText = localStorage.getItem('prompt') || '';
+  }
 
   get selectedAiModel(): string {
     return this.apiService._aiModel();
@@ -122,6 +146,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
+    localStorage.removeItem('prompt')
     this.isChatMode = true;
     this.submittedPrompt = prompt;
     this.promptText = '';

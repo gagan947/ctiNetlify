@@ -41,8 +41,7 @@ export class LoginComponent implements AfterViewInit {
   }
 
   ngOnInit(): void {
-    localStorage.clear();
-
+    // localStorage.clear();
 
     // google.accounts.id.initialize({
     //   client_id: '994120717709-6hec26klmpd1h9eif5vcahincbbn2m1u.apps.googleusercontent.com', // ← use from Cloud Console

@@ -5,7 +5,8 @@
   <div class="main-ai-wrap ct_lightblue_shape_new_12 position-relative" style="overflow: hidden;">
     <div class="main-ai-stage">
       <div class="align-self-end">
-        <h1 class="main-ai-heading">What do you want to <span class="gradient-text ct_fw_700 ct_inter">build today?</span></h1>
+        <h1 class="main-ai-heading">What do you want to <span class="gradient-text ct_fw_700 ct_inter">build
+            today?</span></h1>
         <p class="main-ai-subheading">Describe your idea and let AI turn it into a real product in seconds.</p>
       </div>
       <div class="position-relative " style="z-index: 1;">
@@ -85,20 +86,18 @@
 
             <div class="main-ai-right-actions">
               <button type="button" class="main-ai-submit-btn" aria-label="Continue" (click)="submitPrompt()">
-               
-                    ↑
-                
+
+                ↑
+
               </button>
             </div>
           </div>
         </div>
 
         <div class="eti_suggestions">
-          <div class="et_tag">Food Delivery App</div>
-          <div class="et_tag">CRM Dashboard</div>
-          <div class="et_tag">AI Chatbot</div>
-          <div class="et_tag">Fitness Platform</div>
-          <div class="et_tag">Marketplace App</div>
+          @for (suggestion of SUGGESTIONS; track suggestion) {
+          <div class="et_tag" (click)="usePromptIdea(suggestion.prompt)">{{ suggestion.label }}</div>
+          }
         </div>
       </div>
     </div>
