@@ -58,28 +58,81 @@
               }
 
               <div *ngIf="isModelDropdownOpen" (click)="isModelDropdownOpen = false"
-                class="position-fixed top-0 start-0 w-100 h-100" style="z-index: 999;"></div>
+                class="position-fixed top-0 start-0 w-100 h-100 ct-model-dropdown-overlay"></div>
 
-              <div class="position-relative me-2" style="z-index: 1000;">
+              <div class="position-relative me-2 ct-model-dropdown-wrapper">
                 <button class="main-ai-chip-btn d-flex align-items-center justify-content-between gap-2 px-3 text-white"
                   type="button" style="width: max-content; font-size: 13px;"
                   (click)="isModelDropdownOpen = !isModelDropdownOpen">
-                  {{ selectedAiModel === 'openai' ? 'OpenAI' : 'Claude' }}
+                  {{ selectedDisplayModel }}
                   <i class="fa-solid fa-chevron-up" style="font-size: 10px;" *ngIf="isModelDropdownOpen"></i>
                   <i class="fa-solid fa-chevron-down" style="font-size: 10px;" *ngIf="!isModelDropdownOpen"></i>
                 </button>
 
-                <div class="position-absolute rounded shadow-lg overflow-hidden py-1"
-                  style="bottom: 100%; left: 0; margin-bottom: 8px; background-color: #1a1a2e; border: 1px solid rgba(255,255,255,0.1); min-width: 120px;"
+                <div class="position-absolute rounded shadow-lg overflow-hidden ct-model-dropdown-menu"
                   *ngIf="isModelDropdownOpen">
-                  <a href="javascript:void(0)" class="d-block px-3 py-2 text-white text-decoration-none"
-                    style="font-size: 13px;"
-                    [style.background-color]="selectedAiModel === 'openai' ? 'rgba(255,255,255,0.1)' : 'transparent'"
-                    (click)="selectedAiModel = 'openai'; isModelDropdownOpen = false;">OpenAI</a>
-                  <a href="javascript:void(0)" class="d-block px-3 py-2 text-white text-decoration-none"
-                    style="font-size: 13px;"
-                    [style.background-color]="selectedAiModel === 'claude' ? 'rgba(255,255,255,0.1)' : 'transparent'"
-                    (click)="selectedAiModel = 'claude'; isModelDropdownOpen = false;">Claude</a>
+
+                  <div class="d-flex align-items-center p-3 ct-model-dropdown-header">
+                    <button class="btn btn-link p-0 me-3 text-decoration-none ct-model-dropdown-header-btn"
+                      (click)="isModelDropdownOpen = false">
+                      <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <span class="text-white fw-medium ct-model-dropdown-header-title">Select Model</span>
+                  </div>
+
+                  <div class="flex-grow-1 overflow-auto ct-model-dropdown-scroll">
+                    <div *ngFor="let model of aiModels"
+                      class="d-flex align-items-center p-2 rounded ct-model-dropdown-item"
+                      [class.is-selected]="selectedDisplayModel === model.name" (click)="selectModel(model)">
+
+                      <div class="me-3 d-flex align-items-center justify-content-center ct-model-icon-wrap">
+                        <ng-container *ngIf="model.icon === 'claude'">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg" class="ct-model-icon-claude">
+                            <path
+                              d="M13.2 2H10.8V7.5H13.2V2ZM13.2 16.5H10.8V22H13.2V16.5ZM2 10.8V13.2H7.5V10.8H2ZM16.5 10.8V13.2H22V10.8H16.5ZM6.5 4.8L4.8 6.5L8.7 10.4L10.4 8.7L6.5 4.8ZM17.5 15.3L15.3 17.5L19.2 21.4L21.4 19.2L17.5 15.3ZM19.2 2.6L15.3 6.5L17.5 8.7L21.4 4.8L19.2 2.6ZM8.7 13.6L4.8 17.5L6.5 19.2L10.4 15.3L8.7 13.6Z" />
+                          </svg>
+                        </ng-container>
+                        <ng-container *ngIf="model.icon === 'gpt'">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg" class="ct-model-icon-gpt">
+                            <path
+                              d="M22.28 11.23a10.87 10.87 0 0 0-.2-3.83 1.34 1.34 0 0 0-.8-.94 9.1 9.1 0 0 0-4.52-1.1c-1.42.06-2.82.4-4.1 1-1.07-.63-2.22-1.07-3.44-1.3A9.26 9.26 0 0 0 5 6a1.35 1.35 0 0 0-.96.78 10.6 10.6 0 0 0-.15 3.82c-.8.64-1.44 1.43-1.85 2.33A1.33 1.33 0 0 0 2.2 14a9.12 9.12 0 0 0 3.75 2.72c.3.93.75 1.8 1.32 2.58a9.2 9.2 0 0 0 4.15 2.65 1.32 1.32 0 0 0 1.25-.33 10.66 10.66 0 0 0 1.9-3.32c.98-.38 1.88-.93 2.65-1.63A1.33 1.33 0 0 0 22.28 11.23zM12 20.25c-1.8 0-3.52-.57-4.95-1.63l6.53-3.77a.64.64 0 0 0 .32-.55v-5.2l2.64 1.52A8.1 8.1 0 0 1 12 20.25zM4.9 14.5c.34 1.77 1.28 3.32 2.67 4.41L4.35 13.25A.65.65 0 0 1 4.2 12.7V7.5L6.83 9A8.18 8.18 0 0 1 4.9 14.5zM6.07 5.86A8.1 8.1 0 0 1 10.9 4.3v6.5a.64.64 0 0 1-.32.56l-4.5 2.6-2.65-1.52A8.1 8.1 0 0 1 6.07 5.86zM19.1 9.5c-.34-1.78-1.28-3.32-2.67-4.4L19.65 10.74c.12.2.17.42.16.65v5.2l-2.64-1.5A8.17 8.17 0 0 1 19.1 9.5zM17.93 18.13A8.1 8.1 0 0 1 13.1 19.7V13.2a.64.64 0 0 1 .32-.56l4.5-2.6 2.65 1.52A8.1 8.1 0 0 1 17.93 18.13zM12 3.75c1.8 0 3.52.57 4.95 1.63L10.42 9.15a.64.64 0 0 0-.32.55v5.2L7.46 13.38A8.1 8.1 0 0 1 12 3.75z" />
+                            <path d="M12.02 14.24a2.23 2.23 0 1 0 0-4.46 2.23 2.23 0 0 0 0 4.46z" />
+                          </svg>
+                        </ng-container>
+                        <ng-container *ngIf="model.icon === 'gemini'">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"
+                              fill="url(#gemini-grad)" />
+                            <defs>
+                              <linearGradient id="gemini-grad" x1="2" y1="2" x2="22" y2="22"
+                                gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#4285F4" />
+                                <stop offset="1" stop-color="#D96570" />
+                              </linearGradient>
+                            </defs>
+                          </svg>
+                        </ng-container>
+                      </div>
+
+                      <div class="flex-grow-1">
+                        <div class="d-flex align-items-center mb-1">
+                          <span class="fw-medium ct-model-title">{{ model.name }}</span>
+                          <span *ngIf="model.tag"
+                            class="ms-2 badge rounded-pill d-flex align-items-center gap-1 px-2 py-1 ct-model-badge">
+                            {{ model.tag }}
+                          </span>
+                        </div>
+                        <div class="ct-model-desc">{{ model.description }}</div>
+                      </div>
+
+                      <div class="ms-2 d-flex align-items-center justify-content-center ct-model-check-wrap">
+                        <i *ngIf="selectedDisplayModel === model.name" class="fa-solid fa-check ct-model-check"></i>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

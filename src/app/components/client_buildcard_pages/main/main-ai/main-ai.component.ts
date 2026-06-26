@@ -47,6 +47,29 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   isChatMode = false;
   submittedPrompt = '';
   isModelDropdownOpen = false;
+  selectedDisplayModel = 'Claude 4.7 Opus';
+
+  aiModels = [
+    { id: 'claude-4.7-opus', name: 'Claude 4.7 Opus', description: 'Advanced model for complex tasks', icon: 'claude', tag: '', internal: 'claude' },
+    { id: 'claude-4.8-opus', name: 'Claude 4.8 Opus', description: 'Frontier Performance', icon: 'claude', tag: '', internal: 'claude' },
+    { id: 'claude-4.5-sonnet', name: 'Claude 4.5 Sonnet', description: '200k Context', icon: 'claude', tag: '', internal: 'claude' },
+    { id: 'claude-4.6-sonnet', name: 'Claude 4.6 Sonnet', description: 'Latest versatile model with fast exe...', icon: 'claude', tag: '', internal: 'claude' },
+    { id: 'claude-4.6-opus', name: 'Claude 4.6 Opus', description: 'Capable and Robust Model', icon: 'claude', tag: '', internal: 'claude' },
+    { id: 'claude-4.5-opus', name: 'Claude 4.5 Opus', description: 'Anthropic\'s Advanced Model', icon: 'claude', tag: '', internal: 'claude' },
+    { id: 'gpt-5.5', name: 'GPT 5.5', description: 'OpenAI\'s Latest Model', icon: 'gpt', tag: '', internal: 'openai' },
+    { id: 'gpt-5.4', name: 'GPT 5.4', description: 'OpenAI\'s Model', icon: 'gpt', tag: '', internal: 'openai' },
+    { id: 'gpt-5.4-1m', name: 'GPT 5.4 - 1M', description: '1 Million Context', icon: 'gpt', tag: 'Pro', internal: 'openai' },
+    { id: 'gpt-5.3-codex', name: 'GPT 5.3 Codex', description: 'OpenAI\'s Flagship Model', icon: 'gpt', tag: '', internal: 'openai' },
+    { id: 'claude-4.7-opus-1m', name: 'Claude 4.7 Opus - 1M', description: '1 Million Context', icon: 'claude', tag: '', internal: 'claude' },
+    { id: 'claude-4.6-opus-1m', name: 'Claude 4.6 Opus...', description: '1 Million Context', icon: 'claude', tag: 'Standard', internal: 'claude' },
+    { id: 'claude-4.6-sonnet-1m', name: 'Claude 4.6 So...', description: '1 Million Context', icon: 'claude', tag: 'Standard', internal: 'claude' },
+    { id: 'claude-4.8-opus-fast', name: 'Claude 4.8 Opus - ...', description: 'Anthropic\'s Fast Model (2x costlier)', icon: 'claude', tag: 'Pro', internal: 'claude' },
+    { id: 'claude-4.7-opus-fast', name: 'Claude 4.7 Opus - ...', description: 'Anthropic\'s Fast Model (6x costlier)', icon: 'claude', tag: 'Pro', internal: 'claude' },
+    { id: 'claude-4.7-opus-1m-fast', name: 'Claude 4.7 Opus 1...', description: '1 Million Context (6x costlier)', icon: 'claude', tag: 'Pro', internal: 'claude' },
+    { id: 'gemini-3.1-pro', name: 'Gemini 3.1 Pro', description: 'Google\'s Latest Model', icon: 'gemini', tag: '', internal: 'openai' },
+    { id: 'gemini-3.5-flash', name: 'gemini-3.5-flash', description: 'gemini-3.5-flash', icon: 'gemini', tag: '', internal: 'openai' },
+  ];
+
   private subscriptionStateSub?: Subscription;
   private newChatSubscription?: Subscription;
   private placeholderTimer: ReturnType<typeof setTimeout> | null = null;
@@ -92,6 +115,12 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
 
   set selectedAiModel(value: string) {
     this.apiService.setAiModel(value);
+  }
+
+  selectModel(model: any) {
+    this.selectedDisplayModel = model.name;
+    this.selectedAiModel = model.internal;
+    this.isModelDropdownOpen = false;
   }
 
   ngOnInit(): void {

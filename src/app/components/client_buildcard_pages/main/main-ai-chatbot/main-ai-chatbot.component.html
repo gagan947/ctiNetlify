@@ -1,40 +1,40 @@
 <div style="background-color: #000;">
   <div class="main-ai-chat-shell ">
-  <div class="main-ai-chat-card w-100">
-    <div #chatScroll class="main-ai-chat-scroll">
-      @for(message of chatMessages; track $index){
-      <div class="main-ai-thread-row" [class.is-user]="message.sender === 'user'"
-        [class.is-ai]="message.sender === 'ai'">
-        @if(message.sender === 'ai') {
-        <div class="main-ai-thread-avatar" aria-hidden="true">
-          <span></span>
-        </div>
-        }
+    <div class="main-ai-chat-card w-100">
+      <div #chatScroll class="main-ai-chat-scroll">
+        @for(message of chatMessages; track $index){
+        <div class="main-ai-thread-row" [class.is-user]="message.sender === 'user'"
+          [class.is-ai]="message.sender === 'ai'">
+          @if(message.sender === 'ai') {
+          <div class="main-ai-thread-avatar" aria-hidden="true">
+            <span></span>
+          </div>
+          }
 
-        <div class="main-ai-thread-stack">
-          <!-- @if(message.sender === 'user') {
+          <div class="main-ai-thread-stack">
+            <!-- @if(message.sender === 'user') {
           <div class="main-ai-thread-meta">You</div>
           } -->
 
-          <div class="main-ai-thread-text" [class.main-ai-ai-message]="message.sender === 'ai'"
-            [class.is-error]="message.variant === 'error'">
-            <div class="main-ai-thread-content">
-              @for(line of formatMessage(message.text); track $index) {
-              @if(line.type === 'text') {
-              <p class="text-line ct_fs_14" style="word-break: break-word;">{{
-                line.text }}</p>
-              }
+            <div class="main-ai-thread-text" [class.main-ai-ai-message]="message.sender === 'ai'"
+              [class.is-error]="message.variant === 'error'">
+              <div class="main-ai-thread-content">
+                @for(line of formatMessage(message.text); track $index) {
+                @if(line.type === 'text') {
+                <p class="text-line ct_fs_14" style="word-break: break-word;">{{
+                  line.text }}</p>
+                }
 
-              @if(line.type === 'bullet') {
-              <div class="bullet-line">{{ line.text }}</div>
-              }
-              }
+                @if(line.type === 'bullet') {
+                <div class="bullet-line">{{ line.text }}</div>
+                }
+                }
+              </div>
             </div>
-          </div>
 
-          @if(message.sender === 'ai') {
-          <div class="main-ai-message-footer">
-            <!-- <div class="main-ai-message-actions">
+            @if(message.sender === 'ai') {
+            <div class="main-ai-message-footer">
+              <!-- <div class="main-ai-message-actions">
               <button type="button" class="main-ai-message-action" aria-label="Regenerate response">
                 <i class="fa-solid fa-rotate-right"></i>
               </button>
@@ -46,174 +46,238 @@
               </button>
             </div>
             <span class="main-ai-message-time">{{ formatMessageTime(message.createdAt) }}</span> -->
+            </div>
+            }
           </div>
-          }
         </div>
-      </div>
-      }
+        }
 
-      @if(!isRestoringConversation && isFreshConversation && !chatMessages.length && !currentLoaderText){
-      <div class="main-ai-thread-row is-ai">
-        <div class="main-ai-thread-avatar" aria-hidden="true">
-          <span></span>
-        </div>
-        <div class="main-ai-thread-stack">
-          <div class="main-ai-thread-text main-ai-ai-message">
-            <div class="main-ai-thread-content">
-              <p class="text-line ct_fs_14" style="word-break: break-word;">Start describing your idea and I'll pick up
-                from there.</p>
+        @if(!isRestoringConversation && isFreshConversation && !chatMessages.length && !currentLoaderText){
+        <div class="main-ai-thread-row is-ai">
+          <div class="main-ai-thread-avatar" aria-hidden="true">
+            <span></span>
+          </div>
+          <div class="main-ai-thread-stack">
+            <div class="main-ai-thread-text main-ai-ai-message">
+              <div class="main-ai-thread-content">
+                <p class="text-line ct_fs_14" style="word-break: break-word;">Start describing your idea and I'll pick
+                  up
+                  from there.</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      }
+        }
 
-      @if(currentLoaderText){
-      <div class="main-ai-thread-row is-ai">
-        <div class="main-ai-thread-avatar" aria-hidden="true">
-          <span></span>
-        </div>
-        <div class="main-ai-thread-stack">
-          <div class="main-ai-thread-loader">
-            <div class="main-ai-loader-copy" aria-live="polite">
-              <div class="main-ai-loader-body">
-                <div class="main-ai-loader-line">
-                  <span class="main-ai-loader-status-wrap">
-                    <span class="main-ai-loader-status ct_fs_12" [class.is-visible]="!!currentLoaderText">
-                      {{ currentLoaderText }}
+        @if(currentLoaderText){
+        <div class="main-ai-thread-row is-ai">
+          <div class="main-ai-thread-avatar" aria-hidden="true">
+            <span></span>
+          </div>
+          <div class="main-ai-thread-stack">
+            <div class="main-ai-thread-loader">
+              <div class="main-ai-loader-copy" aria-live="polite">
+                <div class="main-ai-loader-body">
+                  <div class="main-ai-loader-line">
+                    <span class="main-ai-loader-status-wrap">
+                      <span class="main-ai-loader-status ct_fs_12" [class.is-visible]="!!currentLoaderText">
+                        {{ currentLoaderText }}
+                      </span>
                     </span>
-                  </span>
-                  <div class="main-ai-typing-dots" aria-hidden="true">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                    <div class="main-ai-typing-dots" aria-hidden="true">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      }
+        }
 
-      @if(showBuildProjectButton){
-      <div class="main-ai-thread-row is-ai">
-        <div class="main-ai-thread-avatar" aria-hidden="true">
-          <span></span>
-        </div>
-        <div class="main-ai-thread-stack">
-          <div class="main-ai-build-cta">
-            <button type="button" class="main-ai-build-btn" [disabled]="isBuildActionLoading"
-              (click)="buildMatchedProject()">
-              {{ isBuildActionLoading ? 'Preparing your project...' : 'Build My Project' }}
-            </button>
-            <button type="button" class="main-ai-skip-btn" [disabled]="isBuildActionLoading"
-              (click)="skipBuildProject()">
-              Skip for now
-            </button>
+        @if(showBuildProjectButton){
+        <div class="main-ai-thread-row is-ai">
+          <div class="main-ai-thread-avatar" aria-hidden="true">
+            <span></span>
+          </div>
+          <div class="main-ai-thread-stack">
+            <div class="main-ai-build-cta">
+              <button type="button" class="main-ai-build-btn" [disabled]="isBuildActionLoading"
+                (click)="buildMatchedProject()">
+                {{ isBuildActionLoading ? 'Preparing your project...' : 'Build My Project' }}
+              </button>
+              <button type="button" class="main-ai-skip-btn" [disabled]="isBuildActionLoading"
+                (click)="skipBuildProject()">
+                Skip for now
+              </button>
+            </div>
           </div>
         </div>
+        }
       </div>
-      }
-    </div>
-    <div class="ct_lightblue_shape_new_12 position-relative">
-    <div class="main-ai-chat-composer ">
-      <div class="main-ai-composer main-ai-chat-composer-box">
+      <div class="ct_lightblue_shape_new_12 position-relative">
+        <div class="main-ai-chat-composer ">
+          <div class="main-ai-composer main-ai-chat-composer-box">
 
-        <textarea #chatPromptInput class="main-ai-prompt-input main-ai-chat-input" rows="2"
-          [attr.placeholder]="placeholderText" [disabled]="isRestoringConversation" [(ngModel)]="promptText"
-          (keydown)="handlePromptKeydown($event)">
+            <textarea #chatPromptInput class="main-ai-prompt-input main-ai-chat-input" rows="2"
+              [attr.placeholder]="placeholderText" [disabled]="isRestoringConversation" [(ngModel)]="promptText"
+              (keydown)="handlePromptKeydown($event)">
         </textarea>
 
-        <div class="main-ai-composer-footer">
-          <div class="main-ai-left-actions">
-            <div *ngIf="isModelDropdownOpen" (click)="isModelDropdownOpen = false" class="position-fixed top-0 start-0 w-100 h-100" style="z-index: 999;"></div>
-            
-            <div class="position-relative me-2" style="z-index: 1000;">
-              <button class="main-ai-chip-btn d-flex align-items-center justify-content-between gap-2 px-3 text-white" type="button" 
-                      style="width: max-content; font-size: 13px;" 
-                      (click)="isModelDropdownOpen = !isModelDropdownOpen">
-                {{ selectedAiModel === 'openai' ? 'OpenAI' : 'Claude' }}
-                <i class="fa-solid fa-chevron-up" style="font-size: 10px;" *ngIf="isModelDropdownOpen"></i>
-                <i class="fa-solid fa-chevron-down" style="font-size: 10px;" *ngIf="!isModelDropdownOpen"></i>
-              </button>
-              
-              <div class="position-absolute rounded shadow-lg overflow-hidden py-1" 
-                   style="bottom: 100%; left: 0; margin-bottom: 8px; background-color: #1a1a2e; border: 1px solid rgba(255,255,255,0.1); min-width: 120px;" 
-                   *ngIf="isModelDropdownOpen">
-                <a href="javascript:void(0)" class="d-block px-3 py-2 text-white text-decoration-none" style="font-size: 13px;"
-                   [style.background-color]="selectedAiModel === 'openai' ? 'rgba(255,255,255,0.1)' : 'transparent'" 
-                   (click)="selectedAiModel = 'openai'; isModelDropdownOpen = false;">OpenAI</a>
-                <a href="javascript:void(0)" class="d-block px-3 py-2 text-white text-decoration-none" style="font-size: 13px;"
-                   [style.background-color]="selectedAiModel === 'claude' ? 'rgba(255,255,255,0.1)' : 'transparent'" 
-                   (click)="selectedAiModel = 'claude'; isModelDropdownOpen = false;">Claude</a>
+            <div class="main-ai-composer-footer">
+              <div class="main-ai-left-actions">
+
+                <button type="button" class="main-ai-chip-btn" aria-label="Attach files">
+                  <svg _ngcontent-ng-c376650741="" width="14" height="15" viewBox="0 0 14 15" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path _ngcontent-ng-c376650741=""
+                      d="M1.00081e-06 7.46897C-0.000220456 7.59275 0.0363151 7.7138 0.104976 7.81679C0.173636 7.91978 0.27133 8.00006 0.385672 8.04745C0.500014 8.09485 0.625854 8.10723 0.747239 8.08302C0.868625 8.05881 0.980089 7.99911 1.0675 7.91147L6.81125 2.16522C7.39738 1.57909 8.19234 1.24981 9.02125 1.24981C9.43169 1.24981 9.8381 1.33065 10.2173 1.48772C10.5965 1.64479 10.941 1.875 11.2313 2.16522C11.5215 2.45544 11.7517 2.79999 11.9088 3.17918C12.0658 3.55837 12.1467 3.96479 12.1467 4.37522C12.1467 4.78566 12.0658 5.19207 11.9088 5.57127C11.7517 5.95046 11.5215 6.295 11.2313 6.58522L4.6025 13.214C4.36675 13.4417 4.051 13.5677 3.72325 13.5648C3.3955 13.562 3.08199 13.4305 2.85023 13.1987C2.61847 12.967 2.48701 12.6535 2.48416 12.3257C2.48131 11.998 2.6073 11.6822 2.835 11.4465L9.46375 4.81772C9.52186 4.75961 9.56796 4.69063 9.59941 4.6147C9.63085 4.53878 9.64704 4.4574 9.64704 4.37522C9.64704 4.29304 9.63085 4.21167 9.59941 4.13574C9.56796 4.05982 9.52186 3.99083 9.46375 3.93272C9.40564 3.87461 9.33666 3.82852 9.26073 3.79707C9.18481 3.76562 9.10343 3.74943 9.02125 3.74943C8.93907 3.74943 8.8577 3.76562 8.78177 3.79707C8.70585 3.82852 8.63686 3.87461 8.57875 3.93272L1.95 10.5627C1.71123 10.7933 1.52077 11.0692 1.38975 11.3742C1.25872 11.6792 1.18976 12.0073 1.18687 12.3392C1.18399 12.6712 1.24724 13.0004 1.37295 13.3076C1.49865 13.6148 1.68428 13.894 1.91901 14.1287C2.15375 14.3634 2.43287 14.5491 2.74012 14.6748C3.04736 14.8005 3.37656 14.8637 3.7085 14.8608C4.04045 14.858 4.3685 14.789 4.67351 14.658C4.97852 14.527 5.25438 14.3365 5.485 14.0977L12.1138 7.46897C12.9343 6.64846 13.3952 5.5356 13.3952 4.37522C13.3952 3.21484 12.9343 2.10199 12.1138 1.28147C11.2932 0.46096 10.1804 0 9.02 0C7.85962 0 6.74676 0.46096 5.92625 1.28147L0.183751 7.02647C0.125749 7.08462 0.079776 7.15363 0.0484614 7.22956C0.0171467 7.30549 -0.000145683 7.38684 1.00081e-06 7.46897Z"
+                      fill="white"></path>
+                  </svg>
+                </button>
+                <button type="button" class="main-ai-chip-btn main-ai-voice-toggle-btn"
+                  [class.is-starting]="isVoiceStarting" [class.is-listening]="isVoiceUiVisible"
+                  [disabled]="isVoiceStarting || speechService.isListening"
+                  [attr.aria-label]="isVoiceUiVisible ? 'Voice input active' : isVoiceStarting ? 'Voice input is starting' : 'Start voice input'"
+                  (click)="startVoiceTyping()">
+                  <span class="main-ai-voice-toggle-icon">
+                    <i class="fa-solid" [class.fa-microphone]="!speechService.isListening"
+                      [class.fa-wave-square]="speechService.isListening"></i>
+                  </span>
+                  @if (isVoiceStarting) {
+                  <span class="main-ai-voice-loader" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </span>
+                  }
+                  <span class="main-ai-voice-toggle-text">
+                    {{ isVoiceUiVisible && !isVoiceStarting ? 'Listening' : '' }}
+                  </span>
+                </button>
+                @if (isVoiceDraftActive || isVoiceStarting) {
+                <button type="button" class="main-ai-voice-action-btn is-cancel" aria-label="Discard voice text"
+                  (click)="cancelVoiceDraft()">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+                <button type="button" class="main-ai-voice-action-btn is-apply" aria-label="Use voice text"
+                  [disabled]="isVoiceStarting || !voiceDraftText.trim()" (click)="applyVoiceDraft()">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+                }
+                <div *ngIf="isModelDropdownOpen" (click)="isModelDropdownOpen = false"
+                  class="position-fixed top-0 start-0 w-100 h-100 ct-model-dropdown-overlay"></div>
+
+                <div class="position-relative me-2 ct-model-dropdown-wrapper">
+                  <button
+                    class="main-ai-chip-btn d-flex align-items-center justify-content-between gap-2 px-3 text-white"
+                    type="button" style="width: max-content; font-size: 13px;"
+                    (click)="isModelDropdownOpen = !isModelDropdownOpen">
+                    {{ selectedDisplayModel }}
+                    <i class="fa-solid fa-chevron-up" style="font-size: 10px;" *ngIf="isModelDropdownOpen"></i>
+                    <i class="fa-solid fa-chevron-down" style="font-size: 10px;" *ngIf="!isModelDropdownOpen"></i>
+                  </button>
+
+                  <div class="position-absolute rounded shadow-lg overflow-hidden ct-model-dropdown-menu"
+                    *ngIf="isModelDropdownOpen">
+
+                    <div class="d-flex align-items-center p-3 ct-model-dropdown-header">
+                      <button class="btn btn-link p-0 me-3 text-decoration-none ct-model-dropdown-header-btn"
+                        (click)="isModelDropdownOpen = false">
+                        <i class="fa-solid fa-chevron-left"></i>
+                      </button>
+                      <span class="text-white fw-medium ct-model-dropdown-header-title">Select Model</span>
+                    </div>
+
+                    <div class="flex-grow-1 overflow-auto ct-model-dropdown-scroll">
+                      <div *ngFor="let model of aiModels"
+                        class="d-flex align-items-center p-2 rounded ct-model-dropdown-item"
+                        [class.is-selected]="selectedDisplayModel === model.name" (click)="selectModel(model)">
+
+                        <div class="me-3 d-flex align-items-center justify-content-center ct-model-icon-wrap">
+                          <ng-container *ngIf="model.icon === 'claude'">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
+                              xmlns="http://www.w3.org/2000/svg" class="ct-model-icon-claude">
+                              <path
+                                d="M13.2 2H10.8V7.5H13.2V2ZM13.2 16.5H10.8V22H13.2V16.5ZM2 10.8V13.2H7.5V10.8H2ZM16.5 10.8V13.2H22V10.8H16.5ZM6.5 4.8L4.8 6.5L8.7 10.4L10.4 8.7L6.5 4.8ZM17.5 15.3L15.3 17.5L19.2 21.4L21.4 19.2L17.5 15.3ZM19.2 2.6L15.3 6.5L17.5 8.7L21.4 4.8L19.2 2.6ZM8.7 13.6L4.8 17.5L6.5 19.2L10.4 15.3L8.7 13.6Z" />
+                            </svg>
+                          </ng-container>
+                          <ng-container *ngIf="model.icon === 'gpt'">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
+                              xmlns="http://www.w3.org/2000/svg" class="ct-model-icon-gpt">
+                              <path
+                                d="M22.28 11.23a10.87 10.87 0 0 0-.2-3.83 1.34 1.34 0 0 0-.8-.94 9.1 9.1 0 0 0-4.52-1.1c-1.42.06-2.82.4-4.1 1-1.07-.63-2.22-1.07-3.44-1.3A9.26 9.26 0 0 0 5 6a1.35 1.35 0 0 0-.96.78 10.6 10.6 0 0 0-.15 3.82c-.8.64-1.44 1.43-1.85 2.33A1.33 1.33 0 0 0 2.2 14a9.12 9.12 0 0 0 3.75 2.72c.3.93.75 1.8 1.32 2.58a9.2 9.2 0 0 0 4.15 2.65 1.32 1.32 0 0 0 1.25-.33 10.66 10.66 0 0 0 1.9-3.32c.98-.38 1.88-.93 2.65-1.63A1.33 1.33 0 0 0 22.28 11.23zM12 20.25c-1.8 0-3.52-.57-4.95-1.63l6.53-3.77a.64.64 0 0 0 .32-.55v-5.2l2.64 1.52A8.1 8.1 0 0 1 12 20.25zM4.9 14.5c.34 1.77 1.28 3.32 2.67 4.41L4.35 13.25A.65.65 0 0 1 4.2 12.7V7.5L6.83 9A8.18 8.18 0 0 1 4.9 14.5zM6.07 5.86A8.1 8.1 0 0 1 10.9 4.3v6.5a.64.64 0 0 1-.32.56l-4.5 2.6-2.65-1.52A8.1 8.1 0 0 1 6.07 5.86zM19.1 9.5c-.34-1.78-1.28-3.32-2.67-4.4L19.65 10.74c.12.2.17.42.16.65v5.2l-2.64-1.5A8.17 8.17 0 0 1 19.1 9.5zM17.93 18.13A8.1 8.1 0 0 1 13.1 19.7V13.2a.64.64 0 0 1 .32-.56l4.5-2.6 2.65 1.52A8.1 8.1 0 0 1 17.93 18.13zM12 3.75c1.8 0 3.52.57 4.95 1.63L10.42 9.15a.64.64 0 0 0-.32.55v5.2L7.46 13.38A8.1 8.1 0 0 1 12 3.75z" />
+                              <path d="M12.02 14.24a2.23 2.23 0 1 0 0-4.46 2.23 2.23 0 0 0 0 4.46z" />
+                            </svg>
+                          </ng-container>
+                          <ng-container *ngIf="model.icon === 'gemini'">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"
+                                fill="url(#gemini-grad)" />
+                              <defs>
+                                <linearGradient id="gemini-grad" x1="2" y1="2" x2="22" y2="22"
+                                  gradientUnits="userSpaceOnUse">
+                                  <stop stop-color="#4285F4" />
+                                  <stop offset="1" stop-color="#D96570" />
+                                </linearGradient>
+                              </defs>
+                            </svg>
+                          </ng-container>
+                        </div>
+
+                        <div class="flex-grow-1">
+                          <div class="d-flex align-items-center mb-1">
+                            <span class="fw-medium ct-model-title">{{ model.name }}</span>
+                            <span *ngIf="model.tag"
+                              class="ms-2 badge rounded-pill d-flex align-items-center gap-1 px-2 py-1 ct-model-badge">
+                              {{ model.tag }}
+                            </span>
+                          </div>
+                          <div class="ct-model-desc">{{ model.description }}</div>
+                        </div>
+
+                        <div class="ms-2 d-flex align-items-center justify-content-center ct-model-check-wrap">
+                          <i *ngIf="selectedDisplayModel === model.name" class="fa-solid fa-check ct-model-check"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="main-ai-right-actions">
+                <button type="button" class="main-ai-submit-btn" aria-label="Send message"
+                  [disabled]="isSubmitting || isRestoringConversation" (click)="submitPrompt()">
+                  ↑
+                </button>
               </div>
             </div>
-            <button type="button" class="main-ai-chip-btn" aria-label="Attach files">
-              <svg _ngcontent-ng-c376650741="" width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path _ngcontent-ng-c376650741="" d="M1.00081e-06 7.46897C-0.000220456 7.59275 0.0363151 7.7138 0.104976 7.81679C0.173636 7.91978 0.27133 8.00006 0.385672 8.04745C0.500014 8.09485 0.625854 8.10723 0.747239 8.08302C0.868625 8.05881 0.980089 7.99911 1.0675 7.91147L6.81125 2.16522C7.39738 1.57909 8.19234 1.24981 9.02125 1.24981C9.43169 1.24981 9.8381 1.33065 10.2173 1.48772C10.5965 1.64479 10.941 1.875 11.2313 2.16522C11.5215 2.45544 11.7517 2.79999 11.9088 3.17918C12.0658 3.55837 12.1467 3.96479 12.1467 4.37522C12.1467 4.78566 12.0658 5.19207 11.9088 5.57127C11.7517 5.95046 11.5215 6.295 11.2313 6.58522L4.6025 13.214C4.36675 13.4417 4.051 13.5677 3.72325 13.5648C3.3955 13.562 3.08199 13.4305 2.85023 13.1987C2.61847 12.967 2.48701 12.6535 2.48416 12.3257C2.48131 11.998 2.6073 11.6822 2.835 11.4465L9.46375 4.81772C9.52186 4.75961 9.56796 4.69063 9.59941 4.6147C9.63085 4.53878 9.64704 4.4574 9.64704 4.37522C9.64704 4.29304 9.63085 4.21167 9.59941 4.13574C9.56796 4.05982 9.52186 3.99083 9.46375 3.93272C9.40564 3.87461 9.33666 3.82852 9.26073 3.79707C9.18481 3.76562 9.10343 3.74943 9.02125 3.74943C8.93907 3.74943 8.8577 3.76562 8.78177 3.79707C8.70585 3.82852 8.63686 3.87461 8.57875 3.93272L1.95 10.5627C1.71123 10.7933 1.52077 11.0692 1.38975 11.3742C1.25872 11.6792 1.18976 12.0073 1.18687 12.3392C1.18399 12.6712 1.24724 13.0004 1.37295 13.3076C1.49865 13.6148 1.68428 13.894 1.91901 14.1287C2.15375 14.3634 2.43287 14.5491 2.74012 14.6748C3.04736 14.8005 3.37656 14.8637 3.7085 14.8608C4.04045 14.858 4.3685 14.789 4.67351 14.658C4.97852 14.527 5.25438 14.3365 5.485 14.0977L12.1138 7.46897C12.9343 6.64846 13.3952 5.5356 13.3952 4.37522C13.3952 3.21484 12.9343 2.10199 12.1138 1.28147C11.2932 0.46096 10.1804 0 9.02 0C7.85962 0 6.74676 0.46096 5.92625 1.28147L0.183751 7.02647C0.125749 7.08462 0.079776 7.15363 0.0484614 7.22956C0.0171467 7.30549 -0.000145683 7.38684 1.00081e-06 7.46897Z" fill="white"></path></svg>
-            </button>
-            <button type="button" class="main-ai-chip-btn main-ai-voice-toggle-btn"
-              [class.is-starting]="isVoiceStarting" [class.is-listening]="isVoiceUiVisible"
-              [disabled]="isVoiceStarting || speechService.isListening"
-              [attr.aria-label]="isVoiceUiVisible ? 'Voice input active' : isVoiceStarting ? 'Voice input is starting' : 'Start voice input'"
-              (click)="startVoiceTyping()">
-              <span class="main-ai-voice-toggle-icon">
-                <i class="fa-solid" [class.fa-microphone]="!speechService.isListening"
-                  [class.fa-wave-square]="speechService.isListening"></i>
-              </span>
-              @if (isVoiceStarting) {
-              <span class="main-ai-voice-loader" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-              </span>
-              }
-              <span class="main-ai-voice-toggle-text">
-                {{ isVoiceUiVisible && !isVoiceStarting ? 'Listening' : '' }}
-              </span>
-            </button>
-            @if (isVoiceDraftActive || isVoiceStarting) {
-            <button type="button" class="main-ai-voice-action-btn is-cancel" aria-label="Discard voice text"
-              (click)="cancelVoiceDraft()">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-            <button type="button" class="main-ai-voice-action-btn is-apply" aria-label="Use voice text"
-              [disabled]="isVoiceStarting || !voiceDraftText.trim()" (click)="applyVoiceDraft()">
-              <i class="fa-solid fa-check"></i>
-            </button>
-            }
-          </div>
-
-          <div class="main-ai-right-actions">
-            <button type="button" class="main-ai-submit-btn" aria-label="Send message"
-              [disabled]="isSubmitting || isRestoringConversation" (click)="submitPrompt()">
-              ↑ 
-            </button>
           </div>
         </div>
       </div>
     </div>
-    </div>
-  </div>
 
-  <div class="modal fade" id="insufficientCreditsModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content ct_build_failed_modal ct_insufficient_credits_modal">
-        <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-        <div class="ct_build_failed_modal__icon">
-          <i class="fa-solid fa-wallet"></i>
-        </div>
-        <h2>Insufficient Credit Balance</h2>
-        <p>You need at least 100 credits to continue with project publishing. Your current balance is {{
-          getCurrentCreditBalance() }} credits.</p>
-        <div class="actions">
-          <button class="btn-confirm button-deploy w-100" data-bs-dismiss="modal"
-            (click)="subscriptionModalService.openBuyMoreCreditsModal()">Buy Credits</button>
+    <div class="modal fade" id="insufficientCreditsModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ct_build_failed_modal ct_insufficient_credits_modal">
+          <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+          <div class="ct_build_failed_modal__icon">
+            <i class="fa-solid fa-wallet"></i>
+          </div>
+          <h2>Insufficient Credit Balance</h2>
+          <p>You need at least 100 credits to continue with project publishing. Your current balance is {{
+            getCurrentCreditBalance() }} credits.</p>
+          <div class="actions">
+            <button class="btn-confirm button-deploy w-100" data-bs-dismiss="modal"
+              (click)="subscriptionModalService.openBuyMoreCreditsModal()">Buy Credits</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </div>
