@@ -1,125 +1,139 @@
-body{
-    background:#f6f8fb;
-    font-family:'Inter',sans-serif;
-    padding:40px;
-    }
-    .ct_dash_right_content{
-        background: #000;
+body {
+    background: #f6f8fb;
+    font-family: 'Inter', sans-serif;
+    padding: 40px;
+}
+
+.ct_dash_right_content {
+    background: #000;
     color-scheme: dark;
     height: calc(100dvh - 50px);
     overflow-y: auto;
-    }
-    
-    .project-card{
-    border-radius:14px;
-    border:1px solid #FFFFFF66;
+}
+
+.project-card {
+    border-radius: 14px;
+    border: 1px solid #FFFFFF66;
     /* box-shadow:0 4px 12px rgba(0,0,0,0.03); */
     background-color: #04041c;
-    }
-    .project-card h4{
-        color: #fff;
-    }
-    .ct_img_80{
-        width: 80px;
-        height: 80px;
-        object-fit: contain;
-    }
-    .project-thumb{
-    width:180px;
-    height:130px;
-    background:#222;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:600;
-    color:#6b7280;
-    }
-    .project-card  h6{
-        color: #fff;
-    }
-    .feature-badge{
-    background:#f1f5f9;
-    padding:8px 12px;
-    border-radius:8px;
-    font-size:13px;
-    margin:4px;
-    display:inline-block;
-    }
-    
-    .tech-pill{
-    background:#222;
-    color:#BEBFC2;
-    padding:6px 12px;
-    border-radius:20px;
-    font-size:13px;
-    margin:4px;
-    display:inline-block;
-    }
-    
-    .timeline{
-    border-left:2px solid #e5e7eb;
-    padding-left:20px;
-    }
-    
-    .timeline-item{
-    position:relative;
-    margin-bottom:18px;
-    }
-    
-    .timeline-item::before{
-    content:'';
-    width:10px;
-    height:10px;
-    background:#6366f1;
-    border-radius:50%;
-    position:absolute;
-    left:-26px;
-    top:6px;
-    }
+}
 
-    .main-ai-topbar__credits {
+.project-card h4 {
+    color: #fff;
+}
+
+.ct_img_80 {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.project-thumb {
+    width: 180px;
+    height: 130px;
+    background: #222;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.project-card h6 {
+    color: #fff;
+}
+
+.feature-badge {
+    background: #f1f5f9;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin: 4px;
+    display: inline-block;
+}
+
+.tech-pill {
+    background: #222;
+    color: #BEBFC2;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin: 4px;
+    display: inline-block;
+}
+
+.timeline {
+    border-left: 2px solid #e5e7eb;
+    padding-left: 20px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 18px;
+}
+
+.timeline-item::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: #6366f1;
+    border-radius: 50%;
+    position: absolute;
+    left: -26px;
+    top: 6px;
+}
+
+.main-ai-topbar__credits {
     height: 30px;
     padding: 4px 12px;
     border: 0;
     border-radius: 5px;
-    background: #4140B2;
+    background: linear-gradient(135deg,
+            #8b6cff,
+            #5b8dff);
     color: #fff;
     font-size: 13px;
     font-weight: 600;
     /* box-shadow: 0 0 18px rgba(248, 206, 87, 0.45); */
 }
-    .main-ai-topbar__credits:hover {
+
+.main-ai-topbar__credits:hover {
     transform: translateY(-1px);
 }
-    .meta small{
-    color:#BEBFC2;
-    }
-    
-    .main-feature-list {
-      
-        font-size: 16px;
-        margin-bottom: 20px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
 
-    }
-    .main-feature-list li+li{
-        margin-top: 5px;
-    }
-    .main-feature-head{
-        font-size: 13px;
-        margin-bottom:10px;
-        font-weight: 500;
-    }
-    .main-feature-content{
-        max-height:400px;
-        overflow-y: auto;
+.meta small {
+    color: #BEBFC2;
+}
 
-    }
+.main-feature-list {
 
-    @media screen and (max-width:767px){
-        .project-thumb {
-    margin-inline :auto
-           }   }
+    font-size: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+}
+
+.main-feature-list li+li {
+    margin-top: 5px;
+}
+
+.main-feature-head {
+    font-size: 13px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.main-feature-content {
+    max-height: 400px;
+    overflow-y: auto;
+
+}
+
+@media screen and (max-width:767px) {
+    .project-thumb {
+        margin-inline: auto
+    }
+}

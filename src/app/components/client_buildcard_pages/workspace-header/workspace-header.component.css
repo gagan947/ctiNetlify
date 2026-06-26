@@ -360,7 +360,9 @@ button.main-ai-topbar__tab.main-ai-topbar__tab--active {
     padding: 4px 12px;
     border: 0;
     border-radius: 5px;
-    background: #4140B2;
+    background: linear-gradient(135deg,
+            #8b6cff,
+            #5b8dff);
     color: #fff;
     font-size: 13px;
     font-weight: 400;
@@ -845,8 +847,8 @@ button.main-ai-topbar__tab.main-ai-topbar__tab--active {
 
 @media (max-width: 991px) {
 
-    
- 
+
+
 
     .main-ai-topbar__left {
         display: flex;
