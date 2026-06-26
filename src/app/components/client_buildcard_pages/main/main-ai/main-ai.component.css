@@ -346,10 +346,10 @@
 }
 
 .main-ai-submit-btn {
-  width: 56px;
-  height: 56px;
+  width: 38px;
+  height: 38px;
   border: 0;
-  border-radius: 22px;
+  border-radius: 12px;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -362,7 +362,7 @@
   background: linear-gradient(135deg,
       #8b6cff,
       #5b8dff);
-  font-size: 26px;
+  font-size: 18px;
   color: #fff;
   padding: 0;
   font-family: "Inter", sans-serif;
@@ -457,30 +457,29 @@
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  gap: 10px;
-  width: 46px;
-  height: 46px;
-  min-height: 46px;
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, .08);
-  background: rgba(255, 255, 255, .03);
+  gap: 8px;
+  width: 38px;
+  height: 38px;
+  min-height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, .05);
+  background: rgba(255, 255, 255, .02);
   color: white;
-  font-size: 22px;
+  font-size: 14px;
   cursor: pointer;
+}
+.main-ai-chip-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .main-ai-chip-btn-label {
   padding-inline: 18px;
 }
 
-.main-ai-chip-btn {
-  min-height: 46px;
-  font-size: 16px;
-}
-
 .main-ai-voice-toggle-btn {
-  width: 46px;
-  min-width: 46px;
+  width: 38px;
+  min-width: 38px;
   padding: 0;
   gap: 0;
   border-color: #4140B2;
@@ -488,7 +487,8 @@
 }
 
 .main-ai-voice-toggle-btn:hover {
-  border-color: rgba(255, 110, 110, 0.32);
+  border-color: rgba(91, 90, 245, 0.8);
+  background: rgba(65, 64, 178, 0.15);
   color: #fff;
 }
 
