@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NavigationStart, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
@@ -110,7 +110,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   matchedProject: ProjectMatchPayload['project'] | null = null;
   matchedProjectScore: number | null = null;
   isModelDropdownOpen = false;
-  selectedDisplayModel = 'Claude 4.7 Opus';
+  @Input() selectedDisplayModel = 'Claude 4.7 Opus';
+  @Output() selectedDisplayModelChange = new EventEmitter<string>();
 
   aiModels = [
     { id: 'claude-4.7-opus', name: 'Claude 4.7 Opus', description: 'Advanced model for complex tasks', icon: 'claude', tag: '', internal: 'claude' },
@@ -158,6 +159,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
 
   selectModel(model: any) {
     this.selectedDisplayModel = model.name;
+    this.selectedDisplayModelChange.emit(this.selectedDisplayModel);
     this.selectedAiModel = model.internal;
     this.isModelDropdownOpen = false;
   }
