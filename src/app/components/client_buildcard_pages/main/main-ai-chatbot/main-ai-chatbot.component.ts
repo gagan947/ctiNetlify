@@ -129,8 +129,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     { id: 'claude-4.8-opus-fast', name: 'Claude 4.8 Opus - ...', description: 'Anthropic\'s Fast Model (2x costlier)', icon: 'claude', tag: 'Pro', internal: 'claude' },
     { id: 'claude-4.7-opus-fast', name: 'Claude 4.7 Opus - ...', description: 'Anthropic\'s Fast Model (6x costlier)', icon: 'claude', tag: 'Pro', internal: 'claude' },
     { id: 'claude-4.7-opus-1m-fast', name: 'Claude 4.7 Opus 1...', description: '1 Million Context (6x costlier)', icon: 'claude', tag: 'Pro', internal: 'claude' },
-    { id: 'gemini-3.1-pro', name: 'Gemini 3.1 Pro', description: 'Google\'s Latest Model', icon: 'gemini', tag: '', internal: 'openai' },
-    { id: 'gemini-3.5-flash', name: 'gemini-3.5-flash', description: 'gemini-3.5-flash', icon: 'gemini', tag: '', internal: 'openai' },
+    { id: 'gemini-3.1-pro', name: 'Gemini 3.1 Pro', description: 'Google\'s Latest Model', icon: 'gemini', tag: '', internal: 'claude' },
+    { id: 'gemini-3.5-flash', name: 'gemini-3.5-flash', description: 'gemini-3.5-flash', icon: 'gemini', tag: '', internal: 'claude' },
   ];
 
   private pendingInitialPrompt = '';
@@ -145,7 +145,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     public subscriptionModalService: SubscriptionModalService,
     public speechService: SpeechService,
-    public toaster : NzMessageService
+    public toaster: NzMessageService
   ) { }
 
   get selectedAiModel(): string {
@@ -505,9 +505,9 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       user_prompt: this.lastUserPrompt
     }).subscribe({
       next: (response) => {
-        if(!response?.success) {
+        if (!response?.success) {
           this.isBuildActionLoading = false;
-              this.toaster.warning(response.message || ''); // instant
+          this.toaster.warning(response.message || ''); // instant
           return;
         }
         const publicId = response?.data?.public_id;

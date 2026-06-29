@@ -26,7 +26,7 @@ export class ApiService {
   _imagePreview = signal<any>(null);
   _htmlCode = signal<any>(null);
   _finalPrompt = signal<any>(null);
-  _aiModel = signal<string>(localStorage.getItem('selectedAiModel') || 'openai');
+  _aiModel = signal<string>(localStorage.getItem('selectedAiModel') || 'claude');
 
   setAiModel(model: string) {
     this._aiModel.set(model);
