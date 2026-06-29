@@ -331,7 +331,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
     const existingTemplate = templates.find((template: any) => template.inquiryId === inquiryId);
     if (existingTemplate) {
-      await this.showDraftWelcomeMessages(false);
+      await this.showDraftWelcomeMessages(false, existingTemplate.user_prompt);
       if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
         return;
       }
@@ -962,7 +962,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.setBuildFlow('initial');
     this.setBuildStep(3);
 
-    this.blocks.push(this.createCompletedParagraphBlock('Analyzing your prompt...', 'phase'));
+    this.blocks.push(this.createUserMessageBlock(this.finalPrompt));
+
+    // this.blocks.push(this.createCompletedParagraphBlock('Analyzing your prompt...', 'phase'));
     this.blocks.push(this.createCompletedBuildSection(
       'Analyzing your prompt...',
       '🧠',
@@ -2003,7 +2005,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     return Math.abs(currentCreatedAt - previousUpdatedAt) <= 5 * 60 * 1000;
   }
 
-  async showDraftWelcomeMessages(streamMessages = true) {
+  async showDraftWelcomeMessages(streamMessages = true, user_prompt: string) {
 
     const now = new Date();
     const introMessage = `I found saved design directions for this project, and I'm bringing them back into your workspace so you can pick up exactly where you left off.`;
@@ -2025,6 +2027,13 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     if (!streamMessages) {
       this.setBuildStep(3);
       this.blocks = [
+        {
+          id: `user-message-history-0`,
+          text: user_prompt,
+          done: true,
+          timestamp: now
+
+        },
         {
           id: `paragraph-${Date.now()}-0`,
           text: introMessage,
@@ -2833,7 +2842,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
     this.setBuildFlow('initial');
     this.setBuildStep(1);
-    await this.addParagraphBlock('Analyzing your prompt...', 700, 'phase');
+    this.blocks.push(this.createUserMessageBlock(this.finalPrompt));
+    // await this.addParagraphBlock('Analyzing your prompt...', 700, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -3193,6 +3203,16 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     setTimeout(() => this.scrollToBottom(true), 0);
 
     await this.delay(waitAfter);
+  }
+
+  private createUserMessageBlock(text: string, id?: string) {
+    return {
+      id: id || `user-message-history-${Date.now()}-${this.blocks.length}`,
+      text,
+      done: true,
+      timestamp: new Date(),
+      variant: 'default',
+    };
   }
 
   private createCompletedParagraphBlock(
