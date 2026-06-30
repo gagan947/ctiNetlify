@@ -24,18 +24,6 @@ interface DesignSnapshot {
   pages: any;
   loginRedirect: any;
   createdAt: Date;
-
-  // NEW
-  previewType?: 'html' | 'react';
-  reactPreviewUrl?: any;
-}
-
-export interface DraftTemplateMapData {
-  templateId: string;
-  pages: any; // agar pages ka structure pata ho to aur specific kar sakte ho
-  loginRedirect: string | null;
-  reactBuildUrl: string | null;
-  reactBuildStatus: number;
 }
 
 interface ReactFile {
@@ -141,7 +129,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       support: 'I am performing a last end-to-end validation of generated files, build configuration, and deployment output to give the preview one final recovery attempt.'
     },
   ];
-  private buildLogCursor = new Date('2026-04-27T19:45:01.607');
   private aiProcessingInterval?: ReturnType<typeof setInterval>;
   private aiProcessingPhaseVersion = 0;
   private pendingFinalBuildSection: any = null;
@@ -160,17 +147,13 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   @ViewChild('customizeInput') customizeInput!: ElementRef<HTMLTextAreaElement>;
   previewWidth = 100; // desktop default
   blocks: any[] = [];
-  loginRedirect: any = "";
   projectsData: any;
   files: ReactFile[] = [];
   isTyping = true;
   private buildStepTimeouts: ReturnType<typeof setTimeout>[] = [];
   designMap = new Map<string, DesignSnapshot>();
   designOrder: any[] = [];   // keeps tab order
-  activeDesignId!: string;
-  hasMarkedFirstBlock = false;
   fullScreen: boolean = false;
-  userHasScrolled = false;
   designCount = 0;
   selected_template_id = '';
   selectedProjectId = '';
@@ -240,8 +223,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   isChatResizing = false;
   private removeResizeListeners: Array<() => void> = [];
   // Redirect page for login action
-
-  isModelDropdownOpen = false;
 
   constructor(
     private apiService: ApiService,
@@ -410,7 +391,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.designOrder = [];
     this.designCount = 0;
     this.usedVariations = [];
-    this.activeDesignId = '';
     this.currentTemplateId = null;
     this.selected_template_id = '';
     this.pendingPreviewUrl = null;
@@ -514,7 +494,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.scrollToBottom(true);
   }
   onUserScroll() {
-    this.userHasScrolled = true;
   }
 
   startPreview(socket_id: string | null) {
@@ -868,8 +847,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       label: `Template ${this.designCount}`,
       pages: res.data.pages,
       loginRedirect: res.data.login_redirect,
-      createdAt: new Date(),
-      previewType: 'html'
+      createdAt: new Date()
     };
 
     this.designMap.set(designId, snapshot);
@@ -880,8 +858,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       user_template_id: res.data.templateId || null,
       variation_no: res.data.variation
     });
-
-    this.activeDesignId = designId;
 
     if (socketId) {
       this.pendingPreviewUrl = previewUrl;
@@ -1481,16 +1457,10 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
   }
 
-  isNearBottom(): boolean {
-    const el = this.chatScroll.nativeElement;
-    return el.scrollHeight - el.scrollTop - el.clientHeight < 120;
-  }
-
   scrollToBottom(_force = false) {
     if (!this.chatScroll) return;
     const el = this.chatScroll.nativeElement;
     // 🚀 auto-scroll freely UNTIL user touches scroll
-    // if (!force && this.userHasScrolled && !this.isNearBottom()) return;
     requestAnimationFrame(() => {
       el.scrollTop = el.scrollHeight;
     });
@@ -1508,7 +1478,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     const prevScrollHeight = el.scrollHeight;
 
     first.isFirstOfRegenerate = false;
-    this.hasMarkedFirstBlock = false
 
     setTimeout(() => {
       const newScrollHeight = el.scrollHeight;
@@ -2584,12 +2553,10 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   deployTimerDisplay = '01:01';
   deployTimerInterval: any;
   deployTimerSeconds = 61;
-  isDeployApiSuccess = false;
 
   startDeploySteps() {
     this.currentDeployStep = 1;
     this.deployTimerSeconds = this.deployStepDurations[0];
-    this.isDeployApiSuccess = false;
     this.updateDeployTimerDisplay();
     clearInterval(this.deployTimerInterval);
 
@@ -2698,7 +2665,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       .postAPI('api/user/tempalteDeployed', payload)
       .subscribe((res: any) => {
         if (res.success) {
-          this.isDeployApiSuccess = true;
           this.showDeploymentSuccess();
         }
       });
@@ -2771,69 +2737,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     const control = this.callbackRequestForm?.get(controlName);
     return !!control && control.invalid && (control.touched || control.dirty);
   }
-
-  switchDesign(designId: string) {
-    if (this.activeDesignId === designId) return;
-
-    this.activeDesignId = designId;
-
-    const design = this.designOrder.find(d => d.designId === designId);
-
-    if (design?.url) {
-      this.startQuickBuildProgress('switch');
-      this.setSafePreviewUrl(design.url);
-    }
-  }
-
-  removeDesign(item: any) {
-    const index = this.designOrder.findIndex(d => d.designId === item.designId);
-    if (index === -1) return;
-
-    // 🔹 Optional confirm
-    const confirmDelete = confirm('Are you sure you want to delete this template?');
-    if (!confirmDelete) return;
-
-    // 🔹 Call delete API
-    this.apiService
-      .postAPI('api/user/deleteUserTemplate', {
-        template_id: item.user_template_id,
-        clientEnquryId: this.projectsData.clientEnquryId
-      })
-      .subscribe({
-        next: () => {
-
-          // ✅ Remove variation also
-          if (item.variation_no) {
-            this.usedVariations = this.usedVariations.filter(
-              v => v !== item.variation_no
-            );
-          }
-
-          // ✅ Remove from UI
-          this.designOrder.splice(index, 1);
-          this.designMap.delete(item.designId);
-
-          // 🔁 Switch tab
-          if (this.designOrder.length > 0) {
-            const newActive = this.designOrder[0];
-
-            this.activeDesignId = newActive.designId;
-
-            this.setSafePreviewUrl(newActive.url);
-          } else {
-            this.activeDesignId = '';
-            this.safePreviewUrl = null;
-            this.hideDeployHeaderAction();
-          }
-        },
-
-        error: (err) => {
-          console.error('❌ Delete failed:', err);
-          this.toster.error('Failed to delete template');
-        }
-      });
-  }
-
 
   async startFlow() {
     const flowRunId = ++this.initialFlowRunId;
@@ -3138,10 +3041,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       && this.isReactBuilding;
   }
 
-  private resetBuildLogClock() {
-    this.buildLogCursor = new Date('2026-04-27T19:45:01.607');
-  }
-
   getProjectTypeDisplayName(): string {
     const rawProjectType = this.projectsData?.projectType;
 
@@ -3227,18 +3126,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       done: true,
       timestamp
     };
-  }
-
-  async addListBlock(items: string[], waitAfter = 1200) {
-    this.blocks.push({
-      id: `list-${Date.now()}-${this.blocks.length}`,
-      text: items,
-      done: true,
-      timestamp: new Date()
-    });
-
-    setTimeout(() => this.scrollToBottom(true), 0);
-    await this.delay(waitAfter);
   }
 
   private async pauseBetweenMajorSteps(text: string, waitAfter = 1400) {
