@@ -7,7 +7,7 @@ import { Subject, Observable, BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  // apiUrl = 'http://192.168.1.27:4500/'
+  // apiUrl = 'http://192.168.1.35:4500/'
   // imageUrl = 'http://192.168.29.241:4500/'
   // apiUrl = 'http://192.168.1.40:4500/';
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
@@ -27,10 +27,16 @@ export class ApiService {
   _htmlCode = signal<any>(null);
   _finalPrompt = signal<any>(null);
   _aiModel = signal<string>(localStorage.getItem('selectedAiModel') || 'claude');
+  _aiModelVersion = signal<string>(localStorage.getItem('selectedAiModelVersion') || 'claude-4.7-opus');
 
   setAiModel(model: string) {
     this._aiModel.set(model);
     localStorage.setItem('selectedAiModel', model);
+  }
+
+  setAiModelVersion(modelVersion: string) {
+    this._aiModelVersion.set(modelVersion);
+    localStorage.setItem('selectedAiModelVersion', modelVersion);
   }
   constructor(private http: HttpClient, private route: Router) {
     const data: any = localStorage.getItem('userDetailCTI')

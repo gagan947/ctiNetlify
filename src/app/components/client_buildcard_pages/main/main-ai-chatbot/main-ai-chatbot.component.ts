@@ -157,14 +157,32 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.apiService.setAiModel(value);
   }
 
+  get selectedAiModelVersion(): string {
+    return this.apiService._aiModelVersion();
+  }
+
+  set selectedAiModelVersion(value: string) {
+    this.apiService.setAiModelVersion(value);
+  }
+
   selectModel(model: any) {
     this.selectedDisplayModel = model.name;
     this.selectedDisplayModelChange.emit(this.selectedDisplayModel);
     this.selectedAiModel = model.internal;
+    this.selectedAiModelVersion = model.id;
     this.isModelDropdownOpen = false;
   }
 
   ngOnInit(): void {
+    const savedModelVersion = this.selectedAiModelVersion;
+    if (savedModelVersion) {
+      const found = this.aiModels.find(m => m.id === savedModelVersion);
+      if (found) {
+        this.selectedDisplayModel = found.name;
+        this.selectedDisplayModelChange.emit(this.selectedDisplayModel);
+      }
+    }
+
     this.pendingInitialPrompt = this.initialPrompt.trim();
     this.socket = io(this.apiService.apiUrl, {
       auth: {

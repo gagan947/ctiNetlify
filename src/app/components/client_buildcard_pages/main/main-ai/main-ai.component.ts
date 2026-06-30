@@ -80,23 +80,28 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   SUGGESTIONS = [
     {
       label: "Food Delivery App",
-      prompt: "Create a food delivery app with user authentication, restaurant listings, cart, and order tracking."
+      prompt:
+        "Design a premium food delivery mobile app focused on a fast and delightful ordering experience. Include beautiful restaurant discovery, curated menus, smart search, personalized recommendations, a seamless cart, secure checkout, real-time order tracking, favorites, and a clean order history. Prioritize an elegant user experience and a polished MVP suitable for launch."
     },
     {
       label: "CRM Dashboard",
-      prompt: "Build a CRM dashboard with leads, contacts, deals, and activity tracking."
+      prompt:
+        "Create a modern CRM workspace that helps sales teams organize leads, manage customer relationships, track deals, schedule follow-ups, and visualize sales performance. Focus on an intuitive workflow, clean data organization, insightful analytics, and a productivity-first MVP rather than a complex enterprise system."
     },
     {
-      label: "AI Chatbot",
-      prompt: "Create an AI chatbot with natural language understanding and a modern UI."
+      label: "Hospital Management System",
+      prompt:
+        "Build a modern hospital management platform focused on improving the patient journey. Include appointment booking, doctor discovery, patient records, prescriptions, visit history, and treatment tracking with a calm, trustworthy interface. Deliver a practical MVP that simplifies everyday healthcare interactions."
     },
     {
       label: "Fitness Platform",
-      prompt: "Build a fitness platform with workout plans, progress tracking, and user profiles."
+      prompt:
+        "Design a premium fitness platform that helps users build healthy habits through personalized workout plans, progress tracking, activity insights, goal setting, nutrition guidance, and motivational challenges. Create an inspiring, modern experience centered around engagement and long-term consistency."
     },
     {
       label: "Marketplace App",
-      prompt: "Create a marketplace app with product listings, user profiles, and secure payments."
+      prompt:
+        "Create a beautifully designed online marketplace where people can discover, explore, and purchase unique products from independent sellers. Focus on immersive product browsing, rich product pages, search, collections, favorites, secure checkout, messaging, and order tracking while keeping the experience clean, premium, and MVP-focused."
     }
   ];
   constructor(
@@ -107,9 +112,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
     private ngZone: NgZone
   ) {
     this.promptText = localStorage.getItem('prompt') || '';
-  }
-
-  get selectedAiModel(): string {
+  } get selectedAiModel(): string {
     return this.apiService._aiModel();
   }
 
@@ -117,15 +120,32 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
     this.apiService.setAiModel(value);
   }
 
+  get selectedAiModelVersion(): string {
+    return this.apiService._aiModelVersion();
+  }
+
+  set selectedAiModelVersion(value: string) {
+    this.apiService.setAiModelVersion(value);
+  }
+
   selectModel(model: any) {
     this.selectedDisplayModel = model.name;
     this.selectedAiModel = model.internal;
+    this.selectedAiModelVersion = model.id;
     this.isModelDropdownOpen = false;
   }
 
   ngOnInit(): void {
     if (typeof fbq === 'function') {
       fbq('track', 'CompleteRegistration');
+    }
+
+    const savedModelVersion = this.selectedAiModelVersion;
+    if (savedModelVersion) {
+      const found = this.aiModels.find(m => m.id === savedModelVersion);
+      if (found) {
+        this.selectedDisplayModel = found.name;
+      }
     }
 
     this.resolveInitialChatMode();
