@@ -716,7 +716,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
             this.persistCompletedGeneration(this.selectedProjectId, res?.data);
           }
           this.appendBuildActionPrompt();
-          this.queueGeneratedPreview(res, payload.socket_id ?? null);
+          this.queueGeneratedPreview(res, payload.socket_id ?? null, true);
         },
         error: (error: any) => {
           console.log('Build repair attempt failed:', error);
