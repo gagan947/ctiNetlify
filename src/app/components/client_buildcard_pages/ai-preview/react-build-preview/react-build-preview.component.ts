@@ -132,8 +132,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   private aiProcessingInterval?: ReturnType<typeof setInterval>;
   private aiProcessingPhaseVersion = 0;
   private pendingFinalBuildSection: any = null;
-  private actualBuildCompleted = false;
-  private actualBuildCompletedResolver: (() => void) | null = null;
   private repairAttemptVersion = 0;
   private customizationRequestVersion = 0;
   private pendingCustomizationRequest: PendingCustomizationRequest | null = null;
@@ -534,10 +532,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
               return;
             }
             this.clearGenerateProjectFailureTimer();
-            if (this.buildFlowType === 'initial') {
-              const pages = Array.isArray(res?.data?.pages) ? res.data.pages : [];
-              this.syncPolledPagesIntoInitialFlow(pages);
-            }
             this.queueGeneratedPreview(res, null, true);
             return;
           }
@@ -575,11 +569,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
           const statusCode = Number(res?.status ?? res?.data?.statusCode ?? res?.data?.status ?? 200);
           if (statusCode === 202) {
             if (shouldApplyUi) {
-              if (this.buildFlowType === 'initial') {
-                this.syncPolledPagesIntoInitialFlow(runningPages);
-              } else {
-                this.syncRunningBuildBlocks(runningPages);
-              }
+              this.syncRunningBuildBlocks(runningPages);
             }
             return;
           }
@@ -600,9 +590,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
             return;
           }
           this.clearGenerateProjectFailureTimer();
-          if (this.buildFlowType === 'initial') {
-            this.syncPolledPagesIntoInitialFlow(runningPages);
-          }
           this.queueGeneratedPreview(res, null, true);
           return;
         },
@@ -662,7 +649,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       inquiryPublicId: this.projectsData.clientEnquryId,
       socket_id: socketId,
       ai_model: ai_model,
-      ai_model_version: this.apiService._aiModelVersion(),
       excludeVariations: this.usedVariations
     };
   }
@@ -716,7 +702,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
             this.persistCompletedGeneration(this.selectedProjectId, res?.data);
           }
           this.appendBuildActionPrompt();
-          this.queueGeneratedPreview(res, payload.socket_id ?? null, true);
+          this.queueGeneratedPreview(res, payload.socket_id ?? null);
         },
         error: (error: any) => {
           console.log('Build repair attempt failed:', error);
@@ -883,11 +869,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.isReactBuilding = false;
     this.isTyping = false;
     if (this.buildFlowType === 'initial') {
-      this.actualBuildCompleted = true;
-      if (this.actualBuildCompletedResolver) {
-        this.actualBuildCompletedResolver();
-        this.actualBuildCompletedResolver = null;
-      }
+      this.completeInitialBuildUi();
       return;
     }
 
@@ -1026,7 +1008,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   }
 
   private async syncRunningBuildBlocks(pages: any[] = []): Promise<void> {
-    if (this.buildFlowType === 'initial' || !pages.length || this.pendingFinalBuildSection || this.isRunningBuildSyncInProgress) {
+    if (!pages.length || this.pendingFinalBuildSection || this.isRunningBuildSyncInProgress) {
       return;
     }
 
@@ -1099,25 +1081,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.startAiProcessingPhase();
     this.isRunningBuildSyncInProgress = false;
     setTimeout(() => this.scrollToBottom(true), 0);
-  }
-
-  private syncPolledPagesIntoInitialFlow(pages: any[]) {
-    for (const page of pages) {
-      const pageLabel = this.extractPageLabel(page);
-      if (!pageLabel) {
-        continue;
-      }
-
-      if (!this.activePageBuildSection) {
-        const normalizedPage = pageLabel.trim().toLowerCase().replace(/\.jsx?$/, '');
-        const exists = this.queuedSocketPages.some(p => p.trim().toLowerCase().replace(/\.jsx?$/, '') === normalizedPage);
-        if (!exists) {
-          this.queuedSocketPages.push(pageLabel);
-        }
-      } else {
-        this.appendSocketPageToBuildSection(pageLabel);
-      }
-    }
   }
 
   retryBuildGeneration() {
@@ -2779,8 +2742,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     const flowRunId = ++this.initialFlowRunId;
     this.blocks = [];
     this.resetActivePageBuildSection();
-    this.actualBuildCompleted = false;
-    this.actualBuildCompletedResolver = null;
 
     this.setBuildFlow('initial');
     this.setBuildStep(1);
@@ -2798,8 +2759,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'Mapping the main screens and user flow',
         'Defining overall product specification'
       ],
-      3500,
-      1500
+      5200,
+      1800
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -2819,7 +2780,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       return;
     }
 
-    await this.addParagraphBlock('Initializing project...', 400, 'phase');
+    await this.addParagraphBlock('Initializing project...', 700, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -2832,8 +2793,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'Initializing React project shell',
         'Setting up the base environment'
       ],
-      3000,
-      1200
+      4200,
+      1600
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -2844,7 +2805,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       return;
     }
 
-    await this.addParagraphBlock('Creating structure...', 400, 'phase');
+    await this.addParagraphBlock('Creating structure...', 700, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -2860,8 +2821,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'hooks/',
         'context/'
       ],
-      2500,
-      1000
+      3600,
+      1500
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -2873,7 +2834,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     }
 
     this.setBuildStep(2);
-    await this.addParagraphBlock('Creating core files...', 400, 'phase');
+    await this.addParagraphBlock('Creating core files...', 700, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -2888,8 +2849,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'src/main.jsx',
         'src/App.jsx'
       ],
-      3000,
-      1200
+      4300,
+      1700
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -2900,7 +2861,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       return;
     }
 
-    await this.addParagraphBlock('Building UI...', 400, 'phase');
+    await this.addParagraphBlock('Building UI...', 700, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -2915,8 +2876,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'useProjectData.js',
         'api.js'
       ],
-      3000,
-      1200
+      4300,
+      1700
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -2927,15 +2888,15 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       return;
     }
 
-    await this.addParagraphBlock('Creating pages...', 400, 'phase');
+    await this.addParagraphBlock('Creating pages...', 700, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
-    await this.startSocketDrivenBuildSection(
+    await this.showLoader('Generating screen-level page code...');
+    this.startSocketDrivenBuildSection(
       'Creating pages...',
       '📄',
     );
-    await this.showLoader('Generating screen-level page code...');
     await this.waitForPageGenerationCompletion();
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -2947,7 +2908,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     }
 
     this.setBuildStep(3);
-    await this.addParagraphBlock('Finalizing...', 400, 'phase');
+    await this.addParagraphBlock('Finalizing...', 700, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -2960,30 +2921,18 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'Building preview bundle',
         'Deploying preview'
       ],
-      3500,
-      1500
+      6500,
+      1200
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
-
-    if (!this.actualBuildCompleted) {
-      await new Promise<void>(resolve => {
-        this.actualBuildCompletedResolver = resolve;
-      });
-    }
-
-    if (!this.shouldContinueInitialFlow(flowRunId)) {
-      return;
-    }
-
-    this.completeInitialBuildUi();
     this.hideLoader();
 
     return;
   }
 
-  private async addFileActivityBlock(file: string, summary: string, waitAfter = 300, title = 'Updated file') {
+  private async addFileActivityBlock(file: string, summary: string, waitAfter = 320, title = 'Updated file') {
     const block = {
       type: 'file',
       data: {
@@ -3105,7 +3054,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       .replace(/\b\w/g, (char) => char.toUpperCase());
   }
 
-  async addTerminal(lines: string[], lineDelay = 550, finishDelay = 1000) {
+  async addTerminal(lines: string[], lineDelay = 650, finishDelay = 1100) {
     const terminalBlock = {
       type: 'terminal',
       data: {
@@ -3116,7 +3065,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
     this.blocks.push(terminalBlock);
     setTimeout(() => this.scrollToBottom(true), 0);
-    await this.delay(100);
+    await this.delay(500);
 
     for (let line of lines) {
       terminalBlock.data.lines.push(line);
@@ -3129,7 +3078,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
-  async addParagraphBlock(text: string, waitAfter = 2000, variant: 'default' | 'phase' | 'support' = 'default') {
+  async addParagraphBlock(text: string, waitAfter = 2200, variant: 'default' | 'phase' | 'support' = 'default') {
     const block = {
       id: `paragraph-${Date.now()}-${this.blocks.length}`,
       text: '',
@@ -3146,7 +3095,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       if (char === '\n' || block.text.length % 8 === 0) {
         setTimeout(() => this.scrollToBottom(true), 0);
       }
-      await this.delay(char === '\n' ? 10 : 5);
+      await this.delay(char === '\n' ? 30 : 18);
     }
 
     block.done = true;
@@ -3179,7 +3128,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     };
   }
 
-  private async pauseBetweenMajorSteps(text: string, waitAfter = 1200) {
+  private async pauseBetweenMajorSteps(text: string, waitAfter = 1400) {
     this.showLoader(text);
     setTimeout(() => this.scrollToBottom(true), 0);
     await this.delay(waitAfter);
@@ -3187,7 +3136,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
-  async addBuildSection(title: string, icon: string, items: string[], itemDelay = 3000, finishDelay = 1200) {
+  async addBuildSection(title: string, icon: string, items: string[], itemDelay = 4200, finishDelay = 1800) {
     const block = {
       type: 'build-section',
       data: {
@@ -3348,7 +3297,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     return '';
   }
 
-  private async startSocketDrivenBuildSection(title: string, icon: string) {
+  private startSocketDrivenBuildSection(title: string, icon: string) {
     const block = {
       type: 'build-section' as const,
       data: {
@@ -3363,26 +3312,18 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.blocks.push(block);
     setTimeout(() => this.scrollToBottom(true), 0);
 
-    while (true) {
-      if (this.queuedSocketPages.length > 0) {
-        const pageLabel = this.queuedSocketPages.shift();
-        if (pageLabel) {
-          this.appendSocketPageToBuildSection(pageLabel);
-          await this.delay(300);
-        }
-      } else if (this.hasCompletedPageGeneration) {
-        const items = this.activePageBuildSection?.data?.items || [];
-        if (items.length > 0 || this.actualBuildCompleted) {
-          break;
-        } else {
-          await this.delay(100);
-        }
-      } else {
-        await this.delay(100);
+    if (this.queuedSocketPages.length) {
+      const queuedPages = [...this.queuedSocketPages];
+      this.queuedSocketPages = [];
+
+      for (const pageLabel of queuedPages) {
+        this.appendSocketPageToBuildSection(pageLabel);
       }
     }
 
-    this.completeActivePageBuildSection();
+    if (this.hasCompletedPageGeneration) {
+      this.completeActivePageBuildSection();
+    }
   }
 
   private appendSocketPageToBuildSection(pageLabel: string) {
@@ -3391,12 +3332,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     }
 
     const items = this.activePageBuildSection.data.items;
-    const normalizedPage = pageLabel.trim().toLowerCase().replace(/\.jsx?$/, '');
-    const exists = items.some((item) => item.label.trim().toLowerCase().replace(/\.jsx?$/, '') === normalizedPage);
-    if (exists) {
-      return;
-    }
-
     const lastItem = items[items.length - 1];
 
     if (lastItem?.status === 'active') {
@@ -3457,7 +3392,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.pageGenerationCompletionResolver = null;
   }
 
-  async addBuildSectionKeepingLastActive(title: string, icon: string, items: string[], itemDelay = 3000, settleDelay = 1200) {
+  async addBuildSectionKeepingLastActive(title: string, icon: string, items: string[], itemDelay = 4200, settleDelay = 1200) {
     const block = {
       type: 'build-section',
       data: {
@@ -3491,7 +3426,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   }
 
   async addSummary(data: any) {
-    await this.delay(500);
+    await this.delay(600);
     this.blocks.push({
       type: 'summary',
       data
