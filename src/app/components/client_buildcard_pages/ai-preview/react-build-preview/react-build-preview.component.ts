@@ -2931,11 +2931,11 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
-    await this.showLoader('Generating screen-level page code...');
     await this.startSocketDrivenBuildSection(
       'Creating pages...',
       '📄',
     );
+    await this.showLoader('Generating screen-level page code...');
     await this.waitForPageGenerationCompletion();
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;

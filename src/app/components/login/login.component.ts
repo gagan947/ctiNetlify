@@ -32,7 +32,7 @@ export class LoginComponent implements AfterViewInit {
   phoneNumber: string = ''
   otpVisible: boolean = false;
   otp: any
-  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private googleAuth: GoogleAuthService,) {
+  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService, private googleAuth: GoogleAuthService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required]],
       contact: [''],
