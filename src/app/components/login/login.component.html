@@ -111,10 +111,14 @@
                                           <i class="fa" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
                                     </button>
                               </div>
-                              <small class="text-danger ct_fs_14 mt-1 d-block "
-                                    *ngIf="formControls['password'].invalid && formControls['password'].touched">
-                                    Password is required
-                              </small>
+                              <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <small class="text-danger ct_fs_14 mb-0"
+                                          *ngIf="formControls['password'].invalid && formControls['password'].touched">
+                                          Password is required
+                                    </small>
+                                    <a routerLink="/forgot-password" class="ct_forgot_link ct_fs_14 ms-auto">Forgot
+                                          password?</a>
+                              </div>
                         </div>
                         }@else{
                         @if(!otpVisible){
@@ -190,10 +194,10 @@
       </div>
       <div class="ct_login_right_bg_1">
             <div class="ct_right_inner_bg_1">
-                  <div class="ct_logo" routerLink="/">
+                  <a class="ct_logo" href="/">
                         <img loading="lazy" src="assets/img/cti_black_logo1.png" alt="Creative Ai"
                               style="max-width: 225px !important;">
-                  </div>
+                  </a>
                   <p class="ct_fw_600"><span class=" ct_fw_900">100K</span> Satisfied Clients</p>
             </div>
             <div class="ct_login_right_list">

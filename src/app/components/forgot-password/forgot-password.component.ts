@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ApiService } from '../../services/api.service';
 import { SubmitButtonComponent } from '../shared/submit-button/submit-button.component';
@@ -9,72 +9,60 @@ import { SubmitButtonComponent } from '../shared/submit-button/submit-button.com
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-    imports: [RouterLink, ReactiveFormsModule, FormsModule, CommonModule, SubmitButtonComponent],
+  imports: [
+    RouterLink,
+    ReactiveFormsModule,
+    FormsModule,
+    CommonModule,
+    SubmitButtonComponent
+  ],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css'
 })
 export class ForgotPasswordComponent {
-  loginForm: FormGroup;
-  showPassword: boolean = false; // Controls password visibility
-  isLoading = false
-  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router, private message: NzMessageService,) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required
-        ]
-      ]
+  forgotForm: FormGroup;
+  linkSent: boolean = false;
+  emailValue: string = '';
+  isLoading: boolean = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private apiService: ApiService,
+    private message: NzMessageService
+  ) {
+    this.forgotForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]]
     });
   }
 
-  togglePasswordVisibility() {
-    this.showPassword = !this.showPassword;
-  }
-
-  onSubmit() {
-    if (this.loginForm.valid) {
+  onSendOtp() {
+    if (this.forgotForm.valid) {
       this.isLoading = true;
+      this.emailValue = this.forgotForm.value.email;
+      
       const payload = {
-        email: this.loginForm.value.email,
-        password: this.loginForm.value.password
+        email: this.emailValue
       };
 
-      this.apiService.postAPI(`api/user/signIn`, payload)
+      this.apiService.postAPI(`api/user/forgotPassword`, payload)
         .subscribe({
           next: (res: any) => {
-            if (res.success == true) {
-              this.apiService.setToken(res.data.token);
-              localStorage.setItem('userDetailCTI', JSON.stringify(res.data.users));
-              this.message.success(res.message)
-              this.router.navigate(['/main'])
-              // this.projectInfo = res.projectInfo
-              // this, this.getProjectMedia()
-              this.isLoading = false
+            this.isLoading = false;
+            if (res.success === true) {
+              this.message.success(res.message || 'Password reset link sent successfully.');
+              this.linkSent = true;
             } else {
-              this.isLoading = false
-              // this.loading = false
-              this.message.error(res.message)
+              this.message.error(res.message || 'Failed to send password reset link.');
             }
           },
-          error: err => {
-            if (err.status === 0) {
-              this.message.error('Network error, please check your connection.');
-            } else if (err.error?.message) {
-              this.message.error(err.error.message);
-            } else {
-              this.message.error('Unexpected error occurred.');
-            }
-            this.isLoading = false
+          error: (err) => {
+            this.isLoading = false;
+            const errMsg = err.error?.message || 'Error occurred while sending password reset link.';
+            this.message.error(errMsg);
           }
         });
     } else {
-      this.loginForm.markAllAsTouched()
+      this.forgotForm.markAllAsTouched();
     }
-  }
-
-  get formControls() {
-    return this.loginForm.controls;
   }
 }
