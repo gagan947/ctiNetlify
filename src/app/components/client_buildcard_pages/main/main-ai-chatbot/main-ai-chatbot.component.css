@@ -167,6 +167,13 @@
   font-size: 15px;
 }
 
+.main-ai-build-hint {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+}
+
 .bullet-line {
   position: relative;
   padding-left: 28px;

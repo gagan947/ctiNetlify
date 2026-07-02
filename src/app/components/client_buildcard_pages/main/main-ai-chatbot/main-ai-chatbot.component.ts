@@ -292,8 +292,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.socket.on('projectMatch', (payload: ProjectMatchPayload) => {
-      console.log("project====>>", payload);
+    this.socket.on('projectReady', (payload: ProjectMatchPayload) => {
+      console.log("projectReady====>>", payload);
       this.lastUserPrompt = payload?.finalPrompt?.trim() || this.lastUserPrompt;
 
       this.projectMatchPayload = payload;
