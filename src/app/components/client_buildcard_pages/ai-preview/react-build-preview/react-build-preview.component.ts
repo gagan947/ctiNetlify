@@ -649,6 +649,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       inquiryPublicId: this.projectsData.clientEnquryId,
       socket_id: socketId,
       ai_model: ai_model,
+      ai_model_version: this.apiService._aiModelVersion(),
       excludeVariations: this.usedVariations
     };
   }
