@@ -2183,3 +2183,178 @@ p {
 .bg-active-step {
   background: #FFFFFF12;
 }
+
+/* Suggestions Panel */
+.ct_suggestions_panel {
+  background: #1e1e24;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  max-height: 260px;
+  overflow-y: auto;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.ct_suggestions_panel::-webkit-scrollbar {
+  width: 4px;
+}
+.ct_suggestions_panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ct_suggestions_panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.ct_suggestions_header {
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 8px;
+}
+
+.ct_suggestions_header_title {
+  color: #a5f3fc;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ct_suggestions_close_btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  padding: 2px 6px;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.ct_suggestions_close_btn:hover {
+  color: #fff;
+}
+
+.ct_suggestions_categories {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ct_suggestions_cat_item {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ct_suggestions_cat_header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 8px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.ct_suggestions_cat_header:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.ct_suggestions_cat_chevron {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  width: 12px;
+  transition: transform 0.2s;
+}
+
+.ct_suggestions_cat_title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.ct_suggestions_list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 14px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.ct_suggestions_item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: all 0.2s ease-in-out;
+}
+
+.ct_suggestions_item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(2px);
+}
+
+.ct_suggestions_add_btn {
+  color: #a5f3fc;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  background: rgba(165, 243, 252, 0.1);
+  border: 1px solid rgba(165, 243, 252, 0.2);
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ct_suggestions_item:hover .ct_suggestions_add_btn {
+  background: #a5f3fc;
+  color: #1e1e24;
+}
+
+.ct_suggestion_text {
+  font-size: 12.5px;
+  color: #d1d5db;
+  line-height: 1.4;
+}
+
+/* Skeleton Loading Shimmer */
+.ct_suggestion_loading_shimmer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ct_shimmer_bar {
+  height: 12px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.ct_shimmer_bar_short {
+  width: 60%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

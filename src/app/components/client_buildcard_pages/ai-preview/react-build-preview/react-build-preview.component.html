@@ -41,6 +41,87 @@
                         password input field with proper styling.</p>
                 </div> -->
 
+                <!-- Customization Suggestions Panel -->
+                <div *ngIf="!isReactBuilding && (isSuggestionsLoading || suggestionsError || (currentSuggestions && !isSuggestionsDismissed()))" class="ct_suggestions_panel">
+                    
+                    <!-- Loading Skeleton -->
+                    <div *ngIf="isSuggestionsLoading">
+                        <div class="ct_suggestions_header d-flex align-items-center justify-content-between">
+                            <div class="ct_suggestions_header_title">
+                                <i class="fa-regular fa-lightbulb text-info"></i>
+                                <span>Agent is suggesting some feature enhancements:</span>
+                            </div>
+                        </div>
+                        <div class="ct_suggestion_loading_shimmer mt-2">
+                            <div class="ct_shimmer_bar" style="width: 40%"></div>
+                            <div class="ct_shimmer_bar mt-2"></div>
+                            <div class="ct_shimmer_bar ct_shimmer_bar_short mt-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- Error Handling -->
+                    <div *ngIf="!isSuggestionsLoading && suggestionsError">
+                        <div class="ct_suggestions_header d-flex align-items-center justify-content-between">
+                            <div class="ct_suggestions_header_title text-danger">
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <span>Failed to load suggestions</span>
+                            </div>
+                            <button type="button" class="ct_suggestions_close_btn" (click)="dismissSuggestions()">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="text-center py-2 text-danger opacity-75" style="font-size: 12.5px;">
+                            {{ suggestionsError }}
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div *ngIf="!isSuggestionsLoading && !suggestionsError && currentSuggestions && (!currentSuggestions.categories || currentSuggestions.categories.length === 0)">
+                        <div class="ct_suggestions_header d-flex align-items-center justify-content-between">
+                            <div class="ct_suggestions_header_title">
+                                <i class="fa-regular fa-lightbulb text-info"></i>
+                                <span>Agent is suggesting some feature enhancements:</span>
+                            </div>
+                            <button type="button" class="ct_suggestions_close_btn" (click)="dismissSuggestions()">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="text-center py-2 text-muted" style="font-size: 12px;">
+                            No suggestions available.
+                        </div>
+                    </div>
+
+                    <!-- Suggestions Content -->
+                    <div *ngIf="!isSuggestionsLoading && !suggestionsError && currentSuggestions && currentSuggestions.categories && currentSuggestions.categories.length > 0">
+                        <div class="ct_suggestions_header d-flex align-items-center justify-content-between">
+                            <div class="ct_suggestions_header_title">
+                                <i class="fa-regular fa-lightbulb text-info"></i>
+                                <span>Agent is suggesting some feature enhancements:</span>
+                            </div>
+                            <button type="button" class="ct_suggestions_close_btn" (click)="dismissSuggestions()" aria-label="Dismiss suggestions">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="ct_suggestions_categories">
+                            <div *ngFor="let cat of currentSuggestions.categories; let catIndex = index" class="ct_suggestions_cat_item">
+                                <div class="ct_suggestions_cat_header d-flex align-items-center gap-2" (click)="toggleCategory(cat.title)">
+                                    <i class="fa-solid ct_suggestions_cat_chevron" [ngClass]="isCategoryExpanded(cat.title) ? 'fa-caret-down' : 'fa-caret-right'"></i>
+                                    <span class="ct_suggestions_cat_title">{{ cat.title }}</span>
+                                </div>
+                                <div *ngIf="isCategoryExpanded(cat.title)" class="ct_suggestions_list">
+                                    <div *ngFor="let sug of cat.suggestions" class="ct_suggestions_item d-flex align-items-center gap-2" (click)="selectSuggestion(sug)">
+                                        <button type="button" class="ct_suggestions_add_btn" aria-label="Apply suggestion">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                        <span class="ct_suggestion_text">{{ sug.title }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="ct_ai_input_shell px-0">
                     <textarea [disabled]="isReactBuilding" #customizeInput class="ct_ai_textarea px-3" rows="3"
                         placeholder="Shape This Template Your Way"

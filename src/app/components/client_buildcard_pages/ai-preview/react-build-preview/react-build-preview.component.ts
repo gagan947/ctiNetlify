@@ -145,6 +145,12 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
   @ViewChild('chatScroll') chatScroll!: ElementRef<HTMLDivElement>;
   @ViewChild('customizeInput') customizeInput!: ElementRef<HTMLTextAreaElement>;
+  suggestionsMap = new Map<string, any>();
+  isSuggestionsLoading = false;
+  suggestionsError: string | null = null;
+  currentSuggestions: any = null;
+  expandedCategoriesMap = new Map<string, Set<string>>();
+  isSuggestionsDismissedMap = new Map<string, boolean>();
   previewWidth = 100; // desktop default
   blocks: any[] = [];
   projectsData: any;
@@ -334,12 +340,14 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         reactBuildUrl: existingTemplate.reactBuildUrl,
         variation: existingTemplate.variation
       });
+      this.fetchCustomizationSuggestions(inquiryId);
       return;
     }
 
     const generationTab = this.projectGenerationTabState.getTabState(inquiryId);
     if (generationTab?.status === 'completed' && generationTab.previewData?.templateId) {
       this.applyStoredCompletedPreview(generationTab.previewData);
+      this.fetchCustomizationSuggestions(inquiryId);
       return;
     }
 
@@ -403,6 +411,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.isTyping = !!inquiryId;
     this.isReactBuilding = !!inquiryId;
     this.isIframeLoading = !!inquiryId;
+    this.currentSuggestions = null;
+    this.suggestionsError = null;
   }
 
   private isCurrentRouteChange(routeChangeVersion: number, inquiryId: string): boolean {
@@ -502,6 +512,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     if (!inquiryId) {
       return;
     }
+
+    this.suggestionsMap.delete(inquiryId);
+    this.isSuggestionsDismissedMap.set(inquiryId, false);
 
     if (socket_id) {
       this.setBuildFlow('initial');
@@ -871,10 +884,12 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.isTyping = false;
     if (this.buildFlowType === 'initial') {
       this.completeInitialBuildUi();
+      this.fetchCustomizationSuggestions(this.selectedProjectId);
       return;
     }
 
     this.appendBuildActionPrompt();
+    this.fetchCustomizationSuggestions(this.selectedProjectId);
   }
 
   private queueBuildGenerationFailure(forceImmediate = false) {
@@ -1496,6 +1511,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       this.fullScreen = true;
       this.hasAutoOpenedCurrentMobilePreview = true;
     }
+
+    this.fetchCustomizationSuggestions(this.selectedProjectId);
   }
 
   blockPreviewInteraction(event: Event) {
@@ -2205,6 +2222,11 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     const prompt = promptEvent?.value?.trim();
 
     if (!prompt) return;
+
+    if (this.selectedProjectId) {
+      this.suggestionsMap.delete(this.selectedProjectId);
+      this.isSuggestionsDismissedMap.set(this.selectedProjectId, false);
+    }
 
     if (this.speechService.isListening) {
       this.speechService.stop();
@@ -3552,6 +3574,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.deployHeaderActionTimer = setTimeout(() => {
       if (!!this.safePreviewUrl && !this.isReactBuilding && !this.isIframeLoading) {
         this.showDeployHeaderAction = true;
+        this.fetchCustomizationSuggestions(this.selectedProjectId);
       }
       this.deployHeaderActionTimer = null;
     }, 180);
@@ -3569,6 +3592,86 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
   get showSupportCallbackButton(): boolean {
     return this.showDeployHeaderAction;
+  }
+
+  fetchCustomizationSuggestions(inquiryId: string) {
+    if (!inquiryId) {
+      return;
+    }
+
+    if (this.suggestionsMap.has(inquiryId)) {
+      this.currentSuggestions = this.suggestionsMap.get(inquiryId);
+      this.suggestionsError = null;
+      return;
+    }
+
+    if (this.isSuggestionsLoading) {
+      return;
+    }
+
+    this.isSuggestionsLoading = true;
+    this.suggestionsError = null;
+
+    this.apiService.postAPI<any, any>('api/ai/customization-suggestion', { inquiryPublicId: inquiryId })
+      .subscribe({
+        next: (res: any) => {
+          this.isSuggestionsLoading = false;
+          if (res && res.success && res.data) {
+            this.suggestionsMap.set(inquiryId, res.data);
+            if (this.selectedProjectId === inquiryId) {
+              this.currentSuggestions = res.data;
+            }
+          } else {
+            this.suggestionsError = res?.message || 'Failed to load suggestions';
+          }
+        },
+        error: (err: any) => {
+          this.isSuggestionsLoading = false;
+          this.suggestionsError = err?.error?.message || 'Failed to load suggestions';
+        }
+      });
+  }
+
+  isCategoryExpanded(catTitle: string): boolean {
+    const inquiryId = this.selectedProjectId;
+    if (!inquiryId) return false;
+    if (!this.expandedCategoriesMap.has(inquiryId)) {
+      this.expandedCategoriesMap.set(inquiryId, new Set<string>());
+    }
+    return this.expandedCategoriesMap.get(inquiryId)!.has(catTitle);
+  }
+
+  toggleCategory(catTitle: string): void {
+    const inquiryId = this.selectedProjectId;
+    if (!inquiryId) return;
+    if (!this.expandedCategoriesMap.has(inquiryId)) {
+      this.expandedCategoriesMap.set(inquiryId, new Set<string>());
+    }
+    const expandedSet = this.expandedCategoriesMap.get(inquiryId)!;
+    if (expandedSet.has(catTitle)) {
+      expandedSet.delete(catTitle);
+    } else {
+      expandedSet.add(catTitle);
+    }
+  }
+
+  isSuggestionsDismissed(): boolean {
+    const inquiryId = this.selectedProjectId;
+    return !!inquiryId && !!this.isSuggestionsDismissedMap.get(inquiryId);
+  }
+
+  dismissSuggestions(): void {
+    const inquiryId = this.selectedProjectId;
+    if (inquiryId) {
+      this.isSuggestionsDismissedMap.set(inquiryId, true);
+    }
+  }
+
+  selectSuggestion(suggestion: any) {
+    if (this.customizeInput?.nativeElement && suggestion?.description) {
+      this.customizeInput.nativeElement.value = suggestion.description;
+      this.focusCustomizeInput();
+    }
   }
 }
 
