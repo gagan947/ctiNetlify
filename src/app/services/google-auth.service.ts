@@ -121,9 +121,10 @@ export class GoogleAuthService {
   }
 
   private getRedirectUri() {
-    // return `${window.location.origin}/tool/auth/google/callback`;
-    return `${window.location.origin}/auth/google/callback`;
+    return `${window.location.origin}/tool/auth/google/callback`;
+    // return `${window.location.origin}/auth/google/callback`;
   }
+ 
 
   private createNonce() {
     return `${Date.now()}-${Math.random().toString(36).slice(2)}`;

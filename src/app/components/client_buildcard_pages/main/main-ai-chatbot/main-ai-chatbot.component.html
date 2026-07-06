@@ -103,14 +103,13 @@
             <span></span>
           </div>
           <div class="main-ai-thread-stack">
+            <p class="main-ai-build-hint">
+              Your project is ready. Click the button below to start building it.
+            </p>
             <div class="main-ai-build-cta">
               <button type="button" class="main-ai-build-btn" [disabled]="isBuildActionLoading"
                 (click)="buildMatchedProject()">
                 {{ isBuildActionLoading ? 'Preparing your project...' : 'Build My Project' }}
-              </button>
-              <button type="button" class="main-ai-skip-btn" [disabled]="isBuildActionLoading"
-                (click)="skipBuildProject()">
-                Skip for now
               </button>
             </div>
           </div>
