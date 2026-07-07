@@ -47,7 +47,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   isChatMode = false;
   submittedPrompt = '';
   isModelDropdownOpen = false;
-  selectedDisplayModel = 'Claude 4.7 Opus';
+  selectedDisplayModel = 'gpt-5.4-1m';
 
   aiModels = [
     { id: 'claude-4.7-opus', name: 'Claude 4.7 Opus', description: 'Advanced model for complex tasks', icon: 'claude', tag: '', internal: 'claude' },
