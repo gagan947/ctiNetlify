@@ -545,7 +545,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
               return;
             }
             this.clearGenerateProjectFailureTimer();
-            this.queueGeneratedPreview(res, null, true);
+            this.queueGeneratedPreview(res, null, false);
             return;
           }
 
@@ -582,7 +582,22 @@ export class ReactBuildPreviewComponent implements OnDestroy {
           const statusCode = Number(res?.status ?? res?.data?.statusCode ?? res?.data?.status ?? 200);
           if (statusCode === 202) {
             if (shouldApplyUi) {
-              this.syncRunningBuildBlocks(runningPages);
+              if (this.shouldDeferPreviewApply) {
+                for (const page of runningPages) {
+                  const label = this.extractPageLabel(page);
+                  if (label) {
+                    if (this.activePageBuildSection) {
+                      this.appendSocketPageToBuildSection(label);
+                    } else if (!this.hasCompletedPageGeneration) {
+                      if (!this.queuedSocketPages.includes(label)) {
+                        this.queuedSocketPages.push(label);
+                      }
+                    }
+                  }
+                }
+              } else {
+                this.syncRunningBuildBlocks(runningPages);
+              }
             }
             return;
           }
@@ -603,7 +618,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
             return;
           }
           this.clearGenerateProjectFailureTimer();
-          this.queueGeneratedPreview(res, null, true);
+          this.queueGeneratedPreview(res, null, false);
           return;
         },
         error: (error: any) => {
@@ -751,7 +766,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
     await this.addParagraphBlock(
       `${repairAttemptMessage.phase} (Attempt ${attemptNumber}/${this.maxBuildRepairAttempts})`,
-      700,
+      500,
       'phase'
     );
     if (repairAttemptVersion !== this.repairAttemptVersion) {
@@ -760,7 +775,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
     await this.addParagraphBlock(
       repairAttemptMessage.support,
-      1200,
+      600,
       'support'
     );
     if (repairAttemptVersion !== this.repairAttemptVersion) {
@@ -777,8 +792,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'Repairing generated files and build configuration',
         `Retrying preview generation after repair pass ${attemptNumber}`
       ],
-      2200,
-      900
+      1200,
+      600
     );
     this.hideLoader();
     if (repairAttemptVersion !== this.repairAttemptVersion) {
@@ -825,7 +840,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
   private queueGeneratedPreview(res: any, socketId: string | null, forceImmediate = false) {
     this.clearGenerateProjectFailureTimer();
-    this.completeActivePageBuildSection();
+    this.completeActivePageBuildSection(res?.data?.pages);
     if (!forceImmediate && this.shouldDeferPreviewApply && !this.hasInitialFlowCompleted) {
       this.pendingPreviewResponse = { res, socketId };
       return;
@@ -1322,55 +1337,55 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
     await this.addParagraphBlock(
       `I'm generating a fresh template direction for your project. This pass focuses on cleaner hierarchy, improved spacing, and a more distinct visual identity while preserving the core user flow.`,
-      1900
+      600
     );
 
     await this.addTerminal([
       'Reviewing the current template structure'
-    ], 1400, 1600);
+    ], 500, 600);
 
     await this.addTerminal([
       'Exploring a stronger visual direction'
-    ], 1400, 1600);
+    ], 500, 600);
 
     await this.addTerminal([
       'Refining layout balance and section hierarchy'
-    ], 1400, 1700);
+    ], 500, 600);
 
     await this.addParagraphBlock(
       `I'm refreshing the most visible UI layers now so this new variation feels intentionally redesigned rather than lightly adjusted.`,
-      1700
+      600
     );
 
-    await this.addFileActivityBlock('src/components/header.jsx', 'Restructured the shared navigation shell for the refreshed template direction.');
-    await this.addFileActivityBlock('src/pages/home.jsx', 'Reworked the primary landing experience with updated hierarchy and section flow.');
-    await this.addFileActivityBlock('src/styles/home.css', 'Adjusted spacing, typography, and visual rhythm for the new variation.');
+    await this.addFileActivityBlock('src/components/header.jsx', 'Restructured the shared navigation shell for the refreshed template direction.', 200);
+    await this.addFileActivityBlock('src/pages/home.jsx', 'Reworked the primary landing experience with updated hierarchy and section flow.', 200);
+    await this.addFileActivityBlock('src/styles/home.css', 'Adjusted spacing, typography, and visual rhythm for the new variation.', 200);
 
     await this.addParagraphBlock(
       `The next template variation is ready. I'm building the preview now so you can compare it with the other versions in your workspace.`,
-      1800
+      600
     );
 
     this.setBuildStep(1);
     await this.addTerminal([
       'Installing dependencies',
       'Preparing production preview build'
-    ], 1200, 1200);
+    ], 400, 500);
 
     this.setBuildStep(2);
     await this.addTerminal([
       'Compiling React application',
       'Optimizing generated assets'
-    ], 1200, 1300);
+    ], 400, 500);
 
     this.setBuildStep(3);
     await this.addTerminal([
       'Deploying fresh preview',
       'Linking new template tab'
-    ], 1200, 1500);
+    ], 400, 500);
 
     await this.addSummary({
-      time: '1m 28s',
+      time: 'Ready',
       description: 'Generated a new template variation with refreshed layout direction and updated preview build.',
       highlights: [
         'Fresh template variation',
@@ -2073,30 +2088,30 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
     await this.addParagraphBlock(
       introMessage,
-      1800
+      600
     );
 
     await this.addTerminal([
       'Scanning saved design history'
-    ], 1300, 1500);
+    ], 500, 600);
 
     this.setBuildStep(2);
     await this.addTerminal([
       'Rehydrating saved preview directions'
-    ], 1300, 1500);
+    ], 500, 600);
 
     this.setBuildStep(3);
     await this.addTerminal([
       'Rebuilding your AI workspace view'
-    ], 1300, 1600);
+    ], 500, 600);
 
     this.blocks.push(restoredWorkspaceBlock);
     setTimeout(() => this.scrollToBottom(true), 0);
-    await this.delay(420);
+    await this.delay(200);
 
     await this.addParagraphBlock(
       closingMessage,
-      2000
+      600
     );
 
     await this.addSummary({
@@ -2774,28 +2789,28 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'Mapping the main screens and user flow',
         'Defining overall product specification'
       ],
-      5200,
-      1800
+      1500,
+      800
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
     this.hideLoader();
-    await this.pauseBetweenMajorSteps('Synthesizing prompt insights...');
+    await this.pauseBetweenMajorSteps('Synthesizing prompt insights...', 600);
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
 
     await this.addParagraphBlock(
       `The scope is clear now, so I’m moving into the actual build flow with structure first and code generation right after that.`,
-      1200,
+      500,
       'support'
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
 
-    await this.addParagraphBlock('Initializing project...', 700, 'phase');
+    await this.addParagraphBlock('Initializing project...', 300, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -2808,19 +2823,19 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'Initializing React project shell',
         'Setting up the base environment'
       ],
-      4200,
-      1600
+      1200,
+      600
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
     this.hideLoader();
-    await this.pauseBetweenMajorSteps('Thinking through system setup...');
+    await this.pauseBetweenMajorSteps('Thinking through system setup...', 600);
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
 
-    await this.addParagraphBlock('Creating structure...', 700, 'phase');
+    await this.addParagraphBlock('Creating structure...', 300, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -2836,20 +2851,20 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'hooks/',
         'context/'
       ],
-      3600,
-      1500
+      1000,
+      500
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
     this.hideLoader();
-    await this.pauseBetweenMajorSteps('Planning the first file generation batch...');
+    await this.pauseBetweenMajorSteps('Planning the first file generation batch...', 600);
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
 
     this.setBuildStep(2);
-    await this.addParagraphBlock('Creating core files...', 700, 'phase');
+    await this.addParagraphBlock('Creating core files...', 300, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -2864,19 +2879,19 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'src/main.jsx',
         'src/App.jsx'
       ],
-      4300,
-      1700
+      1200,
+      600
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
     this.hideLoader();
-    await this.pauseBetweenMajorSteps('Reviewing generated foundation files...');
+    await this.pauseBetweenMajorSteps('Reviewing generated foundation files...', 600);
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
 
-    await this.addParagraphBlock('Building UI...', 700, 'phase');
+    await this.addParagraphBlock('Building UI...', 300, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -2891,19 +2906,19 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'useProjectData.js',
         'api.js'
       ],
-      4300,
-      1700
+      1200,
+      600
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
     this.hideLoader();
-    await this.pauseBetweenMajorSteps('Refining shared UI building blocks...');
+    await this.pauseBetweenMajorSteps('Refining shared UI building blocks...', 600);
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
 
-    await this.addParagraphBlock('Creating pages...', 700, 'phase');
+    await this.addParagraphBlock('Creating pages...', 300, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -2917,13 +2932,13 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       return;
     }
     this.hideLoader();
-    await this.pauseBetweenMajorSteps('Checking page flow and navigation...');
+    await this.pauseBetweenMajorSteps('Checking page flow and navigation...', 600);
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
 
     this.setBuildStep(3);
-    await this.addParagraphBlock('Finalizing...', 700, 'phase');
+    await this.addParagraphBlock('Finalizing...', 300, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -2936,8 +2951,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'Building preview bundle',
         'Deploying preview'
       ],
-      6500,
-      1200
+      1500,
+      800
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -3093,7 +3108,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
-  async addParagraphBlock(text: string, waitAfter = 2200, variant: 'default' | 'phase' | 'support' = 'default') {
+  async addParagraphBlock(text: string, waitAfter = 600, variant: 'default' | 'phase' | 'support' = 'default') {
     const block = {
       id: `paragraph-${Date.now()}-${this.blocks.length}`,
       text: '',
@@ -3110,7 +3125,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       if (char === '\n' || block.text.length % 8 === 0) {
         setTimeout(() => this.scrollToBottom(true), 0);
       }
-      await this.delay(char === '\n' ? 30 : 18);
+      await this.delay(char === '\n' ? 12 : 8);
     }
 
     block.done = true;
@@ -3243,7 +3258,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       }
 
       if (!this.activePageBuildSection) {
-        this.queuedSocketPages.push(pageLabel);
+        if (!this.queuedSocketPages.includes(pageLabel)) {
+          this.queuedSocketPages.push(pageLabel);
+        }
         return;
       }
 
@@ -3347,6 +3364,11 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     }
 
     const items = this.activePageBuildSection.data.items;
+    const exists = items.some(item => item.label === pageLabel);
+    if (exists) {
+      return;
+    }
+
     const lastItem = items[items.length - 1];
 
     if (lastItem?.status === 'active') {
@@ -3371,7 +3393,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     });
   }
 
-  private completeActivePageBuildSection() {
+  private completeActivePageBuildSection(pages?: any[]) {
     this.hasCompletedPageGeneration = true;
 
     if (!this.activePageBuildSection) {
@@ -3383,6 +3405,17 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     }
 
     const items = this.activePageBuildSection.data.items;
+
+    // Fallback: If no pages were rendered yet, try to populate them from the pages array
+    if (items.length === 0 && pages && pages.length > 0) {
+      for (const page of pages) {
+        const label = this.extractPageLabel(page);
+        if (label) {
+          this.appendSocketPageToBuildSection(label);
+        }
+      }
+    }
+
     const lastItem = items[items.length - 1];
 
     if (lastItem?.status === 'active') {
@@ -3647,15 +3680,35 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     }
   }
 
-  isSuggestionsDismissed(): boolean {
+  isSuggestionsCollapsedMap = new Map<string, boolean>();
+
+  isSuggestionsCollapsed(): boolean {
     const inquiryId = this.selectedProjectId;
-    return !!inquiryId && !!this.isSuggestionsDismissedMap.get(inquiryId);
+    if (!inquiryId) return false;
+    return !!this.isSuggestionsCollapsedMap.get(inquiryId);
+  }
+
+  toggleSuggestionsCollapse(): void {
+    const inquiryId = this.selectedProjectId;
+    if (inquiryId) {
+      const current = this.isSuggestionsCollapsed();
+      this.isSuggestionsCollapsedMap.set(inquiryId, !current);
+    }
+  }
+
+  hasVisibleSuggestions(): boolean {
+    return !this.isReactBuilding && 
+      (this.isSuggestionsLoading || !!this.suggestionsError || (!!this.currentSuggestions && !!this.currentSuggestions.categories && this.currentSuggestions.categories.length > 0));
+  }
+
+  isSuggestionsDismissed(): boolean {
+    return false;
   }
 
   dismissSuggestions(): void {
     const inquiryId = this.selectedProjectId;
     if (inquiryId) {
-      this.isSuggestionsDismissedMap.set(inquiryId, true);
+      this.isSuggestionsCollapsedMap.set(inquiryId, true);
     }
   }
 

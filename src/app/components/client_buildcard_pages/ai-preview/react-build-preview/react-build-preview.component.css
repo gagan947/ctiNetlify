@@ -90,8 +90,13 @@ aside.ct_project_ai_chat_section {
   padding: 20px;
   position: sticky;
   top: 0px;
-  display: -ms-grid;
-  display: grid;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
   -webkit-box-flex: 0;
   -ms-flex: 0 0 auto;
   flex: 0 0 auto;
@@ -183,14 +188,19 @@ aside.ct_project_ai_chat_section {
 }
 
 aside.ct_project_ai_chat_section>.ct_chat_scroll_wrap {
-  height: calc(100dvh - 309px);
-  /* height: calc(100dvh - 445px); */
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  height: auto;
   overflow-y: auto;
   padding-right: 20px;
 }
 
 aside.ct_project_ai_chat_section>.ct_chat_scroll_wrap.ct_chat_scroll_without_btn {
-  height: calc(100dvh - 267px);
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  height: auto;
 }
 
 .ct_ai_input_box {
@@ -2195,17 +2205,31 @@ p {
 .ct_suggestions_panel {
   background: #1e1e24;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
+  border-radius: 16px 16px 0 0;
   padding: 14px;
   max-height: 260px;
   overflow-y: auto;
   font-family: 'Inter', sans-serif;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-  position: absolute;
-  bottom: calc(100% + 12px);
-  left: 0;
-  right: 20px;
+  box-shadow: none;
+  position: relative;
   z-index: 10;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ct_suggestions_panel--collapsed {
+  border-radius: 16px 16px 0 0;
+  padding-bottom: 12px;
+}
+
+.ct_suggestions_panel--collapsed .ct_suggestions_header {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.ct_ai_input_shell.ct_suggestions_active {
+  border-radius: 0 0 20px 20px;
+  border-top: none;
 }
 
 .ct_suggestions_panel::-webkit-scrollbar {
