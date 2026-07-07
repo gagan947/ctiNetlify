@@ -3668,8 +3668,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   }
 
   selectSuggestion(suggestion: any) {
-    if (this.customizeInput?.nativeElement && suggestion?.description) {
-      this.customizeInput.nativeElement.value = suggestion.description;
+    if (this.customizeInput?.nativeElement && suggestion?.objective) {
+      this.customizeInput.nativeElement.value = suggestion.objective;
       this.focusCustomizeInput();
     }
   }
