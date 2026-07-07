@@ -194,6 +194,7 @@ aside.ct_project_ai_chat_section>.ct_chat_scroll_wrap.ct_chat_scroll_without_btn
 }
 
 .ct_ai_input_box {
+  position: relative;
   padding-right: 20px !important;
 }
 
@@ -2196,13 +2197,15 @@ p {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
   padding: 14px;
-  margin-bottom: 12px;
   max-height: 260px;
   overflow-y: auto;
   font-family: 'Inter', sans-serif;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
   position: absolute;
-  bottom: 150px;
+  bottom: calc(100% + 12px);
+  left: 0;
+  right: 20px;
+  z-index: 10;
 }
 
 .ct_suggestions_panel::-webkit-scrollbar {
@@ -2226,8 +2229,8 @@ p {
 
 .ct_suggestions_header_title {
   color: #a5f3fc;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
+  /* font-weight: 600; */
   display: flex;
   align-items: center;
   gap: 6px;

@@ -2288,14 +2288,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
-  private async announceCustomizationProgress(prompt: string, requestVersion: number) {
-    await this.delay(250);
-    if (requestVersion !== this.customizationRequestVersion) {
-      return;
-    }
-    this.showLoader('Updating the template and loading a refreshed preview...');
-  }
-
   private handleCustomizationBotReply(payload: any) {
     if (!this.pendingCustomizationRequest || !this.isCustomizationChatPayload(payload)) {
       return;
@@ -3669,8 +3661,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
   selectSuggestion(suggestion: any) {
     if (this.customizeInput?.nativeElement && suggestion?.objective) {
-      this.customizeInput.nativeElement.value = suggestion.objective;
-      this.focusCustomizeInput();
+      // this.customizeInput.nativeElement.value = suggestion.objective;
+      // this.focusCustomizeInput();
+      this.handlePromptSubmitted({ 'blockId': 'customize_template', 'value': suggestion.customization_prompt })
     }
   }
 }
