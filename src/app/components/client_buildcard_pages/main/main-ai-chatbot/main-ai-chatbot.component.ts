@@ -113,26 +113,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   @Input() selectedDisplayModel = 'Claude 4.7 Opus';
   @Output() selectedDisplayModelChange = new EventEmitter<string>();
 
-  aiModels = [
-    { id: 'claude-4.7-opus', name: 'Claude 4.7 Opus', description: 'Advanced model for complex tasks', icon: 'claude', tag: '', internal: 'claude' },
-    { id: 'claude-4.8-opus', name: 'Claude 4.8 Opus', description: 'Frontier Performance', icon: 'claude', tag: '', internal: 'claude' },
-    { id: 'claude-4.5-sonnet', name: 'Claude 4.5 Sonnet', description: '200k Context', icon: 'claude', tag: '', internal: 'claude' },
-    { id: 'claude-4.6-sonnet', name: 'Claude 4.6 Sonnet', description: 'Latest versatile model with fast exe...', icon: 'claude', tag: '', internal: 'claude' },
-    { id: 'claude-4.6-opus', name: 'Claude 4.6 Opus', description: 'Capable and Robust Model', icon: 'claude', tag: '', internal: 'claude' },
-    { id: 'claude-4.5-opus', name: 'Claude 4.5 Opus', description: 'Anthropic\'s Advanced Model', icon: 'claude', tag: '', internal: 'claude' },
-    { id: 'gpt-5.5', name: 'GPT 5.5', description: 'OpenAI\'s Latest Model', icon: 'gpt', tag: '', internal: 'openai' },
-    { id: 'gpt-5.4', name: 'GPT 5.4', description: 'OpenAI\'s Model', icon: 'gpt', tag: '', internal: 'openai' },
-    { id: 'gpt-5.4-1m', name: 'GPT 5.4 - 1M', description: '1 Million Context', icon: 'gpt', tag: 'Pro', internal: 'openai' },
-    { id: 'gpt-5.3-codex', name: 'GPT 5.3 Codex', description: 'OpenAI\'s Flagship Model', icon: 'gpt', tag: '', internal: 'openai' },
-    { id: 'claude-4.7-opus-1m', name: 'Claude 4.7 Opus - 1M', description: '1 Million Context', icon: 'claude', tag: '', internal: 'claude' },
-    { id: 'claude-4.6-opus-1m', name: 'Claude 4.6 Opus...', description: '1 Million Context', icon: 'claude', tag: 'Standard', internal: 'claude' },
-    { id: 'claude-4.6-sonnet-1m', name: 'Claude 4.6 So...', description: '1 Million Context', icon: 'claude', tag: 'Standard', internal: 'claude' },
-    { id: 'claude-4.8-opus-fast', name: 'Claude 4.8 Opus - ...', description: 'Anthropic\'s Fast Model (2x costlier)', icon: 'claude', tag: 'Pro', internal: 'claude' },
-    { id: 'claude-4.7-opus-fast', name: 'Claude 4.7 Opus - ...', description: 'Anthropic\'s Fast Model (6x costlier)', icon: 'claude', tag: 'Pro', internal: 'claude' },
-    { id: 'claude-4.7-opus-1m-fast', name: 'Claude 4.7 Opus 1...', description: '1 Million Context (6x costlier)', icon: 'claude', tag: 'Pro', internal: 'claude' },
-    { id: 'gemini-3.1-pro', name: 'Gemini 3.1 Pro', description: 'Google\'s Latest Model', icon: 'gemini', tag: '', internal: 'claude' },
-    { id: 'gemini-3.5-flash', name: 'gemini-3.5-flash', description: 'gemini-3.5-flash', icon: 'gemini', tag: '', internal: 'claude' },
-  ];
+  aiModels: any[] = [];
 
   private pendingInitialPrompt = '';
   private resumeFallbackTimer: ReturnType<typeof setTimeout> | null = null;
@@ -170,6 +151,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.selectedDisplayModelChange.emit(this.selectedDisplayModel);
     this.selectedAiModel = model.internal;
     this.selectedAiModelVersion = model.id;
+    localStorage.setItem('modelExplicitlySelected', 'true');
     this.isModelDropdownOpen = false;
   }
 
@@ -183,6 +165,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       }
     }
 
+    this.loadAiModels();
     this.pendingInitialPrompt = this.initialPrompt.trim();
     this.socket = io(this.apiService.apiUrl, {
       auth: {
@@ -193,6 +176,56 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.registerSocketHandlers();
     this.startResumeFallback();
     this.watchPageChange();
+  }
+
+  loadAiModels(): void {
+    this.apiService.getAllAiModels().subscribe({
+      next: (response: any) => {
+        let modelsList: any[] = [];
+        if (Array.isArray(response)) {
+          modelsList = response;
+        } else if (response && Array.isArray(response.data)) {
+          modelsList = response.data;
+        } else if (response && Array.isArray(response.models)) {
+          modelsList = response.models;
+        }
+
+        if (modelsList.length > 0) {
+          this.aiModels = modelsList.map(m => ({
+            id: m.model_id || m.id || m._id || m.modelId || m.value,
+            name: m.name || m.modelName || m.displayName || m.label,
+            description: m.description || m.desc || '',
+            icon: m.icon || m.modelIcon || (m.internal || m.provider || '').toLowerCase() || 'gpt',
+            tag: m.tag || m.badge || '',
+            internal: m.internal || m.provider || m.internalName || 'openai',
+            isDefault: m.is_default || false
+          }));
+
+          const defaultModel = this.aiModels.find(m => m.isDefault);
+          const isExplicit = localStorage.getItem('modelExplicitlySelected') === 'true';
+          const savedModelVersion = isExplicit ? localStorage.getItem('selectedAiModelVersion') : null;
+          let modelToSelect = null;
+
+          if (savedModelVersion) {
+            modelToSelect = this.aiModels.find(m => m.id === savedModelVersion);
+          }
+
+          if (!modelToSelect && defaultModel) {
+            modelToSelect = defaultModel;
+            this.apiService._aiModel.set(defaultModel.internal);
+            this.apiService._aiModelVersion.set(defaultModel.id);
+          }
+
+          if (modelToSelect) {
+            this.selectedDisplayModel = modelToSelect.name;
+            this.selectedDisplayModelChange.emit(this.selectedDisplayModel);
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching AI models in chatbot:', err);
+      }
+    });
   }
 
   ngOnDestroy(): void {

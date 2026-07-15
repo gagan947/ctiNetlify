@@ -26,8 +26,16 @@ export class ApiService {
   _imagePreview = signal<any>(null);
   _htmlCode = signal<any>(null);
   _finalPrompt = signal<any>(null);
-  _aiModel = signal<string>(localStorage.getItem('selectedAiModel') || 'openai');
-  _aiModelVersion = signal<string>(localStorage.getItem('selectedAiModelVersion') || 'gpt-5.4-1m');
+  _aiModel = signal<string>(
+    localStorage.getItem('modelExplicitlySelected') === 'true'
+      ? (localStorage.getItem('selectedAiModel') || 'openai')
+      : 'openai'
+  );
+  _aiModelVersion = signal<string>(
+    localStorage.getItem('modelExplicitlySelected') === 'true'
+      ? (localStorage.getItem('selectedAiModelVersion') || 'gpt-5.4-1m')
+      : 'gpt-5.4-1m'
+  );
 
   setAiModel(model: string) {
     this._aiModel.set(model);
@@ -48,6 +56,10 @@ export class ApiService {
 
   getApi<T>(url: string): Observable<T> {
     return this.http.get<T>(this.apiUrl + url);
+  }
+
+  getAllAiModels<T>(): Observable<T> {
+    return this.http.get<T>(`${this.apiUrl}api/user/get-all-aimodel`);
   }
 
   getAllPlans<T>(billingInterval: 'MONTH' | 'YEAR'): Observable<T> {
