@@ -2129,6 +2129,20 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
   appendBuildActionPrompt() {
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta-success'));
+
+    this.blocks.push({
+      id: `inline-cta-success-${Date.now()}`,
+      text: {
+        message: 'Your project is ready! You can now download the code or deploy it directly.',
+        buttonLabel: 'Download Code',
+        actionId: 'download_code',
+        buttonLabel2: 'Deploy Project',
+        actionId2: 'deploy_template',
+      },
+      done: true,
+      timestamp: new Date()
+    });
 
     this.blocks.push({
       id: `input-prompt-customize-${Date.now()}`,
@@ -2139,6 +2153,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       done: true,
       timestamp: new Date()
     });
+
+    setTimeout(() => this.scrollToBottom(true), 100);
   }
 
   appendCreditLimitPrompt() {
@@ -2188,6 +2204,11 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
     if (actionId === 'deploy_template') {
       this.openDeployModal();
+      return;
+    }
+
+    if (actionId === 'download_code') {
+      this.openDownloadCodeModal();
       return;
     }
 
@@ -2265,6 +2286,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     }
 
     this.blocks = this.blocks.filter(block => block?.id !== promptEvent.blockId);
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta-success'));
     this.blocks.push({
       id: `user-message-customize-${Date.now()}`,
       text: prompt,
@@ -3659,14 +3681,17 @@ export class ReactBuildPreviewComponent implements OnDestroy {
             this.suggestionsMap.set(inquiryId, res.data);
             if (this.selectedProjectId === inquiryId) {
               this.currentSuggestions = res.data;
+              setTimeout(() => this.scrollToBottom(true), 100);
             }
           } else {
             this.suggestionsError = res?.message || 'Failed to load suggestions';
+            setTimeout(() => this.scrollToBottom(true), 100);
           }
         },
         error: (err: any) => {
           this.isSuggestionsLoading = false;
           this.suggestionsError = err?.error?.message || 'Failed to load suggestions';
+          setTimeout(() => this.scrollToBottom(true), 100);
         }
       });
   }
@@ -3707,6 +3732,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     if (inquiryId) {
       const current = this.isSuggestionsCollapsed();
       this.isSuggestionsCollapsedMap.set(inquiryId, !current);
+      if (current) {
+        setTimeout(() => this.scrollToBottom(true), 100);
+      }
     }
   }
 
