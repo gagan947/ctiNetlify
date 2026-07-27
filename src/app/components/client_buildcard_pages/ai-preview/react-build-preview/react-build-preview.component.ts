@@ -2142,7 +2142,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   }
 
   appendCreditLimitPrompt() {
-    this.toggleSuggestionsCollapse();
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
 
     if (this.subscriptionPlan.planType === 'FREE') {
@@ -2240,8 +2239,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     if (!prompt) return;
 
     if (this.selectedProjectId) {
-      this.suggestionsMap.delete(this.selectedProjectId);
       this.isSuggestionsDismissedMap.set(this.selectedProjectId, false);
+      this.isSuggestionsCollapsedMap.set(this.selectedProjectId, true);
     }
 
     if (this.speechService.isListening) {
@@ -2252,7 +2251,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.isVoiceUiVisible = false;
     this.isVoiceStarting = false;
     this.voiceDraftText = '';
-
     if (this.getCurrentCreditBalance() < 5) {
       this.appendCreditLimitPrompt();
       return;
@@ -2293,6 +2291,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     if (!this.socket?.emit) {
       this.pendingCustomizationRequest = null;
       this.customizationRequestVersion++;
+      if (this.selectedProjectId) {
+        this.isSuggestionsCollapsedMap.set(this.selectedProjectId, false);
+      }
       this.toster.error('Customization chat is not connected right now. Please try again.');
       return;
     }
@@ -2322,6 +2323,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         'default'
       )
     );
+    if (this.selectedProjectId) {
+      this.isSuggestionsCollapsedMap.set(this.selectedProjectId, false);
+    }
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
@@ -2463,6 +2467,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         if (!res?.success || !res?.data?.templateId) {
           this.customizationRequestVersion++;
           this.pendingCustomizationRequest = null;
+          if (this.selectedProjectId) {
+            this.isSuggestionsCollapsedMap.set(this.selectedProjectId, false);
+          }
           this.setBuildGenerationError(res?.data?.message || 'Failed to customize preview');
           this.queueBuildGenerationFailure();
           return;
@@ -2472,6 +2479,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         this.pendingCustomizationRequest = null;
         this.completeActiveCustomizationProgress();
         this.hideLoader();
+        if (this.selectedProjectId) {
+          this.isSuggestionsCollapsedMap.set(this.selectedProjectId, false);
+        }
         this.queueGeneratedPreview(res, null);
       },
       error: (error: any) => {
@@ -2488,6 +2498,9 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         }
 
         this.customizationRequestVersion++;
+        if (this.selectedProjectId) {
+          this.isSuggestionsCollapsedMap.set(this.selectedProjectId, false);
+        }
         this.setBuildGenerationError(error);
         this.queueBuildGenerationFailure();
       }
@@ -3698,8 +3711,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   }
 
   hasVisibleSuggestions(): boolean {
-    return !this.isReactBuilding &&
-      (this.isSuggestionsLoading || !!this.suggestionsError || (!!this.currentSuggestions && !!this.currentSuggestions.categories && this.currentSuggestions.categories.length > 0));
+    return (this.isSuggestionsLoading || !!this.suggestionsError || (!!this.currentSuggestions && !!this.currentSuggestions.categories && this.currentSuggestions.categories.length > 0));
   }
 
   isSuggestionsDismissed(): boolean {
@@ -3717,7 +3729,6 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     if (this.customizeInput?.nativeElement && suggestion?.objective) {
       // this.customizeInput.nativeElement.value = suggestion.objective;
       // this.focusCustomizeInput();
-      this.toggleSuggestionsCollapse()
       this.handlePromptSubmitted({ 'blockId': 'customize_template', 'value': suggestion.customization_prompt })
     }
   }

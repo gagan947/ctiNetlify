@@ -42,7 +42,7 @@
                 </div> -->
 
                 <!-- Customization Suggestions Panel -->
-                <div *ngIf="!isReactBuilding && (isSuggestionsLoading || suggestionsError || (currentSuggestions && currentSuggestions.categories && currentSuggestions.categories.length > 0))"
+                <div *ngIf="(isSuggestionsLoading || suggestionsError || (currentSuggestions && currentSuggestions.categories && currentSuggestions.categories.length > 0))"
                     class="ct_suggestions_panel" [class.ct_suggestions_panel--collapsed]="isSuggestionsCollapsed()">
 
                     <!-- Loading Skeleton -->
