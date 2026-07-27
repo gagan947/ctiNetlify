@@ -66,7 +66,7 @@ password input field with proper styling.</p>
       <div *ngIf="isInlineCtaBlock(block)" class="ct_inline_cta_strip">
         <span class="ct_inline_cta_text">{{ block?.text?.message }}</span>
         <span *ngIf="block?.text?.message2" class="ct_inline_cta_text">{{ block?.text?.message2 }}</span>
-        <div class="d-flex gap-2 justify-content-center">
+        <div class="d-flex gap-2 justify-content-end">
           <button type="button" class="ct_inline_cta_btn" (click)="actionSelected.emit(block?.text?.actionId)">
             {{ block?.text?.buttonLabel }}
           </button>

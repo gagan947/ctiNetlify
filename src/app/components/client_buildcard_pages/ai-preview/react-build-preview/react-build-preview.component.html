@@ -42,19 +42,20 @@
                 </div> -->
 
                 <!-- Customization Suggestions Panel -->
-                <div *ngIf="!isReactBuilding && (isSuggestionsLoading || suggestionsError || (currentSuggestions && currentSuggestions.categories && currentSuggestions.categories.length > 0))" 
-                     class="ct_suggestions_panel"
-                     [class.ct_suggestions_panel--collapsed]="isSuggestionsCollapsed()">
-                    
+                <div *ngIf="!isReactBuilding && (isSuggestionsLoading || suggestionsError || (currentSuggestions && currentSuggestions.categories && currentSuggestions.categories.length > 0))"
+                    class="ct_suggestions_panel" [class.ct_suggestions_panel--collapsed]="isSuggestionsCollapsed()">
+
                     <!-- Loading Skeleton -->
                     <div *ngIf="isSuggestionsLoading">
-                        <div class="ct_suggestions_header d-flex align-items-center justify-content-between" (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
+                        <div class="ct_suggestions_header d-flex align-items-center justify-content-between"
+                            (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
                             <div class="ct_suggestions_header_title">
                                 <i class="fa-regular fa-lightbulb text-info"></i>
                                 <span>Agent is suggesting some feature enhancements:</span>
                             </div>
                             <button type="button" class="ct_suggestions_close_btn" aria-label="Toggle suggestions">
-                                <i class="fa-solid" [ngClass]="isSuggestionsCollapsed() ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                                <i class="fa-solid"
+                                    [ngClass]="isSuggestionsCollapsed() ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
                             </button>
                         </div>
                         <div *ngIf="!isSuggestionsCollapsed()" class="ct_suggestion_loading_shimmer mt-2">
@@ -66,41 +67,53 @@
 
                     <!-- Error Handling -->
                     <div *ngIf="!isSuggestionsLoading && suggestionsError">
-                        <div class="ct_suggestions_header d-flex align-items-center justify-content-between" (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
+                        <div class="ct_suggestions_header d-flex align-items-center justify-content-between"
+                            (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
                             <div class="ct_suggestions_header_title text-danger">
                                 <i class="fa-solid fa-circle-exclamation"></i>
                                 <span>Failed to load suggestions</span>
                             </div>
                             <button type="button" class="ct_suggestions_close_btn" aria-label="Toggle suggestions">
-                                <i class="fa-solid" [ngClass]="isSuggestionsCollapsed() ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                                <i class="fa-solid"
+                                    [ngClass]="isSuggestionsCollapsed() ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
                             </button>
                         </div>
-                        <div *ngIf="!isSuggestionsCollapsed()" class="text-center py-2 text-danger opacity-75" style="font-size: 12.5px;">
+                        <div *ngIf="!isSuggestionsCollapsed()" class="text-center py-2 text-danger opacity-75"
+                            style="font-size: 12.5px;">
                             {{ suggestionsError }}
                         </div>
                     </div>
 
                     <!-- Suggestions Content -->
-                    <div *ngIf="!isSuggestionsLoading && !suggestionsError && currentSuggestions && currentSuggestions.categories && currentSuggestions.categories.length > 0">
-                        <div class="ct_suggestions_header d-flex align-items-center justify-content-between" (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
+                    <div
+                        *ngIf="!isSuggestionsLoading && !suggestionsError && currentSuggestions && currentSuggestions.categories && currentSuggestions.categories.length > 0">
+                        <div class="ct_suggestions_header d-flex align-items-center justify-content-between"
+                            (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
                             <div class="ct_suggestions_header_title">
                                 <i class="fa-regular fa-lightbulb text-info"></i>
                                 <span>Agent is suggesting some feature enhancements:</span>
                             </div>
                             <button type="button" class="ct_suggestions_close_btn" aria-label="Toggle suggestions">
-                                <i class="fa-solid" [ngClass]="isSuggestionsCollapsed() ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                                <i class="fa-solid"
+                                    [ngClass]="isSuggestionsCollapsed() ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
                             </button>
                         </div>
-                        
+
                         <div *ngIf="!isSuggestionsCollapsed()" class="ct_suggestions_categories">
-                            <div *ngFor="let cat of currentSuggestions.categories; let catIndex = index" class="ct_suggestions_cat_item">
-                                <div class="ct_suggestions_cat_header d-flex align-items-center gap-2" (click)="toggleCategory(cat.title)">
-                                    <i class="fa-solid ct_suggestions_cat_chevron" [ngClass]="isCategoryExpanded(cat.title) ? 'fa-caret-down' : 'fa-caret-right'"></i>
+                            <div *ngFor="let cat of currentSuggestions.categories; let catIndex = index"
+                                class="ct_suggestions_cat_item">
+                                <div class="ct_suggestions_cat_header d-flex align-items-center gap-2"
+                                    (click)="toggleCategory(cat.title)">
+                                    <i class="fa-solid ct_suggestions_cat_chevron"
+                                        [ngClass]="isCategoryExpanded(cat.title) ? 'fa-caret-down' : 'fa-caret-right'"></i>
                                     <span class="ct_suggestions_cat_title">{{ cat.title }}</span>
                                 </div>
                                 <div *ngIf="isCategoryExpanded(cat.title)" class="ct_suggestions_list">
-                                    <div *ngFor="let sug of cat.suggestions" class="ct_suggestions_item d-flex align-items-center gap-2" (click)="selectSuggestion(sug)">
-                                        <button type="button" class="ct_suggestions_add_btn" aria-label="Apply suggestion">
+                                    <div *ngFor="let sug of cat.suggestions"
+                                        class="ct_suggestions_item d-flex align-items-center gap-2"
+                                        (click)="selectSuggestion(sug)">
+                                        <button type="button" class="ct_suggestions_add_btn"
+                                            aria-label="Apply suggestion">
                                             <i class="fa-solid fa-plus"></i>
                                         </button>
                                         <span class="ct_suggestion_text">{{ sug.title }}</span>
@@ -346,7 +359,7 @@
 
             <div class="text-center mt-3 mb-3">
                 <div class="d-inline-flex align-items-center gap-2">
-                    <span class="text-white ct_fs_13"><span style="color: #FACC15;">🪙</span> 60 credits / month</span>
+                    <span class="text-white ct_fs_13"><span style="color: #FACC15;">🪙</span> 100 credits / month</span>
                     <span class="badge"
                         style="background: rgba(255, 255, 255, 0.1); color: #F8B4B4; border-radius: 4px; padding: 4px 8px; font-weight: 500;">⚡
                         Free with PRO</span>

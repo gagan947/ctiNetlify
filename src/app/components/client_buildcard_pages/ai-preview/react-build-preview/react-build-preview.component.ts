@@ -88,7 +88,7 @@ declare var bootstrap: any;
   styleUrl: './react-build-preview.component.css'
 })
 export class ReactBuildPreviewComponent implements OnDestroy {
-  private readonly deployCreditsRequired = 60;
+  private readonly deployCreditsRequired = 100;
   private readonly downloadCodeCreditsRequired = 100;
   private readonly minChatPanelWidth = 320;
   private readonly maxChatPanelWidth = 720;
@@ -225,7 +225,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   private activeVoiceSessionId = 0;
   draftMessages: any[] = []
   today = new Date();
-  chatSectionWidth = 420;
+  chatSectionWidth = 550;
   isChatResizing = false;
   private removeResizeListeners: Array<() => void> = [];
   // Redirect page for login action
@@ -2142,6 +2142,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   }
 
   appendCreditLimitPrompt() {
+    this.toggleSuggestionsCollapse();
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
 
     if (this.subscriptionPlan.planType === 'FREE') {
@@ -3697,7 +3698,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   }
 
   hasVisibleSuggestions(): boolean {
-    return !this.isReactBuilding && 
+    return !this.isReactBuilding &&
       (this.isSuggestionsLoading || !!this.suggestionsError || (!!this.currentSuggestions && !!this.currentSuggestions.categories && this.currentSuggestions.categories.length > 0));
   }
 
@@ -3716,6 +3717,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     if (this.customizeInput?.nativeElement && suggestion?.objective) {
       // this.customizeInput.nativeElement.value = suggestion.objective;
       // this.focusCustomizeInput();
+      this.toggleSuggestionsCollapse()
       this.handlePromptSubmitted({ 'blockId': 'customize_template', 'value': suggestion.customization_prompt })
     }
   }
