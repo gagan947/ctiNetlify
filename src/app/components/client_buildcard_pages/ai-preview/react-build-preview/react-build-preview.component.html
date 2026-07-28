@@ -292,25 +292,78 @@
 </div>
 
 <div class="modal fade" id="downloadCodeConfirmModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content mb-2 ct_deploy_confirm_modal">
+    <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 600px;">
+        <div class="modal-content ct_download_modal">
             <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <div class="ct_deploy_confirm_modal__badge">
-                <i class="fa-solid fa-download"></i>
+
+            <div class="ct_download_modal__hero">
+                <div class="ct_download_modal__icon_wrap">
+                    <div class="ct_download_modal__orbit">
+                        <span class="ct_orbit_particle ct_orbit_particle--1">✦</span>
+                        <span class="ct_orbit_particle ct_orbit_particle--2">✦</span>
+                    </div>
+                    <div class="ct_download_modal__badge">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                    </div>
+                </div>
+                <div class="ct_download_modal__header">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <h2 class="mb-0">Download Source Code</h2>
+                        <span class="ct_tech_badge"><i class="fa-brands fa-react text-info me-1"></i> Full Code</span>
+                    </div>
+                    <p class="mb-0">
+                        Export the complete, production-ready source code repository for your application.
+                    </p>
+                </div>
             </div>
-            <div class="ct_deploy_confirm_modal__header">
-                <h2>Download Code?</h2>
-                <p class="mb-0">
-                    Downloading your project source code will use 100 credits from your available balance. If you'd like
-                    to continue, click Continue below.
-                </p>
+
+            <!-- What's Included Grid -->
+            <div class="ct_download_highlights">
+                <div class="ct_highlight_item">
+                    <i class="fa-solid fa-circle-check text-success"></i>
+                    <span>Full React Source</span>
+                </div>
+                <div class="ct_highlight_item">
+                    <i class="fa-solid fa-circle-check text-success"></i>
+                    <span>Components & Assets</span>
+                </div>
+                <div class="ct_highlight_item">
+                    <i class="fa-solid fa-circle-check text-success"></i>
+                    <span>Production Ready</span>
+                </div>
             </div>
-            <div class="actions">
-                <button class="btn-cancel button-deploy" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn-confirm button-deploy" (click)="confirmDownloadCode()">
-                    Continue
+
+            <!-- Credit & Balance Info Box -->
+            <div class="ct_download_modal__credit_box">
+                <div class="d-flex align-items-center justify-content-between gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="ct_credit_icon_circle">
+                            🪙
+                        </div>
+                        <div>
+                            <span class="ct_credit_label">Download Cost</span>
+                            <h4 class="ct_credit_val mb-0">100 Credits</h4>
+                        </div>
+                    </div>
+
+                    <div class="ct_balance_meta text-end">
+                        <div class="ct_balance_pill">
+                            <span>Balance: <strong>{{ getCurrentCreditBalance() }} Credits</strong></span>
+                        </div>
+                        <!-- <small class="ct_remaining_text">
+                            Remaining after: {{ getCurrentCreditBalance() >= 100 ? getCurrentCreditBalance() - 100 : 0 }} credits
+                        </small> -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="ct_download_modal__actions">
+                <button type="button" class="btn-cancel button-deploy" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn-confirm button-deploy ct_btn_download_confirm"
+                    (click)="confirmDownloadCode()">
+                    <i class="fa-solid fa-download me-2"></i> Confirm & Download Code
                 </button>
             </div>
         </div>
