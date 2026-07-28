@@ -2272,7 +2272,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     this.isVoiceUiVisible = false;
     this.isVoiceStarting = false;
     this.voiceDraftText = '';
-    if (this.getCurrentCreditBalance() < 5) {
+    if (this.getCurrentCreditBalance() <= 5) {
       this.appendCreditLimitPrompt();
       return;
     }
