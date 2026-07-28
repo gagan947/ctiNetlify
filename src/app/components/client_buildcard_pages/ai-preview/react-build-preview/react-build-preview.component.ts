@@ -1491,9 +1491,16 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   scrollToBottom(_force = false) {
     if (!this.chatScroll) return;
     const el = this.chatScroll.nativeElement;
-    // 🚀 auto-scroll freely UNTIL user touches scroll
+    const doScroll = () => {
+      if (el) {
+        el.scrollTop = el.scrollHeight;
+      }
+    };
     requestAnimationFrame(() => {
-      el.scrollTop = el.scrollHeight;
+      doScroll();
+      setTimeout(doScroll, 50);
+      setTimeout(doScroll, 150);
+      setTimeout(doScroll, 300);
     });
   }
 
@@ -3648,6 +3655,8 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       if (!!this.safePreviewUrl && !this.isReactBuilding && !this.isIframeLoading) {
         this.showDeployHeaderAction = true;
         this.fetchCustomizationSuggestions(this.selectedProjectId);
+        setTimeout(() => this.scrollToBottom(true), 50);
+        setTimeout(() => this.scrollToBottom(true), 250);
       }
       this.deployHeaderActionTimer = null;
     }, 180);
