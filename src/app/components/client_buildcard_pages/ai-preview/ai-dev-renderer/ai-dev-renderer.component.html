@@ -63,17 +63,99 @@ password input field with proper styling.</p>
         </div>
       </div> -->
 
-      <div *ngIf="isInlineCtaBlock(block)" class="ct_inline_cta_strip">
-        <span class="ct_inline_cta_text">{{ block?.text?.message }}</span>
-        <span *ngIf="block?.text?.message2" class="ct_inline_cta_text">{{ block?.text?.message2 }}</span>
-        <div class="d-flex gap-2 justify-content-end">
-          <button type="button" class="ct_inline_cta_btn" (click)="actionSelected.emit(block?.text?.actionId)">
-            {{ block?.text?.buttonLabel }}
-          </button>
-          <button *ngIf="block?.text?.actionId2" type="button" class="ct_inline_cta_btn"
-            (click)="actionSelected.emit(block?.text?.actionId2)">
-            {{ block?.text?.buttonLabel2 }}
-          </button>
+      <div *ngIf="isInlineCtaBlock(block)" class="ct_inline_cta_card"
+        [class.ct_inline_cta_card--purple]="!isSuccessInlineCta(block)"
+        [class.ct_inline_cta_card--green]="isSuccessInlineCta(block)">
+
+        <!-- Close Button -->
+        <button type="button" class="ct_inline_cta_card__close" aria-label="Close"
+          (click)="actionSelected.emit('dismiss_cta')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="ct_inline_cta_card__inner">
+          <!-- Icon Badge Section -->
+          <div class="ct_inline_cta_card__icon_wrap">
+            <div class="ct_inline_cta_card__orbit">
+              <span class="ct_orbit_particle ct_orbit_particle--1">✦</span>
+              <span class="ct_orbit_particle ct_orbit_particle--2">✦</span>
+              <span class="ct_orbit_particle ct_orbit_particle--3">✦</span>
+            </div>
+            <div class="ct_inline_cta_card__icon_badge">
+              <ng-container *ngIf="isSuccessInlineCta(block)">
+                <i class="fa-solid fa-check"></i>
+              </ng-container>
+              <ng-container *ngIf="!isSuccessInlineCta(block)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5Z" fill="url(#crownGrad)" stroke="url(#crownGrad)" stroke-width="1.5" stroke-linejoin="round"/>
+                  <path d="M5 19H19" stroke="url(#crownGrad)" stroke-width="2" stroke-linecap="round"/>
+                  <defs>
+                    <linearGradient id="crownGrad" x1="3" y1="4" x2="21" y2="19" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#E9D5FF"/>
+                      <stop offset="0.5" stop-color="#C084FC"/>
+                      <stop offset="1" stop-color="#A855F7"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </ng-container>
+            </div>
+          </div>
+
+          <!-- Content Section -->
+          <div class="ct_inline_cta_card__content">
+            <h3 class="ct_inline_cta_card__title">
+              <ng-container *ngIf="isSuccessInlineCta(block)">
+                Your project is <span class="ct_highlight_green">ready!</span> 🎉
+              </ng-container>
+              <ng-container *ngIf="!isSuccessInlineCta(block)">
+                {{ block?.text?.title || getCreditLimitTitle(block) }}
+              </ng-container>
+            </h3>
+
+            <p class="ct_inline_cta_card__desc">
+              {{ block?.text?.message }}
+            </p>
+
+            <div class="ct_inline_cta_card__actions">
+              <!-- Button 1 -->
+              <button *ngIf="block?.text?.buttonLabel" type="button" class="ct_inline_cta_card__btn"
+                [class.ct_btn--primary-green]="isSuccessInlineCta(block) && block?.text?.actionId === 'deploy_template'"
+                [class.ct_btn--outline-green]="isSuccessInlineCta(block) && block?.text?.actionId === 'download_code'"
+                [class.ct_btn--primary-purple]="!isSuccessInlineCta(block) && (block?.text?.actionId === 'upgrade_plan' || block?.text?.actionId === 'buy_credits')"
+                [class.ct_btn--outline-purple]="!isSuccessInlineCta(block) && block?.text?.actionId !== 'upgrade_plan' && block?.text?.actionId !== 'buy_credits'"
+                (click)="actionSelected.emit(block?.text?.actionId)">
+                <span *ngIf="block?.text?.actionId === 'download_code'" class="ct_btn_icon">&lt;/&gt;</span>
+                <span *ngIf="block?.text?.actionId === 'deploy_template'" class="ct_btn_icon">🚀</span>
+                <span *ngIf="block?.text?.actionId === 'upgrade_plan'" class="ct_btn_icon">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </span>
+                <span *ngIf="block?.text?.actionId === 'buy_credits'" class="ct_btn_icon">🪙</span>
+                <span>{{ block?.text?.buttonLabel }}</span>
+              </button>
+
+              <!-- Button 2 -->
+              <button *ngIf="block?.text?.buttonLabel2" type="button" class="ct_inline_cta_card__btn"
+                [class.ct_btn--primary-green]="isSuccessInlineCta(block) && block?.text?.actionId2 === 'deploy_template'"
+                [class.ct_btn--outline-green]="isSuccessInlineCta(block) && block?.text?.actionId2 === 'download_code'"
+                [class.ct_btn--primary-purple]="!isSuccessInlineCta(block) && (block?.text?.actionId2 === 'upgrade_plan' || block?.text?.actionId2 === 'buy_credits')"
+                [class.ct_btn--outline-purple]="!isSuccessInlineCta(block) && block?.text?.actionId2 !== 'upgrade_plan' && block?.text?.actionId2 !== 'buy_credits'"
+                (click)="actionSelected.emit(block?.text?.actionId2)">
+                <span *ngIf="block?.text?.actionId2 === 'download_code'" class="ct_btn_icon">&lt;/&gt;</span>
+                <span *ngIf="block?.text?.actionId2 === 'deploy_template'" class="ct_btn_icon">🚀</span>
+                <span *ngIf="block?.text?.actionId2 === 'upgrade_plan'" class="ct_btn_icon">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </span>
+                <span *ngIf="block?.text?.actionId2 === 'buy_credits'" class="ct_btn_icon">🪙</span>
+                <span>{{ block?.text?.buttonLabel2 }}</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

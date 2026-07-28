@@ -84,6 +84,28 @@ export class AiDevRendererComponent {
       && typeof block?.text === 'object';
   }
 
+  isSuccessInlineCta(block: any): boolean {
+    if (!this.isInlineCtaBlock(block)) return false;
+    const id = String(block?.id || '');
+    const variant = block?.text?.variant;
+    const msg = String(block?.text?.message || '');
+    return id.startsWith('inline-cta-success') || variant === 'success' || variant === 'project-ready' || msg.includes('ready!');
+  }
+
+  getCreditLimitTitle(block: any): string {
+    if (block?.text?.title) {
+      return block.text.title;
+    }
+    const msg = String(block?.text?.message || '');
+    if (msg.includes('free credits')) {
+      return 'You’ve used all your free credits for now.';
+    }
+    if (msg.includes('running low')) {
+      return 'You’re running low on credits.';
+    }
+    return 'Credit Balance Update';
+  }
+
   isUserMessageBlock(block: any): boolean {
     return typeof block?.id === 'string'
       && block.id.startsWith('user-message')

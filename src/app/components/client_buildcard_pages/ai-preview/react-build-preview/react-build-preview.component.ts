@@ -2129,12 +2129,14 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
   appendBuildActionPrompt() {
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
-    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta-success'));
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta'));
 
     this.blocks.push({
       id: `inline-cta-success-${Date.now()}`,
       text: {
-        message: 'Your project is ready! You can now download the code or deploy it directly.',
+        variant: 'project-ready',
+        title: 'Your project is ready!',
+        message: 'You can now download the code or deploy it directly.',
         buttonLabel: 'Download Code',
         actionId: 'download_code',
         buttonLabel2: 'Deploy Project',
@@ -2159,13 +2161,16 @@ export class ReactBuildPreviewComponent implements OnDestroy {
 
   appendCreditLimitPrompt() {
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta'));
 
     if (this.subscriptionPlan.planType === 'FREE') {
       this.blocks.push({
         id: `inline-cta-customize-${Date.now()}`,
         text: {
-          message: `Hi! You’ve used all your free credits for now. Upgrade to the Standard Plan to get more monthly credits and continue customizing, generating, and deploying without interruptions. You can also purchase additional credits anytime whenever you need them.`,
-          buttonLabel: 'Upgrade plan',
+          variant: 'credit-limit',
+          title: 'You’ve used all your free credits for now.',
+          message: `Upgrade to the Standard Plan to get more monthly credits and continue customizing, generating, and deploying without interruptions. You can also purchase additional credits anytime whenever you need them.`,
+          buttonLabel: 'Upgrade Plan',
           actionId: 'upgrade_plan',
         },
         done: true,
@@ -2176,10 +2181,12 @@ export class ReactBuildPreviewComponent implements OnDestroy {
       this.blocks.push({
         id: `inline-cta-customize-${Date.now()}`,
         text: {
-          message: `Hi! You’re running low on credits. Buy more credits to continue customizing, generating, and deploying without interruptions. Want higher monthly limits and more included credits? You can upgrade your plan anytime.`,
+          variant: 'credit-limit',
+          title: 'You’re running low on credits.',
+          message: `Buy more credits to continue customizing, generating, and deploying without interruptions. Want higher monthly limits and more included credits? You can upgrade your plan anytime.`,
           buttonLabel: 'Buy credits',
           actionId: 'buy_credits',
-          buttonLabel2: 'Upgrade plan',
+          buttonLabel2: 'Upgrade Plan',
           actionId2: 'upgrade_plan'
         },
         done: true,
@@ -2191,6 +2198,11 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   }
 
   handleChatAction(actionId: string) {
+    if (actionId === 'dismiss_cta') {
+      this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta'));
+      return;
+    }
+
     if (actionId === 'regenerate_template') {
       this.regenerate();
       return;
@@ -2286,7 +2298,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     }
 
     this.blocks = this.blocks.filter(block => block?.id !== promptEvent.blockId);
-    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta-success'));
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta'));
     this.blocks.push({
       id: `user-message-customize-${Date.now()}`,
       text: prompt,
