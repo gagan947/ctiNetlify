@@ -1135,6 +1135,96 @@ p {
   transform: translateY(-1px);
 }
 
+/* Responsive Mobile Support for Download Modal */
+@media (max-width: 576px) {
+  .ct_download_modal {
+    padding: 22px 16px 20px 16px;
+    border-radius: 16px;
+  }
+
+  .ct_download_modal__hero {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .ct_download_modal__icon_wrap {
+    width: 50px;
+    height: 50px;
+  }
+
+  .ct_download_modal__badge {
+    width: 38px;
+    height: 38px;
+    font-size: 17px;
+  }
+
+  .ct_download_modal__header h2 {
+    font-size: 17px;
+    line-height: 1.35;
+  }
+
+  .ct_tech_badge {
+    font-size: 10.5px;
+    padding: 2px 7px;
+  }
+
+  .ct_download_modal__header p {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .ct_download_highlights {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+  }
+
+  .ct_highlight_item {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .ct_download_modal__credit_box {
+    padding: 12px 14px;
+    margin-bottom: 20px;
+  }
+
+  .ct_download_modal__credit_box > .d-flex {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+
+  .ct_balance_meta {
+    align-items: flex-start;
+    text-align: left;
+    width: 100%;
+  }
+
+  .ct_balance_pill {
+    padding: 4px 12px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .ct_download_modal__actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .ct_download_modal__actions .btn-cancel,
+  .ct_btn_download_confirm {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding: 10px 16px !important;
+    font-size: 14px !important;
+    white-space: nowrap;
+  }
+}
+
 .ct_deploy_confirm_modal__badge {
   width: 60px;
   height: 60px;
