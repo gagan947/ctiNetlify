@@ -85,6 +85,7 @@ export class SubcriptionPageComponent {
   };
   userInfo: any = {}
   billingForm: FormGroup = new FormGroup({});
+  isSubmitted = false;
   private readonly modalData = inject<SubscriptionModalData | null>(NZ_MODAL_DATA, { optional: true });
   constructor(
     private apiService: ApiService,
@@ -142,6 +143,7 @@ export class SubcriptionPageComponent {
   }
 
   getStarted(planData: Plan) {
+    this.isSubmitted = false;
     this.selectedPlan.set(this.mapPlanType(planData));
     this.billingSummaryModalOpen = true;
     this.selectedPlanData = planData;
@@ -188,12 +190,17 @@ export class SubcriptionPageComponent {
 
   isInvalid(controlName: string) {
     const control = this.billingForm.get(controlName);
-    return control?.invalid && control?.touched;
+    return !!(this.isSubmitted && control?.invalid);
   }
 
   confirmAndPay() {
+    this.isSubmitted = true;
     if (this.billingForm.invalid) {
-      this.billingForm.markAllAsTouched();
+      if (this.billingForm.get('phoneNumber')?.invalid) {
+        this.message.error('Please enter a valid mobile number.');
+      } else {
+        this.message.error('Please fill in all required billing details.');
+      }
       return;
     }
 
@@ -265,6 +272,7 @@ export class SubcriptionPageComponent {
   }
 
   closeModal() {
+    this.isSubmitted = false;
     this.modalRef?.close({ action: 'closed', reason: 'cancel' });
   }
 

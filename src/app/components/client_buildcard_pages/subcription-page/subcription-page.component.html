@@ -217,10 +217,16 @@
           <div class="ct_form_group">
             <label>Name *</label>
             <input type="text" class="form-control" formControlName="name" [class.is-invalid]="isInvalid('name')" />
+            <small class="text-danger d-block mt-1" *ngIf="isInvalid('name')">
+              Please enter your name.
+            </small>
           </div>
           <div class="ct_form_group">
             <label>Email *</label>
             <input type="email" class="form-control" formControlName="email" [class.is-invalid]="isInvalid('email')" />
+            <small class="text-danger d-block mt-1" *ngIf="isInvalid('email')">
+              Please enter a valid email address.
+            </small>
           </div>
           <div class="ct_form_group ct_phone_group mb-0">
             <label>Phone *</label>
@@ -230,6 +236,9 @@
               [selectedCountryISO]="CountryISO.India" [maxLength]="15" [phoneValidation]="true"
               formControlName="phoneNumber">
             </ngx-intl-tel-input>
+            <small class="text-danger d-block mt-1" *ngIf="isInvalid('phoneNumber')">
+              Please enter a valid phone number.
+            </small>
           </div>
         </form>
       </div>
@@ -268,7 +277,7 @@
 
         <div class="ct_action_buttons">
           <button class="ct_btn_cancel" (click)="closeModal()">Cancel</button>
-          <button class="ct_btn_subscribe" [disabled]="billingForm.invalid" (click)="confirmAndPay()">
+          <button class="ct_btn_subscribe" (click)="confirmAndPay()">
             Subscribe & Pay {{ billedNowAmount(selectedPlanData) }} <i class="fa-solid fa-arrow-right ms-2"></i>
           </button>
         </div>
