@@ -60,7 +60,7 @@
   background: transparent;
   border: 1px solid #27272A;
   gap: 0px;
-
+  max-width: 100%;
 }
 
 .ct_text_clr_71717A {
@@ -75,12 +75,12 @@
   font-size: 14px;
   font-weight: 400;
   padding: 8px 24px;
+  white-space: nowrap;
 }
 
 .ct_pricing_toggle button.active {
   background: #27272A;
   color: #ffffff;
-
 }
 
 .ct_toggle_hint {
@@ -113,6 +113,8 @@
   border: 1px solid rgba(78, 127, 212, 0.45);
   color: #dbeafe;
   font-size: 14px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .ct_offer_badge {
@@ -124,6 +126,7 @@
   font-weight: 400;
   text-transform: uppercase;
   background: #000000CC;
+  white-space: nowrap;
 }
 
 .ct_pricing_grid {
@@ -236,6 +239,19 @@
 
 .ct_subscription_shell {
   padding-inline: 90px !important;
+}
+
+@media screen and (max-width: 991px) {
+  .ct_subscription_shell {
+    padding-inline: 32px !important;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .ct_subscription_shell {
+    padding-inline: 16px !important;
+    padding-block: 20px !important;
+  }
 }
 
 .ct_price_suffix {
@@ -822,7 +838,7 @@
   opacity: 0.95;
 }
 
-/* .disable_btn {
+.disable_btn {
   cursor: not-allowed;
   opacity: 0.7;
   transform: none !important;
@@ -831,32 +847,84 @@
 @media screen and (max-width: 991px) {
   .ct_pricing_grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .ct_subscription_intro h4 {
     font-size: 30px;
   }
+
+  .ct_premium_body {
+    grid-template-columns: 1fr;
+  }
+
+  .ct_premium_footer_layout {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 @media screen and (max-width: 767px) {
+  .ct_subscription_shell {
+    padding-inline: 16px !important;
+    max-height: 95vh;
+  }
+
+  .ct_subscription_intro h4 {
+    font-size: 24px;
+  }
+
+  .ct_subscription_intro p {
+    font-size: 13px;
+  }
+
   .ct_offer_banner {
     flex-direction: column;
+    padding: 12px;
+    gap: 8px;
+    text-align: center;
+    width: 100%;
   }
 
   .ct_price_card {
-    padding: 20px;
+    padding: 24px 18px;
   }
 
   .ct_price_value {
-    font-size: 38px;
+    font-size: 32px;
   }
 
   .ct_pricing_toggle {
+    display: flex;
     width: 100%;
-    justify-content: center;
+    margin-inline: auto;
+  }
+
+  .ct_pricing_toggle button {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .ct_premium_modal {
+    padding: 30px 16px 20px;
+    max-height: 95vh;
+  }
+
+  .ct_premium_header h2 {
+    font-size: 22px;
     flex-wrap: wrap;
   }
-/* } */
+
+  .ct_trust_badges_container {
+    flex-direction: column;
+  }
+
+  .ct_action_buttons {
+    flex-direction: column;
+  }
+}
 
 
 ct_parant_list .card.card-body {
