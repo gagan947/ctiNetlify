@@ -69,6 +69,7 @@ export class SubcriptionPageComponent {
   subscriptionPlan!: SubscriptionResponse;
   proPlans: Plan[] = [];
   businessPlans: Plan[] = [];
+  isLoadingPlans = true;
   private plansCache: Partial<Record<BillingCycle, {
     pro: Plan[];
     business: Plan[];
@@ -229,8 +230,8 @@ export class SubcriptionPageComponent {
     const symbol = this.currencySymbolMap[currencyCode] || `${currencyCode} `;
     const value = Number(amount ?? 0);
     const formatted = value.toLocaleString('en-IN', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
     });
     return `${symbol}${formatted}`;
   }
@@ -282,9 +283,11 @@ export class SubcriptionPageComponent {
       this.proPlans = cachedPlans.pro;
       this.businessPlans = cachedPlans.business;
       this.selectedProPlan = this.resolveSelectedProPlan();
+      this.isLoadingPlans = false;
       return;
     }
 
+    this.isLoadingPlans = true;
     this.apiService.getAllPlans<any>(this.billingCycle())
       .subscribe({
         next: (res: any) => {
@@ -295,9 +298,10 @@ export class SubcriptionPageComponent {
             business: this.businessPlans
           };
           this.selectedProPlan = this.resolveSelectedProPlan();
+          this.isLoadingPlans = false;
         },
         error: () => {
-          // this.loading = false
+          this.isLoadingPlans = false;
         }
       });
   }

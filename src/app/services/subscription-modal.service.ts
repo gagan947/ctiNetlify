@@ -78,8 +78,8 @@ export class SubscriptionModalService {
       nzClosable: true,
       nzMaskClosable: false,
       nzKeyboard: true,
+      nzCentered: true,
       nzWidth: 833,
-      nzStyle: { top: '55px' },
       nzClassName: 'subscription-modal-shell',
       nzBodyStyle: {
         padding: '0',
@@ -118,8 +118,8 @@ export class SubscriptionModalService {
       nzClosable: true,
       nzMaskClosable: false,
       nzKeyboard: true,
+      nzCentered: true,
       nzWidth: 833,
-      nzStyle: { top: '60px' },
       nzClassName: 'buy-more-credits-modal-shell',
       nzBodyStyle: {
         padding: '0',
@@ -160,8 +160,8 @@ export class SubscriptionModalService {
       nzClosable: true,
       nzMaskClosable: false,
       nzKeyboard: true,
+      nzCentered: true,
       nzWidth: 866,
-      nzStyle: { top: '12px' },
       nzClassName: 'user-plans-modal-shell',
       nzBodyStyle: {
         padding: '0',

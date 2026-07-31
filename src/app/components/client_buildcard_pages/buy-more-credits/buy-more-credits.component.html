@@ -10,7 +10,26 @@
       </div>
     </div>
 
-    <div class="ct_buy_credits__grid" *ngIf="topUpPacks.length; else emptyState">
+    <!-- Skeleton Loader Grid -->
+    <div class="ct_buy_credits__grid" *ngIf="isLoading; else loadedContent">
+      <article class="ct_credit_card ct_skeleton_card" *ngFor="let item of [1, 2, 3]">
+        <div class="ct_credit_card__body">
+          <div class="ct_skeleton_shimmer ct_skeleton_badge mx-auto"></div>
+          <div class="ct_skeleton_shimmer ct_skeleton_title mx-auto"></div>
+          <div class="ct_skeleton_shimmer ct_skeleton_price mx-auto"></div>
+          <ul class="ct_credit_card__benefits mt-4">
+            <li *ngFor="let b of [1, 2, 3]">
+              <div class="ct_skeleton_shimmer ct_skeleton_line w-100"></div>
+            </li>
+          </ul>
+        </div>
+        <div class="ct_skeleton_shimmer ct_skeleton_button"></div>
+      </article>
+    </div>
+
+    <!-- Loaded Content -->
+    <ng-template #loadedContent>
+      <div class="ct_buy_credits__grid" *ngIf="topUpPacks.length; else emptyState">
       <article class="ct_credit_card" *ngFor="let pack of topUpPacks; let i = index; trackBy: trackByPackId"
         [class.ct_credit_card__featured]="isFeatured(i)">
         <span class="ct_credit_card__offer">{{ getPackBadge(pack, i) }}</span>
@@ -54,10 +73,11 @@
       <span class="ct_buy_credits__custom_error">{{ customAmountError }}</span>
     </div>
 
-    <ng-template #emptyState>
-      <div class="ct_buy_credits__empty" *ngIf="!isLoading">
-        No active credit bundles are available right now.
-      </div>
+      <ng-template #emptyState>
+        <div class="ct_buy_credits__empty" *ngIf="!isLoading">
+          No active credit bundles are available right now.
+        </div>
+      </ng-template>
     </ng-template>
   </div>
 </section>

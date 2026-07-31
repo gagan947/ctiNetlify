@@ -20,7 +20,30 @@
         </div>
       </div>
 
-      <div class="ct_pricing_grid">
+      <!-- Skeleton Loader Grid -->
+      <div class="ct_pricing_grid" *ngIf="isLoadingPlans">
+        <article class="ct_price_card ct_skeleton_card" *ngFor="let item of [1, 2]">
+          <div class="ct_card_header">
+            <div class="w-100">
+              <div class="ct_skeleton_shimmer ct_skeleton_title"></div>
+              <div class="ct_skeleton_shimmer ct_skeleton_subtitle"></div>
+            </div>
+          </div>
+          <div class="ct_price_wrap">
+            <div class="ct_skeleton_shimmer ct_skeleton_price"></div>
+          </div>
+          <div class="ct_plan_selector">
+            <div class="ct_skeleton_shimmer ct_skeleton_select"></div>
+          </div>
+          <div class="ct_skeleton_shimmer ct_skeleton_button"></div>
+          <div class="ct_feature_list mt-3">
+            <div class="ct_skeleton_shimmer ct_skeleton_feature mb-2" *ngFor="let f of [1, 2, 3, 4, 5]"></div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Real Plans Grid -->
+      <div class="ct_pricing_grid" *ngIf="!isLoadingPlans">
         <article class="ct_price_card" *ngFor="let plan of getVisiblePlanCards()"
           [class.ct_price_card_standard]="getCardTheme(plan) === 'standard'"
           [class.ct_price_card_enterprise]="getCardTheme(plan) === 'enterprise'">
