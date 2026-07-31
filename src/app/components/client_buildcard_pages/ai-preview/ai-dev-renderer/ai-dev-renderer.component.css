@@ -850,8 +850,8 @@
   position: relative;
   width: 100%;
   border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: 26px 20px 20px;
+  margin-bottom: 24px;
   box-sizing: border-box;
   container-type: inline-size;
   background: #090a18;
@@ -1126,13 +1126,16 @@
 /* Responsive adjustment for small screens or narrow containers */
 @container (max-width: 400px) {
   .ct_inline_cta_card {
-    padding: 16px;
+    padding: 24px 16px 20px;
   }
   .ct_inline_cta_card__inner {
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 16px;
+  }
+  .ct_inline_cta_card__icon_wrap {
+    margin-top: 4px;
   }
   .ct_inline_cta_card__actions {
     flex-direction: column;
@@ -1147,13 +1150,16 @@
 
 @media (max-width: 576px) {
   .ct_inline_cta_card {
-    padding: 16px;
+    padding: 24px 16px 20px;
   }
   .ct_inline_cta_card__inner {
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 16px;
+  }
+  .ct_inline_cta_card__icon_wrap {
+    margin-top: 4px;
   }
   .ct_inline_cta_card__actions {
     flex-direction: column;

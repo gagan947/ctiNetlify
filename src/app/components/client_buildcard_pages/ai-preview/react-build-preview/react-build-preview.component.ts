@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, OnDestroy, ViewChild, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -87,7 +87,7 @@ declare var bootstrap: any;
   templateUrl: './react-build-preview.component.html',
   styleUrl: './react-build-preview.component.css'
 })
-export class ReactBuildPreviewComponent implements OnDestroy {
+export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
   private readonly deployCreditsRequired = 100;
   private readonly downloadCodeCreditsRequired = 100;
   private readonly minChatPanelWidth = 320;
@@ -144,6 +144,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   safePreviewUrl: SafeResourceUrl | null = null;
   @ViewChild('previewFrame') previewFrame!: ElementRef<HTMLIFrameElement>;
   @ViewChild('chatScroll') chatScroll!: ElementRef<HTMLDivElement>;
+  private lastChatScrollElement: HTMLDivElement | null = null;
   @ViewChild('customizeInput') customizeInput!: ElementRef<HTMLTextAreaElement>;
   suggestionsMap = new Map<string, any>();
   isSuggestionsLoading = false;
@@ -341,6 +342,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
         variation: existingTemplate.variation
       });
       this.fetchCustomizationSuggestions(inquiryId);
+      this.scrollToBottom(true);
       return;
     }
 
@@ -348,6 +350,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     if (generationTab?.status === 'completed' && generationTab.previewData?.templateId) {
       this.applyStoredCompletedPreview(generationTab.previewData);
       this.fetchCustomizationSuggestions(inquiryId);
+      this.scrollToBottom(true);
       return;
     }
 
@@ -502,6 +505,13 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   }
   ngAfterViewInit() {
     this.scrollToBottom(true);
+  }
+
+  ngAfterViewChecked() {
+    if (this.chatScroll?.nativeElement && this.chatScroll.nativeElement !== this.lastChatScrollElement) {
+      this.lastChatScrollElement = this.chatScroll.nativeElement;
+      this.scrollToBottom(true);
+    }
   }
   onUserScroll() {
   }
@@ -1498,14 +1508,24 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     const el = this.chatScroll.nativeElement;
     const doScroll = () => {
       if (el) {
-        el.scrollTop = el.scrollHeight;
+        el.scrollTop = el.scrollHeight + 500;
+        const asideEl = el.closest('aside') || el.closest('.ct_project_ai_chat_section');
+        if (asideEl) {
+          asideEl.scrollTop = asideEl.scrollHeight + 500;
+        }
+        if (window.innerWidth <= 991 || this.isMobileView()) {
+          window.scrollTo(0, 999999);
+        }
       }
     };
     requestAnimationFrame(() => {
       doScroll();
       setTimeout(doScroll, 50);
       setTimeout(doScroll, 150);
-      setTimeout(doScroll, 300);
+      setTimeout(doScroll, 350);
+      setTimeout(doScroll, 650);
+      setTimeout(doScroll, 1000);
+      setTimeout(doScroll, 1500);
     });
   }
 
@@ -1694,6 +1714,7 @@ export class ReactBuildPreviewComponent implements OnDestroy {
   showChatSection() {
     this.hasDismissedCurrentMobilePreview = true;
     this.fullScreen = false;
+    this.scrollToBottom(true);
   }
 
   private preparePreviewLoadState() {

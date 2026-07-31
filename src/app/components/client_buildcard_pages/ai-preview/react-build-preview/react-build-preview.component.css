@@ -252,7 +252,9 @@ aside.ct_project_ai_chat_section>.ct_chat_scroll_wrap.ct_chat_scroll_without_btn
     width: 100%;
     min-width: 0;
     max-width: none;
-    overflow: auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 }
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './ai-dev-renderer.component.html',
   styleUrl: './ai-dev-renderer.component.css'
 })
-export class AiDevRendererComponent {
+export class AiDevRendererComponent implements OnChanges {
   private readonly codeKeywords = new Set([
     'import', 'from', 'export', 'default', 'function', 'return', 'const', 'let',
     'var', 'if', 'else', 'for', 'while', 'class', 'new', 'async', 'await',
@@ -21,7 +21,14 @@ export class AiDevRendererComponent {
   @Input() blocks: any[] = [];
   @Output() actionSelected = new EventEmitter<string>();
   @Output() promptSubmitted = new EventEmitter<{ blockId: string; value: string }>();
+  @Output() contentRendered = new EventEmitter<void>();
   @Input() isLoading = false;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['blocks']) {
+      this.contentRendered.emit();
+    }
+  }
 
   expandedRows = new Set<string>();
 

@@ -23,7 +23,8 @@
             <div #chatScroll class="ct_chat_scroll_wrap" [class.ct_chat_scroll_without_btn]="!showSupportCallbackButton"
                 (scroll)="onUserScroll()">
                 <app-ai-dev-renderer [isLoading]="isReactBuilding" [blocks]="blocks"
-                    (actionSelected)="handleChatAction($event)" (promptSubmitted)="handlePromptSubmitted($event)">
+                    (actionSelected)="handleChatAction($event)" (promptSubmitted)="handlePromptSubmitted($event)"
+                    (contentRendered)="scrollToBottom(true)">
                 </app-ai-dev-renderer>
             </div>
             <div class="ct_ai_input_box mt-auto">
