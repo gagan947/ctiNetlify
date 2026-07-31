@@ -122,11 +122,21 @@ export class UserPlansComponent {
       return 'Free Plan';
     }
 
-    return this.subscriptionPlan.subscriptionStatus === 'ACTIVE'
-      ? 'Active'
-      : this.subscriptionPlan.subscriptionStatus === 'CANCELLED'
-        ? 'Cancelled'
-        : this.subscriptionPlan.subscriptionStatus === 'BANK_APPROVAL_PENDING' ? 'Bank Approval Pending' : '';
+    const statusMap: Record<string, string> = {
+      ACTIVE: 'Active',
+      BANK_APPROVAL_PENDING: 'Bank Approval Pending',
+      CANCELLED: 'Cancelled',
+      CUSTOMER_CANCELLED: 'Cancelled',
+      PENDING: 'Pending',
+      AUTH_PENDING: 'Auth Pending',
+      INITIALIZED: 'Initialized',
+      ON_HOLD: 'On Hold',
+      EXPIRED: 'Expired',
+      COMPLETED: 'Completed',
+      INACTIVE: 'Inactive'
+    };
+
+    return statusMap[this.subscriptionPlan.subscriptionStatus] || this.subscriptionPlan.subscriptionStatus;
   }
 
   get paymentMethodLabel(): string {
