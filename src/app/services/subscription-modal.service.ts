@@ -78,7 +78,7 @@ export class SubscriptionModalService {
       nzClosable: true,
       nzMaskClosable: false,
       nzKeyboard: true,
-      // nzWidth: 833,
+      nzWidth: 833,
       nzStyle: { top: '55px' },
       nzClassName: 'subscription-modal-shell',
       nzBodyStyle: {

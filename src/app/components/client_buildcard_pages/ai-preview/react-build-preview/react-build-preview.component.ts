@@ -1255,6 +1255,11 @@ export class ReactBuildPreviewComponent implements OnDestroy {
     return Number((this.subscriptionPlan as any)?.creditBalance || 0);
   }
 
+  get isFreePlan(): boolean {
+    if (!this.subscriptionPlan) return true;
+    return this.subscriptionPlan.planType === 'FREE' || (this.subscriptionPlan as any).planName === 'FREE_PLAN';
+  }
+
   private openInsufficientCreditsModal(requiredCredits: number, actionLabel: string) {
     this.insufficientCreditsRequired = requiredCredits;
     this.insufficientCreditsActionLabel = actionLabel;

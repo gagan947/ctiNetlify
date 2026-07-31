@@ -365,9 +365,7 @@ button.main-ai-topbar__tab.main-ai-topbar__tab--active:before {
     padding: 4px 12px;
     border: 0;
     border-radius: 5px;
-    background: linear-gradient(135deg,
-            #8b6cff,
-            #5b8dff);
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
     color: #fff;
     font-size: 13px;
     font-weight: 400;

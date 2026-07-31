@@ -608,8 +608,14 @@
                 insufficientCreditsActionLabel }}. Your current balance is {{
                 getCurrentCreditBalance() }} credits.</p>
             <div class="actions">
-                <button class="btn-confirm button-deploy w-100" data-bs-dismiss="modal"
-                    (click)="subscriptionModalService.openBuyMoreCreditsModal()">Buy Credits</button>
+                <ng-container *ngIf="isFreePlan; else buyCreditsBlock">
+                    <button class="btn-confirm button-deploy w-100" data-bs-dismiss="modal"
+                        (click)="subscriptionModalService.open()">Buy Plan</button>
+                </ng-container>
+                <ng-template #buyCreditsBlock>
+                    <button class="btn-confirm button-deploy w-100" data-bs-dismiss="modal"
+                        (click)="subscriptionModalService.openBuyMoreCreditsModal()">Buy Credits</button>
+                </ng-template>
             </div>
         </div>
     </div>

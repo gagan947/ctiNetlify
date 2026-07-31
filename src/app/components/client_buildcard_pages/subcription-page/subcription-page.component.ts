@@ -99,7 +99,7 @@ export class SubcriptionPageComponent {
 
   ngOnInit(): void {
     this.selectedTemplateId = this.selectedTemplateId || this.modalData?.selectedTemplateId || '';
-    this.updateModalWidth(1250);
+    this.updateModalWidth(1050);
     this.subscriptionService.loadSubscription();
     this.subscriptionService.subscription$.subscribe(subscription => {
       if (subscription) {
@@ -145,7 +145,7 @@ export class SubcriptionPageComponent {
     this.billingSummaryModalOpen = true;
     this.selectedPlanData = planData;
     this.setBillingCycle(planData.billing_interval);
-    this.updateModalWidth(520);
+    this.updateModalWidth(900);
   }
 
   toggleProDropdown(event: Event) {

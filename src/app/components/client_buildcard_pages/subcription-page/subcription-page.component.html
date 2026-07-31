@@ -115,99 +115,141 @@
     </div>
   </div>
 
-  <div class="modal-content rounded-4 ct_confirl_plan_main_div" *ngIf="billingSummaryModalOpen">
-    <div class="modal-header">
-      <h5 class="modal-title mt-2 ps-4 text-white">Confirm Your Plan</h5>
+  <div class="modal-content ct_premium_modal" *ngIf="billingSummaryModalOpen">
+    <!-- <button type="button" class="ct_premium_close" aria-label="Close" (click)="closeModal()">
+      <i class="fa-solid fa-xmark"></i>
+    </button> -->
+
+    <!-- <div class="ct_premium_shield_icon">
+      <div class="ct_shield_glow"></div>
+      <div class="ct_shield_svg">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+    </div> -->
+
+    <div class="ct_premium_header">
+      <h2><span class="ct_sparkle">✦</span> Confirm <span class="ct_text_purple">Your Plan</span> <span
+          class="ct_sparkle">✦</span></h2>
+      <p>You're just one step away from unlocking premium features.</p>
     </div>
 
-    <div class="modal-body pt-4 px-4">
-      <div class="bg-light rounded p-3 mb-4">
-        <h6 class="mb-3">Order Summary</h6>
-
-        <div class="d-flex justify-content-between mb-2">
-          <span>Plan</span>
-          <strong>{{ selectedPlan() | titlecase }}</strong>
+    <div class="ct_premium_body">
+      <!-- Left Column -->
+      <div class="ct_premium_col">
+        <div class="ct_col_header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="ct_icon_circle"><i class="fa-regular fa-file-lines"></i></div>
+            <h6 class="mb-0">Order Summary</h6>
+          </div>
+          <span class="ct_plan_badge">{{ selectedPlan() | titlecase }}</span>
         </div>
 
-        <div class="d-flex justify-content-between mb-2">
-          <span>Billing</span>
-          <strong>{{ billingCycle() == 'MONTH' ? 'Monthly' : 'Yearly' }}</strong>
+        <div class="ct_order_list">
+          <div class="ct_order_row">
+            <span>Plan</span>
+            <strong>{{ selectedPlan() | titlecase }}</strong>
+          </div>
+          <div class="ct_order_row">
+            <span>Billing</span>
+            <strong>{{ billingCycle() == 'MONTH' ? 'Monthly' : 'Yearly' }}</strong>
+          </div>
+          <div class="ct_order_row">
+            <span>Price</span>
+            <strong>{{ getOrderSummaryPrice(selectedPlanData) }} / {{ billingCycle() == 'MONTH' ? 'month' : 'year'
+              }}</strong>
+          </div>
+          <div class="ct_order_row" *ngIf="selectedPlanData && showIntroOffer(selectedPlanData)">
+            <span>Renews at</span>
+            <strong>{{ getRenewalAmount(selectedPlanData) }} / {{ billingCycle() == 'MONTH' ? 'month' : 'year'
+              }}</strong>
+          </div>
         </div>
 
-        <div class="d-flex justify-content-between mb-2">
-          <span>Price</span>
-          <strong>
-            {{ getOrderSummaryPrice(selectedPlanData) }}
-            / {{ billingCycle() == 'MONTH' ? 'month' : 'year' }}
-          </strong>
-        </div>
-        <div class="d-flex justify-content-between mb-2" *ngIf="selectedPlanData && showIntroOffer(selectedPlanData)">
-          <span>Renews at</span>
-          <strong>{{ getRenewalAmount(selectedPlanData) }} / {{ billingCycle() ==
-            'MONTH' ? 'month' : 'year' }}</strong>
-        </div>
-
-        <hr />
-
-        <div class="d-flex justify-content-between fs-5 fw-semibold">
-          <span>Billed now</span>
-          <span>{{ billedNowAmount(selectedPlanData) }}</span>
-        </div>
-
-        <small class=" d-block mt-2">
-          <ng-container *ngIf="selectedPlanData && showIntroOffer(selectedPlanData); else standardRenewal">
-            Renews at {{ getRenewalAmount(selectedPlanData) }}
-            {{ billingCycle() === "YEAR" ? "yearly" : "monthly" }}
-          </ng-container>
-          <ng-template #standardRenewal>
-            Renews {{ billingCycle() === "YEAR" ? "yearly" : "monthly" }}
-          </ng-template>
-        </small>
-      </div>
-
-      <form [formGroup]="billingForm">
-        <h6 class="mb-3 text-white">Billing details</h6>
-
-        <div class="mb-3">
-          <label class="form-label text-white">Name *</label>
-          <input type="text" class="form-control" formControlName="name" [class.is-invalid]="isInvalid('name')" />
-          <div class="invalid-feedback">Name is required</div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label text-white">Email *</label>
-          <input type="email" class="form-control" formControlName="email" [class.is-invalid]="isInvalid('email')" />
-          <div class="invalid-feedback">Enter a valid email</div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label text-white">Phone *</label>
-
-          <ngx-intl-tel-input [cssClass]="'form-control ct_input w-full ps-5 ct_pe_90 custom_phone_input'"
-            [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[
-                SearchCountryField.Iso2,
-                SearchCountryField.Name
-              ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.India" [maxLength]="15"
-            [phoneValidation]="true" formControlName="phoneNumber">
-          </ngx-intl-tel-input>
-
-          <small class="text-danger" *ngIf="
-                billingForm.get('phoneNumber')?.invalid &&
-                billingForm.get('phoneNumber')?.touched">
-            Valid phone number is required
+        <div class="ct_billed_now_box">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="ct_billed_label">Billed now</span>
+            <span class="ct_billed_price">{{ billedNowAmount(selectedPlanData) }}</span>
+          </div>
+          <small class="ct_billed_subtext">
+            <ng-container *ngIf="selectedPlanData && showIntroOffer(selectedPlanData); else standardRenewal">
+              Renews at {{ getRenewalAmount(selectedPlanData) }} {{ billingCycle() === "YEAR" ? "yearly" : "monthly" }}
+            </ng-container>
+            <ng-template #standardRenewal>
+              Renews {{ billingCycle() === "YEAR" ? "yearly" : "monthly" }}
+            </ng-template>
           </small>
         </div>
-      </form>
+      </div>
+
+      <!-- Right Column -->
+      <div class="ct_premium_col">
+        <form [formGroup]="billingForm">
+          <div class="ct_col_header mb-4">
+            <div class="d-flex align-items-center gap-3">
+              <div class="ct_icon_circle"><i class="fa-regular fa-user"></i></div>
+              <h6 class="mb-0">Billing Details</h6>
+            </div>
+          </div>
+
+          <div class="ct_form_group">
+            <label>Name *</label>
+            <input type="text" class="form-control" formControlName="name" [class.is-invalid]="isInvalid('name')" />
+          </div>
+          <div class="ct_form_group">
+            <label>Email *</label>
+            <input type="email" class="form-control" formControlName="email" [class.is-invalid]="isInvalid('email')" />
+          </div>
+          <div class="ct_form_group ct_phone_group mb-0">
+            <label>Phone *</label>
+            <ngx-intl-tel-input [cssClass]="'form-control ct_input w-full custom_phone_input'"
+              [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+              [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [selectFirstCountry]="false"
+              [selectedCountryISO]="CountryISO.India" [maxLength]="15" [phoneValidation]="true"
+              formControlName="phoneNumber">
+            </ngx-intl-tel-input>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <div class="modal-footer px-4 pb-4">
-      <button class="btn-cancel button-deploy" (click)="closeModal()">
-        Cancel
-      </button>
+    <!-- Bottom Layout -->
+    <div class="ct_premium_footer_layout">
+      <!-- Left Bottom -->
+      <div class="ct_trust_badges_container">
+        <div class="ct_trust_badge">
+          <div class="ct_badge_icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+          <h6>Instant Access</h6>
+          <p>Get started right away</p>
+        </div>
+        <div class="ct_trust_badge">
+          <div class="ct_badge_icon"><i class="fa-solid fa-shield"></i></div>
+          <h6>Secure Payment</h6>
+          <p>100% secure checkout</p>
+        </div>
+        <div class="ct_trust_badge">
+          <div class="ct_badge_icon"><i class="fa-solid fa-arrows-rotate"></i></div>
+          <h6>Cancel Anytime</h6>
+          <p>No hidden charges</p>
+        </div>
+      </div>
 
-      <button class="btn-confirm button-deploy ms-2" [disabled]="billingForm.invalid" (click)="confirmAndPay()">
-        Subscribe & Pay {{ billedNowAmount(selectedPlanData) }}
-      </button>
+      <!-- Right Bottom -->
+      <div class="ct_footer_right_container">
+        <div class="ct_secure_text_row">
+          <div class="ct_secure_icon"><i class="fa-solid fa-shield-check"></i></div>
+          <div>
+            <h6>Your payment information is secure</h6>
+            <p>We use industry-standard encryption to protect your data.</p>
+          </div>
+        </div>
+
+        <div class="ct_action_buttons">
+          <button class="ct_btn_cancel" (click)="closeModal()">Cancel</button>
+          <button class="ct_btn_subscribe" [disabled]="billingForm.invalid" (click)="confirmAndPay()">
+            Subscribe & Pay {{ billedNowAmount(selectedPlanData) }} <i class="fa-solid fa-arrow-right ms-2"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 

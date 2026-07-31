@@ -488,6 +488,11 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     return Number((this.subsriptionPlan as any)?.creditBalance || 0);
   }
 
+  get isFreePlan(): boolean {
+    if (!this.subsriptionPlan) return true;
+    return this.subsriptionPlan.planType === 'FREE' || (this.subsriptionPlan as any).planName === 'FREE_PLAN';
+  }
+
   private handleAiStream(payload: AiStreamPayload): void {
     this.isRestoringConversation = false;
     const blockId = payload?.blockId?.trim();
