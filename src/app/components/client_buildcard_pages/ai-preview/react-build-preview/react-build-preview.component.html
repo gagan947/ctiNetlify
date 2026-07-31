@@ -372,8 +372,8 @@
 
 
 <div class="modal fade" id="deployConfirmModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content mb-2 ct_take_live_modal position-relative">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content mb-2 ct_take_live_modal position-relative" style="max-width: 540px; margin: 0 auto;">
             <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -417,9 +417,8 @@
                 </div>
             </div>
 
-            <div class="text-center mb-5">
-                <button class="btn btn-light ct_fw_600 w-100"
-                    style="max-width: 320px; border-radius: 8px; padding: 10px;" (click)="checkNDeploy()">
+            <div class="text-center mb-0">
+                <button class="ct_start_deploy_btn w-100" style="max-width: 320px;" (click)="checkNDeploy()">
                     Start deployment
                 </button>
             </div>
