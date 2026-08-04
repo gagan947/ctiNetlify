@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, ElementRef, OnDestroy, ViewChild, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Component, effect, ElementRef, OnDestroy, ViewChild, OnInit, AfterViewInit, AfterViewChecked, HostListener } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { firstValueFrom } from 'rxjs';
 import { SubscriptionResponse } from '../../../../models/subcription';
@@ -201,6 +201,26 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     companyName: new FormControl<string>('', { nonNullable: true }),
     description: new FormControl<string>('', { nonNullable: true, validators: [Validators.maxLength(1000)] })
   });
+
+  feedbackForm = new FormGroup({
+    rating: new FormControl<number>(0, Validators.required),
+    selected_option: new FormControl<string>('', { nonNullable: true }),
+    feedback_text: new FormControl<string>('', { nonNullable: true })
+  });
+
+  predefinedFeedbackOptions = [
+    { label: "I was just exploring", icon: "fa-regular fa-compass", color: "#F59E0B", bg: "rgba(245, 158, 11, 0.1)" },
+    { label: "I don't need it right now", icon: "fa-regular fa-clock", color: "#3B82F6", bg: "rgba(59, 130, 246, 0.1)" },
+    { label: "I couldn't create what I wanted", icon: "fa-solid fa-wand-magic-sparkles", color: "#10B981", bg: "rgba(16, 185, 129, 0.1)" },
+    { label: "It was difficult to use", icon: "fa-regular fa-face-frown", color: "#EF4444", bg: "rgba(239, 68, 68, 0.1)" },
+    { label: "I need more free credits", icon: "fa-solid fa-gift", color: "#8B5CF6", bg: "rgba(139, 92, 246, 0.1)" },
+    { label: "The pricing doesn't suit me", icon: "fa-solid fa-tag", color: "#F97316", bg: "rgba(249, 115, 22, 0.1)" },
+    { label: "I'm comparing other tools", icon: "fa-solid fa-scale-balanced", color: "#0EA5E9", bg: "rgba(14, 165, 233, 0.1)" },
+    { label: "Other (Please specify)", icon: "fa-regular fa-comment-dots", color: "#9CA3AF", bg: "rgba(156, 163, 175, 0.1)" }
+  ];
+  isFeedbackModalOpen = false;
+  isFeedbackSubmitted = false;
+  private previewReadyTimer: any;
   isCallbackSubmitting = false;
   isRetryBuildGenerationSubmitting = false;
   userInfo: any = {};
@@ -257,6 +277,13 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   }
 
   async ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        if (this.hasUsablePreviewState() && !this.isFeedbackSubmitted && this.previewReadyTimer) {
+          this.showFeedbackModal();
+        }
+      }
+    });
     this.hideDeployHeaderAction();
     this.getUserSubscriptionPlan();
     this.userInfo = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');
@@ -910,11 +937,19 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     if (this.buildFlowType === 'initial') {
       this.completeInitialBuildUi();
       this.fetchCustomizationSuggestions(this.selectedProjectId);
-      return;
+    } else {
+      this.appendBuildActionPrompt();
+      this.fetchCustomizationSuggestions(this.selectedProjectId);
     }
 
-    this.appendBuildActionPrompt();
-    this.fetchCustomizationSuggestions(this.selectedProjectId);
+    if (this.previewReadyTimer) {
+      clearTimeout(this.previewReadyTimer);
+    }
+    this.previewReadyTimer = setTimeout(() => {
+      if (!this.isFeedbackSubmitted) {
+        this.showFeedbackModal();
+      }
+    }, 30000);
   }
 
   private queueBuildGenerationFailure(forceImmediate = false) {
@@ -3098,7 +3133,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
       loaderBlock.text = steps[stepIndex];
       setTimeout(() => this.scrollToBottom(true), 0);
-    }, 3000);
+    }, 6000);
   }
 
   private stopAiProcessingPhase() {
@@ -3806,6 +3841,59 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       // this.focusCustomizeInput();
       this.handlePromptSubmitted({ 'blockId': 'customize_template', 'value': suggestion.customization_prompt })
     }
+  }
+
+  showFeedbackModal(fromButton: boolean = false) {
+    if (this.isFeedbackModalOpen) return;
+    if (!fromButton && this.isFeedbackSubmitted) return;
+    this.isFeedbackModalOpen = true;
+    const modalElement = document.getElementById('feedbackModal');
+    if (modalElement) {
+      bootstrap.Modal.getOrCreateInstance(modalElement, {
+        backdrop: 'static',
+        keyboard: false
+      }).show();
+    }
+  }
+
+  onFeedbackModalDismiss() {
+    this.isFeedbackModalOpen = false;
+    this.isFeedbackSubmitted = true;
+  }
+
+  setRating(rating: number) {
+    this.feedbackForm.patchValue({ rating });
+  }
+
+  submitFeedback() {
+    if (this.feedbackForm.invalid) {
+      this.toster.warning('Please provide a rating.');
+      return;
+    }
+
+    let text = this.feedbackForm.value.selected_option;
+    if (text === 'Other (Please specify)' || !text) {
+      text = this.feedbackForm.value.feedback_text;
+    }
+
+    const payload = {
+      feedback_type: 'satisfaction_survey',
+      rating: this.feedbackForm.value.rating,
+      feedback_text: text
+    };
+
+    this.apiService.postAPI<any, any>('api/user/feedback', payload).subscribe({
+      next: (res) => {
+        this.toster.success('Thank you for your feedback!');
+        this.isFeedbackSubmitted = true;
+        const btn = document.getElementById('feedbackModalCloseBtn');
+        if (btn) btn.click();
+      },
+      error: (err) => {
+        this.toster.error('Failed to submit feedback.');
+        console.error(err);
+      }
+    });
   }
 }
 
