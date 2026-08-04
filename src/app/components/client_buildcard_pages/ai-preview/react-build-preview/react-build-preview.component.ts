@@ -3877,6 +3877,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     }
 
     const payload = {
+      project_template_id: this.selectedProjectId,
       feedback_type: 'satisfaction_survey',
       rating: this.feedbackForm.value.rating,
       feedback_text: text
