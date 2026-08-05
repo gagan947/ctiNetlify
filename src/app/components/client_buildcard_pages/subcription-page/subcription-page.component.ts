@@ -334,7 +334,7 @@ export class SubcriptionPageComponent {
     this.isLoadingPlans = true;
 
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const currency = (timezone === 'Asia/Calcutta' || timezone === 'Asia/Kolkata') ? 'USD' : 'USD';
+    const currency = (timezone === 'Asia/Calcutta' || timezone === 'Asia/Kolkata') ? 'INR' : 'USD';
 
     this.apiService.getAllPlans<any>(this.billingCycle(), currency)
       .subscribe({
