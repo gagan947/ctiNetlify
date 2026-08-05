@@ -1,18 +1,19 @@
 <section class="row w-100 vh-100 overflow-hidden m-0" style="background-color: #fff;">
-      <div class="col-lg-6 d-flex flex-column justify-content-center px-4 px-md-5 py-4"
+      <div class="col-lg-6  py-4 pe-0"
             style="overflow-y: auto; position: relative;">
-            <!-- Logo -->
-            <div class="position-absolute" style="top: 40px; left: 40px;">
+          <div class="et_short_login">
+              <!-- Logo -->
+            <div class="mx-auto" style="width: 100%;">
                   <a class="ct_logo" href="/">
-                        <img loading="lazy" src="assets/img/cti_black_logo1.png" alt="Creative Ai"
+                        <img loading="lazy" src="assets/img/cti_black_logo.svg" alt="Creative Ai"
                               style="width: 150px; object-fit: contain;">
                   </a>
             </div>
 
             <!-- Form Container -->
-            <div class="m-auto" style="max-width: 450px; width: 100%; margin-top: 80px !important;">
-                  <div class="mb-4">
-                        <h1 class="ct_fw_600 mb-1" style="font-size: 36px; color: #111;">Login</h1>
+            <div class="m-auto et_short_login_scroll ct_custom_scroll" style=" width: 100%; margin-top: 80px !important;">
+                  <div class="mb-5">
+                        <h1 class="ct_fw_600 mb-1 ct_fs_40" >Login</h1>
                         <p class="mb-0 text-muted" style="font-size: 15px;">Login to access your account</p>
                   </div>
 
@@ -21,7 +22,7 @@
                         @if(!isPhone){
                         <div class="form-group mb-4 position-relative">
                               <label class="position-absolute px-1"
-                                    style="background: #fff; top: -10px; left: 15px; font-size: 12px; font-weight: 600; color: #111; z-index: 10;">
+                                    style="background: #fff; top: -10px; left: 15px; font-size: 14px; font-weight: 600; color: #111; z-index: 10;">
                                     Email
                               </label>
                               <input type="text" formControlName="email" class="form-control"
@@ -36,9 +37,9 @@
                         </div>
 
                         <!-- Password Field -->
-                        <div class="form-group mb-4 position-relative">
+                        <div class="form-group mb-3 position-relative">
                               <label class="position-absolute px-1"
-                                    style="background: #fff; top: -10px; left: 15px; font-size: 12px; font-weight: 600; color: #111; z-index: 10;">
+                                    style="background: #fff; top: -10px;letter-spacing :0.6px; left: 15px; font-size: 12px; font-weight: 600; color: #111; z-index: 10;">
                                     Password
                               </label>
                               <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
@@ -46,8 +47,8 @@
                                     style="height: 52px; border-radius: 12px; border: 1px solid #d1d5db; padding-left: 15px; font-size: 15px; color: #111; padding-right: 40px;"
                                     placeholder="•••••••••••••••••" />
                               <button type="button"
-                                    class="position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent me-2"
-                                    style="padding-top: 5px;" (click)="togglePasswordVisibility()">
+                                    class="position-absolute end-0  translate-middle-y border-0 bg-transparent me-2"
+                                    style="padding-top: 5px; top:25px" (click)="togglePasswordVisibility()">
                                     <i class="fa" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"
                                           style="color: #6b7280; font-size: 18px;"></i>
                               </button>
@@ -58,9 +59,9 @@
                         </div>
                         }@else{
                         @if(!otpVisible){
-                        <div class="form-group mb-4 position-relative">
+                        <div class="form-group mb-3 position-relative">
                               <label class="position-absolute px-1"
-                                    style="background: #fff; top: -10px; left: 15px; font-size: 12px; font-weight: 600; color: #111; z-index: 10;">
+                                    style="background: #fff; top: -10px; left: 15px; font-size: 14px; letter-spacing :0.6px; font-weight: 600; color: #111; z-index: 10;">
                                     Mobile Number
                               </label>
                               <ngx-intl-tel-input #phoneInput [cssClass]="'form-control w-100'"
@@ -111,7 +112,7 @@
 
                         <div class="d-flex justify-content-end align-items-center mb-4">
                               <a routerLink="/forgot-password" class="text-decoration-none"
-                                    style="font-size: 14px; color: #6366f1; font-weight: 600;">Forgot Password</a>
+                                    style="font-size: 14px; color: #6366f1; font-weight: 600;">Forgot Password?</a>
                         </div>
 
                         <div class="mb-4">
@@ -134,14 +135,15 @@
                         </div>
 
                         <div class="d-flex align-items-center justify-content-center mb-4">
-                              <hr class="flex-grow-1 m-0" style="border-top: 1px solid #e5e7eb;">
-                              <span class="mx-3 text-muted" style="font-size: 13px; color: #9ca3af !important;">Or login
+                              <hr class="flex-grow-1 m-0" style="border-top: 1px solid #21212140;">
+                              <span class="mx-3 opacity-50" style="font-size: 14px; color: #202020 !important;">Or login
                                     with</span>
-                              <hr class="flex-grow-1 m-0" style="border-top: 1px solid #e5e7eb;">
+                              <hr class="flex-grow-1 m-0" style="border-top: 1px solid #21212140;">
                         </div>
 
                         <button type="button" class="btn w-100 mb-3 d-flex align-items-center justify-content-center"
-                              style="border: 1px solid #e5e7eb; border-radius: 999px; height: 50px; background: #fff; font-weight: 600; color: #111; font-size: 15px;"
+                              style="border-radius: 999px; height: 50px;box-shadow: 0px 3px 11.3px 0px #0000001C;
+ background: #fff; font-weight: 600; color: #111; font-size: 15px;"
                               (click)="loginWithGoogle()">
                               <svg width="23" height="23" viewBox="0 0 23 23" fill="none" class="me-2">
                                     <path opacity="0.987" fill-rule="evenodd" clip-rule="evenodd"
@@ -164,7 +166,7 @@
                               <!-- Facebook -->
                               <button (click)="loginWithFacebook()" type="button"
                                     class="btn flex-grow-1 d-flex align-items-center justify-content-center"
-                                    style="background: #e5e7eb; border-radius: 999px; height: 50px; border: none;">
+                                    style="background: #e5e7eb; border-radius: 16px; height: 50px; border: none;">
                                     <svg width="22" height="22" viewBox="0 0 30 30" fill="none">
                                           <g clip-path="url(#clip0_222_4798_1)">
                                                 <path d="M30 15C30 6.71578 23.2842 0 15 0C6.71578 0 0 6.71578 0 15C0 22.4869 5.48531 28.6925 12.6562 29.8178V19.3359H8.84766V15H12.6562V11.6953C12.6562 7.93594 14.8957 5.85938 18.322 5.85938C19.9631 5.85938 21.6797 6.15234 21.6797 6.15234V9.84375H19.7883C17.9249 9.84375 17.3438 11 17.3438 12.1863V15H21.5039L20.8389 19.3359H17.3438V29.8178C24.5147 28.6925 30 22.487 30 15Z"
@@ -186,7 +188,7 @@
                               <!-- Apple -->
                               <button (click)="loginWithApple()" type="button"
                                     class="btn flex-grow-1 d-flex align-items-center justify-content-center"
-                                    style="background: #e5e7eb; border-radius: 999px; height: 50px; border: none;">
+                                    style="background: #e5e7eb; border-radius: 16px; height: 50px; border: none;">
                                     <svg width="22" height="22" viewBox="0 0 37 37" fill="none">
                                           <path d="M26.2859 31.265C24.775 32.7296 23.1255 32.4983 21.5375 31.8046C19.8571 31.0954 18.3155 31.0646 16.5425 31.8046C14.3225 32.7604 13.1509 32.4829 11.825 31.265C4.30171 23.5104 5.41171 11.7012 13.9525 11.2696C16.0338 11.3775 17.483 12.4104 18.7009 12.5029C20.52 12.1329 22.2621 11.0692 24.2046 11.2079C26.5325 11.3929 28.29 12.3179 29.4463 13.9829C24.6363 16.8658 25.7771 23.2021 30.1863 24.975C29.3075 27.2875 28.1667 29.5846 26.2705 31.2804L26.2859 31.265ZM18.5467 11.1771C18.3155 7.73917 21.1059 4.9025 24.3125 4.625C24.7596 8.6025 20.705 11.5625 18.5467 11.1771Z"
                                                 fill="black" />
@@ -195,16 +197,17 @@
                         </div>
                   </form>
             </div>
+          </div>
       </div>
 
       <div class="col-lg-6 d-none d-lg-flex flex-column justify-content-between right-panel-bg"
-            style="padding: 100px; position: relative;">
+            style="padding:32px  100px; position: relative;">
             <div class="mt-4">
                   <h1
                         style="font-size: 55px; font-weight: 500; line-height: 1.1; letter-spacing: -1px; margin-bottom: 40px; color: #ffffff !important;">
                         Everything You<br>Need to Build,<br>Launch & Grow<br>Online</h1>
 
-                  <ul class="list-unstyled d-flex flex-column gap-3"
+                  <ul class="list-unstyled d-flex flex-column gap-2"
                         style="font-size: 18px; font-weight: 400; color: #ffffff !important;">
                         <li class="d-flex align-items-center gap-3">
                               <div style="width: 10px; height: 10px; background-color: #ffffff; border-radius: 50%;">
@@ -229,23 +232,21 @@
                   </ul>
             </div>
 
-            <div class="d-flex align-items-center gap-4 mt-auto mb-4">
+            <div class="d-flex align-items-center gap-3 mt-auto mb-4">
                   <div class="d-flex align-items-center position-relative" style="width: 150px; height: 45px;">
-                        <img src="https://i.pravatar.cc/100?img=11" alt="User"
-                              class="rounded-circle border border-2 border-white position-absolute"
+                        <img src="assets/img/client_3.webp" alt="User"
+                              class="rounded border border-2 border-white position-absolute"
                               style="width: 42px; height: 42px; object-fit: cover; left: 0; z-index: 5;">
-                        <img src="https://i.pravatar.cc/100?img=32" alt="User"
-                              class="rounded-circle border border-2 border-white position-absolute"
-                              style="width: 42px; height: 42px; object-fit: cover; left: 25px; z-index: 4;">
-                        <img src="https://i.pravatar.cc/100?img=47" alt="User"
-                              class="rounded-circle border border-2 border-white position-absolute"
-                              style="width: 42px; height: 42px; object-fit: cover; left: 50px; z-index: 3;">
-                        <img src="https://i.pravatar.cc/100?img=12" alt="User"
-                              class="rounded-circle border border-2 border-white position-absolute"
-                              style="width: 42px; height: 42px; object-fit: cover; left: 75px; z-index: 2;">
-                        <img src="https://i.pravatar.cc/100?img=33" alt="User"
-                              class="rounded-circle border border-2 border-white position-absolute"
-                              style="width: 42px; height: 42px; object-fit: cover; left: 100px; z-index: 1;">
+                        <img src="assets/img/client_4.webp" alt="User"
+                              class="rounded border border-2 border-white position-absolute"
+                              style="width: 42px; height: 42px; object-fit: cover; left: 38px; z-index: 4;">
+                        <img src="assets/img/client_2.webp" alt="User"
+                              class="rounded border border-2 border-white position-absolute"
+                              style="width: 42px; height: 42px; object-fit: cover; left: 76px; z-index: 3;">
+                        <img src="assets/img/james.webp" alt="User"
+                              class="rounded border border-2 border-white position-absolute"
+                              style="width: 42px; height: 42px; object-fit: cover; left: 114px; z-index: 2;">
+                       
                   </div>
                   <div>
                         <div class="d-flex gap-1 mb-1" style="font-size: 14px; color: #ffffff !important;">

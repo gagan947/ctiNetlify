@@ -121,7 +121,20 @@
 }
 
 .right-panel-bg {
-      background: linear-gradient(135deg, #4f46e5 0%, #1e1b4b 50%, #000000 100%) !important;
+      background: #111 !important;
+      position: relative;
+      z-index: 1;
+}
+.right-panel-bg::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("../../../assets/img/login_right_shape_1.png");
+      background-size: cover;
+      z-index: -1;
 }
 
 ::ng-deep .ct_login_btn {
@@ -139,4 +152,49 @@
 
 ::ng-deep .ct_login_btn:hover {
       background-color: #4f46e5 !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
+    -webkit-text-fill-color: #000 !important;
+    transition: background-color 9999s ease-in-out 0s;
+}
+.et_short_login {
+    padding-left: 100px;
+    height: 100dvh;
+}
+.et_short_login_scroll{
+    padding-right: 100px;
+    height: auto;
+    max-height: calc(100dvh - 164px);
+    overflow-y: auto;
+}
+@media screen and (max-width: 1199px) {
+      .et_short_login {
+           padding-left: 50px;
+      }
+      .et_short_login_scroll {
+             padding-right: 50px;
+      }
+}
+@media screen and (max-width: 767px) {
+      .et_short_login {
+           padding-left: 50px;
+      }
+      .et_short_login_scroll {
+             padding-right: 50px;
+      }
+}
+
+@media screen and (max-width: 575px) {
+      .et_short_login {
+           padding-left: 20px;
+      }
+      .et_short_login_scroll {
+             padding-right: 20px;
+      }
 }
