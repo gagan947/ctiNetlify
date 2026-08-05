@@ -58,10 +58,10 @@
           </div>
 
           <div class="ct_price_wrap">
-            <span class="ct_price_previous" *ngIf="shouldShowPreviousPrice(plan)">₹{{ getOriginalPriceValue(plan)
+            <span class="ct_price_previous" *ngIf="shouldShowPreviousPrice(plan)">{{ getCurrencySymbol(plan) }}{{ getOriginalPriceValue(plan)
               }}</span>
             <div class="ct_price_row">
-              <span class="ct_price_value">₹{{ getCurrentPriceValue(plan) }}</span>
+              <span class="ct_price_value">{{ getCurrencySymbol(plan) }}{{ getCurrentPriceValue(plan) }}</span>
               <span class="ct_price_suffix">/ {{ getBillingUnit(plan) }}</span>
               <span class="ct_price_save" *ngIf="getDiscountText(plan)">{{ getDiscountText(plan) }}</span>
             </div>
@@ -88,7 +88,7 @@
             <ul class="dropdown-menu show" *ngIf="proDropdownOpen && proPlans.length > 1">
               <li *ngFor="let proPlan of proDropdownPlans">
                 <button type="button" class="dropdown-item" (click)="selectProPlan(proPlan, $event)">
-                  {{ getCreditsLabel(proPlan) }} - ₹{{ getCurrentPriceValue(proPlan) }}
+                  {{ getCreditsLabel(proPlan) }} - {{ getCurrencySymbol(proPlan) }}{{ getCurrentPriceValue(proPlan) }}
                 </button>
               </li>
             </ul>

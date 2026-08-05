@@ -296,7 +296,11 @@ export class SubcriptionPageComponent {
     }
 
     this.isLoadingPlans = true;
-    this.apiService.getAllPlans<any>(this.billingCycle())
+
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const currency = (timezone === 'Asia/Calcutta' || timezone === 'Asia/Kolkata') ? 'INR' : 'USD';
+
+    this.apiService.getAllPlans<any>(this.billingCycle(), currency)
       .subscribe({
         next: (res: any) => {
           this.proPlans = res?.data?.pro || [];
@@ -312,6 +316,17 @@ export class SubcriptionPageComponent {
           this.isLoadingPlans = false;
         }
       });
+  }
+
+  getCurrencySymbol(plan: Plan | null): string {
+    if (!plan || !plan.currency) return '₹';
+    switch (plan.currency) {
+      case 'INR': return '₹';
+      case 'USD': return '$';
+      case 'EUR': return '€';
+      case 'GBP': return '£';
+      default: return plan.currency + ' ';
+    }
   }
 
   getDisplayAmount(plan: Plan | null): string {
@@ -467,7 +482,7 @@ export class SubcriptionPageComponent {
 
     const savings = this.getOriginalAmount(plan) - this.getEffectiveCurrentAmount(plan);
     if (savings > 0) {
-      return `Save ₹${savings.toLocaleString('en-IN')}`;
+      return `Save ${this.getCurrencySymbol(plan)}${savings.toLocaleString('en-IN')}`;
     }
 
     if (Number(plan.discount_percent || 0) > 0 && !this.shouldShowPreviousPrice(plan)) {
@@ -500,7 +515,7 @@ export class SubcriptionPageComponent {
 
     if (this.shouldShowPreviousPrice(plan)) {
       const savings = Number(plan.amount || 0) - Number(plan.intro_amount || 0);
-      return savings > 0 ? `Save ₹${savings.toLocaleString('en-IN')}` : '';
+      return savings > 0 ? `Save ${this.getCurrencySymbol(plan)}${savings.toLocaleString('en-IN')}` : '';
     }
 
     if (Number(plan.discount_percent || 0) > 0) {

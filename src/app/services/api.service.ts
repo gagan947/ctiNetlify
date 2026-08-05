@@ -62,8 +62,12 @@ export class ApiService {
     return this.http.get<T>(`${this.apiUrl}api/user/get-all-aimodel`);
   }
 
-  getAllPlans<T>(billingInterval: 'MONTH' | 'YEAR'): Observable<T> {
-    return this.http.get<T>(`${this.apiUrl}api/user/getAllPlans?billing_interval=${billingInterval}`);
+  getAllPlans<T>(billingInterval: 'MONTH' | 'YEAR', currency?: string): Observable<T> {
+    let url = `${this.apiUrl}api/user/getAllPlans?billing_interval=${billingInterval}`;
+    if (currency) {
+      url += `&currency=${currency}`;
+    }
+    return this.http.get<T>(url);
   }
 
   getCreditHistory<T>(limit: number, offset: number): Observable<T> {
