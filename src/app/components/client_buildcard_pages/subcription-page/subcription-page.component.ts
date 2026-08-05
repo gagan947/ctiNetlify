@@ -8,7 +8,7 @@ import { SubcriptionService } from '../../../services/subcription.service';
 import { SubscriptionResponse } from '../../../models/subcription';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SubscriptionModalData, SubscriptionModalResult } from '../../../services/subscription-modal.service';
 type BillingCycle = 'MONTH' | 'YEAR';
 type PlanType = 'pro' | 'business';
@@ -93,6 +93,7 @@ export class SubcriptionPageComponent {
     private subscriptionService: SubcriptionService,
     private message: NzMessageService,
     private router: Router,
+    private route: ActivatedRoute,
     @Optional() private modalRef?: NzModalRef<SubcriptionPageComponent, SubscriptionModalResult>
   ) {
     const projectData = sessionStorage.getItem('projectData');
@@ -100,6 +101,17 @@ export class SubcriptionPageComponent {
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const paymentStatus = params['payment'];
+      if (paymentStatus === 'success') {
+        this.message.success('Subscription activated successfully!');
+        this.router.navigate([], { queryParams: { payment: null }, queryParamsHandling: 'merge' });
+      } else if (paymentStatus === 'cancelled') {
+        this.message.error('PayPal checkout was cancelled.');
+        this.router.navigate([], { queryParams: { payment: null }, queryParamsHandling: 'merge' });
+      }
+    });
+
     this.selectedTemplateId = this.selectedTemplateId || this.modalData?.selectedTemplateId || '';
     this.updateModalWidth(1050);
     this.subscriptionService.loadSubscription();
@@ -216,6 +228,30 @@ export class SubcriptionPageComponent {
     this.initiateSubscriptionCheckout(billingDetails)
   }
 
+  subscribePaypal(): void {
+    const backendUrl = 'api/payment/paypal/create-subscription';
+    const redirectPath = window.location.origin + '/my-plan';
+
+    const body = {
+      planKey: this.planKey(),
+      redirectPath: redirectPath
+    };
+
+    this.apiService.postAPI(backendUrl, body).subscribe({
+      next: (response: any) => {
+        if (response.success && response.approvalUrl) {
+          window.location.href = response.approvalUrl;
+        } else {
+          this.message.error('Failed to generate PayPal checkout link: ' + response.message);
+        }
+      },
+      error: (err: any) => {
+        console.error('PayPal Checkout API Error:', err);
+        this.message.error('Server error occurred during checkout initialization.');
+      }
+    });
+  }
+
   showIntroOffer(plan: Plan): boolean {
     return !!plan.has_intro_offer && Number(plan.intro_amount) > 0;
   }
@@ -298,7 +334,7 @@ export class SubcriptionPageComponent {
     this.isLoadingPlans = true;
 
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const currency = (timezone === 'Asia/Calcutta' || timezone === 'Asia/Kolkata') ? 'INR' : 'USD';
+    const currency = (timezone === 'Asia/Calcutta' || timezone === 'Asia/Kolkata') ? 'USD' : 'USD';
 
     this.apiService.getAllPlans<any>(this.billingCycle(), currency)
       .subscribe({

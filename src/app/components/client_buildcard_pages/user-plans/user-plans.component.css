@@ -715,3 +715,66 @@
     align-items: flex-start;
   }
 }
+
+/* Cancel Subscription Modal */
+.ct_cancel_modal {
+  position: relative;
+  padding: 40px;
+  border: 1px solid rgba(139, 108, 255, 0.2);
+  border-radius: 24px;
+  text-align: center;
+  background: radial-gradient(circle at top, rgba(93, 92, 255, 0.15) 0%, #101016 40%), #101016;
+  color: #fff;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.ct_cancel_modal .ct_modal_close_btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #a1a1aa;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.ct_cancel_modal .ct_modal_close_btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.ct_cancel_modal__icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, rgba(139, 108, 255, 0.15) 0%, rgba(93, 92, 255, 0.05) 100%);
+  border: 1.5px solid rgba(139, 108, 255, 0.3);
+  box-shadow: 0 0 24px rgba(93, 92, 255, 0.3), inset 0 0 12px rgba(93, 92, 255, 0.2);
+  color: #f59e0b; /* Warning color for cancel */
+  font-size: 28px;
+}
+
+.ct_cancel_modal p {
+  max-width: 360px;
+  margin: 10px auto 30px;
+  color: #a1a1aa;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.ct_cancel_modal h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #fff;
+}

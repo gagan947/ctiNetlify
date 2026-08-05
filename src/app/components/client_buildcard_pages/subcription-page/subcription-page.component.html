@@ -58,7 +58,8 @@
           </div>
 
           <div class="ct_price_wrap">
-            <span class="ct_price_previous" *ngIf="shouldShowPreviousPrice(plan)">{{ getCurrencySymbol(plan) }}{{ getOriginalPriceValue(plan)
+            <span class="ct_price_previous" *ngIf="shouldShowPreviousPrice(plan)">{{ getCurrencySymbol(plan) }}{{
+              getOriginalPriceValue(plan)
               }}</span>
             <div class="ct_price_row">
               <span class="ct_price_value">{{ getCurrencySymbol(plan) }}{{ getCurrentPriceValue(plan) }}</span>
@@ -277,7 +278,12 @@
 
         <div class="ct_action_buttons">
           <button class="ct_btn_cancel" (click)="closeModal()">Cancel</button>
-          <button class="ct_btn_subscribe" (click)="confirmAndPay()">
+
+          <button *ngIf="selectedPlanData?.currency !== 'USD'" class="ct_btn_subscribe" (click)="confirmAndPay()">
+            Subscribe & Pay {{ billedNowAmount(selectedPlanData) }} <i class="fa-solid fa-arrow-right ms-2"></i>
+          </button>
+
+          <button *ngIf="selectedPlanData?.currency === 'USD'" class="ct_btn_subscribe" (click)="subscribePaypal()">
             Subscribe & Pay {{ billedNowAmount(selectedPlanData) }} <i class="fa-solid fa-arrow-right ms-2"></i>
           </button>
         </div>
