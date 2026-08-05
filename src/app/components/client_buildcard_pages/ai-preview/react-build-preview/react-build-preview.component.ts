@@ -304,7 +304,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       const inquiryId = String(res.params['id'] || '').trim();
       await this.handleProjectRouteChange(inquiryId);
     });
-
   }
 
   private async handleProjectRouteChange(inquiryId: string) {
@@ -1175,6 +1174,11 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.runInitialBuildSequence();
   }
 
+
+  contachSupport() {
+    this.closeBuildGenerationFailureModal();
+    this.openCallbackModal();
+  }
 
   closeBuildGenerationFailedModal() {
     this.resetBuildGenerationError();

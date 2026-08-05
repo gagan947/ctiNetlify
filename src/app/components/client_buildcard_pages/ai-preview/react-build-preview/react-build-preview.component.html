@@ -385,7 +385,7 @@
 
             <div class="ct_take_live_header text-center pt-3">
                 <h2>Take your app live!</h2>
-                <p>Deploy to an Creative.ai hosted production-ready environment and get a live URL for your application.
+                <p>Deploy to a Creative.ai hosted production-ready environment and get a live URL for your application.
                 </p>
             </div>
 
@@ -627,20 +627,23 @@
 
 <div class="modal fade" id="buildGenerationFailedModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content ct_build_failed_modal">
+        <div class="modal-content ct_build_failed_modal ct_build_generation_failed_modal" style="padding: 30px;">
             <button type="button" class="ct_modal_close_btn" data-bs-dismiss="modal" aria-label="Close"
                 (click)="closeBuildGenerationFailedModal()">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <div class="ct_build_failed_modal__icon">
+            <div class="ct_build_failed_modal__icon ct_build_failed_modal__icon--danger"
+                style="width: 56px; height: 56px; font-size: 24px; margin-bottom: 16px;">
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
-            <h2>Build generation failed</h2>
-            <p>Please try again. We could not generate your project preview this time.</p>
+            <h2 style="font-size: 18px; margin-bottom: 8px;">Project generation failed</h2>
+            <p class="mb-3" style="font-size: 13px; line-height: 1.5; margin-top: 0;">We couldn't generate your project
+                preview this time.<br>Please try again or build again from
+                the beginning.</p>
             @if (hasBuildGenerationErrorMessage) {
-            <div class="ct_build_failed_modal__error">
+            <div class="ct_build_failed_modal__error mb-3" style="margin-top: 0; padding: 10px 14px;">
                 <div class="ct_build_failed_modal__error_icon">
-                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <i class="fa-solid fa-circle-info"></i>
                 </div>
                 <div>
                     <p class="ct_build_failed_modal__error_text mt-0">{{ displayedBuildGenerationErrorMessage }}</p>
@@ -653,11 +656,18 @@
                 </div>
             </div>
             }
-            <div class="actions">
-                <button class="btn-confirm button-deploy w-100" [disabled]="isRetryBuildGenerationSubmitting"
-                    (click)="retryBuildGeneration()">
+            <div class="ct_build_failed_actions d-flex align-items-center gap-3 border-top pt-3 mt-0">
+                <button class="btn-confirm button-deploy w-100 d-flex align-items-center justify-content-center gap-2"
+                    [disabled]="isRetryBuildGenerationSubmitting" (click)="retryBuildGeneration()">
+                    <i class="fa-solid fa-arrow-rotate-right" [class.fa-spin]="isRetryBuildGenerationSubmitting"></i>
                     {{ isRetryBuildGenerationSubmitting ? 'Building...' : 'Build Again' }}
                 </button>
+            </div>
+            <div class="ct_build_failed_support_text text-center mt-3">
+                <p class="mb-0 ct_fs_12 d-flex align-items-center justify-content-center gap-2" style="color: #a1a1aa;">
+                    <i class="fa-regular fa-envelope"></i> If the problem persists, please <a href="javascript:void(0)"
+                        class="text-white text-decoration-underline" (click)="contachSupport()">contact support</a>
+                </p>
             </div>
         </div>
     </div>

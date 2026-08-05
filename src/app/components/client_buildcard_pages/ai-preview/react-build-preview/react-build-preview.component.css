@@ -1716,7 +1716,6 @@ p {
   font-weight: 700;
   margin-bottom: 12px;
   color: #fff;
-  letter-spacing: -0.02em;
 }
 
 /* Specific overrides if needed */
@@ -1780,6 +1779,17 @@ p {
   -ms-grid-row-align: center;
   align-self: center;
   white-space: nowrap;
+}
+
+.ct_build_failed_modal__icon--danger {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.05) 100%);
+  border: 1.5px solid rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 24px rgba(239, 68, 68, 0.3), inset 0 0 12px rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.ct_build_generation_failed_modal .border-top {
+  border-top-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 .ct_callback_modal {
@@ -2508,7 +2518,6 @@ p {
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 10px;
-  letter-spacing: -0.02em;
 }
 
 .ct_take_live_header p {
