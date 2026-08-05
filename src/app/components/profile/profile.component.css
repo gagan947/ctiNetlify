@@ -2,10 +2,10 @@
     padding: 30px 30px;
     margin-top: 30px;
     background: #04041c;
-    border: 1PX solid #FFFFFF66;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     height: 100%;
     color: #fff;
-    border-radius: 10px;
+    border-radius: 16px;
 }
 
 .ct_eye_show {
@@ -34,7 +34,8 @@
 .form-control.ct_input {
     background-color: #FFFFFF12 !important;
     color: #fff;
-    border: 1px solid #ffffff4d;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
 }
 
 .ct_input::placeholder {
