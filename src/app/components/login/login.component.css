@@ -17,11 +17,14 @@
 .et_short_login {
     padding-left: 100px;
     height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .et_short_login_scroll{
     padding-right: 100px;
     height: auto;
-    max-height: calc(100dvh - 164px);
+    max-height: calc(100dvh - 40px);
     overflow-y: auto;
 }
 .ct_login_right_list i {
@@ -116,6 +119,7 @@
       background: #111 !important;
       position: relative;
       z-index: 1;
+      height: 100%;
 }
 .right-panel-bg::before {
       content: "";
@@ -138,7 +142,7 @@
       border: none !important;
       font-weight: 600 !important;
       font-size: 16px !important;
-      padding: 14px !important;
+      padding: 12px !important;
       transition: all 0.3s ease;
 }
 
