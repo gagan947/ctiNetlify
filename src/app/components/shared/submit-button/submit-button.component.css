@@ -1,0 +1,59 @@
+:host {
+  display: block;
+}
+
+button {
+  width: 100%;
+  height: clamp(47px, 6vh, 55px);
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #5751ed, #625cf3);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(87, 81, 237, 0.22);
+  transition: 0.25s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 25px rgba(87, 81, 237, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.ct_login_btn {
+  width: 100%;
+  height: clamp(47px, 6vh, 55px);
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #5751ed, #625cf3);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(87, 81, 237, 0.22);
+  transition: 0.25s ease;
+}
+
+.ct_login_btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 25px rgba(87, 81, 237, 0.3);
+}
+
+.ct_login_btn:active {
+  transform: translateY(0);
+}
+
+.ct_login_btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
