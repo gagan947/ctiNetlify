@@ -48,6 +48,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   submittedPrompt = '';
   isModelDropdownOpen = false;
   selectedDisplayModel = '';
+  showWordLimitError = false;
 
   aiModels: any[] = [];
 
@@ -216,7 +217,24 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  get wordCount(): number {
+    if (!this.promptText || !this.promptText.trim()) return 0;
+    return this.promptText.trim().split(/\s+/).length;
+  }
+
+  onPromptChange(newValue: string): void {
+    this.promptText = newValue;
+    if (this.wordCount <= 1000) {
+      this.showWordLimitError = false;
+    }
+  }
+
   submitPrompt(): void {
+    if (this.wordCount > 1000) {
+      this.showWordLimitError = true;
+      return;
+    }
+
     if (this.subscriptionPlan?.allowProjectCreate === false) {
       this.subscriptionModalService.open();
       return;
@@ -234,7 +252,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   usePromptIdea(idea: string): void {
-    this.promptText = idea;
+    this.onPromptChange(idea);
     setTimeout(() => this.promptInput?.nativeElement.focus(), 0);
   }
 
@@ -429,7 +447,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
       this.speechService.stop();
     }
 
-    this.promptText = transcript;
+    this.onPromptChange(transcript);
     this.voiceDraftText = '';
     setTimeout(() => this.promptInput?.nativeElement.focus(), 0);
   }

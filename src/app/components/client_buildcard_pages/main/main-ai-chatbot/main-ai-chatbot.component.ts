@@ -110,6 +110,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   matchedProject: ProjectMatchPayload['project'] | null = null;
   matchedProjectScore: number | null = null;
   isModelDropdownOpen = false;
+  showWordLimitError = false;
   @Input() selectedDisplayModel = 'Claude 4.7 Opus';
   @Output() selectedDisplayModelChange = new EventEmitter<string>();
 
@@ -239,6 +240,18 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.disconnectSocket();
   }
 
+  get wordCount(): number {
+    if (!this.promptText || !this.promptText.trim()) return 0;
+    return this.promptText.trim().split(/\s+/).length;
+  }
+
+  onPromptChange(newValue: string): void {
+    this.promptText = newValue;
+    if (this.wordCount <= 1000) {
+      this.showWordLimitError = false;
+    }
+  }
+
   handlePromptKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
@@ -247,6 +260,11 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   }
 
   submitPrompt(promptOverride?: string): void {
+    if (this.wordCount > 1000 && !promptOverride) {
+      this.showWordLimitError = true;
+      return;
+    }
+
     if (this.isRestoringConversation) {
       return;
     }
@@ -784,7 +802,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       this.speechService.stop();
     }
 
-    this.promptText = transcript;
+    this.onPromptChange(transcript);
     this.voiceDraftText = '';
     this.focusInput();
   }
