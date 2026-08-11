@@ -871,6 +871,9 @@
                                 [ngClass]="(feedbackForm.value.rating || 0) >= 1 ? 'fa-solid fa-star active_star' : 'fa-regular fa-star'"
                                 (click)="setRating(1)"></i>
                         </div>
+                        <div *ngIf="isFeedbackSubmitAttempted && (feedbackForm.value.rating === 0 || feedbackForm.get('rating')?.invalid)" class="text-danger mt-2" style="font-size: 13px;">
+                            Please select a star rating before submitting your feedback.
+                        </div>
                     </div>
 
                     <!-- Divider -->
@@ -915,7 +918,7 @@
                         <div class="d-flex gap-2">
                             <button type="button" class="btn ct_feedback_btn_skip" (click)="onFeedbackModalDismiss()"
                                 data-bs-dismiss="modal">Skip</button>
-                            <button type="submit" class="btn ct_feedback_btn_submit" [disabled]="feedbackForm.invalid">
+                            <button type="submit" class="btn ct_feedback_btn_submit">
                                 Submit <i class="fa-solid fa-arrow-right ms-2"></i>
                             </button>
                         </div>

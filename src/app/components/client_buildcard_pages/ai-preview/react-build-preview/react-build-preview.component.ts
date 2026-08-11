@@ -203,7 +203,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   });
 
   feedbackForm = new FormGroup({
-    rating: new FormControl<number>(0, Validators.required),
+    rating: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
     selected_option: new FormControl<string>('', { nonNullable: true }),
     feedback_text: new FormControl<string>('', { nonNullable: true })
   });
@@ -3860,18 +3860,22 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     }
   }
 
+  isFeedbackSubmitAttempted = false;
+
   onFeedbackModalDismiss() {
     this.isFeedbackModalOpen = false;
     this.isFeedbackSubmitted = true;
+    this.isFeedbackSubmitAttempted = false;
   }
 
   setRating(rating: number) {
     this.feedbackForm.patchValue({ rating });
+    this.isFeedbackSubmitAttempted = false;
   }
 
   submitFeedback() {
-    if (this.feedbackForm.invalid) {
-      this.toster.warning('Please provide a rating.');
+    this.isFeedbackSubmitAttempted = true;
+    if (this.feedbackForm.invalid || this.feedbackForm.value.rating === 0) {
       return;
     }
 
