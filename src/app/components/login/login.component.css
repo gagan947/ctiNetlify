@@ -206,7 +206,7 @@ body {
 }
 
 .ct_main_login_new {
-
+min-height: 100dvh;
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, Arial, sans-serif;
   background: #f5f7fb;
@@ -1188,13 +1188,16 @@ input:focus {
   .login-wrapper {
     height: calc(100dvh - 32px);
   }
+  .login-section{
+    padding: clamp(18px, 2vh, 55px) clamp(30px, 4vw, 85px);
+  }
 
   body {
     padding: 10px;
   }
 
   .brand {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
 
   .subtitle {

@@ -234,7 +234,7 @@ body {
   justify-content: center;
 
   padding: 16px;
-
+min-height: 100dvh;
   overflow: hidden;
 }
 
@@ -1205,13 +1205,16 @@ input:focus {
   .login-wrapper {
     height: calc(100dvh - 32px);
   }
+   .login-section{
+    padding: clamp(18px, 2vh, 55px) clamp(30px, 4vw, 85px);
+  }
 
   body {
     padding: 10px;
   }
 
   .brand {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
 
   .subtitle {
