@@ -269,7 +269,7 @@ html, body {
 
       padding:
         clamp(25px, 5vh, 55px)
-        clamp(30px, 6vw, 85px);
+        clamp(30px, 4vw, 85px);
 
       display: flex;
       align-items: center;
@@ -627,8 +627,8 @@ html, body {
     }
 
     .google-icon {
-      font-size: 19px;
-
+      font-size: 18px;
+      line-height: 16px;
       font-weight: 700;
 
       color: #4285f4;
@@ -1138,7 +1138,11 @@ line-height: 16px;
     /* =========================================
        TABLET
     ========================================= */
-
+@media screen and (max-width:1199px){
+  .login-section{
+padding: clamp(25px, 5vh, 55px) clamp(12px, 0vw, 85px);
+  }
+}
     @media (max-width: 1000px) {
 
       body {
@@ -1269,6 +1273,13 @@ line-height: 16px;
       }
       .illustration{
         width: 37%;
+      }
+    }
+
+
+    @media screen and (max-width:575px){
+      .ct_main_login_new{
+            padding: 0px;
       }
     }
 /* New css E */
