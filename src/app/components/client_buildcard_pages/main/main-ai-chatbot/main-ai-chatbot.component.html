@@ -121,8 +121,8 @@
           <div class="main-ai-composer main-ai-chat-composer-box">
 
             <textarea #chatPromptInput class="main-ai-prompt-input main-ai-chat-input" rows="2"
-              [attr.placeholder]="placeholderText" [disabled]="isRestoringConversation" [ngModel]="promptText" (ngModelChange)="onPromptChange($event)"
-              (keydown)="handlePromptKeydown($event)">
+              [attr.placeholder]="placeholderText" [disabled]="isRestoringConversation" [ngModel]="promptText"
+              (ngModelChange)="onPromptChange($event)" (keydown)="handlePromptKeydown($event)">
         </textarea>
 
             <div class="main-ai-composer-footer">
@@ -251,9 +251,9 @@
                 <span *ngIf="showWordLimitError" class="text-danger" style="font-size: 12px; font-weight: 500;">
                   Word limit exceeded
                 </span>
-                <span [ngStyle]="{'color': wordCount > 1000 ? '#dc3545' : '#888'}" style="font-size: 12px; font-weight: 500;">
+                <!-- <span [ngStyle]="{'color': wordCount > 1000 ? '#dc3545' : '#888'}" style="font-size: 12px; font-weight: 500;">
                   {{ wordCount }}/1000 words
-                </span>
+                </span> -->
                 <button type="button" class="main-ai-submit-btn" aria-label="Send message"
                   [disabled]="isSubmitting || isRestoringConversation" (click)="submitPrompt()">
                   ↑

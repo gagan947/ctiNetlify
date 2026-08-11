@@ -14,7 +14,8 @@
 
         <div class="main-ai-composer">
           <textarea #promptInput class="main-ai-prompt-input" rows="5" [attr.placeholder]="activePlaceholder"
-            [ngModel]="promptText" (ngModelChange)="onPromptChange($event)" (keydown)="handlePromptKeydown($event)"></textarea>
+            [ngModel]="promptText" (ngModelChange)="onPromptChange($event)"
+            (keydown)="handlePromptKeydown($event)"></textarea>
 
           <div class="main-ai-composer-footer">
             <div class="main-ai-left-actions">
@@ -141,9 +142,9 @@
               <span *ngIf="showWordLimitError" class="text-danger" style="font-size: 12px; font-weight: 500;">
                 Word limit exceeded
               </span>
-              <span [ngStyle]="{'color': wordCount > 1000 ? '#dc3545' : '#888'}" style="font-size: 12px; font-weight: 500;">
+              <!-- <span [ngStyle]="{'color': wordCount > 1000 ? '#dc3545' : '#888'}" style="font-size: 12px; font-weight: 500;">
                 {{ wordCount }}/1000 words
-              </span>
+              </span> -->
               <button type="button" class="main-ai-submit-btn" aria-label="Continue" (click)="submitPrompt()">
 
                 ↑
