@@ -32,16 +32,25 @@ export class AiLoaderComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['targetProgress']) {
-      this.animateProgressTo(this.targetProgress);
+      const prev = changes['targetProgress'].previousValue || 0;
+      const curr = changes['targetProgress'].currentValue || 0;
+      
+      // If we go backwards (e.g., restarting from 100 back to 0 or 5), snap instantly to 0.
+      if (curr < prev) {
+        this.progress = 0;
+      }
+      
+      this.animateProgressTo(curr);
     }
   }
 
   animateProgressTo(target: number) {
+    const intTarget = Math.floor(target);
     if (this.progressInterval) clearInterval(this.progressInterval);
     this.progressInterval = setInterval(() => {
-      if (this.progress < target) {
+      if (this.progress < intTarget) {
         this.progress++;
-      } else if (this.progress > target) {
+      } else if (this.progress > intTarget) {
         this.progress--;
       } else {
         clearInterval(this.progressInterval);

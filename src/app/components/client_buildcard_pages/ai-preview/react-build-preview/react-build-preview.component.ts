@@ -1635,7 +1635,11 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
   onIframeLoad() {
     this.clearBuildStepTimers();
-    this.isIframeLoading = false;
+    this.stopFakeProgressLoop();
+    this.loaderProgress = 100;
+    setTimeout(() => {
+      this.isIframeLoading = false;
+    }, 200);
     this.scheduleDeployHeaderAction();
 
     if (this.isMobileView() && !this.hasAutoOpenedCurrentMobilePreview && !this.hasDismissedCurrentMobilePreview) {
@@ -1801,11 +1805,59 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.scrollToBottom(true);
   }
 
+  fakeProgressInterval: any;
+
+  private startFakeProgressLoop() {
+    this.stopFakeProgressLoop();
+    if (this.buildFlowType !== 'switch' && this.buildFlowType !== 'restore' && this.buildFlowType !== 'customize') {
+      return;
+    }
+    
+    if (this.loaderProgress >= 100 || this.loaderProgress === 0) {
+      this.loaderProgress = 5;
+    }
+    
+    this.loaderStepIndex = 1;
+    this.loaderStatusText = this.buildFlowType === 'customize' ? 'Analyzing customization...' : 'Fetching project data...';
+
+    this.fakeProgressInterval = setInterval(() => {
+      if (!this.isIframeLoading && !this.isReactBuilding) {
+        this.stopFakeProgressLoop();
+        return;
+      }
+      
+      if (this.loaderProgress < 25) {
+        this.loaderProgress += 0.8;
+      } else if (this.loaderProgress < 50) {
+        this.loaderProgress += 0.6;
+        this.loaderStepIndex = 2;
+        this.loaderStatusText = this.buildFlowType === 'customize' ? 'Planning modifications...' : 'Restoring structure...';
+      } else if (this.loaderProgress < 85) {
+        this.loaderProgress += 0.25;
+        this.loaderStepIndex = 3;
+        this.loaderStatusText = this.buildFlowType === 'customize' ? 'Applying code changes...' : 'Rebuilding React app...';
+      } else if (this.loaderProgress < 98) {
+        this.loaderProgress += 0.1;
+        this.loaderStepIndex = 4;
+        this.loaderStatusText = this.buildFlowType === 'customize' ? 'Updating preview...' : 'Preparing your preview...';
+      }
+    }, 150);
+  }
+
+  private stopFakeProgressLoop() {
+    if (this.fakeProgressInterval) {
+      clearInterval(this.fakeProgressInterval);
+      this.fakeProgressInterval = null;
+    }
+  }
+
   private preparePreviewLoadState() {
     this.isIframeLoading = true;
     this.hideDeployHeaderAction();
     this.hasAutoOpenedCurrentMobilePreview = false;
     this.hasDismissedCurrentMobilePreview = false;
+    this.loaderProgress = 0;
+    this.startFakeProgressLoop();
   }
 
   private setSafePreviewUrl(url: string) {
@@ -2586,6 +2638,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     pendingRequest.restTriggered = true;
     this.isReactBuilding = true;
+    this.loaderProgress = 0;
+    this.startFakeProgressLoop();
     this.startQuickBuildProgress('customize', 1200, 2600);
     if (pendingRequest.botReplyReceived) {
       this.showLoader('Updating the template and loading a refreshed preview...');
