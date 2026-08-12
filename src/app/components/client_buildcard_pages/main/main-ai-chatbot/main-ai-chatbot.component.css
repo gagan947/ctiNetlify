@@ -1081,3 +1081,22 @@
   color: #60a5fa;
   font-size: 14px;
 }
+
+@media screen and (max-width:500px) {
+  .pt_fs_10_res_575 {
+    font-size: 10px !important;
+  }
+
+  .main-ai-composer-footer {
+    gap: 10px !important;
+  }
+
+  .main-ai-chip-btn {
+    padding-inline: 10px !important;
+  }
+
+  .main-ai-composer {
+    padding-inline: 13px !important;
+  }
+
+}
