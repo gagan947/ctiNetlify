@@ -216,65 +216,19 @@
                             (dragstart)="blockPreviewInteraction($event)"
                             (selectstart)="blockPreviewInteraction($event)">
 
-                            <iframe *ngIf="safePreviewUrl" #previewFrame class="preview-iframe mx-auto w-100 "
+                            <!-- <iframe *ngIf="safePreviewUrl" #previewFrame class="preview-iframe mx-auto w-100 "
                                 [style.maxWidth]="previewWidth === 100 ? '100%' : previewWidth + 'px'"
                                 [style.height.%]="100" [src]="safePreviewUrl"
                                 sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-downloads"
                                 referrerpolicy="no-referrer" (load)="onIframeLoad()">
-                            </iframe>
+                            </iframe> -->
 
                         </div>
                         <!-- <iframe #previewFrame class="preview-iframe mx-auto w-100"
                             [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100" [src]="safePreviewUrl"  (load)="onIframeLoad()">
                         </iframe> -->
-                        <div class="preview-overlay" [class.show]="isReactBuilding || isIframeLoading">
-                            <div class="ct_ai_thiking_loader2 d-flex">
-                                <div class="ct_preview_build_card">
-                                    <div class="ct_preview_build_card__glow"></div>
-                                    <!-- <img class="ct_rotate_all_dir" src="../../../../../assets/img/AI_Generation.png"
-                                        alt=""> -->
-                                    <div class="rgt_loader">
-                                        <div class="rgt_loader-wrapper">
-                                            <span *ngFor="let letter of previewOverlayLoaderLetters"
-                                                class="rgt_loader-letter">{{ letter }}</span>
-                                            <div class="rgt_loader-circle"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="ct_preview_build_card__content text-center mt-4">
-                                        <h4 class="ct_fs_16 ct_fw_600 mb-1">
-                                            {{ previewOverlayTitle }}
-                                        </h4>
-                                        <p class="mb-0 ct_fs_12 ct_text_clr_C7C4D8">This may take a few seconds</p>
-                                    </div>
-
-                                    <div class="build-progress mt-4 text-start  d-grid justify-content-center">
-                                        <div class="build-step" *ngFor="let step of buildSteps; let i = index"
-                                            [class.done]="buildStep > i + 1" [class.running]="buildStep === i + 1"
-                                            [class.pending]="buildStep < i + 1">
-
-                                            <span class="icon">
-                                                <i *ngIf="buildStep > i + 1" class="fa-solid fa-check"
-                                                    style="font-size: 12px;"></i>
-                                                <i *ngIf="buildStep === i + 1" class="fa-solid fa-spinner fa-spin"></i>
-                                                <i *ngIf="buildStep < i + 1" [class]="step.pendingIconClass"></i>
-                                            </span>
-
-                                            <div class="build-step__content">
-                                                <div class="ct_fw_600 build-step__title"
-                                                    style="color: rgba(223, 225, 246, 1);">
-                                                    {{ step.label }}
-                                                    <span *ngIf="buildStep === i + 1" class="typing-dots"></span>
-                                                </div>
-                                                <p class="mb-0 mt-1 ct_fs_10 build-step__status ct_fw_500">
-                                                    {{ buildStep > i + 1 ? 'COMPLETED' : buildStep === i + 1 ?
-                                                    'IN PROGRESS' : 'PENDING' }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="preview-overlay show" [class.show]="isReactBuilding || isIframeLoading">
+                            <app-ai-loader></app-ai-loader>
                         </div>
                     </div>
                 </div>
@@ -871,7 +825,8 @@
                                 [ngClass]="(feedbackForm.value.rating || 0) >= 1 ? 'fa-solid fa-star active_star' : 'fa-regular fa-star'"
                                 (click)="setRating(1)"></i>
                         </div>
-                        <div *ngIf="isFeedbackSubmitAttempted && (feedbackForm.value.rating === 0 || feedbackForm.get('rating')?.invalid)" class="text-danger mt-2" style="font-size: 13px;">
+                        <div *ngIf="isFeedbackSubmitAttempted && (feedbackForm.value.rating === 0 || feedbackForm.get('rating')?.invalid)"
+                            class="text-danger mt-2" style="font-size: 13px;">
                             Please select a star rating before submitting your feedback.
                         </div>
                     </div>

@@ -1,0 +1,128 @@
+<div class="generator-screen">
+    <div class="ambient-glow"></div>
+
+    <!-- Background particles -->
+    <div class="particles">
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>
+            <span>AI is building</span> your app
+        </h1>
+        <p>
+            Turning your idea into a working product
+        </p>
+    </div>
+
+    <!-- AI CORE -->
+    <div class="core-area">
+        <!-- Energy waves -->
+        <div class="energy-waves">
+            <svg viewBox="0 0 900 180" preserveAspectRatio="none">
+                <path class="wave-purple"
+                    d="M0 100 C100 20 150 160 250 90 S400 40 500 100 S650 170 750 80 S850 50 900 100" />
+                <path class="wave-blue"
+                    d="M0 110 C100 50 150 160 250 100 S400 30 500 110 S650 150 750 90 S850 60 900 110" />
+                <path class="wave-light"
+                    d="M0 90 C100 160 160 20 260 90 S420 150 510 90 S650 30 760 100 S850 140 900 80" />
+            </svg>
+        </div>
+
+        <!-- Rings -->
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+
+        <!-- Orbit -->
+        <div class="orbit">
+            <span class="orbit-dot"></span>
+            <span class="orbit-dot small"></span>
+        </div>
+
+        <!-- AI Core -->
+        <div class="ai-core">
+            <!-- Percentage -->
+            <div class="percentage">
+                <span id="mainPercentage" class="percentage-number">{{ progress }}</span>
+                <span class="percentage-symbol">%</span>
+            </div>
+
+            <!-- Status -->
+            <div class="core-label" id="coreStatus" [style.opacity]="coreStatusOpacity"
+                style="transition: opacity 0.2s">
+                {{ currentStatus }}
+            </div>
+
+            <!-- Loading dots -->
+            <div class="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATUS -->
+    <div class="status-container">
+        <!-- STEP 1 -->
+        <div class="status completed">
+            <div class="status-icon">✓</div>
+            <div class="status-info">
+                <div class="status-title">Understanding your idea</div>
+                <span class="status-subtitle">Completed</span>
+            </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="status completed">
+            <div class="status-icon">✓</div>
+            <div class="status-info">
+                <div class="status-title">Generating application structure</div>
+                <span class="status-subtitle">Completed</span>
+            </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="status active">
+            <div class="status-icon">
+                <div class="status-spinner"></div>
+            </div>
+            <div class="status-info">
+                <div class="status-title">Building your React application</div>
+                <span class="status-subtitle">In Progress</span>
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill" [style.width.%]="progress"></div>
+                </div>
+            </div>
+            <!-- Highlight percentage -->
+            <div id="taskPercentage" class="task-percent">{{ progress }}%</div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="status pending">
+            <div class="status-icon">
+                <div class="pending-circle"></div>
+            </div>
+            <div class="status-info">
+                <div class="status-title">Preparing your preview</div>
+                <span class="status-subtitle">Pending</span>
+            </div>
+        </div>
+
+        <!-- TIP -->
+        <div class="tip">
+            This usually takes <strong>5-10 minutes</strong>. Please keep this window open.
+        </div>
+    </div>
+</div>

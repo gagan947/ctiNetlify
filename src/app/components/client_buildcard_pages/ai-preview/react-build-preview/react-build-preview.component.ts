@@ -15,6 +15,7 @@ import { SubscriptionModalService } from '../../../../services/subscription-moda
 import { SubcriptionService } from '../../../../services/subcription.service';
 import { SpeechService } from '../../../../services/speech.service';
 import { WorkspaceHeaderComponent } from "../../workspace-header/workspace-header.component";
+import { AiLoaderComponent } from '../ai-loader/ai-loader.component';
 import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
 import { io } from 'socket.io-client';
 
@@ -83,7 +84,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-react-build-preview',
   standalone: true,
-  imports: [CommonModule, NgxIntlTelInputModule, ReactCodeEditorComponent, FormsModule, ReactiveFormsModule, AiDevRendererComponent, WorkspaceHeaderComponent],
+  imports: [CommonModule, NgxIntlTelInputModule, ReactCodeEditorComponent, FormsModule, ReactiveFormsModule, AiDevRendererComponent, WorkspaceHeaderComponent, AiLoaderComponent],
   templateUrl: './react-build-preview.component.html',
   styleUrl: './react-build-preview.component.css'
 })
