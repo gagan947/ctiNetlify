@@ -2442,9 +2442,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     if (!this.socket?.emit) {
       this.pendingCustomizationRequest = null;
       this.customizationRequestVersion++;
-      if (this.selectedProjectId) {
-        this.isSuggestionsCollapsedMap.set(this.selectedProjectId, false);
-      }
       this.toster.error('Customization chat is not connected right now. Please try again.');
       return;
     }
@@ -2474,9 +2471,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         'default'
       )
     );
-    if (this.selectedProjectId) {
-      this.isSuggestionsCollapsedMap.set(this.selectedProjectId, false);
-    }
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
@@ -2618,9 +2612,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         if (!res?.success || !res?.data?.templateId) {
           this.customizationRequestVersion++;
           this.pendingCustomizationRequest = null;
-          if (this.selectedProjectId) {
-            this.isSuggestionsCollapsedMap.set(this.selectedProjectId, false);
-          }
           this.setBuildGenerationError(res?.data?.message || 'Failed to customize preview');
           this.queueBuildGenerationFailure();
           return;
@@ -2630,9 +2621,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         this.pendingCustomizationRequest = null;
         this.completeActiveCustomizationProgress();
         this.hideLoader();
-        if (this.selectedProjectId) {
-          this.isSuggestionsCollapsedMap.set(this.selectedProjectId, false);
-        }
         this.queueGeneratedPreview(res, null);
       },
       error: (error: any) => {
@@ -2649,9 +2637,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         }
 
         this.customizationRequestVersion++;
-        if (this.selectedProjectId) {
-          this.isSuggestionsCollapsedMap.set(this.selectedProjectId, false);
-        }
         this.setBuildGenerationError(error);
         this.queueBuildGenerationFailure();
       }
@@ -3872,6 +3857,29 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     return this.expandedCategoriesMap.get(inquiryId)!.has(catTitle);
   }
 
+  getCategoryIcon(title: string): string {
+    const t = title.toLowerCase();
+    if (t.includes('design') || t.includes('theme') || t.includes('style') || t.includes('color')) {
+      return '🎨';
+    } else if (t.includes('content') || t.includes('copy') || t.includes('text')) {
+      return '📝';
+    } else if (t.includes('service') || t.includes('feature')) {
+      return '⚡';
+    } else if (t.includes('page') || t.includes('layout') || t.includes('structure')) {
+      return '📄';
+    }
+    return '💡';
+  }
+
+  getCategorySubtitle(title: string): string {
+    const t = title.toLowerCase();
+    if (t.includes('design')) return 'Improve visual hierarchy and UI consistency';
+    if (t.includes('content')) return 'Improve website messaging and content';
+    if (t.includes('service')) return 'Optimize service descriptions and offerings';
+    if (t.includes('page')) return 'Enhance additional pages for better navigation';
+    return 'Explore suggested enhancements';
+  }
+
   toggleCategory(catTitle: string): void {
     const inquiryId = this.selectedProjectId;
     if (!inquiryId) return;
@@ -3890,7 +3898,10 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
   isSuggestionsCollapsed(): boolean {
     const inquiryId = this.selectedProjectId;
-    if (!inquiryId) return false;
+    if (!inquiryId) return true;
+    if (!this.isSuggestionsCollapsedMap.has(inquiryId)) {
+      return true;
+    }
     return !!this.isSuggestionsCollapsedMap.get(inquiryId);
   }
 

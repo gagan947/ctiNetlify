@@ -53,12 +53,12 @@
                         <div class="ct_suggestions_header d-flex align-items-center justify-content-between"
                             (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
                             <div class="ct_suggestions_header_title">
-                                <i class="fa-regular fa-lightbulb text-info"></i>
-                                <span>Agent is suggesting some feature enhancements:</span>
+                                <div class="ct_sugg_main_icon">💡</div>
+                                <span class="fw-bold text-white">Agent is suggesting some feature enhancements</span>
                             </div>
                             <button type="button" class="ct_suggestions_close_btn" aria-label="Toggle suggestions">
                                 <i class="fa-solid"
-                                    [ngClass]="isSuggestionsCollapsed() ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                                    [ngClass]="isSuggestionsCollapsed() ? 'fa-caret-down' : 'fa-caret-up'"></i>
                             </button>
                         </div>
                         <div *ngIf="!isSuggestionsCollapsed()" class="ct_suggestion_loading_shimmer mt-2">
@@ -73,12 +73,12 @@
                         <div class="ct_suggestions_header d-flex align-items-center justify-content-between"
                             (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
                             <div class="ct_suggestions_header_title text-danger">
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <span>Failed to load suggestions</span>
+                                <div class="ct_sugg_main_icon bg-danger-subtle border-danger text-danger">⚠️</div>
+                                <span class="fw-bold">Failed to load suggestions</span>
                             </div>
                             <button type="button" class="ct_suggestions_close_btn" aria-label="Toggle suggestions">
                                 <i class="fa-solid"
-                                    [ngClass]="isSuggestionsCollapsed() ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                                    [ngClass]="isSuggestionsCollapsed() ? 'fa-caret-down' : 'fa-caret-up'"></i>
                             </button>
                         </div>
                         <div *ngIf="!isSuggestionsCollapsed()" class="text-center py-2 text-danger opacity-75"
@@ -93,23 +93,31 @@
                         <div class="ct_suggestions_header d-flex align-items-center justify-content-between"
                             (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
                             <div class="ct_suggestions_header_title">
-                                <i class="fa-regular fa-lightbulb text-info"></i>
-                                <span>Agent is suggesting some feature enhancements:</span>
+                                <div class="ct_sugg_main_icon">💡</div>
+                                <span class="fw-bold text-white">Agent is suggesting some feature enhancements</span>
                             </div>
                             <button type="button" class="ct_suggestions_close_btn" aria-label="Toggle suggestions">
                                 <i class="fa-solid"
-                                    [ngClass]="isSuggestionsCollapsed() ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                                    [ngClass]="isSuggestionsCollapsed() ? 'fa-caret-down' : 'fa-caret-up'"></i>
                             </button>
                         </div>
 
                         <div *ngIf="!isSuggestionsCollapsed()" class="ct_suggestions_categories">
                             <div *ngFor="let cat of currentSuggestions.categories; let catIndex = index"
                                 class="ct_suggestions_cat_item">
-                                <div class="ct_suggestions_cat_header d-flex align-items-center gap-2"
+                                <div class="ct_suggestions_cat_header d-flex align-items-center justify-content-between"
                                     (click)="toggleCategory(cat.title)">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="ct_sugg_cat_icon">
+                                            <span>{{ getCategoryIcon(cat.title) }}</span>
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <span class="ct_suggestions_cat_title">{{ cat.title }}</span>
+                                            <span class="ct_suggestions_cat_subtitle">{{ getCategorySubtitle(cat.title) }}</span>
+                                        </div>
+                                    </div>
                                     <i class="fa-solid ct_suggestions_cat_chevron"
-                                        [ngClass]="isCategoryExpanded(cat.title) ? 'fa-caret-down' : 'fa-caret-right'"></i>
-                                    <span class="ct_suggestions_cat_title">{{ cat.title }}</span>
+                                        [ngClass]="isCategoryExpanded(cat.title) ? 'fa-caret-up' : 'fa-caret-down'"></i>
                                 </div>
                                 <div *ngIf="isCategoryExpanded(cat.title)" class="ct_suggestions_list">
                                     <div *ngFor="let sug of cat.suggestions"
