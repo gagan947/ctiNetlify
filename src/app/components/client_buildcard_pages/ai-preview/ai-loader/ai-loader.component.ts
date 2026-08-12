@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,52 +8,60 @@ import { CommonModule } from '@angular/common';
   templateUrl: './ai-loader.component.html',
   styleUrls: ['./ai-loader.component.css']
 })
-export class AiLoaderComponent implements OnInit, OnDestroy {
-  progress = 64;
-  statuses = [
-    "Building...",
-    "Writing code...",
-    "Connecting components...",
-    "Generating UI...",
-    "Optimizing...",
-    "Testing..."
+export class AiLoaderComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() targetProgress: number = 0;
+  @Input() currentStatus: string = "Building...";
+  @Input() currentStepIndex: number = 1;
+  @Input() heading1: string = "AI is building";
+  @Input() heading2: string = "your app";
+  @Input() subheading: string = "Turning your idea into a working product";
+  @Input() stepTitles: string[] = [
+    "Understanding your idea",
+    "Generating application structure",
+    "Building your React application",
+    "Preparing your preview"
   ];
-  currentStatus = this.statuses[0];
-  statusIndex = 0;
+
+  progress = 0;
   coreStatusOpacity = 1;
-  
-  private progressTimer: any;
-  private statusTimer: any;
-  private completionTimer: any;
+
+  private progressInterval: any;
 
   ngOnInit() {
-    this.progressTimer = setInterval(() => {
-      if (this.progress < 96) {
-        this.progress += Math.floor(Math.random() * 2) + 1;
-        if (this.progress > 96) {
-          this.progress = 96;
-        }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['targetProgress']) {
+      this.animateProgressTo(this.targetProgress);
+    }
+  }
+
+  animateProgressTo(target: number) {
+    if (this.progressInterval) clearInterval(this.progressInterval);
+    this.progressInterval = setInterval(() => {
+      if (this.progress < target) {
+        this.progress++;
+      } else if (this.progress > target) {
+        this.progress--;
+      } else {
+        clearInterval(this.progressInterval);
       }
-    }, 1100);
+    }, 50);
+  }
 
-    this.statusTimer = setInterval(() => {
-      this.statusIndex = (this.statusIndex + 1) % this.statuses.length;
-      this.coreStatusOpacity = 0;
-      setTimeout(() => {
-        this.currentStatus = this.statuses[this.statusIndex];
-        this.coreStatusOpacity = 1;
-      }, 200);
-    }, 1800);
+  getStepClass(stepNumber: number) {
+    if (this.currentStepIndex > stepNumber) return 'completed';
+    if (this.currentStepIndex === stepNumber) return 'active';
+    return 'pending';
+  }
 
-    this.completionTimer = setTimeout(() => {
-      this.progress = 100;
-      this.currentStatus = "Ready!";
-    }, 18000);
+  getStepSubtitle(stepNumber: number) {
+    if (this.currentStepIndex > stepNumber) return 'COMPLETED';
+    if (this.currentStepIndex === stepNumber) return 'IN PROGRESS';
+    return 'PENDING';
   }
 
   ngOnDestroy() {
-    if (this.progressTimer) clearInterval(this.progressTimer);
-    if (this.statusTimer) clearInterval(this.statusTimer);
-    if (this.completionTimer) clearTimeout(this.completionTimer);
+    if (this.progressInterval) clearInterval(this.progressInterval);
   }
 }

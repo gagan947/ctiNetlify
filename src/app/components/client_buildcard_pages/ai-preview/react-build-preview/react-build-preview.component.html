@@ -216,19 +216,21 @@
                             (dragstart)="blockPreviewInteraction($event)"
                             (selectstart)="blockPreviewInteraction($event)">
 
-                            <!-- <iframe *ngIf="safePreviewUrl" #previewFrame class="preview-iframe mx-auto w-100 "
+                            <iframe *ngIf="safePreviewUrl" #previewFrame class="preview-iframe mx-auto w-100 "
                                 [style.maxWidth]="previewWidth === 100 ? '100%' : previewWidth + 'px'"
                                 [style.height.%]="100" [src]="safePreviewUrl"
                                 sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-downloads"
                                 referrerpolicy="no-referrer" (load)="onIframeLoad()">
-                            </iframe> -->
-
+                            </iframe>
                         </div>
                         <!-- <iframe #previewFrame class="preview-iframe mx-auto w-100"
                             [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100" [src]="safePreviewUrl"  (load)="onIframeLoad()">
                         </iframe> -->
-                        <div class="preview-overlay show" [class.show]="isReactBuilding || isIframeLoading">
-                            <app-ai-loader></app-ai-loader>
+                        <div class="preview-overlay" [class.show]="isReactBuilding || isIframeLoading">
+                            <app-ai-loader [targetProgress]="loaderProgress" [currentStatus]="loaderStatusText"
+                                [currentStepIndex]="loaderStepIndex" [stepTitles]="loaderStepTitles"
+                                [heading1]="loaderHeading1" [heading2]="loaderHeading2" [subheading]="loaderSubheading">
+                            </app-ai-loader>
                         </div>
                     </div>
                 </div>

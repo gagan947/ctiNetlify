@@ -18,10 +18,10 @@
     <!-- HEADER -->
     <div class="header">
         <h1>
-            <span>AI is building</span> your app
+            <span>{{ heading1 }}</span> {{ heading2 }}
         </h1>
         <p>
-            Turning your idea into a working product
+            {{ subheading }}
         </p>
     </div>
 
@@ -76,48 +76,71 @@
     <!-- STATUS -->
     <div class="status-container">
         <!-- STEP 1 -->
-        <div class="status completed">
-            <div class="status-icon">✓</div>
-            <div class="status-info">
-                <div class="status-title">Understanding your idea</div>
-                <span class="status-subtitle">Completed</span>
+        <div class="status" [ngClass]="getStepClass(1)">
+            <div class="status-icon">
+                <div *ngIf="getStepClass(1) === 'completed'">✓</div>
+                <div *ngIf="getStepClass(1) === 'active'" class="status-spinner"></div>
+                <div *ngIf="getStepClass(1) === 'pending'" class="pending-circle"></div>
             </div>
+            <div class="status-info">
+                <div class="status-title">{{ stepTitles[0] }}</div>
+                <span class="status-subtitle">{{ getStepSubtitle(1) }}</span>
+                <div class="progress-bar" *ngIf="getStepClass(1) === 'active'">
+                    <div class="progress-fill" [style.width.%]="progress"></div>
+                </div>
+            </div>
+            <div class="task-percent" *ngIf="getStepClass(1) === 'active'">{{ progress }}%</div>
         </div>
 
         <!-- STEP 2 -->
-        <div class="status completed">
-            <div class="status-icon">✓</div>
-            <div class="status-info">
-                <div class="status-title">Generating application structure</div>
-                <span class="status-subtitle">Completed</span>
+        <div class="status" [ngClass]="getStepClass(2)">
+            <div class="status-icon">
+                <div *ngIf="getStepClass(2) === 'completed'">✓</div>
+                <div *ngIf="getStepClass(2) === 'active'" class="status-spinner"></div>
+                <div *ngIf="getStepClass(2) === 'pending'" class="pending-circle"></div>
             </div>
+            <div class="status-info">
+                <div class="status-title">{{ stepTitles[1] }}</div>
+                <span class="status-subtitle">{{ getStepSubtitle(2) }}</span>
+                <div class="progress-bar" *ngIf="getStepClass(2) === 'active'">
+                    <div class="progress-fill" [style.width.%]="progress"></div>
+                </div>
+            </div>
+            <div class="task-percent" *ngIf="getStepClass(2) === 'active'">{{ progress }}%</div>
         </div>
 
         <!-- STEP 3 -->
-        <div class="status active">
+        <div class="status" [ngClass]="getStepClass(3)">
             <div class="status-icon">
-                <div class="status-spinner"></div>
+                <div *ngIf="getStepClass(3) === 'completed'">✓</div>
+                <div *ngIf="getStepClass(3) === 'active'" class="status-spinner"></div>
+                <div *ngIf="getStepClass(3) === 'pending'" class="pending-circle"></div>
             </div>
             <div class="status-info">
-                <div class="status-title">Building your React application</div>
-                <span class="status-subtitle">In Progress</span>
-                <div class="progress-bar">
-                    <div id="progressFill" class="progress-fill" [style.width.%]="progress"></div>
+                <div class="status-title">{{ stepTitles[2] }}</div>
+                <span class="status-subtitle">{{ getStepSubtitle(3) }}</span>
+                <div class="progress-bar" *ngIf="getStepClass(3) === 'active'">
+                    <div class="progress-fill" [style.width.%]="progress"></div>
                 </div>
             </div>
-            <!-- Highlight percentage -->
-            <div id="taskPercentage" class="task-percent">{{ progress }}%</div>
+            <div class="task-percent" *ngIf="getStepClass(3) === 'active'">{{ progress }}%</div>
         </div>
 
         <!-- STEP 4 -->
-        <div class="status pending">
+        <div class="status" [ngClass]="getStepClass(4)">
             <div class="status-icon">
-                <div class="pending-circle"></div>
+                <div *ngIf="getStepClass(4) === 'completed'">✓</div>
+                <div *ngIf="getStepClass(4) === 'active'" class="status-spinner"></div>
+                <div *ngIf="getStepClass(4) === 'pending'" class="pending-circle"></div>
             </div>
             <div class="status-info">
-                <div class="status-title">Preparing your preview</div>
-                <span class="status-subtitle">Pending</span>
+                <div class="status-title">{{ stepTitles[3] }}</div>
+                <span class="status-subtitle">{{ getStepSubtitle(4) }}</span>
+                <div class="progress-bar" *ngIf="getStepClass(4) === 'active'">
+                    <div class="progress-fill" [style.width.%]="progress"></div>
+                </div>
             </div>
+            <div class="task-percent" *ngIf="getStepClass(4) === 'active'">{{ progress }}%</div>
         </div>
 
         <!-- TIP -->

@@ -171,9 +171,53 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   SearchCountryField = SearchCountryField;
   selectedCountry = CountryISO.India;
   isReactBuilding = true;
+  loaderProgress = 0;
+  loaderStepIndex = 1;
+  loaderStatusText = 'Building...';
   buildStep = 0;
   templateExists = false;
   buildFlowType: BuildFlowType = 'initial';
+
+  get loaderStepTitles(): string[] {
+    if (this.buildFlowType === 'customize') {
+      return [
+        'Analyzing customization',
+        'Planning modifications',
+        'Applying code changes',
+        'Updating preview'
+      ];
+    } else if (this.buildFlowType === 'restore' || this.buildFlowType === 'switch' || this.buildFlowType === 'regenerate') {
+      return [
+        'Fetching project data',
+        'Restoring structure',
+        'Rebuilding React app',
+        'Preparing your preview'
+      ];
+    }
+    return [
+      'Understanding your idea',
+      'Generating application structure',
+      'Building your React application',
+      'Preparing your preview'
+    ];
+  }
+
+  get loaderHeading1(): string {
+    if (this.buildFlowType === 'customize') return 'AI is modifying';
+    if (this.buildFlowType === 'restore' || this.buildFlowType === 'switch' || this.buildFlowType === 'regenerate') return 'AI is loading';
+    return 'AI is building';
+  }
+
+  get loaderHeading2(): string {
+    return 'your app';
+  }
+
+  get loaderSubheading(): string {
+    if (this.buildFlowType === 'customize') return 'Applying your requested changes';
+    if (this.buildFlowType === 'restore' || this.buildFlowType === 'switch' || this.buildFlowType === 'regenerate') return 'Fetching and restoring your project';
+    return 'Turning your idea into a working product';
+  }
+
   buildSteps: BuildProgressStep[] = [
     { pendingIconClass: 'fa-solid fa-download', label: 'Installing dependencies' },
     { pendingIconClass: 'fa-solid fa-gear', label: 'Building React app' },
@@ -2894,6 +2938,10 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.blocks = [];
     this.resetActivePageBuildSection();
 
+    this.loaderProgress = 0;
+    this.loaderStepIndex = 1;
+    this.loaderStatusText = 'Understanding your idea...';
+
     this.setBuildFlow('initial');
     this.setBuildStep(1);
     this.blocks.push(this.createUserMessageBlock(this.finalPrompt));
@@ -2901,6 +2949,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
+    this.loaderProgress = 10;
+    this.loaderStatusText = 'Analyzing your prompt...';
     await this.showLoader('Thinking through product requirements...');
     await this.addBuildSection(
       'Analyzing your prompt...',
@@ -2931,6 +2981,9 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       return;
     }
 
+    this.loaderProgress = 20;
+    this.loaderStepIndex = 2;
+    this.loaderStatusText = 'Initializing project...';
     await this.addParagraphBlock('Initializing project...', 300, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -2956,6 +3009,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       return;
     }
 
+    this.loaderProgress = 35;
+    this.loaderStatusText = 'Creating structure...';
     await this.addParagraphBlock('Creating structure...', 300, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -2985,6 +3040,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     }
 
     this.setBuildStep(2);
+    this.loaderProgress = 45;
+    this.loaderStatusText = 'Creating core files...';
     await this.addParagraphBlock('Creating core files...', 300, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -3012,6 +3069,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       return;
     }
 
+    this.loaderProgress = 55;
+    this.loaderStatusText = 'Building UI...';
     await this.addParagraphBlock('Building UI...', 300, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -3039,6 +3098,9 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       return;
     }
 
+    this.loaderStepIndex = 3;
+    this.loaderProgress = 70;
+    this.loaderStatusText = 'Generating screen-level page code...';
     await this.addParagraphBlock('Creating pages...', 300, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -3048,7 +3110,18 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       'Creating pages...',
       '📄',
     );
+    
+    // Smoothly animate progress from 70 to 80 while pages are generating
+    const pageGenInterval = setInterval(() => {
+      if (this.loaderProgress < 80) {
+        this.loaderProgress++;
+      }
+    }, 1500);
+
     await this.waitForPageGenerationCompletion();
+    clearInterval(pageGenInterval);
+    this.loaderProgress = 80;
+
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -3059,6 +3132,9 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     }
 
     this.setBuildStep(3);
+    this.loaderStepIndex = 4;
+    this.loaderProgress = 85;
+    this.loaderStatusText = 'Finalizing project build...';
     await this.addParagraphBlock('Finalizing...', 300, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -3079,6 +3155,10 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       return;
     }
     this.hideLoader();
+
+    // Reached the end before opening preview
+    this.loaderProgress = 100;
+    this.loaderStatusText = 'Ready!';
 
     return;
   }
