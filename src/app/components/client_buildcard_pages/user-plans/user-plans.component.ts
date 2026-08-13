@@ -200,7 +200,7 @@ export class UserPlansComponent {
 
   cancelSubcription(): void {
     this.isCanceling = true;
-    this.apiService.getApi(`api/user/cancelSubscription`)
+    this.apiService.postAPI(`api/payment/cancel-subscription`, {})
       .subscribe({
         next: (res: any) => {
           setTimeout(() => {

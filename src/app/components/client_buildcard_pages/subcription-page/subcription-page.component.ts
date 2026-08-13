@@ -229,7 +229,8 @@ export class SubcriptionPageComponent {
   }
 
   subscribePaypal(): void {
-    const backendUrl = 'api/payment/paypal/create-subscription';
+
+    const backendUrl = this.subscriptionPlan.planName !== 'Free Plan' && this.subscriptionPlan.subscriptionStatus !== 'CANCELLED' ? 'api/payment/paypal/upgrade-subscription' : 'api/payment/paypal/create-subscription';
     const redirectPath = window.location.origin + '/my-plan';
 
     const body = {
