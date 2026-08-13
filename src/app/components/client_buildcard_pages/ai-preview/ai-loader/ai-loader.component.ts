@@ -13,7 +13,7 @@ export class AiLoaderComponent implements OnInit, OnDestroy, OnChanges {
   @Input() currentStatus: string = "Building...";
   @Input() currentStepIndex: number = 1;
   @Input() heading1: string = "AI is building";
-  @Input() heading2: string = "your app";
+  @Input() heading2: string = "your project";
   @Input() subheading: string = "Turning your idea into a working product";
   @Input() stepTitles: string[] = [
     "Understanding your idea",
@@ -34,12 +34,12 @@ export class AiLoaderComponent implements OnInit, OnDestroy, OnChanges {
     if (changes['targetProgress']) {
       const prev = changes['targetProgress'].previousValue || 0;
       const curr = changes['targetProgress'].currentValue || 0;
-      
+
       // If we go backwards (e.g., restarting from 100 back to 0 or 5), snap instantly to 0.
       if (curr < prev) {
         this.progress = 0;
       }
-      
+
       this.animateProgressTo(curr);
     }
   }

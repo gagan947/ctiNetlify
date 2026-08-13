@@ -209,7 +209,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   }
 
   get loaderHeading2(): string {
-    return 'your app';
+    return 'your project';
   }
 
   get loaderSubheading(): string {
@@ -1812,11 +1812,11 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     if (this.buildFlowType !== 'switch' && this.buildFlowType !== 'restore' && this.buildFlowType !== 'customize') {
       return;
     }
-    
+
     if (this.loaderProgress >= 100 || this.loaderProgress === 0) {
       this.loaderProgress = 5;
     }
-    
+
     this.loaderStepIndex = 1;
     this.loaderStatusText = this.buildFlowType === 'customize' ? 'Analyzing customization...' : 'Fetching project data...';
 
@@ -1825,7 +1825,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         this.stopFakeProgressLoop();
         return;
       }
-      
+
       if (this.loaderProgress < 25) {
         this.loaderProgress += 0.8;
       } else if (this.loaderProgress < 50) {
@@ -3149,7 +3149,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       'Creating pages...',
       '📄',
     );
-    
+
     // Smoothly animate progress from 70 to 80 while pages are generating
     const pageGenInterval = setInterval(() => {
       if (this.loaderProgress < 80) {
