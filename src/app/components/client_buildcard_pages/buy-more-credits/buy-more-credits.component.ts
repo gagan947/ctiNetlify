@@ -15,6 +15,7 @@ interface TopUpPack {
   credits: number;
   is_active: number;
   sort_order: number;
+  currency?: string;
 }
 
 @Component({
@@ -72,9 +73,18 @@ export class BuyMoreCreditsComponent {
     this.getAllTopUpPlans();
   }
 
+  closeModal(): void {
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
+  }
+
   getAllTopUpPlans() {
     this.isLoading = true;
-    this.apiService.getApi('api/payment/topup-packs').subscribe({
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const currency = (timezone === 'Asia/Calcutta' || timezone === 'Asia/Kolkata') ? 'INR' : 'USD';
+
+    this.apiService.getApi(`api/payment/topup-packs?currency=${currency}`).subscribe({
       next: (res: any) => {
         this.topUpPacks = this.extractTopUpPacks(res?.data);
         this.isLoading = false;
@@ -93,6 +103,16 @@ export class BuyMoreCreditsComponent {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
+  }
+
+  getCurrencySymbol(pack: TopUpPack): string {
+    return pack.currency === 'USD' ? '$' : '₹';
+  }
+
+  get currentCurrencySymbol(): string {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const currency = (timezone === 'Asia/Calcutta' || timezone === 'Asia/Kolkata') ? 'INR' : 'USD';
+    return currency === 'USD' ? '$' : '₹';
   }
 
   getPackBadge(pack: TopUpPack, index: number): string {
@@ -159,14 +179,27 @@ export class BuyMoreCreditsComponent {
     const input = event.target as HTMLInputElement | null;
     const rawValue = input?.value || '';
     this.customAmount = rawValue.replace(/[^\d.]/g, '');
-    if (Number(this.customAmount) < 1650) {
-      this.customCredits = 0;
-      this.customAmountError = 'Minimum amount is 1650 INR';
-      return;
-    }
 
-    this.customAmountError = '';
-    this.customCredits = Math.round(Number(this.customAmount) / 16.50);
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const currency = (timezone === 'Asia/Calcutta' || timezone === 'Asia/Kolkata') ? 'INR' : 'USD';
+
+    if (currency === 'USD') {
+      if (Number(this.customAmount) < 20) {
+        this.customCredits = 0;
+        this.customAmountError = 'Minimum amount is 20 USD';
+        return;
+      }
+      this.customAmountError = '';
+      this.customCredits = Math.round(Number(this.customAmount) * 4);
+    } else {
+      if (Number(this.customAmount) < 1650) {
+        this.customCredits = 0;
+        this.customAmountError = 'Minimum amount is 1650 INR';
+        return;
+      }
+      this.customAmountError = '';
+      this.customCredits = Math.round(Number(this.customAmount) / 16.50);
+    }
   }
 
   private extractTopUpPacks(packs: TopUpPack[] | null | undefined): TopUpPack[] {
@@ -176,6 +209,8 @@ export class BuyMoreCreditsComponent {
   }
 
   buyCredits(pack: TopUpPack | null) {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const currency = (timezone === 'Asia/Calcutta' || timezone === 'Asia/Kolkata') ? 'INR' : 'USD';
 
     let payload = {};
     if (pack) {
@@ -184,7 +219,8 @@ export class BuyMoreCreditsComponent {
         redirectPath: window.location.origin + this.router.url || '/my-plan'
       };
     } else {
-      if (Number(this.customAmount) < 1650 || !this.customAmount || !Number(this.customAmount) || isNaN(Number(this.customAmount))) {
+      const minAmount = currency === 'USD' ? 20 : 1650;
+      if (Number(this.customAmount) < minAmount || !this.customAmount || !Number(this.customAmount) || isNaN(Number(this.customAmount))) {
         return;
       }
       payload = {
@@ -192,10 +228,15 @@ export class BuyMoreCreditsComponent {
         redirectPath: window.location.origin + this.router.url || '/my-plan'
       };
     }
-    this.apiService.postAPI('api/payment/create-topup-order', payload).subscribe({
+
+    const backendUrl = currency === 'USD' ? 'api/payment/paypal/create-topup-order' : 'api/payment/create-topup-order';
+
+    this.apiService.postAPI(backendUrl, payload).subscribe({
       next: (res: any) => {
         if (res.success) {
-          if (res.data.payment_session_id) {
+          if (currency === 'USD' && res.approvalUrl) {
+            window.location.href = res.approvalUrl;
+          } else if (currency === 'INR' && res.data?.payment_session_id) {
             this.openCashfreeSubscriptionCheckout(res.data.payment_session_id);
           }
         } else {
@@ -204,7 +245,7 @@ export class BuyMoreCreditsComponent {
       },
       error: (err) => {
         console.error(err);
-        this.message.error(err.error.message || 'Failed to create top-up order. Please try again.');
+        this.message.error(err.error?.message || 'Failed to create top-up order. Please try again.');
       }
     });
   }

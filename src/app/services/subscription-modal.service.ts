@@ -81,6 +81,10 @@ export class SubscriptionModalService {
       nzCentered: true,
       nzWidth: 833,
       nzClassName: 'subscription-modal-shell',
+      nzMaskStyle: {
+        backgroundColor: 'rgba(0, 0, 0, 0.50)',
+        backdropFilter: 'blur(8px)'
+      },
       nzBodyStyle: {
         padding: '0',
         overflow: 'hidden',
@@ -121,6 +125,10 @@ export class SubscriptionModalService {
       nzCentered: true,
       nzWidth: 833,
       nzClassName: 'buy-more-credits-modal-shell',
+      nzMaskStyle: {
+        backgroundColor: 'rgba(0, 0, 0, 0.50)',
+        backdropFilter: 'blur(8px)'
+      },
       nzBodyStyle: {
         padding: '0',
         overflow: 'hidden',
