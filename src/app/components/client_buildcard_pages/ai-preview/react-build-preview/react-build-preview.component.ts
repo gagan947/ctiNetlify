@@ -249,8 +249,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
   feedbackForm = new FormGroup({
     rating: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
-    selected_option: new FormControl<string>('', { nonNullable: true }),
-    feedback_text: new FormControl<string>('', { nonNullable: true })
+    feedback_text: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, noWhitespaceValidator] })
   });
 
   predefinedFeedbackOptions = [
@@ -3844,7 +3843,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         setTimeout(() => this.scrollToBottom(true), 250);
       }
       this.deployHeaderActionTimer = null;
-    }, 180);
+    }, 250);
   }
 
   private initializeCallbackRequestForm() {
@@ -4025,10 +4024,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       return;
     }
 
-    let text = this.feedbackForm.value.selected_option;
-    if (text === 'Other (Please specify)' || !text) {
-      text = this.feedbackForm.value.feedback_text;
-    }
+    const text = this.feedbackForm.value.feedback_text;
 
     const payload = {
       project_template_id: this.selectedProjectId,

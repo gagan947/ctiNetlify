@@ -113,7 +113,8 @@
                                         </div>
                                         <div class="d-flex flex-column">
                                             <span class="ct_suggestions_cat_title">{{ cat.title }}</span>
-                                            <span class="ct_suggestions_cat_subtitle">{{ getCategorySubtitle(cat.title) }}</span>
+                                            <span class="ct_suggestions_cat_subtitle">{{ getCategorySubtitle(cat.title)
+                                                }}</span>
                                         </div>
                                     </div>
                                     <i class="fa-solid ct_suggestions_cat_chevron"
@@ -798,10 +799,10 @@
 <div class="modal fade" id="feedbackModal" tabindex="-1" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 600px;">
         <div class="modal-content ct_feedback_modal">
-            <button type="button" id="feedbackModalCloseBtn" class="ct_modal_close_btn"
+            <!-- <button type="button" id="feedbackModalCloseBtn" class="ct_modal_close_btn"
                 (click)="onFeedbackModalDismiss()" data-bs-dismiss="modal" aria-label="Close">
                 <i class="fa-solid fa-xmark"></i>
-            </button>
+            </button> -->
 
             <!-- Top icon & Title -->
             <div class="text-center pt-3 pb-1 position-relative">
@@ -843,27 +844,16 @@
 
                     <!-- Divider -->
 
-                    <!-- Options Grid -->
+                    <!-- Textarea -->
                     <div class="mb-3">
                         <label class="form-label text-white mb-2" style="font-size: 13px; font-weight: 500;">Tell us
-                            more (optional)</label>
-                        <div class="ct_feedback_options_grid">
-                            <label *ngFor="let opt of predefinedFeedbackOptions" class="ct_feedback_option_card"
-                                [class.active]="feedbackForm.value.selected_option === opt.label">
-                                <input type="radio" formControlName="selected_option" [value]="opt.label"
-                                    class="d-none">
-                                <div class="ct_feedback_option_icon" [style.color]="opt.color"
-                                    [style.background]="opt.bg">
-                                    <i [class]="opt.icon"></i>
-                                </div>
-                                <span class="ct_feedback_option_text">{{ opt.label }}</span>
-                            </label>
+                            more</label>
+                        <textarea class="form-control ct_feedback_textarea" formControlName="feedback_text" rows="4"
+                            placeholder="Please share your experience with us..."></textarea>
+                        <div *ngIf="isFeedbackSubmitAttempted && feedbackForm.get('feedback_text')?.invalid"
+                            class="text-danger mt-2" style="font-size: 13px;">
+                            Please provide your feedback before submitting.
                         </div>
-                    </div>
-
-                    <div class="mb-2" *ngIf="feedbackForm.value.selected_option === 'Other (Please specify)'">
-                        <textarea class="form-control ct_feedback_textarea" formControlName="feedback_text" rows="2"
-                            placeholder="Please specify..."></textarea>
                     </div>
 
                     <!-- Footer -->
