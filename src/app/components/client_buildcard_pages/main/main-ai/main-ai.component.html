@@ -158,7 +158,22 @@
 
         <div class="eti_suggestions">
           @for (suggestion of SUGGESTIONS; track suggestion) {
-          <div class="et_tag" (click)="usePromptIdea(suggestion.prompt)">{{ suggestion.label }}</div>
+          <div class="et_tag" (click)="usePromptIdea(suggestion.prompt)">
+            <span class="et_tag_icon">{{ suggestion.icon }}</span>
+            {{ suggestion.label }}
+          </div>
+          }
+        </div>
+
+        <div class="eti_features mt-4 pt-3">
+          @for (feature of FEATURES; track feature) {
+          <div class="et_feature_card">
+            <div class="et_feature_icon">{{ feature.icon }}</div>
+            <div class="et_feature_content">
+              <div class="et_feature_title">{{ feature.title }}</div>
+              <div class="et_feature_desc">{{ feature.description }}</div>
+            </div>
+          </div>
           }
         </div>
       </div>

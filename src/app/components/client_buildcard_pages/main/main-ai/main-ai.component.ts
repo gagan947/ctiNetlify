@@ -61,29 +61,57 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   private activeVoiceSessionId = 0;
   SUGGESTIONS = [
     {
+      icon: "🛵",
       label: "Food Delivery App",
       prompt:
         "Design a premium food delivery mobile app focused on a fast and delightful ordering experience. Include beautiful restaurant discovery, curated menus, smart search, personalized recommendations, a seamless cart, secure checkout, real-time order tracking, favorites, and a clean order history. Prioritize an elegant user experience and a polished MVP suitable for launch."
     },
     {
+      icon: "👥",
       label: "CRM Dashboard",
       prompt:
         "Create a modern CRM workspace that helps sales teams organize leads, manage customer relationships, track deals, schedule follow-ups, and visualize sales performance. Focus on an intuitive workflow, clean data organization, insightful analytics, and a productivity-first MVP rather than a complex enterprise system."
     },
     {
+      icon: "🏥",
       label: "Hospital Management System",
       prompt:
         "Build a modern hospital management platform focused on improving the patient journey. Include appointment booking, doctor discovery, patient records, prescriptions, visit history, and treatment tracking with a calm, trustworthy interface. Deliver a practical MVP that simplifies everyday healthcare interactions."
     },
     {
+      icon: "🏋️",
       label: "Fitness Platform",
       prompt:
         "Design a premium fitness platform that helps users build healthy habits through personalized workout plans, progress tracking, activity insights, goal setting, nutrition guidance, and motivational challenges. Create an inspiring, modern experience centered around engagement and long-term consistency."
     },
     {
+      icon: "🛍️",
       label: "Marketplace App",
       prompt:
         "Create a beautifully designed online marketplace where people can discover, explore, and purchase unique products from independent sellers. Focus on immersive product browsing, rich product pages, search, collections, favorites, secure checkout, messaging, and order tracking while keeping the experience clean, premium, and MVP-focused."
+    }
+  ];
+
+  FEATURES = [
+    {
+      icon: "🚀",
+      title: "AI-Powered Generation",
+      description: "Smart AI that understands your ideas deeply"
+    },
+    {
+      icon: "⚡",
+      title: "Real-Time Preview",
+      description: "See your product come to life instantly"
+    },
+    {
+      icon: "🛡️",
+      title: "Secure & Private",
+      description: "Your ideas are safe with enterprise-grade security"
+    },
+    {
+      icon: "☁️",
+      title: "Deploy Anywhere",
+      description: "One-click deployment to the cloud"
     }
   ];
   constructor(
