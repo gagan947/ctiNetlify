@@ -343,20 +343,23 @@
     font-size: 34px;
     font-weight: 800;
     letter-spacing: -2px;
-    background: linear-gradient(180deg, #ffffff 5%, #b09aff 50%, #775cff 100%);
+    /* background: linear-gradient(180deg, #ffffff 15%, #fff 50%, #b1a8e0fc 100%);
     -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    text-shadow: 0 0 15px rgba(130, 105, 255, .45);
+    background-clip: text; */
+    color: #fff;
+    /* text-shadow: 0 0 15px rgba(130, 105, 255, .45); */
     transition: all .35s ease;
 }
 
 .percentage-symbol {
     font-size: 14px;
     font-weight: 700;
-    color: #9c86ff;
+    color: #fff;
+    /* background-clip: text !important;
+    background: linear-gradient(180deg, #ffffff 15%, #fff 50%, #b1a8e0fc 100%); */
     margin-left: 2px;
-    text-shadow: 0 0 10px rgba(130, 105, 255, .7);
+    text-shadow: 0 0 15px rgba(130, 105, 255, .45);
+
 }
 
 /* CORE LABEL */
@@ -364,7 +367,7 @@
     margin-top: 4px;
     font-size: 10px;
     font-weight: 600;
-    color: #ffffffa3;
+    color: #f5f5f5;
     letter-spacing: .2px;
     white-space: nowrap;
 }
@@ -434,7 +437,9 @@
 }
 
 .status.completed .status-icon {
-    background: linear-gradient(135deg, #6d59e8, #4d43b6);
+    background: linear-gradient(135deg,
+            #10B981 0%,
+            #059669 100%);
     box-shadow: 0 0 10px rgba(100, 80, 255, .25);
 }
 
@@ -572,7 +577,7 @@
 }
 
 .tip strong {
-    color: #806cff;
+    color: #fff;
     font-weight: 600;
 }
 

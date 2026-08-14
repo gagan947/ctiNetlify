@@ -4037,6 +4037,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       next: (res) => {
         this.toster.success('Thank you for your feedback!');
         this.isFeedbackSubmitted = true;
+        this.feedbackForm.reset();
         const btn = document.getElementById('feedbackModalCloseBtn');
         if (btn) btn.click();
       },
