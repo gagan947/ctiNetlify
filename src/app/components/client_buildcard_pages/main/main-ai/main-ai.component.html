@@ -50,14 +50,14 @@
       </div>
       <div class="position-relative " style="z-index: 1;">
         <!-- <img src="../../../../../assets/img/lightblue_shape_promp.png" alt="" class="ct_light_blue_shape_props"> -->
-        @if(isIndependenceDayTheme) {
-        <div class="text-center position-absolute"
-          style="z-index: 2; top: -35px; left: 50%; transform: translateX(-50%); pointer-events: none;">
-          <img src="assets/img/flag_curve_img.png" alt="Independence Day Flag"
-            style="height: 65px; object-fit: contain;" />
-        </div>
-        }
         <div class="main-ai-composer" [class.independence-composer]="isIndependenceDayTheme">
+          @if(isIndependenceDayTheme) {
+          <div class="text-center position-absolute"
+            style="z-index: 2; top: -35px; left: 50%; transform: translateX(-50%); pointer-events: none;">
+            <img src="assets/img/flag_curve_img.png" alt="Independence Day Flag"
+              style="height: 65px; object-fit: contain;" />
+          </div>
+          }
           <!-- <img src=""> -->
           <!-- @if(isIndependenceDayTheme) {
           <div class="px-3 pt-3 text-white" style="font-size: 13px; font-weight: 500;">Generate</div>
@@ -189,13 +189,15 @@
             </div>
 
             <div class="main-ai-right-actions d-flex align-items-center" style="gap: 12px;">
-              <span *ngIf="showWordLimitError" class="text-danger" style="font-size: 12px; font-weight: 500;">
+              @if(!isVoiceUiVisible && !isVoiceStarting){
+              <!-- <span *ngIf="showWordLimitError" class="text-danger" style="font-size: 12px; font-weight: 500;">
                 Word limit exceeded
-              </span>
+              </span> -->
               <span [ngStyle]="{'color': wordCount > 1000 ? '#dc3545' : '#888'}"
                 style="font-size: 12px; font-weight: 500;" class="pt_fs_10_res_575">
                 {{ wordCount }}/1000 words
               </span>
+              }
               <button type="button" class="main-ai-submit-btn" [class.independence-send-btn]="isIndependenceDayTheme"
                 aria-label="Continue" (click)="submitPrompt()">
 

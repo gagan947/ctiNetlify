@@ -612,11 +612,12 @@
 
 .main-ai-voice-toggle-btn.is-listening {
   width: auto;
-  min-width: 116px;
-  padding: 0 16px;
-  gap: 10px;
+  min-width: 80px;
+  padding: 0 10px;
+  gap: 5px;
   border-color: rgba(223, 63, 104, 0.28);
   background: linear-gradient(135deg, #ff6b81, #ff8e53);
+  -webkit-box-shadow: 0 12px 28px rgba(223, 63, 104, 0.22);
   box-shadow: 0 12px 28px rgba(223, 63, 104, 0.22);
   color: #ffffff;
 }
@@ -952,11 +953,11 @@
     margin-left: auto;
   }
 
-  .main-ai-submit-btn,
+  /* .main-ai-submit-btn,
   .main-ai-voice-btn {
     width: 46px;
     height: 46px;
-  }
+  } */
 }
 
 .ct_modal_close_btn {
@@ -1184,4 +1185,15 @@
 
     background-size: cover !important;
   }
+
+  .ct-model-dropdown-menu {
+    left: -60px !important;
+    width: 280px !important;
+    min-width: 280px !important;
+  }
+
+  .main-ai-left-actions {
+    gap: 8px;
+  }
+
 }

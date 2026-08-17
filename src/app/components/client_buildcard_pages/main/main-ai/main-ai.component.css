@@ -512,9 +512,9 @@
 
 .main-ai-voice-toggle-btn.is-listening {
   width: auto;
-  min-width: 116px;
-  padding: 0 16px;
-  gap: 10px;
+  min-width: 80px;
+  padding: 0 10px;
+  gap: 5px;
   border-color: rgba(223, 63, 104, 0.28);
   background: linear-gradient(135deg, #ff6b81, #ff8e53);
   -webkit-box-shadow: 0 12px 28px rgba(223, 63, 104, 0.22);
@@ -2093,7 +2093,7 @@ li.ct_ai_project_right {
   background-size: cover;
   background-attachment: fixed;
   height: auto !important;
-  min-height: 100vh !important;
+  min-height: calc(100vh - 50px) !important;
 }
 
 .ct_orange {
@@ -2201,5 +2201,11 @@ li.ct_ai_project_right {
 
   .eti_suggestions {
     gap: 5px !important;
+  }
+
+  .ct-model-dropdown-menu {
+    left: -60px !important;
+    width: 280px !important;
+    min-width: 280px !important;
   }
 }
