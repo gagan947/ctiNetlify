@@ -32,17 +32,6 @@
                 </app-ai-dev-renderer>
             </div>
             <div class="ct_ai_input_box mt-auto">
-                <!-- <p class="mb-2 ct_legacy_text">{{ block?.text?.message }}</p> -->
-                <!-- <div class="d-flex align-items-center gap-2 justify-content-between ct_code_companion_header">
-                    <h6 class="mb-0 ct_legacy_text ct_fs_14 ct_fw_600 text-white">Code Companion</h6>
-                    <a class="ct_fs_12 text-white opacity-75">Clear chat</a>
-                </div>
-                <div class="ct_chat_user_input_main">
-                    <p class="ct_chat_user_right">Can you add a forgot password link below the
-                        password input field?</p>
-                    <p class="ct_chat_user_left">Sure! I've added a "Forgot password?" link below the
-                        password input field with proper styling.</p>
-                </div> -->
 
                 <!-- Customization Suggestions Panel -->
                 <div *ngIf="(isSuggestionsLoading || suggestionsError || (currentSuggestions && currentSuggestions.categories && currentSuggestions.categories.length > 0))"
@@ -225,12 +214,102 @@
                             (dragstart)="blockPreviewInteraction($event)"
                             (selectstart)="blockPreviewInteraction($event)">
 
-                            <iframe *ngIf="safePreviewUrl" #previewFrame class="preview-iframe mx-auto w-100 "
-                                [style.maxWidth]="previewWidth === 100 ? '100%' : previewWidth + 'px'"
-                                [style.height.%]="100" [src]="safePreviewUrl"
+                            <!-- =========================================
+         EDITOR DOCK
+         ========================================= -->
+                            <div class="creative-editor-dock" [class.collapsed]="editorToolbarCollapsed">
+
+                                <div class="creative-editor-toolbar">
+
+                                    <!-- Edit -->
+                                    <button type="button" class="creative-toolbar-edit" [class.active]="editorMode"
+                                        (click)="toggleEditorMode()">
+
+                                        <span class="edit-icon">◩</span>
+                                        <span>Edit</span>
+
+                                    </button>
+
+
+                                    <!-- Desktop -->
+                                    <button type="button" class="creative-toolbar-icon"
+                                        [class.active]="!isMobilePreview">
+
+                                        <span>▱</span>
+
+                                    </button>
+
+
+                                    <!-- Fullscreen -->
+                                    <button type="button" class="creative-toolbar-icon">
+
+                                        <span>⛶</span>
+
+                                    </button>
+
+
+                                    <!-- Collapse -->
+                                    <button type="button" class="creative-toolbar-icon creative-toolbar-collapse"
+                                        (click)="toggleEditorToolbar()">
+
+                                        <span>
+                                            {{ editorToolbarCollapsed ? '⌃' : '⌄' }}
+                                        </span>
+
+                                    </button>
+
+                                </div>
+
+
+                                <!-- =========================================
+             PENDING CHANGES
+             ONLY ONE
+             ========================================= -->
+                                <div *ngIf="
+                elementEdits.length > 0 &&
+                !editorToolbarCollapsed
+            " class="creative-editor-pending">
+
+                                    <div class="pending-info">
+
+                                        <span class="pending-count">
+                                            {{ elementEdits.length }}
+                                        </span>
+
+                                        <span>
+                                            {{
+                                            elementEdits.length === 1
+                                            ? 'Change ready'
+                                            : elementEdits.length + ' changes ready'
+                                            }}
+                                        </span>
+
+                                    </div>
+
+                                    <button type="button" class="pending-apply-btn" (click)="applyElementEdits()">
+
+                                        Apply
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =========================================
+         ONLY ONE REACT IFRAME
+         ========================================= -->
+                            <iframe *ngIf="safePreviewUrl" #previewFrame class="preview-iframe mx-auto w-100"
+                                [style.maxWidth]="
+            previewWidth === 100
+                ? '100%'
+                : previewWidth + 'px'
+        " [style.height.%]="100" [src]="safePreviewUrl"
                                 sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-downloads"
                                 referrerpolicy="no-referrer" (load)="onIframeLoad()">
                             </iframe>
+
                         </div>
                         <!-- <iframe #previewFrame class="preview-iframe mx-auto w-100"
                             [style.maxWidth]="previewWidth + 'px'" [style.height.%]="100" [src]="safePreviewUrl"  (load)="onIframeLoad()">

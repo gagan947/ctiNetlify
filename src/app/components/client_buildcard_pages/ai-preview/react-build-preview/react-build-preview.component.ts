@@ -177,6 +177,16 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   buildStep = 0;
   templateExists = false;
   buildFlowType: BuildFlowType = 'initial';
+  editorMode = false;
+
+  isMobilePreview = false;
+
+  elementEdits: any[] = [];
+  editorToolbarCollapsed = false;
+
+  pendingElementEdit: any = null;
+  chatInput = '';
+
 
   get loaderStepTitles(): string[] {
     if (this.buildFlowType === 'customize') {
@@ -321,6 +331,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   }
 
   async ngOnInit() {
+    window.addEventListener('message', this.handlePreviewMessage);
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         if (this.hasUsablePreviewState() && !this.isFeedbackSubmitted && this.previewReadyTimer) {
@@ -1632,6 +1643,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   }
 
 
+
   onIframeLoad() {
     this.clearBuildStepTimers();
     this.stopFakeProgressLoop();
@@ -1653,6 +1665,73 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     event.preventDefault();
     event.stopPropagation();
   }
+
+  private handlePreviewMessage = (event: MessageEvent) => {
+    if (!event.data || typeof event.data !== 'object') {
+      return;
+    }
+
+    // console.log(
+    //   '[CreativeAI Angular] Preview message:',
+    //   event.data
+    // );
+
+    switch (event.data.type) {
+
+      case 'creative-ai-element-hover':
+        console.log(
+          '[CreativeAI Angular] Hovered:',
+          event.data
+        );
+        break;
+
+      case 'creative-ai-element-select':
+        console.log(
+          '[CreativeAI Angular] Selected:',
+          event.data
+        );
+
+        this.openElementEditor(event.data);
+        break;
+
+      /**
+       * React editor-runtime
+       * sends this when user submits:
+       *
+       * "change the image of this"
+       */
+      case 'creative-ai-element-edit':
+        // console.log(
+        //   '[CreativeAI Angular] ELEMENT EDIT:',
+        //   event.data
+        // );
+
+        this.handleElementEdit(event.data);
+        break;
+    }
+  };
+
+  openElementEditor(data: any) {
+    // console.log("OPEN EDITOR", data);
+  }
+
+handleElementEdit(data: any) {
+  console.log('[CreativeAI Angular] ELEMENT EDIT:', data);
+
+  this.pendingElementEdit = data;
+
+  this.chatInput = data?.instruction || '';
+
+  console.log(
+    '[CreativeAI Angular] pendingElementEdit:',
+    this.pendingElementEdit
+  );
+
+  console.log(
+    '[CreativeAI Angular] chatInput:',
+    this.chatInput
+  );
+}
 
 
   getUserSubscriptionPlan() {
@@ -4047,7 +4126,86 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       }
     });
   }
+
+  toggleEditorMode(): void {
+    this.editorMode = !this.editorMode;
+
+    this.sendEditorMode();
+
+
+  }
+
+  private sendEditorMode(): void {
+
+    const iframe =
+      this.previewFrame?.nativeElement;
+
+    if (!iframe?.contentWindow) {
+      console.warn(
+        '[CreativeAI] Preview iframe is not ready'
+      );
+
+      return;
+    }
+
+    iframe.contentWindow.postMessage(
+      {
+        type: 'creative-ai-editor-toggle',
+        enabled: this.editorMode
+      },
+      '*'
+    );
+
+    console.log(
+      '[CreativeAI] Editor:',
+      this.editorMode
+        ? 'ON'
+        : 'OFF'
+    );
+  }
+
+  applyElementEdits(): void {
+
+    if (
+      !this.elementEdits.length
+    ) {
+      return;
+    }
+
+    console.log(
+      '================================'
+    );
+
+    console.log(
+      '[CreativeAI] APPLYING ELEMENT EDITS'
+    );
+
+    console.log(
+      JSON.stringify(
+        this.elementEdits,
+        null,
+        2
+      )
+    );
+
+    console.log(
+      '================================'
+    );
+
+    /*
+     * Existing AI/backend request
+     * yahan connect karenge.
+     */
+  }
+
+  toggleEditorToolbar(): void {
+    this.editorToolbarCollapsed =
+      !this.editorToolbarCollapsed;
+  }
+
 }
+
+
 
 
 

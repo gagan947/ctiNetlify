@@ -3126,3 +3126,402 @@ p {
     text-align: center;
   }
 }
+
+
+/* =========================================================
+   CREATIVE AI EDITOR DOCK
+   ========================================================= */
+
+.iframe-container {
+  position: relative;
+}
+
+
+/* Main floating dock */
+
+.creative-editor-dock {
+  position: absolute;
+
+  left: 50%;
+  bottom: 16px;
+
+  transform: translateX(-50%);
+
+  z-index: 2147483000;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 8px;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   MAIN TOOLBAR
+   ========================================================= */
+
+.creative-editor-toolbar {
+  display: flex;
+  align-items: center;
+
+  gap: 3px;
+
+  height: 52px;
+
+  padding: 5px;
+
+  box-sizing: border-box;
+
+  border-radius: 28px;
+
+  background: rgba(30, 30, 32, 0.96);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.30);
+
+  backdrop-filter: blur(14px);
+
+  -webkit-backdrop-filter: blur(14px);
+
+  pointer-events: auto;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   EDIT BUTTON
+   ========================================================= */
+
+.creative-toolbar-edit {
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 0 14px;
+
+  border: 0;
+
+  border-radius: 22px;
+
+  background: #2563eb;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  outline: none;
+
+  box-shadow: none;
+
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.creative-toolbar-edit:hover {
+  background: #1d4ed8;
+}
+
+.creative-toolbar-edit:active {
+  transform: scale(0.97);
+}
+
+
+/* When editor is OFF */
+
+.creative-toolbar-edit:not(.active) {
+  background: transparent;
+
+  color: #ffffff;
+}
+
+.creative-toolbar-edit:not(.active):hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+
+/* Edit icon */
+
+.edit-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 18px;
+  height: 18px;
+
+  font-size: 17px;
+
+  line-height: 1;
+}
+
+
+/* =========================================================
+   ICON BUTTONS
+   ========================================================= */
+
+.creative-toolbar-icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #aeb3bd;
+
+  font-family: inherit;
+
+  font-size: 20px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  outline: none;
+
+  box-shadow: none;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.creative-toolbar-icon:hover {
+  background: rgba(255, 255, 255, 0.09);
+
+  color: #ffffff;
+}
+
+.creative-toolbar-icon.active {
+  color: #ffffff;
+}
+
+
+/* Desktop icon */
+
+.creative-toolbar-icon span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  line-height: 1;
+}
+
+
+/* =========================================================
+   COLLAPSE BUTTON
+   ========================================================= */
+
+.creative-toolbar-collapse {
+  font-size: 22px;
+
+  padding-bottom: 3px;
+}
+
+
+/* =========================================================
+   COLLAPSED STATE
+   ========================================================= */
+
+.creative-editor-dock.collapsed
+.creative-toolbar-edit,
+
+.creative-editor-dock.collapsed
+.creative-toolbar-icon:not(.creative-toolbar-collapse) {
+  display: none;
+}
+
+.creative-editor-dock.collapsed
+.creative-editor-toolbar {
+  width: 52px;
+
+  justify-content: center;
+}
+
+.creative-editor-dock.collapsed
+.creative-toolbar-collapse {
+  display: flex;
+}
+
+
+/* =========================================================
+   PENDING CHANGES
+   ========================================================= */
+
+.creative-editor-pending {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 7px 8px 7px 10px;
+
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.97);
+
+  border: 1px solid rgba(15, 23, 42, 0.10);
+
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.18);
+
+  backdrop-filter: blur(12px);
+
+  -webkit-backdrop-filter: blur(12px);
+
+  pointer-events: auto;
+
+  white-space: nowrap;
+}
+
+
+/* Pending info */
+
+.pending-info {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: #20242d;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+/* Count */
+
+.pending-count {
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #2563eb;
+
+  color: #ffffff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+
+/* Apply */
+
+.pending-apply-btn {
+  height: 34px;
+
+  padding: 0 15px;
+
+  border: 0;
+
+  border-radius: 17px;
+
+  background: #2563eb;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  outline: none;
+
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.pending-apply-btn:hover {
+  background: #1d4ed8;
+}
+
+.pending-apply-btn:active {
+  transform: scale(0.97);
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .creative-editor-dock {
+    bottom: 12px;
+  }
+
+  .creative-editor-toolbar {
+    height: 48px;
+
+    padding: 4px;
+
+    border-radius: 25px;
+  }
+
+  .creative-toolbar-edit {
+    height: 40px;
+
+    padding: 0 12px;
+
+    font-size: 13px;
+  }
+
+  .creative-toolbar-icon {
+    width: 40px;
+    height: 40px;
+
+    font-size: 18px;
+  }
+
+  .creative-editor-pending {
+    max-width: calc(100vw - 24px);
+
+    box-sizing: border-box;
+  }
+}
