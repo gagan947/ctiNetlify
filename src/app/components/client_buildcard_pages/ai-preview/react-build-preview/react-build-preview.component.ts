@@ -94,6 +94,14 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   private readonly minChatPanelWidth = 320;
   private readonly maxChatPanelWidth = 720;
   socket: any;
+  customizationSocket: any;
+
+  private readonly customizationConversationStorageKey =
+    'customizationConversationId';
+
+  private customizationConversationId: string | null = null;
+
+  isCustomizationRestoring = true;
   private readonly mobileBreakpoint = 991;
   private readonly buildErrorPreviewLineLimit = 6;
   private readonly buildErrorPreviewCharLimit = 700;
@@ -525,6 +533,167 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     });
     this.socketInquiryId = inquiryId;
     this.registerBuildSocketListeners();
+  }
+
+  private ensureCustomizationSocket(
+    inquiryId: string
+  ): void {
+
+    if (!inquiryId) {
+      return;
+    }
+
+    const storedConversationId =
+      this.getStoredCustomizationConversationId();
+
+    if (
+      this.customizationSocket?.connected &&
+      this.customizationConversationId ===
+      storedConversationId
+    ) {
+      return;
+    }
+
+    this.customizationSocket?.removeAllListeners?.();
+    this.customizationSocket?.disconnect?.();
+
+    this.customizationSocket = io(
+      this.apiService.apiUrl,
+      {
+        auth: {
+          token:
+            localStorage.getItem('tokenCTi'),
+
+          conversationId:
+            storedConversationId || null,
+
+          inquiryId
+        }
+      }
+    );
+
+    this.customizationConversationId =
+      storedConversationId;
+
+    this.registerCustomizationSocketListeners();
+  }
+
+  private registerCustomizationSocketListeners(): void {
+
+    this.customizationSocket.on(
+      'connect',
+      () => {
+
+        console.log(
+          'Customization socket connected'
+        );
+      }
+    );
+
+
+    this.customizationSocket.on(
+      'conversationResumed',
+      (payload: any) => {
+
+        console.log(
+          'Customization conversation resumed:',
+          payload
+        );
+
+        this.isCustomizationRestoring =
+          false;
+
+        const conversationId =
+          String(
+            payload?.conversationId || ''
+          ).trim();
+
+        if (conversationId) {
+
+          this.customizationConversationId =
+            conversationId;
+
+          this.saveCustomizationConversationId(
+            conversationId
+          );
+        }
+
+        // this.customizationMessages =
+        //   this.normalizeCustomizationMessages(
+        //     payload?.messages
+        //   );
+
+        // this.customizationChatState =
+        //   payload?.state || null;
+      }
+    );
+
+
+    this.customizationSocket.on(
+      'customizationResponse',
+      (response: any) => {
+
+        console.log(
+          'Customization response:',
+          response
+        );
+
+        // this.handleCustomizationResponse(
+        //   response
+        // );
+      }
+    );
+
+
+    this.customizationSocket.on(
+      'customizationError',
+      (error: any) => {
+
+        console.error(
+          'Customization chatbot error:',
+          error
+        );
+
+        this.isCustomizationRestoring =
+          false;
+      }
+    );
+  }
+
+
+  private saveCustomizationConversationId(
+    conversationId: string
+  ): void {
+
+    const normalizedId =
+      conversationId?.trim();
+
+    if (
+      !normalizedId ||
+      typeof localStorage === 'undefined'
+    ) {
+      return;
+    }
+
+    localStorage.setItem(
+      this.customizationConversationStorageKey,
+      normalizedId
+    );
+  }
+
+
+  private getStoredCustomizationConversationId():
+    string | null {
+
+    if (
+      typeof localStorage === 'undefined'
+    ) {
+      return null;
+    }
+
+    return localStorage.getItem(
+      this.customizationConversationStorageKey
+    );
   }
 
   private applyStoredCompletedPreview(previewData: ProjectGenerationPreviewData) {
@@ -1715,23 +1884,23 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     // console.log("OPEN EDITOR", data);
   }
 
-handleElementEdit(data: any) {
-  console.log('[CreativeAI Angular] ELEMENT EDIT:', data);
+  handleElementEdit(data: any) {
+    console.log('[CreativeAI Angular] ELEMENT EDIT:', data);
 
-  this.pendingElementEdit = data;
+    this.pendingElementEdit = data;
 
-  this.chatInput = data?.instruction || '';
+    this.chatInput = data?.instruction || '';
 
-  console.log(
-    '[CreativeAI Angular] pendingElementEdit:',
-    this.pendingElementEdit
-  );
+    console.log(
+      '[CreativeAI Angular] pendingElementEdit:',
+      this.pendingElementEdit
+    );
 
-  console.log(
-    '[CreativeAI Angular] chatInput:',
-    this.chatInput
-  );
-}
+    console.log(
+      '[CreativeAI Angular] chatInput:',
+      this.chatInput
+    );
+  }
 
 
   getUserSubscriptionPlan() {
