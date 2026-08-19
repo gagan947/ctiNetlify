@@ -3596,6 +3596,10 @@ p {
   overflow-y: hidden;
 }
 
+.preview-container::-webkit-scrollbar {
+  display: none;
+}
+
 .eti_file_hover_main img,
 .eti_file_hover_main video,
 .eti_file_hover_main audio,

@@ -176,6 +176,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   loaderStatusText = 'Building...';
   buildStep = 0;
   templateExists = false;
+  templates: any[] = [];
   buildFlowType: BuildFlowType = 'initial';
   editorMode = false;
 
@@ -578,6 +579,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       )
     );
     if (res.success) {
+      this.templates = res.data;
       this.templateExists = res.data.length > 0;
       return res.data;
     }
@@ -4263,6 +4265,20 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         fileName: file.name
       });
     });
+
+    const activeDesign = this.templates.find((t: any) => t.inquiryId === this.selectedProjectId).templateId;
+
+    if (activeDesign && this.previewFiles.length > 0) {
+      const filesToUpload = this.previewFiles.map(item => item.file);
+      this.apiService.uploadCustomizeAssets(activeDesign, filesToUpload).subscribe({
+        next: (response) => {
+          console.log('Upload response:', response);
+        },
+        error: (error) => {
+          console.error('Error uploading files:', error);
+        }
+      });
+    }
 
     input.value = '';
   }
