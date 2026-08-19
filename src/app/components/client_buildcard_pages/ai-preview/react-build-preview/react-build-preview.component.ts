@@ -187,7 +187,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   templates: any[] = [];
   buildFlowType: BuildFlowType = 'initial';
   editorMode = false;
-
+  showDiscardConfirm = false;
+  showDiscardConfirm2 = false
   isMobilePreview = false;
 
   elementEdits: any[] = [];
@@ -4310,8 +4311,12 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.editorMode = !this.editorMode;
 
     this.sendEditorMode();
+  }
 
-
+  confirmDiscard() {
+    this.toggleEditorMode();
+    this.editCommentsArray = [];
+    this.showDiscardConfirm = false;
   }
 
   private sendEditorMode(): void {
