@@ -3575,13 +3575,13 @@ p {
 }
 
 .ct_edit_comments i {
-  display: none;
+  /* display: none; */
   cursor: pointer;
 }
 
-.ct_edit_comments:hover i {
+/* .ct_edit_comments:hover i {
   display: block;
-}
+} */
 
 .et_text_chat_box_border {
   background-color: #283637;
