@@ -73,28 +73,8 @@
             <i [class]="primaryHeaderActionIconClass"></i>
             <span>{{ primaryHeaderActionLabel }}</span>
         </button>
-        <div class="d-none d-lg-block" *ngIf="showPreviewControls">
-            <div class="et_reload_icon" (click)="handleFullScreenToggle()">
-                <i class="fa-solid" [ngClass]="fullScreen ? 'fa-minimize' : 'fa-expand'"></i>
-            </div>
-        </div>
-        <ul class="mb-0 d-none d-lg-block" *ngIf="showPreviewControls">
-            <li>
-                <div class="dropdown ct_dropdown_device_preview123">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                        data-bs-toggle="dropdown" aria-expanded="false" [innerHTML]="selectedDeviceType">
-                    </button>
-                    <ul class="dropdown-menu mb-0" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" (click)="handleDeviceTypeChange('desktop')"> <i
-                                    class="fa-solid fa-display"></i></a></li>
-                        <li><a class="dropdown-item" (click)="handleDeviceTypeChange('tablet')"> <i
-                                    class="fa-solid fa-tablet-screen-button"></i></a></li>
-                        <li><a class="dropdown-item" (click)="handleDeviceTypeChange('mobile')"> <i
-                                    class="fa-solid fa-mobile-screen"></i></a></li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
+
+
 
         <button type="button" class="main-ai-topbar__credits" (click)="openSubscriptionModal()">
             Buy Plan <span>✦</span>
@@ -308,7 +288,8 @@
             <i class="fa-solid fa-plus"></i>
             <span>Add tab</span>
         </button>
-        <button type="button" class="main-ai-topbar__credits main-ai-mobile-sidebar__upgrade" (click)="openSubscriptionModal()">
+        <button type="button" class="main-ai-topbar__credits main-ai-mobile-sidebar__upgrade"
+            (click)="openSubscriptionModal()">
             Buy Plan <span>✦</span>
         </button>
     </div>

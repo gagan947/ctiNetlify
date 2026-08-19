@@ -512,9 +512,9 @@
 
 .main-ai-voice-toggle-btn.is-listening {
   width: auto;
-  min-width: 116px;
-  padding: 0 16px;
-  gap: 10px;
+  min-width: 80px;
+  padding: 0 10px;
+  gap: 5px;
   border-color: rgba(223, 63, 104, 0.28);
   background: linear-gradient(135deg, #ff6b81, #ff8e53);
   -webkit-box-shadow: 0 12px 28px rgba(223, 63, 104, 0.22);
@@ -1428,14 +1428,20 @@ li.ct_ai_project_right {
 }
 
 .eti_suggestions {
-  margin-top: 25px;
+  margin: 12px auto 0;
+  max-width: 980px;
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  justify-content: center;
+}
+
+.independence-composer {
+  padding-bottom: 15px !important;
 }
 
 .et_tag {
-  padding: 12px 18px;
+  padding: 6px 15px;
   border-radius: 999px;
   background: rgba(255, 255, 255, .04);
   border: 1px solid rgba(255, 255, 255, .07);
@@ -1445,6 +1451,7 @@ li.ct_ai_project_right {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-size: 13px;
   transition: all 0.3s ease;
 }
 
@@ -2078,4 +2085,127 @@ li.ct_ai_project_right {
     padding-inline: 10px !important;
   }
 
+}
+
+/* Independence Day Theme Additions */
+.ct_independence_theme {
+  background: url('../../../../../assets/img/independence_bg.png') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+  height: auto !important;
+  min-height: calc(100vh - 50px) !important;
+}
+
+.ct_orange {
+  color: #FF9933;
+}
+
+.ct_green {
+  color: #138808;
+}
+
+.independence-composer {
+  position: relative;
+  /* Use padding-box for the dark background and border-box for the gradient border */
+  background: linear-gradient(rgba(35, 35, 35, 0.95), rgba(35, 35, 35, 0.95)) padding-box,
+    linear-gradient(to right, #FF9933, #138808) border-box !important;
+  border: 1px solid transparent !important;
+  border-radius: 24px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  overflow: visible;
+  /* changed from hidden to allow the flag to overflow if needed, or keep hidden? Wait, flag is outside. */
+  max-width: 980px !important;
+  margin-inline: auto !important;
+}
+
+/* Remove the old top tricolor line */
+.independence-composer::before {
+  display: none;
+}
+
+.independence-composer .main-ai-voice-toggle {
+  border-color: rgba(255, 153, 51, 0.5) !important;
+}
+
+.independence-send-btn {
+  background: linear-gradient(to right, #FF9933, #138808) !important;
+  color: white !important;
+  border: none !important;
+  opacity: 1 !important;
+}
+
+.independence-send-btn i {
+  color: white !important;
+}
+
+.independence-heading {
+  color: #000 !important;
+  font-weight: 800 !important;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Inter", sans-serif !important;
+  letter-spacing: -0.5px;
+}
+
+.independence-heading .ct_orange {
+  color: #E37130 !important;
+
+}
+
+.independence-heading span {
+  font-weight: 800 !important;
+}
+
+.independence-heading .ct_green {
+  color: #2F6927 !important;
+  font-weight: 600 !important;
+}
+
+.independence-subheading {
+  color: #4A4A4A !important;
+  font-weight: 400 !important;
+  font-size: 17px !important;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Inter", sans-serif !important;
+  margin-top: 12px !important;
+}
+
+.independence-feature-card {
+  background: rgba(30, 30, 30, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.independence-feature-card:hover {
+  background: rgba(40, 40, 40, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.independence-tag {
+  background: rgba(30, 30, 30, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  backdrop-filter: blur(10px);
+}
+
+.independence-tag:hover {
+  background: rgba(50, 50, 50, 0.7) !important;
+}
+
+@media screen and (max-width:575px) {
+  .ct_independence_theme {
+    background-position: 28% !important;
+
+    background-size: cover !important;
+  }
+
+  .eti_suggestions {
+    gap: 5px !important;
+  }
+
+  .ct-model-dropdown-menu {
+    left: -60px !important;
+    width: 280px !important;
+    min-width: 280px !important;
+  }
 }

@@ -2,17 +2,66 @@
   <app-workspace-header></app-workspace-header>
 
   @if(!isChatMode){
-  <div class="main-ai-wrap ct_lightblue_shape_new_12 position-relative" style="overflow: hidden;">
+  <div class="main-ai-wrap position-relative" [class.ct_lightblue_shape_new_12]="!isIndependenceDayTheme"
+    [class.ct_independence_theme]="isIndependenceDayTheme" style="overflow: hidden;">
     <div class="main-ai-stage">
-      <div class="align-self-end">
+      <div class="align-self-end text-center">
+        @if(isIndependenceDayTheme) {
+        <div class="mb-3">
+          <span class="badge rounded-pill px-3 py-2 fw-medium d-inline-flex align-items-center gap-2"
+            style="background: rgb(255 255 255 / 34%); backdrop-filter: blur(10px); color: #4A4A4A; font-size: 14px;">
+            <svg width="20" height="14" viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+              <clipPath id="flag-clip">
+                <rect width="24" height="16" rx="3" />
+              </clipPath>
+              <g clip-path="url(#flag-clip)">
+                <rect width="24" height="5.33" fill="#FF9933" />
+                <rect y="5.33" width="24" height="5.33" fill="#FFFFFF" />
+                <rect y="10.66" width="24" height="5.33" fill="#138808" />
+                <circle cx="12" cy="8" r="1.5" fill="#000080" />
+              </g>
+            </svg>
+            Happy Independence Day, India!
+            <svg width="20" height="14" viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+              <clipPath id="flag-clip2">
+                <rect width="24" height="16" rx="3" />
+              </clipPath>
+              <g clip-path="url(#flag-clip2)">
+                <rect width="24" height="5.33" fill="#FF9933" />
+                <rect y="5.33" width="24" height="5.33" fill="#FFFFFF" />
+                <rect y="10.66" width="24" height="5.33" fill="#138808" />
+                <circle cx="12" cy="8" r="1.5" fill="#000080" />
+              </g>
+            </svg>
+          </span>
+        </div>
+        <h1 class="main-ai-heading independence-heading ct_inter">
+          <span style="display: block; padding-bottom: 5px;">What do you want to</span>
+          <span class="ct_orange">build</span>&nbsp;<span class="ct_green">today?</span>
+        </h1>
+        <p class="main-ai-subheading independence-subheading mt-2">Describe your idea and let AI turn it into a real
+          product in
+          seconds.</p>
+        } @else {
         <h1 class="main-ai-heading">What do you want to <span class="gradient-text ct_fw_700 ct_inter">build
             today?</span></h1>
         <p class="main-ai-subheading">Describe your idea and let AI turn it into a real product in seconds.</p>
+        }
       </div>
       <div class="position-relative " style="z-index: 1;">
         <!-- <img src="../../../../../assets/img/lightblue_shape_promp.png" alt="" class="ct_light_blue_shape_props"> -->
-
-        <div class="main-ai-composer">
+        <div class="main-ai-composer" [class.independence-composer]="isIndependenceDayTheme">
+          @if(isIndependenceDayTheme) {
+          <div class="text-center position-absolute"
+            style="z-index: 2; top: -35px; left: 50%; transform: translateX(-50%); pointer-events: none;">
+            <img src="assets/img/flag_curve_img.png" alt="Independence Day Flag"
+              style="height: 65px; object-fit: contain;" />
+          </div>
+          }
+          <!-- <img src=""> -->
+          <!-- @if(isIndependenceDayTheme) {
+          <div class="px-3 pt-3 text-white" style="font-size: 13px; font-weight: 500;">Generate</div>
+          } -->
           <textarea #promptInput class="main-ai-prompt-input" rows="5" [attr.placeholder]="activePlaceholder"
             [ngModel]="promptText" (ngModelChange)="onPromptChange($event)"
             (keydown)="handlePromptKeydown($event)"></textarea>
@@ -140,14 +189,17 @@
             </div>
 
             <div class="main-ai-right-actions d-flex align-items-center" style="gap: 12px;">
-              <span *ngIf="showWordLimitError" class="text-danger" style="font-size: 12px; font-weight: 500;">
+              @if(!isVoiceUiVisible && !isVoiceStarting){
+              <!-- <span *ngIf="showWordLimitError" class="text-danger" style="font-size: 12px; font-weight: 500;">
                 Word limit exceeded
-              </span>
+              </span> -->
               <span [ngStyle]="{'color': wordCount > 1000 ? '#dc3545' : '#888'}"
                 style="font-size: 12px; font-weight: 500;" class="pt_fs_10_res_575">
                 {{ wordCount }}/1000 words
               </span>
-              <button type="button" class="main-ai-submit-btn" aria-label="Continue" (click)="submitPrompt()">
+              }
+              <button type="button" class="main-ai-submit-btn" [class.independence-send-btn]="isIndependenceDayTheme"
+                aria-label="Continue" (click)="submitPrompt()">
 
                 ↑
 
@@ -158,12 +210,15 @@
 
         <div class="eti_suggestions">
           @for (suggestion of SUGGESTIONS; track suggestion) {
-          <div class="et_tag" (click)="usePromptIdea(suggestion.prompt)">
+          <div class="et_tag" (click)="usePromptIdea(suggestion.prompt)"
+            [class.independence-tag]="isIndependenceDayTheme">
             <span class="et_tag_icon">{{ suggestion.icon }}</span>
             {{ suggestion.label }}
           </div>
           }
         </div>
+
+
       </div>
     </div>
   </div>

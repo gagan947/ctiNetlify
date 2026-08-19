@@ -59,6 +59,10 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
   private resumeProbeSocket: any = null;
   private activePlaceholderIndex = 0;
   private activeVoiceSessionId = 0;
+
+  // Manual Flag for Independence Day Theme
+  isIndependenceDayTheme = true;
+
   SUGGESTIONS = [
     {
       icon: "🛵",

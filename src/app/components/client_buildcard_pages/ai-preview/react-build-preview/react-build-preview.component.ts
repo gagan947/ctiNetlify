@@ -89,7 +89,7 @@ declare var bootstrap: any;
   styleUrl: './react-build-preview.component.css'
 })
 export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
-  private readonly deployCreditsRequired = 100;
+  private readonly deployCreditsRequired = 60;
   private readonly downloadCodeCreditsRequired = 100;
   private readonly minChatPanelWidth = 320;
   private readonly maxChatPanelWidth = 720;
@@ -175,7 +175,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   selectedProjectId = '';
   subscriptionPlan!: SubscriptionResponse;
   isIframeLoading = true;
-  selectedDeviceType: string = '<i class="fa-solid fa-display"></i>';
+  selectedDeviceType: string = 'desktop';
   SearchCountryField = SearchCountryField;
   selectedCountry = CountryISO.India;
   isReactBuilding = true;
@@ -184,6 +184,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   loaderStatusText = 'Building...';
   buildStep = 0;
   templateExists = false;
+  templates: any[] = [];
   buildFlowType: BuildFlowType = 'initial';
   editorMode = false;
 
@@ -195,7 +196,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   pendingElementEdit: any = null;
   chatInput = '';
 
-
+  editCommentsArray: any = [];
   get loaderStepTitles(): string[] {
     if (this.buildFlowType === 'customize') {
       return [
@@ -747,6 +748,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       )
     );
     if (res.success) {
+      this.templates = res.data;
       this.templateExists = res.data.length > 0;
       return res.data;
     }
@@ -1885,21 +1887,29 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   }
 
   handleElementEdit(data: any) {
-    console.log('[CreativeAI Angular] ELEMENT EDIT:', data);
+    this.editCommentsArray?.push({
+      id: data?.element.id,
+      instruction: data?.instruction,
+      element: data.element,
+    })
 
-    this.pendingElementEdit = data;
+    console.log("editCommentsArray", this.editCommentsArray);
 
-    this.chatInput = data?.instruction || '';
+    // console.log('[CreativeAI Angular] ELEMENT EDIT:', data);
+    // this.pendingElementEdit = data;
+    // this.chatInput = data?.instruction || '';
+    // console.log(
+    //   '[CreativeAI Angular] pendingElementEdit:',
+    //   this.pendingElementEdit
+    // );
+    // console.log(
+    //   '[CreativeAI Angular] chatInput:',
+    //   this.chatInput
+    // );
+  }
 
-    console.log(
-      '[CreativeAI Angular] pendingElementEdit:',
-      this.pendingElementEdit
-    );
-
-    console.log(
-      '[CreativeAI Angular] chatInput:',
-      this.chatInput
-    );
+  removeEditComment(id: string) {
+    this.editCommentsArray = this.editCommentsArray.filter((x: any) => x.id != id)
   }
 
 
@@ -2116,15 +2126,15 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   onDeviceTypeChange(deviceType: string) {
     switch (deviceType) {
       case 'desktop':
-        this.selectedDeviceType = '<i class="fa-solid fa-display"></i>';
+        this.selectedDeviceType = deviceType
         this.previewWidth = 100
         break;
       case 'tablet':
-        this.selectedDeviceType = '<i class="fa-solid fa-tablet-screen-button"></i>';
+        this.selectedDeviceType = deviceType;
         this.previewWidth = 768
         break;
       case 'mobile':
-        this.selectedDeviceType = '<i class="fa-solid fa-mobile-screen"></i>';
+        this.selectedDeviceType = deviceType;
         this.previewWidth = 400
         break;
     }
@@ -3246,21 +3256,21 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         'Mapping the main screens and user flow',
         'Defining overall product specification'
       ],
-      1500,
-      800
+      6000,
+      4000
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
     this.hideLoader();
-    await this.pauseBetweenMajorSteps('Synthesizing prompt insights...', 600);
+    await this.pauseBetweenMajorSteps('Synthesizing prompt insights...', 3000);
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
 
     await this.addParagraphBlock(
       `The scope is clear now, so I’m moving into the actual build flow with structure first and code generation right after that.`,
-      500,
+      2000,
       'support'
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
@@ -3270,7 +3280,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.loaderProgress = 20;
     this.loaderStepIndex = 2;
     this.loaderStatusText = 'Initializing project...';
-    await this.addParagraphBlock('Initializing project...', 300, 'phase');
+    await this.addParagraphBlock('Initializing project...', 2000, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -3283,21 +3293,21 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         'Initializing React project shell',
         'Setting up the base environment'
       ],
-      1200,
-      600
+      6000,
+      4000
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
     this.hideLoader();
-    await this.pauseBetweenMajorSteps('Thinking through system setup...', 600);
+    await this.pauseBetweenMajorSteps('Thinking through system setup...', 3000);
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
 
     this.loaderProgress = 35;
     this.loaderStatusText = 'Creating structure...';
-    await this.addParagraphBlock('Creating structure...', 300, 'phase');
+    await this.addParagraphBlock('Creating structure...', 2000, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -3313,14 +3323,14 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         'hooks/',
         'context/'
       ],
-      1000,
-      500
+      6000,
+      3000
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
     this.hideLoader();
-    await this.pauseBetweenMajorSteps('Planning the first file generation batch...', 600);
+    await this.pauseBetweenMajorSteps('Planning the first file generation batch...', 3000);
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -3328,7 +3338,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.setBuildStep(2);
     this.loaderProgress = 45;
     this.loaderStatusText = 'Creating core files...';
-    await this.addParagraphBlock('Creating core files...', 300, 'phase');
+    await this.addParagraphBlock('Creating core files...', 2000, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -3343,21 +3353,21 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         'src/main.jsx',
         'src/App.jsx'
       ],
-      1200,
-      600
+      6000,
+      3000
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
     this.hideLoader();
-    await this.pauseBetweenMajorSteps('Reviewing generated foundation files...', 600);
+    await this.pauseBetweenMajorSteps('Reviewing generated foundation files...', 3000);
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
 
     this.loaderProgress = 55;
     this.loaderStatusText = 'Building UI...';
-    await this.addParagraphBlock('Building UI...', 300, 'phase');
+    await this.addParagraphBlock('Building UI...', 2000, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -3372,14 +3382,14 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         'useProjectData.js',
         'api.js'
       ],
-      1200,
-      600
+      6000,
+      3000
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
     this.hideLoader();
-    await this.pauseBetweenMajorSteps('Refining shared UI building blocks...', 600);
+    await this.pauseBetweenMajorSteps('Refining shared UI building blocks...', 3000);
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -3387,7 +3397,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.loaderStepIndex = 3;
     this.loaderProgress = 70;
     this.loaderStatusText = 'Generating screen-level page code...';
-    await this.addParagraphBlock('Creating pages...', 300, 'phase');
+    await this.addParagraphBlock('Creating pages...', 2000, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -3402,7 +3412,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       if (this.loaderProgress < 80) {
         this.loaderProgress++;
       }
-    }, 1500);
+    }, 3000);
 
     await this.waitForPageGenerationCompletion();
     clearInterval(pageGenInterval);
@@ -3412,7 +3422,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       return;
     }
     this.hideLoader();
-    await this.pauseBetweenMajorSteps('Checking page flow and navigation...', 600);
+    await this.pauseBetweenMajorSteps('Checking page flow and navigation...', 3000);
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -3421,7 +3431,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.loaderStepIndex = 4;
     this.loaderProgress = 85;
     this.loaderStatusText = 'Finalizing project build...';
-    await this.addParagraphBlock('Finalizing...', 300, 'phase');
+    await this.addParagraphBlock('Finalizing...', 2000, 'phase');
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
     }
@@ -3434,8 +3444,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         'Building preview bundle',
         'Deploying preview'
       ],
-      1500,
-      800
+      8000,
+      4000
     );
     if (!this.shouldContinueInitialFlow(flowRunId)) {
       return;
@@ -4372,9 +4382,76 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       !this.editorToolbarCollapsed;
   }
 
+
+  previewFiles: {
+    file: File;
+    previewUrl: string;
+    previewType: 'image' | 'video' | 'audio' | 'pdf';
+    fileName: string;
+  }[] = [];
+  handleFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    // Clear previous previews
+    this.previewFiles.forEach(item => {
+      URL.revokeObjectURL(item.previewUrl);
+    });
+
+    this.previewFiles = [];
+
+    Array.from(input.files).forEach((file: File) => {
+
+      let previewType: 'image' | 'video' | 'audio' | 'pdf' | null = null;
+
+      if (file.type.startsWith('image/')) {
+        previewType = 'image';
+
+      } else if (file.type.startsWith('video/')) {
+        previewType = 'video';
+
+      } else if (file.type.startsWith('audio/')) {
+        previewType = 'audio';
+
+      } else if (file.type === 'application/pdf') {
+        previewType = 'pdf';
+      }
+
+      if (!previewType) {
+        console.warn('Unsupported file type:', file.type);
+        return;
+      }
+
+      const previewUrl = URL.createObjectURL(file);
+
+      this.previewFiles.push({
+        file: file,
+        previewUrl: previewUrl,
+        previewType: previewType,
+        fileName: file.name
+      });
+    });
+
+    const activeDesign = this.templates.find((t: any) => t.inquiryId === this.selectedProjectId).templateId;
+
+    if (activeDesign && this.previewFiles.length > 0) {
+      const filesToUpload = this.previewFiles.map(item => item.file);
+      this.apiService.uploadCustomizeAssets(activeDesign, filesToUpload).subscribe({
+        next: (response) => {
+          console.log('Upload response:', response);
+        },
+        error: (error) => {
+          console.error('Error uploading files:', error);
+        }
+      });
+    }
+
+    input.value = '';
+  }
+
 }
-
-
-
 
 

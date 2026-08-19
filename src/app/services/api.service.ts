@@ -7,7 +7,7 @@ import { Subject, Observable, BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  // apiUrl = 'http://192.168.1.8:4500/'
+  apiUrl = 'http://192.168.1.165:4500/'
   // imageUrl = 'http://192.168.29.241:4500/'
   // apiUrl = 'http://192.168.1.40:4500/';
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
@@ -15,7 +15,7 @@ export class ApiService {
   imageUrl = 'https://api.creativethoughts.ai';
   // apiUrl = 'https://dev-api.creativethoughts.ai/';
   // imageUrl = 'https://dev-api.creativethoughts.ai';
-  apiUrl = 'http://localhost:4500/';
+  // apiUrl = 'http://localhost:4500/';
   // reactBuildURl = 'https://dev-api.creativethoughts.ai';
   reactBuildURl = 'https://api.creativethoughts.ai';
 
@@ -199,4 +199,13 @@ export class ApiService {
     this.triggerClearInput();
     this.triggerNewChat();
   }
+
+  uploadCustomizeAssets(projectId: string, files: File[]): import('rxjs').Observable<any> {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append('files', file);
+    });
+    return this.http.post(`${this.apiUrl}api/edit/project/${projectId}/customize/assets`, formData);
+  }
 }
+

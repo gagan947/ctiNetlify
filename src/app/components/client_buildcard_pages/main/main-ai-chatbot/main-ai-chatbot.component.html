@@ -1,5 +1,6 @@
-<div style="background-color: #000;">
-  <div class="main-ai-chat-shell ">
+<div [style.background-color]="isIndependenceDayTheme ? 'transparent' : '#000'"
+  [class.ct_independence_theme]="isIndependenceDayTheme">
+  <div class="main-ai-chat-shell">
     <div class="main-ai-chat-card w-100">
       <div #chatScroll class="main-ai-chat-scroll">
         @for(message of chatMessages; track $index){
@@ -116,9 +117,17 @@
         </div>
         }
       </div>
-      <div class="ct_lightblue_shape_new_12 position-relative">
+      <div class="position-relative" [class.ct_lightblue_shape_new_12]="!isIndependenceDayTheme">
         <div class="main-ai-chat-composer ">
-          <div class="main-ai-composer main-ai-chat-composer-box">
+          <div class="main-ai-composer main-ai-chat-composer-box"
+            [class.independence-composer]="isIndependenceDayTheme">
+            @if(isIndependenceDayTheme) {
+            <div class="text-center position-absolute"
+              style="z-index: 2; top: -35px; left: 50%; transform: translateX(-50%); pointer-events: none;">
+              <img src="assets/img/flag_curve_img.png" alt="Independence Day Flag"
+                style="height: 65px; object-fit: contain;" />
+            </div>
+            }
 
             <textarea #chatPromptInput class="main-ai-prompt-input main-ai-chat-input" rows="2"
               [attr.placeholder]="placeholderText" [disabled]="isRestoringConversation" [ngModel]="promptText"
@@ -248,15 +257,18 @@
               </div>
 
               <div class="main-ai-right-actions d-flex align-items-center" style="gap: 8px;">
-                <span *ngIf="showWordLimitError" class="text-danger" style="font-size: 12px; font-weight: 500;">
+                @if(!isVoiceUiVisible && !isVoiceStarting){
+                <!-- <span *ngIf="showWordLimitError" class="text-danger" style="font-size: 12px; font-weight: 500;">
                   Word limit exceeded
-                </span>
+                </span> -->
                 <span [ngStyle]="{'color': wordCount > 1000 ? '#dc3545' : '#888'}" class="pt_fs_10_res_575"
                   style="font-size: 12px; font-weight: 500;white-space: nowrap;">
                   {{ wordCount }}/1000 words
                 </span>
-                <button type="button" class="main-ai-submit-btn" aria-label="Send message"
-                  [disabled]="isSubmitting || isRestoringConversation" (click)="submitPrompt()">
+                }
+                <button type="button" class="main-ai-submit-btn" [class.independence-send-btn]="isIndependenceDayTheme"
+                  aria-label="Send message" [disabled]="isSubmitting || isRestoringConversation"
+                  (click)="submitPrompt()">
                   ↑
                 </button>
               </div>
@@ -264,6 +276,8 @@
           </div>
         </div>
       </div>
+
+
     </div>
 
     <div class="modal fade" id="insufficientCreditsModal" tabindex="-1" aria-hidden="true">

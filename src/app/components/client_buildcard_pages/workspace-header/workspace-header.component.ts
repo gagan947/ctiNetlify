@@ -34,17 +34,12 @@ interface UserProfileSummary {
   styleUrl: './workspace-header.component.css'
 })
 export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
-  @Input() fullScreen = false;
-  @Input() selectedDeviceType = '<i class="fa-solid fa-display"></i>';
-  @Input() showPreviewControls = false;
   @Input() showPrimaryHeaderAction = false;
   @Input() primaryHeaderActionLabel = 'Deploy';
   @Input() primaryHeaderActionIconClass = 'fa-solid fa-rocket';
   @Input() showSecondaryHeaderAction = false;
   @Input() secondaryHeaderActionLabel = 'Download';
   @Input() secondaryHeaderActionIconClass = 'fa-solid fa-download';
-  @Output() fullScreenToggle = new EventEmitter<void>();
-  @Output() deviceTypeChange = new EventEmitter<'desktop' | 'tablet' | 'mobile'>();
   @Output() primaryHeaderActionClick = new EventEmitter<void>();
   @Output() secondaryHeaderActionClick = new EventEmitter<void>();
   allProjectsList: UserProjectTab[] = [];
@@ -228,14 +223,6 @@ export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   openUserPlansModal(): void {
     this.closeProfileMenu();
     this.subscriptionModalService.openUserPlansModal();
-  }
-
-  handleFullScreenToggle(): void {
-    this.fullScreenToggle.emit();
-  }
-
-  handleDeviceTypeChange(deviceType: 'desktop' | 'tablet' | 'mobile'): void {
-    this.deviceTypeChange.emit(deviceType);
   }
 
   handlePrimaryHeaderActionClick(): void {
