@@ -29,106 +29,217 @@
                 </app-ai-dev-renderer>
             </div>
             <div class="ct_ai_input_box mt-auto">
+                <div class="et_text_chat_box_border">
 
-                <!-- Customization Suggestions Panel -->
-                <div *ngIf="(isSuggestionsLoading || suggestionsError || (currentSuggestions && currentSuggestions.categories && currentSuggestions.categories.length > 0))"
-                    class="ct_suggestions_panel" [class.ct_suggestions_panel--collapsed]="isSuggestionsCollapsed()">
+                    <!-- Customization Suggestions Panel -->
+                    <div *ngIf="(isSuggestionsLoading || suggestionsError || (currentSuggestions && currentSuggestions.categories && currentSuggestions.categories.length > 0))"
+                        class="ct_suggestions_panel" [class.ct_suggestions_panel--collapsed]="isSuggestionsCollapsed()">
 
-                    <!-- Loading Skeleton -->
-                    <div *ngIf="isSuggestionsLoading">
-                        <div class="ct_suggestions_header d-flex align-items-center justify-content-between"
-                            (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
-                            <div class="ct_suggestions_header_title">
-                                <div class="ct_sugg_main_icon">💡</div>
-                                <span class="fw-bold text-white">Agent is suggesting some feature enhancements</span>
+                        <!-- Loading Skeleton -->
+                        <div *ngIf="isSuggestionsLoading">
+                            <div class="ct_suggestions_header d-flex align-items-center justify-content-between"
+                                (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
+                                <div class="ct_suggestions_header_title">
+                                    <div class="ct_sugg_main_icon">💡</div>
+                                    <span class="fw-bold text-white">Agent is suggesting some feature
+                                        enhancements</span>
+                                </div>
+                                <button type="button" class="ct_suggestions_close_btn" aria-label="Toggle suggestions">
+                                    <i class="fa-solid"
+                                        [ngClass]="isSuggestionsCollapsed() ? 'fa-caret-down' : 'fa-caret-up'"></i>
+                                </button>
                             </div>
-                            <button type="button" class="ct_suggestions_close_btn" aria-label="Toggle suggestions">
-                                <i class="fa-solid"
-                                    [ngClass]="isSuggestionsCollapsed() ? 'fa-caret-down' : 'fa-caret-up'"></i>
-                            </button>
-                        </div>
-                        <div *ngIf="!isSuggestionsCollapsed()" class="ct_suggestion_loading_shimmer mt-2">
-                            <div class="ct_shimmer_bar" style="width: 40%"></div>
-                            <div class="ct_shimmer_bar mt-2"></div>
-                            <div class="ct_shimmer_bar ct_shimmer_bar_short mt-2"></div>
-                        </div>
-                    </div>
-
-                    <!-- Error Handling -->
-                    <div *ngIf="!isSuggestionsLoading && suggestionsError">
-                        <div class="ct_suggestions_header d-flex align-items-center justify-content-between"
-                            (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
-                            <div class="ct_suggestions_header_title text-danger">
-                                <div class="ct_sugg_main_icon bg-danger-subtle border-danger text-danger">⚠️</div>
-                                <span class="fw-bold">Failed to load suggestions</span>
+                            <div *ngIf="!isSuggestionsCollapsed()" class="ct_suggestion_loading_shimmer mt-2">
+                                <div class="ct_shimmer_bar" style="width: 40%"></div>
+                                <div class="ct_shimmer_bar mt-2"></div>
+                                <div class="ct_shimmer_bar ct_shimmer_bar_short mt-2"></div>
                             </div>
-                            <button type="button" class="ct_suggestions_close_btn" aria-label="Toggle suggestions">
-                                <i class="fa-solid"
-                                    [ngClass]="isSuggestionsCollapsed() ? 'fa-caret-down' : 'fa-caret-up'"></i>
-                            </button>
                         </div>
-                        <div *ngIf="!isSuggestionsCollapsed()" class="text-center py-2 text-danger opacity-75"
-                            style="font-size: 12.5px;">
-                            {{ suggestionsError }}
-                        </div>
-                    </div>
 
-                    <!-- Suggestions Content -->
-                    <div
-                        *ngIf="!isSuggestionsLoading && !suggestionsError && currentSuggestions && currentSuggestions.categories && currentSuggestions.categories.length > 0">
-                        <div class="ct_suggestions_header d-flex align-items-center justify-content-between"
-                            (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
-                            <div class="ct_suggestions_header_title">
-                                <div class="ct_sugg_main_icon">💡</div>
-                                <span class="fw-bold text-white">Agent is suggesting some feature enhancements</span>
+                        <!-- Error Handling -->
+                        <div *ngIf="!isSuggestionsLoading && suggestionsError">
+                            <div class="ct_suggestions_header d-flex align-items-center justify-content-between"
+                                (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
+                                <div class="ct_suggestions_header_title text-danger">
+                                    <div class="ct_sugg_main_icon bg-danger-subtle border-danger text-danger">⚠️</div>
+                                    <span class="fw-bold">Failed to load suggestions</span>
+                                </div>
+                                <button type="button" class="ct_suggestions_close_btn" aria-label="Toggle suggestions">
+                                    <i class="fa-solid"
+                                        [ngClass]="isSuggestionsCollapsed() ? 'fa-caret-down' : 'fa-caret-up'"></i>
+                                </button>
                             </div>
-                            <button type="button" class="ct_suggestions_close_btn" aria-label="Toggle suggestions">
-                                <i class="fa-solid"
-                                    [ngClass]="isSuggestionsCollapsed() ? 'fa-caret-down' : 'fa-caret-up'"></i>
-                            </button>
+                            <div *ngIf="!isSuggestionsCollapsed()" class="text-center py-2 text-danger opacity-75"
+                                style="font-size: 12.5px;">
+                                {{ suggestionsError }}
+                            </div>
                         </div>
 
-                        <div *ngIf="!isSuggestionsCollapsed()" class="ct_suggestions_categories">
-                            <div *ngFor="let cat of currentSuggestions.categories; let catIndex = index"
-                                class="ct_suggestions_cat_item">
-                                <div class="ct_suggestions_cat_header d-flex align-items-center justify-content-between"
-                                    (click)="toggleCategory(cat.title)">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="ct_sugg_cat_icon">
-                                            <span>{{ getCategoryIcon(cat.title) }}</span>
+                        <!-- Suggestions Content -->
+                        <div
+                            *ngIf="!isSuggestionsLoading && !suggestionsError && currentSuggestions && currentSuggestions.categories && currentSuggestions.categories.length > 0">
+                            <div class="ct_suggestions_header d-flex align-items-center justify-content-between"
+                                (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
+                                <div class="ct_suggestions_header_title">
+                                    <div class="ct_sugg_main_icon">💡</div>
+                                    <span class="fw-bold text-white">Agent is suggesting some feature
+                                        enhancements</span>
+                                </div>
+                                <button type="button" class="ct_suggestions_close_btn" aria-label="Toggle suggestions">
+                                    <i class="fa-solid"
+                                        [ngClass]="isSuggestionsCollapsed() ? 'fa-caret-down' : 'fa-caret-up'"></i>
+                                </button>
+                            </div>
+
+                            <div *ngIf="!isSuggestionsCollapsed()" class="ct_suggestions_categories">
+                                <div *ngFor="let cat of currentSuggestions.categories; let catIndex = index"
+                                    class="ct_suggestions_cat_item">
+                                    <div class="ct_suggestions_cat_header d-flex align-items-center justify-content-between"
+                                        (click)="toggleCategory(cat.title)">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="ct_sugg_cat_icon">
+                                                <span>{{ getCategoryIcon(cat.title) }}</span>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <span class="ct_suggestions_cat_title">{{ cat.title }}</span>
+                                                <span class="ct_suggestions_cat_subtitle">{{
+                                                    getCategorySubtitle(cat.title)
+                                                    }}</span>
+                                            </div>
                                         </div>
-                                        <div class="d-flex flex-column">
-                                            <span class="ct_suggestions_cat_title">{{ cat.title }}</span>
-                                            <span class="ct_suggestions_cat_subtitle">{{ getCategorySubtitle(cat.title)
-                                                }}</span>
+                                        <i class="fa-solid ct_suggestions_cat_chevron"
+                                            [ngClass]="isCategoryExpanded(cat.title) ? 'fa-caret-up' : 'fa-caret-down'"></i>
+                                    </div>
+                                    <div *ngIf="isCategoryExpanded(cat.title)" class="ct_suggestions_list">
+                                        <div *ngFor="let sug of cat.suggestions"
+                                            class="ct_suggestions_item d-flex align-items-center gap-2"
+                                            (click)="selectSuggestion(sug)">
+                                            <button type="button" class="ct_suggestions_add_btn"
+                                                aria-label="Apply suggestion">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                            <span class="ct_suggestion_text">{{ sug.title }}</span>
                                         </div>
                                     </div>
-                                    <i class="fa-solid ct_suggestions_cat_chevron"
-                                        [ngClass]="isCategoryExpanded(cat.title) ? 'fa-caret-up' : 'fa-caret-down'"></i>
-                                </div>
-                                <div *ngIf="isCategoryExpanded(cat.title)" class="ct_suggestions_list">
-                                    <div *ngFor="let sug of cat.suggestions"
-                                        class="ct_suggestions_item d-flex align-items-center gap-2"
-                                        (click)="selectSuggestion(sug)">
-                                        <button type="button" class="ct_suggestions_add_btn"
-                                            aria-label="Apply suggestion">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </button>
-                                        <span class="ct_suggestion_text">{{ sug.title }}</span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="ct_ai_input_shell px-0" [class.ct_suggestions_active]="hasVisibleSuggestions()">
-                    <textarea [disabled]="isReactBuilding" #customizeInput class="ct_ai_textarea px-3" rows="3"
-                        placeholder="Shape This Template Your Way"
-                        (keydown)="handlePromptKeydown($event, 'customize_template', customizeInput.value)"></textarea>
-                    <div class="d-flex align-items-center justify-content-between gap-2 px-3">
-                        <div class="d-flex align-items-center gap-2 ">
-                            <!-- <div *ngIf="isModelDropdownOpen" (click)="isModelDropdownOpen = false" class="position-fixed top-0 start-0 w-100 h-100" style="z-index: 999;"></div>
+                    <div class="ct_ai_input_shell px-0" [class.ct_suggestions_active]="hasVisibleSuggestions()">
+                        <div class="d-flex align-items-center gap-2 preview-container">
+                            <div *ngFor="let item of previewFiles" class="file-preview">
+
+                                <!-- Image -->
+                                <div class="position-relative eti_file_hover_main" *ngIf="item.previewType === 'image'">
+                                    <i class="fa-solid fa-xmark ct_preview_close_btn"></i>
+                                    <img [src]="item.previewUrl" alt="Image Preview" class="preview-image" />
+                                </div>
+
+                                <!-- Video -->
+                                <div class="position-relative eti_file_hover_main" *ngIf="item.previewType === 'video'">
+                                    <i class="fa-solid fa-xmark ct_preview_close_btn"></i>
+                                    <video [src]="item.previewUrl" class="preview-video">
+                                    </video>
+                                </div>
+
+                                <!-- Audio -->
+                                <div class="position-relative eti_file_hover_main" *ngIf="item.previewType === 'audio'">
+                                    <i class="fa-solid fa-xmark ct_preview_close_btn"></i>
+                                    <!-- <audio *ngIf="item.previewType === 'audio'" controls [src]="item.previewUrl"
+                                    style="width: 230px; border-radius: 100px;" class="preview-audio">
+                                </audio> -->
+                                    <div class="eti-file-card">
+                                        <div class="eti-file-card__icon">
+                                            <!-- Audio file icon -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path
+                                                    d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                                                <polyline points="14 2 14 8 20 8" />
+                                                <path d="M10 18a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                                                <path d="M11.5 16.5V12h3" />
+                                            </svg>
+                                        </div>
+                                        <div class="eti-file-card__details">
+                                            <span class="eti-file-card__name"
+                                                [title]="item.fileName">{{item.fileName}}</span>
+                                            <span class="eti-file-card__type">MP3</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- PDF -->
+                                <div class="position-relative eti_file_hover_main" *ngIf="item.previewType === 'pdf'">
+                                    <i class="fa-solid fa-xmark ct_preview_close_btn"></i>
+                                    <!-- <iframe *ngIf="item.previewType === 'pdf'" [src]="item.previewUrl"
+                                    class="preview-pdf">
+                                </iframe> -->
+                                    <div class="eti-file-card">
+                                        <div class="eti-file-card__icon">
+                                            <!-- Audio file icon -->
+                                            <svg viewBox="0 0 24 24" fill="currentColor"
+                                                xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
+                                                class="shrink-0 text-muted-foreground/70 h-8 w-8 md:h-7 md:w-7"
+                                                aria-hidden="true" data-default-size="">
+                                                <path
+                                                    d="M15 16.25C15.4142 16.25 15.75 16.5858 15.75 17C15.75 17.4142 15.4142 17.75 15 17.75H9C8.58579 17.75 8.25 17.4142 8.25 17C8.25 16.5858 8.58579 16.25 9 16.25H15ZM12 12.25C12.4142 12.25 12.75 12.5858 12.75 13C12.75 13.4142 12.4142 13.75 12 13.75H9C8.58579 13.75 8.25 13.4142 8.25 13C8.25 12.5858 8.58579 12.25 9 12.25H12ZM19.75 18C19.75 20.0711 18.0711 21.75 16 21.75H8C5.92893 21.75 4.25 20.0711 4.25 18V6C4.25 3.92893 5.92893 2.25 8 2.25H13C13.1989 2.25 13.3896 2.32907 13.5303 2.46973L19.5303 8.46973C19.6709 8.61038 19.75 8.80109 19.75 9V18ZM5.75 18C5.75 19.2426 6.75736 20.25 8 20.25H16C17.2426 20.25 18.25 19.2426 18.25 18V9.75H16C13.9289 9.75 12.25 8.07107 12.25 6V3.75H8C6.75736 3.75 5.75 4.75736 5.75 6V18ZM13.75 6C13.75 7.24264 14.7574 8.25 16 8.25H17.1895L13.75 4.81055V6Z"
+                                                    fill="currentColor"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="eti-file-card__details">
+                                            <span class="eti-file-card__name"
+                                                [title]="item.fileName">{{item.fileName}}</span>
+                                            <span class="eti-file-card__type">PDF</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="position-relative ">
+                            <div class="eti-wrapper">
+                                @if(editCommentsArray.length > 0){
+                                <div class="ct_edit_comments align-items-center justify-content-between gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M8 15.4286C12.1029 15.4286 15.4286 12.1028 15.4286 7.99999C15.4286 3.89714 12.1029 0.571426 8 0.571426C3.89715 0.571426 0.571437 3.89714 0.571437 7.99999C0.568801 9.80047 1.22268 11.5401 2.41058 12.8931L1.14286 15.4286H8Z"
+                                                fill="transparent" fill-opacity="0.4"></path>
+                                            <path
+                                                d="M2.41058 12.8931L2.92172 13.1489C2.9725 13.0473 2.99188 12.9329 2.97737 12.8203C2.96287 12.7077 2.91515 12.6019 2.84029 12.5166L2.41058 12.8931ZM1.14286 15.4286L0.631721 15.1731C0.588188 15.2603 0.567643 15.3571 0.572037 15.4543C0.576431 15.5516 0.605618 15.6462 0.656828 15.729C0.708038 15.8119 0.77957 15.8802 0.864635 15.9277C0.9497 15.9751 1.04547 16 1.14286 16V15.4286ZM14.8571 8C14.8571 11.7871 11.7871 14.8571 8 14.8571V16C12.4183 16 16 12.4183 16 8H14.8571ZM8 1.14286C11.7871 1.14286 14.8571 4.21286 14.8571 8H16C16 3.58171 12.4183 0 8 0V1.14286ZM1.14286 8C1.14286 4.21286 4.21286 1.14286 8 1.14286V0C3.58172 0 7.24204e-06 3.58171 7.24204e-06 8H1.14286ZM2.84029 12.5166C1.74372 11.2678 1.1402 9.66192 1.14286 8H7.24204e-06C-0.00260515 9.93902 0.701633 11.8125 1.98086 13.2697L2.84029 12.5166ZM1.65429 15.684L2.92172 13.1489L1.89972 12.6374L0.631721 15.1731L1.65429 15.684ZM8 14.8571H1.14286V16H8V14.8571Z"
+                                                fill="currentColor"></path>
+                                        </svg>
+                                        <span>{{editCommentsArray.length}} {{editCommentsArray.length > 1 ? 'Edits' :
+                                            'Edit'}} </span>
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </div>
+                                </div>
+                                }
+
+                                <div class="eti-comments">
+                                    @for (item of editCommentsArray; track $index) {
+                                    <div class="eti-comment">
+                                        <span class="eti-number">{{$index + 1}}</span>
+                                        <div class="eti-content">
+                                            <span class="eti-text">{{item.instruction}}</span>
+                                        </div>
+                                        <i class="fa-solid fa-xmark" (click)="removeEditComment(item.id)"></i>
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                            <textarea [disabled]="isReactBuilding" #customizeInput class="ct_ai_textarea px-3" rows="3"
+                                [placeholder]="editCommentsArray.length > 0 ? '' : 'Shape This Template Your Way'"
+                                (keydown)="handlePromptKeydown($event, 'customize_template', customizeInput.value)"></textarea>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between gap-2 px-3">
+                            <div class="d-flex align-items-center gap-2 ">
+                                <!-- <div *ngIf="isModelDropdownOpen" (click)="isModelDropdownOpen = false" class="position-fixed top-0 start-0 w-100 h-100" style="z-index: 999;"></div>
 
                             <div class="position-relative me-1" style="z-index: 1000;">
                                 <button type="button" class="ct_mic_icon_30 d-flex align-items-center justify-content-between gap-2 px-3 text-white" 
@@ -149,52 +260,57 @@
                                        (click)="selectedAiModel = 'claude'; isModelDropdownOpen = false;">Claude</a>
                                 </div>
                             </div> -->
-                            <!-- <button type="button" class="ct_mic_icon_30 ct_mic_icon_30_voice">
-                                <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_1290_384)">
-                                        <path
-                                            d="M19.3251 9.2224C19.2397 9.13278 19.1296 9.07054 19.0088 9.04356C18.888 9.01657 18.7619 9.02607 18.6465 9.07083C18.5311 9.1156 18.4316 9.19362 18.3606 9.29501C18.2896 9.39639 18.2503 9.51658 18.2477 9.64033L18.0676 17.763C18.0491 18.5917 17.7021 19.3791 17.103 19.9519C16.8063 20.2356 16.4567 20.458 16.0741 20.6066C15.6915 20.7551 15.2834 20.8268 14.873 20.8177C14.4627 20.8085 14.0582 20.7185 13.6826 20.553C13.307 20.3875 12.9677 20.1496 12.6841 19.853C12.4004 19.5564 12.178 19.2067 12.0294 18.8241C11.8809 18.4415 11.8092 18.0334 11.8184 17.6231L12.0282 8.25095C12.0412 7.92345 12.1824 7.61417 12.4212 7.38972C12.6601 7.16527 12.9775 7.04362 13.3052 7.05095C13.6329 7.05829 13.9446 7.19403 14.1731 7.42894C14.4017 7.66386 14.5288 7.97914 14.5272 8.3069L14.3174 17.679C14.3155 17.7612 14.3299 17.8429 14.3596 17.9195C14.3894 17.9961 14.4339 18.0661 14.4907 18.1255C14.5475 18.1849 14.6154 18.2325 14.6906 18.2657C14.7658 18.2988 14.8468 18.3168 14.929 18.3187C15.0111 18.3205 15.0929 18.3061 15.1695 18.2764C15.2461 18.2467 15.3161 18.2021 15.3755 18.1453C15.4349 18.0885 15.4825 18.0206 15.5156 17.9454C15.5488 17.8702 15.5668 17.7892 15.5686 17.707L15.7776 8.33401C15.7908 8.00231 15.7378 7.67131 15.6217 7.36031C15.5056 7.04931 15.3288 6.76455 15.1014 6.52264C14.8741 6.28072 14.6009 6.08651 14.2977 5.95132C13.9945 5.81613 13.6674 5.74268 13.3355 5.73525C13.0037 5.72782 12.6736 5.78656 12.3647 5.90804C12.0558 6.02952 11.7741 6.21132 11.5362 6.44281C11.2983 6.67431 11.1088 6.95087 10.9789 7.25636C10.849 7.56185 10.7813 7.89015 10.7796 8.22211L10.5698 17.5942C10.5438 18.7543 10.9797 19.8772 11.7817 20.7159C12.5836 21.5546 13.6859 22.0403 14.846 22.0663C16.0061 22.0923 17.129 21.6563 17.9676 20.8544C18.8063 20.0524 19.2921 18.9502 19.318 17.7901L19.4981 9.66921C19.4998 9.58709 19.4854 9.50544 19.4555 9.42892C19.4257 9.3524 19.3819 9.28165 19.3251 9.2224Z"
-                                            fill="white" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_1290_384">
-                                            <rect width="20" height="20" fill="white"
-                                                transform="translate(28.2772 14.4552) rotate(136.283)" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                            </button> -->
-                            <button type="button" class="ct_mic_icon_30" style="background-color: #4140B2;"
-                                [class.is-starting]="isVoiceStarting"
-                                [class.is-listening]="isVoiceUiVisible || speechService.isListening"
-                                [disabled]="isReactBuilding || isVoiceStarting"
-                                [attr.aria-label]="isVoiceUiVisible ? 'Voice input active' : isVoiceStarting ? 'Voice input is starting' : 'Start voice input'"
-                                (click)="startVoiceTyping()">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_1290_387)">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M7.99992 1.33333C6.51259 1.33333 5.33325 2.50467 5.33325 3.88533V8.11467C5.33325 9.49467 6.51259 10.6667 7.99992 10.6667C9.48725 10.6667 10.6666 9.49467 10.6666 8.11467V3.88533C10.6666 2.50533 9.48725 1.33333 7.99992 1.33333Z"
-                                            fill="white" />
-                                        <path
-                                            d="M8.66667 13.9633V15.3333C8.66667 15.5101 8.59643 15.6797 8.4714 15.8047C8.34638 15.9298 8.17681 16 8 16C7.82319 16 7.65362 15.9298 7.5286 15.8047C7.40357 15.6797 7.33333 15.5101 7.33333 15.3333V13.9633C5.86652 13.7993 4.51162 13.1005 3.5277 12.0003C2.54378 10.9002 1.99988 9.47595 2 8C2 7.82319 2.07024 7.65362 2.19526 7.5286C2.32029 7.40357 2.48986 7.33334 2.66667 7.33334C2.84348 7.33334 3.01305 7.40357 3.13807 7.5286C3.2631 7.65362 3.33333 7.82319 3.33333 8C3.33333 8.61284 3.45404 9.21967 3.68856 9.78586C3.92308 10.352 4.26683 10.8665 4.70017 11.2998C5.13351 11.7332 5.64796 12.0769 6.21414 12.3114C6.78033 12.546 7.38716 12.6667 8 12.6667C8.61284 12.6667 9.21967 12.546 9.78586 12.3114C10.352 12.0769 10.8665 11.7332 11.2998 11.2998C11.7332 10.8665 12.0769 10.352 12.3114 9.78586C12.546 9.21967 12.6667 8.61284 12.6667 8C12.6667 7.82319 12.7369 7.65362 12.8619 7.5286C12.987 7.40357 13.1565 7.33334 13.3333 7.33334C13.5101 7.33334 13.6797 7.40357 13.8047 7.5286C13.9298 7.65362 14 7.82319 14 8C14.0001 9.47595 13.4562 10.9002 12.4723 12.0003C11.4884 13.1005 10.1335 13.7993 8.66667 13.9633Z"
-                                            fill="white" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_1290_387">
-                                            <rect width="16" height="16" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
+                                <button type="button" class="ct_mic_icon_30 ct_mic_icon_30_voice"
+                                    (click)="fileInput.click()">
+                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g clip-path="url(#clip0_1290_384)">
+                                            <path
+                                                d="M19.3251 9.2224C19.2397 9.13278 19.1296 9.07054 19.0088 9.04356C18.888 9.01657 18.7619 9.02607 18.6465 9.07083C18.5311 9.1156 18.4316 9.19362 18.3606 9.29501C18.2896 9.39639 18.2503 9.51658 18.2477 9.64033L18.0676 17.763C18.0491 18.5917 17.7021 19.3791 17.103 19.9519C16.8063 20.2356 16.4567 20.458 16.0741 20.6066C15.6915 20.7551 15.2834 20.8268 14.873 20.8177C14.4627 20.8085 14.0582 20.7185 13.6826 20.553C13.307 20.3875 12.9677 20.1496 12.6841 19.853C12.4004 19.5564 12.178 19.2067 12.0294 18.8241C11.8809 18.4415 11.8092 18.0334 11.8184 17.6231L12.0282 8.25095C12.0412 7.92345 12.1824 7.61417 12.4212 7.38972C12.6601 7.16527 12.9775 7.04362 13.3052 7.05095C13.6329 7.05829 13.9446 7.19403 14.1731 7.42894C14.4017 7.66386 14.5288 7.97914 14.5272 8.3069L14.3174 17.679C14.3155 17.7612 14.3299 17.8429 14.3596 17.9195C14.3894 17.9961 14.4339 18.0661 14.4907 18.1255C14.5475 18.1849 14.6154 18.2325 14.6906 18.2657C14.7658 18.2988 14.8468 18.3168 14.929 18.3187C15.0111 18.3205 15.0929 18.3061 15.1695 18.2764C15.2461 18.2467 15.3161 18.2021 15.3755 18.1453C15.4349 18.0885 15.4825 18.0206 15.5156 17.9454C15.5488 17.8702 15.5668 17.7892 15.5686 17.707L15.7776 8.33401C15.7908 8.00231 15.7378 7.67131 15.6217 7.36031C15.5056 7.04931 15.3288 6.76455 15.1014 6.52264C14.8741 6.28072 14.6009 6.08651 14.2977 5.95132C13.9945 5.81613 13.6674 5.74268 13.3355 5.73525C13.0037 5.72782 12.6736 5.78656 12.3647 5.90804C12.0558 6.02952 11.7741 6.21132 11.5362 6.44281C11.2983 6.67431 11.1088 6.95087 10.9789 7.25636C10.849 7.56185 10.7813 7.89015 10.7796 8.22211L10.5698 17.5942C10.5438 18.7543 10.9797 19.8772 11.7817 20.7159C12.5836 21.5546 13.6859 22.0403 14.846 22.0663C16.0061 22.0923 17.129 21.6563 17.9676 20.8544C18.8063 20.0524 19.2921 18.9502 19.318 17.7901L19.4981 9.66921C19.4998 9.58709 19.4854 9.50544 19.4555 9.42892C19.4257 9.3524 19.3819 9.28165 19.3251 9.2224Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_1290_384">
+                                                <rect width="20" height="20" fill="white"
+                                                    transform="translate(28.2772 14.4552) rotate(136.283)" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                </button>
+                                <input type="file" class="d-none" #fileInput multiple
+                                    (change)="handleFileChange($event)"
+                                    accept="image/*,video/*,audio/*,.pdf,application/pdf">
+                                <button type="button" class="ct_mic_icon_30" style="background-color: #4140B2;"
+                                    [class.is-starting]="isVoiceStarting"
+                                    [class.is-listening]="isVoiceUiVisible || speechService.isListening"
+                                    [disabled]="isReactBuilding || isVoiceStarting"
+                                    [attr.aria-label]="isVoiceUiVisible ? 'Voice input active' : isVoiceStarting ? 'Voice input is starting' : 'Start voice input'"
+                                    (click)="startVoiceTyping()">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g clip-path="url(#clip0_1290_387)">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M7.99992 1.33333C6.51259 1.33333 5.33325 2.50467 5.33325 3.88533V8.11467C5.33325 9.49467 6.51259 10.6667 7.99992 10.6667C9.48725 10.6667 10.6666 9.49467 10.6666 8.11467V3.88533C10.6666 2.50533 9.48725 1.33333 7.99992 1.33333Z"
+                                                fill="white" />
+                                            <path
+                                                d="M8.66667 13.9633V15.3333C8.66667 15.5101 8.59643 15.6797 8.4714 15.8047C8.34638 15.9298 8.17681 16 8 16C7.82319 16 7.65362 15.9298 7.5286 15.8047C7.40357 15.6797 7.33333 15.5101 7.33333 15.3333V13.9633C5.86652 13.7993 4.51162 13.1005 3.5277 12.0003C2.54378 10.9002 1.99988 9.47595 2 8C2 7.82319 2.07024 7.65362 2.19526 7.5286C2.32029 7.40357 2.48986 7.33334 2.66667 7.33334C2.84348 7.33334 3.01305 7.40357 3.13807 7.5286C3.2631 7.65362 3.33333 7.82319 3.33333 8C3.33333 8.61284 3.45404 9.21967 3.68856 9.78586C3.92308 10.352 4.26683 10.8665 4.70017 11.2998C5.13351 11.7332 5.64796 12.0769 6.21414 12.3114C6.78033 12.546 7.38716 12.6667 8 12.6667C8.61284 12.6667 9.21967 12.546 9.78586 12.3114C10.352 12.0769 10.8665 11.7332 11.2998 11.2998C11.7332 10.8665 12.0769 10.352 12.3114 9.78586C12.546 9.21967 12.6667 8.61284 12.6667 8C12.6667 7.82319 12.7369 7.65362 12.8619 7.5286C12.987 7.40357 13.1565 7.33334 13.3333 7.33334C13.5101 7.33334 13.6797 7.40357 13.8047 7.5286C13.9298 7.65362 14 7.82319 14 8C14.0001 9.47595 13.4562 10.9002 12.4723 12.0003C11.4884 13.1005 10.1335 13.7993 8.66667 13.9633Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_1290_387">
+                                                <rect width="16" height="16" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                </button>
+                            </div>
+                            <button type="button" class="ct_ai_input_submit"
+                                style="width: 30px; height: 30px; flex: 0 0 30px;"
+                                (click)="handlePromptSubmitted({'blockId': 'customize_template', 'value': customizeInput.value}); customizeInput.value = ''">
+                                <i class="fa-solid"
+                                    [ngClass]="{'fa-stop': isReactBuilding, 'fa-arrow-up': !isReactBuilding}"></i>
                             </button>
                         </div>
-                        <button type="button" class="ct_ai_input_submit"
-                            style="width: 30px; height: 30px; flex: 0 0 30px;"
-                            (click)="handlePromptSubmitted({'blockId': 'customize_template', 'value': customizeInput.value}); customizeInput.value = ''">
-                            <i class="fa-solid"
-                                [ngClass]="{'fa-stop': isReactBuilding, 'fa-arrow-up': !isReactBuilding}"></i>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -218,7 +334,40 @@
 
                                 <div class="creative-editor-toolbar">
 
+
+                                    <div class="eti-wrapper me-2">
+                                        @if(editCommentsArray.length > 0){
+                                        <div
+                                            class="ct_edit_comments position-relative align-items-center justify-content-between gap-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M8 15.4286C12.1029 15.4286 15.4286 12.1028 15.4286 7.99999C15.4286 3.89714 12.1029 0.571426 8 0.571426C3.89715 0.571426 0.571437 3.89714 0.571437 7.99999C0.568801 9.80047 1.22268 11.5401 2.41058 12.8931L1.14286 15.4286H8Z"
+                                                        fill="transparent" fill-opacity="0.4"></path>
+                                                    <path
+                                                        d="M2.41058 12.8931L2.92172 13.1489C2.9725 13.0473 2.99188 12.9329 2.97737 12.8203C2.96287 12.7077 2.91515 12.6019 2.84029 12.5166L2.41058 12.8931ZM1.14286 15.4286L0.631721 15.1731C0.588188 15.2603 0.567643 15.3571 0.572037 15.4543C0.576431 15.5516 0.605618 15.6462 0.656828 15.729C0.708038 15.8119 0.77957 15.8802 0.864635 15.9277C0.9497 15.9751 1.04547 16 1.14286 16V15.4286ZM14.8571 8C14.8571 11.7871 11.7871 14.8571 8 14.8571V16C12.4183 16 16 12.4183 16 8H14.8571ZM8 1.14286C11.7871 1.14286 14.8571 4.21286 14.8571 8H16C16 3.58171 12.4183 0 8 0V1.14286ZM1.14286 8C1.14286 4.21286 4.21286 1.14286 8 1.14286V0C3.58172 0 7.24204e-06 3.58171 7.24204e-06 8H1.14286ZM2.84029 12.5166C1.74372 11.2678 1.1402 9.66192 1.14286 8H7.24204e-06C-0.00260515 9.93902 0.701633 11.8125 1.98086 13.2697L2.84029 12.5166ZM1.65429 15.684L2.92172 13.1489L1.89972 12.6374L0.631721 15.1731L1.65429 15.684ZM8 14.8571H1.14286V16H8V14.8571Z"
+                                                        fill="currentColor"></path>
+                                                </svg>
+                                                <span>{{editCommentsArray.length}}</span>
+                                            </div>
+                                        </div>
+                                        }
+
+                                        <div class="eti-comments">
+                                            @for (item of editCommentsArray; track $index) {
+                                            <div class="eti-comment">
+                                                <span class="eti-number">{{$index + 1}}</span>
+                                                <div class="eti-content">
+                                                    <span class="eti-text">{{item.instruction}}</span>
+                                                </div>
+                                                <i class="fa-solid fa-xmark" (click)="removeEditComment(item.id)"></i>
+                                            </div>
+                                            }
+                                        </div>
+                                    </div>
                                     <!-- Edit -->
+                                    @if(editCommentsArray.length == 0){
                                     <button type="button" class="creative-toolbar-edit" [class.active]="editorMode"
                                         (click)="toggleEditorMode()">
 
@@ -236,8 +385,7 @@
                                         <span>Edit</span>
 
                                     </button>
-
-
+                                    }
                                     <!-- Desktop -->
                                     @switch (selectedDeviceType) {
                                     @case ('desktop') {

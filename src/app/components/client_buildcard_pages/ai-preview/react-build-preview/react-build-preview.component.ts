@@ -187,7 +187,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   pendingElementEdit: any = null;
   chatInput = '';
 
-
+  editCommentsArray: any = [];
   get loaderStepTitles(): string[] {
     if (this.buildFlowType === 'customize') {
       return [
@@ -1716,21 +1716,29 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   }
 
   handleElementEdit(data: any) {
-    console.log('[CreativeAI Angular] ELEMENT EDIT:', data);
+    this.editCommentsArray?.push({
+      id: data?.element.id,
+      instruction: data?.instruction,
+      element: data.element,
+    })
 
-    this.pendingElementEdit = data;
+    console.log("editCommentsArray", this.editCommentsArray);
 
-    this.chatInput = data?.instruction || '';
+    // console.log('[CreativeAI Angular] ELEMENT EDIT:', data);
+    // this.pendingElementEdit = data;
+    // this.chatInput = data?.instruction || '';
+    // console.log(
+    //   '[CreativeAI Angular] pendingElementEdit:',
+    //   this.pendingElementEdit
+    // );
+    // console.log(
+    //   '[CreativeAI Angular] chatInput:',
+    //   this.chatInput
+    // );
+  }
 
-    console.log(
-      '[CreativeAI Angular] pendingElementEdit:',
-      this.pendingElementEdit
-    );
-
-    console.log(
-      '[CreativeAI Angular] chatInput:',
-      this.chatInput
-    );
+  removeEditComment(id: string) {
+    this.editCommentsArray = this.editCommentsArray.filter((x: any) => x.id != id)
   }
 
 
@@ -4203,9 +4211,62 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       !this.editorToolbarCollapsed;
   }
 
+
+  previewFiles: {
+    file: File;
+    previewUrl: string;
+    previewType: 'image' | 'video' | 'audio' | 'pdf';
+    fileName: string;
+  }[] = [];
+  handleFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    // Clear previous previews
+    this.previewFiles.forEach(item => {
+      URL.revokeObjectURL(item.previewUrl);
+    });
+
+    this.previewFiles = [];
+
+    Array.from(input.files).forEach((file: File) => {
+
+      let previewType: 'image' | 'video' | 'audio' | 'pdf' | null = null;
+
+      if (file.type.startsWith('image/')) {
+        previewType = 'image';
+
+      } else if (file.type.startsWith('video/')) {
+        previewType = 'video';
+
+      } else if (file.type.startsWith('audio/')) {
+        previewType = 'audio';
+
+      } else if (file.type === 'application/pdf') {
+        previewType = 'pdf';
+      }
+
+      if (!previewType) {
+        console.warn('Unsupported file type:', file.type);
+        return;
+      }
+
+      const previewUrl = URL.createObjectURL(file);
+
+      this.previewFiles.push({
+        file: file,
+        previewUrl: previewUrl,
+        previewType: previewType,
+        fileName: file.name
+      });
+    });
+
+    input.value = '';
+  }
+
 }
-
-
-
 
 
