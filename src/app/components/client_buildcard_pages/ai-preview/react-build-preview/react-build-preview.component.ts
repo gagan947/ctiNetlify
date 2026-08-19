@@ -167,7 +167,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   selectedProjectId = '';
   subscriptionPlan!: SubscriptionResponse;
   isIframeLoading = true;
-  selectedDeviceType: string = '<i class="fa-solid fa-display"></i>';
+  selectedDeviceType: string = 'desktop';
   SearchCountryField = SearchCountryField;
   selectedCountry = CountryISO.India;
   isReactBuilding = true;
@@ -1715,23 +1715,23 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     // console.log("OPEN EDITOR", data);
   }
 
-handleElementEdit(data: any) {
-  console.log('[CreativeAI Angular] ELEMENT EDIT:', data);
+  handleElementEdit(data: any) {
+    console.log('[CreativeAI Angular] ELEMENT EDIT:', data);
 
-  this.pendingElementEdit = data;
+    this.pendingElementEdit = data;
 
-  this.chatInput = data?.instruction || '';
+    this.chatInput = data?.instruction || '';
 
-  console.log(
-    '[CreativeAI Angular] pendingElementEdit:',
-    this.pendingElementEdit
-  );
+    console.log(
+      '[CreativeAI Angular] pendingElementEdit:',
+      this.pendingElementEdit
+    );
 
-  console.log(
-    '[CreativeAI Angular] chatInput:',
-    this.chatInput
-  );
-}
+    console.log(
+      '[CreativeAI Angular] chatInput:',
+      this.chatInput
+    );
+  }
 
 
   getUserSubscriptionPlan() {
@@ -1947,15 +1947,15 @@ handleElementEdit(data: any) {
   onDeviceTypeChange(deviceType: string) {
     switch (deviceType) {
       case 'desktop':
-        this.selectedDeviceType = '<i class="fa-solid fa-display"></i>';
+        this.selectedDeviceType = deviceType
         this.previewWidth = 100
         break;
       case 'tablet':
-        this.selectedDeviceType = '<i class="fa-solid fa-tablet-screen-button"></i>';
+        this.selectedDeviceType = deviceType;
         this.previewWidth = 768
         break;
       case 'mobile':
-        this.selectedDeviceType = '<i class="fa-solid fa-mobile-screen"></i>';
+        this.selectedDeviceType = deviceType;
         this.previewWidth = 400
         break;
     }

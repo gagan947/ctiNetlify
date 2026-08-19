@@ -3199,40 +3199,23 @@ p {
    ========================================================= */
 
 .creative-toolbar-edit {
-  height: 42px;
-
+  height: 34px;
   display: flex;
   align-items: center;
-
   gap: 7px;
-
   padding: 0 14px;
-
   border: 0;
-
   border-radius: 22px;
-
-  background: #2563eb;
-
+  background: #4140b2;
   color: #ffffff;
-
   font-family: inherit;
-
   font-size: 14px;
-
-  font-weight: 600;
-
+  /* font-weight: 600; */
   line-height: 1;
-
   cursor: pointer;
-
   outline: none;
-
   box-shadow: none;
-
-  transition:
-    background 0.18s ease,
-    transform 0.18s ease;
+  transition: background 0.18s ease, transform 0.18s ease;
 }
 
 .creative-toolbar-edit:hover {
@@ -3264,10 +3247,10 @@ p {
   align-items: center;
   justify-content: center;
 
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 
-  font-size: 17px;
+  font-size: 16px;
 
   line-height: 1;
 }
@@ -3351,23 +3334,19 @@ p {
    COLLAPSED STATE
    ========================================================= */
 
-.creative-editor-dock.collapsed
-.creative-toolbar-edit,
+.creative-editor-dock.collapsed .creative-toolbar-edit,
 
-.creative-editor-dock.collapsed
-.creative-toolbar-icon:not(.creative-toolbar-collapse) {
+.creative-editor-dock.collapsed .creative-toolbar-icon:not(.creative-toolbar-collapse) {
   display: none;
 }
 
-.creative-editor-dock.collapsed
-.creative-editor-toolbar {
+.creative-editor-dock.collapsed .creative-editor-toolbar {
   width: 52px;
 
   justify-content: center;
 }
 
-.creative-editor-dock.collapsed
-.creative-toolbar-collapse {
+.creative-editor-dock.collapsed .creative-toolbar-collapse {
   display: flex;
 }
 
