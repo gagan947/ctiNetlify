@@ -85,6 +85,26 @@ export interface PendingQuestion {
   type: string;
 }
 
+export enum CustomizationMessageType {
+  EDITOR_ELEMENT_EDIT = 'editor-element-edit',
+  CHAT_MESSAGE = 'chat-message',
+  OPTION_SELECTION = 'option-selection',
+  QUESTION_ANSWER = 'question-answer'
+}
+
+export interface CustomizationMessagePayload {
+  templatePublicId: string;
+  type: CustomizationMessageType | string;
+  requestId: string | null;
+  message: string | null;
+  instruction: string | null;
+  element: any | null;
+  attachments: any[];
+  optionId?: string;
+  optionLabel?: string;
+  questionId?: string | null;
+}
+
 export interface CustomizationChatMessage {
   sender: 'user' | 'ai';
   message: string;
@@ -198,6 +218,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   fullScreen: boolean = false;
   designCount = 0;
   selected_template_id = '';
+  activeCustomizationRequestId: string | null = null;
+  selectedElementMetadata: any = null;
   selectedProjectId = '';
   subscriptionPlan!: SubscriptionResponse;
   isIframeLoading = true;
@@ -659,9 +681,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         if (Array.isArray(payload?.messages)) {
           this.customizationMessages = payload.messages.map((m: any) => this.normalizeCustomizationChatMessage(m));
         }
-
-        // this.customizationChatState =
-        //   payload?.state || null;
       }
     );
 
@@ -722,9 +741,59 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     );
   }
 
+  buildCustomizationPayload(
+    type: CustomizationMessageType | string,
+    data: Partial<CustomizationMessagePayload>
+  ): CustomizationMessagePayload {
+    const templatePublicId = this.currentTemplateId || this.selected_template_id || '';
+    const reqId = data.requestId !== undefined ? data.requestId : (this.activeCustomizationRequestId || null);
+
+    return {
+      templatePublicId,
+      type,
+      requestId: reqId,
+      message: data.message ?? null,
+      instruction: data.instruction ?? null,
+      element: data.element ?? null,
+      attachments: Array.isArray(data.attachments) ? data.attachments : [],
+      ...(data.optionId !== undefined ? { optionId: data.optionId } : {}),
+      ...(data.optionLabel !== undefined ? { optionLabel: data.optionLabel } : {}),
+      ...(data.questionId !== undefined ? { questionId: data.questionId } : {})
+    };
+  }
+
+  sendCustomizationMessage(payload: CustomizationMessagePayload): void {
+    if (!payload.templatePublicId) {
+      payload.templatePublicId = this.currentTemplateId || this.selected_template_id || '';
+    }
+
+    if (!this.customizationSocket?.connected) {
+      this.toster?.error('Customization chat is not connected right now. Please try again.');
+      return;
+    }
+
+    console.log('[Customize] emitting customizationMessage:', payload);
+
+    this.customizationSocket.emit(
+      'customizationMessage',
+      payload
+    );
+  }
+
   handleCustomizationResponse(payload: any): void {
     if (!payload || typeof payload !== 'object') {
       return;
+    }
+
+    // Capture backend-generated active requestId
+    const returnedRequestId = payload.activeRequest?.requestId || payload.requestId || payload.activeRequestId || null;
+    if (returnedRequestId) {
+      this.activeCustomizationRequestId = returnedRequestId;
+    }
+
+    // Clear active requestId if task completed
+    if (payload.status === 'completed' || payload.isCompleted || payload.done || payload.completed) {
+      this.activeCustomizationRequestId = null;
     }
 
     this.hideLoader();
@@ -757,7 +826,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
             id: `customization-card-${Date.now()}`,
             type: 'customization-card',
             data: {
-              requestId: response.activeRequest.requestId || null,
+              requestId: returnedRequestId || this.activeCustomizationRequestId || null,
+              questionId: response.questionId || response.pendingQuestion?.id || null,
               message: response.message || 'Please answer the question below:',
               questionTitle: response.questionTitle || 'Agent has questions for you',
               options: parsedOptions,
@@ -789,7 +859,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
           id: `customization-card-${Date.now()}`,
           type: 'customization-card',
           data: {
-            requestId: response.activeRequest.requestId || null,
+            requestId: returnedRequestId || this.activeCustomizationRequestId || null,
+            questionId: response.questionId || null,
             message: response.message || 'Please select your options:',
             questionTitle: response.questionTitle || response.title || 'Agent has questions for you',
             options: parsedOptions,
@@ -874,17 +945,21 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
     this.isTyping = true;
+    this.showLoader('Thinking...');
 
-    if (this.customizationSocket?.connected) {
-      this.customizationSocket.emit('customizationMessage', {
-        templatePublicId: this.currentTemplateId,
-        type: 'customization-message',
-        message: selectedLabels,
-        instruction: null,
-        element: null,
-        attachments: []
-      });
-    }
+    const firstOpt = selectedOptions[0];
+    const payload = this.buildCustomizationPayload(CustomizationMessageType.OPTION_SELECTION, {
+      requestId: this.activeCustomizationRequestId,
+      message: selectedLabels,
+      instruction: null,
+      element: null,
+      attachments: [],
+      optionId: firstOpt?.id || '',
+      optionLabel: selectedLabels,
+      questionId: chat.questionId || chat.pendingQuestion?.id || null
+    });
+
+    this.sendCustomizationMessage(payload);
   }
 
   autoAnswerCustomizationQuestion(chat: CustomizationChatMessage): void {
@@ -918,17 +993,20 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
     this.isTyping = true;
+    this.showLoader('Thinking...');
 
-    if (this.customizationSocket?.connected) {
-      this.customizationSocket.emit('customizationMessage', {
-        templatePublicId: this.currentTemplateId,
-        type: 'customization-message',
-        message: option.label,
-        instruction: null,
-        element: null,
-        attachments: []
-      });
-    }
+    const payload = this.buildCustomizationPayload(CustomizationMessageType.OPTION_SELECTION, {
+      requestId: this.activeCustomizationRequestId,
+      message: option.label,
+      instruction: null,
+      element: null,
+      attachments: [],
+      optionId: option.id,
+      optionLabel: option.label,
+      questionId: chat.questionId || chat.pendingQuestion?.id || null
+    });
+
+    this.sendCustomizationMessage(payload);
   }
 
   submitCustomizationQuestionAnswer(chat: CustomizationChatMessage, answerValue: string): void {
@@ -948,17 +1026,18 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
     this.isTyping = true;
+    this.showLoader('Thinking...');
 
-    if (this.customizationSocket?.connected) {
-      this.customizationSocket.emit('customizationMessage', {
-        templatePublicId: this.currentTemplateId,
-        type: 'customization-message',
-        message: trimmed,
-        instruction: null,
-        element: null,
-        attachments: []
-      });
-    }
+    const payload = this.buildCustomizationPayload(CustomizationMessageType.QUESTION_ANSWER, {
+      requestId: this.activeCustomizationRequestId,
+      message: trimmed,
+      instruction: null,
+      element: null,
+      attachments: [],
+      questionId: chat.questionId || chat.pendingQuestion?.id || null
+    });
+
+    this.sendCustomizationMessage(payload);
   }
 
   trackByChatMessage(index: number, item: CustomizationChatMessage): any {
@@ -1911,93 +1990,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
 
 
-  async regenerate() {
-
-    if (this.isTyping) return;
-    if (this.designOrder.length >= this.subscriptionPlan.template_limit) {
-      this.toster.error(`You have reached the maximum limit of ${this.subscriptionPlan.template_limit} templates.`);
-      this.subscriptionModalService.open();
-      return;
-    }
-
-    this.setBuildFlow('regenerate');
-    this.setBuildStep(0);
-    this.isReactBuilding = true;
-
-    this.clearFirstBlockMinHeight();
-    this.isTyping = true;
-
-    this.blocks = this.blocks.filter(block => block?.id !== 'action-prompt-build');
-
-    await this.addParagraphBlock(
-      `I'm generating a fresh template direction for your project. This pass focuses on cleaner hierarchy, improved spacing, and a more distinct visual identity while preserving the core user flow.`,
-      600
-    );
-
-    await this.addTerminal([
-      'Reviewing the current template structure'
-    ], 500, 600);
-
-    await this.addTerminal([
-      'Exploring a stronger visual direction'
-    ], 500, 600);
-
-    await this.addTerminal([
-      'Refining layout balance and section hierarchy'
-    ], 500, 600);
-
-    await this.addParagraphBlock(
-      `I'm refreshing the most visible UI layers now so this new variation feels intentionally redesigned rather than lightly adjusted.`,
-      600
-    );
-
-    await this.addFileActivityBlock('src/components/header.jsx', 'Restructured the shared navigation shell for the refreshed template direction.', 200);
-    await this.addFileActivityBlock('src/pages/home.jsx', 'Reworked the primary landing experience with updated hierarchy and section flow.', 200);
-    await this.addFileActivityBlock('src/styles/home.css', 'Adjusted spacing, typography, and visual rhythm for the new variation.', 200);
-
-    await this.addParagraphBlock(
-      `The next template variation is ready. I'm building the preview now so you can compare it with the other versions in your workspace.`,
-      600
-    );
-
-    this.setBuildStep(1);
-    await this.addTerminal([
-      'Installing dependencies',
-      'Preparing production preview build'
-    ], 400, 500);
-
-    this.setBuildStep(2);
-    await this.addTerminal([
-      'Compiling React application',
-      'Optimizing generated assets'
-    ], 400, 500);
-
-    this.setBuildStep(3);
-    await this.addTerminal([
-      'Deploying fresh preview',
-      'Linking new template tab'
-    ], 400, 500);
-
-    await this.addSummary({
-      time: 'Ready',
-      description: 'Generated a new template variation with refreshed layout direction and updated preview build.',
-      highlights: [
-        'Fresh template variation',
-        'Updated home and header structure',
-        'Refined CSS rhythm',
-        'New preview build'
-      ]
-    });
-
-    setTimeout(() => this.scrollToBottom(true), 0);
-    this.isTyping = false;
-    // this.startPreview(null);
-    this.appendBuildActionPrompt();
-    return;
-
-  }
-
-
   delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -2199,29 +2191,18 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   };
 
   openElementEditor(data: any) {
-    // console.log("OPEN EDITOR", data);
+    this.selectedElementMetadata = data?.element || data || null;
   }
 
   handleElementEdit(data: any) {
-    this.editCommentsArray?.push({
-      id: data?.element.id,
-      instruction: data?.instruction,
-      element: data.element,
-    })
-
-    console.log("editCommentsArray", this.editCommentsArray);
-
-    // console.log('[CreativeAI Angular] ELEMENT EDIT:', data);
-    // this.pendingElementEdit = data;
-    // this.chatInput = data?.instruction || '';
-    // console.log(
-    //   '[CreativeAI Angular] pendingElementEdit:',
-    //   this.pendingElementEdit
-    // );
-    // console.log(
-    //   '[CreativeAI Angular] chatInput:',
-    //   this.chatInput
-    // );
+    this.selectedElementMetadata = data?.element || data || null;
+    if (data?.element) {
+      this.editCommentsArray?.push({
+        id: data?.element?.id,
+        instruction: data?.instruction,
+        element: data.element,
+      });
+    }
   }
 
   removeEditComment(id: string) {
@@ -2945,11 +2926,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       return;
     }
 
-    if (actionId === 'regenerate_template') {
-      this.regenerate();
-      return;
-    }
-
     if (actionId === 'customize_template') {
       this.appendBuildActionPrompt();
       setTimeout(() => this.scrollToBottom(true), 0);
@@ -2987,6 +2963,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         const data = JSON.parse(payloadStr);
         const selectedOptions = data.selectedOptions || [];
         const selectedLabels = selectedOptions.map((opt: any) => opt.label).join(', ');
+        const firstOpt = selectedOptions[0];
 
         this.blocks.push({
           id: `user-message-${Date.now()}`,
@@ -2997,19 +2974,18 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
         this.showLoader('Thinking...');
 
-        const socketPayload = {
-          templatePublicId: this.currentTemplateId,
-          type: 'customization-message',
+        const socketPayload = this.buildCustomizationPayload(CustomizationMessageType.OPTION_SELECTION, {
+          requestId: data.requestId || this.activeCustomizationRequestId || null,
           message: selectedLabels,
           instruction: null,
           element: null,
           attachments: [],
-          requestId: data.requestId || null
-        };
+          optionId: firstOpt?.id || '',
+          optionLabel: selectedLabels,
+          questionId: data.questionId || null
+        });
 
-        if (this.customizationSocket?.connected) {
-          this.customizationSocket.emit('customizationMessage', socketPayload);
-        }
+        this.sendCustomizationMessage(socketPayload);
       } catch (err) {
         console.error('[Customize] Error submitting options:', err);
       }
@@ -3096,14 +3072,28 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       restTriggered: false
     };
     this.activeCustomizationProgressBlock = null;
-    const socketPayload = {
-      templatePublicId,
-      type: 'customization-message',
-      message: prompt,
-      instruction: null,
-      element: null,
-      attachments: []
-    };
+
+    const attachments = (this as any).pendingAttachments || [];
+
+    let socketPayload: CustomizationMessagePayload;
+    if (this.selectedElementMetadata) {
+      socketPayload = this.buildCustomizationPayload(CustomizationMessageType.EDITOR_ELEMENT_EDIT, {
+        requestId: this.activeCustomizationRequestId,
+        message: null,
+        instruction: prompt,
+        element: this.selectedElementMetadata,
+        attachments: attachments
+      });
+    } else {
+      socketPayload = this.buildCustomizationPayload(CustomizationMessageType.CHAT_MESSAGE, {
+        requestId: this.activeCustomizationRequestId,
+        message: prompt,
+        instruction: null,
+        element: null,
+        attachments: attachments
+      });
+    }
+
     if (!this.customizationSocket?.emit) {
       this.pendingCustomizationRequest = null;
       this.customizationRequestVersion++;
@@ -3111,91 +3101,11 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       return;
     }
 
-    this.customizationSocket?.emit?.(
-      'customizationMessage',
-      socketPayload
-    );
+    this.sendCustomizationMessage(socketPayload);
 
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
-  private handleCustomizationBotReply(payload: any) {
-    if (!this.pendingCustomizationRequest || !this.isCustomizationChatPayload(payload)) {
-      return;
-    }
-
-    const reply = this.extractCustomizationBotReply(payload);
-    if (!reply) {
-      return;
-    }
-
-    this.pendingCustomizationRequest.botReplyReceived = true;
-    this.hideLoader();
-    this.blocks.push(
-      this.createCompletedParagraphBlock(
-        reply,
-        'default'
-      )
-    );
-    setTimeout(() => this.scrollToBottom(true), 0);
-  }
-
-  private handleCustomizationProgressReply(payload: any) {
-    const message = typeof payload?.message === 'string' ? payload.message.trim() : '';
-    if (!message) {
-      return;
-    }
-
-    this.isReactBuilding = true;
-    this.isTyping = true;
-    this.hideLoader();
-    this.setBuildFlow('customize');
-
-    const percentage = this.normalizeCustomizationPercentage(payload?.percentage);
-    this.setBuildStep(this.getCustomizationBuildStep(percentage));
-
-    const progressData = {
-      historyId: Number.isFinite(Number(payload?.historyId)) ? Number(payload.historyId) : null,
-      step: typeof payload?.step === 'string' ? payload.step : 'ai_processing',
-      stepLabel: this.getCustomizationProgressStepLabel(payload?.step),
-      message,
-      percentage,
-      logs: this.normalizeCustomizationLogs(payload?.console_logs)
-    };
-
-    if (!this.activeCustomizationProgressBlock || this.activeCustomizationProgressBlock.data.step !== progressData.step) {
-      this.activeCustomizationProgressBlock = {
-        type: 'ai-progress',
-        data: progressData
-      };
-      this.blocks.push(this.activeCustomizationProgressBlock);
-    } else {
-      this.activeCustomizationProgressBlock.data = progressData;
-    }
-
-    this.showLoader(message);
-    setTimeout(() => this.scrollToBottom(true), 0);
-  }
-
-  private normalizeCustomizationPercentage(value: any): number {
-    const percentage = Number(value);
-    if (!Number.isFinite(percentage)) {
-      return this.activeCustomizationProgressBlock?.data?.percentage ?? 0;
-    }
-
-    return Math.max(0, Math.min(100, Math.round(percentage)));
-  }
-
-  private normalizeCustomizationLogs(value: any): string[] {
-    if (!Array.isArray(value)) {
-      return this.activeCustomizationProgressBlock?.data?.logs ?? [];
-    }
-
-    return value
-      .map((log) => String(log || '').trim())
-      .filter(Boolean)
-      .slice(-5);
-  }
 
   private getCustomizationProgressStepLabel(step: any): string {
     const normalizedStep = String(step || '').trim().replace(/[_-]+/g, ' ');
@@ -3205,189 +3115,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     return normalizedStep.replace(/\b\w/g, (char) => char.toUpperCase());
   }
-
-  private getCustomizationBuildStep(percentage: number): number {
-    if (percentage >= 75) {
-      return 3;
-    }
-
-    if (percentage >= 35) {
-      return 2;
-    }
-
-    return 1;
-  }
-
-  private handleCustomizationChatResponse(response: any) {
-    if (!response || !this.pendingCustomizationRequest) {
-      return;
-    }
-
-    const normalizedResponse = typeof response === 'string'
-      ? { botReply: response }
-      : response;
-
-    if (this.isCustomizationChatPayload(normalizedResponse) && this.extractCustomizationBotReply(normalizedResponse)) {
-      this.handleCustomizationBotReply(normalizedResponse);
-    }
-
-    const shouldTriggerApi = !!(
-      normalizedResponse?.triggerCustomizationAPI
-      || normalizedResponse?.data?.triggerCustomizationAPI
-    );
-
-    if (shouldTriggerApi) {
-      void this.handleCustomizationApiTrigger(normalizedResponse);
-    }
-  }
-
-  private async handleCustomizationApiTrigger(payload: any) {
-    const pendingRequest = this.pendingCustomizationRequest;
-    if (!pendingRequest || pendingRequest.restTriggered) {
-      return;
-    }
-
-    const triggerPrompt = this.extractCustomizationPrompt(payload) || pendingRequest.prompt;
-    const triggerTemplatePublicId = this.extractCustomizationTemplateId(payload) || pendingRequest.templatePublicId;
-
-    pendingRequest.restTriggered = true;
-    this.isReactBuilding = true;
-    this.loaderProgress = 0;
-    this.startFakeProgressLoop();
-    this.startQuickBuildProgress('customize', 1200, 2600);
-    if (pendingRequest.botReplyReceived) {
-      this.showLoader('Updating the template and loading a refreshed preview...');
-    }
-    this.runCustomizationApiRequest(
-      triggerPrompt,
-      triggerTemplatePublicId,
-      pendingRequest.requestVersion
-    );
-  }
-
-  private runCustomizationApiRequest(prompt: string, templatePublicId: string, requestVersion: number) {
-    const payLoad = {
-      prompt,
-      templatePublicId
-    };
-
-    this.apiService.postAPI('api/ai/customization', payLoad).subscribe({
-      next: (res: any) => {
-        if (requestVersion !== this.customizationRequestVersion) {
-          return;
-        }
-
-        if (!res?.success || !res?.data?.templateId) {
-          this.customizationRequestVersion++;
-          this.pendingCustomizationRequest = null;
-          this.setBuildGenerationError(res?.data?.message || 'Failed to customize preview');
-          this.queueBuildGenerationFailure();
-          return;
-        }
-
-        this.customizationRequestVersion++;
-        this.pendingCustomizationRequest = null;
-        this.completeActiveCustomizationProgress();
-        this.hideLoader();
-        this.queueGeneratedPreview(res, null);
-      },
-      error: (error: any) => {
-        if (requestVersion !== this.customizationRequestVersion) {
-          return;
-        }
-
-        this.pendingCustomizationRequest = null;
-        if (error?.error?.status === 422 && error?.error?.data?.canRepairBuild) {
-          this.customizationRequestVersion++;
-          const repairPayload = this.buildRepairPayload(error, templatePublicId);
-          void this.attemptBuildRepair(repairPayload, error);
-          return;
-        }
-
-        this.customizationRequestVersion++;
-        this.setBuildGenerationError(error);
-        this.queueBuildGenerationFailure();
-      }
-    });
-  }
-
-  private completeActiveCustomizationProgress() {
-    const logs = this.activeCustomizationProgressBlock
-      ? [
-        ...this.activeCustomizationProgressBlock.data.logs,
-        'Customization complete. Refreshing preview...'
-      ].slice(-5)
-      : ['Customization complete. Refreshing preview...'];
-
-    const historyId = this.activeCustomizationProgressBlock?.data?.historyId || null;
-
-    this.activeCustomizationProgressBlock = {
-      type: 'ai-progress',
-      data: {
-        historyId,
-        step: 'preview_ready',
-        stepLabel: 'Preview Ready',
-        message: 'Customization complete. Loading your refreshed preview...',
-        percentage: 100,
-        logs: logs
-      }
-    };
-    this.blocks.push(this.activeCustomizationProgressBlock);
-    this.setBuildStep(3);
-    setTimeout(() => this.scrollToBottom(true), 0);
-  }
-
-  private extractCustomizationBotReply(payload: any): string {
-    if (typeof payload === 'string') {
-      return payload.trim();
-    }
-
-    if (payload && typeof payload === 'object') {
-      const candidate = payload.botReply ?? payload.message ?? payload.reply;
-      return typeof candidate === 'string' ? candidate.trim() : '';
-    }
-
-    return '';
-  }
-
-  private extractCustomizationPrompt(payload: any): string {
-    if (!payload || typeof payload !== 'object') {
-      return '';
-    }
-
-    const candidate = payload.prompt ?? payload.data?.prompt;
-    return typeof candidate === 'string' ? candidate.trim() : '';
-  }
-
-  private extractCustomizationTemplateId(payload: any): string {
-    if (!payload || typeof payload !== 'object') {
-      return '';
-    }
-
-    const candidate = payload.templatePublicId ?? payload.data?.templatePublicId;
-    return typeof candidate === 'string' ? candidate.trim() : '';
-  }
-
-  private isCustomizationChatPayload(payload: any): boolean {
-    if (typeof payload === 'string') {
-      return true;
-    }
-
-    if (!payload || typeof payload !== 'object') {
-      return false;
-    }
-
-    if (typeof payload.isCustomizationChat === 'boolean') {
-      return payload.isCustomizationChat;
-    }
-
-    if (typeof payload.data?.isCustomizationChat === 'boolean') {
-      return payload.data.isCustomizationChat;
-    }
-
-    return true;
-  }
-
 
   deployProgressSteps = [
     'Building Package...',
@@ -4126,20 +3853,20 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       this.completeActivePageBuildSection();
     });
 
-    this.socket.on('botReply', (payload: any) => {
-      console.log('Received bot reply:', payload);
-      this.handleCustomizationBotReply(payload);
-    });
+    // this.socket.on('botReply', (payload: any) => {
+    //   console.log('Received bot reply:', payload);
+    //   this.handleCustomizationBotReply(payload);
+    // });
 
-    this.socket.on('triggerCustomizationAPI', (payload: any) => {
-      console.log('Received triggerCustomizationAPI event:', payload);
-      void this.handleCustomizationApiTrigger(payload);
-    });
+    // this.socket.on('triggerCustomizationAPI', (payload: any) => {
+    //   console.log('Received triggerCustomizationAPI event:', payload);
+    //   void this.handleCustomizationApiTrigger(payload);
+    // });
 
-    this.socket.on('customization-progress', (payload: any) => {
-      console.log('Received customization-progress event:', payload);
-      this.handleCustomizationProgressReply(payload);
-    });
+    // this.socket.on('customization-progress', (payload: any) => {
+    //   console.log('Received customization-progress event:', payload);
+    //   this.handleCustomizationProgressReply(payload);
+    // });
   }
 
   private deferGenerateProjectFailure(source?: any) {

@@ -415,7 +415,6 @@ export class AiDevRendererComponent implements OnChanges {
   }
 
   submitCustomizationCard(block: any): void {
-    debugger
     if (block?.data?.answered || !block?.data?.options) return;
     const selectedOptions = block.data.options.filter((opt: any) => this.isOptionChecked(block, opt.id));
     if (!selectedOptions.length) return;
@@ -427,7 +426,8 @@ export class AiDevRendererComponent implements OnChanges {
     this.actionSelected.emit(`submit_customization_options:${JSON.stringify({
       blockId: block.id,
       selectedOptions,
-      requestId: block.data.requestId || null
+      requestId: block.data?.requestId || null,
+      questionId: block.data?.questionId || null
     })}`);
   }
 
