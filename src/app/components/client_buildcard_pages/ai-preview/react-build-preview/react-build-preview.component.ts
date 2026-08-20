@@ -306,6 +306,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   private isContinueProjectGenerationRequestInFlight = false;
   private routeChangeVersion = 0;
   private socketInquiryId = '';
+  private customizationSocketInquiryId = '';
   private activeVoiceSessionId = 0;
   draftMessages: any[] = []
   today = new Date();
@@ -367,7 +368,11 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.route.paramMap.subscribe(async (res: any) => {
       const inquiryId = String(res.params['id'] || '').trim();
       await this.handleProjectRouteChange(inquiryId);
+      this.ensureCustomizationSocket(
+        inquiryId
+      );
     });
+
   }
 
   private async handleProjectRouteChange(inquiryId: string) {
@@ -540,6 +545,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     inquiryId: string
   ): void {
 
+
     if (!inquiryId) {
       return;
     }
@@ -549,6 +555,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     if (
       this.customizationSocket?.connected &&
+      this.customizationSocketInquiryId === inquiryId &&
       this.customizationConversationId ===
       storedConversationId
     ) {
@@ -565,7 +572,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
           token:
             localStorage.getItem('tokenCTi'),
 
-          conversationId:
+          customizationConversationId:
             storedConversationId || null,
 
           inquiryId
@@ -575,6 +582,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     this.customizationConversationId =
       storedConversationId;
+    this.customizationSocketInquiryId = inquiryId;
 
     this.registerCustomizationSocketListeners();
   }
@@ -586,7 +594,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       () => {
 
         console.log(
-          'Customization socket connected'
+          '[ANGULAR CUSTOMIZE] CONNECTED:',
+          this.customizationSocket.id
         );
       }
     );
@@ -597,7 +606,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       (payload: any) => {
 
         console.log(
-          'Customization conversation resumed:',
+          '[Customize] conversationResumed',
           payload
         );
 
@@ -632,12 +641,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     this.customizationSocket.on(
       'customizationResponse',
-      (response: any) => {
-
-        console.log(
-          'Customization response:',
-          response
-        );
+      (payload: any) => {
+        console.log('[Customize] customizationResponse (payload):', payload);
 
         // this.handleCustomizationResponse(
         //   response
@@ -648,15 +653,26 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     this.customizationSocket.on(
       'customizationError',
-      (error: any) => {
+      (payload: any) => {
 
         console.error(
-          'Customization chatbot error:',
-          error
+          '[Customize] customizationError',
+          payload
         );
 
         this.isCustomizationRestoring =
           false;
+      }
+    );
+
+    this.customizationSocket.on(
+      'disconnect',
+      (reason: any) => {
+
+        console.log(
+          '[Customize] disconnect',
+          reason
+        );
       }
     );
   }
@@ -1764,6 +1780,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.socket?.off?.('customization-progress');
     this.socket?.off?.('triggerCustomizationAPI');
     this.socket?.disconnect?.();
+    this.customizationSocket?.removeAllListeners?.();
+    this.customizationSocket?.disconnect?.();
     this.aiService.stop();
 
   }
@@ -2745,19 +2763,24 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.activeCustomizationProgressBlock = null;
     this.showLoader('Thinking...');
     const socketPayload = {
-      prompt,
-      templatePublicId
+      templatePublicId,
+      type: 'customization-message',
+      message: prompt,
+      instruction: null,
+      element: null,
+      attachments: []
     };
-    if (!this.socket?.emit) {
+    if (!this.customizationSocket?.emit) {
       this.pendingCustomizationRequest = null;
       this.customizationRequestVersion++;
       this.toster.error('Customization chat is not connected right now. Please try again.');
       return;
     }
 
-    this.socket?.emit?.('customizationChatMessage', socketPayload, (response: any) => {
-      this.handleCustomizationChatResponse(response);
-    });
+    this.customizationSocket?.emit?.(
+      'customizationMessage',
+      socketPayload
+    );
 
     setTimeout(() => this.scrollToBottom(true), 0);
   }
