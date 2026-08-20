@@ -165,8 +165,49 @@ password input field with proper styling.</p>
       <div *ngIf="isUserMessageBlock(block)" class="customization-chat-message mb-3 is-user">
         <div class="d-flex align-items-start gap-2 justify-content-end">
           <div class="ct_chat_body" style="max-width: 85%;">
-            <div class="ct_chat_bubble ct_chat_bubble_user">
-              <p class="mb-0">{{ block?.text }}</p>
+            <div class="ct_chat_bubble ct_chat_bubble_user"
+              [class.p-0]="block.attachments && block.attachments.length > 0">
+
+              <!-- Attachments Section (Thumbnails / File Cards) -->
+              <div *ngIf="block?.attachments && block.attachments.length > 0"
+                class="user-chat-attachments d-flex flex-wrap gap-2 mb-2 justify-content-end">
+                <ng-container *ngFor="let file of block.attachments">
+
+                  <!-- Image preview -->
+                  <div *ngIf="isImageAttachment(file)" class="user-chat-file-wrap">
+                    <img [src]="file.previewUrl || file.url" [alt]="file.fileName || file.originalName || 'Attachment'"
+                      class="user-chat-img-thumb" />
+                  </div>
+
+                  <!-- Video preview -->
+                  <div *ngIf="isVideoAttachment(file)" class="user-chat-file-wrap">
+                    <video [src]="file.previewUrl || file.url" class="user-chat-video-thumb"></video>
+                  </div>
+
+                  <!-- PDF / Audio / General File preview card -->
+                  <div *ngIf="!isImageAttachment(file) && !isVideoAttachment(file)"
+                    class="user-chat-file-card d-flex align-items-center gap-2">
+                    <i class="fa-solid"
+                      [ngClass]="isPdfAttachment(file) ? 'fa-file-pdf text-danger' : 'fa-file-audio text-info'"></i>
+                    <span class="user-chat-file-name text-truncate" style="max-width: 160px;"
+                      [title]="file.fileName || file.originalName">{{ file.fileName || file.originalName || 'File'
+                      }}</span>
+                  </div>
+
+                </ng-container>
+              </div>
+
+              <!-- Text message -->
+              <p *ngIf="block?.text" class="mb-0" style="white-space: pre-wrap;">{{ block?.text }}</p>
+
+              <!-- Edit Comments list (if any) -->
+              <div *ngIf="block?.editComments && block.editComments.length > 0"
+                class="user-chat-edits mt-2 pt-2 border-top border-white-20">
+                <div *ngFor="let edit of block.editComments; let editIdx = index" class="small text-white-75 mb-1">
+                  <span class="fw-semibold">Edit #{{ editIdx + 1 }}:</span> {{ edit.instruction }}
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

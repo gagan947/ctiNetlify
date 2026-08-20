@@ -114,9 +114,28 @@ export class AiDevRendererComponent implements OnChanges {
   }
 
   isUserMessageBlock(block: any): boolean {
-    return typeof block?.id === 'string'
-      && block.id.startsWith('user-message')
-      && typeof block?.text === 'string';
+    return typeof block?.id === 'string' && block.id.startsWith('user-message');
+  }
+
+  isImageAttachment(file: any): boolean {
+    if (!file) return false;
+    if (file.previewType === 'image' || file.type === 'image') return true;
+    const url = String(file.previewUrl || file.url || file.fileName || file.originalName || '');
+    return /\.(jpg|jpeg|png|gif|webp|svg|bmp)$/i.test(url) || url.startsWith('data:image/');
+  }
+
+  isVideoAttachment(file: any): boolean {
+    if (!file) return false;
+    if (file.previewType === 'video' || file.type === 'video') return true;
+    const url = String(file.previewUrl || file.url || file.fileName || file.originalName || '');
+    return /\.(mp4|webm|ogg|mov)$/i.test(url) || url.startsWith('data:video/');
+  }
+
+  isPdfAttachment(file: any): boolean {
+    if (!file) return false;
+    if (file.previewType === 'pdf' || file.type === 'pdf' || file.mimeType === 'application/pdf') return true;
+    const url = String(file.previewUrl || file.url || file.fileName || file.originalName || '');
+    return /\.pdf$/i.test(url);
   }
 
   isInputBlock(block: any): boolean {

@@ -108,6 +108,8 @@ export interface CustomizationChatMessage {
   sender: 'user' | 'ai';
   message: string;
   replyType?: 'message' | 'question' | 'options';
+  attachments?: any[];
+  editComments?: any[];
   questionId?: string;
   pendingQuestion?: PendingQuestion;
   options?: CustomizationOption[];
@@ -888,10 +890,12 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
   addCustomizationMessage(msg: CustomizationChatMessage): void {
     this.customizationMessages.push(msg);
-    if (msg.sender === 'user' && msg.message) {
+    if (msg.sender === 'user' && (msg.message || (msg.attachments && msg.attachments.length > 0) || (msg.editComments && msg.editComments.length > 0))) {
       this.blocks.push({
         id: `user-message-${Date.now()}`,
-        text: msg.message,
+        text: msg.message || '',
+        attachments: msg.attachments || [],
+        editComments: msg.editComments || [],
         done: true,
         timestamp: new Date()
       });
@@ -3016,9 +3020,15 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
   async handlePromptSubmitted(event: Event | { blockId: string; value: string }) {
     const promptEvent = event as { blockId?: string; value?: string };
-    const prompt = promptEvent?.value?.trim();
+    const prompt = promptEvent?.value?.trim() || '';
 
-    if (!prompt) return;
+    const attachments = (this as any).pendingAttachments || [];
+    const hasEditComments = this.editCommentsArray.length > 0;
+    const hasAttachments = attachments.length > 0 || this.previewFiles.length > 0;
+
+    if (!prompt && !hasEditComments && !hasAttachments) {
+      return;
+    }
 
     if (this.selectedProjectId) {
       this.isSuggestionsDismissedMap.set(this.selectedProjectId, false);
@@ -3050,9 +3060,14 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta'));
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
 
+    const currentAttachments = [...this.previewFiles];
+    const currentEditComments = [...this.editCommentsArray];
+    debugger
     this.addCustomizationMessage({
       sender: 'user',
-      message: prompt,
+      message: prompt || '',
+      attachments: currentAttachments,
+      editComments: currentEditComments,
       replyType: 'message'
     });
 
@@ -3061,7 +3076,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.resetBuildGenerationError();
     const customizationRequestVersion = ++this.customizationRequestVersion;
     this.pendingCustomizationRequest = {
-      prompt,
+      prompt: prompt || (currentEditComments.length > 0 ? 'Edit element' : 'Upload attachment'),
       requestVersion: customizationRequestVersion,
       templatePublicId,
       botReplyReceived: false,
@@ -3069,24 +3084,22 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     };
     this.activeCustomizationProgressBlock = null;
 
-    const attachments = (this as any).pendingAttachments || [];
-
     let socketPayload: CustomizationMessagePayload;
-    if (this.selectedElementMetadata) {
+    if (this.selectedElementMetadata || hasEditComments) {
       const element = this.editCommentsArray.map((item: any) => ({
         ...item.element,
         instruction: item.instruction
-      }))
+      }));
       socketPayload = this.buildCustomizationPayload(CustomizationMessageType.EDITOR_ELEMENT_EDIT, {
         requestId: this.activeCustomizationRequestId,
-        message: prompt,
+        message: prompt || null,
         elements: element,
         attachments: attachments
       });
     } else {
       socketPayload = this.buildCustomizationPayload(CustomizationMessageType.CHAT_MESSAGE, {
         requestId: this.activeCustomizationRequestId,
-        message: prompt,
+        message: prompt || null,
         elements: [],
         attachments: attachments
       });
@@ -3102,11 +3115,11 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.sendCustomizationMessage(socketPayload);
 
     this.editCommentsArray = [];
-    this.previewFiles.forEach(item => {
-      if (item.previewUrl && item.previewUrl.startsWith('blob:')) {
-        URL.revokeObjectURL(item.previewUrl);
-      }
-    });
+    // this.previewFiles.forEach(item => {
+    //   if (item.previewUrl && item.previewUrl.startsWith('blob:')) {
+    //     URL.revokeObjectURL(item.previewUrl);
+    //   }
+    // });
     this.previewFiles = [];
     this.fileUrls = [];
     (this as any).pendingAttachments = [];
@@ -4588,6 +4601,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   }
 
   private updatePendingAttachments(): void {
+    debugger
     const uploadedAssets = this.previewFiles
       .filter(item => item.asset)
       .map(item => item.asset);
