@@ -36,21 +36,21 @@
 }
 
 .eti-page-header h1 {
-  margin: 0 0 8px;
-  font-size: 30px;
-  font-weight: 700;
-  letter-spacing: -0.7px;
-  color: #fff;
+    margin: 0 0 8px;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0;
+    color: #fff;
+    font-family: 'Satoshi-Regular';
 }
 
 .eti-page-header p {
-  max-width: 600px;
-  margin: 0;
-  color: #8d93b3;
-  font-size: 14px;
-  line-height: 1.7;
+    max-width: 546px;
+    margin: 0;
+    color: #8d93b3;
+    font-size: 14px;
+    line-height: 1.7;
 }
-
 .eti-header-actions {
   display: flex;
   gap: 12px;
@@ -172,7 +172,7 @@
   margin-bottom: 7px;
 
   color: #71799d;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.7px;
 }
@@ -186,7 +186,7 @@
 .eti-summary-card p {
   margin: 0;
   color: #7d84a5;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .eti-status {
@@ -197,7 +197,7 @@
   color: #ae8cff;
   background: rgba(123, 75, 255, 0.14);
 
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -286,7 +286,7 @@
 .eti-section-title p {
   margin: 0;
   color: #7e86a8;
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .eti-refresh-btn {
@@ -327,7 +327,7 @@
 }
 
 .eti-mini-card strong {
-  font-size: 13px;
+  font-size: 14px;
   color: #f2f3ff;
 }
 
@@ -344,6 +344,12 @@
 /* =========================
    TRANSACTION ROW
 ========================= */
+
+.eti-credit-history-groups {
+    height: auto;
+    max-height: calc(100dvh - 150px);
+    overflow-y: auto;
+}
 
 .eti-credit-history-state {
   display: flex;
@@ -408,13 +414,13 @@
 .eti-transaction-info strong {
   display: block;
   margin-bottom: 3px;
-  font-size: 13px;
+  font-size: 14px;
   color: #fff;
 }
 
 .eti-transaction-info span {
   color: #747d9f;
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .eti-transaction-value {
@@ -428,7 +434,7 @@
   margin-top: 5px;
 
   color: #7a82a1;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
 }
 
@@ -458,17 +464,10 @@
   gap: 8px;
 
   color: #7983a5;
-  font-size: 10px;
+  font-size: 14px;
 }
 
-.eti-transaction-footer i {
-  width: 8px;
-  height: 8px;
 
-  border-radius: 50%;
-  background: #36d879;
-  box-shadow: 0 0 10px rgba(54, 216, 121, 0.6);
-}
 
 .eti-buy-more {
   height: 38px;
@@ -488,24 +487,12 @@
 ========================= */
 
 .eti-plan-header {
-  min-height: 108px;
-  padding: 20px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  background:
-    radial-gradient(
-      circle at 90% 20%,
-      rgba(145, 101, 255, 0.6),
-      transparent 45%
-    ),
-    linear-gradient(
-      135deg,
-      #4120a8,
-      #5c36e8
-    );
+    min-height: 108px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #4c2ddd, #1d116c);
 }
 
 .eti-plan-header > div span {
@@ -532,7 +519,7 @@
   color: #57ec8b;
   background: rgba(5, 35, 21, 0.6);
 
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -548,7 +535,7 @@
 
 .eti-active-badge.free {
   color: #ae8cff;
-  background: rgba(123, 75, 255, 0.14);
+    background: rgb(123 75 255 / 34%);
 }
 
 .eti-plan-body {
@@ -598,11 +585,11 @@
   margin-bottom: 4px;
 
   color: #70799d;
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .eti-plan-info strong {
-  font-size: 12px;
+  font-size: 14px;
   color: #fff;
 }
 
@@ -626,7 +613,7 @@
   margin-bottom: 11px;
 
   color: #adb3ca;
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .eti-plan-features div:last-child {
@@ -688,7 +675,7 @@
 
 .eti-more-credits h3 {
   margin: 0 0 5px;
-  font-size: 12px;
+  font-size: 14px;
   color: #fff;
 }
 
@@ -696,7 +683,7 @@
   margin: 0 0 12px;
 
   color: #777fa1;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.5;
 }
 

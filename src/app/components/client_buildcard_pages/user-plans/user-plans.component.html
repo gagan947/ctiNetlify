@@ -16,12 +16,12 @@
 
         <div class="eti-header-actions">
           <button class="eti-btn eti-btn-primary" type="button" (click)="openSubscriptionModal()">
-            <span>⚡</span>
+            <span><i class="fa-solid fa-bolt"></i></span>
             Upgrade Plan
           </button>
 
           <button class="eti-btn eti-btn-outline" type="button" (click)="openBuyCreditsModal()">
-            <span>▣</span>
+            <span><i class="fa-regular fa-credit-card"></i></span>
             Buy Credits
           </button>
         </div>
@@ -32,7 +32,22 @@
 
         <div class="eti-summary-card">
           <div class="eti-icon purple">
-            ♡
+           <svg width="24" height="24" viewBox="0 0 28 28" fill="none"
+     xmlns="http://www.w3.org/2000/svg">
+  <path
+    d="M14 2.5L23 6V12.5C23 18.3 19.2 23.1 14 25.5C8.8 23.1 5 18.3 5 12.5V6L14 2.5Z"
+    stroke="#9255FF"
+    stroke-width="2.2"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M9.5 13.5L12.5 16.5L18.5 10.5"
+    stroke="#9255FF"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
           </div>
           <div>
             <span class="eti-label">STATUS</span>
@@ -42,14 +57,60 @@
               'cancelled': subscriptionPlan.subscriptionStatus === 'CANCELLED',
               'free': !subscriptionPlan.subscriptionStatus
             }">
-              ● {{ formattedStatus }}
+               {{ formattedStatus }}
             </span>
           </div>
         </div>
 
         <div class="eti-summary-card">
           <div class="eti-icon blue">
-            ◎
+            <svg width="24" height="24" viewBox="0 0 40 40" fill="none"
+     xmlns="http://www.w3.org/2000/svg">
+  <ellipse
+    cx="20"
+    cy="9"
+    rx="11"
+    ry="5"
+    stroke="#4C7DFF"
+    stroke-width="2.2"
+  />
+
+  <path
+    d="M9 9V20"
+    stroke="#4C7DFF"
+    stroke-width="2.2"
+  />
+
+  <path
+    d="M31 9V20"
+    stroke="#4C7DFF"
+    stroke-width="2.2"
+  />
+
+  <path
+    d="M9 20C9 22.76 13.92 25 20 25C26.08 25 31 22.76 31 20"
+    stroke="#4C7DFF"
+    stroke-width="2.2"
+  />
+
+  <path
+    d="M9 20V30"
+    stroke="#4C7DFF"
+    stroke-width="2.2"
+  />
+
+  <path
+    d="M31 20V30"
+    stroke="#4C7DFF"
+    stroke-width="2.2"
+  />
+
+  <path
+    d="M9 30C9 32.76 13.92 35 20 35C26.08 35 31 32.76 31 30"
+    stroke="#4C7DFF"
+    stroke-width="2.2"
+  />
+</svg>
           </div>
           <div>
             <span class="eti-label">REMAINING CREDITS</span>
@@ -60,7 +121,30 @@
 
         <div class="eti-summary-card">
           <div class="eti-icon green">
-            +
+            <svg width="24" height="24" viewBox="0 0 36 36" fill="none"
+     xmlns="http://www.w3.org/2000/svg">
+  <circle
+    cx="18"
+    cy="18"
+    r="14"
+    stroke="#48E36B"
+    stroke-width="2.5"
+  />
+
+  <path
+    d="M18 11V25"
+    stroke="#48E36B"
+    stroke-width="2.5"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M11 18H25"
+    stroke="#48E36B"
+    stroke-width="2.5"
+    stroke-linecap="round"
+  />
+</svg>
           </div>
           <div>
             <span class="eti-label">TOTAL TOP-UP CREDITS</span>
@@ -71,7 +155,81 @@
 
         <div class="eti-summary-card">
           <div class="eti-icon orange">
-            ▣
+           <svg width="24" height="24" viewBox="0 0 37 37" fill="none"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <rect
+    x="5"
+    y="7"
+    width="27"
+    height="25"
+    rx="3"
+    stroke="#FF914D"
+    stroke-width="2.2"
+  />
+
+  <path
+    d="M5 14H32"
+    stroke="#FF914D"
+    stroke-width="2.2"
+  />
+
+  <path
+    d="M11 4V10"
+    stroke="#FF914D"
+    stroke-width="2.2"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M26 4V10"
+    stroke="#FF914D"
+    stroke-width="2.2"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M11 19H11.01"
+    stroke="#FF914D"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M18.5 19H18.51"
+    stroke="#FF914D"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M26 19H26.01"
+    stroke="#FF914D"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M11 25H11.01"
+    stroke="#FF914D"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M18.5 25H18.51"
+    stroke="#FF914D"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M26 25H26.01"
+    stroke="#FF914D"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+</svg>
           </div>
           <div>
             <span class="eti-label">NEXT BILLING</span>
@@ -90,7 +248,53 @@
 
           <div class="eti-section-header">
             <div class="eti-section-title">
-              <div class="eti-title-icon">▤</div>
+              <div class="eti-title-icon">
+                <svg width="24" height="24" viewBox="0 0 32 32" fill="none"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Document -->
+  <rect
+    x="7"
+    y="4"
+    width="18"
+    height="24"
+    rx="3"
+    stroke="#8B5CFF"
+    stroke-width="2"
+  />
+
+  <!-- Lines -->
+  <path
+    d="M12 10H20"
+    stroke="#8B5CFF"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M12 14H20"
+    stroke="#8B5CFF"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M12 18H17"
+    stroke="#8B5CFF"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <!-- Small bottom line -->
+  <path
+    d="M12 22H15"
+    stroke="#8B5CFF"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+</svg>
+              </div>
               <div>
                 <h2>Credit Transactions</h2>
                 <p>A clean history of your balance, top-ups, and product activity.</p>
@@ -179,7 +383,7 @@
             </span>
 
             <button class="eti-buy-more" type="button" (click)="openBuyCreditsModal()">
-              ▣ &nbsp; Buy More Credits
+              <i class="fa-regular fa-credit-card"></i>  Buy More Credits
             </button>
           </div>
 
@@ -206,7 +410,30 @@
           <div class="eti-plan-body">
 
             <div class="eti-plan-info">
-              <div class="eti-plan-icon purple">◷</div>
+              <div class="eti-plan-icon purple">
+                <svg width="24" height="24" viewBox="0 0 32 32" fill="none"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Clock Circle -->
+  <circle
+    cx="16"
+    cy="16"
+    r="10"
+    stroke="#8B5CFF"
+    stroke-width="2"
+  />
+
+  <!-- Minute Hand -->
+  <path
+    d="M16 10V16L20 19"
+    stroke="#8B5CFF"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+</svg>
+              </div>
               <div>
                 <span>Billing cycle</span>
                 <strong>{{ monthlyPriceLabel }}</strong>
@@ -214,7 +441,54 @@
             </div>
 
             <div class="eti-plan-info">
-              <div class="eti-plan-icon pink">▣</div>
+              <div class="eti-plan-icon pink">
+                <svg width="24" height="24" viewBox="0 0 32 32" fill="none"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Calendar -->
+  <rect
+    x="6"
+    y="7"
+    width="20"
+    height="19"
+    rx="3"
+    stroke="#D946EF"
+    stroke-width="2"
+  />
+
+  <!-- Top line -->
+  <path
+    d="M6 13H26"
+    stroke="#D946EF"
+    stroke-width="2"
+  />
+
+  <!-- Calendar rings -->
+  <path
+    d="M11 5V10"
+    stroke="#D946EF"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M21 5V10"
+    stroke="#D946EF"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <!-- Date dots -->
+  <circle cx="11" cy="18" r="1" fill="#D946EF"/>
+  <circle cx="16" cy="18" r="1" fill="#D946EF"/>
+  <circle cx="21" cy="18" r="1" fill="#D946EF"/>
+
+  <circle cx="11" cy="22" r="1" fill="#D946EF"/>
+  <circle cx="16" cy="22" r="1" fill="#D946EF"/>
+  <circle cx="21" cy="22" r="1" fill="#D946EF"/>
+
+</svg>
+              </div>
               <div>
                 <span>Next renewal</span>
                 <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date:'mediumDate') : 'Not Available' }}</strong>
@@ -246,7 +520,30 @@
             </div>
 
             <div class="eti-more-credits">
-              <div class="eti-more-icon">◷</div>
+              <div class="eti-more-icon">
+                  <svg width="24" height="24" viewBox="0 0 32 32" fill="none"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Clock Circle -->
+  <circle
+    cx="16"
+    cy="16"
+    r="10"
+    stroke="#8B5CFF"
+    stroke-width="2"
+  />
+
+  <!-- Minute Hand -->
+  <path
+    d="M16 10V16L20 19"
+    stroke="#8B5CFF"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+</svg>
+              </div>
 
               <div>
                 <h3>Need more credits?</h3>
@@ -256,7 +553,7 @@
                 </p>
 
                 <button class="eti-btn eti-btn-primary" type="button" (click)="openBuyCreditsModal()">
-                  ▣ &nbsp; Buy Credits
+                  <i class="fa-regular fa-credit-card"></i> Buy Credits
                 </button>
               </div>
             </div>
