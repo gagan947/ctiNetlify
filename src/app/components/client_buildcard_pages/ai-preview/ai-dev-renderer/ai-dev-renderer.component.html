@@ -87,13 +87,14 @@ password input field with proper styling.</p>
               </ng-container>
               <ng-container *ngIf="!isSuccessInlineCta(block)">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5Z" fill="url(#crownGrad)" stroke="url(#crownGrad)" stroke-width="1.5" stroke-linejoin="round"/>
-                  <path d="M5 19H19" stroke="url(#crownGrad)" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5Z" fill="url(#crownGrad)" stroke="url(#crownGrad)"
+                    stroke-width="1.5" stroke-linejoin="round" />
+                  <path d="M5 19H19" stroke="url(#crownGrad)" stroke-width="2" stroke-linecap="round" />
                   <defs>
                     <linearGradient id="crownGrad" x1="3" y1="4" x2="21" y2="19" gradientUnits="userSpaceOnUse">
-                      <stop stop-color="#E9D5FF"/>
-                      <stop offset="0.5" stop-color="#C084FC"/>
-                      <stop offset="1" stop-color="#A855F7"/>
+                      <stop stop-color="#E9D5FF" />
+                      <stop offset="0.5" stop-color="#C084FC" />
+                      <stop offset="1" stop-color="#A855F7" />
                     </linearGradient>
                   </defs>
                 </svg>
@@ -127,7 +128,8 @@ password input field with proper styling.</p>
                 <span *ngIf="block?.text?.actionId === 'download_code'" class="ct_btn_icon">&lt;/&gt;</span>
                 <span *ngIf="block?.text?.actionId === 'deploy_template'" class="ct_btn_icon">🚀</span>
                 <span *ngIf="block?.text?.actionId === 'upgrade_plan'" class="ct_btn_icon">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
                     <line x1="7" y1="17" x2="17" y2="7"></line>
                     <polyline points="7 7 17 7 17 17"></polyline>
                   </svg>
@@ -146,7 +148,8 @@ password input field with proper styling.</p>
                 <span *ngIf="block?.text?.actionId2 === 'download_code'" class="ct_btn_icon">&lt;/&gt;</span>
                 <span *ngIf="block?.text?.actionId2 === 'deploy_template'" class="ct_btn_icon">🚀</span>
                 <span *ngIf="block?.text?.actionId2 === 'upgrade_plan'" class="ct_btn_icon">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
                     <line x1="7" y1="17" x2="17" y2="7"></line>
                     <polyline points="7 7 17 7 17 17"></polyline>
                   </svg>
@@ -159,13 +162,14 @@ password input field with proper styling.</p>
         </div>
       </div>
 
-      <div *ngIf="isUserMessageBlock(block)" class="ct_user_message_row">
-        <div class="ct_user_message_card">
-          {{ block?.text }}
+      <div *ngIf="isUserMessageBlock(block)" class="customization-chat-message mb-3 is-user">
+        <div class="d-flex align-items-start gap-2 justify-content-end">
+          <div class="ct_chat_body" style="max-width: 85%;">
+            <div class="ct_chat_bubble ct_chat_bubble_user">
+              <p class="mb-0">{{ block?.text }}</p>
+            </div>
+          </div>
         </div>
-        <!-- <div class="ct_user_message_meta">
-          <span *ngIf="block?.timestamp">{{ block?.timestamp | date : 'dd MMM, HH:mm a' }}</span>
-        </div> -->
       </div>
     </div>
   </div>
@@ -265,6 +269,68 @@ password input field with proper styling.</p>
       <div class="file-activity-copy">
         <div class="file-activity-name">{{ block?.data?.file }}</div>
         <div class="file-activity-summary">{{ getFileActivitySummary(block) }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isCustomizationCardBlock(block)" class="ct_custom_q_card mt-2 mb-3">
+    <!-- Header Bar -->
+    <div class="ct_custom_q_header d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-2">
+        <div class="ct_custom_q_badge_icon">
+          <i class="fa-circle-question fa-solid"></i>
+        </div>
+        <span class="ct_custom_q_header_title">{{ block?.data?.questionTitle || 'Agent has questions for you' }}</span>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <span class="ct_custom_q_status_badge" [class.is-answered]="block?.data?.answered">
+          {{ block?.data?.answered ? 'Answered' : 'Waiting for answers' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="ct_custom_q_body">
+      <div class="ct_custom_q_subhead mb-3" *ngIf="block?.data?.message">
+        <span>{{ block?.data?.message }}</span>
+      </div>
+
+      <!-- Checkbox Options List -->
+      <div class="ct_custom_checkbox_list d-flex flex-column gap-2 mb-3" *ngIf="block?.data?.options?.length">
+        <div *ngFor="let option of block?.data?.options" class="ct_custom_checkbox_row d-flex align-items-center gap-3"
+          [class.is-checked]="isOptionChecked(block, option.id)" [class.is-disabled]="block?.data?.answered"
+          (click)="!block?.data?.answered && toggleCustomizationOption(block, option.id)">
+
+          <div class="ct_custom_checkbox_square" [class.checked]="isOptionChecked(block, option.id)">
+            <i class="fa-solid fa-check" *ngIf="isOptionChecked(block, option.id)"></i>
+          </div>
+
+          <span class="ct_custom_checkbox_label">{{ option.label }}</span>
+        </div>
+      </div>
+
+      <!-- Footer Bar -->
+      <div class="ct_custom_q_footer d-flex align-items-center justify-content-between pt-2">
+        <div class="ct_custom_q_counter">
+          <span *ngIf="block?.data?.totalQuestions && block?.data?.totalQuestions > 1">
+            &lt; Question {{ (block?.data?.currentQuestionIndex || 0) + 1 }} of {{ block?.data?.totalQuestions }} &gt;
+          </span>
+        </div>
+
+        <div class="d-flex align-items-center gap-2" *ngIf="!block?.data?.answered">
+          <button type="button" class="btn ct_custom_btn_auto_answer" (click)="autoAnswerCustomizationCard(block)">
+            Auto-answer
+          </button>
+
+          <button type="button" class="btn ct_custom_btn_submit_card" [disabled]="!hasSelectedOptions(block)"
+            (click)="submitCustomizationCard(block)">
+            Submit
+          </button>
+        </div>
+
+        <div class="ct_answered_badge text-success small" *ngIf="block?.data?.answered">
+          <i class="fa-solid fa-circle-check me-1"></i> Submitted: <strong>{{ block?.data?.userInputAnswer }}</strong>
+        </div>
       </div>
     </div>
   </div>

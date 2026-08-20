@@ -391,6 +391,55 @@ export class AiDevRendererComponent implements OnChanges {
     return 'token-plain';
   }
 
+  isCustomizationCardBlock(block: any): boolean {
+    return block?.type === 'customization-card';
+  }
+
+  toggleCustomizationOption(block: any, optionId: string): void {
+    if (block?.data?.answered) return;
+    if (!block.data) block.data = {};
+    const isAlreadyChecked = !!(block.data.selectedOptionsMap && block.data.selectedOptionsMap[optionId]);
+    if (isAlreadyChecked) {
+      block.data.selectedOptionsMap = {};
+    } else {
+      block.data.selectedOptionsMap = { [optionId]: true };
+    }
+  }
+
+  isOptionChecked(block: any, optionId: string): boolean {
+    return !!(block?.data?.selectedOptionsMap && block.data.selectedOptionsMap[optionId]);
+  }
+
+  hasSelectedOptions(block: any): boolean {
+    return !!(block?.data?.selectedOptionsMap && Object.values(block.data.selectedOptionsMap).some(v => !!v));
+  }
+
+  submitCustomizationCard(block: any): void {
+    debugger
+    if (block?.data?.answered || !block?.data?.options) return;
+    const selectedOptions = block.data.options.filter((opt: any) => this.isOptionChecked(block, opt.id));
+    if (!selectedOptions.length) return;
+
+    block.data.answered = true;
+    const selectedLabels = selectedOptions.map((opt: any) => opt.label).join(', ');
+    block.data.userInputAnswer = selectedLabels;
+
+    this.actionSelected.emit(`submit_customization_options:${JSON.stringify({
+      blockId: block.id,
+      selectedOptions,
+      requestId: block.data.requestId || null
+    })}`);
+  }
+
+  autoAnswerCustomizationCard(block: any): void {
+    if (block?.data?.answered || !block?.data?.options?.length) return;
+    if (!this.hasSelectedOptions(block)) {
+      if (!block.data.selectedOptionsMap) block.data.selectedOptionsMap = {};
+      block.data.selectedOptionsMap[block.data.options[0].id] = true;
+    }
+    this.submitCustomizationCard(block);
+  }
+
   private escapeHtml(value: string): string {
     return value
       .replace(/&/g, '&amp;')

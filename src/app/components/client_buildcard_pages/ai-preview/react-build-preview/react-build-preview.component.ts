@@ -75,6 +75,32 @@ interface CustomizationProgressBlock {
   };
 }
 
+export interface CustomizationOption {
+  id: string;
+  label: string;
+}
+
+export interface PendingQuestion {
+  id: string;
+  type: string;
+}
+
+export interface CustomizationChatMessage {
+  sender: 'user' | 'ai';
+  message: string;
+  replyType?: 'message' | 'question' | 'options';
+  questionId?: string;
+  pendingQuestion?: PendingQuestion;
+  options?: CustomizationOption[];
+  answered?: boolean;
+  selectedOptionId?: string;
+  selectedOptionsMap?: { [optionId: string]: boolean };
+  userInputAnswer?: string;
+  questionTitle?: string;
+  currentQuestionIndex?: number;
+  totalQuestions?: number;
+}
+
 export function noWhitespaceValidator(control: AbstractControl): ValidationErrors | null {
   const value = String(control.value || '');
   return value.trim().length === 0 ? { whitespace: true } : null;
@@ -190,13 +216,14 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   showDiscardConfirm = false;
   showDiscardConfirm2 = false
   isMobilePreview = false;
-
+  fileUrls: any = []
   elementEdits: any[] = [];
   editorToolbarCollapsed = false;
 
   pendingElementEdit: any = null;
   chatInput = '';
 
+  customizationMessages: CustomizationChatMessage[] = [];
   editCommentsArray: any = [];
   get loaderStepTitles(): string[] {
     if (this.buildFlowType === 'customize') {
@@ -629,10 +656,9 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
           );
         }
 
-        // this.customizationMessages =
-        //   this.normalizeCustomizationMessages(
-        //     payload?.messages
-        //   );
+        if (Array.isArray(payload?.messages)) {
+          this.customizationMessages = payload.messages.map((m: any) => this.normalizeCustomizationChatMessage(m));
+        }
 
         // this.customizationChatState =
         //   payload?.state || null;
@@ -644,10 +670,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       'customizationResponse',
       (payload: any) => {
         console.log('[Customize] customizationResponse (payload):', payload);
-
-        // this.handleCustomizationResponse(
-        //   response
-        // );
+        this.handleCustomizationResponse(payload);
       }
     );
 
@@ -697,6 +720,280 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       this.customizationConversationStorageKey,
       normalizedId
     );
+  }
+
+  handleCustomizationResponse(payload: any): void {
+    if (!payload || typeof payload !== 'object') {
+      return;
+    }
+
+    this.hideLoader();
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
+    this.isTyping = false;
+
+    const response = payload;
+
+    switch (response.replyType) {
+      case 'message':
+        if (response.message) {
+          this.blocks.push({
+            id: `ai-message-${Date.now()}`,
+            text: response.message,
+            done: true,
+            timestamp: new Date()
+          });
+        }
+        break;
+
+      case 'question':
+        if (response.options && response.options.length > 0) {
+          const parsedOptions = response.options.map((opt: any) => ({
+            id: String(opt.id || opt.value || opt.label || ''),
+            label: String(opt.label || opt.text || opt.title || opt.id || '')
+          }));
+          const defaultMap: { [key: string]: boolean } = {};
+
+          this.blocks.push({
+            id: `customization-card-${Date.now()}`,
+            type: 'customization-card',
+            data: {
+              requestId: response.activeRequest.requestId || null,
+              message: response.message || 'Please answer the question below:',
+              questionTitle: response.questionTitle || 'Agent has questions for you',
+              options: parsedOptions,
+              selectedOptionsMap: defaultMap,
+              currentQuestionIndex: response.currentQuestionIndex || 0,
+              totalQuestions: response.totalQuestions || 1,
+              answered: false
+            }
+          });
+        } else if (response.message) {
+          this.blocks.push({
+            id: `ai-message-${Date.now()}`,
+            text: response.message,
+            done: true,
+            timestamp: new Date()
+          });
+        }
+        break;
+
+      case 'options':
+        const parsedOptions = Array.isArray(response.options) ? response.options.map((opt: any) => ({
+          id: String(opt.id || opt.value || opt.label || ''),
+          label: String(opt.label || opt.text || opt.title || opt.id || '')
+        })) : [];
+
+        const defaultMap: { [key: string]: boolean } = {};
+
+        this.blocks.push({
+          id: `customization-card-${Date.now()}`,
+          type: 'customization-card',
+          data: {
+            requestId: response.activeRequest.requestId || null,
+            message: response.message || 'Please select your options:',
+            questionTitle: response.questionTitle || response.title || 'Agent has questions for you',
+            options: parsedOptions,
+            selectedOptionsMap: defaultMap,
+            currentQuestionIndex: response.currentQuestionIndex || 0,
+            totalQuestions: response.totalQuestions || 1,
+            answered: false
+          }
+        });
+        break;
+
+      default:
+        if (response.message) {
+          this.blocks.push({
+            id: `ai-message-${Date.now()}`,
+            text: response.message,
+            done: true,
+            timestamp: new Date()
+          });
+        }
+        break;
+    }
+    setTimeout(() => this.scrollToBottom(true), 50);
+  }
+
+  addCustomizationMessage(msg: CustomizationChatMessage): void {
+    this.customizationMessages.push(msg);
+    if (msg.sender === 'user' && msg.message) {
+      this.blocks.push({
+        id: `user-message-${Date.now()}`,
+        text: msg.message,
+        done: true,
+        timestamp: new Date()
+      });
+    }
+    setTimeout(() => this.scrollToBottom(true), 50);
+  }
+
+  toggleCustomizationOptionCheckbox(chat: CustomizationChatMessage, optionId: string): void {
+    if (chat.answered) {
+      return;
+    }
+
+    if (!chat.selectedOptionsMap) {
+      chat.selectedOptionsMap = {};
+    }
+
+    chat.selectedOptionsMap[optionId] = !chat.selectedOptionsMap[optionId];
+  }
+
+  isCustomizationOptionChecked(chat: CustomizationChatMessage, optionId: string): boolean {
+    return !!(chat.selectedOptionsMap && chat.selectedOptionsMap[optionId]);
+  }
+
+  hasAnyCustomizationOptionSelected(chat: CustomizationChatMessage): boolean {
+    if (!chat.selectedOptionsMap) {
+      return false;
+    }
+    return Object.values(chat.selectedOptionsMap).some(val => !!val);
+  }
+
+  submitCustomizationOptions(chat: CustomizationChatMessage): void {
+    if (chat.answered || !chat.options) {
+      return;
+    }
+
+    const selectedOptions = chat.options.filter(opt => this.isCustomizationOptionChecked(chat, opt.id));
+    if (selectedOptions.length === 0) {
+      return;
+    }
+
+    chat.answered = true;
+
+    const selectedLabels = selectedOptions.map(opt => opt.label).join(', ');
+    chat.userInputAnswer = selectedLabels;
+
+    this.addCustomizationMessage({
+      sender: 'user',
+      message: selectedLabels,
+      replyType: 'message'
+    });
+
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
+    this.isTyping = true;
+
+    if (this.customizationSocket?.connected) {
+      this.customizationSocket.emit('customizationMessage', {
+        templatePublicId: this.currentTemplateId,
+        type: 'customization-message',
+        message: selectedLabels,
+        instruction: null,
+        element: null,
+        attachments: []
+      });
+    }
+  }
+
+  autoAnswerCustomizationQuestion(chat: CustomizationChatMessage): void {
+    if (chat.answered || !chat.options || chat.options.length === 0) {
+      return;
+    }
+
+    if (!this.hasAnyCustomizationOptionSelected(chat)) {
+      if (!chat.selectedOptionsMap) {
+        chat.selectedOptionsMap = {};
+      }
+      chat.selectedOptionsMap[chat.options[0].id] = true;
+    }
+
+    this.submitCustomizationOptions(chat);
+  }
+
+  selectCustomizationOption(chat: CustomizationChatMessage, option: CustomizationOption): void {
+    if (chat.answered) {
+      return;
+    }
+
+    chat.answered = true;
+    chat.selectedOptionId = option.id;
+
+    this.addCustomizationMessage({
+      sender: 'user',
+      message: option.label,
+      replyType: 'message'
+    });
+
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
+    this.isTyping = true;
+
+    if (this.customizationSocket?.connected) {
+      this.customizationSocket.emit('customizationMessage', {
+        templatePublicId: this.currentTemplateId,
+        type: 'customization-message',
+        message: option.label,
+        instruction: null,
+        element: null,
+        attachments: []
+      });
+    }
+  }
+
+  submitCustomizationQuestionAnswer(chat: CustomizationChatMessage, answerValue: string): void {
+    const trimmed = answerValue?.trim();
+    if (!trimmed || chat.answered) {
+      return;
+    }
+
+    chat.answered = true;
+    chat.userInputAnswer = trimmed;
+
+    this.addCustomizationMessage({
+      sender: 'user',
+      message: trimmed,
+      replyType: 'message'
+    });
+
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
+    this.isTyping = true;
+
+    if (this.customizationSocket?.connected) {
+      this.customizationSocket.emit('customizationMessage', {
+        templatePublicId: this.currentTemplateId,
+        type: 'customization-message',
+        message: trimmed,
+        instruction: null,
+        element: null,
+        attachments: []
+      });
+    }
+  }
+
+  trackByChatMessage(index: number, item: CustomizationChatMessage): any {
+    return item.questionId || index;
+  }
+
+  private normalizeCustomizationChatMessage(raw: any): CustomizationChatMessage {
+    if (!raw || typeof raw !== 'object') {
+      return {
+        sender: 'ai',
+        message: String(raw || ''),
+        replyType: 'message'
+      };
+    }
+
+    const sender = raw.sender === 'user' || raw.role === 'user' ? 'user' : 'ai';
+    const replyType = raw.replyType || 'message';
+
+    return {
+      sender,
+      message: raw.message || raw.text || '',
+      replyType,
+      questionId: raw.questionId || raw.pendingQuestion?.id,
+      pendingQuestion: raw.pendingQuestion ? {
+        id: raw.pendingQuestion.id || raw.questionId || '',
+        type: raw.pendingQuestion.type || 'text'
+      } : undefined,
+      options: Array.isArray(raw.options) ? raw.options.map((opt: any) => ({
+        id: String(opt.id || opt.value || opt.label || ''),
+        label: String(opt.label || opt.text || opt.title || opt.id || '')
+      })) : [],
+      answered: !!raw.answered,
+      selectedOptionId: raw.selectedOptionId,
+      userInputAnswer: raw.userInputAnswer
+    };
   }
 
 
@@ -2683,6 +2980,41 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       this.openCallbackModal();
       return;
     }
+
+    if (actionId.startsWith('submit_customization_options:')) {
+      try {
+        const payloadStr = actionId.replace('submit_customization_options:', '');
+        const data = JSON.parse(payloadStr);
+        const selectedOptions = data.selectedOptions || [];
+        const selectedLabels = selectedOptions.map((opt: any) => opt.label).join(', ');
+
+        this.blocks.push({
+          id: `user-message-${Date.now()}`,
+          text: selectedLabels,
+          done: true,
+          timestamp: new Date()
+        });
+
+        this.showLoader('Thinking...');
+
+        const socketPayload = {
+          templatePublicId: this.currentTemplateId,
+          type: 'customization-message',
+          message: selectedLabels,
+          instruction: null,
+          element: null,
+          attachments: [],
+          requestId: data.requestId || null
+        };
+
+        if (this.customizationSocket?.connected) {
+          this.customizationSocket.emit('customizationMessage', socketPayload);
+        }
+      } catch (err) {
+        console.error('[Customize] Error submitting options:', err);
+      }
+      return;
+    }
   }
 
   handlePromptKeydown(event: KeyboardEvent, block: any, value: string): void {
@@ -2744,13 +3076,15 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     this.blocks = this.blocks.filter(block => block?.id !== promptEvent.blockId);
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta'));
-    this.blocks.push({
-      id: `user-message-customize-${Date.now()}`,
-      text: prompt,
-      done: true,
-      timestamp: new Date()
+    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
+
+    this.addCustomizationMessage({
+      sender: 'user',
+      message: prompt,
+      replyType: 'message'
     });
 
+    this.showLoader('Thinking...');
     this.isTyping = true;
     this.resetBuildGenerationError();
     const customizationRequestVersion = ++this.customizationRequestVersion;
@@ -2762,7 +3096,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       restTriggered: false
     };
     this.activeCustomizationProgressBlock = null;
-    this.showLoader('Thinking...');
     const socketPayload = {
       templatePublicId,
       type: 'customization-message',
@@ -4469,6 +4802,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       const filesToUpload = this.previewFiles.map(item => item.file);
       this.apiService.uploadCustomizeAssets(activeDesign, filesToUpload).subscribe({
         next: (response) => {
+          this.fileUrls = response
           console.log('Upload response:', response);
         },
         error: (error) => {
