@@ -129,30 +129,32 @@
 
                     <div class="ct_ai_input_shell px-0" [class.ct_suggestions_active]="hasVisibleSuggestions()">
                         <div class="d-flex align-items-center gap-2 preview-container">
-                            <div *ngFor="let item of previewFiles" class="file-preview">
+                            <div *ngFor="let item of previewFiles; let idx = index" class="file-preview">
 
                                 <!-- Image -->
                                 <div class="position-relative eti_file_hover_main" *ngIf="item.previewType === 'image'">
-                                    <i class="fa-solid fa-xmark ct_preview_close_btn"></i>
+                                    <i class="fa-solid fa-xmark ct_preview_close_btn" (click)="removePreviewFile(idx)"></i>
                                     <img [src]="item.previewUrl" alt="Image Preview" class="preview-image" />
+                                    <div *ngIf="item.isUploading" class="eti_file_upload_loader">
+                                        <div class="eti_spinner"></div>
+                                    </div>
                                 </div>
 
                                 <!-- Video -->
                                 <div class="position-relative eti_file_hover_main" *ngIf="item.previewType === 'video'">
-                                    <i class="fa-solid fa-xmark ct_preview_close_btn"></i>
+                                    <i class="fa-solid fa-xmark ct_preview_close_btn" (click)="removePreviewFile(idx)"></i>
                                     <video [src]="item.previewUrl" class="preview-video">
                                     </video>
+                                    <div *ngIf="item.isUploading" class="eti_file_upload_loader">
+                                        <div class="eti_spinner"></div>
+                                    </div>
                                 </div>
 
                                 <!-- Audio -->
                                 <div class="position-relative eti_file_hover_main" *ngIf="item.previewType === 'audio'">
-                                    <i class="fa-solid fa-xmark ct_preview_close_btn"></i>
-                                    <!-- <audio *ngIf="item.previewType === 'audio'" controls [src]="item.previewUrl"
-                                    style="width: 230px; border-radius: 100px;" class="preview-audio">
-                                </audio> -->
+                                    <i class="fa-solid fa-xmark ct_preview_close_btn" (click)="removePreviewFile(idx)"></i>
                                     <div class="eti-file-card">
                                         <div class="eti-file-card__icon">
-                                            <!-- Audio file icon -->
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                                                 stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                                                 stroke-linejoin="round">
@@ -169,18 +171,16 @@
                                             <span class="eti-file-card__type">MP3</span>
                                         </div>
                                     </div>
+                                    <div *ngIf="item.isUploading" class="eti_file_upload_loader">
+                                        <div class="eti_spinner"></div>
+                                    </div>
                                 </div>
-
 
                                 <!-- PDF -->
                                 <div class="position-relative eti_file_hover_main" *ngIf="item.previewType === 'pdf'">
-                                    <i class="fa-solid fa-xmark ct_preview_close_btn"></i>
-                                    <!-- <iframe *ngIf="item.previewType === 'pdf'" [src]="item.previewUrl"
-                                    class="preview-pdf">
-                                </iframe> -->
+                                    <i class="fa-solid fa-xmark ct_preview_close_btn" (click)="removePreviewFile(idx)"></i>
                                     <div class="eti-file-card">
                                         <div class="eti-file-card__icon">
-                                            <!-- Audio file icon -->
                                             <svg viewBox="0 0 24 24" fill="currentColor"
                                                 xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
                                                 class="shrink-0 text-muted-foreground/70 h-8 w-8 md:h-7 md:w-7"
@@ -195,6 +195,9 @@
                                                 [title]="item.fileName">{{item.fileName}}</span>
                                             <span class="eti-file-card__type">PDF</span>
                                         </div>
+                                    </div>
+                                    <div *ngIf="item.isUploading" class="eti_file_upload_loader">
+                                        <div class="eti_spinner"></div>
                                     </div>
                                 </div>
 

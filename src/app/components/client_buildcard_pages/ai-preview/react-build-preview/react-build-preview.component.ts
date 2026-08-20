@@ -3101,7 +3101,15 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     this.sendCustomizationMessage(socketPayload);
 
-    this.editCommentsArray = []
+    this.editCommentsArray = [];
+    this.previewFiles.forEach(item => {
+      if (item.previewUrl && item.previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(item.previewUrl);
+      }
+    });
+    this.previewFiles = [];
+    this.fileUrls = [];
+    (this as any).pendingAttachments = [];
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 
@@ -4471,11 +4479,15 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
 
   previewFiles: {
+    id?: string;
     file: File;
     previewUrl: string;
     previewType: 'image' | 'video' | 'audio' | 'pdf';
     fileName: string;
+    isUploading?: boolean;
+    asset?: any;
   }[] = [];
+
   handleFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
 
@@ -4483,26 +4495,18 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       return;
     }
 
-    // Clear previous previews
-    this.previewFiles.forEach(item => {
-      URL.revokeObjectURL(item.previewUrl);
-    });
+    const newFiles: File[] = Array.from(input.files);
+    const newlyAddedItems: any[] = [];
 
-    this.previewFiles = [];
-
-    Array.from(input.files).forEach((file: File) => {
-
+    newFiles.forEach((file: File) => {
       let previewType: 'image' | 'video' | 'audio' | 'pdf' | null = null;
 
       if (file.type.startsWith('image/')) {
         previewType = 'image';
-
       } else if (file.type.startsWith('video/')) {
         previewType = 'video';
-
       } else if (file.type.startsWith('audio/')) {
         previewType = 'audio';
-
       } else if (file.type === 'application/pdf') {
         previewType = 'pdf';
       }
@@ -4514,30 +4518,86 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
       const previewUrl = URL.createObjectURL(file);
 
-      this.previewFiles.push({
+      const item = {
         file: file,
         previewUrl: previewUrl,
         previewType: previewType,
-        fileName: file.name
-      });
+        fileName: file.name,
+        isUploading: true,
+        asset: null
+      };
+
+      this.previewFiles.push(item);
+      newlyAddedItems.push(item);
     });
 
-    const activeDesign = this.templates.find((t: any) => t.inquiryId === this.selectedProjectId).templateId;
+    const activeDesign = this.templates.find((t: any) => t.inquiryId === this.selectedProjectId)?.templateId;
 
-    if (activeDesign && this.previewFiles.length > 0) {
-      const filesToUpload = this.previewFiles.map(item => item.file);
+    if (activeDesign && newlyAddedItems.length > 0) {
+      const filesToUpload = newlyAddedItems.map(item => item.file);
       this.apiService.uploadCustomizeAssets(activeDesign, filesToUpload).subscribe({
-        next: (response) => {
-          this.fileUrls = response
+        next: (response: any) => {
           console.log('Upload response:', response);
+          this.fileUrls = response;
+          const returnedAssets = response?.assets || (Array.isArray(response) ? response : []);
+
+          if (Array.isArray(returnedAssets)) {
+            newlyAddedItems.forEach((item) => {
+              const matchedAsset = returnedAssets.find((a: any) =>
+                a.originalName === item.fileName ||
+                a.fileName === item.fileName ||
+                a.originalName === item.file?.name
+              ) || returnedAssets[0];
+
+              if (matchedAsset) {
+                item.id = matchedAsset.id;
+                item.asset = matchedAsset;
+              }
+              item.isUploading = false;
+            });
+          } else {
+            newlyAddedItems.forEach(item => item.isUploading = false);
+          }
+
+          this.updatePendingAttachments();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error uploading files:', error);
+          newlyAddedItems.forEach(item => item.isUploading = false);
         }
       });
+    } else {
+      newlyAddedItems.forEach(item => item.isUploading = false);
     }
 
     input.value = '';
+  }
+
+  removePreviewFile(index: number): void {
+    if (index < 0 || index >= this.previewFiles.length) {
+      return;
+    }
+
+    const item = this.previewFiles[index];
+    if (item && item.previewUrl && item.previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(item.previewUrl);
+    }
+
+    this.previewFiles.splice(index, 1);
+    this.updatePendingAttachments();
+  }
+
+  private updatePendingAttachments(): void {
+    const uploadedAssets = this.previewFiles
+      .filter(item => item.asset)
+      .map(item => item.asset);
+
+    (this as any).pendingAttachments = uploadedAssets;
+    if (this.fileUrls && typeof this.fileUrls === 'object') {
+      this.fileUrls.assets = uploadedAssets;
+    } else {
+      this.fileUrls = uploadedAssets;
+    }
   }
 
 }
