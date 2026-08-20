@@ -97,8 +97,7 @@ export interface CustomizationMessagePayload {
   type: CustomizationMessageType | string;
   requestId: string | null;
   message: string | null;
-  instruction: string | null;
-  element: any | null;
+  elements: any[];
   attachments: any[];
   optionId?: string;
   optionLabel?: string;
@@ -755,8 +754,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       type,
       requestId: reqId,
       message: data.message ?? null,
-      instruction: data.instruction ?? null,
-      element: data.element ?? null,
+      elements: data.elements ?? [],
       attachments: Array.isArray(data.attachments) ? data.attachments : [],
       ...(data.optionId !== undefined ? { optionId: data.optionId } : {}),
       ...(data.optionLabel !== undefined ? { optionLabel: data.optionLabel } : {}),
@@ -953,8 +951,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     const payload = this.buildCustomizationPayload(CustomizationMessageType.OPTION_SELECTION, {
       requestId: this.activeCustomizationRequestId,
       message: selectedLabels,
-      instruction: null,
-      element: null,
+      elements: [],
       attachments: [],
       optionId: firstOpt?.id || '',
       optionLabel: selectedLabels,
@@ -1000,8 +997,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     const payload = this.buildCustomizationPayload(CustomizationMessageType.OPTION_SELECTION, {
       requestId: this.activeCustomizationRequestId,
       message: option.label,
-      instruction: null,
-      element: null,
+      elements: [],
       attachments: [],
       optionId: option.id,
       optionLabel: option.label,
@@ -1033,8 +1029,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     const payload = this.buildCustomizationPayload(CustomizationMessageType.QUESTION_ANSWER, {
       requestId: this.activeCustomizationRequestId,
       message: trimmed,
-      instruction: null,
-      element: null,
+      elements: [],
       attachments: [],
       questionId: chat.questionId || chat.pendingQuestion?.id || null
     });
@@ -2160,17 +2155,17 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     switch (event.data.type) {
 
       case 'creative-ai-element-hover':
-        console.log(
-          '[CreativeAI Angular] Hovered:',
-          event.data
-        );
+        // console.log(
+        //   '[CreativeAI Angular] Hovered:',
+        //   event.data
+        // );
         break;
 
       case 'creative-ai-element-select':
-        console.log(
-          '[CreativeAI Angular] Selected:',
-          event.data
-        );
+        // console.log(
+        //   '[CreativeAI Angular] Selected:',
+        //   event.data
+        // );
 
         this.openElementEditor(event.data);
         break;
@@ -2979,8 +2974,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         const socketPayload = this.buildCustomizationPayload(CustomizationMessageType.OPTION_SELECTION, {
           requestId: data.requestId || this.activeCustomizationRequestId || null,
           message: selectedLabels,
-          instruction: null,
-          element: null,
+          elements: [],
           attachments: [],
           optionId: firstOpt?.id || '',
           optionLabel: selectedLabels,
@@ -3079,19 +3073,21 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     let socketPayload: CustomizationMessagePayload;
     if (this.selectedElementMetadata) {
+      const element = this.editCommentsArray.map((item: any) => ({
+        ...item.element,
+        instruction: item.instruction
+      }))
       socketPayload = this.buildCustomizationPayload(CustomizationMessageType.EDITOR_ELEMENT_EDIT, {
         requestId: this.activeCustomizationRequestId,
-        message: null,
-        instruction: prompt,
-        element: this.selectedElementMetadata,
+        message: prompt,
+        elements: element,
         attachments: attachments
       });
     } else {
       socketPayload = this.buildCustomizationPayload(CustomizationMessageType.CHAT_MESSAGE, {
         requestId: this.activeCustomizationRequestId,
         message: prompt,
-        instruction: null,
-        element: null,
+        elements: [],
         attachments: attachments
       });
     }
@@ -3105,6 +3101,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     this.sendCustomizationMessage(socketPayload);
 
+    this.editCommentsArray = []
     setTimeout(() => this.scrollToBottom(true), 0);
   }
 

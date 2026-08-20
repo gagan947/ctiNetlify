@@ -348,7 +348,8 @@
                             <!-- =========================================
          EDITOR DOCK
          ========================================= -->
-                            <div class="creative-editor-dock" [class.collapsed]="editorToolbarCollapsed">
+                            <div *ngIf="showSupportCallbackButton" class="creative-editor-dock"
+                                [class.collapsed]="editorToolbarCollapsed">
 
                                 <div class="creative-editor-toolbar">
 
