@@ -202,7 +202,7 @@
                         <div class="position-relative ">
                             <div class="eti-wrapper">
                                 @if(editCommentsArray.length > 0){
-                                <div class="ct_edit_comments align-items-center justify-content-between gap-2">
+                                <div class="ct_edit_comments align-items-center justify-content-between gap-2 pe-1">
                                     <div class="d-flex align-items-center gap-2">
                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -215,11 +215,27 @@
                                         </svg>
                                         <span>{{editCommentsArray.length}} {{editCommentsArray.length > 1 ? 'Edits' :
                                             'Edit'}} </span>
-                                        <i class="fa-solid fa-xmark"></i>
+                                        <i (click)="showDiscardConfirm2 = !showDiscardConfirm2"
+                                            class="fa-solid fa-xmark cursor-pointer"></i>
+
+                                        <div class="position-relative d-inline-block">
+                                            @if(showDiscardConfirm2) {
+                                            <div class="discard-confirm-popover">
+                                                <div class="discard-confirm-text">Discard all changes?</div>
+                                                <div class="discard-confirm-actions">
+                                                    <button class="discard-btn-cancel"
+                                                        (click)="showDiscardConfirm2 = false">Cancel</button>
+                                                    <button class="discard-btn-confirm"
+                                                        (click)="confirmDiscard()">Discard</button>
+                                                </div>
+                                            </div>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                                 }
 
+                                @if (!showDiscardConfirm2){
                                 <div class="eti-comments">
                                     @for (item of editCommentsArray; track $index) {
                                     <div class="eti-comment">
@@ -231,6 +247,7 @@
                                     </div>
                                     }
                                 </div>
+                                }
                             </div>
                             <textarea [disabled]="isReactBuilding" #customizeInput class="ct_ai_textarea px-3" rows="3"
                                 [placeholder]="editCommentsArray.length > 0 ? '' : 'Shape This Template Your Way'"
@@ -475,6 +492,31 @@
                                             </svg>
                                         </span>
                                     </button>
+
+                                    @if(editCommentsArray.length > 0){
+                                    <div class="position-relative d-inline-block">
+                                        <button type="button" class="creative-toolbar-edit"
+                                            (click)="showDiscardConfirm = !showDiscardConfirm">
+                                            <span>Discard</span>
+                                        </button>
+
+                                        @if(showDiscardConfirm) {
+                                        <div class="discard-confirm-popover">
+                                            <div class="discard-confirm-text">Discard all changes?</div>
+                                            <div class="discard-confirm-actions">
+                                                <button class="discard-btn-cancel"
+                                                    (click)="showDiscardConfirm = false">Cancel</button>
+                                                <button class="discard-btn-confirm"
+                                                    (click)="confirmDiscard()">Discard</button>
+                                            </div>
+                                        </div>
+                                        }
+                                    </div>
+
+                                    <button type="button" class="creative-toolbar-apply">
+                                        <span>Apply</span>
+                                    </button>
+                                    }
                                 </div>
 
 
