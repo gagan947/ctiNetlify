@@ -1,780 +1,802 @@
 @import '../../../../assets/css/user-dashboard.css';
 
 .ct_user_plan_page {
-  --ct-text: #152235;
-  --ct-text-soft: #5e6c80;
-  --ct-surface: rgba(255, 255, 255, 0.78);
-  --ct-primary: #1655c0;
-  --ct-primary-soft: #e8f0ff;
-  --ct-success: #12805c;
-  --ct-success-soft: #e6f7f0;
-  --ct-warning: #a96a17;
-  --ct-warning-soft: #fff3db;
-  --ct-danger: #d14343;
-  background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.96), transparent 28%),
-    linear-gradient(135deg, #fff1e7 0%, #f8f1ff 42%, #edf5ff 100%);
+  background: #000;
   min-height: 100dvh;
-  padding: 18px 0 36px;
 }
 
 .ct_dash_right_content {
   background: #000;
 }
 
-.ct_plan_shell {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.eti-plans-page {
+  min-height: 100vh;
+  padding: 34px 42px;
+  background:
+    radial-gradient(
+      circle at 80% 10%,
+      rgba(92, 55, 255, 0.12),
+      transparent 30%
+    ),
+    #050817;
+  color: #f5f5ff;
+  font-family: Inter, Arial, sans-serif;
 }
 
-/* .ct_plan_hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 420px;
-  gap: 14px;
-  align-items: start;
-} */
+/* =========================
+   HEADER
+========================= */
 
-.ct_plan_hero_copy,
-.ct_plan_hero_panel,
-.ct_plan_section {
-  background: #000022B2;
-  border: 1px solid #FFFFFF66;
-  box-shadow: 0 18px 44px rgba(20, 35, 62, 0.07);
-  backdrop-filter: blur(16px);
-}
-
-.ct_plan_hero_copy {
-  border-radius: 24px;
-  padding: 22px;
-  position: relative;
-  overflow: hidden;
+.eti-page-header {
   display: flex;
-  flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 28px;
 }
 
-/* .ct_plan_hero_copy::before {
-  content: '';
-  position: absolute;
-  right: -44px;
-  bottom: -84px;
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(22, 85, 192, 0.16), transparent 68%);
-} */
-
-.ct_plan_eyebrow {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
-  color: var(--ct-primary);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-
-.ct_plan_hero_copy h1 {
-  font-size: clamp(20px, 2.8vw, 30px);
-  line-height: 1.16;
-  font-weight: 800;
+.eti-page-header h1 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.7px;
   color: #fff;
-  margin-bottom: 10px;
 }
 
-.ct_plan_hero_copy p {
-  /* max-width: 56ch; */
-  color: #BEBFC2;
-  font-size: 13px;
-  line-height: 1.6;
-  margin-bottom: 16px;
+.eti-page-header p {
+  max-width: 600px;
+  margin: 0;
+  color: #8d93b3;
+  font-size: 14px;
+  line-height: 1.7;
 }
 
-.ct_plan_hero_actions {
+.eti-header-actions {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
+  gap: 12px;
 }
 
-.ct_upgrade_btn,
-.ct_secondary_btn,
-.ct_side_action_btn {
+/* =========================
+   BUTTONS
+========================= */
+
+.eti-btn {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 10px;
+  border: 1px solid #30355b;
+  background: transparent;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-height: 40px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  font-size: 13px;
-  font-weight: 400;
-  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
 }
 
-.ct_upgrade_btn {
-  color: #fff;
-  background: #4140B2;
-  /* box-shadow: 0 12px 24px rgba(22, 85, 192, 0.2); */
+.eti-btn-primary {
+  border: none;
+  background: linear-gradient(
+    135deg,
+    #6847ff,
+    #4933d7
+  );
+  box-shadow:
+    0 8px 25px rgba(91, 60, 255, 0.25);
 }
 
-.ct_upgrade_btn:hover,
-.remove-btn:hover {
+.eti-btn-primary:hover {
   transform: translateY(-1px);
+  box-shadow:
+    0 10px 30px rgba(91, 60, 255, 0.4);
 }
 
-.ct_secondary_btn {
-  color: #fff;
-  background: transparent;
-  border-color: #d6e0ee;
+.eti-btn-outline:hover {
+  border-color: #6650ff;
+  background: rgba(102, 80, 255, 0.08);
 }
 
-.ct_plan_hero_metrics {
+/* =========================
+   SUMMARY
+========================= */
+
+.eti-summary-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.eti-summary-card {
+  min-height: 112px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  border: 1px solid #242945;
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(19, 23, 48, 0.95),
+      rgba(8, 12, 29, 0.95)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.eti-icon {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.eti-icon.purple {
+  color: #b286ff;
+  background: rgba(121, 70, 255, 0.16);
+}
+
+.eti-icon.blue {
+  color: #5d91ff;
+  background: rgba(48, 108, 255, 0.15);
+}
+
+.eti-icon.green {
+  color: #59ee85;
+  background: rgba(33, 190, 91, 0.14);
+}
+
+.eti-icon.orange {
+  color: #ffae57;
+  background: rgba(255, 142, 38, 0.13);
+}
+
+.eti-label,
+.eti-mini-label {
+  display: block;
+  margin-bottom: 7px;
+
+  color: #71799d;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+}
+
+.eti-summary-card h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  color: #fff;
+}
+
+.eti-summary-card p {
+  margin: 0;
+  color: #7d84a5;
+  font-size: 12px;
+}
+
+.eti-status {
+  display: inline-flex;
+  padding: 4px 9px;
+  border-radius: 20px;
+
+  color: #ae8cff;
+  background: rgba(123, 75, 255, 0.14);
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.eti-status.active {
+  color: #57ec8b;
+  background: rgba(5, 35, 21, 0.6);
+}
+
+.eti-status.cancelled {
+  color: #ffae57;
+  background: rgba(255, 142, 38, 0.13);
+}
+
+.eti-status.free {
+  color: #ae8cff;
+  background: rgba(123, 75, 255, 0.14);
+}
+
+/* =========================
+   CONTENT GRID
+========================= */
+
+.eti-content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 395px;
+  gap: 20px;
   align-items: stretch;
 }
 
-.ct_hero_metric {
-  background: linear-gradient(0deg, rgba(93, 92, 255, 0.2), rgba(93, 92, 255, 0.2)),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+/* =========================
+   TRANSACTIONS
+========================= */
 
-  border: 1px solid #5D5CFF99;
-  border-radius: 16px;
-  box-shadow: 0px 0px 33px 0px #5D5CFF33;
-
-  padding: 12px 14px;
-  min-height: 82px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.ct_hero_metric span {
-  display: block;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-  opacity: 0.8;
-}
-
-.ct_hero_metric strong {
-  color: #fff;
-  font-size: 15px;
-  line-height: 1.35;
-  font-weight: 600;
-}
-
-.ct_plan_hero_panel {
-  border-radius: 24px;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  justify-content: flex-start;
-  height: 100%;
-}
-
-.ct_plan_hero_panel_head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.ct_plan_hero_label {
-  display: block;
-  color: #BEBFC2;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-
-.ct_plan_hero_panel h2 {
-  color: #fff;
-  font-size: 18px;
-  font-weight: 800;
-  margin-bottom: 0;
-}
-
-.ct_status_badge {
-  padding: 7px 12px;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 800;
-  white-space: nowrap;
-}
-
-.ct_status_badge.active {
-  color: var(--ct-success);
-  background: var(--ct-success-soft);
-}
-
-.ct_status_badge.cancelled {
-  color: var(--ct-warning);
-  background: var(--ct-warning-soft);
-}
-
-.ct_status_badge.free {
-  color: #637083;
-  background: #edf2f7;
-}
-
-.ct_plan_highlight_box {
-  border-radius: 16px;
-  padding: 14px;
-  background: transparent;
-  border: 1px solid #ffffff2e;
-}
-
-.ct_plan_highlight_box span {
-  display: block;
-  color: #BEBFC2;
-  font-size: 12px;
-  margin-bottom: 5px;
-}
-
-.ct_plan_highlight_box strong {
-  color: #fff;
-  font-size: 15px;
-  font-weight: 800;
-  line-height: 1.35;
-}
-
-.ct_dashboard_grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 420px;
-  gap: 16px;
-  align-items: start;
-}
-
-.ct_dashboard_grid.ct_dashboard_grid_full {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.ct_dashboard_main,
-.ct_dashboard_side {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  min-width: 0;
-}
-
-.ct_dashboard_side {
-  position: sticky;
-  top: 16px;
-  align-self: start;
-}
-
-.ct_plan_section {
-  margin-bottom: 0;
-  padding: 16px;
-  border-radius: 24px;
-}
-
-.ct_section_header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 12px;
-}
-
-.ct_section_header h2 {
-  margin-bottom: 4px;
-  color: #fff;
-  font-size: 17px;
-  font-weight: 800;
-}
-
-.ct_section_header p {
-  margin-bottom: 0;
-  color: #BEBFC2;
-  font-size: 13px;
-  line-height: 1.55;
-}
-
-.ct_credit_history_actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.ct_credit_balance_strip {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-  padding: 8px;
+.eti-transactions,
+.eti-current-plan {
+  border: 1px solid #242945;
   border-radius: 18px;
-}
 
-.ct_credit_balance_card {
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: #5d5cff2e;
-  border: 1px solid #ffffff2e;
-}
+  background:
+    linear-gradient(
+      145deg,
+      rgba(11, 16, 36, 0.98),
+      rgba(6, 10, 25, 0.98)
+    );
 
-.ct_credit_balance_card_primary {
-  background: linear-gradient(135deg, #edf4ff 0%, #dce9ff 100%);
-}
-
-.ct_credit_balance_card span {
-  display: block;
-  margin-bottom: 6px;
-  color: #fff;
-  opacity: 0.8;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.ct_credit_balance_card strong {
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.ct_credit_balance_card_primary strong {
-  color: var(--ct-primary);
-}
-
-.ct_credit_history_body {
-  max-height: 540px;
-  overflow-y: auto;
-  padding-right: 4px;
-  margin-top: 10px;
-}
-
-.ct_credit_history_body::-webkit-scrollbar {
-  width: 8px;
-}
-
-.ct_credit_history_body::-webkit-scrollbar-thumb {
-  background: #ced8e8;
-  border-radius: 999px;
-}
-
-.ct_credit_history_body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.ct_credit_history_state {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-height: 120px;
-  color: var(--ct-text-soft);
-  font-size: 14px;
-}
-
-.ct_credit_history_state_error {
-  color: #c53030;
-}
-
-.ct_credit_history_groups {
-  padding-top: 2px;
-}
-
-.ct_credit_history_group+.ct_credit_history_group {
-  margin-top: 16px;
-}
-
-.ct_credit_history_label {
-  margin-bottom: 8px;
-  color: #778198;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.ct_credit_history_table {
-  background: #04041c;
-  border: 1px solid #ffffff2e;
-  border-radius: 16px;
   overflow: hidden;
 }
 
-.ct_credit_history_table_head {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: 18px;
-  padding: 9px 14px;
-  background: #04041c;
-  border-bottom: 1px solid #ffffff2e;
+.eti-transactions {
+  padding: 20px;
 }
 
-.ct_credit_history_table_head span {
-  color: #BEBFC2;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.ct_credit_history_table_head span:nth-child(2),
-.ct_credit_history_table_head span:nth-child(3) {
-  text-align: right;
-}
-
-.ct_credit_history_item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: 14px;
-  align-items: center;
-  padding: 12px 14px;
-}
-
-.ct_credit_history_item+.ct_credit_history_item {
-  border-top: 1px solid #ffffff2e;
-}
-
-.ct_credit_history_item_left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-}
-
-.ct_credit_history_icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: 14px;
-}
-
-.ct_credit_history_icon.positive {
-  background: var(--ct-success-soft);
-  color: var(--ct-success);
-}
-
-.ct_credit_history_icon.negative {
-  background: var(--ct-primary-soft);
-  color: var(--ct-primary);
-}
-
-.ct_credit_history_copy h3 {
-  margin-bottom: 3px;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.ct_credit_history_copy p {
-  color: #BEBFC2;
-  font-size: 12px;
-  line-height: 1.45;
-}
-
-.ct_credit_history_item_meta {
-  min-width: 110px;
-  text-align: right;
-}
-
-.ct_credit_history_item_meta span,
-.ct_credit_history_item_meta small {
-  display: block;
-  color: #7b8596;
-  font-size: 12px;
-}
-
-.ct_credit_history_item_meta span {
-  margin-bottom: 3px;
-}
-
-.ct_credit_history_item_right {
-  min-width: 96px;
-  text-align: right;
-  display: grid;
-}
-
-.ct_credit_history_item_right span {
-  font-size: 13px;
-  color: #7b8596;
-}
-
-.ct_credit_history_item_right strong {
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.ct_credit_history_item_right strong.is-positive {
-  color: var(--ct-success);
-}
-
-.ct_credit_history_item_right strong.is-negative {
-  color: var(--ct-danger);
-}
-
-.ct_credit_footer {
-  margin-top: 10px;
-  padding: 10px 2px 0;
+.eti-section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  margin-bottom: 20px;
 }
 
-.ct_credit_footer_status {
+.eti-section-title {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #435066;
+  gap: 12px;
+}
+
+.eti-title-icon {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  color: #a77cff;
+  background: rgba(112, 68, 255, 0.15);
+}
+
+.eti-section-title h2 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  color: #fff;
+}
+
+.eti-section-title p {
+  margin: 0;
+  color: #7e86a8;
+  font-size: 11px;
+}
+
+.eti-refresh-btn {
+  height: 38px;
+  padding: 0 15px;
+
+  border: 1px solid #303652;
+  border-radius: 9px;
+
+  color: #dce0f2;
+  background: #0d1227;
+
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* =========================
+   MINI CARDS
+========================= */
+
+.eti-transaction-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.eti-mini-card {
+  padding: 16px;
+
+  border: 1px solid #242b48;
+  border-radius: 12px;
+
+  background: rgba(13, 18, 39, 0.8);
+}
+
+.eti-mini-card strong {
+  font-size: 13px;
+  color: #f2f3ff;
+}
+
+.eti-date-label {
+  margin: 12px 0 10px 4px;
+
+  color: #7d85a7;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* =========================
+   TRANSACTION ROW
+========================= */
+
+.eti-credit-history-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 30px;
+  color: #7d85a7;
+  font-size: 13px;
+}
+
+.eti-transaction {
+  min-height: 64px;
+  padding: 10px 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  margin-bottom: 9px;
+
+  border: 1px solid #222a47;
+  border-radius: 12px;
+
+  background: rgba(12, 17, 37, 0.72);
+
+  transition: 0.2s ease;
+}
+
+.eti-transaction:hover {
+  border-color: #39416a;
+  background: rgba(18, 24, 49, 0.9);
+}
+
+.eti-transaction-icon {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  color: #9671ff;
+  background: rgba(105, 62, 255, 0.13);
+
+  font-size: 18px;
+}
+
+.eti-transaction-icon.green {
+  color: #4de17d;
+  background: rgba(39, 196, 91, 0.13);
+}
+
+.eti-transaction-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.eti-transaction-info strong {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 13px;
+  color: #fff;
+}
+
+.eti-transaction-info span {
+  color: #747d9f;
+  font-size: 10px;
+}
+
+.eti-transaction-value {
+  text-align: right;
   font-size: 12px;
   font-weight: 600;
 }
 
-.ct_credit_footer_dot {
+.eti-transaction-value small {
+  display: block;
+  margin-top: 5px;
+
+  color: #7a82a1;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.eti-transaction-value.negative {
+  color: #ff4d5e;
+}
+
+.eti-transaction-value.positive {
+  color: #40dd78;
+}
+
+/* =========================
+   TRANSACTION FOOTER
+========================= */
+
+.eti-transaction-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 20px;
+}
+
+.eti-transaction-footer span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: #7983a5;
+  font-size: 10px;
+}
+
+.eti-transaction-footer i {
   width: 8px;
   height: 8px;
+
   border-radius: 50%;
-  background: var(--ct-success);
-  display: inline-block;
+  background: #36d879;
+  box-shadow: 0 0 10px rgba(54, 216, 121, 0.6);
 }
 
-.ct_side_card {
-  padding: 16px;
-  width: 100%;
+.eti-buy-more {
+  height: 38px;
+  padding: 0 15px;
+
+  border: 1px solid #30365b;
+  border-radius: 9px;
+
+  color: #a98aff;
+  background: #0e142d;
+
+  cursor: pointer;
 }
 
-.ct_payment_card {
+/* =========================
+   CURRENT PLAN
+========================= */
+
+.eti-plan-header {
+  min-height: 108px;
+  padding: 20px;
+
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 14px;
-  border-radius: 16px;
-  border: 1px solid #ffffff2e;
-  background: transparent;
+  align-items: center;
+  justify-content: space-between;
+
+  background:
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(145, 101, 255, 0.6),
+      transparent 45%
+    ),
+    linear-gradient(
+      135deg,
+      #4120a8,
+      #5c36e8
+    );
 }
 
-.ct_payment_copy {
+.eti-plan-header > div span {
+  display: block;
+  margin-bottom: 8px;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  opacity: 0.85;
+}
+
+.eti-plan-header h2 {
+  margin: 0;
+  font-size: 21px;
+  color: #fff;
+}
+
+.eti-active-badge {
+  padding: 6px 11px;
+
+  border-radius: 20px;
+
+  color: #57ec8b;
+  background: rgba(5, 35, 21, 0.6);
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.eti-active-badge.active {
+  color: #57ec8b;
+  background: rgba(5, 35, 21, 0.6);
+}
+
+.eti-active-badge.cancelled {
+  color: #ffae57;
+  background: rgba(255, 142, 38, 0.13);
+}
+
+.eti-active-badge.free {
+  color: #ae8cff;
+  background: rgba(123, 75, 255, 0.14);
+}
+
+.eti-plan-body {
+  padding: 20px;
+}
+
+/* Plan Info */
+
+.eti-plan-info {
   display: flex;
   align-items: center;
   gap: 12px;
+
+  padding: 14px;
+
+  margin-bottom: 10px;
+
+  border: 1px solid #252d4a;
+  border-radius: 12px;
+
+  background: rgba(12, 18, 39, 0.75);
 }
 
-.ct_payment_icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
+.eti-plan-icon {
+  width: 34px;
+  height: 34px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #FFF;
-  font-size: 18px;
-  box-shadow: 0px 0px 11px 0px #4140B2 inset;
 
+  border-radius: 9px;
 }
 
-.ct_payment_copy h3 {
-  margin-bottom: 3px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-  text-transform: capitalize;
+.eti-plan-icon.purple {
+  color: #9b75ff;
+  background: rgba(116, 70, 255, 0.15);
 }
 
-.ct_payment_copy p {
-  color: #BEBFC2;
+.eti-plan-icon.pink {
+  color: #ef67d5;
+  background: rgba(230, 70, 202, 0.12);
+}
+
+.eti-plan-info span {
+  display: block;
+  margin-bottom: 4px;
+
+  color: #70799d;
+  font-size: 10px;
+}
+
+.eti-plan-info strong {
   font-size: 12px;
-}
-
-.ct_side_action_btn {
-  width: 100%;
-  margin-top: 14px;
-}
-
-.remove-btn {
   color: #fff;
-  background: linear-gradient(135deg, #ef4444 0%, #d12f2f 100%);
 }
 
-@media screen and (max-width: 1199px) {
+/* Features */
 
-  .ct_plan_hero,
-  .ct_dashboard_grid {
+.eti-plan-features {
+  margin-top: 12px;
+  padding: 16px;
+
+  border: 1px solid #252d4a;
+  border-radius: 12px;
+
+  background: rgba(12, 18, 39, 0.7);
+}
+
+.eti-plan-features div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 11px;
+
+  color: #adb3ca;
+  font-size: 11px;
+}
+
+.eti-plan-features div:last-child {
+  margin-bottom: 0;
+}
+
+.eti-plan-features span {
+  width: 16px;
+  height: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: #45dc7c;
+  background: rgba(49, 209, 110, 0.13);
+
+  font-size: 9px;
+}
+
+/* =========================
+   MORE CREDITS
+========================= */
+
+.eti-more-credits {
+  display: flex;
+  gap: 12px;
+
+  margin-top: 14px;
+  padding: 16px;
+
+  border: 1px solid #4038a5;
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(81, 55, 215, 0.13),
+      rgba(35, 31, 89, 0.2)
+    );
+}
+
+.eti-more-icon {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  color: #9a7aff;
+  background: rgba(103, 68, 255, 0.13);
+}
+
+.eti-more-credits h3 {
+  margin: 0 0 5px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.eti-more-credits p {
+  margin: 0 0 12px;
+
+  color: #777fa1;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.eti-more-credits .eti-btn {
+  height: 34px;
+  font-size: 10px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+
+  .eti-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .eti-content-grid {
     grid-template-columns: 1fr;
   }
 
-  .ct_dashboard_side {
-    position: static;
+  .eti-current-plan {
+    width: 100%;
   }
 }
 
-@media screen and (max-width: 991px) {
+@media (max-width: 700px) {
 
-  .ct_plan_hero_metrics,
-  .ct_credit_balance_strip {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .eti-plans-page {
+    padding: 20px 14px;
   }
 
-  .ct_credit_history_table_head,
-  .ct_credit_history_item {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .ct_credit_history_table_head span:nth-child(2) {
-    text-align: right;
-  }
-
-  .ct_credit_history_table_head span:nth-child(3) {
-    display: none;
-  }
-
-  .ct_credit_history_item_meta {
-    grid-column: 1 / 2;
-    text-align: left;
-    padding-left: 50px;
-  }
-
-
-}
-
-@media screen and (max-width: 767px) {
-  .ct_user_plan_page {
-    padding-top: 14px;
-  }
-
-  .ct_plan_hero_copy,
-  .ct_plan_hero_panel,
-  .ct_plan_section {
-    border-radius: 18px;
-    padding: 14px;
-  }
-
-  .ct_plan_hero_actions,
-  .ct_credit_history_actions,
-  .ct_credit_footer,
-  .ct_section_header,
-  .ct_plan_hero_panel_head,
-  .ct_payment_copy {
+  .eti-page-header {
     flex-direction: column;
-    align-items: flex-start;
   }
 
-  .ct_upgrade_btn,
-  .ct_secondary_btn,
-  .ct_side_action_btn {
+  .eti-header-actions {
     width: 100%;
   }
 
-  .ct_credit_history_body {
-    max-height: 420px;
+  .eti-header-actions .eti-btn {
+    flex: 1;
   }
 
-  .ct_credit_history_table_head {
-    display: none;
-  }
-
-  .ct_credit_history_item {
+  .eti-summary-grid {
     grid-template-columns: 1fr;
   }
 
-  .ct_credit_history_item_meta,
-  .ct_credit_history_item_right {
-    min-width: 100%;
-    text-align: left;
-    padding-left: 50px;
-  }
-}
-
-@media screen and (max-width: 575px) {
-
-  .ct_plan_hero_metrics,
-  .ct_credit_balance_strip {
-    grid-template-columns: 1fr;
+  .eti-transaction-summary {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .ct_credit_history_item_meta,
-  .ct_credit_history_item_right {
-    padding-left: 0;
-  }
-
-  .ct_credit_history_item_left {
+  .eti-section-header {
     align-items: flex-start;
   }
+
+  .eti-transaction {
+    padding: 10px;
+  }
+
+  .eti-transaction-value {
+    font-size: 11px;
+  }
 }
 
-/* Cancel Subscription Modal */
-.ct_cancel_modal {
-  position: relative;
-  padding: 40px;
-  border: 1px solid rgba(139, 108, 255, 0.2);
-  border-radius: 24px;
-  text-align: center;
-  background: radial-gradient(circle at top, rgba(93, 92, 255, 0.15) 0%, #101016 40%), #101016;
-  color: #fff;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
+@media (max-width: 480px) {
 
-.ct_cancel_modal .ct_modal_close_btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #a1a1aa;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  padding: 0;
-}
+  .eti-page-header h1 {
+    font-size: 23px;
+  }
 
-.ct_cancel_modal .ct_modal_close_btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
+  .eti-transaction-summary {
+    grid-template-columns: 1fr;
+  }
 
-.ct_cancel_modal__icon {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 24px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: radial-gradient(circle, rgba(139, 108, 255, 0.15) 0%, rgba(93, 92, 255, 0.05) 100%);
-  border: 1.5px solid rgba(139, 108, 255, 0.3);
-  box-shadow: 0 0 24px rgba(93, 92, 255, 0.3), inset 0 0 12px rgba(93, 92, 255, 0.2);
-  color: #f59e0b; /* Warning color for cancel */
-  font-size: 28px;
-}
+  .eti-section-header {
+    flex-direction: column;
+    gap: 12px;
+  }
 
-.ct_cancel_modal p {
-  max-width: 360px;
-  margin: 10px auto 30px;
-  color: #a1a1aa;
-  font-size: 15px;
-  line-height: 1.6;
-}
+  .eti-refresh-btn {
+    width: 100%;
+  }
 
-.ct_cancel_modal h2 {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  color: #fff;
+  .eti-transaction-info strong {
+    font-size: 12px;
+  }
+
+  .eti-transaction-value {
+    font-size: 10px;
+  }
+
+  .eti-transaction-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .eti-buy-more {
+    width: 100%;
+  }
 }

@@ -1,240 +1,279 @@
 <section class="ct_dash_board_main" style="display: block !important">
   <app-workspace-header></app-workspace-header>
-  <div class="ct_dash_right_content ct_user_plan_page">
+  <div class="ct_dash_right_content">
     @if (subscriptionPlan) {
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="ct_plan_shell">
-            <div class="ct_plan_hero">
-              <div class="ct_plan_hero_copy">
-                <div class="d-block d-md-flex justify-content-between align-items-start">
-                  <div>
-                    <h1>{{ subscriptionPlan.planName }} overview and credit wallet</h1>
-                    <p>
-                      Keep an eye on your current membership, available balance, and recent credit activity from one
-                      clean
-                      dashboard.
-                    </p>
-                  </div>
-                  <div class="ct_plan_hero_actions">
-                    <button class="ct_upgrade_btn" type="button" (click)="openSubscriptionModal()">
-                      <i class="fa-solid fa-bolt"></i>
-                      <span>Upgrade Plan</span>
-                    </button>
-                    <button class="ct_secondary_btn" type="button" (click)="openBuyCreditsModal()">
-                      <i class="fa-solid fa-wallet"></i>
-                      <span>Buy Credits</span>
-                    </button>
-                  </div>
-                </div>
-                <div class="ct_plan_hero_metrics">
-                  <div class="ct_hero_metric">
-                    <span>Status</span>
-                    <strong>{{ formattedStatus }}</strong>
-                  </div>
-                  <div class="ct_hero_metric">
-                    <span>Remaining Credits</span>
-                    <strong>{{ creditBalanceSummary.total | number:'1.0-0' }} credits</strong>
-                  </div>
-                  <div class="ct_hero_metric">
-                    <span>Total Top-up Credits</span>
-                    <strong>{{ creditBalanceSummary.topup | number:'1.0-0' }} credits</strong>
-                  </div>
-                  <div class="ct_hero_metric">
-                    <span>Next billing</span>
-                    <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date |
-                      date:'mediumDate') :
-                      'Not Available' }}</strong>
-                  </div>
-                </div>
+    <div class="eti-plans-page">
+
+      <!-- Header -->
+      <div class="eti-page-header">
+        <div>
+          <h1>{{ subscriptionPlan.planName }} overview and credit wallet</h1>
+          <p>
+            Keep an eye on your current membership, available balance,
+            and recent credit activity from one clean dashboard.
+          </p>
+        </div>
+
+        <div class="eti-header-actions">
+          <button class="eti-btn eti-btn-primary" type="button" (click)="openSubscriptionModal()">
+            <span>⚡</span>
+            Upgrade Plan
+          </button>
+
+          <button class="eti-btn eti-btn-outline" type="button" (click)="openBuyCreditsModal()">
+            <span>▣</span>
+            Buy Credits
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="eti-summary-grid">
+
+        <div class="eti-summary-card">
+          <div class="eti-icon purple">
+            ♡
+          </div>
+          <div>
+            <span class="eti-label">STATUS</span>
+            <h3>{{ subscriptionPlan.planName }}</h3>
+            <span class="eti-status" [ngClass]="{
+              'active': subscriptionPlan.subscriptionStatus === 'ACTIVE',
+              'cancelled': subscriptionPlan.subscriptionStatus === 'CANCELLED',
+              'free': !subscriptionPlan.subscriptionStatus
+            }">
+              ● {{ formattedStatus }}
+            </span>
+          </div>
+        </div>
+
+        <div class="eti-summary-card">
+          <div class="eti-icon blue">
+            ◎
+          </div>
+          <div>
+            <span class="eti-label">REMAINING CREDITS</span>
+            <h3>{{ creditBalanceSummary.total | number:'1.0-0' }} credits</h3>
+            <p>Available balance</p>
+          </div>
+        </div>
+
+        <div class="eti-summary-card">
+          <div class="eti-icon green">
+            +
+          </div>
+          <div>
+            <span class="eti-label">TOTAL TOP-UP CREDITS</span>
+            <h3>{{ creditBalanceSummary.topup | number:'1.0-0' }} credits</h3>
+            <p>All time top-ups</p>
+          </div>
+        </div>
+
+        <div class="eti-summary-card">
+          <div class="eti-icon orange">
+            ▣
+          </div>
+          <div>
+            <span class="eti-label">NEXT BILLING</span>
+            <h3>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date:'mediumDate') : 'Not Available' }}</h3>
+            <p>{{ subscriptionPlan.next_charge_date ? 'Upcoming renewal' : 'No upcoming billing' }}</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Main Content -->
+      <div class="eti-content-grid">
+
+        <!-- Transactions -->
+        <section class="eti-transactions">
+
+          <div class="eti-section-header">
+            <div class="eti-section-title">
+              <div class="eti-title-icon">▤</div>
+              <div>
+                <h2>Credit Transactions</h2>
+                <p>A clean history of your balance, top-ups, and product activity.</p>
               </div>
             </div>
 
-            <div class="ct_dashboard_grid">
-              <div class="ct_dashboard_main">
-                <div class="ct_white_bg ct_ecommerse_web_card ct_plan_section ct_credit_history_section">
-                  <div class="ct_section_header ct_credit_history_head">
-                    <div>
-                      <h2>Credit Transactions</h2>
-                      <p>A clean history of your balance, top-ups, and product activity.</p>
-                    </div>
-                    <div class="ct_credit_history_actions">
-                      <button class="ct_secondary_btn" type="button" (click)="loadCreditHistory()">
-                        <i class="fa-solid fa-rotate-right"></i>
-                        <span>Refresh</span>
-                      </button>
-                      <!-- <button class="ct_upgrade_btn" type="button" (click)="openBuyCreditsModal()">
-                        <i class="fa-solid fa-plus"></i>
-                        <span>Top up Credits</span>
-                      </button> -->
-                    </div>
+            <button class="eti-refresh-btn" type="button" (click)="loadCreditHistory()">
+              ↻ &nbsp; Refresh
+            </button>
+          </div>
+
+          <!-- Transaction Summary -->
+          <div class="eti-transaction-summary">
+
+            <div class="eti-mini-card">
+              <span class="eti-mini-label">TOTAL BALANCE</span>
+              <strong>{{ creditBalanceSummary.total | number:'1.0-0' }} credits</strong>
+            </div>
+
+            <div class="eti-mini-card">
+              <span class="eti-mini-label">PLAN CREDITS</span>
+              <strong>{{ creditBalanceSummary.plan | number:'1.0-0' }} credits</strong>
+            </div>
+
+            <div class="eti-mini-card">
+              <span class="eti-mini-label">TOP-UP CREDITS</span>
+              <strong>{{ creditBalanceSummary.topup | number:'1.0-0' }} credits</strong>
+            </div>
+
+            <div class="eti-mini-card">
+              <span class="eti-mini-label">FREE / BONUS</span>
+              <strong>{{ creditBalanceSummary.free | number:'1.0-0' }} credits</strong>
+            </div>
+
+          </div>
+
+          <!-- Credit History State -->
+          <div class="eti-credit-history-body">
+            <div class="eti-credit-history-state" *ngIf="isCreditHistoryLoading">
+              <i class="fa-solid fa-rotate fa-spin"></i>
+              <span>Loading credit history...</span>
+            </div>
+
+            <div class="eti-credit-history-state eti-credit-history-state-error"
+              *ngIf="!isCreditHistoryLoading && creditHistoryError">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <span>{{ creditHistoryError }}</span>
+            </div>
+
+            <div class="eti-credit-history-state"
+              *ngIf="!isCreditHistoryLoading && !creditHistoryError && !hasCreditHistory">
+              <i class="fa-regular fa-clock"></i>
+              <span>No credit transactions found yet.</span>
+            </div>
+
+            <div class="eti-credit-history-groups"
+              *ngIf="!isCreditHistoryLoading && !creditHistoryError && hasCreditHistory">
+              <div class="eti-credit-history-group"
+                *ngFor="let group of creditHistoryGroups; trackBy: trackByHistoryGroup">
+                <div class="eti-date-label">{{ group.label }}</div>
+
+                <div class="eti-transaction"
+                  *ngFor="let item of group.items; trackBy: trackByHistoryItem">
+                  <div class="eti-transaction-icon" [ngClass]="{'green': item.delta >= 0}">
+                    {{ item.delta >= 0 ? '▣' : 'ϟ' }}
                   </div>
 
-                  <div class="ct_credit_balance_strip">
-                    <div class="ct_credit_balance_card">
-                      <span>Total Balance</span>
-                      <strong>{{ creditBalanceSummary.total | number:'1.0-0' }} credits</strong>
-                    </div>
-                    <div class="ct_credit_balance_card">
-                      <span>Plan Credits</span>
-                      <strong>{{ creditBalanceSummary.plan | number:'1.0-0' }} credits</strong>
-                    </div>
-                    <div class="ct_credit_balance_card">
-                      <span>Top-up Credits</span>
-                      <strong>{{ creditBalanceSummary.topup | number:'1.0-0' }} credits</strong>
-                    </div>
-                    <div class="ct_credit_balance_card">
-                      <span>Free / Bonus</span>
-                      <strong>{{ creditBalanceSummary.free | number:'1.0-0' }} credits</strong>
-                    </div>
+                  <div class="eti-transaction-info">
+                    <strong>{{ item.title }}</strong>
+                    <span>{{ item.subtitle }}</span>
                   </div>
 
-                  <div class="ct_credit_history_body">
-                    <div class="ct_credit_history_state" *ngIf="isCreditHistoryLoading">
-                      <i class="fa-solid fa-rotate fa-spin"></i>
-                      <span>Loading credit history...</span>
-                    </div>
-
-                    <div class="ct_credit_history_state ct_credit_history_state_error"
-                      *ngIf="!isCreditHistoryLoading && creditHistoryError">
-                      <i class="fa-solid fa-circle-exclamation"></i>
-                      <span>{{ creditHistoryError }}</span>
-                    </div>
-
-                    <div class="ct_credit_history_state"
-                      *ngIf="!isCreditHistoryLoading && !creditHistoryError && !hasCreditHistory">
-                      <i class="fa-regular fa-clock"></i>
-                      <span>No credit transactions found yet.</span>
-                    </div>
-
-                    <div class="ct_credit_history_groups"
-                      *ngIf="!isCreditHistoryLoading && !creditHistoryError && hasCreditHistory">
-                      <div class="ct_credit_history_group"
-                        *ngFor="let group of creditHistoryGroups; trackBy: trackByHistoryGroup">
-                        <div class="ct_credit_history_label">{{ group.label }}</div>
-
-                        <div class="ct_credit_history_table">
-                          <div class="ct_credit_history_table_head">
-                            <span>Activity</span>
-                            <span>Credits</span>
-                          </div>
-
-                          <div class="ct_credit_history_item"
-                            *ngFor="let item of group.items; trackBy: trackByHistoryItem">
-                            <div class="ct_credit_history_item_left">
-                              <div class="ct_credit_history_icon" [ngClass]="item.iconClass">
-                                <i class="fa-solid fa-bolt" *ngIf="item.icon === 'bolt'"></i>
-                                <i class="fa-solid fa-comments" *ngIf="item.icon === 'comment'"></i>
-                                <i class="fa-solid fa-plus" *ngIf="item.icon === 'plus'"></i>
-                                <i class="fa-solid fa-pen-to-square" *ngIf="item.icon === 'edit'"></i>
-                                <i class="fa-solid fa-wallet" *ngIf="item.icon === 'wallet'"></i>
-                                <i class="fa-solid fa-download" *ngIf="item.icon === 'download'"></i>
-                              </div>
-
-                              <div class="ct_credit_history_copy">
-                                <h3>{{ item.title }}</h3>
-                                <p class="mb-0">{{ item.subtitle }}</p>
-                              </div>
-                            </div>
-
-                            <div class="ct_credit_history_item_right">
-                              <strong [ngClass]="{
-                                'is-positive': item.delta >= 0,
-                                'is-negative': item.delta < 0
-                              }">
-                                {{ item.delta >= 0 ? '+' : '-' }} {{ getCreditAmountLabel(item.delta) }}
-                              </strong>
-                              <span>{{ item.time }}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="ct_credit_footer">
-                    <div class="ct_credit_footer_status">
-                      <span class="ct_credit_footer_dot"></span>
-                      <span>Real-time sync active</span>
-                    </div>
-                    <button class="ct_upgrade_btn" type="button" (click)="openBuyCreditsModal()">
-                      <i class="fa-solid fa-wallet"></i>
-                      <span>Buy More Credits</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="ct_dashboard_side">
-                <div class="ct_plan_hero_panel">
-                  <div class="ct_plan_hero_panel_head">
-                    <div>
-                      <span class="ct_plan_hero_label">Current Plan</span>
-                      <h2>{{ subscriptionPlan.planName }}</h2>
-                    </div>
-                    <span class="ct_status_badge" [ngClass]="{
-                                    'active': subscriptionPlan.subscriptionStatus === 'ACTIVE',
-                                    'cancelled': subscriptionPlan.subscriptionStatus === 'CANCELLED',
-                                    'free': !subscriptionPlan.subscriptionStatus
-                                  }">
-                      {{ formattedStatus }}
-                    </span>
-
-                  </div>
-
-                  <div class="ct_plan_highlight_box">
-                    <span>Billing cycle</span>
-                    <strong>{{ monthlyPriceLabel }}</strong>
-                  </div>
-
-                  <div class="ct_plan_highlight_box">
-                    <span>Next renewal</span>
-                    <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date |
-                      date:'mediumDate')
-                      :
-                      'Not Available' }}</strong>
-                  </div>
-                  @if(subscriptionPlan.planType !== 'FREE') {
-                  <button class="remove-btn ct_side_action_btn" [disabled]="isCanceling" data-bs-toggle="modal" data-bs-target="#cancelSubscriptionModal"
-                    *ngIf="subscriptionPlan.subscriptionStatus === 'ACTIVE'">
-                    {{ isCanceling ? 'Canceling...' : 'Cancel Subscription' }}
-                  </button>
-                  }
-                </div>
-                <div class="ct_white_bg ct_ecommerse_web_card ct_plan_section ct_side_card"
-                  *ngIf="subscriptionPlan.activePaymentMethod">
-                  <div class="ct_section_header">
-                    <div>
-                      <h2>Payment Method</h2>
-                      <p>Your active billing source for subscription charges.</p>
-                    </div>
-                  </div>
-
-                  <div class="ct_payment_card">
-                    <div class="ct_payment_copy">
-                      <div class="ct_payment_icon">
-                        <i class="fa-regular fa-credit-card"
-                          *ngIf="subscriptionPlan.activePaymentMethod.type === 'card'"></i>
-                        <i class="fa-solid fa-building-columns"
-                          *ngIf="subscriptionPlan.activePaymentMethod.type !== 'card'"></i>
-                      </div>
-                      <div>
-                        <h3>{{ paymentMethodLabel }}</h3>
-                        <p class="mb-0">
-                          {{ subscriptionPlan.activePaymentMethod.bank || 'Saved payment method' }}
-                          <span *ngIf="subscriptionPlan.activePaymentMethod.country">, {{
-                            subscriptionPlan.activePaymentMethod.country }}</span>
-                        </p>
-                      </div>
-                    </div>
+                  <div class="eti-transaction-value" [ngClass]="item.delta >= 0 ? 'positive' : 'negative'">
+                    {{ item.delta >= 0 ? '+' : '-' }} {{ getCreditAmountLabel(item.delta) }}
+                    <small>{{ item.time }}</small>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+
+          <div class="eti-transaction-footer">
+            <span>
+              <i></i>
+              Real-time sync active
+            </span>
+
+            <button class="eti-buy-more" type="button" (click)="openBuyCreditsModal()">
+              ▣ &nbsp; Buy More Credits
+            </button>
+          </div>
+
+        </section>
+
+        <!-- Current Plan -->
+        <aside class="eti-current-plan">
+
+          <div class="eti-plan-header">
+            <div>
+              <span>CURRENT PLAN</span>
+              <h2>{{ subscriptionPlan.planName }}</h2>
+            </div>
+
+            <span class="eti-active-badge" [ngClass]="{
+              'active': subscriptionPlan.subscriptionStatus === 'ACTIVE',
+              'cancelled': subscriptionPlan.subscriptionStatus === 'CANCELLED',
+              'free': !subscriptionPlan.subscriptionStatus
+            }">
+              ● {{ formattedStatus }}
+            </span>
+          </div>
+
+          <div class="eti-plan-body">
+
+            <div class="eti-plan-info">
+              <div class="eti-plan-icon purple">◷</div>
+              <div>
+                <span>Billing cycle</span>
+                <strong>{{ monthlyPriceLabel }}</strong>
+              </div>
+            </div>
+
+            <div class="eti-plan-info">
+              <div class="eti-plan-icon pink">▣</div>
+              <div>
+                <span>Next renewal</span>
+                <strong>{{ subscriptionPlan.next_charge_date ? (subscriptionPlan.next_charge_date | date:'mediumDate') : 'Not Available' }}</strong>
+              </div>
+            </div>
+
+            <div class="eti-plan-features">
+
+              <div>
+                <span>✓</span>
+                {{ creditBalanceSummary.plan | number:'1.0-0' }} plan credits
+              </div>
+
+              <div>
+                <span>✓</span>
+                {{ creditBalanceSummary.topup | number:'1.0-0' }} top-up credits
+              </div>
+
+              <div>
+                <span>✓</span>
+                {{ creditBalanceSummary.free | number:'1.0-0' }} bonus credits
+              </div>
+
+              <div>
+                <span>✓</span>
+                Basic support
+              </div>
+
+            </div>
+
+            <div class="eti-more-credits">
+              <div class="eti-more-icon">◷</div>
+
+              <div>
+                <h3>Need more credits?</h3>
+                <p>
+                  Purchase additional credits to keep
+                  building without limits.
+                </p>
+
+                <button class="eti-btn eti-btn-primary" type="button" (click)="openBuyCreditsModal()">
+                  ▣ &nbsp; Buy Credits
+                </button>
+              </div>
+            </div>
+
+            @if(subscriptionPlan.planType !== 'FREE') {
+            <button class="remove-btn eti-btn eti-btn-outline w-100 mt-3" [disabled]="isCanceling" data-bs-toggle="modal" data-bs-target="#cancelSubscriptionModal"
+              *ngIf="subscriptionPlan.subscriptionStatus === 'ACTIVE'">
+              {{ isCanceling ? 'Canceling...' : 'Cancel Subscription' }}
+            </button>
+            }
+
+          </div>
+
+        </aside>
+
       </div>
+
     </div>
     }
   </div>
