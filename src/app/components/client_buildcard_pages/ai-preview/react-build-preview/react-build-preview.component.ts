@@ -536,6 +536,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       auth: {
         token: localStorage.getItem('tokenCTi'),
         inquiryPublicId: inquiryId,
+        socketType: 'chat-v2'
       }
     });
     this.socketInquiryId = inquiryId;
@@ -576,7 +577,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
           customizationConversationId:
             storedConversationId || null,
 
-          inquiryId
+          inquiryId,
+          socketType: 'customize'
         }
       }
     );

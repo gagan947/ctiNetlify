@@ -174,7 +174,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.socket = io(this.apiService.apiUrl, {
       auth: {
         token: localStorage.getItem('tokenCTi'),
-        conversationId: this.getStoredConversationId()
+        conversationId: this.getStoredConversationId(),
+        socketType: 'chat-v2'
       }
     });
     this.registerSocketHandlers();
