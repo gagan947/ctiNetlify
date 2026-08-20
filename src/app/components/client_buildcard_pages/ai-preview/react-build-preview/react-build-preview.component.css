@@ -3140,20 +3140,14 @@ p {
 
 .creative-editor-dock {
   position: absolute;
-
   left: 50%;
   bottom: 16px;
-
   transform: translateX(-50%);
-
-  z-index: 2147483000;
-
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
-
   gap: 8px;
-
   pointer-events: none;
 }
 
@@ -4165,6 +4159,11 @@ p {
 }
 
 @keyframes eti_spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

@@ -113,7 +113,7 @@ export class SubcriptionPageComponent {
     });
 
     this.selectedTemplateId = this.selectedTemplateId || this.modalData?.selectedTemplateId || '';
-    this.updateModalWidth(1050);
+    this.updateModalWidth(900);
     this.subscriptionService.loadSubscription();
     this.subscriptionService.subscription$.subscribe(subscription => {
       if (subscription) {

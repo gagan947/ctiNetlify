@@ -79,7 +79,7 @@ export class SubscriptionModalService {
       nzMaskClosable: false,
       nzKeyboard: true,
       nzCentered: true,
-      nzWidth: 833,
+      nzWidth: 900,
       nzClassName: 'subscription-modal-shell',
       nzMaskStyle: {
         backgroundColor: 'rgba(0, 0, 0, 0.50)',

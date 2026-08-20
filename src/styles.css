@@ -467,8 +467,15 @@ aside.ct_project_ai_chat_section {
 }
 
 .ant-modal-content {
-      border-radius: 30px !important;
-      background-color: #18181A !important;
+  border-radius: 24px !important;
+  background-color: #18181A !important;
+  overflow: hidden !important;
+}
+
+.subscription-modal-shell .ant-modal-content,
+.subscription-modal-shell .ant-modal-body {
+  overflow: hidden !important;
+  max-height: 96vh !important;
 }
 
 @media screen and (max-width: 767px) {
