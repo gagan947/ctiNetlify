@@ -272,7 +272,7 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    const prompt = this.promptText.trim().replace(/\s+/g, ' ');
+    const prompt = this.promptText.trim();
     if (!prompt) {
       return;
     }

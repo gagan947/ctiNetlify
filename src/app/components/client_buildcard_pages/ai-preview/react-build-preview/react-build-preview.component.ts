@@ -716,6 +716,17 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       'customizationError',
       (payload: any) => {
 
+        this.hideLoader();
+        this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
+        this.isTyping = false;
+
+        this.blocks.push({
+          id: `ai-message-${Date.now()}`,
+          text: payload.message,
+          done: true,
+          timestamp: new Date()
+        });
+
         console.error(
           '[Customize] customizationError',
           payload

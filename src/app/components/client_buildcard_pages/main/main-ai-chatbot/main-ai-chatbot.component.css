@@ -68,7 +68,7 @@
 }
 
 .main-ai-thread-row.is-user .main-ai-thread-stack {
-  width: clamp(280px, 34vw, 520px);
+  width: clamp(280px, 40vw, 610px);
   max-width: 100%;
   align-items: flex-end;
 }

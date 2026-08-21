@@ -273,7 +273,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const prompt = (promptOverride ?? this.promptText).trim().replace(/\s+/g, ' ');
+    const prompt = (promptOverride ?? this.promptText).trim();
     if (!prompt || this.isSubmitting) {
       return;
     }
@@ -826,15 +826,17 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   }
 
   formatMessage(text: string): FormattedMessageLine[] {
+    if (!text) return [];
     return text
       .split('\n')
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0)
       .map((line) => {
-        if (line.startsWith('-')) {
-          return { type: 'bullet', text: line.slice(1).trim() };
+        const trimmed = line.trim();
+        if (trimmed.startsWith('- ')) {
+          return { type: 'bullet', text: trimmed.slice(2).trim() };
         }
-
+        if (trimmed.startsWith('-')) {
+          return { type: 'bullet', text: trimmed.slice(1).trim() };
+        }
         return { type: 'text', text: line };
       });
   }

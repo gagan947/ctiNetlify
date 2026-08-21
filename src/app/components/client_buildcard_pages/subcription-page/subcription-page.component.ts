@@ -386,6 +386,9 @@ export class SubcriptionPageComponent {
   }
 
   getBillingUnit(plan: Plan | null): 'month' | 'year' {
+    if (this.billingCycle() === 'YEAR') {
+      return 'month';
+    }
     const cycle = plan?.billing_interval || this.billingCycle();
     return cycle === 'YEAR' ? 'year' : 'month';
   }
@@ -496,7 +499,10 @@ export class SubcriptionPageComponent {
       return '0';
     }
 
-    const amount = this.getEffectiveCurrentAmount(plan);
+    let amount = this.getEffectiveCurrentAmount(plan);
+    if (this.billingCycle() === 'YEAR') {
+      amount = amount / 12;
+    }
     return amount.toLocaleString('en-IN', {
       maximumFractionDigits: 0
     });
@@ -507,7 +513,11 @@ export class SubcriptionPageComponent {
       return '';
     }
 
-    return this.getOriginalAmount(plan).toLocaleString('en-IN', {
+    let amount = this.getOriginalAmount(plan);
+    if (this.billingCycle() === 'YEAR') {
+      amount = amount / 12;
+    }
+    return amount.toLocaleString('en-IN', {
       maximumFractionDigits: 0
     });
   }
@@ -517,9 +527,16 @@ export class SubcriptionPageComponent {
       return '';
     }
 
-    const savings = this.getOriginalAmount(plan) - this.getEffectiveCurrentAmount(plan);
+    let original = this.getOriginalAmount(plan);
+    let current = this.getEffectiveCurrentAmount(plan);
+    if (this.billingCycle() === 'YEAR') {
+      original = original / 12;
+      current = current / 12;
+    }
+
+    const savings = original - current;
     if (savings > 0) {
-      return `Save ${this.getCurrencySymbol(plan)}${savings.toLocaleString('en-IN')}`;
+      return `Save ${this.getCurrencySymbol(plan)}${Math.round(savings).toLocaleString('en-IN')}`;
     }
 
     if (Number(plan.discount_percent || 0) > 0 && !this.shouldShowPreviousPrice(plan)) {

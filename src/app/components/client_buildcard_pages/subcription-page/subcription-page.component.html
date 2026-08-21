@@ -70,35 +70,11 @@
 
           <div class="ct_subs_btn_2">
             <div class="ct_plan_selector"
-            [class.ct_plan_selector_clickable]="getCardTheme(plan) === 'standard' && proPlans.length > 1"
-            *ngIf="getCardTheme(plan) === 'standard'; else enterpriseCredits">
-            <button type="button" class="ct_starter_plan" [class.ct_starter_plan_disabled]="proPlans.length <= 1"
-              (click)="proPlans.length > 1 && toggleProDropdown($event)">
+              [class.ct_plan_selector_clickable]="getCardTheme(plan) === 'standard' && proPlans.length > 1"
+              *ngIf="getCardTheme(plan) === 'standard'; else enterpriseCredits">
+              <button type="button" class="ct_starter_plan" [class.ct_starter_plan_disabled]="proPlans.length <= 1"
+                (click)="proPlans.length > 1 && toggleProDropdown($event)">
 
-              <div>
-                <svg width="20" class="me-2" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0.599352" y="0.599352" width="17.9806" height="17.9806" rx="8.99028" stroke="#71717A"
-                    stroke-width="1.1987" />
-                  <rect x="5.99316" y="5.99353" width="7.19222" height="7.19222" rx="3.59611" fill="white" />
-                </svg>
-                <span>{{ getCreditsLabel(plan) }}</span>
-              </div>
-              <i class="fa-solid fa-angle-down" *ngIf="proPlans.length > 1"></i>
-            </button>
-
-            <ul class="dropdown-menu show" *ngIf="proDropdownOpen && proPlans.length > 1">
-              <li *ngFor="let proPlan of proDropdownPlans">
-                <button type="button" class="dropdown-item" (click)="selectProPlan(proPlan, $event)">
-                  {{ getCreditsLabel(proPlan) }} - {{ getCurrencySymbol(proPlan) }}{{ getCurrentPriceValue(proPlan) }}
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          <ng-template #enterpriseCredits>
-            <div class="ct_plan_selector">
-              <div class="ct_starter_plan ct_starter_plan_disabled">
                 <div>
                   <svg width="20" class="me-2" height="20" viewBox="0 0 20 20" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -108,14 +84,38 @@
                   </svg>
                   <span>{{ getCreditsLabel(plan) }}</span>
                 </div>
-              </div>
-            </div>
-          </ng-template>
+                <i class="fa-solid fa-angle-down" *ngIf="proPlans.length > 1"></i>
+              </button>
 
-          <a (click)="handlePlanAction(plan)" class="ct_price_cta" [class.disable_btn]="isPlanActionDisabled(plan)"
-            [attr.aria-disabled]="isPlanActionDisabled(plan)">
-            {{ getPlanButtonLabel(plan) }}
-          </a>
+              <ul class="dropdown-menu show" *ngIf="proDropdownOpen && proPlans.length > 1">
+                <li *ngFor="let proPlan of proDropdownPlans">
+                  <button type="button" class="dropdown-item" (click)="selectProPlan(proPlan, $event)">
+                    {{ getCreditsLabel(proPlan) }} - {{ getCurrencySymbol(proPlan) }}{{ getCurrentPriceValue(proPlan) }}
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            <ng-template #enterpriseCredits>
+              <div class="ct_plan_selector">
+                <div class="ct_starter_plan ct_starter_plan_disabled">
+                  <div>
+                    <svg width="20" class="me-2" height="20" viewBox="0 0 20 20" fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <rect x="0.599352" y="0.599352" width="17.9806" height="17.9806" rx="8.99028" stroke="#71717A"
+                        stroke-width="1.1987" />
+                      <rect x="5.99316" y="5.99353" width="7.19222" height="7.19222" rx="3.59611" fill="white" />
+                    </svg>
+                    <span>{{ getCreditsLabel(plan) }}</span>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+
+            <a (click)="handlePlanAction(plan)" class="ct_price_cta" [class.disable_btn]="isPlanActionDisabled(plan)"
+              [attr.aria-disabled]="isPlanActionDisabled(plan)">
+              {{ getPlanButtonLabel(plan) }}
+            </a>
           </div>
 
           <ul class="ct_feature_list">
