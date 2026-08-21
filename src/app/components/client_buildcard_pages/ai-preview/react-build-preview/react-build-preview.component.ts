@@ -918,7 +918,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
             changes: changesList,
             buttonLabel: 'Deploy',
             actionId: 'deploy_template',
-            buttonLabel2: 'Download Code',
+            buttonLabel2: 'Download',
             actionId2: 'download_code'
           },
           done: true,
