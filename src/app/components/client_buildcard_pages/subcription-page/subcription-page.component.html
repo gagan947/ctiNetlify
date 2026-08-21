@@ -68,7 +68,8 @@
             </div>
           </div>
 
-          <div class="ct_plan_selector"
+          <div class="ct_subs_btn_2">
+            <div class="ct_plan_selector"
             [class.ct_plan_selector_clickable]="getCardTheme(plan) === 'standard' && proPlans.length > 1"
             *ngIf="getCardTheme(plan) === 'standard'; else enterpriseCredits">
             <button type="button" class="ct_starter_plan" [class.ct_starter_plan_disabled]="proPlans.length <= 1"
@@ -115,6 +116,7 @@
             [attr.aria-disabled]="isPlanActionDisabled(plan)">
             {{ getPlanButtonLabel(plan) }}
           </a>
+          </div>
 
           <ul class="ct_feature_list">
             <li *ngFor="let feature of planFeatures(plan)" class="ct_parant_list">
@@ -152,7 +154,7 @@
     </div> -->
 
     <div class="ct_premium_header">
-      <h2><span class="ct_sparkle">✦</span> Confirm <span class="ct_text_purple">Your Plan</span> <span
+      <h2><span class="ct_sparkle">✦</span> <span>Confirm</span><span class="ct_text_purple">Your Plan</span> <span
           class="ct_sparkle">✦</span></h2>
       <p>You're just one step away from unlocking premium features.</p>
     </div>
@@ -208,7 +210,7 @@
       <!-- Right Column -->
       <div class="ct_premium_col">
         <form [formGroup]="billingForm">
-          <div class="ct_col_header mb-4">
+          <div class="ct_col_header mb-3">
             <div class="d-flex align-items-center gap-3">
               <div class="ct_icon_circle"><i class="fa-regular fa-user"></i></div>
               <h6 class="mb-0">Billing Details</h6>
