@@ -36,10 +36,10 @@ interface UserProfileSummary {
 export class WorkspaceHeaderComponent implements OnInit, OnDestroy {
   @Input() showPrimaryHeaderAction = false;
   @Input() primaryHeaderActionLabel = 'Deploy';
-  @Input() primaryHeaderActionIconClass = 'fa-solid fa-rocket';
+  @Input() primaryHeaderActionIconClass = 'fa-solid fa-cloud-arrow-up';
   @Input() showSecondaryHeaderAction = false;
   @Input() secondaryHeaderActionLabel = 'Download';
-  @Input() secondaryHeaderActionIconClass = 'fa-solid fa-download';
+  @Input() secondaryHeaderActionIconClass = 'fa-solid fa-code';
   @Output() primaryHeaderActionClick = new EventEmitter<void>();
   @Output() secondaryHeaderActionClick = new EventEmitter<void>();
   allProjectsList: UserProjectTab[] = [];

@@ -63,103 +63,114 @@ password input field with proper styling.</p>
         </div>
       </div> -->
 
-      <div *ngIf="isInlineCtaBlock(block)" class="ct_inline_cta_card"
-        [class.ct_inline_cta_card--purple]="!isSuccessInlineCta(block)"
-        [class.ct_inline_cta_card--green]="isSuccessInlineCta(block)">
-
-        <!-- Close Button -->
-        <button type="button" class="ct_inline_cta_card__close" aria-label="Close"
-          (click)="actionSelected.emit('dismiss_cta')">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-
-        <div class="ct_inline_cta_card__inner">
-          <!-- Icon Badge Section -->
-          <div class="ct_inline_cta_card__icon_wrap">
-            <div class="ct_inline_cta_card__orbit">
-              <span class="ct_orbit_particle ct_orbit_particle--1">✦</span>
-              <span class="ct_orbit_particle ct_orbit_particle--2">✦</span>
-              <span class="ct_orbit_particle ct_orbit_particle--3">✦</span>
+      <div *ngIf="isInlineCtaBlock(block)" class="mb-3">
+        <!-- Success CTA (Clean AI Activity UI) -->
+        <ng-container *ngIf="isSuccessInlineCta(block)">
+          <div class="ct_agent_activity mb-3 pe-3">
+            <div class="ct_agent_activity__avatar">
+              <i class="fa-solid fa-robot"></i>
             </div>
-            <div class="ct_inline_cta_card__icon_badge">
-              <ng-container *ngIf="isSuccessInlineCta(block)">
-                <i class="fa-solid fa-check"></i>
-              </ng-container>
-              <ng-container *ngIf="!isSuccessInlineCta(block)">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5Z" fill="url(#crownGrad)" stroke="url(#crownGrad)"
-                    stroke-width="1.5" stroke-linejoin="round" />
-                  <path d="M5 19H19" stroke="url(#crownGrad)" stroke-width="2" stroke-linecap="round" />
-                  <defs>
-                    <linearGradient id="crownGrad" x1="3" y1="4" x2="21" y2="19" gradientUnits="userSpaceOnUse">
-                      <stop stop-color="#E9D5FF" />
-                      <stop offset="0.5" stop-color="#C084FC" />
-                      <stop offset="1" stop-color="#A855F7" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </ng-container>
+            <div class="ct_agent_activity__body">
+              <h5 class="text-white fs-6 mb-2">
+                Your project is <span style="color: #38bdf8;">ready!</span> 🎉
+              </h5>
+              <p class="text-white-50 fs-14 mb-3">
+                {{ block?.text?.message || 'You can now download the code or deploy it directly.' }}
+              </p>
+              <div class="d-flex align-items-center gap-2 mt-2">
+                <button *ngIf="block?.text?.buttonLabel || block?.text?.buttonLabel2" type="button"
+                  class="btn btn-sm ct_btn_custom_pub d-flex align-items-center gap-1"
+                  (click)="actionSelected.emit(block?.text?.actionId === 'deploy_template' ? 'deploy_template' : (block?.text?.actionId2 || 'deploy_template'))">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                  <span>Deploy</span>
+                </button>
+
+                <button *ngIf="block?.text?.buttonLabel2 || block?.text?.buttonLabel" type="button"
+                  class="btn btn-sm ct_btn_custom_prev d-flex align-items-center gap-1"
+                  (click)="actionSelected.emit(block?.text?.actionId === 'download_code' ? 'download_code' : (block?.text?.actionId2 === 'download_code' ? 'download_code' : 'download_code'))">
+                  <i class="fa-solid fa-code"></i>
+                  <span>Download Code</span>
+                </button>
+              </div>
             </div>
           </div>
+        </ng-container>
 
-          <!-- Content Section -->
-          <div class="ct_inline_cta_card__content">
-            <h3 class="ct_inline_cta_card__title">
-              <ng-container *ngIf="isSuccessInlineCta(block)">
-                Your project is <span class="ct_highlight_green">ready!</span> 🎉
-              </ng-container>
-              <ng-container *ngIf="!isSuccessInlineCta(block)">
-                {{ block?.text?.title || getCreditLimitTitle(block) }}
-              </ng-container>
-            </h3>
+        <!-- Credit Limit CTA (Purple Box Card) -->
+        <ng-container *ngIf="!isSuccessInlineCta(block)">
+          <div class="ct_inline_cta_card ct_inline_cta_card--purple">
+            <button type="button" class="ct_inline_cta_card__close" aria-label="Close"
+              (click)="actionSelected.emit('dismiss_cta')">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
 
-            <p class="ct_inline_cta_card__desc">
-              {{ block?.text?.message }}
-            </p>
-
-            <div class="ct_inline_cta_card__actions">
-              <!-- Button 1 -->
-              <button *ngIf="block?.text?.buttonLabel" type="button" class="ct_inline_cta_card__btn"
-                [class.ct_btn--primary-green]="isSuccessInlineCta(block) && block?.text?.actionId === 'deploy_template'"
-                [class.ct_btn--outline-green]="isSuccessInlineCta(block) && block?.text?.actionId === 'download_code'"
-                [class.ct_btn--primary-purple]="!isSuccessInlineCta(block) && (block?.text?.actionId === 'upgrade_plan' || block?.text?.actionId === 'buy_credits')"
-                [class.ct_btn--outline-purple]="!isSuccessInlineCta(block) && block?.text?.actionId !== 'upgrade_plan' && block?.text?.actionId !== 'buy_credits'"
-                (click)="actionSelected.emit(block?.text?.actionId)">
-                <span *ngIf="block?.text?.actionId === 'download_code'" class="ct_btn_icon">&lt;/&gt;</span>
-                <span *ngIf="block?.text?.actionId === 'deploy_template'" class="ct_btn_icon">🚀</span>
-                <span *ngIf="block?.text?.actionId === 'upgrade_plan'" class="ct_btn_icon">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
+            <div class="ct_inline_cta_card__inner">
+              <div class="ct_inline_cta_card__icon_wrap">
+                <div class="ct_inline_cta_card__orbit">
+                  <span class="ct_orbit_particle ct_orbit_particle--1">✦</span>
+                  <span class="ct_orbit_particle ct_orbit_particle--2">✦</span>
+                  <span class="ct_orbit_particle ct_orbit_particle--3">✦</span>
+                </div>
+                <div class="ct_inline_cta_card__icon_badge">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5Z" fill="url(#crownGrad)"
+                      stroke="url(#crownGrad)" stroke-width="1.5" stroke-linejoin="round" />
+                    <path d="M5 19H19" stroke="url(#crownGrad)" stroke-width="2" stroke-linecap="round" />
+                    <defs>
+                      <linearGradient id="crownGrad" x1="3" y1="4" x2="21" y2="19" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#E9D5FF" />
+                        <stop offset="0.5" stop-color="#C084FC" />
+                        <stop offset="1" stop-color="#A855F7" />
+                      </linearGradient>
+                    </defs>
                   </svg>
-                </span>
-                <span *ngIf="block?.text?.actionId === 'buy_credits'" class="ct_btn_icon">🪙</span>
-                <span>{{ block?.text?.buttonLabel }}</span>
-              </button>
+                </div>
+              </div>
 
-              <!-- Button 2 -->
-              <button *ngIf="block?.text?.buttonLabel2" type="button" class="ct_inline_cta_card__btn"
-                [class.ct_btn--primary-green]="isSuccessInlineCta(block) && block?.text?.actionId2 === 'deploy_template'"
-                [class.ct_btn--outline-green]="isSuccessInlineCta(block) && block?.text?.actionId2 === 'download_code'"
-                [class.ct_btn--primary-purple]="!isSuccessInlineCta(block) && (block?.text?.actionId2 === 'upgrade_plan' || block?.text?.actionId2 === 'buy_credits')"
-                [class.ct_btn--outline-purple]="!isSuccessInlineCta(block) && block?.text?.actionId2 !== 'upgrade_plan' && block?.text?.actionId2 !== 'buy_credits'"
-                (click)="actionSelected.emit(block?.text?.actionId2)">
-                <span *ngIf="block?.text?.actionId2 === 'download_code'" class="ct_btn_icon">&lt;/&gt;</span>
-                <span *ngIf="block?.text?.actionId2 === 'deploy_template'" class="ct_btn_icon">🚀</span>
-                <span *ngIf="block?.text?.actionId2 === 'upgrade_plan'" class="ct_btn_icon">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
-                </span>
-                <span *ngIf="block?.text?.actionId2 === 'buy_credits'" class="ct_btn_icon">🪙</span>
-                <span>{{ block?.text?.buttonLabel2 }}</span>
-              </button>
+              <div class="ct_inline_cta_card__content">
+                <h3 class="ct_inline_cta_card__title">
+                  {{ block?.text?.title || getCreditLimitTitle(block) }}
+                </h3>
+
+                <p class="ct_inline_cta_card__desc">
+                  {{ block?.text?.message }}
+                </p>
+
+                <div class="ct_inline_cta_card__actions">
+                  <button *ngIf="block?.text?.buttonLabel" type="button" class="ct_inline_cta_card__btn"
+                    [class.ct_btn--primary-purple]="block?.text?.actionId === 'upgrade_plan' || block?.text?.actionId === 'buy_credits'"
+                    [class.ct_btn--outline-purple]="block?.text?.actionId !== 'upgrade_plan' && block?.text?.actionId !== 'buy_credits'"
+                    (click)="actionSelected.emit(block?.text?.actionId)">
+                    <span *ngIf="block?.text?.actionId === 'upgrade_plan'" class="ct_btn_icon">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
+                    </span>
+                    <span *ngIf="block?.text?.actionId === 'buy_credits'" class="ct_btn_icon">🪙</span>
+                    <span>{{ block?.text?.buttonLabel }}</span>
+                  </button>
+
+                  <button *ngIf="block?.text?.buttonLabel2" type="button" class="ct_inline_cta_card__btn"
+                    [class.ct_btn--primary-purple]="block?.text?.actionId2 === 'upgrade_plan' || block?.text?.actionId2 === 'buy_credits'"
+                    [class.ct_btn--outline-purple]="block?.text?.actionId2 !== 'upgrade_plan' && block?.text?.actionId2 !== 'buy_credits'"
+                    (click)="actionSelected.emit(block?.text?.actionId2)">
+                    <span *ngIf="block?.text?.actionId2 === 'upgrade_plan'" class="ct_btn_icon">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
+                    </span>
+                    <span *ngIf="block?.text?.actionId2 === 'buy_credits'" class="ct_btn_icon">🪙</span>
+                    <span>{{ block?.text?.buttonLabel2 }}</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </ng-container>
       </div>
 
       <div *ngIf="isUserMessageBlock(block)" class="customization-chat-message mb-3 is-user">
@@ -330,12 +341,14 @@ password input field with proper styling.</p>
     <!-- Body -->
     <div class="ct_custom_q_body">
       <!-- Main top message -->
-      <div class="ct_custom_q_subhead mb-3" *ngIf="block?.data?.message && (!block?.data?.questions?.length || !getCurrentQuestion(block))">
+      <div class="ct_custom_q_subhead mb-3"
+        *ngIf="block?.data?.message && (!block?.data?.questions?.length || !getCurrentQuestion(block))">
         <span>{{ block?.data?.message }}</span>
       </div>
 
       <!-- Checkbox Options List (Single Question) -->
-      <div class="ct_custom_checkbox_list d-flex flex-column gap-2 mb-3" *ngIf="block?.data?.options?.length && (!block?.data?.questions || !block?.data?.questions?.length)">
+      <div class="ct_custom_checkbox_list d-flex flex-column gap-2 mb-3"
+        *ngIf="block?.data?.options?.length && (!block?.data?.questions || !block?.data?.questions?.length)">
         <div *ngFor="let option of block?.data?.options" class="ct_custom_checkbox_row d-flex align-items-center gap-3"
           [class.is-checked]="isOptionChecked(block, option.id)" [class.is-disabled]="block?.data?.answered"
           (click)="!block?.data?.answered && toggleCustomizationOption(block, option.id)">
@@ -361,7 +374,8 @@ password input field with proper styling.</p>
               [class.is-disabled]="block?.data?.answered"
               (click)="!block?.data?.answered && selectMultiQuestionOption(block, q.questionId, option.id)">
 
-              <div class="ct_custom_checkbox_square" [class.checked]="isMultiQuestionOptionChecked(block, q.questionId, option.id)">
+              <div class="ct_custom_checkbox_square"
+                [class.checked]="isMultiQuestionOptionChecked(block, q.questionId, option.id)">
                 <i class="fa-solid fa-check" *ngIf="isMultiQuestionOptionChecked(block, q.questionId, option.id)"></i>
               </div>
 
@@ -377,8 +391,7 @@ password input field with proper styling.</p>
           <ng-container *ngIf="block?.data?.questions?.length as totalQ">
             <div class="d-flex align-items-center gap-2">
               <button type="button" class="btn btn-sm btn-link p-0 text-white opacity-75 text-decoration-none"
-                [disabled]="(block?.data?.currentQuestionIndex || 0) === 0"
-                (click)="prevMultiQuestion(block)">
+                [disabled]="(block?.data?.currentQuestionIndex || 0) === 0" (click)="prevMultiQuestion(block)">
                 <i class="fa-solid fa-chevron-left"></i>
               </button>
               <span>Question {{ (block?.data?.currentQuestionIndex || 0) + 1 }} of {{ totalQ }}</span>
@@ -390,7 +403,8 @@ password input field with proper styling.</p>
             </div>
           </ng-container>
 
-          <span *ngIf="(!block?.data?.questions || !block?.data?.questions?.length) && block?.data?.totalQuestions && block?.data?.totalQuestions > 1">
+          <span
+            *ngIf="(!block?.data?.questions || !block?.data?.questions?.length) && block?.data?.totalQuestions && block?.data?.totalQuestions > 1">
             Question {{ (block?.data?.currentQuestionIndex || 0) + 1 }} of {{ block?.data?.totalQuestions }}
           </span>
         </div>
@@ -402,13 +416,11 @@ password input field with proper styling.</p>
 
           <ng-container *ngIf="block?.data?.questions?.length">
             <button *ngIf="!isLastMultiQuestion(block)" type="button" class="btn ct_custom_btn_submit_card"
-              [disabled]="!isCurrentMultiQuestionAnswered(block)"
-              (click)="nextMultiQuestion(block)">
+              [disabled]="!isCurrentMultiQuestionAnswered(block)" (click)="nextMultiQuestion(block)">
               Next
             </button>
             <button *ngIf="isLastMultiQuestion(block)" type="button" class="btn ct_custom_btn_submit_card"
-              [disabled]="!hasSelectedOptions(block)"
-              (click)="submitCustomizationCard(block)">
+              [disabled]="!hasSelectedOptions(block)" (click)="submitCustomizationCard(block)">
               Submit
             </button>
           </ng-container>
@@ -424,6 +436,45 @@ password input field with proper styling.</p>
         <div class="ct_answered_badge text-success small" *ngIf="block?.data?.answered">
           <i class="fa-solid fa-circle-check me-1"></i> Submitted: <strong>{{ block?.data?.userInputAnswer }}</strong>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isCustomizationCompletedBlock(block)" class="ct_agent_activity mb-3 pe-3">
+    <div class="ct_agent_activity__avatar">
+      <i class="fa-solid fa-robot"></i>
+    </div>
+    <div class="ct_agent_activity__body">
+      <h5 class="text-white fs-6 mb-2" *ngIf="block?.data?.title">
+        {{ block?.data?.title }}
+      </h5>
+
+      <ul *ngIf="block?.data?.changes?.length" class="ct_listed_pointed mb-3 ps-0" style="list-style: none;">
+        <li *ngFor="let item of block.data.changes"
+          class="bullet d-flex align-items-start gap-2 mb-2 text-white-50 fs-14">
+          <span class="ct_bullet_dot_outline mt-2"
+            style="width: 5px; height: 5px; border-radius: 50%; background: #a1a1aa; flex-shrink: 0; display: inline-block;"></span>
+          <span style="color: #e4e4e7;">{{ item }}</span>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-2 mt-3">
+        <button *ngIf="block?.data?.buttonLabel" type="button"
+          class="btn btn-sm ct_btn_custom_pub d-flex align-items-center gap-1"
+          (click)="actionSelected.emit(block?.data?.actionId)">
+          <i class="fa-solid fa-cloud-arrow-up" *ngIf="block?.data?.actionId === 'deploy_template'"></i>
+          <i class="fa-solid fa-code" *ngIf="block?.data?.actionId === 'download_code'"></i>
+          <span>{{ block?.data?.buttonLabel }}</span>
+        </button>
+
+        <button *ngIf="block?.data?.buttonLabel2" type="button"
+          class="btn btn-sm ct_btn_custom_prev d-flex align-items-center gap-1"
+          (click)="actionSelected.emit(block?.data?.actionId2)">
+          <i class="fa-solid fa-code" *ngIf="block?.data?.actionId2 === 'download_code'"></i>
+          <i class="fa-solid fa-eye"
+            *ngIf="block?.data?.actionId2 === 'preview' || block?.data?.actionId2 === 'deploy_template'"></i>
+          <span>{{ block?.data?.buttonLabel2 }}</span>
+        </button>
       </div>
     </div>
   </div>

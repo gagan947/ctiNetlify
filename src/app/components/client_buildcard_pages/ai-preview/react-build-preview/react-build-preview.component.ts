@@ -902,6 +902,30 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         });
         break;
 
+      case 'customization-completed':
+      case 'customization_completed':
+        const summaryObj = response.summary || {};
+        const summaryTitle = summaryObj.summary || response.message || 'Customization completed';
+        const changesList = Array.isArray(summaryObj.changes) ? summaryObj.changes : [];
+
+        this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta'));
+
+        this.blocks.push({
+          id: `customization-completed-${Date.now()}`,
+          type: 'customization-completed',
+          data: {
+            title: summaryTitle,
+            changes: changesList,
+            buttonLabel: 'Deploy',
+            actionId: 'deploy_template',
+            buttonLabel2: 'Download Code',
+            actionId2: 'download_code'
+          },
+          done: true,
+          timestamp: new Date()
+        });
+        break;
+
       default:
         if (response.message) {
           this.blocks.push({
