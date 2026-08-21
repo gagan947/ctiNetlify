@@ -626,6 +626,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       this.customizationConversationId ===
       storedConversationId
     ) {
+      this.emitResumeCustomizationConversation();
       return;
     }
 
@@ -655,98 +656,76 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.registerCustomizationSocketListeners();
   }
 
+  private emitResumeCustomizationConversation(): void {
+    const conversationId = this.getStoredCustomizationConversationId() || this.customizationConversationId;
+    console.log('[Customize] Checking emitResumeCustomizationConversation. Stored ID:', conversationId, 'Connected:', this.customizationSocket?.connected);
+
+    if (conversationId && this.customizationSocket?.connected) {
+      console.log('[Customize] >>> EMITTING resumeCustomizationConversation to backend:', { conversationId });
+      this.customizationSocket.emit('resumeCustomizationConversation', { conversationId });
+    }
+  }
+
   private registerCustomizationSocketListeners(): void {
+    this.customizationSocket.on('connect', () => {
+      console.log('[ANGULAR CUSTOMIZE] CONNECTED:', this.customizationSocket.id);
+      this.emitResumeCustomizationConversation();
+    });
 
-    this.customizationSocket.on(
-      'connect',
-      () => {
+    this.customizationSocket.on('conversationResumed', (payload: any) => {
+      console.log('[Customize] conversationResumed:', payload);
+      this.isCustomizationRestoring = false;
 
-        console.log(
-          '[ANGULAR CUSTOMIZE] CONNECTED:',
-          this.customizationSocket.id
-        );
+      const conversationId = String(payload?.conversationId || '').trim();
+      if (conversationId) {
+        this.customizationConversationId = conversationId;
+        this.saveCustomizationConversationId(conversationId);
       }
-    );
 
-
-    this.customizationSocket.on(
-      'conversationResumed',
-      (payload: any) => {
-
-        console.log(
-          '[Customize] conversationResumed',
-          payload
-        );
-
-        this.isCustomizationRestoring =
-          false;
-
-        const conversationId =
-          String(
-            payload?.conversationId || ''
-          ).trim();
-
-        if (conversationId) {
-
-          this.customizationConversationId =
-            conversationId;
-
-          this.saveCustomizationConversationId(
-            conversationId
-          );
-        }
-
-        if (Array.isArray(payload?.messages)) {
-          this.customizationMessages = payload.messages.map((m: any) => this.normalizeCustomizationChatMessage(m));
-        }
+      if (Array.isArray(payload?.messages)) {
+        this.customizationMessages = payload.messages.map((m: any) => this.normalizeCustomizationChatMessage(m));
       }
-    );
+    });
 
+    this.customizationSocket.on('customizationConversationResumed', (payload: any) => {
+      console.log('[Customize] customizationConversationResumed:', payload);
+      this.isCustomizationRestoring = false;
 
-    this.customizationSocket.on(
-      'customizationResponse',
-      (payload: any) => {
-        console.log('[Customize] customizationResponse (payload):', payload);
-        this.handleCustomizationResponse(payload);
+      const conversationId = String(payload?.conversationId || '').trim();
+      if (conversationId) {
+        this.customizationConversationId = conversationId;
+        this.saveCustomizationConversationId(conversationId);
       }
-    );
 
-
-    this.customizationSocket.on(
-      'customizationError',
-      (payload: any) => {
-
-        this.hideLoader();
-        this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
-        this.isTyping = false;
-
-        this.blocks.push({
-          id: `ai-message-${Date.now()}`,
-          text: payload.message,
-          done: true,
-          timestamp: new Date()
-        });
-
-        console.error(
-          '[Customize] customizationError',
-          payload
-        );
-
-        this.isCustomizationRestoring =
-          false;
+      if (Array.isArray(payload?.messages)) {
+        this.customizationMessages = payload.messages.map((m: any) => this.normalizeCustomizationChatMessage(m));
       }
-    );
+    });
 
-    this.customizationSocket.on(
-      'disconnect',
-      (reason: any) => {
+    this.customizationSocket.on('customizationResponse', (payload: any) => {
+      console.log('[Customize] customizationResponse (payload):', payload);
+      this.handleCustomizationResponse(payload);
+    });
 
-        console.log(
-          '[Customize] disconnect',
-          reason
-        );
-      }
-    );
+    this.customizationSocket.on('customizationError', (payload: any) => {
+      this.hideLoader();
+      this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
+      this.isTyping = false;
+
+      this.blocks.push({
+        id: `ai-message-${Date.now()}`,
+        text: payload.message,
+        done: true,
+        timestamp: new Date()
+      });
+
+      console.error('[Customize] customizationError:', payload);
+      this.isCustomizationRestoring = false;
+    });
+
+    this.customizationSocket.on('disconnect', (reason: any) => {
+      console.log('[Customize] disconnect:', reason);
+    });
   }
 
 
