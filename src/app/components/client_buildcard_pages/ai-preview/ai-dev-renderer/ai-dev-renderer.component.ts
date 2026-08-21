@@ -414,6 +414,50 @@ export class AiDevRendererComponent implements OnChanges {
     return block?.type === 'customization-card';
   }
 
+  getCurrentQuestion(block: any): any {
+    if (!block?.data?.questions || !block.data.questions.length) return null;
+    const index = block.data.currentQuestionIndex || 0;
+    return block.data.questions[index] || block.data.questions[0];
+  }
+
+  isCurrentMultiQuestionAnswered(block: any): boolean {
+    const q = this.getCurrentQuestion(block);
+    if (!q) return false;
+    return !!(block?.data?.selectedMultiOptionsMap && block.data.selectedMultiOptionsMap[q.questionId]);
+  }
+
+  isMultiQuestionOptionChecked(block: any, questionId: string, optionId: string): boolean {
+    return !!(block?.data?.selectedMultiOptionsMap && block.data.selectedMultiOptionsMap[questionId] === optionId);
+  }
+
+  selectMultiQuestionOption(block: any, questionId: string, optionId: string): void {
+    if (block?.data?.answered) return;
+    if (!block.data) block.data = {};
+    if (!block.data.selectedMultiOptionsMap) block.data.selectedMultiOptionsMap = {};
+    block.data.selectedMultiOptionsMap[questionId] = optionId;
+  }
+
+  prevMultiQuestion(block: any): void {
+    if (block?.data?.currentQuestionIndex && block.data.currentQuestionIndex > 0) {
+      block.data.currentQuestionIndex--;
+    }
+  }
+
+  nextMultiQuestion(block: any): void {
+    const questions = block?.data?.questions;
+    const currentIndex = block?.data?.currentQuestionIndex || 0;
+    if (Array.isArray(questions) && currentIndex < questions.length - 1) {
+      block.data.currentQuestionIndex = currentIndex + 1;
+    }
+  }
+
+  isLastMultiQuestion(block: any): boolean {
+    const questions = block?.data?.questions;
+    if (!Array.isArray(questions) || !questions.length) return true;
+    const currentIndex = block?.data?.currentQuestionIndex || 0;
+    return currentIndex >= questions.length - 1;
+  }
+
   toggleCustomizationOption(block: any, optionId: string): void {
     if (block?.data?.answered) return;
     if (!block.data) block.data = {};
@@ -430,11 +474,53 @@ export class AiDevRendererComponent implements OnChanges {
   }
 
   hasSelectedOptions(block: any): boolean {
-    return !!(block?.data?.selectedOptionsMap && Object.values(block.data.selectedOptionsMap).some(v => !!v));
+    if (!block?.data) return false;
+    if (Array.isArray(block.data.questions) && block.data.questions.length > 0) {
+      const selectedMap = block.data.selectedMultiOptionsMap || {};
+      return block.data.questions.every((q: any) => !!selectedMap[q.questionId]);
+    }
+    return !!(block.data.selectedOptionsMap && Object.values(block.data.selectedOptionsMap).some(v => !!v));
   }
 
   submitCustomizationCard(block: any): void {
-    if (block?.data?.answered || !block?.data?.options) return;
+    if (block?.data?.answered) return;
+
+    if (Array.isArray(block.data?.questions) && block.data.questions.length > 0) {
+      const selectedMultiMap = block.data.selectedMultiOptionsMap || {};
+      const selectedOptions: any[] = [];
+      const answersList: string[] = [];
+
+      for (const q of block.data.questions) {
+        const selectedId = selectedMultiMap[q.questionId];
+        if (selectedId) {
+          const opt = q.options?.find((o: any) => o.id === selectedId);
+          if (opt) {
+            selectedOptions.push({
+              questionId: q.questionId,
+              id: opt.id,
+              label: opt.label
+            });
+            answersList.push(opt.label);
+          }
+        }
+      }
+
+      if (!selectedOptions.length) return;
+
+      block.data.answered = true;
+      const selectedLabels = answersList.join(', ');
+      block.data.userInputAnswer = selectedLabels;
+
+      this.actionSelected.emit(`submit_customization_options:${JSON.stringify({
+        blockId: block.id,
+        selectedOptions,
+        requestId: block.data?.requestId || null,
+        questionId: block.data?.questionId || null
+      })}`);
+      return;
+    }
+
+    if (!block?.data?.options) return;
     const selectedOptions = block.data.options.filter((opt: any) => this.isOptionChecked(block, opt.id));
     if (!selectedOptions.length) return;
 
@@ -451,7 +537,19 @@ export class AiDevRendererComponent implements OnChanges {
   }
 
   autoAnswerCustomizationCard(block: any): void {
-    if (block?.data?.answered || !block?.data?.options?.length) return;
+    if (block?.data?.answered) return;
+    if (Array.isArray(block.data?.questions) && block.data.questions.length > 0) {
+      if (!block.data.selectedMultiOptionsMap) block.data.selectedMultiOptionsMap = {};
+      for (const q of block.data.questions) {
+        if (!block.data.selectedMultiOptionsMap[q.questionId] && q.options?.length) {
+          block.data.selectedMultiOptionsMap[q.questionId] = q.options[0].id;
+        }
+      }
+      block.data.currentQuestionIndex = block.data.questions.length - 1;
+      this.submitCustomizationCard(block);
+      return;
+    }
+    if (!block?.data?.options?.length) return;
     if (!this.hasSelectedOptions(block)) {
       if (!block.data.selectedOptionsMap) block.data.selectedOptionsMap = {};
       block.data.selectedOptionsMap[block.data.options[0].id] = true;

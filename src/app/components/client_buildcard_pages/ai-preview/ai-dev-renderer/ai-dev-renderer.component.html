@@ -193,18 +193,15 @@ password input field with proper styling.</p>
                       [title]="file.fileName || file.originalName">{{ file.fileName || file.originalName || 'File'
                       }}</span>
                   </div>
-
                 </ng-container>
               </div>
 
               <!-- Text message -->
-              <p *ngIf="block?.text" class="mb-0" style="white-space: pre-wrap;">{{ block?.text }}</p>
-
+              <p *ngIf="block?.text" class="mb-0 ct_legacy_text" style="white-space: pre-wrap;">{{ block?.text }}</p>
               <!-- Edit Comments list (if any) -->
-              <div *ngIf="block?.editComments && block.editComments.length > 0"
-                class="user-chat-edits mt-2 pt-2 border-top border-white-20">
-                <div *ngFor="let edit of block.editComments; let editIdx = index" class="small text-white-75 mb-1">
-                  <span class="fw-semibold">Edit #{{ editIdx + 1 }}:</span> {{ edit.instruction }}
+              <div *ngIf="block?.editComments && block.editComments.length > 0" class="user-chat-edits">
+                <div *ngFor="let edit of block.editComments; let editIdx = index" class="ct_legacy_text mb-1">
+                  <span class="fw-semibold">Edit {{ editIdx + 1 }}:</span> {{ edit.instruction }}
                 </div>
               </div>
 
@@ -332,12 +329,13 @@ password input field with proper styling.</p>
 
     <!-- Body -->
     <div class="ct_custom_q_body">
-      <div class="ct_custom_q_subhead mb-3" *ngIf="block?.data?.message">
+      <!-- Main top message -->
+      <div class="ct_custom_q_subhead mb-3" *ngIf="block?.data?.message && (!block?.data?.questions?.length || !getCurrentQuestion(block))">
         <span>{{ block?.data?.message }}</span>
       </div>
 
-      <!-- Checkbox Options List -->
-      <div class="ct_custom_checkbox_list d-flex flex-column gap-2 mb-3" *ngIf="block?.data?.options?.length">
+      <!-- Checkbox Options List (Single Question) -->
+      <div class="ct_custom_checkbox_list d-flex flex-column gap-2 mb-3" *ngIf="block?.data?.options?.length && (!block?.data?.questions || !block?.data?.questions?.length)">
         <div *ngFor="let option of block?.data?.options" class="ct_custom_checkbox_row d-flex align-items-center gap-3"
           [class.is-checked]="isOptionChecked(block, option.id)" [class.is-disabled]="block?.data?.answered"
           (click)="!block?.data?.answered && toggleCustomizationOption(block, option.id)">
@@ -350,11 +348,50 @@ password input field with proper styling.</p>
         </div>
       </div>
 
+      <!-- Multiple Questions List (1-by-1: Render active question only) -->
+      <ng-container *ngIf="block?.data?.questions?.length">
+        <div *ngIf="getCurrentQuestion(block) as q" class="ct_multi_q_group mb-3">
+          <div class="ct_custom_q_subhead mb-3">
+            <span class="fw-semibold">{{ q.message || block?.data?.message }}</span>
+          </div>
+
+          <div class="ct_custom_checkbox_list d-flex flex-column gap-2">
+            <div *ngFor="let option of q.options" class="ct_custom_checkbox_row d-flex align-items-center gap-3"
+              [class.is-checked]="isMultiQuestionOptionChecked(block, q.questionId, option.id)"
+              [class.is-disabled]="block?.data?.answered"
+              (click)="!block?.data?.answered && selectMultiQuestionOption(block, q.questionId, option.id)">
+
+              <div class="ct_custom_checkbox_square" [class.checked]="isMultiQuestionOptionChecked(block, q.questionId, option.id)">
+                <i class="fa-solid fa-check" *ngIf="isMultiQuestionOptionChecked(block, q.questionId, option.id)"></i>
+              </div>
+
+              <span class="ct_custom_checkbox_label">{{ option.label }}</span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
       <!-- Footer Bar -->
       <div class="ct_custom_q_footer d-flex align-items-center justify-content-between pt-2">
         <div class="ct_custom_q_counter">
-          <span *ngIf="block?.data?.totalQuestions && block?.data?.totalQuestions > 1">
-            &lt; Question {{ (block?.data?.currentQuestionIndex || 0) + 1 }} of {{ block?.data?.totalQuestions }} &gt;
+          <ng-container *ngIf="block?.data?.questions?.length as totalQ">
+            <div class="d-flex align-items-center gap-2">
+              <button type="button" class="btn btn-sm btn-link p-0 text-white opacity-75 text-decoration-none"
+                [disabled]="(block?.data?.currentQuestionIndex || 0) === 0"
+                (click)="prevMultiQuestion(block)">
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+              <span>Question {{ (block?.data?.currentQuestionIndex || 0) + 1 }} of {{ totalQ }}</span>
+              <button type="button" class="btn btn-sm btn-link p-0 text-white opacity-75 text-decoration-none"
+                [disabled]="isLastMultiQuestion(block) || !isCurrentMultiQuestionAnswered(block)"
+                (click)="nextMultiQuestion(block)">
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+          </ng-container>
+
+          <span *ngIf="(!block?.data?.questions || !block?.data?.questions?.length) && block?.data?.totalQuestions && block?.data?.totalQuestions > 1">
+            Question {{ (block?.data?.currentQuestionIndex || 0) + 1 }} of {{ block?.data?.totalQuestions }}
           </span>
         </div>
 
@@ -363,10 +400,25 @@ password input field with proper styling.</p>
             Auto-answer
           </button>
 
-          <button type="button" class="btn ct_custom_btn_submit_card" [disabled]="!hasSelectedOptions(block)"
-            (click)="submitCustomizationCard(block)">
-            Submit
-          </button>
+          <ng-container *ngIf="block?.data?.questions?.length">
+            <button *ngIf="!isLastMultiQuestion(block)" type="button" class="btn ct_custom_btn_submit_card"
+              [disabled]="!isCurrentMultiQuestionAnswered(block)"
+              (click)="nextMultiQuestion(block)">
+              Next
+            </button>
+            <button *ngIf="isLastMultiQuestion(block)" type="button" class="btn ct_custom_btn_submit_card"
+              [disabled]="!hasSelectedOptions(block)"
+              (click)="submitCustomizationCard(block)">
+              Submit
+            </button>
+          </ng-container>
+
+          <ng-container *ngIf="!block?.data?.questions || !block?.data?.questions?.length">
+            <button type="button" class="btn ct_custom_btn_submit_card" [disabled]="!hasSelectedOptions(block)"
+              (click)="submitCustomizationCard(block)">
+              Submit
+            </button>
+          </ng-container>
         </div>
 
         <div class="ct_answered_badge text-success small" *ngIf="block?.data?.answered">

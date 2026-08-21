@@ -85,10 +85,17 @@ export interface PendingQuestion {
   type: string;
 }
 
+export interface CustomizationAnswer {
+  questionId: string;
+  optionId: string;
+  optionLabel: string;
+}
+
 export enum CustomizationMessageType {
   EDITOR_ELEMENT_EDIT = 'editor-element-edit',
   CHAT_MESSAGE = 'chat-message',
   OPTION_SELECTION = 'option-selection',
+  MULTI_OPTION_SELECTION = 'multi-option-selection',
   QUESTION_ANSWER = 'question-answer'
 }
 
@@ -102,6 +109,13 @@ export interface CustomizationMessagePayload {
   optionId?: string;
   optionLabel?: string;
   questionId?: string | null;
+  answers?: CustomizationAnswer[];
+}
+
+export interface CustomizationSubQuestion {
+  questionId: string;
+  message: string;
+  options: CustomizationOption[];
 }
 
 export interface CustomizationChatMessage {
@@ -113,6 +127,7 @@ export interface CustomizationChatMessage {
   questionId?: string;
   pendingQuestion?: PendingQuestion;
   options?: CustomizationOption[];
+  questions?: CustomizationSubQuestion[];
   answered?: boolean;
   selectedOptionId?: string;
   selectedOptionsMap?: { [optionId: string]: boolean };
@@ -760,7 +775,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       attachments: Array.isArray(data.attachments) ? data.attachments : [],
       ...(data.optionId !== undefined ? { optionId: data.optionId } : {}),
       ...(data.optionLabel !== undefined ? { optionLabel: data.optionLabel } : {}),
-      ...(data.questionId !== undefined ? { questionId: data.questionId } : {})
+      ...(data.questionId !== undefined ? { questionId: data.questionId } : {}),
+      ...(Array.isArray(data.answers) ? { answers: data.answers } : {})
     };
   }
 
@@ -855,7 +871,17 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
           label: String(opt.label || opt.text || opt.title || opt.id || '')
         })) : [];
 
+        const parsedQuestions = Array.isArray(response.questions) ? response.questions.map((q: any) => ({
+          questionId: String(q.questionId || q.id || ''),
+          message: String(q.message || q.title || ''),
+          options: Array.isArray(q.options) ? q.options.map((opt: any) => ({
+            id: String(opt.id || opt.value || opt.label || ''),
+            label: String(opt.label || opt.text || opt.title || opt.id || '')
+          })) : []
+        })) : [];
+
         const defaultMap: { [key: string]: boolean } = {};
+        const defaultMultiMap: { [key: string]: string } = {};
 
         this.blocks.push({
           id: `customization-card-${Date.now()}`,
@@ -866,9 +892,11 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
             message: response.message || 'Please select your options:',
             questionTitle: response.questionTitle || response.title || 'Agent has questions for you',
             options: parsedOptions,
+            questions: parsedQuestions,
             selectedOptionsMap: defaultMap,
+            selectedMultiOptionsMap: defaultMultiMap,
             currentQuestionIndex: response.currentQuestionIndex || 0,
-            totalQuestions: response.totalQuestions || 1,
+            totalQuestions: response.totalQuestions || (parsedQuestions.length > 0 ? parsedQuestions.length : 1),
             answered: false
           }
         });
@@ -1069,6 +1097,14 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       options: Array.isArray(raw.options) ? raw.options.map((opt: any) => ({
         id: String(opt.id || opt.value || opt.label || ''),
         label: String(opt.label || opt.text || opt.title || opt.id || '')
+      })) : [],
+      questions: Array.isArray(raw.questions) ? raw.questions.map((q: any) => ({
+        questionId: String(q.questionId || q.id || ''),
+        message: String(q.message || q.title || ''),
+        options: Array.isArray(q.options) ? q.options.map((opt: any) => ({
+          id: String(opt.id || opt.value || opt.label || ''),
+          label: String(opt.label || opt.text || opt.title || opt.id || '')
+        })) : []
       })) : [],
       answered: !!raw.answered,
       selectedOptionId: raw.selectedOptionId,
@@ -2975,15 +3011,35 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
         this.showLoader('Thinking...');
 
-        const socketPayload = this.buildCustomizationPayload(CustomizationMessageType.OPTION_SELECTION, {
-          requestId: data.requestId || this.activeCustomizationRequestId || null,
-          message: selectedLabels,
-          elements: [],
-          attachments: [],
-          optionId: firstOpt?.id || '',
-          optionLabel: selectedLabels,
-          questionId: data.questionId || null
-        });
+        const isMultiOption = selectedOptions.some((opt: any) => !!opt.questionId);
+
+        let socketPayload: CustomizationMessagePayload;
+
+        if (isMultiOption) {
+          const answers: CustomizationAnswer[] = selectedOptions.map((opt: any) => ({
+            questionId: String(opt.questionId || ''),
+            optionId: String(opt.id || opt.optionId || ''),
+            optionLabel: String(opt.label || opt.optionLabel || '')
+          }));
+
+          socketPayload = this.buildCustomizationPayload(CustomizationMessageType.MULTI_OPTION_SELECTION, {
+            requestId: data.requestId || this.activeCustomizationRequestId || null,
+            answers: answers,
+            message: null,
+            elements: [],
+            attachments: []
+          });
+        } else {
+          socketPayload = this.buildCustomizationPayload(CustomizationMessageType.OPTION_SELECTION, {
+            requestId: data.requestId || this.activeCustomizationRequestId || null,
+            message: selectedLabels,
+            elements: [],
+            attachments: [],
+            optionId: firstOpt?.id || '',
+            optionLabel: selectedLabels,
+            questionId: data.questionId || null
+          });
+        }
 
         this.sendCustomizationMessage(socketPayload);
       } catch (err) {
@@ -3062,7 +3118,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     const currentAttachments = [...this.previewFiles];
     const currentEditComments = [...this.editCommentsArray];
-    debugger
     this.addCustomizationMessage({
       sender: 'user',
       message: prompt || '',
@@ -4601,7 +4656,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   }
 
   private updatePendingAttachments(): void {
-    debugger
     const uploadedAssets = this.previewFiles
       .filter(item => item.asset)
       .map(item => item.asset);
