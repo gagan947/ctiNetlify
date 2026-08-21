@@ -1667,6 +1667,8 @@ p.ct_chat_user_left::-webkit-scrollbar-thumb {
 .ct_custom_q_counter {
   font-size: 11.5px;
   color: #a1a1aa;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .ct_custom_btn_auto_answer {

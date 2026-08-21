@@ -386,15 +386,15 @@ password input field with proper styling.</p>
       </ng-container>
 
       <!-- Footer Bar -->
-      <div class="ct_custom_q_footer d-flex align-items-center justify-content-between pt-2">
-        <div class="ct_custom_q_counter">
+      <div class="ct_custom_q_footer d-flex align-items-center justify-content-between pt-2 gap-3">
+        <div class="ct_custom_q_counter flex-shrink-0 text-nowrap" style="white-space: nowrap;">
           <ng-container *ngIf="block?.data?.questions?.length as totalQ">
-            <div class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2 text-nowrap" style="white-space: nowrap;">
               <button type="button" class="btn btn-sm btn-link p-0 text-white opacity-75 text-decoration-none"
                 [disabled]="(block?.data?.currentQuestionIndex || 0) === 0" (click)="prevMultiQuestion(block)">
                 <i class="fa-solid fa-chevron-left"></i>
               </button>
-              <span>Question {{ (block?.data?.currentQuestionIndex || 0) + 1 }} of {{ totalQ }}</span>
+              <span class="text-nowrap" style="white-space: nowrap;">Question {{ (block?.data?.currentQuestionIndex || 0) + 1 }} of {{ totalQ }}</span>
               <button type="button" class="btn btn-sm btn-link p-0 text-white opacity-75 text-decoration-none"
                 [disabled]="isLastMultiQuestion(block) || !isCurrentMultiQuestionAnswered(block)"
                 (click)="nextMultiQuestion(block)">
@@ -403,13 +403,13 @@ password input field with proper styling.</p>
             </div>
           </ng-container>
 
-          <span
+          <span class="text-nowrap" style="white-space: nowrap;"
             *ngIf="(!block?.data?.questions || !block?.data?.questions?.length) && block?.data?.totalQuestions && block?.data?.totalQuestions > 1">
             Question {{ (block?.data?.currentQuestionIndex || 0) + 1 }} of {{ block?.data?.totalQuestions }}
           </span>
         </div>
 
-        <div class="d-flex align-items-center gap-2" *ngIf="!block?.data?.answered">
+        <div class="d-flex align-items-center gap-2 flex-shrink-0" *ngIf="!block?.data?.answered">
           <button type="button" class="btn ct_custom_btn_auto_answer" (click)="autoAnswerCustomizationCard(block)">
             Auto-answer
           </button>
@@ -433,7 +433,7 @@ password input field with proper styling.</p>
           </ng-container>
         </div>
 
-        <div class="ct_answered_badge text-success small" *ngIf="block?.data?.answered">
+        <div class="ct_answered_badge text-success small text-end text-truncate ms-auto" style="min-width: 0;" *ngIf="block?.data?.answered" [title]="'Submitted: ' + block?.data?.userInputAnswer">
           <i class="fa-solid fa-circle-check me-1"></i> Submitted: <strong>{{ block?.data?.userInputAnswer }}</strong>
         </div>
       </div>
