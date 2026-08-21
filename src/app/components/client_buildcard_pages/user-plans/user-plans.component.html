@@ -559,7 +559,7 @@
             </div>
 
             @if(subscriptionPlan.planType !== 'FREE') {
-            <button class="remove-btn eti-btn eti-btn-outline w-100 mt-3" [disabled]="isCanceling" data-bs-toggle="modal" data-bs-target="#cancelSubscriptionModal"
+            <button class="remove-btn eti-btn eti-btn-outline w-100 mt-3 btn-danger" [disabled]="isCanceling" data-bs-toggle="modal" data-bs-target="#cancelSubscriptionModal"
               *ngIf="subscriptionPlan.subscriptionStatus === 'ACTIVE'">
               {{ isCanceling ? 'Canceling...' : 'Cancel Subscription' }}
             </button>
@@ -586,12 +586,12 @@
       <div class="ct_cancel_modal__icon">
         <i class="fa-solid fa-circle-exclamation"></i>
       </div>
-      <h2 id="cancelSubscriptionModalLabel">Cancel Subscription?</h2>
+      <h4 id="cancelSubscriptionModalLabel">Cancel Subscription?</h4>
       <p>
         Are you sure you want to cancel? You will lose access to premium features at the end of your current billing cycle.
       </p>
       <div class="d-flex justify-content-center gap-3 mt-4">
-        <button type="button" class="btn px-4 py-2 fw-medium rounded-3" data-bs-dismiss="modal" style="background-color: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1);">No, Keep it</button>
+        <button type="button" class="btn px-4 py-2 fw-medium rounded-3 ct_keep_subscription_btn" data-bs-dismiss="modal" >No, Keep it</button>
         <button type="button" class="btn btn-danger px-4 py-2 fw-medium rounded-3" (click)="cancelSubcription()" data-bs-dismiss="modal">Yes, Cancel</button>
       </div>
     </div>

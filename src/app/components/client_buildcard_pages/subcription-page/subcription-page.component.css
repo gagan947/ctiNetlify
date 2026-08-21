@@ -495,7 +495,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 90vh;
-  padding: 40px;
+  padding:20px  40px;
   width: 100%;
 }
 
@@ -575,15 +575,15 @@
 
 .ct_premium_header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 15px;
   margin-top: 10px;
 }
 
 .ct_premium_header h2 {
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 8px;
+  margin-bottom: 0px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -608,15 +608,15 @@
 .ct_premium_body {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-bottom: 24px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .ct_premium_col {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 20px;
-  padding: 24px;
+  padding: 15px;
   display: flex;
   flex-direction: column;
 }
@@ -625,7 +625,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 15px;
 }
 
 .ct_icon_circle {
@@ -658,7 +658,7 @@
 .ct_order_list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   margin-bottom: 24px;
 }
 
@@ -706,7 +706,7 @@
 }
 
 .ct_form_group {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .ct_form_group label {
@@ -749,7 +749,7 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
-  padding: 16px 12px;
+  padding:  12px;
   text-align: center;
   flex: 1;
 }
@@ -1087,3 +1087,12 @@ ct_parant_list .card.card-body {
   height: 16px;
   border-radius: 6px;
 }
+
+
+/* @media screen and (max-height:650px){
+  .ct_subs_btn_2{
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 10px;
+  }
+} */
