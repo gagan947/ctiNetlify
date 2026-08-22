@@ -1721,8 +1721,8 @@ p.ct_chat_user_left::-webkit-scrollbar-thumb {
 }
 
 .user-chat-img-thumb {
-  max-width: 100px;
-  max-height: 120px;
+  max-width: 180px;
+  max-height: 180px;
   border-radius: 10px;
   object-fit: cover;
   border: 1px solid rgba(255, 255, 255, 0.15);

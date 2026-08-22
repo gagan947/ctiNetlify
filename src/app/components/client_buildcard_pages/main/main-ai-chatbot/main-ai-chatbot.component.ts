@@ -178,6 +178,18 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
         socketType: 'chat-v2'
       }
     });
+    
+    // If it's a completely fresh conversation (from the home screen), 
+    // we can submit the prompt instantly instead of waiting for the socket round-trip.
+    const storedId = this.getStoredConversationId();
+    if (!storedId && this.pendingInitialPrompt) {
+      this.isRestoringConversation = false;
+      this.isFreshConversation = true;
+      const initialPrompt = this.pendingInitialPrompt;
+      this.pendingInitialPrompt = '';
+      this.submitPrompt(initialPrompt);
+    }
+
     this.registerSocketHandlers();
     this.startResumeFallback();
     this.watchPageChange();
@@ -284,6 +296,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
       ...this.chatMessages,
       { sender: 'user', text: prompt, variant: 'default', createdAt: Date.now() }
     ];
+
     this.lastUserPrompt = prompt;
     this.showBuildProjectButton = false;
     this.matchedProjectId = '';
@@ -446,16 +459,21 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   }
 
   private handleConversationResumed(payload?: ConversationResumePayload | null): void {
+    const wasFallbackAlreadyTriggered = !this.isRestoringConversation;
     this.clearResumeFallback();
     this.isRestoringConversation = false;
     this.isFreshConversation = payload?.source === 'fresh';
 
     this.saveConversationId(payload?.conversationId);
-    this.chatMessages = this.normalizeConversationMessages(payload?.messages);
+    
+    const normalizedMessages = this.normalizeConversationMessages(payload?.messages);
+    if (!wasFallbackAlreadyTriggered || normalizedMessages.length > 0) {
+      this.chatMessages = normalizedMessages;
+    }
     this.restoreConversationState(payload?.state ?? null);
     this.isSubmitting = false;
 
-    if (this.pendingInitialPrompt && this.isFreshConversation && this.chatMessages.length === 0) {
+    if (this.pendingInitialPrompt) {
       const initialPrompt = this.pendingInitialPrompt;
       this.pendingInitialPrompt = '';
       this.submitPrompt(initialPrompt);
@@ -533,6 +551,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     let targetMessageIndex = this.chatMessages.findIndex(
       (message) => message.sender === 'ai' && message.streamBlockId === blockId
     );
+
 
     if (targetMessageIndex === -1) {
       if (!content) {
@@ -880,6 +899,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   }
 
   private normalizeConversationMessages(messages?: any[]): ChatMessage[] {
+
     if (!Array.isArray(messages)) {
       return [];
     }

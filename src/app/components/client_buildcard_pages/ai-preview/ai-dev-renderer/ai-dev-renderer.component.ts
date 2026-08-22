@@ -418,6 +418,10 @@ export class AiDevRendererComponent implements OnChanges {
     return block?.type === 'customization-completed';
   }
 
+  isCustomizationProgressBlock(block: any): boolean {
+    return block?.type === 'customization-progress';
+  }
+
   getCurrentQuestion(block: any): any {
     if (!block?.data?.questions || !block.data.questions.length) return null;
     const index = block.data.currentQuestionIndex || 0;

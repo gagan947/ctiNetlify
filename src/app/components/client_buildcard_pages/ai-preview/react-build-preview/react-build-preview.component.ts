@@ -858,11 +858,13 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
       case 'customization-completed':
       case 'customization_completed':
+        this.setSafePreviewUrl(this.getPreviewProxyUrl(this.selected_template_id) + '?t=' + Date.now());
+        this.isReactBuilding = false;
         const summaryObj = response.summary || {};
         const summaryTitle = summaryObj.summary || response.message || 'Customization completed';
         const changesList = Array.isArray(summaryObj.changes) ? summaryObj.changes : [];
 
-        this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta'));
+        this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta') && block?.type !== 'customization-progress');
 
         this.blocks.push({
           id: `customization-completed-${Date.now()}`,
@@ -879,6 +881,56 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
           timestamp: new Date()
         });
         break;
+
+      case 'customization-progress': {
+        if (!this.isReactBuilding) {
+          this.isReactBuilding = true;
+          this.loaderProgress = 0;
+          this.loaderStepIndex = 1;
+          this.buildFlowType = 'customize';
+          this.startFakeProgressLoop();
+        }
+
+        if (response.message) {
+          this.loaderStatusText = response.message;
+        }
+
+        if (typeof response.progress === 'number' && response.progress > 0 && response.progress < 100) {
+          this.loaderProgress = response.progress;
+          if (this.loaderProgress < 25) {
+            this.loaderStepIndex = 1;
+          } else if (this.loaderProgress < 50) {
+            this.loaderStepIndex = 2;
+          } else if (this.loaderProgress < 75) {
+            this.loaderStepIndex = 3;
+          } else {
+            this.loaderStepIndex = 4;
+          }
+        }
+
+        const existingProgressBlockIndex = this.blocks.findIndex((b: any) => b.type === 'customization-progress');
+        if (existingProgressBlockIndex !== -1) {
+          this.blocks[existingProgressBlockIndex].data.message = response.message;
+          if (response.progress !== undefined) {
+            this.blocks[existingProgressBlockIndex].data.progress = response.progress;
+          }
+          this.blocks[existingProgressBlockIndex].timestamp = new Date();
+        } else {
+          this.blocks.push({
+            id: `customization-progress-${Date.now()}`,
+            type: 'customization-progress',
+            data: {
+              progress: response.progress,
+              message: response.message,
+              requestId: response.requestId
+            },
+            done: false,
+            timestamp: new Date()
+          });
+        }
+        setTimeout(() => this.scrollToBottom(true), 0);
+        break;
+      }
 
       default:
         if (response.message) {

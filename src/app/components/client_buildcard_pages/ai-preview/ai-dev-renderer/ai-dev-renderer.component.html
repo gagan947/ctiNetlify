@@ -176,8 +176,7 @@ password input field with proper styling.</p>
       <div *ngIf="isUserMessageBlock(block)" class="customization-chat-message mb-3 is-user">
         <div class="d-flex align-items-start gap-2 justify-content-end">
           <div class="ct_chat_body" style="max-width: 85%;">
-            <div class="ct_chat_bubble ct_chat_bubble_user"
-              [class.p-0]="block.attachments && block.attachments.length > 0">
+            <div class="ct_chat_bubble ct_chat_bubble_user">
 
               <!-- Attachments Section (Thumbnails / File Cards) -->
               <div *ngIf="block?.attachments && block.attachments.length > 0"
@@ -436,6 +435,18 @@ password input field with proper styling.</p>
         <div class="ct_answered_badge text-success small text-end text-truncate ms-auto" style="min-width: 0;" *ngIf="block?.data?.answered" [title]="'Submitted: ' + block?.data?.userInputAnswer">
           <i class="fa-solid fa-circle-check me-1"></i> Submitted: <strong>{{ block?.data?.userInputAnswer }}</strong>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isCustomizationProgressBlock(block)" class="ct_agent_activity mb-3 pe-3">
+    <div class="ct_agent_activity__avatar">
+      <i class="fa-solid fa-robot"></i>
+    </div>
+    <div class="ct_agent_activity__body">
+      <div class="d-flex align-items-center gap-2">
+        <span class="ct_codex_thinking_orb"></span>
+        <p class="ct_legacy_text mb-0" style="white-space: pre-wrap;">{{ block?.data?.message || 'Processing your request...' }}</p>
       </div>
     </div>
   </div>

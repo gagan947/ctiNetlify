@@ -329,7 +329,8 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
     this.resumeProbeSocket = io(this.apiService.apiUrl, {
       auth: {
         token: localStorage.getItem('tokenCTi'),
-        conversationId: this.getStoredConversationId()
+        conversationId: this.getStoredConversationId(),
+        socketType: 'chat-v2'
       }
     });
 
