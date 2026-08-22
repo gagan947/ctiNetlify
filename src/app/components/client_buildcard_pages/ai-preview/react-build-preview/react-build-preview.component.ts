@@ -6,10 +6,9 @@ import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { firstValueFrom } from 'rxjs';
 import { SubscriptionResponse } from '../../../../models/subcription';
-import { AiSocketService } from '../../../../services/ai-socket.service';
+
 import { ApiService } from '../../../../services/api.service';
 import { ProjectGenerationPreviewData, ProjectGenerationTabStateService } from '../../../../services/project-generation-tab-state.service';
-import { ReactCodeEditorComponent } from '../react-code-editor/react-code-editor.component';
 import { AiDevRendererComponent } from '../ai-dev-renderer/ai-dev-renderer.component';
 import { SubscriptionModalService } from '../../../../services/subscription-modal.service';
 import { SubcriptionService } from '../../../../services/subcription.service';
@@ -146,7 +145,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-react-build-preview',
   standalone: true,
-  imports: [CommonModule, NgxIntlTelInputModule, ReactCodeEditorComponent, FormsModule, ReactiveFormsModule, AiDevRendererComponent, WorkspaceHeaderComponent, AiLoaderComponent],
+  imports: [CommonModule, NgxIntlTelInputModule, FormsModule, ReactiveFormsModule, AiDevRendererComponent, WorkspaceHeaderComponent, AiLoaderComponent],
   templateUrl: './react-build-preview.component.html',
   styleUrl: './react-build-preview.component.css'
 })
@@ -384,7 +383,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   constructor(
     private apiService: ApiService,
     private sanitizer: DomSanitizer,
-    private aiService: AiSocketService,
     private projectGenerationTabState: ProjectGenerationTabStateService,
     private router: Router,
     private toster: NzMessageService,
@@ -2123,7 +2121,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.socket?.disconnect?.();
     this.customizationSocket?.removeAllListeners?.();
     this.customizationSocket?.disconnect?.();
-    this.aiService.stop();
+
 
   }
 

@@ -1534,7 +1534,8 @@ p.ct_chat_user_left::-webkit-scrollbar-thumb {
 }
 
 .ct_chat_bubble_user {
-  background: #2d3052;
+  background: radial-gradient(50% 50% at 50% 50%, rgb(65 64 178 / 55%) 0%, rgb(65 64 178 / 19%) 100%);
+  ;
   color: #ffffff;
   border-top-right-radius: 4px;
 }
