@@ -178,9 +178,8 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
         socketType: 'chat-v2'
       }
     });
-    
-    // If it's a completely fresh conversation (from the home screen), 
-    // we can submit the prompt instantly instead of waiting for the socket round-trip.
+
+
     const storedId = this.getStoredConversationId();
     if (!storedId && this.pendingInitialPrompt) {
       this.isRestoringConversation = false;
@@ -465,7 +464,7 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
     this.isFreshConversation = payload?.source === 'fresh';
 
     this.saveConversationId(payload?.conversationId);
-    
+
     const normalizedMessages = this.normalizeConversationMessages(payload?.messages);
     if (!wasFallbackAlreadyTriggered || normalizedMessages.length > 0) {
       this.chatMessages = normalizedMessages;

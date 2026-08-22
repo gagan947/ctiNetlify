@@ -418,6 +418,17 @@ export class AiDevRendererComponent implements OnChanges {
     return block?.type === 'customization-completed';
   }
 
+  isLatestCustomizationCompletedBlock(block: any): boolean {
+    if (!this.blocks || !this.blocks.length) return false;
+    for (let i = this.blocks.length - 1; i >= 0; i--) {
+      const b = this.blocks[i];
+      if (this.isCustomizationCompletedBlock(b) || this.isInlineCtaBlock(b)) {
+        return b === block;
+      }
+    }
+    return false;
+  }
+
   isCustomizationProgressBlock(block: any): boolean {
     return block?.type === 'customization-progress';
   }

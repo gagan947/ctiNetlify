@@ -45,14 +45,6 @@ interface CallbackPhoneNumber {
   dialCode?: string;
 }
 
-interface CustomizationHistoryEntry {
-  id: number;
-  prompt: string;
-  ai_response?: string | null;
-  build_status: number;
-  created_at: string;
-  updated_at?: string;
-}
 
 interface PendingCustomizationRequest {
   prompt: string;
@@ -482,10 +474,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         return;
       }
 
-      await this.appendCustomizationHistory(inquiryId, routeChangeVersion);
-      if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
-        return;
-      }
 
       await this.loadDraftTemplates(templates);
       if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
@@ -663,6 +651,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
       if (Array.isArray(payload?.messages)) {
         this.customizationMessages = payload.messages.map((m: any) => this.normalizeCustomizationChatMessage(m));
+        this.restoreCustomizationBlocks(payload.messages);
       }
     });
 
@@ -871,11 +860,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
           type: 'customization-completed',
           data: {
             title: summaryTitle,
-            changes: changesList,
-            buttonLabel: 'Deploy',
-            actionId: 'deploy_template',
-            buttonLabel2: 'Download',
-            actionId2: 'download_code'
+            changes: changesList
           },
           done: true,
           timestamp: new Date()
@@ -1117,8 +1102,10 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     return {
       sender,
-      message: raw.message || raw.text || '',
+      message: raw.message || raw.content || raw.text || '',
       replyType,
+      attachments: Array.isArray(raw.attachments) ? raw.attachments : [],
+      editComments: Array.isArray(raw.editComments) ? raw.editComments : (Array.isArray(raw.elementContext) ? raw.elementContext : []),
       questionId: raw.questionId || raw.pendingQuestion?.id,
       pendingQuestion: raw.pendingQuestion ? {
         id: raw.pendingQuestion.id || raw.questionId || '',
@@ -1140,6 +1127,160 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       selectedOptionId: raw.selectedOptionId,
       userInputAnswer: raw.userInputAnswer
     };
+  }
+
+  private restoreCustomizationBlocks(messages: any[]): void {
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return;
+    }
+
+    const customizationBlocks: any[] = [];
+
+    for (let index = 0; index < messages.length; index++) {
+      const m = messages[index];
+      if (!m) continue;
+
+      const isUser = m.role === 'user' || m.sender === 'user';
+      const createdAt = m.createdAt ? new Date(m.createdAt) : new Date();
+
+      if (isUser) {
+        const text = m.content || m.message || m.text || '';
+        const attachments = Array.isArray(m.attachments) ? m.attachments : [];
+        const editComments = Array.isArray(m.editComments)
+          ? m.editComments
+          : (Array.isArray(m.elementContext) ? m.elementContext : []);
+
+        if (text || attachments.length > 0 || editComments.length > 0) {
+          customizationBlocks.push({
+            id: `user-message-${m.id || index}-${Date.now()}`,
+            text: text,
+            attachments: attachments,
+            editComments: editComments,
+            done: true,
+            timestamp: createdAt,
+            isCustomizationHistory: true
+          });
+        }
+      } else {
+        const replyType = m.replyType || 'message';
+
+        if (replyType === 'customization-completed' || replyType === 'customization_completed') {
+          const summaryObj = m.summary || {};
+          const summaryTitle = summaryObj.summary || summaryObj.title || m.content || m.message || 'Customization completed';
+          const changesList = Array.isArray(summaryObj.changes)
+            ? summaryObj.changes
+            : (Array.isArray(m.changes) ? m.changes : []);
+
+          customizationBlocks.push({
+            id: `customization-completed-${m.id || index}-${Date.now()}`,
+            type: 'customization-completed',
+            data: {
+              title: summaryTitle,
+              changes: changesList
+            },
+            done: true,
+            timestamp: createdAt,
+            isCustomizationHistory: true
+          });
+        } else if (replyType === 'options' || replyType === 'question') {
+          const hasOptions = (Array.isArray(m.options) && m.options.length > 0) || (Array.isArray(m.questions) && m.questions.length > 0);
+
+          if (hasOptions) {
+            const parsedOptions = Array.isArray(m.options) ? m.options.map((opt: any) => ({
+              id: String(opt.id || opt.value || opt.label || ''),
+              label: String(opt.label || opt.text || opt.title || opt.id || '')
+            })) : [];
+
+            const parsedQuestions = Array.isArray(m.questions) ? m.questions.map((q: any) => ({
+              questionId: String(q.questionId || q.id || ''),
+              message: String(q.message || q.title || ''),
+              options: Array.isArray(q.options) ? q.options.map((opt: any) => ({
+                id: String(opt.id || opt.value || opt.label || ''),
+                label: String(opt.label || opt.text || opt.title || opt.id || '')
+              })) : []
+            })) : [];
+
+            const nextMsg = messages[index + 1];
+            const isAnsweredByNextUser = nextMsg && (nextMsg.role === 'user' || nextMsg.sender === 'user');
+            const isAnswered = m.answered !== undefined ? !!m.answered : (index < messages.length - 1);
+            const answerText = m.userInputAnswer || (isAnsweredByNextUser ? (nextMsg.content || nextMsg.message || '') : '');
+
+            const defaultMap: { [key: string]: boolean } = {};
+            const defaultMultiMap: { [key: string]: string } = {};
+
+            if (answerText && parsedOptions.length) {
+              const matchedOpt = parsedOptions.find((o: any) => o.label?.toLowerCase() === answerText?.toLowerCase() || o.id === answerText);
+              if (matchedOpt) {
+                defaultMap[matchedOpt.id] = true;
+              }
+            }
+
+            customizationBlocks.push({
+              id: `customization-card-${m.id || index}-${Date.now()}`,
+              type: 'customization-card',
+              data: {
+                requestId: m.requestId || null,
+                questionId: m.questionId || null,
+                message: m.content || m.message || 'Please select your options:',
+                questionTitle: m.questionTitle || m.title || 'Agent has questions for you',
+                options: parsedOptions,
+                questions: parsedQuestions,
+                selectedOptionsMap: defaultMap,
+                selectedMultiOptionsMap: defaultMultiMap,
+                currentQuestionIndex: m.currentQuestionIndex || 0,
+                totalQuestions: m.totalQuestions || (parsedQuestions.length > 0 ? parsedQuestions.length : 1),
+                answered: isAnswered,
+                userInputAnswer: answerText
+              },
+              done: true,
+              timestamp: createdAt,
+              isCustomizationHistory: true
+            });
+          } else {
+            const text = m.content || m.message || m.text || '';
+            if (text) {
+              customizationBlocks.push({
+                id: `ai-message-${m.id || index}-${Date.now()}`,
+                text: text,
+                done: true,
+                timestamp: createdAt,
+                isCustomizationHistory: true
+              });
+            }
+          }
+        } else if (replyType === 'customization-progress') {
+          if (index === messages.length - 1 && (m.content || m.message)) {
+            customizationBlocks.push({
+              id: `customization-progress-${m.id || index}-${Date.now()}`,
+              type: 'customization-progress',
+              data: {
+                progress: m.progress,
+                message: m.content || m.message,
+                requestId: m.requestId
+              },
+              done: false,
+              timestamp: createdAt,
+              isCustomizationHistory: true
+            });
+          }
+        } else {
+          const text = m.content || m.message || m.text || '';
+          if (text) {
+            customizationBlocks.push({
+              id: `ai-message-${m.id || index}-${Date.now()}`,
+              text: text,
+              done: true,
+              timestamp: createdAt,
+              isCustomizationHistory: true
+            });
+          }
+        }
+      }
+    }
+
+    const baseBlocks = this.blocks.filter(b => !b.isCustomizationHistory);
+    this.blocks = [...baseBlocks, ...customizationBlocks];
+    setTimeout(() => this.scrollToBottom(true), 100);
   }
 
 
@@ -2273,7 +2414,24 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   }
 
   removeEditComment(id: string) {
-    this.editCommentsArray = this.editCommentsArray.filter((x: any) => x.id != id)
+    this.editCommentsArray = this.editCommentsArray.filter((x: any) => x.id != id);
+    this.textareaScrollTop = 0;
+  }
+
+  textareaScrollTop = 0;
+
+  onTextareaScroll(event: Event): void {
+    const target = event.target as HTMLTextAreaElement;
+    if (target) {
+      this.textareaScrollTop = target.scrollTop || 0;
+    }
+  }
+
+  getEditChipIndent(): number {
+    if (!this.editCommentsArray || this.editCommentsArray.length === 0) {
+      return 0;
+    }
+    return this.editCommentsArray.length > 1 ? 115 : 110;
   }
 
 
@@ -2609,193 +2767,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.isTyping = false;
   }
 
-  private async appendCustomizationHistory(inquiryPublicId: string, routeChangeVersion: number): Promise<void> {
-    const history = await this.fetchCustomizationHistory(inquiryPublicId);
-
-    if (!this.isCurrentRouteChange(routeChangeVersion, inquiryPublicId) || !history.length) {
-      return;
-    }
-
-    this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('input-prompt-customize'));
-
-    let previousHistoryItem: CustomizationHistoryEntry | null = null;
-
-    for (const item of history) {
-      if (this.shouldSkipDuplicateHistoryPrompt(item, previousHistoryItem)) {
-        previousHistoryItem = item;
-        continue;
-      }
-
-      this.blocks.push({
-        id: `user-message-history-${item.id}`,
-        text: item.prompt,
-        done: true,
-        timestamp: new Date(item.created_at)
-      });
-
-      const aiResponseBlocks = this.extractCustomizationHistoryResponseBlocks(item);
-      for (const aiResponseBlock of aiResponseBlocks) {
-        this.blocks.push(aiResponseBlock);
-      }
-
-      previousHistoryItem = item;
-    }
-
-    this.appendBuildActionPrompt();
-    setTimeout(() => this.scrollToBottom(true), 0);
-  }
-
-  private async fetchCustomizationHistory(inquiryPublicId: string): Promise<CustomizationHistoryEntry[]> {
-    if (!inquiryPublicId) {
-      return [];
-    }
-
-    try {
-      const response = await firstValueFrom(
-        this.apiService.getApi<any>(
-          `api/ai/customization/history?inquiryPublicId=${encodeURIComponent(inquiryPublicId)}`
-        )
-      );
-
-      const history = Array.isArray(response?.data?.history) ? response.data.history : [];
-
-      return history
-        .filter((item: CustomizationHistoryEntry) => typeof item?.prompt === 'string' && item.prompt.trim().length > 0)
-        .sort((a: CustomizationHistoryEntry, b: CustomizationHistoryEntry) =>
-          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-        );
-    } catch (error) {
-      console.error('Failed to fetch customization history', error);
-      return [];
-    }
-  }
-
-  private extractCustomizationHistoryResponseBlocks(item: CustomizationHistoryEntry): any[] {
-    const aiResponse = item.ai_response;
-    const response = typeof aiResponse === 'string' ? aiResponse.trim() : '';
-    if (!response) {
-      return [];
-    }
-
-    try {
-      const parsedResponse = JSON.parse(response);
-      if (parsedResponse && typeof parsedResponse === 'object' && !Array.isArray(parsedResponse)) {
-        return this.createCustomizationHistoryProgressBlocks(parsedResponse, item);
-      }
-    } catch {
-      return [
-        this.createCompletedParagraphBlock(
-          response,
-          'default',
-          new Date(item.created_at)
-        )
-      ];
-    }
-
-    return [
-      this.createCompletedParagraphBlock(
-        response,
-        'default',
-        new Date(item.created_at)
-      )
-    ];
-  }
-
-  private createCustomizationHistoryProgressBlocks(parsedResponse: any, item: CustomizationHistoryEntry): CustomizationProgressBlock[] {
-    const phaseKeys = this.getCustomizationHistoryPhaseKeys(item.build_status);
-
-    return phaseKeys
-      .map((phaseKey) => this.createCustomizationHistoryProgressBlock(phaseKey, parsedResponse?.[phaseKey], item))
-      .filter((block): block is CustomizationProgressBlock => !!block);
-  }
-
-  private getCustomizationHistoryPhaseKeys(buildStatus: number): string[] {
-    const basePhases = ['started', 'ai_processing', 'compiling', 'deploying'];
-
-    if (buildStatus === 0) {
-      return [...basePhases, 'completed'];
-    }
-
-    return [...basePhases, 'failed'];
-  }
-
-  private createCustomizationHistoryProgressBlock(
-    phaseKey: string,
-    phaseResponse: any,
-    item: CustomizationHistoryEntry
-  ): CustomizationProgressBlock | null {
-    if (!phaseResponse) {
-      return null;
-    }
-
-    const message = typeof phaseResponse === 'string'
-      ? phaseResponse.trim()
-      : String(phaseResponse?.message || '').trim();
-
-    if (!message) {
-      return null;
-    }
-
-    const percentage = this.normalizeCustomizationHistoryPercentage(phaseResponse?.percentage, phaseKey);
-    const logs = Array.isArray(phaseResponse?.console_logs)
-      ? phaseResponse.console_logs.map((log: any) => String(log || '').trim()).filter(Boolean).slice(-5)
-      : [];
-
-    return {
-      type: 'ai-progress',
-      data: {
-        historyId: item.id,
-        step: phaseKey,
-        stepLabel: this.getCustomizationProgressStepLabel(phaseKey),
-        message,
-        percentage,
-        logs
-      }
-    };
-  }
-
-  private normalizeCustomizationHistoryPercentage(value: any, phaseKey: string): number {
-    const percentage = Number(value);
-    if (Number.isFinite(percentage)) {
-      return Math.max(0, Math.min(100, Math.round(percentage)));
-    }
-
-    switch (phaseKey) {
-      case 'started':
-        return 10;
-      case 'ai_processing':
-        return 40;
-      case 'compiling':
-        return 70;
-      case 'deploying':
-        return 90;
-      case 'completed':
-        return 100;
-      case 'failed':
-        return 0;
-      default:
-        return 0;
-    }
-  }
-
-  private shouldSkipDuplicateHistoryPrompt(
-    item: CustomizationHistoryEntry,
-    previousItem: CustomizationHistoryEntry | null
-  ): boolean {
-    if (!previousItem || item.ai_response) {
-      return false;
-    }
-
-    const currentPrompt = item.prompt.trim().toLowerCase();
-    const previousPrompt = previousItem.prompt.trim().toLowerCase();
-    if (currentPrompt !== previousPrompt || !previousItem.ai_response) {
-      return false;
-    }
-
-    const currentCreatedAt = new Date(item.created_at).getTime();
-    const previousUpdatedAt = new Date(previousItem.updated_at || previousItem.created_at).getTime();
-    return Math.abs(currentCreatedAt - previousUpdatedAt) <= 5 * 60 * 1000;
-  }
 
   async showDraftWelcomeMessages(streamMessages = true, user_prompt: string) {
 
@@ -4279,27 +4250,27 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.isSuggestionsLoading = true;
     this.suggestionsError = null;
 
-    this.apiService.postAPI<any, any>('api/ai/customization-suggestion', { inquiryPublicId: inquiryId })
-      .subscribe({
-        next: (res: any) => {
-          this.isSuggestionsLoading = false;
-          if (res && res.success && res.data) {
-            this.suggestionsMap.set(inquiryId, res.data);
-            if (this.selectedProjectId === inquiryId) {
-              this.currentSuggestions = res.data;
-              setTimeout(() => this.scrollToBottom(true), 100);
-            }
-          } else {
-            this.suggestionsError = res?.message || 'Failed to load suggestions';
-            setTimeout(() => this.scrollToBottom(true), 100);
-          }
-        },
-        error: (err: any) => {
-          this.isSuggestionsLoading = false;
-          this.suggestionsError = err?.error?.message || 'Failed to load suggestions';
-          setTimeout(() => this.scrollToBottom(true), 100);
-        }
-      });
+    // this.apiService.postAPI<any, any>('api/ai/customization-suggestion', { inquiryPublicId: inquiryId })
+    //   .subscribe({
+    //     next: (res: any) => {
+    //       this.isSuggestionsLoading = false;
+    //       if (res && res.success && res.data) {
+    //         this.suggestionsMap.set(inquiryId, res.data);
+    //         if (this.selectedProjectId === inquiryId) {
+    //           this.currentSuggestions = res.data;
+    //           setTimeout(() => this.scrollToBottom(true), 100);
+    //         }
+    //       } else {
+    //         this.suggestionsError = res?.message || 'Failed to load suggestions';
+    //         setTimeout(() => this.scrollToBottom(true), 100);
+    //       }
+    //     },
+    //     error: (err: any) => {
+    //       this.isSuggestionsLoading = false;
+    //       this.suggestionsError = err?.error?.message || 'Failed to load suggestions';
+    //       setTimeout(() => this.scrollToBottom(true), 100);
+    //     }
+    //   });
   }
 
   isCategoryExpanded(catTitle: string): boolean {

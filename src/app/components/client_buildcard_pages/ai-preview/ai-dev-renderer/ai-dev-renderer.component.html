@@ -77,17 +77,15 @@ password input field with proper styling.</p>
               <p class="text-white-50 fs-14 mb-3">
                 {{ block?.text?.message || 'You can now download the code or deploy it directly.' }}
               </p>
-              <div class="d-flex align-items-center gap-2 mt-2">
-                <button *ngIf="block?.text?.buttonLabel || block?.text?.buttonLabel2" type="button"
-                  class="btn btn-sm ct_btn_custom_pub d-flex align-items-center gap-1"
-                  (click)="actionSelected.emit(block?.text?.actionId === 'deploy_template' ? 'deploy_template' : (block?.text?.actionId2 || 'deploy_template'))">
+              <div *ngIf="isLatestCustomizationCompletedBlock(block)" class="d-flex align-items-center gap-2 mt-2">
+                <button type="button" class="btn btn-sm ct_btn_custom_pub d-flex align-items-center gap-1"
+                  (click)="actionSelected.emit('deploy_template')">
                   <i class="fa-solid fa-cloud-arrow-up"></i>
                   <span>Deploy</span>
                 </button>
 
-                <button *ngIf="block?.text?.buttonLabel2 || block?.text?.buttonLabel" type="button"
-                  class="btn btn-sm ct_btn_custom_prev d-flex align-items-center gap-1"
-                  (click)="actionSelected.emit(block?.text?.actionId === 'download_code' ? 'download_code' : (block?.text?.actionId2 === 'download_code' ? 'download_code' : 'download_code'))">
+                <button type="button" class="btn btn-sm ct_btn_custom_prev d-flex align-items-center gap-1"
+                  (click)="actionSelected.emit('download_code')">
                   <i class="fa-solid fa-code"></i>
                   <span>Download</span>
                 </button>
@@ -393,7 +391,8 @@ password input field with proper styling.</p>
                 [disabled]="(block?.data?.currentQuestionIndex || 0) === 0" (click)="prevMultiQuestion(block)">
                 <i class="fa-solid fa-chevron-left"></i>
               </button>
-              <span class="text-nowrap" style="white-space: nowrap;">Question {{ (block?.data?.currentQuestionIndex || 0) + 1 }} of {{ totalQ }}</span>
+              <span class="text-nowrap" style="white-space: nowrap;">Question {{ (block?.data?.currentQuestionIndex ||
+                0) + 1 }} of {{ totalQ }}</span>
               <button type="button" class="btn btn-sm btn-link p-0 text-white opacity-75 text-decoration-none"
                 [disabled]="isLastMultiQuestion(block) || !isCurrentMultiQuestionAnswered(block)"
                 (click)="nextMultiQuestion(block)">
@@ -432,7 +431,8 @@ password input field with proper styling.</p>
           </ng-container>
         </div>
 
-        <div class="ct_answered_badge text-success small text-end text-truncate ms-auto" style="min-width: 0;" *ngIf="block?.data?.answered" [title]="'Submitted: ' + block?.data?.userInputAnswer">
+        <div class="ct_answered_badge text-success small text-end text-truncate ms-auto" style="min-width: 0;"
+          *ngIf="block?.data?.answered" [title]="'Submitted: ' + block?.data?.userInputAnswer">
           <i class="fa-solid fa-circle-check me-1"></i> Submitted: <strong>{{ block?.data?.userInputAnswer }}</strong>
         </div>
       </div>
@@ -446,7 +446,8 @@ password input field with proper styling.</p>
     <div class="ct_agent_activity__body">
       <div class="d-flex align-items-center gap-2">
         <span class="ct_codex_thinking_orb"></span>
-        <p class="ct_legacy_text mb-0" style="white-space: pre-wrap;">{{ block?.data?.message || 'Processing your request...' }}</p>
+        <p class="ct_legacy_text mb-0" style="white-space: pre-wrap;">{{ block?.data?.message || 'Processing your
+          request...' }}</p>
       </div>
     </div>
   </div>
@@ -469,22 +470,17 @@ password input field with proper styling.</p>
         </li>
       </ul>
 
-      <div class="d-flex align-items-center gap-2 mt-3">
-        <button *ngIf="block?.data?.buttonLabel" type="button"
-          class="btn btn-sm ct_btn_custom_pub d-flex align-items-center gap-1"
-          (click)="actionSelected.emit(block?.data?.actionId)">
-          <i class="fa-solid fa-cloud-arrow-up" *ngIf="block?.data?.actionId === 'deploy_template'"></i>
-          <i class="fa-solid fa-code" *ngIf="block?.data?.actionId === 'download_code'"></i>
-          <span>{{ block?.data?.buttonLabel }}</span>
+      <div *ngIf="isLatestCustomizationCompletedBlock(block)" class="d-flex align-items-center gap-2 my-3">
+        <button type="button" class="btn btn-sm ct_btn_custom_pub d-flex align-items-center gap-1"
+          (click)="actionSelected.emit('deploy_template')">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <span>Deploy</span>
         </button>
 
-        <button *ngIf="block?.data?.buttonLabel2" type="button"
-          class="btn btn-sm ct_btn_custom_prev d-flex align-items-center gap-1"
-          (click)="actionSelected.emit(block?.data?.actionId2)">
-          <i class="fa-solid fa-code" *ngIf="block?.data?.actionId2 === 'download_code'"></i>
-          <i class="fa-solid fa-eye"
-            *ngIf="block?.data?.actionId2 === 'preview' || block?.data?.actionId2 === 'deploy_template'"></i>
-          <span>{{ block?.data?.buttonLabel2 }}</span>
+        <button type="button" class="btn btn-sm ct_btn_custom_prev d-flex align-items-center gap-1"
+          (click)="actionSelected.emit('download_code')">
+          <i class="fa-solid fa-code"></i>
+          <span>Download</span>
         </button>
       </div>
     </div>

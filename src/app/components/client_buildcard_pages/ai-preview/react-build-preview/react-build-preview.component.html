@@ -34,9 +34,9 @@
 
                     <!-- Customization Suggestions Panel -->
                     <div *ngIf="(isSuggestionsLoading || suggestionsError || (currentSuggestions && currentSuggestions.categories && currentSuggestions.categories.length > 0))"
-                        class="ct_suggestions_panel" [class.ct_suggestions_panel--collapsed]="isSuggestionsCollapsed()">
+                        class="ct_suggestions_panel d-none"
+                        [class.ct_suggestions_panel--collapsed]="isSuggestionsCollapsed()">
 
-                        <!-- Loading Skeleton -->
                         <div *ngIf="isSuggestionsLoading">
                             <div class="ct_suggestions_header d-flex align-items-center justify-content-between"
                                 (click)="toggleSuggestionsCollapse()" style="cursor: pointer;">
@@ -207,12 +207,16 @@
 
                             </div>
                         </div>
-                        <div class="position-relative ">
-                            <div class="eti-wrapper">
-                                @if(editCommentsArray.length > 0){
+                        <div class="position-relative">
+                            @if(editCommentsArray.length > 0){
+                            <div class="eti-wrapper ct_edit_chip_inline_wrapper"
+                                [style.transform]="'translateY(-' + textareaScrollTop + 'px)'"
+                                [style.opacity]="textareaScrollTop > 24 ? '0' : '1'"
+                                [style.pointer-events]="textareaScrollTop > 24 ? 'none' : 'auto'"
+                                [style.clip-path]="textareaScrollTop > 0 ? ('inset(' + textareaScrollTop + 'px 0 0 0)') : 'none'">
                                 <div class="ct_edit_comments align-items-center justify-content-between gap-2 pe-1">
                                     <div class="d-flex align-items-center gap-2">
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd"
                                                 d="M8 15.4286C12.1029 15.4286 15.4286 12.1028 15.4286 7.99999C15.4286 3.89714 12.1029 0.571426 8 0.571426C3.89715 0.571426 0.571437 3.89714 0.571437 7.99999C0.568801 9.80047 1.22268 11.5401 2.41058 12.8931L1.14286 15.4286H8Z"
@@ -222,7 +226,7 @@
                                                 fill="currentColor"></path>
                                         </svg>
                                         <span>{{editCommentsArray.length}} {{editCommentsArray.length > 1 ? 'Edits' :
-                                            'Edit'}} </span>
+                                            'Edit'}}</span>
                                         <i (click)="showDiscardConfirm2 = !showDiscardConfirm2"
                                             class="fa-solid fa-xmark cursor-pointer"></i>
 
@@ -241,7 +245,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                }
 
                                 @if (!showDiscardConfirm2){
                                 <div class="eti-comments">
@@ -257,8 +260,12 @@
                                 </div>
                                 }
                             </div>
+                            }
                             <textarea [disabled]="isReactBuilding" #customizeInput class="ct_ai_textarea px-3" rows="3"
+                                [class.has-edit-chip]="editCommentsArray.length > 0"
+                                [style.text-indent.px]="getEditChipIndent()"
                                 [placeholder]="editCommentsArray.length > 0 ? '' : 'Shape This Template Your Way'"
+                                (scroll)="onTextareaScroll($event)"
                                 (keydown)="handlePromptKeydown($event, 'customize_template', customizeInput.value)"></textarea>
                         </div>
 
