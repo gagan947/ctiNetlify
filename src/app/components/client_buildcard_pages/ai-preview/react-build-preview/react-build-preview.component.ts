@@ -471,8 +471,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.selectedProjectId = inquiryId;
     this.projectGenerationTabState.setActiveInquiryId(inquiryId);
     this.refreshProjectContext(inquiryId);
-    this.ensureBuildSocket(inquiryId);
-
+  
     const templates = await this.getUserTemplates();
     if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
       return;
@@ -588,25 +587,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       || !!generationTab;
   }
 
-  private ensureBuildSocket(inquiryId: string) {
-    if (!inquiryId || this.socketInquiryId === inquiryId) {
-      return;
-    }
 
-    this.socket?.off?.('page-created');
-    this.socket?.off?.('pages-generation-complete');
-    this.socket?.disconnect?.();
-
-    this.socket = io(this.apiService.apiUrl, {
-      auth: {
-        token: localStorage.getItem('tokenCTi'),
-        inquiryPublicId: inquiryId,
-        socketType: 'chat-v2'
-      }
-    });
-    this.socketInquiryId = inquiryId;
-    this.registerBuildSocketListeners();
-  }
 
   private ensureCustomizationSocket(
     inquiryId: string
