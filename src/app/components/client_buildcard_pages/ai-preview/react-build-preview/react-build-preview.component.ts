@@ -469,7 +469,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.selectedProjectId = inquiryId;
     this.projectGenerationTabState.setActiveInquiryId(inquiryId);
     this.refreshProjectContext(inquiryId);
-  
+
     const templates = await this.getUserTemplates();
     if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
       return;
@@ -597,7 +597,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     }
 
     const storedConversationId =
-      this.getStoredCustomizationConversationId();
+      this.getStoredCustomizationConversationId() || this.projectsData?.customizationConversationId;
 
     if (
       this.customizationSocket?.connected &&
@@ -636,7 +636,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   }
 
   private emitResumeCustomizationConversation(): void {
-    const conversationId = this.getStoredCustomizationConversationId() || this.customizationConversationId;
+    const conversationId = this.getStoredCustomizationConversationId() || this.customizationConversationId || this.projectsData?.customizationConversationId;
     console.log('[Customize] Checking emitResumeCustomizationConversation. Stored ID:', conversationId, 'Connected:', this.customizationSocket?.connected);
 
     if (conversationId && this.customizationSocket?.connected) {
@@ -649,21 +649,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.customizationSocket.on('connect', () => {
       console.log('[ANGULAR CUSTOMIZE] CONNECTED:', this.customizationSocket.id);
       this.emitResumeCustomizationConversation();
-    });
-
-    this.customizationSocket.on('conversationResumed', (payload: any) => {
-      console.log('[Customize] conversationResumed:', payload);
-      this.isCustomizationRestoring = false;
-
-      const conversationId = String(payload?.conversationId || '').trim();
-      if (conversationId) {
-        this.customizationConversationId = conversationId;
-        this.saveCustomizationConversationId(conversationId);
-      }
-
-      if (Array.isArray(payload?.messages)) {
-        this.customizationMessages = payload.messages.map((m: any) => this.normalizeCustomizationChatMessage(m));
-      }
     });
 
     this.customizationSocket.on('customizationConversationResumed', (payload: any) => {
@@ -3889,53 +3874,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     return pageItems.length ? pageItems : ['Generating page screens'];
   }
 
-  private registerBuildSocketListeners() {
-    if (!this.socket?.on) {
-      return;
-    }
 
-    this.socket.off?.('page-created');
-    this.socket.off?.('pages-generation-complete');
-    this.socket.off?.('botReply');
-    this.socket.off?.('triggerCustomizationAPI');
-    this.socket.off?.('customization-progress');
-    this.socket.on('page-created', (data: any) => {
-      this.clearGenerateProjectFailureTimer();
-      const pageLabel = this.extractPageLabel(data?.page);
-      if (!pageLabel) {
-        return;
-      }
-
-      if (!this.activePageBuildSection) {
-        if (!this.queuedSocketPages.includes(pageLabel)) {
-          this.queuedSocketPages.push(pageLabel);
-        }
-        return;
-      }
-
-      this.appendSocketPageToBuildSection(pageLabel);
-    });
-
-    this.socket.on('pages-generation-complete', () => {
-      this.clearGenerateProjectFailureTimer();
-      this.completeActivePageBuildSection();
-    });
-
-    // this.socket.on('botReply', (payload: any) => {
-    //   console.log('Received bot reply:', payload);
-    //   this.handleCustomizationBotReply(payload);
-    // });
-
-    // this.socket.on('triggerCustomizationAPI', (payload: any) => {
-    //   console.log('Received triggerCustomizationAPI event:', payload);
-    //   void this.handleCustomizationApiTrigger(payload);
-    // });
-
-    // this.socket.on('customization-progress', (payload: any) => {
-    //   console.log('Received customization-progress event:', payload);
-    //   this.handleCustomizationProgressReply(payload);
-    // });
-  }
 
   private deferGenerateProjectFailure(source?: any) {
 
