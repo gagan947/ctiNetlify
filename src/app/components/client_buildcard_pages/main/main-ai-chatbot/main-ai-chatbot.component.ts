@@ -98,9 +98,6 @@ export class MainAiChatbotComponent implements OnInit, OnDestroy {
   isVoiceUiVisible = false;
   isVoiceStarting = false;
   isSubmitting = false;
-
-  // Manual Flag for Independence Day Theme
-  isIndependenceDayTheme = true;
   isBuildActionLoading = false;
   isRestoringConversation = true;
   isFreshConversation = false;

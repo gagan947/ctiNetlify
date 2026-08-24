@@ -48,7 +48,7 @@
 .main-ai-chat-scroll {
   flex: 1 1 auto;
   min-height: 0;
-  height: calc(100dvh - 230px);
+  height: calc(100dvh - 243px);
   padding: 20px 28px 14px;
   overflow-y: auto;
   scrollbar-gutter: stable;
@@ -127,16 +127,16 @@
 .main-ai-thread-text {
   position: relative;
   color: #8f929e;
-  background-color: #e6e6e669;
+  /* background-color: #e6e6e669; */
   padding: 16px;
-  border: 1px solid #e6e6e6;
+  /* border: 1px solid #e6e6e6; */
   border-radius: 15px;
 }
 
 .main-ai-thread-row.is-user .main-ai-thread-text {
   /* width: 100%; */
   padding: 8px 15px;
-  border-radius: 24px;
+  /* border-radius: 24px; */
   background: #c3c3c333;
   box-shadow: 0 10px 30px rgba(129, 157, 234, 0.26);
   color: #ffffff;
@@ -174,7 +174,7 @@
 .main-ai-build-hint {
   margin: 0 0 12px;
   font-size: 13px;
-  color: #000;
+  color: #fff;
   line-height: 1.5;
 }
 
@@ -436,19 +436,24 @@
 
 .main-ai-composer {
   /* padding: 12px 18px; */
-  box-shadow: 0 0 80px rgba(108, 92, 255, .15), inset 0 1px 0 rgba(255, 255, 255, .08);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 24px rgba(65, 64, 178, 0.22);
   margin-top: 0px;
   position: relative;
   z-index: 1;
   width: 100%;
-  background: rgba(15, 15, 25, .75);
+  background: rgba(24, 24, 38, 0.94);
   -webkit-backdrop-filter: blur(30px);
   backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 32px;
   padding: 30px;
   text-align: left;
+  transition: all 0.25s ease;
+}
 
+.main-ai-composer:focus-within {
+  border-color: rgba(120, 120, 240, 0.5);
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 35px rgba(65, 64, 178, 0.35);
 }
 
 /* .main-ai-composer::before {
@@ -493,11 +498,13 @@
   color: #fff;
   font-size: 15px;
   line-height: 1.5;
-  caret-color: #df4a9a;
+  caret-color: #818cf8;
 }
 
-.main-ai-prompt-input::placeholder {
-  color: rgba(102, 112, 142, 0.72);
+.main-ai-prompt-input::placeholder,
+.main-ai-prompt-input::-webkit-input-placeholder,
+.main-ai-prompt-input::-moz-placeholder {
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .main-ai-composer-footer {
@@ -881,7 +888,7 @@
   }
 
   .main-ai-chat-scroll {
-    height: calc(100dvh - 250px);
+    height: calc(100dvh - 243px);
     padding: 18px 14px 8px;
   }
 
@@ -1106,86 +1113,7 @@
 
 }
 
-/* Independence Day Theme Additions */
-.ct_independence_theme {
-  background: url('../../../../../assets/img/independence_bg.png') no-repeat center center !important;
-  background-size: cover;
-  background-attachment: fixed;
-  height: auto !important;
-  /* min-height: 100vh !important; */
-  min-height: calc(100dvh - 50px) !important;
-
-}
-
-.ct_orange {
-  color: #FF9933;
-}
-
-.ct_green {
-  color: #138808;
-}
-
-.independence-composer {
-  position: relative;
-  /* Use padding-box for the dark background and border-box for the gradient border */
-  background: linear-gradient(rgba(35, 35, 35, 0.95), rgba(35, 35, 35, 0.95)) padding-box,
-    linear-gradient(to right, #FF9933, #138808) border-box !important;
-  border: 1px solid transparent !important;
-  border-radius: 24px !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  overflow: visible;
-  /* changed from hidden to allow the flag to overflow if needed */
-  max-width: 980px !important;
-  margin-inline: auto !important;
-  padding-bottom: 15px !important;
-}
-
-/* Remove the old top tricolor line */
-.independence-composer::before {
-  display: none;
-}
-
-.independence-composer .main-ai-voice-toggle {
-  border-color: rgba(255, 153, 51, 0.5) !important;
-}
-
-.independence-send-btn {
-  background: linear-gradient(to right, #FF9933, #138808) !important;
-  color: white !important;
-  border: none !important;
-  opacity: 1 !important;
-}
-
-.independence-send-btn i {
-  color: white !important;
-}
-
-/* Chat Bubbles Independence Theme Fixes */
-.ct_independence_theme .main-ai-thread-row.is-user .main-ai-thread-text {
-  background: #e6e6e669 !important;
-  color: #222 !important;
-  border-radius: 15px !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
-}
-
-.ct_independence_theme .main-ai-thread-row.is-ai .main-ai-thread-text {
-  color: #222 !important;
-}
-
-.ct_independence_theme .main-ai-thread-row.is-ai .text-line,
-.ct_independence_theme .main-ai-thread-row.is-user .text-line,
-.ct_independence_theme .main-ai-thread-row.is-user .bullet-line {
-  color: #222 !important;
-  background: transparent !important;
-}
-
 @media screen and (max-width:575px) {
-  .ct_independence_theme {
-    background-position: 48% !important;
-
-    background-size: cover !important;
-  }
-
   .ct-model-dropdown-menu {
     left: -60px !important;
     width: 280px !important;
@@ -1195,5 +1123,4 @@
   .main-ai-left-actions {
     gap: 8px;
   }
-
 }

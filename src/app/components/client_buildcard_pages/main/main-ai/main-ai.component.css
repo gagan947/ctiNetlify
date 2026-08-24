@@ -151,16 +151,22 @@
   width: 100%;
   /* padding: 18px 22px 14px; */
 
-  background: rgba(15, 15, 25, .75);
+  background: rgba(24, 24, 38, 0.94);
   backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 32px;
   padding: 30px;
-  box-shadow: 0 0 80px rgba(108, 92, 255, .15), inset 0 1px 0 rgba(255, 255, 255, .08);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 24px rgba(65, 64, 178, 0.22);
   text-align: left;
   margin-top: 50px;
   position: relative;
   z-index: 1;
+  transition: all 0.25s ease;
+}
+
+.main-ai-composer:focus-within {
+  border-color: rgba(120, 120, 240, 0.5);
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 35px rgba(65, 64, 178, 0.35);
 }
 
 .gradient-text {
@@ -210,23 +216,16 @@
   font-size: 15px;
   line-height: 1.6;
   font-weight: 400;
+  caret-color: #818cf8;
 }
 
-.main-ai-prompt-input::-webkit-input-placeholder {
-  color: #fff;
-}
-
-.main-ai-prompt-input::-moz-placeholder {
-  color: #fff;
-}
-
+.main-ai-prompt-input::placeholder,
+.main-ai-prompt-input::-webkit-input-placeholder,
+.main-ai-prompt-input::-moz-placeholder,
 .main-ai-prompt-input:-ms-input-placeholder {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.55);
 }
 
-.main-ai-prompt-input::-ms-input-placeholder {
-  color: #fff;
-}
 
 .main-ai-prompt-input::placeholder {
   color: #fff;
@@ -1436,10 +1435,6 @@ li.ct_ai_project_right {
   justify-content: center;
 }
 
-.independence-composer {
-  padding-bottom: 15px !important;
-}
-
 .et_tag {
   padding: 6px 15px;
   border-radius: 999px;
@@ -2087,118 +2082,7 @@ li.ct_ai_project_right {
 
 }
 
-/* Independence Day Theme Additions */
-.ct_independence_theme {
-  background: url('../../../../../assets/img/independence_bg.png') no-repeat center center;
-  background-size: cover;
-  background-attachment: fixed;
-  height: auto !important;
-  min-height: calc(100vh - 50px) !important;
-}
-
-.ct_orange {
-  color: #FF9933;
-}
-
-.ct_green {
-  color: #138808;
-}
-
-.independence-composer {
-  position: relative;
-  /* Use padding-box for the dark background and border-box for the gradient border */
-  background: linear-gradient(rgba(35, 35, 35, 0.95), rgba(35, 35, 35, 0.95)) padding-box,
-    linear-gradient(to right, #FF9933, #138808) border-box !important;
-  border: 1px solid transparent !important;
-  border-radius: 24px !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  overflow: visible;
-  /* changed from hidden to allow the flag to overflow if needed, or keep hidden? Wait, flag is outside. */
-  max-width: 980px !important;
-  margin-inline: auto !important;
-}
-
-/* Remove the old top tricolor line */
-.independence-composer::before {
-  display: none;
-}
-
-.independence-composer .main-ai-voice-toggle {
-  border-color: rgba(255, 153, 51, 0.5) !important;
-}
-
-.independence-send-btn {
-  background: linear-gradient(to right, #FF9933, #138808) !important;
-  color: white !important;
-  border: none !important;
-  opacity: 1 !important;
-}
-
-.independence-send-btn i {
-  color: white !important;
-}
-
-.independence-heading {
-  color: #000 !important;
-  font-weight: 800 !important;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Inter", sans-serif !important;
-  letter-spacing: -0.5px;
-}
-
-.independence-heading .ct_orange {
-  color: #E37130 !important;
-
-}
-
-.independence-heading span {
-  font-weight: 800 !important;
-}
-
-.independence-heading .ct_green {
-  color: #2F6927 !important;
-  font-weight: 600 !important;
-}
-
-.independence-subheading {
-  color: #4A4A4A !important;
-  font-weight: 400 !important;
-  font-size: 17px !important;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Inter", sans-serif !important;
-  margin-top: 12px !important;
-}
-
-.independence-feature-card {
-  background: rgba(30, 30, 30, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
-
-.independence-feature-card:hover {
-  background: rgba(40, 40, 40, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
-}
-
-.independence-tag {
-  background: rgba(30, 30, 30, 0.5) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  color: #fff !important;
-  backdrop-filter: blur(10px);
-}
-
-.independence-tag:hover {
-  background: rgba(50, 50, 50, 0.7) !important;
-}
-
 @media screen and (max-width:575px) {
-  .ct_independence_theme {
-    background-position: 28% !important;
-
-    background-size: cover !important;
-  }
-
   .eti_suggestions {
     gap: 5px !important;
   }

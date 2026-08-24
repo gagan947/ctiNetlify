@@ -1,5 +1,4 @@
-<div [style.background-color]="isIndependenceDayTheme ? 'transparent' : '#000'"
-  [class.ct_independence_theme]="isIndependenceDayTheme">
+<div style="background-color: #000;">
   <div class="main-ai-chat-shell">
     <div class="main-ai-chat-card w-100">
       <div #chatScroll class="main-ai-chat-scroll">
@@ -123,17 +122,9 @@
         </div>
         }
       </div>
-      <div class="position-relative" [class.ct_lightblue_shape_new_12]="!isIndependenceDayTheme">
+      <div class="position-relative ct_lightblue_shape_new_12">
         <div class="main-ai-chat-composer ">
-          <div class="main-ai-composer main-ai-chat-composer-box"
-            [class.independence-composer]="isIndependenceDayTheme">
-            @if(isIndependenceDayTheme) {
-            <div class="text-center position-absolute"
-              style="z-index: 2; top: -35px; left: 50%; transform: translateX(-50%); pointer-events: none;">
-              <img src="assets/img/flag_curve_img.png" alt="Independence Day Flag"
-                style="height: 65px; object-fit: contain;" />
-            </div>
-            }
+          <div class="main-ai-composer main-ai-chat-composer-box">
 
             <textarea #chatPromptInput class="main-ai-prompt-input main-ai-chat-input" rows="2"
               [attr.placeholder]="placeholderText" [disabled]="isRestoringConversation" [ngModel]="promptText"
@@ -272,9 +263,8 @@
                   {{ wordCount }}/1000 words
                 </span>
                 }
-                <button type="button" class="main-ai-submit-btn" [class.independence-send-btn]="isIndependenceDayTheme"
-                  aria-label="Send message" [disabled]="isSubmitting || isRestoringConversation"
-                  (click)="submitPrompt()">
+                <button type="button" class="main-ai-submit-btn" aria-label="Send message"
+                  [disabled]="isSubmitting || isRestoringConversation" (click)="submitPrompt()">
                   ↑
                 </button>
               </div>
