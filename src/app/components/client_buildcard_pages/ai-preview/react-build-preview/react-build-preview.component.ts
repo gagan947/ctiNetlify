@@ -423,10 +423,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     this.route.paramMap.subscribe(async (res: any) => {
       const inquiryId = String(res.params['id'] || '').trim();
-      await this.handleProjectRouteChange(inquiryId);
-      this.ensureCustomizationSocket(
-        inquiryId
-      );
+      await this.handleProjectRouteChange(inquiryId)
     });
 
   }
@@ -469,6 +466,8 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
     const existingTemplate = templates.find((template: any) => template.inquiryId === inquiryId);
     if (existingTemplate) {
+      this.saveCustomizationConversationId(existingTemplate.customizationConversationId);
+      this.ensureCustomizationSocket(inquiryId, existingTemplate.customizationConversationId)
       await this.showDraftWelcomeMessages(false, existingTemplate.user_prompt);
       if (!this.isCurrentRouteChange(routeChangeVersion, inquiryId)) {
         return;
@@ -575,24 +574,12 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
 
 
-  private ensureCustomizationSocket(
-    inquiryId: string
-  ): void {
-
-
+  private ensureCustomizationSocket(inquiryId: string, storedConversationId: string): void {
     if (!inquiryId) {
       return;
     }
 
-    const storedConversationId =
-      this.getStoredCustomizationConversationId() || this.projectsData?.customizationConversationId;
-
-    if (
-      this.customizationSocket?.connected &&
-      this.customizationSocketInquiryId === inquiryId &&
-      this.customizationConversationId ===
-      storedConversationId
-    ) {
+    if (this.customizationSocket?.connected) {
       this.emitResumeCustomizationConversation();
       return;
     }
@@ -606,7 +593,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         auth: {
           token:
             localStorage.getItem('tokenCTi'),
-
           customizationConversationId:
             storedConversationId || null,
 
@@ -619,14 +605,12 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.customizationConversationId =
       storedConversationId;
     this.customizationSocketInquiryId = inquiryId;
-
     this.registerCustomizationSocketListeners();
   }
 
   private emitResumeCustomizationConversation(): void {
     const conversationId = this.getStoredCustomizationConversationId() || this.customizationConversationId || this.projectsData?.customizationConversationId;
     console.log('[Customize] Checking emitResumeCustomizationConversation. Stored ID:', conversationId, 'Connected:', this.customizationSocket?.connected);
-
     if (conversationId && this.customizationSocket?.connected) {
       console.log('[Customize] >>> EMITTING resumeCustomizationConversation to backend:', { conversationId });
       this.customizationSocket.emit('resumeCustomizationConversation', { conversationId });
@@ -689,12 +673,12 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     const normalizedId =
       conversationId?.trim();
 
-    if (
-      !normalizedId ||
-      typeof localStorage === 'undefined'
-    ) {
-      return;
-    }
+    // if (
+    //   !normalizedId ||
+    //   typeof localStorage === 'undefined'
+    // ) {
+    //   return;
+    // }
 
     localStorage.setItem(
       this.customizationConversationStorageKey,
@@ -4496,6 +4480,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   }
 
   toggleEditorToolbar(): void {
+    if (this.editCommentsArray.length > 0) return;
     this.editorToolbarCollapsed =
       !this.editorToolbarCollapsed;
   }

@@ -366,10 +366,16 @@
                                 [class.collapsed]="editorToolbarCollapsed">
 
                                 <div class="creative-editor-toolbar">
+                                    @if (isMobileView()) {
+                                    <button type="button" class="creative-toolbar-icon creative-toolbar-back-icon"
+                                        (click)="handleMobileViewToggle($event)" title="Back to Chat" aria-label="Back to Chat">
+                                        <i class="fa-solid fa-comments"></i>
+                                    </button>
+                                    }
 
 
-                                    <div class="eti-wrapper me-2">
-                                        @if(editCommentsArray.length > 0){
+                                    @if (editCommentsArray.length > 0) {
+                                    <div class="eti-wrapper">
                                         <div
                                             class="ct_edit_comments position-relative align-items-center justify-content-between gap-2">
                                             <div class="d-flex align-items-center gap-2">
@@ -385,7 +391,6 @@
                                                 <span>{{editCommentsArray.length}}</span>
                                             </div>
                                         </div>
-                                        }
 
                                         <div class="eti-comments">
                                             @for (item of editCommentsArray; track $index) {
@@ -399,6 +404,7 @@
                                             }
                                         </div>
                                     </div>
+                                    }
                                     <!-- Edit -->
                                     @if(editCommentsArray.length == 0){
                                     <button type="button" class="creative-toolbar-edit" [class.active]="editorMode"
@@ -602,11 +608,11 @@
         </div>
     </section>
 
-    @if (isMobileView() && safePreviewUrl) {
+    @if (isMobileView() && safePreviewUrl && !fullScreen) {
     <div class="ct_mobile_preview_cta_wrap ct_mobile_preview_cta_wrap--global">
         <button type="button" class="ct_mobile_preview_cta" (click)="handleMobileViewToggle($event)">
-            <i class="fa-solid" [ngClass]="fullScreen ? 'fa-arrow-left' : 'fa-mobile-screen-button'"></i>
-            <span>{{ fullScreen ? 'Back to Chat' : 'Show Preview' }}</span>
+            <i class="fa-solid fa-mobile-screen-button"></i>
+            <span>Show Preview</span>
         </button>
     </div>
     }

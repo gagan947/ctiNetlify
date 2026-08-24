@@ -32,13 +32,16 @@
 .ct_subscription_shell::-webkit-scrollbar {
   width: 5px;
 }
+
 .ct_subscription_shell::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .ct_subscription_shell::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.18);
   border-radius: 10px;
 }
+
 .ct_subscription_shell::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }
@@ -396,6 +399,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  padding: 10px;
   min-height: clamp(32px, 4vh, 40px);
   margin-bottom: clamp(8px, 1.2vh, 12px);
   border-radius: 10px;
@@ -495,7 +499,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 90vh;
-  padding:20px  40px;
+  padding: 20px 40px;
   width: 100%;
 }
 
@@ -503,13 +507,16 @@
 .ct_premium_modal::-webkit-scrollbar {
   width: 6px;
 }
+
 .ct_premium_modal::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .ct_premium_modal::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 10px;
 }
+
 .ct_premium_modal::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.25);
 }
@@ -749,7 +756,7 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
-  padding:  12px;
+  padding: 12px;
   text-align: center;
   flex: 1;
 }
@@ -1026,12 +1033,10 @@ ct_parant_list .card.card-body {
 
 /* Skeleton Loader Shimmer */
 .ct_skeleton_shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.04) 0%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.04) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.12) 50%,
+      rgba(255, 255, 255, 0.04) 100%);
   background-size: 200% 100%;
   animation: ctSkeletonShimmer 1.5s infinite linear;
   border-radius: 8px;
@@ -1041,6 +1046,7 @@ ct_parant_list .card.card-body {
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }
