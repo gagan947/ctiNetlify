@@ -396,7 +396,6 @@
 
 .eti-btn-outline.remove-btn {
   background-color: #e7354d;
-
 }
 
 .eti-btn-outline.remove-btn:hover {
@@ -404,6 +403,26 @@
   background-color: transparent;
   color: #e7354d;
 }
+
+.remove-btn.ct_btn_subtle_cancel {
+  background: transparent !important;
+  border: none !important;
+  color: rgb(255 255 255 / 78%) !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  padding: 2px 6px !important;
+  width: auto !important;
+  display: inline-block !important;
+  margin-top: 14px !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+  opacity: 0.35 !important;
+  transition: all 0.2s ease-in-out !important;
+  box-shadow: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+}
+
 
 .eti-transaction-icon.green {
   color: #4de17d;

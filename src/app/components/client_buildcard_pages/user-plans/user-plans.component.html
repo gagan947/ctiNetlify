@@ -372,11 +372,12 @@
             </div>
 
             @if(subscriptionPlan.planType !== 'FREE') {
-            <button class="remove-btn eti-btn eti-btn-outline w-100 mt-3 btn-danger" [disabled]="isCanceling"
-              data-bs-toggle="modal" data-bs-target="#cancelSubscriptionModal"
-              *ngIf="subscriptionPlan.subscriptionStatus === 'ACTIVE'">
-              {{ isCanceling ? 'Canceling...' : 'Cancel Subscription' }}
-            </button>
+            <div class="text-end w-100">
+              <button class="remove-btn ct_btn_subtle_cancel" [disabled]="isCanceling" data-bs-toggle="modal"
+                data-bs-target="#cancelSubscriptionModal" *ngIf="subscriptionPlan.subscriptionStatus === 'ACTIVE'">
+                {{ isCanceling ? 'Canceling...' : 'Cancel Subscription' }}
+              </button>
+            </div>
             }
 
           </div>
