@@ -245,9 +245,10 @@
 .ct_agent_activity {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 36px 12px minmax(0, 1fr);
+  -ms-grid-columns: 36px 16px minmax(0, 1fr);
   grid-template-columns: 36px minmax(0, 1fr);
-  gap: 12px;
+  gap: 16px;
+  margin-bottom: 40px !important;
 }
 
 .ct_agent_activity__avatar {
@@ -1493,6 +1494,7 @@ p.ct_chat_user_left::-webkit-scrollbar-thumb {
    ============================================ */
 .customization-chat-message {
   width: 100%;
+  margin-bottom: 40px !important;
 }
 
 .ct_chat_avatar {
@@ -1519,10 +1521,10 @@ p.ct_chat_user_left::-webkit-scrollbar-thumb {
 }
 
 .ct_chat_bubble {
-  padding: 10px 16px;
+  padding: 14px 20px;
   border-radius: 16px;
-  font-size: 13.5px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.68;
   word-break: break-word;
 }
 
@@ -1535,7 +1537,6 @@ p.ct_chat_user_left::-webkit-scrollbar-thumb {
 
 .ct_chat_bubble_user {
   background: radial-gradient(50% 50% at 50% 50%, rgb(65 64 178 / 55%) 0%, rgb(65 64 178 / 19%) 100%);
-  ;
   color: #ffffff;
   border-top-right-radius: 4px;
 }
@@ -1550,6 +1551,8 @@ p.ct_chat_user_left::-webkit-scrollbar-thumb {
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   width: 100%;
+  margin-top: 16px;
+  margin-bottom: 40px !important;
 }
 
 .ct_custom_q_header {

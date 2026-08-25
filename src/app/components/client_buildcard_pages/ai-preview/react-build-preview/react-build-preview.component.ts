@@ -833,6 +833,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       case 'customization_completed':
         this.setSafePreviewUrl(this.getPreviewProxyUrl(this.selected_template_id) + '?t=' + Date.now());
         this.isReactBuilding = false;
+        this.getUserSubscriptionPlan();
         const summaryObj = response.summary || {};
         const summaryTitle = summaryObj.summary || response.message || 'Customization completed';
         const changesList = Array.isArray(summaryObj.changes) ? summaryObj.changes : [];

@@ -160,13 +160,11 @@
         <div class="eti_suggestions">
           @for (suggestion of SUGGESTIONS; track suggestion) {
           <div class="et_tag" (click)="usePromptIdea(suggestion.prompt)">
-            <span class="et_tag_icon">{{ suggestion.icon }}</span>
+            <i [class]="suggestion.iconClass" [style.color]="suggestion.iconColor"></i>
             {{ suggestion.label }}
           </div>
           }
         </div>
-
-
       </div>
     </div>
   </div>

@@ -62,34 +62,34 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
 
   SUGGESTIONS = [
     {
-      icon: "🛵",
-      label: "Food Delivery App",
-      prompt:
-        "Design a premium food delivery mobile app focused on a fast and delightful ordering experience. Include beautiful restaurant discovery, curated menus, smart search, personalized recommendations, a seamless cart, secure checkout, real-time order tracking, favorites, and a clean order history. Prioritize an elegant user experience and a polished MVP suitable for launch."
+      label: "Food Delivery Website",
+      iconClass: "fa-solid fa-motorcycle me-2",
+      iconColor: "#e4773b",
+      prompt: "Design a premium food delivery platform focused on a fast and delightful ordering experience. Include restaurant discovery, curated menus, smart search, personalized recommendations, a seamless cart, secure checkout, real-time order tracking, favorites, user profiles, notifications, and order history. Prioritize a modern, intuitive interface with scalable architecture, excellent performance, and a polished user experience."
     },
     {
-      icon: "👥",
       label: "CRM Dashboard",
-      prompt:
-        "Create a modern CRM workspace that helps sales teams organize leads, manage customer relationships, track deals, schedule follow-ups, and visualize sales performance. Focus on an intuitive workflow, clean data organization, insightful analytics, and a productivity-first MVP rather than a complex enterprise system."
+      iconClass: "fa-solid fa-users me-2",
+      iconColor: "#6882fe",
+      prompt: "Create a modern CRM workspace that helps sales teams organize leads, manage customer relationships, track deals, schedule follow-ups, and visualize sales performance. Focus on an intuitive workflow, clean data organization, insightful analytics, and a productivity-first MVP rather than a complex enterprise system."
     },
     {
-      icon: "🏥",
       label: "Hospital Management System",
-      prompt:
-        "Build a modern hospital management platform focused on improving the patient journey. Include appointment booking, doctor discovery, patient records, prescriptions, visit history, and treatment tracking with a calm, trustworthy interface. Deliver a practical MVP that simplifies everyday healthcare interactions."
+      iconClass: "fa-solid fa-square-plus me-2",
+      iconColor: "#ff4d4d",
+      prompt: "Build a modern hospital management platform focused on improving the patient journey. Include appointment booking, doctor discovery, patient records, prescriptions, visit history, and treatment tracking with a calm, trustworthy interface. Deliver a practical MVP that simplifies everyday healthcare interactions."
     },
     {
-      icon: "🏋️",
       label: "Fitness Platform",
-      prompt:
-        "Design a premium fitness platform that helps users build healthy habits through personalized workout plans, progress tracking, activity insights, goal setting, nutrition guidance, and motivational challenges. Create an inspiring, modern experience centered around engagement and long-term consistency."
+      iconClass: "fa-solid fa-dumbbell me-2",
+      iconColor: "#2ecc71",
+      prompt: "Design a premium fitness platform that helps users build healthy habits through personalized workout plans, progress tracking, activity insights, goal setting, nutrition guidance, and motivational challenges. Create an inspiring, modern experience centered around engagement and long-term consistency."
     },
     {
-      icon: "🛍️",
-      label: "Marketplace App",
-      prompt:
-        "Create a beautifully designed online marketplace where people can discover, explore, and purchase unique products from independent sellers. Focus on immersive product browsing, rich product pages, search, collections, favorites, secure checkout, messaging, and order tracking while keeping the experience clean, premium, and MVP-focused."
+      label: "Marketplace Website",
+      iconClass: "fa-solid fa-bag-shopping me-2",
+      iconColor: "#9b59b6",
+      prompt: "Create a modern online marketplace where people can discover, explore, and purchase products from independent sellers. Include advanced search, categories, collections, rich product pages, seller profiles, wishlists, secure checkout, messaging, reviews, ratings, order tracking, and account management. Focus on a clean, premium experience with scalable design, high usability, and smooth user interactions."
     }
   ];
 

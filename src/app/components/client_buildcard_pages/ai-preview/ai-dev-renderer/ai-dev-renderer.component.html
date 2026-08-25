@@ -18,6 +18,10 @@
             <span *ngIf="isSupportParagraphBlock(block)" class="ct_support_label">Requested change</span>
             {{ block?.text }}
           </p>
+          <div *ngIf="getBlockTimestamp(block)" class="ct_msg_timestamp mt-1"
+            style="font-size: 11px; color: rgba(255, 255, 255, 0.45);">
+            {{ formatDateTime(getBlockTimestamp(block)) }}
+          </div>
         </div>
       </div>
 
@@ -212,7 +216,10 @@ password input field with proper styling.</p>
                   <span class="fw-semibold">Edit {{ editIdx + 1 }}:</span> {{ edit.instruction }}
                 </div>
               </div>
-
+            </div>
+            <div *ngIf="getBlockTimestamp(block)" class="ct_msg_timestamp text-end mt-1 pe-1"
+              style="font-size: 11px; color: rgba(255, 255, 255, 0.45);">
+              {{ formatDateTime(getBlockTimestamp(block)) }}
             </div>
           </div>
         </div>
@@ -482,6 +489,10 @@ password input field with proper styling.</p>
           <i class="fa-solid fa-code"></i>
           <span>Download</span>
         </button>
+      </div>
+      <div *ngIf="getBlockTimestamp(block)" class="ct_msg_timestamp mt-2"
+        style="font-size: 11px; color: rgba(255, 255, 255, 0.45);">
+        {{ formatDateTime(getBlockTimestamp(block)) }}
       </div>
     </div>
   </div>

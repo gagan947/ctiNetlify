@@ -576,6 +576,29 @@ export class AiDevRendererComponent implements OnChanges {
     this.submitCustomizationCard(block);
   }
 
+  getBlockTimestamp(block: any): any {
+    if (!block) return null;
+    return block.createdAt || block.timestamp || block.data?.createdAt || block.data?.timestamp || block.time || block.data?.time || null;
+  }
+
+  formatDateTime(value: any): string {
+    if (!value) return '';
+    const date = new Date(value);
+    if (isNaN(date.getTime())) return '';
+
+    const dateStr = date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+    const timeStr = date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+    return `${dateStr}, ${timeStr}`;
+  }
+
   private escapeHtml(value: string): string {
     return value
       .replace(/&/g, '&amp;')
