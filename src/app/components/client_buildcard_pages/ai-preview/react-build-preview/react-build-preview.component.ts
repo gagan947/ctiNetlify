@@ -494,6 +494,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     const generationTab = this.projectGenerationTabState.getTabState(inquiryId);
     if (generationTab?.status === 'completed' && generationTab.previewData?.templateId) {
       this.applyStoredCompletedPreview(generationTab.previewData);
+      this.ensureCustomizationSocket(inquiryId);
       this.fetchCustomizationSuggestions(inquiryId);
       this.scrollToBottom(true);
       return;
@@ -574,7 +575,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
 
 
-  private ensureCustomizationSocket(inquiryId: string, storedConversationId: string): void {
+  private ensureCustomizationSocket(inquiryId: string, storedConversationId?: string | null): void {
     if (!inquiryId) {
       return;
     }
@@ -584,8 +585,14 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       return;
     }
 
+    if (this.customizationSocket && !this.customizationSocket.disconnected && this.customizationSocketInquiryId === inquiryId) {
+      return;
+    }
+
     this.customizationSocket?.removeAllListeners?.();
     this.customizationSocket?.disconnect?.();
+
+    const conversationId = storedConversationId || this.getStoredCustomizationConversationId() || this.customizationConversationId || this.projectsData?.customizationConversationId || null;
 
     this.customizationSocket = io(
       this.apiService.apiUrl,
@@ -594,7 +601,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
           token:
             localStorage.getItem('tokenCTi'),
           customizationConversationId:
-            storedConversationId || null,
+            conversationId,
 
           inquiryId,
           socketType: 'customize'
@@ -603,7 +610,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     );
 
     this.customizationConversationId =
-      storedConversationId;
+      conversationId;
     this.customizationSocketInquiryId = inquiryId;
     this.registerCustomizationSocketListeners();
   }
@@ -621,6 +628,14 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.customizationSocket.on('connect', () => {
       console.log('[ANGULAR CUSTOMIZE] CONNECTED:', this.customizationSocket.id);
       this.emitResumeCustomizationConversation();
+    });
+
+    this.customizationSocket.on('connect_error', (err: any) => {
+      console.error('[ANGULAR CUSTOMIZE] CONNECT_ERROR:', err);
+    });
+
+    this.customizationSocket.on('error', (err: any) => {
+      console.error('[ANGULAR CUSTOMIZE] ERROR:', err);
     });
 
     this.customizationSocket.on('customizationConversationResumed', (payload: any) => {
@@ -652,6 +667,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
       this.blocks.push({
         id: `ai-message-${Date.now()}`,
         text: payload.message,
+        isError: true,
         done: true,
         timestamp: new Date()
       });
@@ -708,21 +724,77 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   }
 
   sendCustomizationMessage(payload: CustomizationMessagePayload): void {
+    const inquiryId = this.selectedProjectId || this.projectsData?.clientEnquryId || this.route.snapshot.params['inquiryId'] || '';
+    const conversationId = this.getStoredCustomizationConversationId() || this.customizationConversationId || this.projectsData?.customizationConversationId;
+
     if (!payload.templatePublicId) {
-      payload.templatePublicId = this.currentTemplateId || this.selected_template_id || '';
+      const generationTab = inquiryId ? this.projectGenerationTabState.getTabState(inquiryId) : null;
+      payload.templatePublicId = this.currentTemplateId || this.selected_template_id || generationTab?.previewData?.templateId || '';
     }
 
-    if (!this.customizationSocket?.connected) {
-      this.toster?.error('Customization chat is not connected right now. Please try again.');
+    if (!this.customizationSocket || !this.customizationSocket.connected) {
+      console.log('[Customize] Socket not connected. Ensuring customization socket for inquiryId:', inquiryId);
+      if (inquiryId) {
+        this.ensureCustomizationSocket(inquiryId, conversationId);
+      }
+    }
+
+    if (this.customizationSocket?.connected) {
+      console.log('[Customize] Socket connected. Emitting customizationMessage:', payload);
+      this.customizationSocket.emit('customizationMessage', payload);
       return;
     }
 
-    console.log('[Customize] emitting customizationMessage:', payload);
+    if (this.customizationSocket) {
+      console.log('[Customize] Socket is connecting... Queueing customizationMessage emission');
+      let hasEmitted = false;
+      const doEmit = () => {
+        if (!hasEmitted && this.customizationSocket?.connected) {
+          hasEmitted = true;
+          console.log('[Customize] Socket connected! Emitting pending customizationMessage:', payload);
+          this.customizationSocket.emit('customizationMessage', payload);
+        }
+      };
 
-    this.customizationSocket.emit(
-      'customizationMessage',
-      payload
-    );
+      this.customizationSocket.once('connect', doEmit);
+
+      if (this.customizationSocket.disconnected) {
+        this.customizationSocket.connect();
+      }
+
+      setTimeout(() => { if (!hasEmitted && this.customizationSocket?.connected) doEmit(); }, 300);
+      setTimeout(() => { if (!hasEmitted && this.customizationSocket?.connected) doEmit(); }, 1000);
+
+      setTimeout(() => {
+        if (!hasEmitted && !this.customizationSocket?.connected) {
+          console.error('[Customize] Connection timed out after 5s');
+          this.hideLoader();
+          this.isTyping = false;
+          this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
+          this.blocks.push({
+            id: `ai-message-${Date.now()}`,
+            text: 'Customization chat is not connected right now. Please try again.',
+            isError: true,
+            done: true,
+            timestamp: new Date()
+          });
+          setTimeout(() => this.scrollToBottom(true), 50);
+        }
+      }, 5000);
+    } else {
+      console.error('[Customize] No customizationSocket available');
+      this.hideLoader();
+      this.isTyping = false;
+      this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
+      this.blocks.push({
+        id: `ai-message-${Date.now()}`,
+        text: 'Customization chat is not connected right now. Please try again.',
+        isError: true,
+        done: true,
+        timestamp: new Date()
+      });
+      setTimeout(() => this.scrollToBottom(true), 50);
+    }
   }
 
   handleCustomizationResponse(payload: any): void {
@@ -3064,9 +3136,22 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     const promptEvent = event as { blockId?: string; value?: string };
     const prompt = promptEvent?.value?.trim() || '';
 
+    if (this.previewFiles.some(item => item.isUploading)) {
+      this.blocks.push({
+        id: `ai-message-${Date.now()}`,
+        text: 'Please wait for file upload to complete.',
+        isError: true,
+        done: true,
+        timestamp: new Date()
+      });
+      setTimeout(() => this.scrollToBottom(true), 50);
+      return;
+    }
+
     const attachments = (this as any).pendingAttachments || [];
     const hasEditComments = this.editCommentsArray.length > 0;
-    const hasAttachments = attachments.length > 0 || this.previewFiles.length > 0;
+    const currentAttachments = this.previewFiles.filter(item => !!item.asset);
+    const hasAttachments = attachments.length > 0 || currentAttachments.length > 0;
 
     if (!prompt && !hasEditComments && !hasAttachments) {
       return;
@@ -3102,7 +3187,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('inline-cta'));
     this.blocks = this.blocks.filter(block => !String(block?.id || '').startsWith('status'));
 
-    const currentAttachments = [...this.previewFiles];
     const currentEditComments = [...this.editCommentsArray];
     this.addCustomizationMessage({
       sender: 'user',
@@ -3144,13 +3228,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         elements: [],
         attachments: attachments
       });
-    }
-
-    if (!this.customizationSocket?.emit) {
-      this.pendingCustomizationRequest = null;
-      this.customizationRequestVersion++;
-      this.toster.error('Customization chat is not connected right now. Please try again.');
-      return;
     }
 
     this.sendCustomizationMessage(socketPayload);
@@ -4548,9 +4625,34 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         next: (response: any) => {
           console.log('Upload response:', response);
           this.fileUrls = response;
+
+          if (response?.success === false || response?.error) {
+            const errorMsg = response?.message || response?.error || 'Failed to upload file(s). Please try again.';
+            newlyAddedItems.forEach(item => {
+              item.isUploading = false;
+              if (item.previewUrl && item.previewUrl.startsWith('blob:')) {
+                URL.revokeObjectURL(item.previewUrl);
+              }
+              const index = this.previewFiles.indexOf(item);
+              if (index !== -1) {
+                this.previewFiles.splice(index, 1);
+              }
+            });
+            this.blocks.push({
+              id: `ai-message-${Date.now()}`,
+              text: errorMsg,
+              isError: true,
+              done: true,
+              timestamp: new Date()
+            });
+            setTimeout(() => this.scrollToBottom(true), 50);
+            this.updatePendingAttachments();
+            return;
+          }
+
           const returnedAssets = response?.assets || (Array.isArray(response) ? response : []);
 
-          if (Array.isArray(returnedAssets)) {
+          if (Array.isArray(returnedAssets) && returnedAssets.length > 0) {
             newlyAddedItems.forEach((item) => {
               const matchedAsset = returnedAssets.find((a: any) =>
                 a.originalName === item.fileName ||
@@ -4565,18 +4667,79 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
               item.isUploading = false;
             });
           } else {
-            newlyAddedItems.forEach(item => item.isUploading = false);
+            const errorMsg = response?.message || 'Failed to upload file(s). Please try again.';
+            newlyAddedItems.forEach(item => {
+              item.isUploading = false;
+              if (item.previewUrl && item.previewUrl.startsWith('blob:')) {
+                URL.revokeObjectURL(item.previewUrl);
+              }
+              const index = this.previewFiles.indexOf(item);
+              if (index !== -1) {
+                this.previewFiles.splice(index, 1);
+              }
+            });
+            this.blocks.push({
+              id: `ai-message-${Date.now()}`,
+              text: errorMsg,
+              isError: true,
+              done: true,
+              timestamp: new Date()
+            });
+            setTimeout(() => this.scrollToBottom(true), 50);
           }
 
           this.updatePendingAttachments();
         },
         error: (error: any) => {
           console.error('Error uploading files:', error);
-          newlyAddedItems.forEach(item => item.isUploading = false);
+          const errorMsg = error?.error?.message || error?.error?.error || error?.message || 'Failed to upload image. Please try again.';
+
+          this.blocks.push({
+            id: `ai-message-${Date.now()}`,
+            text: errorMsg,
+            isError: true,
+            done: true,
+            timestamp: new Date()
+          });
+          setTimeout(() => this.scrollToBottom(true), 50);
+
+          newlyAddedItems.forEach((item) => {
+            item.isUploading = false;
+            if (item.previewUrl && item.previewUrl.startsWith('blob:')) {
+              URL.revokeObjectURL(item.previewUrl);
+            }
+            const index = this.previewFiles.indexOf(item);
+            if (index !== -1) {
+              this.previewFiles.splice(index, 1);
+            }
+          });
+          this.updatePendingAttachments();
         }
       });
     } else {
-      newlyAddedItems.forEach(item => item.isUploading = false);
+      if (!activeDesign && newlyAddedItems.length > 0) {
+        this.blocks.push({
+          id: `ai-message-${Date.now()}`,
+          text: 'Template design ID not found for asset upload.',
+          isError: true,
+          done: true,
+          timestamp: new Date()
+        });
+        setTimeout(() => this.scrollToBottom(true), 50);
+
+        newlyAddedItems.forEach((item) => {
+          item.isUploading = false;
+          if (item.previewUrl && item.previewUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(item.previewUrl);
+          }
+          const index = this.previewFiles.indexOf(item);
+          if (index !== -1) {
+            this.previewFiles.splice(index, 1);
+          }
+        });
+      } else {
+        newlyAddedItems.forEach(item => item.isUploading = false);
+      }
     }
 
     input.value = '';

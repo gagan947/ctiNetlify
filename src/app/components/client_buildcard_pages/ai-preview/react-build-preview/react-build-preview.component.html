@@ -264,7 +264,7 @@
                             <textarea [disabled]="isReactBuilding" #customizeInput class="ct_ai_textarea px-3" rows="3"
                                 [class.has-edit-chip]="editCommentsArray.length > 0"
                                 [style.text-indent.px]="getEditChipIndent()"
-                                [placeholder]="editCommentsArray.length > 0 ? '' : 'Shape This Template Your Way'"
+                                [placeholder]="editCommentsArray.length > 0 ? '' : 'Shape This Project Your Way'"
                                 (scroll)="onTextareaScroll($event)"
                                 (keydown)="handlePromptKeydown($event, 'customize_template', customizeInput.value)"></textarea>
                         </div>
@@ -368,7 +368,8 @@
                                 <div class="creative-editor-toolbar">
                                     @if (isMobileView()) {
                                     <button type="button" class="creative-toolbar-icon creative-toolbar-back-icon"
-                                        (click)="handleMobileViewToggle($event)" title="Back to Chat" aria-label="Back to Chat">
+                                        (click)="handleMobileViewToggle($event)" title="Back to Chat"
+                                        aria-label="Back to Chat">
                                         <i class="fa-solid fa-comments"></i>
                                     </button>
                                     }

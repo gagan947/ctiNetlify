@@ -14,7 +14,9 @@
         </div>
         <div class="ct_agent_activity__body">
           <p class="ct_legacy_text ct_side_ai_chat_left_box12" [class.ct_phase_heading]="isPhaseHeadingBlock(block)"
-            [class.ct_support_paragraph]="isSupportParagraphBlock(block)">
+            [class.ct_support_paragraph]="isSupportParagraphBlock(block)"
+            [class.text-danger]="block?.isError || block?.variant === 'error'"
+            [style.color]="(block?.isError || block?.variant === 'error') ? '#f87171' : null">
             <span *ngIf="isSupportParagraphBlock(block)" class="ct_support_label">Requested change</span>
             {{ block?.text }}
           </p>
