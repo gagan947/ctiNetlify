@@ -25,13 +25,12 @@
                 } @else {
                 @for(line of formatMessage(message.text); track $index) {
                 @if(line.type === 'text') {
-                <p class="text-line ct_fs_14" style="word-break: break-word; white-space: pre-wrap; min-height: 1.2em;">
-                  {{
-                  line.text }}</p>
+                <p class="text-line ct_fs_14" style="word-break: break-word; min-height: 1.2em;">
+                  {{line.text }}</p>
                 }
 
                 @if(line.type === 'bullet') {
-                <div class="bullet-line" style="word-break: break-word; white-space: pre-wrap;">{{ line.text }}</div>
+                <div class="bullet-line" style="word-break: break-word;">{{ line.text }}</div>
                 }
                 }
                 }

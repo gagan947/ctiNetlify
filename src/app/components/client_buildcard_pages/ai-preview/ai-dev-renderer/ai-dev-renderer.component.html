@@ -98,77 +98,53 @@ password input field with proper styling.</p>
           </div>
         </ng-container>
 
-        <!-- Credit Limit CTA (Purple Box Card) -->
+        <!-- Credit Limit CTA (Matching Image 2 Reference UI) -->
         <ng-container *ngIf="!isSuccessInlineCta(block)">
-          <div class="ct_inline_cta_card ct_inline_cta_card--purple">
-            <button type="button" class="ct_inline_cta_card__close" aria-label="Close"
-              (click)="actionSelected.emit('dismiss_cta')">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
+          <div class="ct_agent_activity mb-3 pe-3">
+            <div class="ct_agent_activity__avatar">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <div class="ct_agent_activity__body">
+              <p class="ct_legacy_text text-white mb-3" style="font-size: 14px; line-height: 1.6;">
+                {{ block?.text?.subtitle || block?.text?.submessage ||
+                "It looks like you've exhausted all your credits. No worries! To continue working on this run, simply
+                add more credits to your account and proceed." }}
+              </p>
 
-            <div class="ct_inline_cta_card__inner">
-              <div class="ct_inline_cta_card__icon_wrap">
-                <div class="ct_inline_cta_card__orbit">
-                  <span class="ct_orbit_particle ct_orbit_particle--1">✦</span>
-                  <span class="ct_orbit_particle ct_orbit_particle--2">✦</span>
-                  <span class="ct_orbit_particle ct_orbit_particle--3">✦</span>
-                </div>
-                <div class="ct_inline_cta_card__icon_badge">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5Z" fill="url(#crownGrad)"
-                      stroke="url(#crownGrad)" stroke-width="1.5" stroke-linejoin="round" />
-                    <path d="M5 19H19" stroke="url(#crownGrad)" stroke-width="2" stroke-linecap="round" />
-                    <defs>
-                      <linearGradient id="crownGrad" x1="3" y1="4" x2="21" y2="19" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#E9D5FF" />
-                        <stop offset="0.5" stop-color="#C084FC" />
-                        <stop offset="1" stop-color="#A855F7" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                </div>
+              <!-- Card Container -->
+              <div class="ct_credit_limit_card mb-3">
+                <p class="mb-0" style="font-size: 14px; line-height: 1.6; color: #d4d4d8;">
+                  {{ block?.text?.message || block?.text?.title || getCreditLimitTitle(block) }}
+                </p>
               </div>
 
-              <div class="ct_inline_cta_card__content">
-                <h3 class="ct_inline_cta_card__title">
-                  {{ block?.text?.title || getCreditLimitTitle(block) }}
-                </h3>
+              <!-- Action Buttons -->
+              <div class="d-flex align-items-center gap-2 my-2 flex-wrap">
+                <button type="button" class="btn btn-sm ct_btn_custom_pub d-flex align-items-center gap-2"
+                  (click)="actionSelected.emit(block?.text?.actionId || 'upgrade_plan')">
+                  <span class="ct_btn_icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="7" y1="17" x2="17" y2="7"></line>
+                      <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                  </span>
+                  <span>{{ block?.text?.buttonLabel || 'Upgrade Plan' }}</span>
+                </button>
 
-                <p class="ct_inline_cta_card__desc">
-                  {{ block?.text?.message }}
-                </p>
+                <button *ngIf="block?.text?.buttonLabel2 || block?.text?.actionId2" type="button"
+                  class="btn btn-sm ct_btn_custom_prev d-flex align-items-center gap-2"
+                  (click)="actionSelected.emit(block?.text?.actionId2 || 'preview')">
+                  <i class="fa-regular fa-eye"></i>
+                  <span>{{ block?.text?.buttonLabel2 || 'Preview' }}</span>
+                </button>
+              </div>
 
-                <div class="ct_inline_cta_card__actions">
-                  <button *ngIf="block?.text?.buttonLabel" type="button" class="ct_inline_cta_card__btn"
-                    [class.ct_btn--primary-purple]="block?.text?.actionId === 'upgrade_plan' || block?.text?.actionId === 'buy_credits'"
-                    [class.ct_btn--outline-purple]="block?.text?.actionId !== 'upgrade_plan' && block?.text?.actionId !== 'buy_credits'"
-                    (click)="actionSelected.emit(block?.text?.actionId)">
-                    <span *ngIf="block?.text?.actionId === 'upgrade_plan'" class="ct_btn_icon">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                      </svg>
-                    </span>
-                    <span *ngIf="block?.text?.actionId === 'buy_credits'" class="ct_btn_icon">🪙</span>
-                    <span>{{ block?.text?.buttonLabel }}</span>
-                  </button>
-
-                  <button *ngIf="block?.text?.buttonLabel2" type="button" class="ct_inline_cta_card__btn"
-                    [class.ct_btn--primary-purple]="block?.text?.actionId2 === 'upgrade_plan' || block?.text?.actionId2 === 'buy_credits'"
-                    [class.ct_btn--outline-purple]="block?.text?.actionId2 !== 'upgrade_plan' && block?.text?.actionId2 !== 'buy_credits'"
-                    (click)="actionSelected.emit(block?.text?.actionId2)">
-                    <span *ngIf="block?.text?.actionId2 === 'upgrade_plan'" class="ct_btn_icon">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                      </svg>
-                    </span>
-                    <span *ngIf="block?.text?.actionId2 === 'buy_credits'" class="ct_btn_icon">🪙</span>
-                    <span>{{ block?.text?.buttonLabel2 }}</span>
-                  </button>
-                </div>
+              <!-- Timestamp & Copy Footer -->
+              <div *ngIf="getBlockTimestamp(block)"
+                class="d-flex align-items-center justify-content-end gap-2 mt-2 pe-1"
+                style="font-size: 11px; color: rgba(255, 255, 255, 0.45);">
+                <span>{{ formatDateTime(getBlockTimestamp(block)) }}</span>
               </div>
             </div>
           </div>

@@ -845,41 +845,85 @@
   opacity: 0.95;
 }
 
-/* Inline CTA Cards (Credit Limit & Project Ready) */
-.ct_inline_cta_card {
-  position: relative;
-  width: 100%;
-  border-radius: 16px;
-  padding: 26px 20px 20px;
-  margin-bottom: 24px;
-  box-sizing: border-box;
-  container-type: inline-size;
-  background: #090a18;
-  overflow: hidden;
-  transition: all 0.3s ease;
+/* Credit Limit Container Card (Teal Border Card matching Image 2 Reference) */
+.ct_credit_limit_card {
+  background: #11171a;
+  border: 1px solid #1c4d47;
+  border-radius: 12px;
+  padding: 14px 16px;
+  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35); */
 }
 
-/* Purple Theme (Credit Limit / Upgrade) */
-.ct_inline_cta_card--purple {
-  border: 1px solid rgba(124, 58, 237, 0.45);
-  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.15), inset 0 0 20px rgba(124, 58, 237, 0.05);
+.ct_credit_limit_badge_icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: #2dd4bf;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
 }
 
-.ct_inline_cta_card--purple:hover {
-  border-color: rgba(139, 92, 246, 0.6);
-  box-shadow: 0 10px 40px rgba(124, 58, 237, 0.22), inset 0 0 25px rgba(124, 58, 237, 0.08);
+.ct_credit_limit_header_title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #2dd4bf;
+  line-height: 1.4;
 }
 
-/* Green Theme (Project Ready / Success) */
-.ct_inline_cta_card--green {
-  border: 1px solid rgba(16, 185, 129, 0.45);
-  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15), inset 0 0 20px rgba(16, 185, 129, 0.05);
+.ct_credit_limit_card_inner_box {
+  background: #171d21;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 14px 16px;
 }
 
-.ct_inline_cta_card--green:hover {
-  border-color: rgba(52, 211, 153, 0.6);
-  box-shadow: 0 10px 40px rgba(16, 185, 129, 0.22), inset 0 0 25px rgba(16, 185, 129, 0.08);
+/* Yellow Upgrade Plan Button matching Image 2 */
+.ct_btn_upgrade_yellow {
+  background: #f2c94c;
+  color: #09090b;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 8px 18px;
+  transition: all 0.2s ease;
 }
+
+.ct_btn_upgrade_yellow:hover {
+  background: #ebd060;
+  color: #000000;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(242, 201, 76, 0.35);
+}
+
+.ct_icon_circle_dark {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #09090b;
+  color: #f2c94c;
+}
+
+/* Dark Preview Button matching Image 2 */
+.ct_btn_preview_dark {
+  background: #32353a;
+  color: #ffffff;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 8px 18px;
+  transition: all 0.2s ease;
+}
+
+.ct_btn_preview_dark:hover {
+  background: #3e4248;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
 
 /* Close button top-right */
 .ct_inline_cta_card__close {
@@ -915,46 +959,11 @@
   /* Allow icon and content to wrap if too narrow */
 }
 
-/* Left Icon Badge Outer Orbital Ring */
-.ct_inline_cta_card__icon_wrap {
-  position: relative;
-  flex-shrink: 0;
-  width: 76px;
-  height: 76px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.ct_inline_cta_card__orbit {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  animation: ctOrbitRotate 12s linear infinite;
-}
-
-.ct_inline_cta_card--purple .ct_inline_cta_card__orbit {
-  border: 1px dashed rgba(168, 85, 247, 0.35);
-}
-
-.ct_inline_cta_card--green .ct_inline_cta_card__orbit {
-  border: 1px dashed rgba(16, 185, 129, 0.35);
-}
 
 .ct_orbit_particle {
   position: absolute;
   font-size: 8px;
   user-select: none;
-}
-
-.ct_inline_cta_card--purple .ct_orbit_particle {
-  color: #C084FC;
-  text-shadow: 0 0 6px #C084FC;
-}
-
-.ct_inline_cta_card--green .ct_orbit_particle {
-  color: #34D399;
-  text-shadow: 0 0 6px #34D399;
 }
 
 .ct_orbit_particle--1 {
@@ -997,19 +1006,6 @@
   font-size: 22px;
 }
 
-.ct_inline_cta_card--purple .ct_inline_cta_card__icon_badge {
-  background: radial-gradient(circle, rgba(147, 51, 234, 0.3) 0%, rgba(99, 102, 241, 0.1) 100%);
-  border: 1.5px solid rgba(168, 85, 247, 0.6);
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.3), inset 0 0 10px rgba(168, 85, 247, 0.2);
-}
-
-.ct_inline_cta_card--green .ct_inline_cta_card__icon_badge {
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.1) 100%);
-  border: 1.5px solid rgba(52, 211, 153, 0.6);
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3), inset 0 0 10px rgba(16, 185, 129, 0.2);
-  color: #34D399;
-}
-
 /* Right Content */
 .ct_inline_cta_card__content {
   flex: 1;
@@ -1022,7 +1018,8 @@
   font-size: 18px;
   font-weight: 700;
   color: #FFFFFF;
-  line-height: 1.35;
+  letter-spacing: 1px;
+  font-family: Satoshi-Regular;
 }
 
 .ct_highlight_green {
@@ -1030,7 +1027,7 @@
 }
 
 .ct_inline_cta_card__desc {
-  margin: 0 0 20px 0;
+  margin: 0 0 10px 0;
   font-size: 13.5px;
   line-height: 1.55;
   color: #A1A1AA;
@@ -1041,6 +1038,7 @@
 .ct_inline_cta_card__actions {
   display: flex;
   align-items: center;
+  justify-content: end;
   gap: 12px;
   flex-wrap: wrap;
   width: 100%;
@@ -1064,17 +1062,16 @@
 
 /* Purple Primary (Upgrade Plan) */
 .ct_btn--primary-purple {
-  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
-  color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+  background: #363595;
+  color: #fff;
+  border: none;
+  /* font-size: 13.5px; */
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 10px 18px;
+  transition: all 0.2s ease;
 }
 
-.ct_btn--primary-purple:hover {
-  background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
-  transform: translateY(-1px);
-}
 
 /* Purple Outline (Buy Credits) */
 .ct_btn--outline-purple {
@@ -1137,10 +1134,6 @@
     gap: 16px;
   }
 
-  .ct_inline_cta_card__icon_wrap {
-    margin-top: 4px;
-  }
-
   .ct_inline_cta_card__actions {
     flex-direction: column;
     align-items: stretch;
@@ -1163,10 +1156,6 @@
     align-items: center;
     text-align: center;
     gap: 16px;
-  }
-
-  .ct_inline_cta_card__icon_wrap {
-    margin-top: 4px;
   }
 
   .ct_inline_cta_card__actions {
