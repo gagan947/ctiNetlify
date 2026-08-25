@@ -11,11 +11,11 @@ export class ApiService {
   // imageUrl = 'http://192.168.29.241:4500/'
   // apiUrl = 'http://192.168.1.40:4500/';
   // apiUrl = 'https://bbpqirh4sk.execute-api.eu-north-1.amazonaws.com/prod/'
-  // apiUrl = 'https://api.creativethoughts.ai/';
+  apiUrl = 'https://api.creativethoughts.ai/';
   imageUrl = 'https://api.creativethoughts.ai';
   // apiUrl = 'https://dev-api.creativethoughts.ai/';
   // imageUrl = 'https://dev-api.creativethoughts.ai';
-  apiUrl = 'http://localhost:4500/';
+  // apiUrl = 'http://localhost:4500/';
   // reactBuildURl = 'https://dev-api.creativethoughts.ai';
   reactBuildURl = 'https://api.creativethoughts.ai';
 
