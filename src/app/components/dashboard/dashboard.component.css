@@ -220,10 +220,11 @@
 }
 
 .ct_dashboard_card__top h2 {
-  margin: 0;
-  color: #fff;
-  font-size: 20px;
-  font-weight: 700;
+    margin: 0;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: 'Satoshi-Regular';
 }
 
 .ct_dashboard_card__top p {

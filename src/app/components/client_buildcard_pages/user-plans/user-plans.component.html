@@ -133,9 +133,9 @@
       <div class="eti-content-grid">
 
         <!-- Transactions -->
-        <section class="eti-transactions">
+        <section class="eti-transactions pe-0">
 
-          <div class="eti-section-header">
+          <div class="eti-section-header pe-3">
             <div class="eti-section-title">
               <div class="eti-title-icon">
                 <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -167,7 +167,7 @@
           </div>
 
           <!-- Transaction Summary -->
-          <div class="eti-transaction-summary">
+          <div class="eti-transaction-summary pe-3">
 
             <div class="eti-mini-card">
               <span class="eti-mini-label">TOTAL BALANCE</span>
@@ -192,7 +192,7 @@
           </div>
 
           <!-- Credit History State -->
-          <div class="eti-credit-history-body">
+          <div class="eti-credit-history-body ">
             <div class="eti-credit-history-state" *ngIf="isCreditHistoryLoading">
               <i class="fa-solid fa-rotate fa-spin"></i>
               <span>Loading credit history...</span>
@@ -210,7 +210,7 @@
               <span>No credit transactions found yet.</span>
             </div>
 
-            <div class="eti-credit-history-groups"
+            <div class="eti-credit-history-groups pe-3"
               *ngIf="!isCreditHistoryLoading && !creditHistoryError && hasCreditHistory">
               <div class="eti-credit-history-group"
                 *ngFor="let group of creditHistoryGroups; trackBy: trackByHistoryGroup">
