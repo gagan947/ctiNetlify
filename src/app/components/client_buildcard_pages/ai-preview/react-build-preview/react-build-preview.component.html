@@ -426,6 +426,7 @@
 
                                     </button>
                                     }
+                                    @if (!isMobileView()) {
                                     <!-- Desktop -->
                                     @switch (selectedDeviceType) {
                                     @case ('desktop') {
@@ -502,7 +503,7 @@
                                         </span>
                                         }
                                     </button>
-
+                                    }
                                     <!-- Collapse -->
                                     <button type="button" class="creative-toolbar-icon creative-toolbar-collapse"
                                         (click)="toggleEditorToolbar()">

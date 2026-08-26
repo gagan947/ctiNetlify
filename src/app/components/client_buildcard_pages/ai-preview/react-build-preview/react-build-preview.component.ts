@@ -398,13 +398,13 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
   async ngOnInit() {
     window.addEventListener('message', this.handlePreviewMessage);
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        if (this.hasUsablePreviewState() && !this.isFeedbackSubmitted && this.previewReadyTimer) {
-          this.showFeedbackModal();
-        }
-      }
-    });
+    // this.router.events.subscribe((event) => {
+    //   if (event instanceof NavigationStart) {
+    //     if (this.hasUsablePreviewState() && !this.isFeedbackSubmitted && this.previewReadyTimer) {
+    //       this.showFeedbackModal();
+    //     }
+    //   }
+    // });
     this.hideDeployHeaderAction();
     this.getUserSubscriptionPlan();
     this.userInfo = JSON.parse(localStorage.getItem('userDetailCTI') || '{}');

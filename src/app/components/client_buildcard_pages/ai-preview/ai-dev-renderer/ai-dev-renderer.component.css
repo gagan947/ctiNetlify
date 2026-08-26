@@ -1365,6 +1365,7 @@ aside.ct_project_ai_chat_section {
   width: -moz-fit-content;
   width: fit-content;
   color: #fff;
+  white-space: break-spaces;
 }
 
 
