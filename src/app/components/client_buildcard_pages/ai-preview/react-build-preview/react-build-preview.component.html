@@ -611,11 +611,37 @@
     </section>
 
     @if (isMobileView() && safePreviewUrl && !fullScreen) {
-    <div class="ct_mobile_preview_cta_wrap ct_mobile_preview_cta_wrap--global">
+    <!-- <div class="ct_mobile_preview_cta_wrap ct_mobile_preview_cta_wrap--global">
         <button type="button" class="ct_mobile_preview_cta" (click)="handleMobileViewToggle($event)">
-            <i class="fa-solid fa-mobile-screen-button"></i>
+            <i class="fa-regular fa-eye"></i>
             <span>Show Preview</span>
         </button>
+    </div> -->
+    <div class="ct_mobile_preview_cta_wrap ct_mobile_preview_cta_wrap--global">
+        <div class="creative-editor-toolbar gap-2">
+            <button type="button" class="ct_mobile_preview_cta" (click)="handleMobileViewToggle($event)">
+                <i class="fa-regular fa-eye"></i>
+                <span>Show Preview</span>
+            </button>
+            <!-- Edit -->
+            <button type="button" class="creative-toolbar-edit" [class.active]="editorMode" (click)="toggleEditorMode()"
+                style="padding: 9px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        background: transparent;">
+                <span class="edit-icon"><svg class="opacity-60 transition-opacity group-hover/editbtn:opacity-100"
+                        width="16" height="16" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M10.75 0C12.5449 0 14 1.45507 14 3.25V4.75C14 5.16421 13.6642 5.5 13.25 5.5C12.8358 5.5 12.5 5.16421 12.5 4.75V3.25C12.5 2.2835 11.7165 1.5 10.75 1.5H3.25C2.2835 1.5 1.5 2.2835 1.5 3.25V10.75C1.5 11.7165 2.2835 12.5 3.25 12.5H4.75C5.16421 12.5 5.5 12.8358 5.5 13.25C5.5 13.6642 5.16421 14 4.75 14H3.25C1.45507 14 0 12.5449 0 10.75V3.25C0 1.45507 1.45507 0 3.25 0H10.75Z"
+                            fill="currentColor"></path>
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M5.05232 6.29842C4.7955 5.52777 5.52777 4.7955 6.29842 5.05232L13.3248 7.3951C14.1581 7.67304 14.2402 8.8198 13.4547 9.21249L10.9205 10.4791C10.7297 10.5745 10.5745 10.7297 10.4791 10.9205L9.21249 13.4547C8.8198 14.2402 7.67304 14.1581 7.3951 13.3248L5.05232 6.29842Z"
+                            fill="currentColor"></path>
+                    </svg></span>
+                <span>Edit</span>
+            </button>
+        </div>
     </div>
     }
 </div>

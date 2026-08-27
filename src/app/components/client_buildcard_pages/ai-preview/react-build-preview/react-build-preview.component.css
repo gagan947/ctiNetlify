@@ -2216,7 +2216,7 @@ p {
     padding: 9px 14px;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 999px;
-    background: rgba(17, 24, 39, 0.9);
+    background: transparent;
     color: #fff;
     font-size: 12px;
     font-weight: 600;

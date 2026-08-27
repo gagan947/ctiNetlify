@@ -68,10 +68,10 @@ export class MainAiComponent implements OnInit, AfterViewInit, OnDestroy {
       prompt: "Design a premium food delivery platform focused on a fast and delightful ordering experience. Include restaurant discovery, curated menus, smart search, personalized recommendations, a seamless cart, secure checkout, real-time order tracking, favorites, user profiles, notifications, and order history. Prioritize a modern, intuitive interface with scalable architecture, excellent performance, and a polished user experience."
     },
     {
-      label: "CRM Dashboard",
-      iconClass: "fa-solid fa-users me-2",
-      iconColor: "#6882fe",
-      prompt: "Create a modern CRM workspace that helps sales teams organize leads, manage customer relationships, track deals, schedule follow-ups, and visualize sales performance. Focus on an intuitive workflow, clean data organization, insightful analytics, and a productivity-first MVP rather than a complex enterprise system."
+      label: "Premium Unisex Salon",
+      iconClass: "fa-solid fa-scissors me-2",
+      iconColor: "#7f78d2",
+      prompt: "Create a premium unisex salon and barbering platform with service discovery, pricing, master barber profiles, grooming lookbook, memberships, favorites, salon information, and VIP appointment booking.Include service/add-on selection, barber and time-slot selection, digital booking confirmation, before/after transformations, notifications, and responsive cinematic interactions with a sophisticated dark luxury design."
     },
     {
       label: "Hospital Management System",

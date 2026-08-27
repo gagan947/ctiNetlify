@@ -2544,6 +2544,10 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     }
 
     if (this.fullScreen) {
+      if (this.editorMode) {
+        this.editorMode = false;
+        this.sendEditorMode();
+      }
       this.showChatSection();
       return;
     }
@@ -3133,6 +3137,7 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
   }
 
   async handlePromptSubmitted(event: Event | { blockId: string; value: string }) {
+
     const promptEvent = event as { blockId?: string; value?: string };
     const prompt = promptEvent?.value?.trim() || '';
 
@@ -3199,6 +3204,11 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
     this.showLoader('Thinking...');
     this.isTyping = true;
     this.resetBuildGenerationError();
+
+    if (this.isMobileView()) {
+      this.showChatSection();
+    }
+
     const customizationRequestVersion = ++this.customizationRequestVersion;
     this.pendingCustomizationRequest = {
       prompt: prompt || (currentEditComments.length > 0 ? 'Edit element' : 'Upload attachment'),
@@ -3229,7 +3239,6 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
         attachments: attachments
       });
     }
-
     this.sendCustomizationMessage(socketPayload);
 
     this.editCommentsArray = [];
@@ -4484,6 +4493,10 @@ export class ReactBuildPreviewComponent implements OnInit, AfterViewInit, AfterV
 
   toggleEditorMode(): void {
     this.editorMode = !this.editorMode;
+    if (this.isMobileView()) {
+      this.hasDismissedCurrentMobilePreview = true;
+      this.fullScreen = true;
+    }
 
     this.sendEditorMode();
   }
